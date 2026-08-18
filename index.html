@@ -253,6 +253,10 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
 .course-card-name{font-size:14.5px;font-weight:600;color:var(--forest-900);margin-top:2px;}
 .course-card-sub{font-size:11.5px;color:var(--ink-soft);margin-top:3px;}
 .course-card-arrow{width:8px;height:8px;border-right:1.6px solid var(--ink-soft);border-bottom:1.6px solid var(--ink-soft);transform:rotate(-45deg);flex-shrink:0;}
+.course-edit-btn{flex-shrink:0;width:26px;height:26px;border-radius:50%;border:1px solid rgba(27,67,50,0.15);background:rgba(255,255,255,0.5);color:var(--ink-soft);font-size:12px;display:flex;align-items:center;justify-content:center;transition:border-color .12s,color .12s;}
+.course-edit-btn:hover{border-color:var(--forest-500);color:var(--forest-700);}
+.btn-add-course{width:auto;padding:10px 20px;margin-bottom:14px;display:inline-flex;align-items:center;gap:6px;}
+.course-modal-skip{margin-top:10px;background:none;border:none;font-size:11.5px;font-weight:600;color:var(--forest-700);text-decoration:underline;padding:0;}
 
 /* INOVA link-out card */
 .inova-card{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;margin-bottom:16px;}
@@ -343,6 +347,9 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
         <div class="semester-heading" id="courses-semester-label">Semester</div>
         <div class="greeting" style="margin-bottom:2px">My Courses</div>
         <div class="courses-count" id="courses-count"></div>
+        <div id="add-course-row" style="display:none">
+          <button class="btn-primary btn-add-course" id="add-course-btn" type="button">+ Add new course</button>
+        </div>
         <div class="glass" id="courses-list"></div>
       </section>
 
@@ -468,6 +475,43 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
     <select class="modal-topic-select" id="modal-topic-select"></select>
     <div class="modal-topic-tlo" id="modal-topic-tlo"></div>
     <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- ADD / EDIT COURSE MODAL -->
+<div class="modal-overlay" id="course-modal-overlay">
+  <div class="modal-sheet">
+    <div class="modal-head">
+      <div class="modal-title" id="course-modal-title">Add new course</div>
+      <button class="modal-close" id="course-modal-close" type="button" aria-label="Close">✕</button>
+    </div>
+
+    <div class="meta" id="course-modal-upload-label" style="margin-bottom:8px">Upload the course's lesson plan (.xlsx, .xls, .csv, .docx) — we'll pull the topics, TLOs, and course details from it.</div>
+    <div class="file-drop" id="course-modal-filedrop">Click or drop your lesson plan file<input type="file" id="course-modal-file" accept=".xlsx,.xls,.csv,.docx"></div>
+    <div id="course-modal-parse-status"></div>
+    <button type="button" class="course-modal-skip" id="course-modal-skip-btn">Skip — enter course details manually</button>
+
+    <div id="course-form-fields" style="display:none;margin-top:16px">
+      <div class="field"><label for="course-form-code">Course code</label><input type="text" id="course-form-code" placeholder="e.g. PHIA 4312"></div>
+      <div class="field"><label for="course-form-name">Course name</label><input type="text" id="course-form-name" placeholder="e.g. Instrumentation Analysis"></div>
+      <div class="field"><label for="course-form-semester">Semester</label><input type="text" id="course-form-semester" placeholder="e.g. Semester 3, 2026"></div>
+      <div class="field">
+        <label for="course-form-examtype">Assessment type</label>
+        <select class="modal-topic-select" id="course-form-examtype" style="margin:0">
+          <option value="ca">CA-only (marks finalise before study week)</option>
+          <option value="final">Has a final exam</option>
+        </select>
+      </div>
+      <div class="field" id="course-form-examdate-row" style="display:none">
+        <label for="course-form-examdate">Final exam date</label>
+        <input type="date" id="course-form-examdate">
+      </div>
+      <div class="field"><label for="course-form-inova">INOVA Grader report link <span style="font-weight:400;color:var(--ink-soft)">(optional)</span></label><input type="url" id="course-form-inova" placeholder="https://..."></div>
+      <div class="field"><label for="course-form-notebook">Gemini Notebook link <span style="font-weight:400;color:var(--ink-soft)">(optional)</span></label><input type="url" id="course-form-notebook" placeholder="https://notebook.google.com/..."></div>
+    </div>
+
+    <div class="auth-error" id="course-modal-error"></div>
+    <button class="btn-primary" id="course-modal-save-btn" style="display:none;margin-top:4px">Create course</button>
   </div>
 </div>
 
@@ -597,6 +641,7 @@ async function boot(opts = {}) {
     document.getElementById('student-bottomnav').style.display = 'none';
     document.getElementById('educator-sidenav').style.display = 'flex';
     document.getElementById('educator-bottomnav').style.display = 'flex';
+    document.getElementById('add-course-row').style.display = '';
     await loadEducatorCourses();
     showView('courses');
     setupUploads();
@@ -665,14 +710,14 @@ function groupBySemester(courses) {
   return groups;
 }
 
-function renderCourseList(courses, subtitleFn, onOpen) {
+function renderCourseList(courses, subtitleFn, onOpen, onEdit) {
   const listEl = document.getElementById('courses-list');
   const countEl = document.getElementById('courses-count');
   const labelEl = document.getElementById('courses-semester-label');
   if (!courses.length) {
     labelEl.textContent = '';
     countEl.textContent = '';
-    listEl.innerHTML = '<div class="empty-state">No courses found for your account yet. Contact your coordinator.</div>';
+    listEl.innerHTML = `<div class="empty-state">${onEdit ? 'No courses yet — add your first one above.' : 'No courses found for your account yet. Contact your coordinator.'}</div>`;
     return;
   }
   const groups = groupBySemester(courses);
@@ -689,12 +734,18 @@ function renderCourseList(courses, subtitleFn, onOpen) {
           <div class="course-card-name">${c.name}</div>
           <div class="course-card-sub">${subtitleFn(c)}</div>
         </div>
+        ${onEdit ? `<button type="button" class="course-edit-btn" data-edit="${c.id}" aria-label="Edit course">✎</button>` : ''}
         <div class="course-card-arrow"></div>
       </div>`).join('')}`).join('');
 
   listEl.querySelectorAll('.course-card').forEach(card => {
     card.addEventListener('click', () => onOpen(card.dataset.course));
   });
+  if (onEdit) {
+    listEl.querySelectorAll('.course-edit-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => { e.stopPropagation(); onEdit(btn.dataset.edit); });
+    });
+  }
 }
 
 async function loadStudentCourses() {
@@ -720,7 +771,7 @@ async function loadEducatorCourses() {
   const { data: enrollmentCounts } = await sb.from('enrollments').select('course_id');
   const counts = {};
   (enrollmentCounts || []).forEach(e => { counts[e.course_id] = (counts[e.course_id] || 0) + 1; });
-  renderCourseList(myCourses, c => (counts[c.id] || 0) + ' students enrolled', openEducatorCourse);
+  renderCourseList(myCourses, c => (counts[c.id] || 0) + ' students enrolled', openEducatorCourse, (id) => openCourseModal('edit', id));
 }
 
 async function openEducatorCourse(courseId) {
@@ -1272,7 +1323,17 @@ function parseDocxFile(file) {
         const bestHeaderIdx = best.theadCount > 0 ? best.theadCount - 1 : 0;
         const bestRows = best.grid.slice(bestHeaderIdx).filter(r => r.some(c => String(c).trim() !== ''));
 
-        resolve({ bestRows, allRows });
+        // Plain-text extraction (paragraphs + table cells, no structure) —
+        // used only for the course code/name auto-detect heuristic, not for
+        // topic parsing, since a document's title/header page usually isn't
+        // inside a table at all.
+        let rawText = '';
+        try {
+          const rawResult = await mammoth.extractRawText({ arrayBuffer: e.target.result });
+          rawText = rawResult.value || '';
+        } catch (_) { /* best-effort only */ }
+
+        resolve({ bestRows, allRows, rawText });
       } catch (err) { reject(err); }
     };
     reader.onerror = reject;
@@ -1283,7 +1344,7 @@ function parseDocxFile(file) {
 function parseUploadedFile(file) {
   const ext = file.name.split('.').pop().toLowerCase();
   if (ext === 'docx') return parseDocxFile(file);
-  return parseWorkbook(file).then(rows => ({ bestRows: rows, allRows: rows }));
+  return parseWorkbook(file).then(rows => ({ bestRows: rows, allRows: rows, rawText: rows.flat().join(' ') }));
 }
 
 /* ---- Lesson-plan copy/paste detection: educators can just copy the
@@ -1455,6 +1516,201 @@ function parseDateCell(val) {
   const d = new Date(val);
   return isNaN(d) ? null : dateStr(d);
 }
+
+/* ---------- ADD / EDIT COURSE ---------- */
+let courseModalMode = null;       // 'add' | 'edit'
+let courseModalEditId = null;
+let courseModalParsedTopics = null; // parsed {week_number,title,tlo,week_start_date}[] or null
+
+// Best-effort fallback when a lesson plan file isn't a recognised
+// "Topic N / TLO N" dump — reuses the same column-guessing the Uploads tab
+// uses, but auto-picks the mapping rather than showing a confirm table,
+// since this compact modal is meant to be a fast path, not a full re-import UI.
+function mapRowsToTopics(rows) {
+  if (!rows || !rows.length) return [];
+  const headers = rows[0], dataRows = rows.slice(1);
+  const wIdx = guessColumn(headers, ['week']);
+  const dIdx = guessColumn(headers, ['date']);
+  const tIdx = guessColumn(headers, ['title', 'chapter', 'lesson', 'topic']);
+  const tloIdx = guessColumn(headers, ['tlo', 'learning outcome', 'outcome']);
+  if (tIdx < 0) return [];
+  return dataRows.map(r => ({
+    week_number: wIdx >= 0 && r[wIdx] !== '' ? Number(r[wIdx]) : null,
+    week_start_date: dIdx >= 0 && r[dIdx] !== '' ? parseDateCell(r[dIdx]) : null,
+    title: String(r[tIdx] || '').trim(),
+    tlo: tloIdx >= 0 && r[tloIdx] !== '' ? String(r[tloIdx]).trim() : null,
+  })).filter(r => r.title && !Number.isNaN(r.week_number) && !/^(sub-?total|grand total|total)$/i.test(r.title));
+}
+
+// Best-effort course code/name guess from the document's plain text — looks
+// for a code-like token (e.g. "PHIA 4312") and takes the words right after
+// it as the name. Always shown in an editable field, never written silently.
+function detectCourseMeta(text) {
+  const clean = (text || '').replace(/\s+/g, ' ');
+  const codeMatch = clean.match(/\b([A-Z]{3,5})\s?-?\s?(\d{3,5})\b/);
+  let code = '', name = '';
+  if (codeMatch) {
+    code = codeMatch[1] + ' ' + codeMatch[2];
+    const after = clean.slice(codeMatch.index + codeMatch[0].length, codeMatch.index + codeMatch[0].length + 100);
+    const nameMatch = after.match(/^[\s:()\-–—]*([A-Za-z][A-Za-z0-9 ,&'\/]{3,70})/);
+    if (nameMatch) name = nameMatch[1].trim().replace(/\s{2,}/g, ' ');
+  }
+  return { code, name };
+}
+
+function examTypeVal() { return document.getElementById('course-form-examtype').value; }
+function toggleExamDateField() {
+  document.getElementById('course-form-examdate-row').style.display = examTypeVal() === 'final' ? '' : 'none';
+}
+document.getElementById('course-form-examtype').addEventListener('change', toggleExamDateField);
+
+function openCourseModal(mode, courseId) {
+  courseModalMode = mode;
+  courseModalEditId = courseId || null;
+  courseModalParsedTopics = null;
+
+  const course = mode === 'edit' ? myCourses.find(c => c.id === courseId) : null;
+
+  document.getElementById('course-modal-title').textContent = mode === 'add' ? 'Add new course' : 'Edit course';
+  document.getElementById('course-modal-file').value = '';
+  document.getElementById('course-modal-filedrop').classList.remove('has-file');
+  document.getElementById('course-modal-parse-status').innerHTML = '';
+  document.getElementById('course-modal-error').classList.remove('show');
+  document.getElementById('course-modal-upload-label').textContent = mode === 'add'
+    ? "Upload the course's lesson plan (.xlsx, .xls, .csv, .docx) — we'll pull the topics, TLOs, and course details from it."
+    : "Replace this course's lesson plan (optional — leave empty to keep its current topics).";
+  document.getElementById('course-modal-skip-btn').style.display = mode === 'add' ? '' : 'none';
+
+  document.getElementById('course-form-code').value = course ? course.code : '';
+  document.getElementById('course-form-name').value = course ? course.name : '';
+  document.getElementById('course-form-semester').value = course ? (course.semester || '') : '';
+  document.getElementById('course-form-inova').value = course ? (course.inova_url || '') : '';
+  document.getElementById('course-form-notebook').value = course ? (course.notebook_url || '') : '';
+  document.getElementById('course-form-examtype').value = course && course.final_exam_date ? 'final' : 'ca';
+  document.getElementById('course-form-examdate').value = course && course.final_exam_date ? String(course.final_exam_date).slice(0, 10) : '';
+  toggleExamDateField();
+
+  document.getElementById('course-form-fields').style.display = mode === 'edit' ? '' : 'none';
+  const saveBtn = document.getElementById('course-modal-save-btn');
+  saveBtn.style.display = mode === 'edit' ? '' : 'none';
+  saveBtn.disabled = false;
+  saveBtn.textContent = mode === 'add' ? 'Create course' : 'Save changes';
+
+  document.getElementById('course-modal-overlay').classList.add('open');
+}
+
+function closeCourseModal() {
+  document.getElementById('course-modal-overlay').classList.remove('open');
+}
+document.getElementById('course-modal-close').addEventListener('click', closeCourseModal);
+
+document.getElementById('course-modal-skip-btn').addEventListener('click', () => {
+  document.getElementById('course-form-fields').style.display = '';
+  const saveBtn = document.getElementById('course-modal-save-btn');
+  saveBtn.style.display = '';
+  saveBtn.textContent = 'Create course';
+});
+
+document.getElementById('course-modal-file').addEventListener('change', async (e) => {
+  const file = e.target.files[0]; if (!file) return;
+  document.getElementById('course-modal-filedrop').classList.add('has-file');
+  const statusEl = document.getElementById('course-modal-parse-status');
+  statusEl.innerHTML = '<div class="preview-note">Reading file…</div>';
+  try {
+    const parsed = await parseUploadedFile(file);
+    const topics = looksLikeLessonPlanDump(parsed.allRows) ? parseLessonPlanDump(parsed.allRows) : mapRowsToTopics(parsed.bestRows);
+    courseModalParsedTopics = topics;
+
+    if (!topics.length) {
+      statusEl.innerHTML = `<div class="preview-note warn">Couldn't find topic rows in this file. You can still ${courseModalMode === 'add' ? 'create the course' : 'save these details'} and add the lesson plan later from Uploads.</div>`;
+    } else {
+      const preview = topics.slice(0, 5).map(t => `<div class="coverage-row"><div class="coverage-week">Wk ${t.week_number ?? '—'}</div><div class="coverage-title">${t.title}</div></div>`).join('');
+      const more = topics.length > 5 ? `<div class="preview-note">…and ${topics.length - 5} more</div>` : '';
+      statusEl.innerHTML = `<div class="preview-note">Found ${topics.length} topics with TLOs.</div><div class="glass" style="margin-top:8px">${preview}</div>${more}`;
+    }
+
+    if (courseModalMode === 'add') {
+      const guess = detectCourseMeta(parsed.rawText || '');
+      if (guess.code) document.getElementById('course-form-code').value = guess.code;
+      if (guess.name) document.getElementById('course-form-name').value = guess.name;
+      document.getElementById('course-form-fields').style.display = '';
+      const saveBtn = document.getElementById('course-modal-save-btn');
+      saveBtn.style.display = '';
+      saveBtn.textContent = 'Create course';
+    }
+  } catch (err) {
+    statusEl.innerHTML = `<div class="preview-note warn">Couldn't read this file: ${err.message}</div>`;
+  }
+});
+
+document.getElementById('course-modal-save-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('course-modal-save-btn');
+  const errEl = document.getElementById('course-modal-error');
+  errEl.classList.remove('show');
+
+  const code = document.getElementById('course-form-code').value.trim();
+  const name = document.getElementById('course-form-name').value.trim();
+  const semester = document.getElementById('course-form-semester').value.trim();
+  const inova_url = document.getElementById('course-form-inova').value.trim();
+  const notebook_url = document.getElementById('course-form-notebook').value.trim();
+  const examType = examTypeVal();
+  const examDate = document.getElementById('course-form-examdate').value;
+
+  if (!code || !name) {
+    errEl.textContent = 'Course code and name are required.';
+    errEl.classList.add('show');
+    return;
+  }
+  if (examType === 'final' && !examDate) {
+    errEl.textContent = 'Enter the final exam date, or switch to "CA-only".';
+    errEl.classList.add('show');
+    return;
+  }
+
+  const payload = {
+    code, name,
+    semester: semester || null,
+    inova_url: inova_url || null,
+    notebook_url: notebook_url || null,
+    final_exam_date: examType === 'final' ? examDate : null,
+  };
+
+  btn.disabled = true; btn.textContent = courseModalMode === 'add' ? 'Creating…' : 'Saving…';
+
+  let courseId = courseModalEditId;
+  if (courseModalMode === 'add') {
+    const { data, error } = await sb.from('courses').insert(payload).select().single();
+    if (error) {
+      btn.disabled = false; btn.textContent = 'Create course';
+      errEl.textContent = 'Could not create course: ' + error.message;
+      errEl.classList.add('show');
+      return;
+    }
+    courseId = data.id;
+  } else {
+    const { error } = await sb.from('courses').update(payload).eq('id', courseId);
+    if (error) {
+      btn.disabled = false; btn.textContent = 'Save changes';
+      errEl.textContent = 'Could not save course: ' + error.message;
+      errEl.classList.add('show');
+      return;
+    }
+  }
+
+  if (courseModalParsedTopics && courseModalParsedTopics.length) {
+    const toInsert = courseModalParsedTopics.map(t => ({
+      course_id: courseId, week_number: t.week_number, week_start_date: t.week_start_date || null, title: t.title, tlo: t.tlo || null
+    }));
+    await sb.from('topics').delete().eq('course_id', courseId);
+    await sb.from('topics').insert(toInsert);
+  }
+
+  btn.disabled = false;
+  closeCourseModal();
+  await loadEducatorCourses();
+});
+
+document.getElementById('add-course-btn').addEventListener('click', () => openCourseModal('add'));
 
 /* ---------- INIT ---------- */
 (async function init() {
