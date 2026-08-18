@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kompas Semester</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1.8.0/mammoth.browser.min.js"></script>
+<style>
+:root {
+  --ivory: #f8f6ef;
+  --forest-900: #10241c;
+  --forest-700: #1b4332;
+  --forest-500: #2d6a4f;
+  --forest-300: #86ab97;
+  --gold-600: #a9791b;
+  --gold-500: #c9a227;
+  --gold-300: #e8c468;
+  --ink: #16241d;
+  --ink-soft: #55655c;
+  --glass-bg: rgba(255,255,255,0.58);
+  --glass-bg-strong: rgba(255,255,255,0.76);
+  --glass-border: rgba(255,255,255,0.6);
+  --glass-shadow: 0 10px 34px rgba(16,36,28,0.10);
+  --radius-lg: 22px;
+  --radius-md: 14px;
+  --radius-sm: 9px;
+  --font-display: 'Fraunces', ui-serif, serif;
+  --font-body: 'IBM Plex Sans', ui-sans-serif, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:var(--font-body);color:var(--ink);min-height:100vh;background:var(--ivory);position:relative;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+body::before, body::after{content:'';position:fixed;border-radius:50%;filter:blur(70px);z-index:0;pointer-events:none;}
+body::before{width:520px;height:520px;background:radial-gradient(circle, rgba(201,162,39,0.35), transparent 70%);top:-160px; right:-140px;}
+body::after{width:600px;height:600px;background:radial-gradient(circle, rgba(45,106,79,0.28), transparent 70%);bottom:-200px; left:-180px;}
+@media (prefers-reduced-motion: no-preference) { .fade-up{animation:fadeUp .35s ease forwards;} }
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
+button, input, select{font-family:inherit;}
+button{cursor:pointer;}
+:focus-visible{outline:2px solid var(--forest-500); outline-offset:2px;}
+.glass{background:var(--glass-bg);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);border:1px solid var(--glass-border);border-radius:var(--radius-lg);box-shadow:var(--glass-shadow);}
+
+/* AUTH */
+#auth-screen{position:relative;z-index:1;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;}
+.auth-card{width:100%;max-width:380px;padding:36px 32px;text-align:center;}
+.auth-mark{width:52px;height:52px;margin:0 auto 18px;border-radius:50%;background:conic-gradient(from -90deg, var(--forest-500), var(--gold-500), var(--forest-500));display:flex;align-items:center;justify-content:center;box-shadow:0 6px 18px rgba(45,106,79,0.25);}
+.auth-mark svg{width:24px;height:24px;}
+.auth-card h1{font-family:var(--font-display);font-size:26px;font-weight:600;color:var(--forest-900);margin-bottom:6px;}
+.auth-card p.sub{font-size:13px;color:var(--ink-soft);margin-bottom:26px;}
+.field{text-align:left;margin-bottom:14px;}
+.field label{display:block;font-size:12px;font-weight:600;color:var(--forest-700);margin-bottom:5px;}
+.field input{width:100%;padding:11px 14px;border:1px solid rgba(27,67,50,0.18);border-radius:var(--radius-sm);background:rgba(255,255,255,0.7);font-size:14px;color:var(--ink);outline:none;transition:border-color .15s, box-shadow .15s;}
+.field input:focus{border-color:var(--forest-500); box-shadow:0 0 0 3px rgba(45,106,79,0.12);}
+.btn-primary{width:100%;padding:12px;margin-top:6px;background:linear-gradient(135deg, var(--forest-700), var(--forest-500));color:#fff;border:none;border-radius:var(--radius-sm);font-size:14px;font-weight:600;letter-spacing:.1px;box-shadow:0 6px 16px rgba(27,67,50,0.25);transition:transform .1s, box-shadow .15s;}
+.btn-primary:hover{box-shadow:0 8px 22px rgba(27,67,50,0.32);}
+.btn-primary:active{transform:scale(0.98);}
+.btn-primary[disabled]{opacity:.6;cursor:default;}
+.auth-error{margin-top:14px;padding:9px 12px;border-radius:var(--radius-sm);background:rgba(180,60,40,0.08);border:1px solid rgba(180,60,40,0.2);color:#8a3221;font-size:12.5px;text-align:left;display:none;}
+.auth-error.show{display:block;}
+.auth-info{margin-top:14px;padding:9px 12px;border-radius:var(--radius-sm);background:rgba(45,106,79,0.08);border:1px solid rgba(45,106,79,0.2);color:var(--forest-700);font-size:12.5px;text-align:left;display:none;}
+.auth-info.show{display:block;}
+.auth-toggle{margin-top:18px;font-size:12.5px;color:var(--ink-soft);}
+.auth-toggle button{background:none;border:none;padding:0;font:inherit;color:var(--forest-700);font-weight:600;text-decoration:underline;cursor:pointer;}
+.pdpa-notice{text-align:left;background:rgba(255,255,255,0.55);border:1px solid rgba(27,67,50,0.14);border-radius:var(--radius-sm);padding:14px 15px;margin:16px 0 14px;font-size:11.5px;line-height:1.55;color:var(--ink-soft);max-height:180px;overflow-y:auto;}
+.pdpa-notice h4{font-size:12px;color:var(--forest-900);margin-bottom:6px;}
+.pdpa-notice p{margin-bottom:8px;}
+.pdpa-notice p:last-child{margin-bottom:0;}
+.pdpa-notice strong{color:var(--forest-700);}
+.consent-row{display:flex;align-items:flex-start;gap:9px;text-align:left;margin-bottom:16px;font-size:12px;color:var(--ink-soft);line-height:1.4;}
+.consent-row input[type="checkbox"]{margin-top:2px;flex-shrink:0;width:16px;height:16px;accent-color:var(--forest-500);cursor:pointer;}
+.consent-row label{cursor:pointer;}
+#course-picker-screen{position:relative;z-index:1;min-height:100vh;display:none;align-items:center;justify-content:center;padding:24px;}
+#course-picker-screen.active{display:flex;}
+.picker-card{width:100%;max-width:420px;padding:32px 28px;text-align:center;}
+.picker-list{text-align:left;margin:18px 0;max-height:340px;overflow-y:auto;}
+.picker-item{display:flex;align-items:flex-start;gap:10px;padding:12px 4px;border-bottom:1px solid rgba(27,67,50,0.08);}
+.picker-item:last-child{border-bottom:none;}
+.picker-item input[type="checkbox"]{margin-top:3px;width:16px;height:16px;accent-color:var(--forest-500);cursor:pointer;flex-shrink:0;}
+.picker-item label{cursor:pointer;flex:1;}
+.picker-item .course-card-code{display:block;}
+.picker-item .course-card-name{display:block;}
+
+/* SHELL */
+#app{display:none;position:relative;z-index:1;min-height:100vh;}
+#app.active{display:block;}
+.topbar{position:sticky;top:0;z-index:50;display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--glass-bg-strong);backdrop-filter:blur(16px);border-bottom:1px solid var(--glass-border);}
+.topbar-brand{display:flex;align-items:center;gap:10px;}
+.topbar-mark{width:30px;height:30px;border-radius:50%;background:conic-gradient(from -90deg, var(--forest-500), var(--gold-500), var(--forest-500));}
+.topbar-name{font-family:var(--font-display);font-weight:600;font-size:16px;color:var(--forest-900);}
+.topbar-right{display:flex;align-items:center;gap:12px;}
+.topbar-user{font-size:12.5px;color:var(--ink-soft);}
+.btn-signout{font-size:12px;font-weight:600;color:var(--forest-700);background:rgba(255,255,255,0.5);border:1px solid var(--glass-border);padding:6px 12px;border-radius:99px;}
+main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
+@media(min-width:900px){main.shell{display:grid;grid-template-columns:180px 1fr;gap:28px;padding:28px 32px 60px;max-width:1100px;}}
+.sidenav{display:none;}
+@media(min-width:900px){
+  .sidenav{display:flex;flex-direction:column;gap:4px;position:sticky;top:88px;height:fit-content;}
+  .sidenav button{display:flex;align-items:center;gap:10px;padding:10px 12px;border:none;background:transparent;border-radius:var(--radius-sm);font-size:13.5px;font-weight:500;color:var(--ink-soft);text-align:left;}
+  .sidenav button.active{background:var(--glass-bg-strong);color:var(--forest-900);font-weight:600;box-shadow:var(--glass-shadow);}
+  .sidenav button:hover:not(.active){background:rgba(255,255,255,0.35);}
+}
+.bottomnav{position:fixed;bottom:14px;left:50%;transform:translateX(-50%);z-index:60;display:flex;gap:4px;padding:6px;border-radius:99px;background:var(--glass-bg-strong);backdrop-filter:blur(18px);border:1px solid var(--glass-border);box-shadow:var(--glass-shadow);}
+@media(min-width:900px){.bottomnav{display:none;}}
+.bottomnav button{border:none;background:transparent;padding:9px 16px;border-radius:99px;font-size:12px;font-weight:600;color:var(--ink-soft);display:flex;flex-direction:column;align-items:center;gap:2px;}
+.bottomnav button.active{background:var(--forest-700);color:#fff;}
+.view{display:none;}
+.view.active{display:block;}
+.section-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-600);margin-bottom:8px;}
+.greeting{font-family:var(--font-display);font-size:24px;font-weight:600;color:var(--forest-900);margin-bottom:20px;}
+
+/* ACADEMIC HEALTH HERO */
+.health-card{padding:24px;margin-bottom:16px;}
+.health-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;}
+.health-head h2{font-family:var(--font-display);font-size:19px;font-weight:600;color:var(--forest-900);}
+.health-summary{font-size:12px;color:var(--ink-soft);margin-bottom:18px;}
+.habit-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(27,67,50,0.07);}
+.habit-row:last-child{border-bottom:none;}
+.habit-icon{font-size:18px;width:26px;text-align:center;flex-shrink:0;}
+.habit-label{font-size:13px;font-weight:600;color:var(--forest-900);width:76px;flex-shrink:0;}
+.habit-dots{display:flex;gap:5px;flex:1;}
+.habit-dots .dot{flex:1;aspect-ratio:1;border-radius:50%;background:rgba(27,67,50,0.09);max-width:16px;}
+.habit-dots .dot.filled{background:linear-gradient(135deg,var(--forest-500),var(--gold-500));}
+.habit-dots .dot.today{box-shadow:0 0 0 2px rgba(201,162,39,0.5);}
+
+.quick-actions{display:flex;gap:10px;margin-bottom:18px;}
+.quick-action-btn{flex:1;padding:12px 10px;border-radius:14px;border:1px solid rgba(27,67,50,0.15);background:rgba(255,255,255,0.55);font-size:12.5px;font-weight:600;color:var(--forest-900);display:flex;align-items:center;justify-content:center;gap:7px;transition:border-color .12s, background .12s;}
+.quick-action-btn:hover{border-color:var(--forest-500);background:rgba(255,255,255,0.8);}
+.quick-action-btn.done{color:var(--forest-700);border-color:rgba(45,106,79,0.3);background:rgba(45,106,79,0.06);}
+.quick-action-btn .qa-icon{font-size:15px;}
+
+.card-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+@media(max-width:480px){.card-row{grid-template-columns:1fr;}}
+.stat-card{padding:18px;}
+.stat-card .label{font-size:11.5px;color:var(--ink-soft);margin-bottom:4px;}
+.stat-card .big{font-family:var(--font-mono);font-size:24px;font-weight:600;color:var(--forest-900);}
+.stat-card .cap{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+
+.card{padding:18px 20px;margin-bottom:12px;}
+.card:last-child{margin-bottom:0;}
+.card h3{font-size:14px;font-weight:600;color:var(--forest-900);margin-bottom:2px;}
+.card .meta{font-size:12px;color:var(--ink-soft);}
+
+.assess-row{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 20px;border-bottom:1px solid rgba(27,67,50,0.08);gap:10px;}
+.assess-row:last-child{border-bottom:none;}
+.assess-row .score{font-family:var(--font-mono);font-weight:600;font-size:15px;color:var(--forest-700);white-space:nowrap;}
+.assess-row .score.pending{color:var(--gold-600);font-family:var(--font-body);font-weight:500;font-size:12.5px;}
+
+.coverage-row{display:flex;align-items:center;gap:10px;padding:11px 20px;border-bottom:1px solid rgba(27,67,50,0.06);}
+.coverage-row:last-child{border-bottom:none;}
+.coverage-week{font-family:var(--font-mono);font-size:11px;color:var(--ink-soft);width:52px;flex-shrink:0;}
+.coverage-title{font-size:13px;color:var(--ink);flex:1;}
+.badge-thisweek{font-size:9.5px;font-weight:600;color:#fff;background:var(--gold-500);padding:3px 8px;border-radius:99px;text-transform:uppercase;letter-spacing:.04em;}
+
+/* 14-WEEK LEARNING GUIDE (accordion) */
+.guide-row{border-bottom:1px solid rgba(27,67,50,0.08);}
+.guide-row:last-child{border-bottom:none;}
+.guide-head{display:flex;align-items:center;gap:10px;padding:13px 2px;background:none;border:none;width:100%;text-align:left;border-radius:8px;}
+.guide-head:hover{background:rgba(255,255,255,0.4);}
+.guide-num{font-family:var(--font-mono);font-size:11px;color:var(--ink-soft);width:42px;flex-shrink:0;}
+.guide-topic{font-size:13px;font-weight:500;color:var(--ink);flex:1;}
+.guide-topic.muted{color:var(--ink-soft);font-style:italic;font-weight:400;}
+.guide-badge{font-size:9px;font-weight:600;color:#fff;background:var(--gold-500);padding:2px 7px;border-radius:99px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;}
+.guide-chevron{width:8px;height:8px;border-right:1.6px solid var(--ink-soft);border-bottom:1.6px solid var(--ink-soft);transform:rotate(45deg);transition:transform .18s ease;flex-shrink:0;margin-left:2px;}
+.guide-row.open .guide-chevron{transform:rotate(-135deg);}
+.guide-body{max-height:0;overflow:hidden;transition:max-height .25s ease;}
+.guide-row.open .guide-body{max-height:320px;}
+.guide-body-inner{padding:0 2px 16px 42px;}
+.guide-tlo{font-size:11.5px;color:var(--ink-soft);line-height:1.5;padding-bottom:8px;margin-bottom:8px;border-bottom:1px dashed rgba(27,67,50,0.12);}
+.guide-prompt{display:flex;align-items:center;gap:8px;padding:6px 0;}
+.guide-prompt-text{font-size:11.5px;color:var(--ink-soft);flex:1;line-height:1.4;}
+.guide-copy-btn{flex-shrink:0;font-size:10.5px;font-weight:600;color:var(--forest-700);background:rgba(45,106,79,0.08);border:1px solid rgba(45,106,79,0.18);padding:5px 10px;border-radius:99px;white-space:nowrap;transition:background .15s, color .15s;}
+.guide-copy-btn.copied{background:var(--forest-700);color:#fff;border-color:var(--forest-700);}
+.guide-open-link{display:inline-block;margin-top:6px;font-size:11px;font-weight:600;color:var(--forest-700);text-decoration:none;}
+
+/* educator roster */
+.search-wrap{margin-bottom:14px;}
+.search-wrap input{width:100%;padding:11px 16px;border-radius:99px;border:1px solid var(--glass-border);background:var(--glass-bg-strong);font-size:13.5px;outline:none;}
+.roster-row{padding:14px 18px;border-bottom:1px solid rgba(27,67,50,0.08);cursor:pointer;}
+.roster-row:last-child{border-bottom:none;}
+.roster-top{display:flex;align-items:center;justify-content:space-between;}
+.roster-name{font-size:13.5px;font-weight:600;color:var(--forest-900);}
+.roster-matric{font-family:var(--font-mono);font-size:11px;color:var(--ink-soft);}
+.roster-ca{font-family:var(--font-mono);font-weight:600;font-size:14px;color:var(--forest-700);}
+/* uploads */
+.upload-card{padding:20px;margin-bottom:16px;}
+.upload-card h3{font-size:15px;font-weight:600;color:var(--forest-900);margin-bottom:2px;}
+.upload-card .meta{font-size:12px;color:var(--ink-soft);margin-bottom:14px;}
+.file-drop{border:1.5px dashed rgba(27,67,50,0.3);border-radius:var(--radius-sm);padding:18px;text-align:center;font-size:12.5px;color:var(--ink-soft);background:rgba(255,255,255,0.35);position:relative;}
+.file-drop input{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.file-drop.has-file{border-style:solid;border-color:var(--forest-500);color:var(--forest-700);}
+.map-table{width:100%;margin-top:14px;border-collapse:collapse;font-size:12px;}
+.map-table th{text-align:left;font-weight:600;color:var(--ink-soft);padding:6px 8px;border-bottom:1px solid rgba(27,67,50,0.12);}
+.map-table td{padding:6px 8px;border-bottom:1px solid rgba(27,67,50,0.06);vertical-align:top;}
+.map-table select{width:100%;padding:5px 6px;border-radius:6px;border:1px solid rgba(27,67,50,0.2);font-size:11.5px;}
+.preview-note{font-size:11.5px;color:var(--ink-soft);margin-top:10px;}
+.preview-note.warn{color:#a9491f;}
+.btn-import{margin-top:12px;padding:10px 18px;border:none;border-radius:99px;background:linear-gradient(135deg, var(--gold-600), var(--gold-500));color:#fff;font-size:12.5px;font-weight:600;}
+.import-result{margin-top:10px;font-size:12px;color:var(--forest-700);display:none;}
+.import-result.show{display:block;}
+
+.loading-state, .empty-state{padding:40px 20px;text-align:center;color:var(--ink-soft);font-size:13px;}
+
+/* PRACTICE / NOTES MODAL */
+.modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(16,36,28,0.45);backdrop-filter:blur(3px);display:none;align-items:flex-end;justify-content:center;}
+.modal-overlay.open{display:flex;}
+@media(min-width:640px){.modal-overlay{align-items:center;}}
+.modal-sheet{width:100%;max-width:480px;max-height:88vh;overflow-y:auto;background:var(--ivory);border-radius:22px 22px 0 0;padding:22px 22px 28px;box-shadow:0 -8px 30px rgba(16,36,28,0.25);}
+@media(min-width:640px){.modal-sheet{border-radius:var(--radius-lg);box-shadow:0 20px 50px rgba(16,36,28,0.3);}}
+.modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:4px;}
+.modal-title{font-family:var(--font-display);font-size:18px;font-weight:600;color:var(--forest-900);}
+.modal-close{flex-shrink:0;width:28px;height:28px;border-radius:50%;border:none;background:rgba(27,67,50,0.08);color:var(--ink-soft);font-size:16px;line-height:1;}
+.modal-topic-select{width:100%;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid rgba(27,67,50,0.18);background:#fff;font-size:13px;color:var(--ink);margin:12px 0 16px;}
+.modal-topic-tlo{font-size:11.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:16px;padding-bottom:14px;border-bottom:1px dashed rgba(27,67,50,0.15);}
+
+.quiz-q{margin-bottom:18px;}
+.quiz-q-text{font-size:13.5px;font-weight:600;color:var(--forest-900);margin-bottom:9px;line-height:1.4;}
+.quiz-opt{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:var(--radius-sm);border:1px solid rgba(27,67,50,0.15);margin-bottom:7px;font-size:12.5px;color:var(--ink);cursor:pointer;transition:border-color .12s, background .12s;}
+.quiz-opt:hover{border-color:var(--forest-500);}
+.quiz-opt.selected{border-color:var(--forest-500);background:rgba(45,106,79,0.08);font-weight:500;}
+.quiz-opt.correct{border-color:var(--forest-500);background:rgba(45,106,79,0.12);}
+.quiz-opt.incorrect{border-color:#c0503a;background:rgba(192,80,58,0.08);}
+.quiz-opt input{accent-color:var(--forest-700);}
+.quiz-result{text-align:center;padding:18px 0 6px;}
+.quiz-result .score{font-family:var(--font-mono);font-size:32px;font-weight:600;color:var(--forest-900);}
+.quiz-result .label{font-size:12.5px;color:var(--ink-soft);margin-top:4px;}
+
+.notes-textarea{width:100%;min-height:120px;padding:12px 14px;border-radius:var(--radius-sm);border:1px solid rgba(27,67,50,0.18);background:#fff;font-family:inherit;font-size:13.5px;color:var(--ink);resize:vertical;outline:none;}
+.notes-textarea:focus{border-color:var(--forest-500);}
+.notes-hint{font-size:11px;color:var(--ink-soft);margin-top:6px;}
+
+/* LEARNING TAB: notes/quiz history */
+.history-row{padding:13px 18px;border-bottom:1px solid rgba(27,67,50,0.08);}
+.history-row:last-child{border-bottom:none;}
+.history-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;}
+.history-topic{font-size:12.5px;font-weight:600;color:var(--forest-900);}
+.history-date{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-soft);white-space:nowrap;}
+.history-note-text{font-size:12.5px;color:var(--ink-soft);margin-top:4px;line-height:1.5;}
+.history-score{font-family:var(--font-mono);font-size:12.5px;font-weight:600;color:var(--forest-700);margin-top:2px;}
+
+/* MY COURSES */
+.semester-heading{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-600);margin-bottom:2px;}
+.courses-count{font-size:12px;color:var(--ink-soft);margin-bottom:14px;}
+.course-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 18px;border-bottom:1px solid rgba(27,67,50,0.08);cursor:pointer;transition:background .12s;}
+.course-card:last-child{border-bottom:none;}
+.course-card:hover{background:rgba(255,255,255,0.4);}
+.course-card-code{font-family:var(--font-mono);font-size:11px;color:var(--gold-600);font-weight:600;letter-spacing:.03em;}
+.course-card-name{font-size:14.5px;font-weight:600;color:var(--forest-900);margin-top:2px;}
+.course-card-sub{font-size:11.5px;color:var(--ink-soft);margin-top:3px;}
+.course-card-arrow{width:8px;height:8px;border-right:1.6px solid var(--ink-soft);border-bottom:1.6px solid var(--ink-soft);transform:rotate(-45deg);flex-shrink:0;}
+
+/* INOVA link-out card */
+.inova-card{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 20px;margin-bottom:16px;}
+.inova-card-text h3{font-size:14px;font-weight:600;color:var(--forest-900);margin-bottom:2px;}
+.inova-card-text p{font-size:12px;color:var(--ink-soft);}
+.btn-inova{flex-shrink:0;display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:600;color:#fff;background:linear-gradient(135deg, var(--forest-700), var(--forest-500));border:none;padding:10px 16px;border-radius:99px;text-decoration:none;white-space:nowrap;}
+.link-inova-inline{display:inline-block;margin-top:2px;font-size:11.5px;font-weight:600;color:var(--forest-700);text-decoration:none;}
+</style>
+</head>
+<body>
+
+<div id="auth-screen">
+  <div class="auth-card glass fade-up">
+    <div class="auth-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2.5 6-6 2.5 2.5-6 6-2.5z" fill="#fff" stroke="none"/></svg></div>
+    <h1>Kompas Semester</h1>
+    <p class="sub" id="auth-subtitle">Sign in to continue</p>
+
+    <form id="login-form">
+      <div class="field"><label for="email">Email</label><input type="email" id="email" placeholder="you@example.com" autocomplete="username" required></div>
+      <div class="field"><label for="password">Password</label><input type="password" id="password" placeholder="••••••••" autocomplete="current-password" required></div>
+      <button type="submit" class="btn-primary" id="login-btn">Sign in</button>
+    </form>
+
+    <form id="signup-form" style="display:none">
+      <div class="field"><label for="signup-name">Full name</label><input type="text" id="signup-name" placeholder="As you'd like it shown to your lecturer" autocomplete="name" required></div>
+      <div class="field"><label for="signup-email">Email</label><input type="email" id="signup-email" placeholder="you@example.com" autocomplete="username" required></div>
+      <div class="field"><label for="signup-password">Password</label><input type="password" id="signup-password" placeholder="At least 6 characters" autocomplete="new-password" minlength="6" required></div>
+
+      <div class="pdpa-notice">
+        <h4>About this app &amp; your data</h4>
+        <p>Kompas Semester is an independent study companion created by your lecturer for all chemistry courses — it is <strong>not an official KPJU system</strong> and does not hold your official grades or attendance records (those remain in INOVA). Signing up is optional.</p>
+        <p><strong>What we collect:</strong> your full name, the email address you choose to sign up with, and your activity on this app — practice quiz results and study notes you write.</p>
+        <p><strong>Why:</strong> to track your course progress, show you a study streak, and let your lecturer see engagement (not scores) for the course you enroll in.</p>
+        <p><strong>Where it's stored:</strong> on Supabase, hosted in Australia (Sydney region). Your data leaves Malaysia to be processed there.</p>
+        <p><strong>Who can see it:</strong> you, and the lecturer(s) of courses you're enrolled in. It is not shared with any other third party.</p>
+        <p><strong>Your rights:</strong> you may request access to, correction of, or deletion of your data at any time by contacting <strong>aufali@gmail.com</strong>. Deleting your account removes your notes and quiz history from this app.</p>
+      </div>
+      <div class="consent-row">
+        <input type="checkbox" id="signup-consent" required>
+        <label for="signup-consent">I have read this notice and consent to my data being processed as described.</label>
+      </div>
+
+      <button type="submit" class="btn-primary" id="signup-btn">Create account</button>
+    </form>
+
+    <div class="auth-error" id="auth-error"></div>
+    <div class="auth-info" id="auth-info"></div>
+
+    <div class="auth-toggle" id="auth-toggle">
+      New here? <button type="button" id="show-signup">Create an account</button>
+    </div>
+  </div>
+</div>
+
+<div id="course-picker-screen">
+  <div class="picker-card glass fade-up">
+    <div class="auth-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2.5 6-6 2.5 2.5-6 6-2.5z" fill="#fff" stroke="none"/></svg></div>
+    <h1>Pick your course(s)</h1>
+    <p class="sub">You can add more later — this app is separate from your official course registration.</p>
+    <div class="picker-list" id="picker-list"></div>
+    <button type="button" class="btn-primary" id="picker-continue-btn">Continue</button>
+    <div class="auth-error" id="picker-error"></div>
+  </div>
+</div>
+
+<div id="app">
+  <div class="topbar">
+    <div class="topbar-brand"><div class="topbar-mark"></div><span class="topbar-name">Kompas Semester</span></div>
+    <div class="topbar-right"><span class="topbar-user" id="topbar-user"></span><button class="btn-signout" id="signout-btn">Sign out</button></div>
+  </div>
+
+  <main class="shell">
+    <nav class="sidenav" id="student-sidenav">
+      <button data-view="courses" class="active">📚 My Courses</button>
+      <button data-view="home">🧭 Home</button>
+      <button data-view="assessments">📋 Assessments</button>
+      <button data-view="learning">🔥 Learning</button>
+    </nav>
+    <nav class="sidenav" id="educator-sidenav" style="display:none">
+      <button data-view="courses" class="active">📚 My Courses</button>
+      <button data-view="roster">🎓 Students</button>
+      <button data-view="uploads">⬆️ Uploads</button>
+    </nav>
+
+    <div id="views">
+      <!-- MY COURSES (shared landing view — content rendered per role) -->
+      <section class="view active" id="view-courses">
+        <div class="semester-heading" id="courses-semester-label">Semester</div>
+        <div class="greeting" style="margin-bottom:2px">My Courses</div>
+        <div class="courses-count" id="courses-count"></div>
+        <div class="glass" id="courses-list"></div>
+      </section>
+
+      <!-- STUDENT: HOME (Academic Health hero) -->
+      <section class="view" id="view-home">
+        <div class="greeting" id="home-greeting">Hi there</div>
+
+        <div class="health-card glass fade-up">
+          <div class="health-head"><h2>Your academic health this week</h2></div>
+          <div class="health-summary" id="health-summary">Loading…</div>
+          <div class="quick-actions" id="quick-actions"></div>
+          <div id="habit-rows"></div>
+        </div>
+
+        <div class="card-row">
+          <div class="stat-card glass fade-up" id="countdown-card">
+            <div class="label" id="countdown-label">Loading…</div>
+            <div class="big" id="countdown-days">—</div>
+            <div class="cap" id="countdown-sub"></div>
+          </div>
+          <div class="stat-card glass fade-up">
+            <div class="label">Study streak</div>
+            <div class="big" id="streak-days">—</div>
+            <div class="cap">consecutive days</div>
+          </div>
+        </div>
+
+        <div class="card glass fade-up" id="guide-card" style="display:none;padding:18px 20px">
+          <h3 style="margin-bottom:2px">Weekly learning guide</h3>
+          <div class="meta" style="margin-bottom:6px">Tap a week for Gemini Notebook prompts on that topic.</div>
+          <div id="guide-list"></div>
+        </div>
+      </section>
+
+      <!-- STUDENT: ASSESSMENTS -->
+      <section class="view" id="view-assessments">
+        <div class="section-label" id="assess-section-label">PHIA 4312 · Instrumentation Analysis</div>
+        <div class="greeting" style="font-size:20px;margin-bottom:16px">Assessments &amp; coverage</div>
+
+        <div class="inova-card glass fade-up">
+          <div class="inova-card-text">
+            <h3>Your marks</h3>
+            <p>Test, presentation &amp; assignment scores are recorded in INOVA.</p>
+          </div>
+          <a href="#" target="_blank" rel="noopener" class="btn-inova" id="inova-marks-link">View in INOVA →</a>
+        </div>
+
+        <div class="glass" id="assess-list" style="margin-bottom:16px"></div>
+
+        <div class="section-label">Semester coverage</div>
+        <div class="glass" id="coverage-list"></div>
+      </section>
+
+      <!-- STUDENT: LEARNING -->
+      <section class="view" id="view-learning">
+        <div class="section-label">Consistency</div>
+        <div class="greeting" style="font-size:20px;margin-bottom:16px">Your learning history</div>
+        <div class="card glass fade-up">
+          <h3 id="learning-streak-title">—</h3>
+          <div class="meta" id="learning-streak-sub">Keep showing up — consistency compounds.</div>
+        </div>
+        <div id="learning-detail"></div>
+
+        <div class="section-label" style="margin-top:22px">Your notes</div>
+        <div class="glass" id="notes-history" style="margin-bottom:16px"></div>
+
+        <div class="section-label">Practice quiz history</div>
+        <div class="glass" id="quiz-history"></div>
+      </section>
+
+      <!-- EDUCATOR: ROSTER -->
+      <section class="view" id="view-roster">
+        <div class="section-label" id="roster-section-label">PHIA 4312 · DPH 48</div>
+        <div class="greeting" style="font-size:20px;margin-bottom:16px">Students</div>
+
+        <div class="inova-card glass fade-up">
+          <div class="inova-card-text">
+            <h3>Marks &amp; grading</h3>
+            <p>Enter and view test, presentation &amp; assignment scores in INOVA's Grader report.</p>
+          </div>
+          <a href="#" target="_blank" rel="noopener" class="btn-inova" id="inova-roster-link">Open Grader report →</a>
+        </div>
+
+        <div class="search-wrap"><input type="text" id="roster-search" placeholder="Search by name or matric number…"></div>
+        <div class="glass" id="roster-list"></div>
+      </section>
+
+      <!-- EDUCATOR: UPLOADS -->
+      <section class="view" id="view-uploads">
+        <div class="section-label" id="uploads-section-label">PHIA 4312</div>
+        <div class="greeting" style="font-size:20px;margin-bottom:16px">Upload from Excel</div>
+
+        <div class="upload-card glass fade-up">
+          <h3>Lesson plan / coverage</h3>
+          <div class="meta">Upload the semester's lesson plan (week, date, topic). We'll try to detect the columns — confirm the mapping below before importing.</div>
+          <div class="file-drop" id="coverage-drop">Click or drop your lesson plan file (.xlsx, .xls, .csv, .docx)<input type="file" id="coverage-file" accept=".xlsx,.xls,.csv,.docx"></div>
+          <div id="coverage-map"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <nav class="bottomnav" id="student-bottomnav">
+    <button data-view="courses" class="active">📚<span>Courses</span></button>
+    <button data-view="home">🧭<span>Home</span></button>
+    <button data-view="assessments">📋<span>Marks</span></button>
+    <button data-view="learning">🔥<span>Streak</span></button>
+  </nav>
+  <nav class="bottomnav" id="educator-bottomnav" style="display:none">
+    <button data-view="courses" class="active">📚<span>Courses</span></button>
+    <button data-view="roster">🎓<span>Students</span></button>
+    <button data-view="uploads">⬆️<span>Uploads</span></button>
+  </nav>
+</div>
+
+<!-- PRACTICE / NOTES MODAL (shared shell — content rendered per mode) -->
+<div class="modal-overlay" id="activity-modal">
+  <div class="modal-sheet">
+    <div class="modal-head">
+      <div class="modal-title" id="modal-title">—</div>
+      <button class="modal-close" id="modal-close" type="button" aria-label="Close">✕</button>
+    </div>
+    <select class="modal-topic-select" id="modal-topic-select"></select>
+    <div class="modal-topic-tlo" id="modal-topic-tlo"></div>
+    <div id="modal-body"></div>
+  </div>
+</div>
+
+<script>
+const SUPABASE_URL = 'https://jtkskwopnprgmxlhppro.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0a3Nrd29wbnByZ214bGhwcHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDU0NDQsImV4cCI6MjEwMjUyMTQ0NH0.MVvaIH6fPhzC0aRk8XIZMU1OrAZYNbsT9V1diP8fuGw';
+const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+const ACTIVITY_TYPES = [
+  {key:'practice', label:'Practice', icon:'🧪'},
+  {key:'notes', label:'Notes', icon:'📝'},
+];
+
+let myProfile = null, currentCourse = null, currentAssessments = [], myActivities = [], myCourses = [];
+let myTopics = [], myNotes = [], myQuizAttempts = [];
+let quizQuestionCache = {}; // topic_id -> questions[]
+let modalType = null; // 'practice' | 'notes'
+
+/* ---------- AUTH ---------- */
+function clearAuthMessages() {
+  document.getElementById('auth-error').classList.remove('show');
+  document.getElementById('auth-info').classList.remove('show');
+}
+
+document.getElementById('show-signup').addEventListener('click', () => {
+  const showingSignup = document.getElementById('signup-form').style.display !== 'none';
+  document.getElementById('login-form').style.display = showingSignup ? '' : 'none';
+  document.getElementById('signup-form').style.display = showingSignup ? 'none' : '';
+  document.getElementById('auth-subtitle').textContent = showingSignup ? 'Sign in to continue' : 'Create your account';
+  document.getElementById('show-signup').textContent = showingSignup ? 'Create an account' : 'Sign in instead';
+  document.getElementById('auth-toggle').firstChild.textContent = showingSignup ? 'New here? ' : 'Already have an account? ';
+  clearAuthMessages();
+});
+
+document.getElementById('login-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim().toLowerCase();
+  const password = document.getElementById('password').value;
+  const btn = document.getElementById('login-btn');
+  const errEl = document.getElementById('auth-error');
+  clearAuthMessages();
+  btn.disabled = true; btn.textContent = 'Signing in…';
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  btn.disabled = false; btn.textContent = 'Sign in';
+  if (error) { errEl.textContent = 'Email or password not recognized. Check both and try again.'; errEl.classList.add('show'); return; }
+  await boot();
+});
+
+document.getElementById('signup-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const fullName = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim().toLowerCase();
+  const password = document.getElementById('signup-password').value;
+  const consented = document.getElementById('signup-consent').checked;
+  const btn = document.getElementById('signup-btn');
+  const errEl = document.getElementById('auth-error');
+  const infoEl = document.getElementById('auth-info');
+  clearAuthMessages();
+
+  if (!consented) {
+    errEl.textContent = 'Please read the notice and tick the consent box to continue.';
+    errEl.classList.add('show');
+    return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Creating account…';
+  const { data, error } = await sb.auth.signUp({ email, password });
+  if (error) {
+    btn.disabled = false; btn.textContent = 'Create account';
+    errEl.textContent = error.message.includes('already registered') ? 'An account with this email already exists — try signing in instead.' : 'Could not create account: ' + error.message;
+    errEl.classList.add('show');
+    return;
+  }
+
+  if (!data.session) {
+    // Email confirmation required — no active session yet, so we can't write the profile row
+    // (RLS requires auth.uid() = id). Prompt the student to confirm and come back to sign in.
+    btn.disabled = false; btn.textContent = 'Create account';
+    infoEl.textContent = 'Account created. Check your email to confirm it, then sign in.';
+    infoEl.classList.add('show');
+    document.getElementById('signup-form').reset();
+    return;
+  }
+
+  const { error: profileError } = await sb.from('profiles').insert({
+    id: data.user.id, full_name: fullName, email, role: 'student', pdpa_consent_at: new Date().toISOString()
+  });
+  btn.disabled = false; btn.textContent = 'Create account';
+  if (profileError) {
+    errEl.textContent = 'Account created but profile setup failed — contact your lecturer.';
+    errEl.classList.add('show');
+    return;
+  }
+
+  await boot({ afterSignup: true });
+});
+
+document.getElementById('signout-btn').addEventListener('click', async () => { await sb.auth.signOut(); location.reload(); });
+
+async function boot(opts = {}) {
+  const { data: { session } } = await sb.auth.getSession();
+  if (!session) return;
+  const { data: profile, error } = await sb.from('profiles').select('*').eq('id', session.user.id).single();
+  if (error || !profile) {
+    document.getElementById('auth-error').textContent = 'Your account exists but has no profile yet. Contact your coordinator.';
+    document.getElementById('auth-error').classList.add('show');
+    return;
+  }
+  myProfile = profile;
+
+  if (opts.afterSignup && profile.role === 'student') {
+    const { data: enrollments } = await sb.from('enrollments').select('id').eq('student_id', profile.id);
+    if (!enrollments || enrollments.length === 0) {
+      document.getElementById('auth-screen').style.display = 'none';
+      await showCoursePicker();
+      return;
+    }
+  }
+
+  document.getElementById('auth-screen').style.display = 'none';
+  document.getElementById('course-picker-screen').classList.remove('active');
+  document.getElementById('app').classList.add('active');
+  document.getElementById('topbar-user').textContent = profile.full_name.split(' ').slice(0,2).join(' ');
+
+  if (profile.role === 'educator') {
+    document.getElementById('student-sidenav').style.display = 'none';
+    document.getElementById('student-bottomnav').style.display = 'none';
+    document.getElementById('educator-sidenav').style.display = 'flex';
+    document.getElementById('educator-bottomnav').style.display = 'flex';
+    await loadEducatorCourses();
+    showView('courses');
+    setupUploads();
+  } else {
+    await loadStudentCourses();
+    showView('courses');
+  }
+}
+
+document.querySelectorAll('.sidenav button, .bottomnav button').forEach(btn => btn.addEventListener('click', () => showView(btn.dataset.view)));
+function showView(view) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + view).classList.add('active');
+  document.querySelectorAll('.sidenav button, .bottomnav button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+}
+
+/* ---------- COURSE PICKER (post-signup) ---------- */
+async function showCoursePicker() {
+  const listEl = document.getElementById('picker-list');
+  const errEl = document.getElementById('picker-error');
+  errEl.classList.remove('show');
+  listEl.innerHTML = '<div class="loading-state">Loading courses…</div>';
+  document.getElementById('course-picker-screen').classList.add('active');
+
+  const { data: courses } = await sb.from('courses').select('*').order('code');
+  if (!courses || !courses.length) {
+    listEl.innerHTML = '<div class="empty-state">No courses available yet. Contact your lecturer.</div>';
+    return;
+  }
+  listEl.innerHTML = courses.map(c => `
+    <div class="picker-item">
+      <input type="checkbox" id="pick-${c.id}" value="${c.id}">
+      <label for="pick-${c.id}">
+        <span class="course-card-code">${c.code}</span>
+        <span class="course-card-name">${c.name}</span>
+      </label>
+    </div>`).join('');
+}
+
+document.getElementById('picker-continue-btn').addEventListener('click', async () => {
+  const btn = document.getElementById('picker-continue-btn');
+  const errEl = document.getElementById('picker-error');
+  errEl.classList.remove('show');
+  const selected = [...document.querySelectorAll('#picker-list input[type="checkbox"]:checked')].map(el => el.value);
+  if (!selected.length) {
+    errEl.textContent = 'Pick at least one course to continue.';
+    errEl.classList.add('show');
+    return;
+  }
+  btn.disabled = true; btn.textContent = 'Enrolling…';
+  const rows = selected.map(course_id => ({ student_id: myProfile.id, course_id }));
+  const { error } = await sb.from('enrollments').insert(rows);
+  btn.disabled = false; btn.textContent = 'Continue';
+  if (error) {
+    errEl.textContent = 'Could not enroll — please try again.';
+    errEl.classList.add('show');
+    return;
+  }
+  await boot();
+});
+
+/* ---------- MY COURSES (shared landing) ---------- */
+function groupBySemester(courses) {
+  const groups = {};
+  courses.forEach(c => { const key = c.semester || 'Semester not set'; (groups[key] = groups[key] || []).push(c); });
+  return groups;
+}
+
+function renderCourseList(courses, subtitleFn, onOpen) {
+  const listEl = document.getElementById('courses-list');
+  const countEl = document.getElementById('courses-count');
+  const labelEl = document.getElementById('courses-semester-label');
+  if (!courses.length) {
+    labelEl.textContent = '';
+    countEl.textContent = '';
+    listEl.innerHTML = '<div class="empty-state">No courses found for your account yet. Contact your coordinator.</div>';
+    return;
+  }
+  const groups = groupBySemester(courses);
+  const semesterKeys = Object.keys(groups);
+  labelEl.textContent = semesterKeys.length === 1 ? semesterKeys[0] : 'Your semesters';
+  countEl.textContent = courses.length + (courses.length === 1 ? ' course' : ' courses');
+
+  listEl.innerHTML = semesterKeys.map(sem => `
+    ${semesterKeys.length > 1 ? `<div class="semester-heading" style="padding:14px 18px 0">${sem}</div>` : ''}
+    ${groups[sem].map(c => `
+      <div class="course-card" data-course="${c.id}">
+        <div>
+          <div class="course-card-code">${c.code}</div>
+          <div class="course-card-name">${c.name}</div>
+          <div class="course-card-sub">${subtitleFn(c)}</div>
+        </div>
+        <div class="course-card-arrow"></div>
+      </div>`).join('')}`).join('');
+
+  listEl.querySelectorAll('.course-card').forEach(card => {
+    card.addEventListener('click', () => onOpen(card.dataset.course));
+  });
+}
+
+async function loadStudentCourses() {
+  const { data: enrollments } = await sb.from('enrollments').select('course_id, courses(*)').eq('student_id', myProfile.id);
+  myCourses = (enrollments || []).map(e => e.courses).filter(Boolean);
+  renderCourseList(myCourses, () => 'Tap to view your progress', openStudentCourse);
+}
+
+async function openStudentCourse(courseId) {
+  currentCourse = myCourses.find(c => c.id === courseId);
+  if (!currentCourse) return;
+  await loadStudentData();
+  showView('home');
+}
+
+async function loadEducatorCourses() {
+  // NOTE: courses have no per-educator ownership field yet — with a single
+  // educator (Auf) this lists every course in the system. If a second
+  // educator account is ever added, this needs a `courses.educator_id`
+  // filter to scope it correctly.
+  const { data: courses } = await sb.from('courses').select('*').order('code');
+  myCourses = courses || [];
+  const { data: enrollmentCounts } = await sb.from('enrollments').select('course_id');
+  const counts = {};
+  (enrollmentCounts || []).forEach(e => { counts[e.course_id] = (counts[e.course_id] || 0) + 1; });
+  renderCourseList(myCourses, c => (counts[c.id] || 0) + ' students enrolled', openEducatorCourse);
+}
+
+async function openEducatorCourse(courseId) {
+  currentCourse = myCourses.find(c => c.id === courseId);
+  if (!currentCourse) return;
+  await loadEducatorRoster();
+  showView('roster');
+}
+
+/* ---------- STUDENT DATA ---------- */
+async function loadStudentData() {
+  document.getElementById('home-greeting').textContent = 'Hi, ' + myProfile.full_name.split(' ')[0];
+  document.getElementById('assess-section-label').textContent = currentCourse.code + ' · ' + currentCourse.name;
+  const inovaLink = document.getElementById('inova-marks-link');
+  if (currentCourse.inova_url) { inovaLink.href = currentCourse.inova_url; inovaLink.style.display = ''; }
+  else { inovaLink.style.display = 'none'; }
+
+  const { data: assessments } = await sb.from('assessments').select('*').eq('course_id', currentCourse.id).order('name');
+  currentAssessments = assessments || [];
+  const { data: activities } = await sb.from('learning_activities').select('*').eq('student_id', myProfile.id).eq('course_id', currentCourse.id);
+  myActivities = activities || [];
+  const { data: topics } = await sb.from('topics').select('*').eq('course_id', currentCourse.id).order('week_number');
+  myTopics = topics || [];
+  const { data: notes } = await sb.from('student_notes').select('*').eq('student_id', myProfile.id).eq('course_id', currentCourse.id).order('created_at', { ascending: false });
+  myNotes = notes || [];
+  const { data: attempts } = await sb.from('quiz_attempts').select('*').eq('student_id', myProfile.id).eq('course_id', currentCourse.id).order('created_at', { ascending: false });
+  myQuizAttempts = attempts || [];
+
+  renderHealthHero();
+  renderCountdown();
+  renderStreakStat();
+  renderAssessments();
+  renderCoverage(myTopics);
+  renderLearningGuide(myTopics);
+  renderLearningDetail();
+  renderNotesHistory();
+  renderQuizHistory();
+}
+
+async function refreshAfterActivityLog() {
+  const { data: activities } = await sb.from('learning_activities').select('*').eq('student_id', myProfile.id).eq('course_id', currentCourse.id);
+  myActivities = activities || [];
+  const { data: notes } = await sb.from('student_notes').select('*').eq('student_id', myProfile.id).eq('course_id', currentCourse.id).order('created_at', { ascending: false });
+  myNotes = notes || [];
+  const { data: attempts } = await sb.from('quiz_attempts').select('*').eq('student_id', myProfile.id).eq('course_id', currentCourse.id).order('created_at', { ascending: false });
+  myQuizAttempts = attempts || [];
+  renderHealthHero();
+  renderStreakStat();
+  renderLearningDetail();
+  renderNotesHistory();
+  renderQuizHistory();
+}
+
+function findThisWeekTopic(topics) {
+  const today = new Date();
+  return topics.find(t => {
+    if (!t.week_start_date) return false;
+    const start = new Date(t.week_start_date);
+    const end = new Date(start); end.setDate(end.getDate() + 7);
+    return today >= start && today < end;
+  });
+}
+
+/* ---------- PRACTICE / NOTES MODAL ---------- */
+function openActivityModal(type) {
+  modalType = type;
+  const modal = document.getElementById('activity-modal');
+  const select = document.getElementById('modal-topic-select');
+  document.getElementById('modal-title').textContent = type === 'practice' ? '🧪 Practice quiz' : '📝 Write a note';
+
+  if (!myTopics.length) {
+    select.style.display = 'none';
+    document.getElementById('modal-topic-tlo').textContent = '';
+    document.getElementById('modal-body').innerHTML = '<div class="empty-state">No topics published for this course yet.</div>';
+    modal.classList.add('open');
+    return;
+  }
+  select.style.display = '';
+  const thisWeek = findThisWeekTopic(myTopics);
+  select.innerHTML = myTopics.map(t => `<option value="${t.id}">Week ${t.week_number ?? '—'}: ${t.title}${thisWeek && t.id === thisWeek.id ? ' (this week)' : ''}</option>`).join('');
+  select.value = (thisWeek || myTopics[0]).id;
+  select.onchange = () => renderModalTopic(select.value);
+  renderModalTopic(select.value);
+  modal.classList.add('open');
+}
+
+function closeActivityModal() {
+  document.getElementById('activity-modal').classList.remove('open');
+  document.getElementById('modal-topic-select').onchange = null;
+}
+document.getElementById('modal-close').addEventListener('click', closeActivityModal);
+document.getElementById('activity-modal').addEventListener('click', (e) => { if (e.target.id === 'activity-modal') closeActivityModal(); });
+
+function renderModalTopic(topicId) {
+  const topic = myTopics.find(t => t.id === topicId);
+  document.getElementById('modal-topic-tlo').textContent = topic && topic.tlo ? topic.tlo : '';
+  if (modalType === 'practice') renderQuizBody(topicId); else renderNotesBody(topicId);
+}
+
+async function getQuizQuestions(topicId) {
+  if (quizQuestionCache[topicId]) return quizQuestionCache[topicId];
+  const { data } = await sb.from('topic_quiz_questions').select('*').eq('topic_id', topicId);
+  quizQuestionCache[topicId] = data || [];
+  return quizQuestionCache[topicId];
+}
+
+async function renderQuizBody(topicId) {
+  const body = document.getElementById('modal-body');
+  body.innerHTML = '<div class="loading-state">Loading questions…</div>';
+  const questions = await getQuizQuestions(topicId);
+  if (!questions.length) {
+    body.innerHTML = '<div class="empty-state">No practice questions for this topic yet.</div>';
+    return;
+  }
+  body.innerHTML = questions.map((q, qi) => `
+    <div class="quiz-q" data-qid="${q.id}" data-correct="${q.correct_index}">
+      <div class="quiz-q-text">${qi + 1}. ${q.question}</div>
+      ${q.options.map((opt, oi) => `
+        <label class="quiz-opt" data-oi="${oi}">
+          <input type="radio" name="q-${q.id}" value="${oi}"> ${opt}
+        </label>`).join('')}
+    </div>`).join('') + '<button class="btn-primary" id="quiz-submit-btn" type="button">Submit answers</button>';
+
+  body.querySelectorAll('.quiz-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const group = opt.closest('.quiz-q');
+      group.querySelectorAll('.quiz-opt').forEach(o => o.classList.remove('selected'));
+      opt.classList.add('selected');
+      opt.querySelector('input').checked = true;
+    });
+  });
+
+  document.getElementById('quiz-submit-btn').addEventListener('click', async () => {
+    const groups = body.querySelectorAll('.quiz-q');
+    let unanswered = 0;
+    groups.forEach(g => { if (!g.querySelector('input:checked')) unanswered++; });
+    if (unanswered > 0) { alert('Please answer every question before submitting.'); return; }
+
+    let score = 0;
+    groups.forEach(g => {
+      const correct = Number(g.dataset.correct);
+      const checked = Number(g.querySelector('input:checked').value);
+      g.querySelectorAll('.quiz-opt').forEach((o, oi) => {
+        if (oi === correct) o.classList.add('correct');
+        else if (oi === checked) o.classList.add('incorrect');
+      });
+      if (checked === correct) score++;
+    });
+
+    const btn = document.getElementById('quiz-submit-btn');
+    btn.disabled = true; btn.textContent = 'Saving…';
+    await sb.from('quiz_attempts').insert({
+      student_id: myProfile.id, topic_id: topicId, course_id: currentCourse.id,
+      score, total: groups.length, attempt_date: dateStr(new Date()),
+    });
+    await sb.from('learning_activities').insert({
+      student_id: myProfile.id, course_id: currentCourse.id, activity_date: dateStr(new Date()), activity_type: 'practice',
+    });
+    body.insertAdjacentHTML('beforeend', `<div class="quiz-result"><div class="score">${score}/${groups.length}</div><div class="label">Nice work — logged as today's practice.</div></div>`);
+    btn.style.display = 'none';
+    document.getElementById('modal-topic-select').disabled = true;
+    await refreshAfterActivityLog();
+    setTimeout(closeActivityModal, 1600);
+  });
+}
+
+function renderNotesBody(topicId) {
+  const body = document.getElementById('modal-body');
+  body.innerHTML = `
+    <textarea class="notes-textarea" id="notes-textarea" placeholder="What do you remember about this topic? A summary, a question you still have, anything counts."></textarea>
+    <div class="notes-hint">At least a couple of sentences — writing it from memory is the point.</div>
+    <button class="btn-primary" id="notes-submit-btn" type="button" style="margin-top:14px">Save note</button>`;
+
+  document.getElementById('notes-submit-btn').addEventListener('click', async () => {
+    const text = document.getElementById('notes-textarea').value.trim();
+    if (text.length < 15) { alert('Write a little more — at least a sentence or two.'); return; }
+    const btn = document.getElementById('notes-submit-btn');
+    btn.disabled = true; btn.textContent = 'Saving…';
+    await sb.from('student_notes').insert({
+      student_id: myProfile.id, topic_id: topicId, course_id: currentCourse.id,
+      note_date: dateStr(new Date()), content: text,
+    });
+    await sb.from('learning_activities').insert({
+      student_id: myProfile.id, course_id: currentCourse.id, activity_date: dateStr(new Date()), activity_type: 'notes',
+    });
+    await refreshAfterActivityLog();
+    closeActivityModal();
+  });
+}
+
+function topicLabel(topicId) {
+  const t = myTopics.find(x => x.id === topicId);
+  return t ? `Week ${t.week_number ?? '—'}: ${t.title}` : 'Topic';
+}
+
+function renderNotesHistory() {
+  const el = document.getElementById('notes-history');
+  if (!el) return;
+  if (!myNotes.length) { el.innerHTML = '<div class="empty-state">No notes yet — write one from the Home tab.</div>'; return; }
+  el.innerHTML = myNotes.map(n => `
+    <div class="history-row">
+      <div class="history-top"><div class="history-topic">${topicLabel(n.topic_id)}</div><div class="history-date">${new Date(n.note_date).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</div></div>
+      <div class="history-note-text">${n.content}</div>
+    </div>`).join('');
+}
+
+function renderQuizHistory() {
+  const el = document.getElementById('quiz-history');
+  if (!el) return;
+  if (!myQuizAttempts.length) { el.innerHTML = '<div class="empty-state">No practice quizzes attempted yet.</div>'; return; }
+  el.innerHTML = myQuizAttempts.map(a => `
+    <div class="history-row">
+      <div class="history-top"><div class="history-topic">${topicLabel(a.topic_id)}</div><div class="history-date">${new Date(a.attempt_date).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</div></div>
+      <div class="history-score">${a.score}/${a.total} correct</div>
+    </div>`).join('');
+}
+
+const GUIDE_WEEK_COUNT = 14;
+
+function renderLearningGuide(topics) {
+  const card = document.getElementById('guide-card');
+  if (!currentCourse.notebook_url) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+
+  const byWeek = {};
+  topics.forEach(t => { if (t.week_number) byWeek[t.week_number] = t; });
+  const thisWeekTopic = findThisWeekTopic(topics);
+  const thisWeekNum = thisWeekTopic ? thisWeekTopic.week_number : null;
+
+  const rowsHtml = Array.from({ length: GUIDE_WEEK_COUNT }, (_, i) => i + 1).map(n => {
+    const t = byWeek[n];
+    const title = t ? t.title : null;
+    const tlo = t ? t.tlo : null;
+    const isThisWeek = n === thisWeekNum;
+    const subject = title ? `Week ${n}: ${title}` : `Week ${n}`;
+    // With real TLOs uploaded, prompts target the actual learning outcomes
+    // for that week rather than just the topic name — more useful for
+    // steering how a student uses NotebookLM Studio on that week's content.
+    const focus = tlo ? `, focusing on: ${tlo}` : '';
+    const prompts = [
+      `Give me an Audio Overview of ${subject}${focus}.`,
+      `Create a Study Guide covering ${subject}${focus}.`,
+      `Quiz me on ${subject}${tlo ? ' — specifically: ' + tlo : ''}.`,
+    ];
+    const tloHtml = tlo ? `<div class="guide-tlo">${tlo}</div>` : '';
+    const promptsHtml = prompts.map(p => `
+      <div class="guide-prompt">
+        <div class="guide-prompt-text">${p}</div>
+        <button class="guide-copy-btn" type="button" data-prompt="${p.replace(/"/g, '&quot;')}">Copy</button>
+      </div>`).join('');
+    return `
+      <div class="guide-row${isThisWeek ? ' open' : ''}" data-week="${n}">
+        <button class="guide-head" type="button" aria-expanded="${isThisWeek}">
+          <div class="guide-num">Wk ${n}</div>
+          <div class="guide-topic${title ? '' : ' muted'}">${title || 'Topic not yet published'}</div>
+          ${isThisWeek ? '<span class="guide-badge">Now</span>' : ''}
+          <div class="guide-chevron"></div>
+        </button>
+        <div class="guide-body">
+          <div class="guide-body-inner">
+            ${tloHtml}
+            ${promptsHtml}
+            <a href="${currentCourse.notebook_url}" target="_blank" rel="noopener" class="guide-open-link">Open in course notebook →</a>
+          </div>
+        </div>
+      </div>`;
+  }).join('');
+
+  document.getElementById('guide-list').innerHTML = rowsHtml;
+
+  document.querySelectorAll('#guide-list .guide-head').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const row = btn.closest('.guide-row');
+      const wasOpen = row.classList.contains('open');
+      document.querySelectorAll('#guide-list .guide-row.open').forEach(r => {
+        r.classList.remove('open');
+        r.querySelector('.guide-head').setAttribute('aria-expanded', 'false');
+      });
+      if (!wasOpen) { row.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+    });
+  });
+
+  document.querySelectorAll('#guide-list .guide-copy-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const prompt = btn.dataset.prompt;
+      try {
+        await navigator.clipboard.writeText(prompt);
+        btn.textContent = 'Copied!'; btn.classList.add('copied');
+      } catch (err) {
+        btn.textContent = 'Copy failed';
+      }
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1400);
+    });
+  });
+}
+
+function dateStr(d) { return d.toISOString().slice(0,10); }
+function lastNDays(n) { const arr=[]; for (let i=n-1;i>=0;i--){ const d=new Date(); d.setDate(d.getDate()-i); arr.push(dateStr(d)); } return arr; }
+
+function renderHealthHero() {
+  const week = lastNDays(7);
+  const todayStr = dateStr(new Date());
+  const byType = {};
+  ACTIVITY_TYPES.forEach(t => byType[t.key] = new Set(myActivities.filter(a => a.activity_type === t.key).map(a => a.activity_date)));
+
+  let touchedToday = 0;
+  ACTIVITY_TYPES.forEach(t => { if (byType[t.key].has(todayStr)) touchedToday++; });
+  document.getElementById('health-summary').textContent = touchedToday + ' of ' + ACTIVITY_TYPES.length + ' habits touched today';
+
+  document.getElementById('quick-actions').innerHTML = ACTIVITY_TYPES.map(t => {
+    const doneToday = byType[t.key].has(todayStr);
+    return `<button type="button" class="quick-action-btn${doneToday ? ' done' : ''}" data-type="${t.key}"><span class="qa-icon">${t.icon}</span>${doneToday ? 'Done — do another' : t.label}</button>`;
+  }).join('');
+  document.querySelectorAll('#quick-actions .quick-action-btn').forEach(btn => {
+    btn.addEventListener('click', () => openActivityModal(btn.dataset.type));
+  });
+
+  const rowsHtml = ACTIVITY_TYPES.map(t => {
+    const dots = week.map(d => {
+      const filled = byType[t.key].has(d);
+      const isToday = d === todayStr;
+      const cls = 'dot' + (filled ? ' filled' : '') + (isToday ? ' today' : '');
+      return `<div class="${cls}"></div>`;
+    }).join('');
+    return `<div class="habit-row"><div class="habit-icon">${t.icon}</div><div class="habit-label">${t.label}</div><div class="habit-dots">${dots}</div></div>`;
+  }).join('');
+  document.getElementById('habit-rows').innerHTML = rowsHtml;
+}
+
+function computeStreak(dateStrings) {
+  const set = new Set(dateStrings);
+  let streak = 0;
+  let cursor = new Date();
+  if (!set.has(dateStr(cursor))) cursor.setDate(cursor.getDate() - 1);
+  while (set.has(dateStr(cursor))) { streak++; cursor.setDate(cursor.getDate() - 1); }
+  return streak;
+}
+
+function renderStreakStat() {
+  const anyDayActive = [...new Set(myActivities.map(a => a.activity_date))];
+  document.getElementById('streak-days').textContent = computeStreak(anyDayActive);
+}
+
+function renderCountdown() {
+  const hasFinal = !!currentCourse.final_exam_date;
+  const labelEl = document.getElementById('countdown-label');
+  const daysEl = document.getElementById('countdown-days');
+  const subEl = document.getElementById('countdown-sub');
+  const fmt = (s) => new Date(s).toLocaleDateString('en-GB', { day:'numeric', month:'short', year:'numeric' });
+
+  if (hasFinal) {
+    const days = Math.max(0, Math.ceil((new Date(currentCourse.final_exam_date) - new Date()) / 86400000));
+    labelEl.textContent = 'Final exam in';
+    daysEl.textContent = days;
+    subEl.textContent = fmt(currentCourse.final_exam_date);
+  } else if (currentCourse.ca_end_date) {
+    const days = Math.max(0, Math.ceil((new Date(currentCourse.ca_end_date) - new Date()) / 86400000));
+    labelEl.textContent = 'CA marks finalize in';
+    daysEl.textContent = days;
+    subEl.textContent = currentCourse.study_week_start_date ? 'Study week begins ' + fmt(currentCourse.study_week_start_date) : fmt(currentCourse.ca_end_date);
+  } else {
+    labelEl.textContent = 'CA timeline';
+    daysEl.textContent = '—';
+    subEl.textContent = 'Not yet set';
+  }
+}
+
+function renderAssessments() {
+  document.getElementById('assess-list').innerHTML = currentAssessments.map(a => `
+    <div class="assess-row">
+      <div>
+        <h3 style="margin-bottom:2px">${a.name}</h3>
+        <div class="meta">${a.weight}% of final CA${a.coverage ? ' · ' + a.coverage : ''}${a.date ? ' · ' + new Date(a.date).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : ''}</div>
+      </div>
+    </div>`).join('');
+}
+
+function renderCoverage(topics) {
+  const el = document.getElementById('coverage-list');
+  if (!topics.length) { el.innerHTML = '<div class="empty-state">No lesson plan uploaded yet.</div>'; return; }
+  const today = new Date();
+  el.innerHTML = topics.map(t => {
+    let thisWeek = false;
+    if (t.week_start_date) {
+      const start = new Date(t.week_start_date);
+      const end = new Date(start); end.setDate(end.getDate() + 7);
+      thisWeek = today >= start && today < end;
+    }
+    const notebookLink = thisWeek && currentCourse.notebook_url
+      ? `<a href="${currentCourse.notebook_url}" target="_blank" rel="noopener" style="font-size:10.5px;font-weight:600;color:var(--forest-700);text-decoration:none;white-space:nowrap">Open notebook →</a>` : '';
+    return `<div class="coverage-row">
+      <div class="coverage-week">${t.week_number ? 'Wk ' + t.week_number : ''}</div>
+      <div class="coverage-title">${t.title}</div>
+      ${thisWeek ? '<span class="badge-thisweek">This week</span>' : ''}
+      ${notebookLink}
+    </div>`;
+  }).join('');
+}
+
+function renderLearningDetail() {
+  const anyDayActive = [...new Set(myActivities.map(a => a.activity_date))];
+  document.getElementById('learning-streak-title').textContent = computeStreak(anyDayActive) + '-day streak';
+  document.getElementById('learning-streak-sub').textContent = myActivities.length + ' total check-ins recorded this course';
+  const days = lastNDays(28);
+  const html = ACTIVITY_TYPES.map(t => {
+    const set = new Set(myActivities.filter(a => a.activity_type === t.key).map(a => a.activity_date));
+    const dots = days.map(d => `<div class="dot ${set.has(d) ? 'filled' : ''}" style="width:9px;height:9px;border-radius:50%;background:${set.has(d) ? 'linear-gradient(135deg,var(--forest-500),var(--gold-500))' : 'rgba(27,67,50,0.09)'}"></div>`).join('');
+    return `<div class="card glass fade-up"><h3>${t.icon} ${t.label} — ${set.size} sessions (last 28 days)</h3><div style="display:flex;gap:4px;margin-top:10px;flex-wrap:wrap">${dots}</div></div>`;
+  }).join('');
+  document.getElementById('learning-detail').innerHTML = html;
+}
+
+/* ---------- EDUCATOR: ROSTER ---------- */
+let allStudents = [];
+async function loadEducatorRoster() {
+  document.getElementById('roster-list').innerHTML = '<div class="loading-state">Loading roster…</div>';
+  document.getElementById('roster-section-label').textContent = currentCourse.code + (currentCourse.semester ? ' · ' + currentCourse.semester : '');
+  document.getElementById('uploads-section-label').textContent = currentCourse.code;
+  const inovaLink = document.getElementById('inova-roster-link');
+  if (currentCourse.inova_url) { inovaLink.href = currentCourse.inova_url; inovaLink.style.display = ''; }
+  else { inovaLink.style.display = 'none'; }
+
+  const { data: enrolled } = await sb.from('enrollments').select('student_id').eq('course_id', currentCourse.id);
+  const enrolledIds = new Set((enrolled || []).map(e => e.student_id));
+  const { data: students } = await sb.from('profiles').select('*').eq('role', 'student').order('full_name');
+  const { data: activities } = await sb.from('learning_activities').select('student_id, activity_date').eq('course_id', currentCourse.id);
+
+  allStudents = (students || []).filter(s => enrolledIds.has(s.id)).map(s => {
+    const myAct = [...new Set((activities || []).filter(a => a.student_id === s.id).map(a => a.activity_date))];
+    const lastActive = myAct.sort().slice(-1)[0];
+    return { ...s, streak: computeStreak(myAct), lastActive };
+  });
+  renderRoster(allStudents);
+}
+
+function renderRoster(list) {
+  const el = document.getElementById('roster-list');
+  if (!list.length) { el.innerHTML = '<div class="empty-state">No students enrolled in this course yet.</div>'; return; }
+  el.innerHTML = list.map(s => `
+    <div class="roster-row" data-id="${s.id}">
+      <div class="roster-top">
+        <div><div class="roster-name">${s.full_name}</div>${s.matric_number ? `<div class="roster-matric">${s.matric_number}</div>` : ''}</div>
+        <div style="text-align:right"><div class="roster-ca">${s.streak}d streak</div><div class="roster-matric">${s.lastActive ? 'Active ' + new Date(s.lastActive).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : 'No activity yet'}</div></div>
+      </div>
+    </div>`).join('');
+}
+document.getElementById('roster-search').addEventListener('input', (e) => {
+  const q = e.target.value.trim().toLowerCase();
+  renderRoster(allStudents.filter(s => s.full_name.toLowerCase().includes(q) || (s.matric_number || '').toLowerCase().includes(q)));
+});
+
+/* ---------- EDUCATOR: UPLOADS ---------- */
+function parseWorkbook(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const wb = XLSX.read(e.target.result, { type: 'array', cellDates: true });
+        const sheet = wb.Sheets[wb.SheetNames[0]];
+        const rows = XLSX.utils.sheet_to_json(sheet, { header: 1, raw: false, dateNF: 'yyyy-mm-dd', defval: '' });
+        resolve(rows.filter(r => r.some(c => String(c).trim() !== '')));
+      } catch (err) { reject(err); }
+    };
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+function guessColumn(headers, patterns) {
+  // Try patterns in priority order (not column order) so a more specific
+  // pattern like 'title' wins over a broader one like 'topic' even if the
+  // broader one happens to sit in an earlier column — e.g. a "TOPIC NO."
+  // column would otherwise shadow the real "TOPIC TITLE" column, since both
+  // contain the substring "topic".
+  for (const p of patterns) {
+    for (let i = 0; i < headers.length; i++) {
+      if (String(headers[i]).toLowerCase().includes(p)) return i;
+    }
+  }
+  return -1;
+}
+
+/* ---- DOCX table parsing (Word tables → same row-array shape as parseWorkbook) ---- */
+function parseDocxFile(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = async (e) => {
+      try {
+        const result = await mammoth.convertToHtml({ arrayBuffer: e.target.result });
+        const doc = new DOMParser().parseFromString(result.value, 'text/html');
+        const tables = Array.from(doc.querySelectorAll('table'));
+        if (!tables.length) { reject(new Error('No tables found in this Word document.')); return; }
+
+        // Expand each <table> into a full rectangular grid, honouring both
+        // colspan and rowspan, so column indices line up across every row.
+        // Word tables commonly have a two-row header where cells like "NO."
+        // and "WEEK" use rowspan="2" (carried down into the next row) while
+        // a cell like "HOURS" uses colspan="5" (repeated across that row) —
+        // without both handled, columns drift out of alignment.
+        function gridFromTable(table) {
+          const trs = Array.from(table.querySelectorAll('tr'));
+          const theadCount = table.querySelectorAll('thead tr').length;
+          const grid = [];
+          const pending = {}; // colIndex -> { text, rowsLeft }
+          trs.forEach((tr, rIdx) => {
+            grid[rIdx] = grid[rIdx] || [];
+            let col = 0;
+            // Consume a pending rowspan cell exactly once per row that it
+            // covers (decrementing here, not after the row, so a rowspan="2"
+            // cell is still available on the very next row).
+            const advance = () => { while (pending[col] && pending[col].rowsLeft > 0) { grid[rIdx][col] = pending[col].text; pending[col].rowsLeft--; col++; } };
+            advance();
+            Array.from(tr.children).forEach(td => {
+              const colspan = parseInt(td.getAttribute('colspan') || '1', 10);
+              const rowspan = parseInt(td.getAttribute('rowspan') || '1', 10);
+              const text = td.textContent.replace(/\s+/g, ' ').trim();
+              for (let i = 0; i < colspan; i++) {
+                grid[rIdx][col] = text;
+                if (rowspan > 1) pending[col] = { text, rowsLeft: rowspan - 1 };
+                col++;
+                advance();
+              }
+            });
+          });
+          return { grid, theadCount };
+        }
+
+        const built = tables.map(gridFromTable);
+
+        // Some Word documents (e.g. a compiled lesson plan) split content
+        // across MANY separate tables — one per topic — rather than one
+        // continuous table. `allRows` concatenates every table's rows in
+        // document order, for callers that need to scan the whole document
+        // (e.g. finding every "Topic"/"TLO" marker regardless of which of
+        // the 14 tables it lives in).
+        const allRows = [];
+        built.forEach(b => {
+          const headerIdx = b.theadCount > 0 ? b.theadCount - 1 : 0;
+          b.grid.slice(headerIdx).forEach(r => { if (r.some(c => String(c).trim() !== '')) allRows.push(r); });
+        });
+
+        // `bestRows` keeps the old single-largest-table behaviour, for
+        // callers that expect one flat table (e.g. a Teaching Plan's
+        // schedule table, where the header-info and signature blocks are
+        // small tables that should be ignored rather than concatenated in).
+        let best = built[0];
+        built.forEach(b => { if (b.grid.length > best.grid.length) best = b; });
+        const bestHeaderIdx = best.theadCount > 0 ? best.theadCount - 1 : 0;
+        const bestRows = best.grid.slice(bestHeaderIdx).filter(r => r.some(c => String(c).trim() !== ''));
+
+        resolve({ bestRows, allRows });
+      } catch (err) { reject(err); }
+    };
+    reader.onerror = reject;
+    reader.readAsArrayBuffer(file);
+  });
+}
+
+function parseUploadedFile(file) {
+  const ext = file.name.split('.').pop().toLowerCase();
+  if (ext === 'docx') return parseDocxFile(file);
+  return parseWorkbook(file).then(rows => ({ bestRows: rows, allRows: rows }));
+}
+
+/* ---- Lesson-plan copy/paste detection: educators can just copy the
+   Topic + TLO rows straight out of the compiled Lesson Plan doc (each TLO
+   lands on its own row) instead of preparing a clean table. ---- */
+function cellCandidates(row) {
+  // A single Word-table cell that visually spans several columns (a
+  // "Topic" or "TLO1: ..." row spanning the full width) gets its text
+  // duplicated across every column it covers by the grid-expansion above,
+  // so a naive join of the whole row repeats the same sentence 6-7 times.
+  // De-duplicating first gives back the actual distinct cell values.
+  const seen = new Set();
+  const out = [];
+  (row || []).forEach(c => {
+    const t = c && String(c).trim();
+    if (t && !seen.has(t)) { seen.add(t); out.push(t); }
+  });
+  return out;
+}
+
+function looksLikeLessonPlanDump(rows) {
+  // Search for the marker within the first few characters rather than
+  // anchoring exactly at position 0 — a mangled bullet character from a
+  // CSV encoding mismatch can add several garbled bytes before "TLO"/
+  // "Topic" even starts, and the exact number of extra bytes isn't
+  // predictable, so a fixed-length prefix match is too brittle.
+  let topicCount = 0, tloCount = 0;
+  rows.forEach(r => {
+    cellCandidates(r).forEach(t => {
+      const topicIdx = t.search(/Topic\s*\d+/i);
+      if (topicIdx >= 0 && topicIdx <= 6) topicCount++;
+      const tloIdx = t.search(/TLO\s*\d+/i);
+      if (tloIdx >= 0 && tloIdx <= 6) tloCount++;
+    });
+  });
+  return topicCount >= 2 && tloCount >= 2;
+}
+
+function parseLessonPlanDump(rows) {
+  const topics = [];
+  let current = null;
+  rows.forEach(r => {
+    cellCandidates(r).forEach(text => {
+      const topicIdx = text.search(/Topic\s*\d+/i);
+      if (topicIdx >= 0 && topicIdx <= 6) {
+        const m = text.slice(topicIdx).match(/^Topic\s*(\d+)\s*[:\-]?\s*(.*)$/i);
+        if (m) {
+          if (current) topics.push(current);
+          current = { week_number: Number(m[1]), title: m[2].trim(), tlos: [] };
+          return;
+        }
+      }
+      const tloIdx = text.search(/TLO\s*\d+/i);
+      if (tloIdx >= 0 && tloIdx <= 6 && current) {
+        const m = text.slice(tloIdx).match(/^TLO\s*\d+\s*[:.]?\s*(.*)$/i);
+        const t = m ? m[1].trim() : '';
+        if (t) current.tlos.push(t);
+      }
+    });
+  });
+  if (current) topics.push(current);
+  return topics
+    .map(t => ({ week_number: t.week_number, title: t.title, tlo: t.tlos.join(' ') }))
+    .filter(t => t.title && !Number.isNaN(t.week_number) && !/^(sub-?total|grand total|total)$/i.test(t.title));
+}
+
+function renderCoverageAutoImport(rows) {
+  const parsed = parseLessonPlanDump(rows);
+  const mapEl = document.getElementById('coverage-map');
+
+  if (!parsed.length) {
+    mapEl.innerHTML = `<div class="preview-note warn">Recognised this as a Lesson Plan-style file but couldn't find any complete Topic + TLO entries. Try the column-mapping upload instead, or check the file content.</div>`;
+    return;
+  }
+
+  const previewHtml = parsed.slice(0, 5).map(t =>
+    `<div class="coverage-row"><div class="coverage-week">Wk ${t.week_number}</div><div class="coverage-title">${t.title}</div></div>`
+  ).join('');
+  const more = parsed.length > 5 ? `<div class="preview-note">…and ${parsed.length - 5} more</div>` : '';
+
+  mapEl.innerHTML = `
+    <div class="preview-note">Recognised this as a Lesson Plan-style file — found ${parsed.length} topics with TLOs, no column mapping needed.</div>
+    <div class="glass" style="margin-top:10px;margin-bottom:4px">${previewHtml}</div>
+    ${more}
+    <div class="preview-note">Importing will replace the current lesson plan for PHIA 4312.</div>
+    <button class="btn-import" id="coverage-import-btn">Import lesson plan</button>
+    <div class="import-result" id="coverage-import-result"></div>`;
+
+  document.getElementById('coverage-import-btn').addEventListener('click', async () => {
+    const btn = document.getElementById('coverage-import-btn');
+    btn.disabled = true; btn.textContent = 'Importing…';
+    const toInsert = parsed.map(t => ({ course_id: currentCourse.id, week_number: t.week_number, week_start_date: null, title: t.title, tlo: t.tlo || null }));
+    await sb.from('topics').delete().eq('course_id', currentCourse.id);
+    const { error } = await sb.from('topics').insert(toInsert);
+    btn.disabled = false; btn.textContent = 'Import lesson plan';
+    const res = document.getElementById('coverage-import-result');
+    res.textContent = error ? ('Import failed: ' + error.message) : (`Imported ${toInsert.length} topics.`);
+    res.classList.add('show');
+  });
+}
+
+function setupUploads() {
+  document.getElementById('coverage-file').addEventListener('change', async (e) => {
+    const file = e.target.files[0]; if (!file) return;
+    document.getElementById('coverage-drop').classList.add('has-file');
+    try {
+      const { bestRows, allRows } = await parseUploadedFile(file);
+      if (looksLikeLessonPlanDump(allRows)) {
+        renderCoverageAutoImport(allRows);
+      } else {
+        renderCoverageMapping(bestRows);
+      }
+    } catch (err) {
+      document.getElementById('coverage-map').innerHTML = `<div class="preview-note warn">Couldn't read this file: ${err.message}</div>`;
+    }
+  });
+}
+
+function fieldSelect(name, options, selectedIdx) {
+  return `<select data-field="${name}">${options.map((o,i) => `<option value="${i}" ${i===selectedIdx?'selected':''}>${o}</option>`).join('')}</select>`;
+}
+
+function renderCoverageMapping(rows) {
+  const headers = rows[0]; const dataRows = rows.slice(1);
+  const weekIdx = guessColumn(headers, ['week']);
+  const dateIdx = guessColumn(headers, ['date']);
+  const titleIdx = guessColumn(headers, ['title', 'chapter', 'lesson', 'topic']);
+  const tloIdx = guessColumn(headers, ['tlo', 'learning outcome', 'outcome']);
+  const options = ['Ignore', ...headers];
+
+  const mapEl = document.getElementById('coverage-map');
+  mapEl.innerHTML = `
+    <table class="map-table">
+      <tr><th>Detected column</th><th>Maps to</th></tr>
+      <tr><td>Week number</td><td>${fieldSelect('week', options, weekIdx + 1)}</td></tr>
+      <tr><td>Week start date</td><td>${fieldSelect('date', options, dateIdx + 1)}</td></tr>
+      <tr><td>Topic / chapter title</td><td>${fieldSelect('title', options, titleIdx + 1)}</td></tr>
+      <tr><td>Topic Learning Outcomes (TLO)</td><td>${fieldSelect('tlo', options, tloIdx + 1)}</td></tr>
+    </table>
+    <div class="preview-note">${dataRows.length} rows detected. Importing will replace the current lesson plan for PHIA 4312.</div>
+    <button class="btn-import" id="coverage-import-btn">Import lesson plan</button>
+    <div class="import-result" id="coverage-import-result"></div>`;
+
+  document.getElementById('coverage-import-btn').addEventListener('click', async () => {
+    const get = (name) => Number(mapEl.querySelector(`select[data-field="${name}"]`).value) - 1;
+    const wIdx = get('week'), dIdx = get('date'), tIdx = get('title'), tloIdx2 = get('tlo');
+    if (tIdx < 0) { alert('Please map a Topic column before importing.'); return; }
+    const parsed = dataRows.map(r => ({
+      course_id: currentCourse.id,
+      week_number: wIdx >= 0 && r[wIdx] !== '' ? Number(r[wIdx]) : null,
+      week_start_date: dIdx >= 0 && r[dIdx] !== '' ? parseDateCell(r[dIdx]) : null,
+      title: String(r[tIdx] || '').trim(),
+      tlo: tloIdx2 >= 0 && r[tloIdx2] !== '' ? String(r[tloIdx2]).trim() : null,
+    })).filter(r => r.title && !Number.isNaN(r.week_number) && !/^(sub-?total|grand total|total)$/i.test(r.title));
+
+    const btn = document.getElementById('coverage-import-btn');
+    btn.disabled = true; btn.textContent = 'Importing…';
+    await sb.from('topics').delete().eq('course_id', currentCourse.id);
+    const { error } = await sb.from('topics').insert(parsed);
+    btn.disabled = false; btn.textContent = 'Import lesson plan';
+    const res = document.getElementById('coverage-import-result');
+    res.textContent = error ? ('Import failed: ' + error.message) : (`Imported ${parsed.length} topics.`);
+    res.classList.add('show');
+  });
+}
+
+function parseDateCell(val) {
+  if (val instanceof Date) return dateStr(val);
+  const d = new Date(val);
+  return isNaN(d) ? null : dateStr(d);
+}
+
+/* ---------- INIT ---------- */
+(async function init() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session) await boot();
+})();
+</script>
+</body>
+</html>
