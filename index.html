@@ -494,7 +494,8 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
     <div id="course-form-fields" style="display:none;margin-top:16px">
       <div class="field"><label for="course-form-code">Course code</label><input type="text" id="course-form-code" placeholder="e.g. PHIA 4312"></div>
       <div class="field"><label for="course-form-name">Course name</label><input type="text" id="course-form-name" placeholder="e.g. Instrumentation Analysis"></div>
-      <div class="field"><label for="course-form-semester">Semester</label><input type="text" id="course-form-semester" placeholder="e.g. Semester 3, 2026"></div>
+      <div class="field"><label for="course-form-cohort">Cohort</label><input type="text" id="course-form-cohort" placeholder="e.g. DPH 48"></div>
+      <div class="field"><label for="course-form-semester">Semester</label><input type="text" id="course-form-semester" placeholder="e.g. Y1S1"></div>
       <div class="field">
         <label for="course-form-examtype">Assessment type</label>
         <select class="modal-topic-select" id="course-form-examtype" style="margin:0">
@@ -704,9 +705,9 @@ document.getElementById('picker-continue-btn').addEventListener('click', async (
 });
 
 /* ---------- MY COURSES (shared landing) ---------- */
-function groupBySemester(courses) {
+function groupByCohort(courses) {
   const groups = {};
-  courses.forEach(c => { const key = c.semester || 'Semester not set'; (groups[key] = groups[key] || []).push(c); });
+  courses.forEach(c => { const key = c.cohort || 'Cohort not set'; (groups[key] = groups[key] || []).push(c); });
   return groups;
 }
 
@@ -720,17 +721,17 @@ function renderCourseList(courses, subtitleFn, onOpen, onEdit) {
     listEl.innerHTML = `<div class="empty-state">${onEdit ? 'No courses yet — add your first one above.' : 'No courses found for your account yet. Contact your coordinator.'}</div>`;
     return;
   }
-  const groups = groupBySemester(courses);
-  const semesterKeys = Object.keys(groups);
-  labelEl.textContent = semesterKeys.length === 1 ? semesterKeys[0] : 'Your semesters';
+  const groups = groupByCohort(courses);
+  const groupKeys = Object.keys(groups);
+  labelEl.textContent = groupKeys.length === 1 ? groupKeys[0] : 'Your cohorts';
   countEl.textContent = courses.length + (courses.length === 1 ? ' course' : ' courses');
 
-  listEl.innerHTML = semesterKeys.map(sem => `
-    ${semesterKeys.length > 1 ? `<div class="semester-heading" style="padding:14px 18px 0">${sem}</div>` : ''}
-    ${groups[sem].map(c => `
+  listEl.innerHTML = groupKeys.map(cohort => `
+    ${groupKeys.length > 1 ? `<div class="semester-heading" style="padding:14px 18px 0">${cohort}</div>` : ''}
+    ${groups[cohort].map(c => `
       <div class="course-card" data-course="${c.id}">
         <div>
-          <div class="course-card-code">${c.code}</div>
+          <div class="course-card-code">${c.code}${c.semester ? ` <span style="color:var(--ink-soft);font-weight:500">· ${c.semester}</span>` : ''}</div>
           <div class="course-card-name">${c.name}</div>
           <div class="course-card-sub">${subtitleFn(c)}</div>
         </div>
@@ -1189,8 +1190,9 @@ function renderLearningDetail() {
 let allStudents = [];
 async function loadEducatorRoster() {
   document.getElementById('roster-list').innerHTML = '<div class="loading-state">Loading roster…</div>';
-  document.getElementById('roster-section-label').textContent = currentCourse.code + (currentCourse.semester ? ' · ' + currentCourse.semester : '');
-  document.getElementById('uploads-section-label').textContent = currentCourse.code;
+  const courseTag = [currentCourse.code, currentCourse.cohort, currentCourse.semester].filter(Boolean).join(' · ');
+  document.getElementById('roster-section-label').textContent = courseTag;
+  document.getElementById('uploads-section-label').textContent = courseTag;
   const inovaLink = document.getElementById('inova-roster-link');
   if (currentCourse.inova_url) { inovaLink.href = currentCourse.inova_url; inovaLink.style.display = ''; }
   else { inovaLink.style.display = 'none'; }
@@ -1583,6 +1585,7 @@ function openCourseModal(mode, courseId) {
 
   document.getElementById('course-form-code').value = course ? course.code : '';
   document.getElementById('course-form-name').value = course ? course.name : '';
+  document.getElementById('course-form-cohort').value = course ? (course.cohort || '') : '';
   document.getElementById('course-form-semester').value = course ? (course.semester || '') : '';
   document.getElementById('course-form-inova').value = course ? (course.inova_url || '') : '';
   document.getElementById('course-form-notebook').value = course ? (course.notebook_url || '') : '';
@@ -1650,6 +1653,7 @@ document.getElementById('course-modal-save-btn').addEventListener('click', async
 
   const code = document.getElementById('course-form-code').value.trim();
   const name = document.getElementById('course-form-name').value.trim();
+  const cohort = document.getElementById('course-form-cohort').value.trim();
   const semester = document.getElementById('course-form-semester').value.trim();
   const inova_url = document.getElementById('course-form-inova').value.trim();
   const notebook_url = document.getElementById('course-form-notebook').value.trim();
@@ -1669,6 +1673,7 @@ document.getElementById('course-modal-save-btn').addEventListener('click', async
 
   const payload = {
     code, name,
+    cohort: cohort || null,
     semester: semester || null,
     inova_url: inova_url || null,
     notebook_url: notebook_url || null,
