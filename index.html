@@ -490,6 +490,7 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
         <div class="greeting" style="font-size:20px;margin-bottom:4px">Content for students</div>
         <div class="meta" style="font-size:12px;color:var(--ink-soft);margin-bottom:16px">Add practice questions and study notes per topic. Students see these in their Learning tab; only you can edit them here.</div>
 
+        <select class="content-topic-select" id="content-course-select"></select>
         <select class="content-topic-select" id="content-topic-select"></select>
 
         <div class="content-tabs">
@@ -739,6 +740,7 @@ function showView(view) {
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-' + view).classList.add('active');
   document.querySelectorAll('.sidenav button, .bottomnav button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
+  if (view === 'content') populateContentEditor();
 }
 
 /* ---------- COURSE PICKER (post-signup + add-more) ---------- */
@@ -885,9 +887,7 @@ async function openEducatorCourse(courseId) {
   if (!currentCourse) return;
   const { data: topics } = await sb.from('topics').select('*').eq('course_id', currentCourse.id).order('week_number', { nullsFirst: false });
   myTopics = topics || [];
-  document.getElementById('content-section-label').textContent = currentCourse.code + ' · ' + currentCourse.name;
   document.getElementById('uploads-section-label').textContent = currentCourse.code;
-  setupContentEditor();
   await loadEducatorRoster();
   showView('roster');
 }
@@ -1763,19 +1763,28 @@ function refreshContentPanels() {
   loadStudyNoteEditor(topicId);
 }
 
-function setupContentEditor() {
-  const sel = document.getElementById('content-topic-select');
-  if (!myTopics.length) {
-    sel.innerHTML = '<option value="">No topics yet — upload a lesson plan first</option>';
-    document.getElementById('bank-list').innerHTML = '<div class="empty-state">Upload a lesson plan to add topics, then add questions here.</div>';
-    return;
-  }
-  sel.innerHTML = myTopics.map(t => `<option value="${t.id}">${t.week_number != null ? 'Week ' + t.week_number + ': ' : ''}${escapeHtml(t.title)}</option>`).join('');
+// Topics shown in the Content editor — loaded from the Content tab's own
+// course selector, independent of currentCourse (so the tab works whether you
+// arrived via a course or straight from the nav).
+let contentTopics = [];
 
-  if (contentSetupDone) { refreshContentPanels(); return; }
+function contentCurrentTopicId() {
+  const sel = document.getElementById('content-topic-select');
+  return sel ? sel.value : null;
+}
+
+// Bind all Content-editor event handlers ONCE at startup. Previously these were
+// bound inside a function that early-returned when no topics were loaded, so
+// opening the Content tab without first drilling into a course left the Preview
+// button (and everything else) dead. Binding here guarantees they always work.
+function bindContentEditorOnce() {
+  if (contentSetupDone) return;
   contentSetupDone = true;
 
-  sel.addEventListener('change', refreshContentPanels);
+  document.getElementById('content-course-select').addEventListener('change', (e) => {
+    loadContentTopics(e.target.value);
+  });
+  document.getElementById('content-topic-select').addEventListener('change', refreshContentPanels);
 
   document.querySelectorAll('.content-tab').forEach(tab => {
     tab.addEventListener('click', () => {
@@ -1787,8 +1796,10 @@ function setupContentEditor() {
   });
 
   document.getElementById('bulk-preview-btn').addEventListener('click', async () => {
-    const raw = document.getElementById('bulk-textarea').value;
+    const topicId = contentCurrentTopicId();
     const previewEl = document.getElementById('bulk-preview');
+    if (!topicId) { previewEl.innerHTML = '<div class="preview-note warn">Pick a course and topic first.</div>'; return; }
+    const raw = document.getElementById('bulk-textarea').value;
     const btn = document.getElementById('bulk-preview-btn');
     const { questions, errors } = parseBulkMCQ(raw);
 
@@ -1813,11 +1824,11 @@ function setupContentEditor() {
       <button class="btn-import" id="bulk-confirm-btn" type="button">Add ${questions.length} question(s)</button>`;
 
     document.getElementById('bulk-confirm-btn').addEventListener('click', async () => {
-      const topicId = contentCurrentTopicId();
-      if (!topicId) return;
+      const tId = contentCurrentTopicId();
+      if (!tId) return;
       const cbtn = document.getElementById('bulk-confirm-btn');
       cbtn.disabled = true; cbtn.textContent = 'Adding…';
-      const rows = questions.map(q => ({ topic_id: topicId, question: q.question, options: q.options, correct_index: q.correct_index }));
+      const rows = questions.map(q => ({ topic_id: tId, question: q.question, options: q.options, correct_index: q.correct_index }));
       const { error } = await sb.from('topic_quiz_questions').insert(rows);
       const res = document.getElementById('bulk-save-result');
       if (error) {
@@ -1825,24 +1836,23 @@ function setupContentEditor() {
         res.textContent = 'Could not add: ' + error.message; res.classList.add('err', 'show');
         return;
       }
-      delete quizQuestionCache[topicId];
+      delete quizQuestionCache[tId];
       document.getElementById('bulk-textarea').value = '';
       previewEl.innerHTML = '';
       res.textContent = `Added ${rows.length} question(s).`; res.classList.remove('err'); res.classList.add('show');
-      await renderBankList(topicId);
+      await renderBankList(tId);
     });
   });
 
   document.getElementById('studynote-save-btn').addEventListener('click', async () => {
     const topicId = contentCurrentTopicId();
-    if (!topicId) return;
-    const btn = document.getElementById('studynote-save-btn');
     const res = document.getElementById('studynote-save-result');
+    if (!topicId) { res.textContent = 'Pick a course and topic first.'; res.classList.add('err', 'show'); return; }
+    const btn = document.getElementById('studynote-save-btn');
     const content = document.getElementById('studynote-textarea').value.trim();
     btn.disabled = true; btn.textContent = 'Saving…';
     let error;
     if (!content) {
-      // Blank = remove the note.
       ({ error } = await sb.from('topic_study_notes').delete().eq('topic_id', topicId));
     } else {
       ({ error } = await sb.from('topic_study_notes').upsert({ topic_id: topicId, content, updated_at: new Date().toISOString() }, { onConflict: 'topic_id' }));
@@ -1851,7 +1861,39 @@ function setupContentEditor() {
     if (error) { res.textContent = 'Could not save: ' + error.message; res.classList.add('err', 'show'); return; }
     res.textContent = content ? 'Study note saved.' : 'Study note removed.'; res.classList.remove('err'); res.classList.add('show');
   });
+}
 
+// Populate the Content tab's course dropdown and load the first course's
+// topics. Called whenever the Content view is opened. Defaults to the course
+// you last opened (currentCourse), else the first course.
+function populateContentEditor() {
+  bindContentEditorOnce();
+  const courseSel = document.getElementById('content-course-select');
+  if (!myCourses.length) {
+    courseSel.innerHTML = '<option value="">No courses yet</option>';
+    document.getElementById('content-topic-select').innerHTML = '<option value="">—</option>';
+    document.getElementById('bank-list').innerHTML = '<div class="empty-state">Create a course first.</div>';
+    return;
+  }
+  courseSel.innerHTML = myCourses.map(c => `<option value="${c.id}">${escapeHtml(c.code)} · ${escapeHtml(c.name)}</option>`).join('');
+  const defaultCourse = (currentCourse && myCourses.some(c => c.id === currentCourse.id)) ? currentCourse.id : myCourses[0].id;
+  courseSel.value = defaultCourse;
+  loadContentTopics(defaultCourse);
+}
+
+async function loadContentTopics(courseId) {
+  const sel = document.getElementById('content-topic-select');
+  sel.innerHTML = '<option value="">Loading…</option>';
+  document.getElementById('content-section-label').textContent = (myCourses.find(c => c.id === courseId)?.code) || 'Course content';
+  const { data: topics } = await sb.from('topics').select('*').eq('course_id', courseId).order('week_number', { nullsFirst: false });
+  contentTopics = topics || [];
+  if (!contentTopics.length) {
+    sel.innerHTML = '<option value="">No topics yet — upload a lesson plan first</option>';
+    document.getElementById('bank-list').innerHTML = '<div class="empty-state">Upload a lesson plan for this course to add topics, then add questions here.</div>';
+    document.getElementById('studynote-textarea').value = '';
+    return;
+  }
+  sel.innerHTML = contentTopics.map(t => `<option value="${t.id}">${t.week_number != null ? 'Week ' + t.week_number + ': ' : ''}${escapeHtml(t.title)}</option>`).join('');
   refreshContentPanels();
 }
 
