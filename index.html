@@ -660,7 +660,12 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
   }
 
   btn.disabled = true; btn.textContent = 'Creating account…';
-  const { data, error } = await sb.auth.signUp({ email, password });
+  const consentAt = new Date().toISOString();
+  const { data, error } = await sb.auth.signUp({
+    email,
+    password,
+    options: { data: { full_name: fullName, pdpa_consent_at: consentAt } }
+  });
   if (error) {
     btn.disabled = false; btn.textContent = 'Create account';
     errEl.textContent = error.message.includes('already registered') ? 'An account with this email already exists — try signing in instead.' : 'Could not create account: ' + error.message;
@@ -678,9 +683,12 @@ document.getElementById('signup-form').addEventListener('submit', async (e) => {
     return;
   }
 
-  const { error: profileError } = await sb.from('profiles').insert({
-    id: data.user.id, full_name: fullName, email, role: 'student', pdpa_consent_at: new Date().toISOString()
-  });
+  // The on_auth_user_created trigger already created this profile row from the
+  // signUp metadata above. Update it (not insert) — an insert here collides on
+  // the primary key and leaves full_name / pdpa_consent_at unwritten.
+  const { error: profileError } = await sb.from('profiles').update({
+    full_name: fullName, pdpa_consent_at: consentAt
+  }).eq('id', data.user.id);
   btn.disabled = false; btn.textContent = 'Create account';
   if (profileError) {
     errEl.textContent = 'Account created but profile setup failed — contact your lecturer.';
@@ -1351,7 +1359,7 @@ function renderRoster(list) {
 }
 document.getElementById('roster-search').addEventListener('input', (e) => {
   const q = e.target.value.trim().toLowerCase();
-  renderRoster(allStudents.filter(s => s.full_name.toLowerCase().includes(q) || (s.matric_number || '').toLowerCase().includes(q)));
+  renderRoster(allStudents.filter(s => (s.full_name || '').toLowerCase().includes(q) || (s.email || '').toLowerCase().includes(q) || (s.matric_number || '').toLowerCase().includes(q)));
 });
 
 /* ---------- EDUCATOR: UPLOADS ---------- */
