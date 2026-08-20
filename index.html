@@ -187,6 +187,25 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
 .roster-name{font-size:13.5px;font-weight:600;color:var(--forest-900);}
 .roster-matric{font-family:var(--font-mono);font-size:11px;color:var(--ink-soft);}
 .roster-ca{font-family:var(--font-mono);font-weight:600;font-size:14px;color:var(--forest-700);}
+.roster-manage-btn{flex-shrink:0;font-size:11px;font-weight:600;color:var(--forest-700);background:rgba(45,106,79,0.08);border:1px solid rgba(45,106,79,0.2);border-radius:99px;padding:5px 12px;margin-left:12px;}
+.roster-manage-btn:hover{background:rgba(45,106,79,0.15);}
+.manage-field{text-align:left;margin-bottom:16px;}
+.manage-field label{display:block;font-size:12px;font-weight:600;color:var(--forest-700);margin-bottom:5px;}
+.manage-field input{width:100%;padding:11px 14px;border:1px solid rgba(27,67,50,0.18);border-radius:var(--radius-sm);background:rgba(255,255,255,0.7);font-size:14px;color:var(--ink);outline:none;}
+.manage-field input:focus{border-color:var(--forest-500);box-shadow:0 0 0 3px rgba(45,106,79,0.12);}
+.manage-section{padding:16px 0;border-top:1px solid rgba(27,67,50,0.1);}
+.manage-section-label{font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:4px;}
+.manage-section p{font-size:12px;color:var(--ink-soft);line-height:1.5;margin-bottom:10px;}
+.btn-danger{width:100%;padding:11px;border:1px solid rgba(169,73,31,0.35);background:rgba(169,73,31,0.08);color:#a9491f;border-radius:var(--radius-sm);font-size:13px;font-weight:600;}
+.btn-danger:hover{background:rgba(169,73,31,0.15);}
+.btn-danger.hard{background:#a9491f;color:#fff;border-color:#a9491f;}
+.btn-danger.hard:hover{background:#8a3517;}
+.manage-result{margin-top:10px;font-size:12px;color:var(--forest-700);display:none;}
+.manage-result.show{display:block;}
+.manage-result.err{color:#a9491f;}
+.manage-confirm-box{margin-top:10px;padding:12px;border:1px solid rgba(169,73,31,0.3);border-radius:var(--radius-sm);background:rgba(169,73,31,0.05);}
+.manage-confirm-box p{font-size:11.5px;color:#8a3517;margin-bottom:8px;}
+.manage-confirm-box input{width:100%;padding:9px 12px;border:1px solid rgba(169,73,31,0.3);border-radius:var(--radius-sm);font-size:13px;font-family:var(--font-mono);margin-bottom:10px;}
 /* uploads */
 .upload-card{padding:20px;margin-bottom:16px;}
 .upload-card h3{font-size:15px;font-weight:600;color:var(--forest-900);margin-bottom:2px;}
@@ -555,6 +574,39 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
     <select class="modal-topic-select" id="modal-topic-select"></select>
     <div class="modal-topic-tlo" id="modal-topic-tlo"></div>
     <div id="modal-body"></div>
+  </div>
+</div>
+
+<!-- MANAGE STUDENT MODAL (educator: edit name / remove / delete) -->
+<div class="modal-overlay" id="manage-student-overlay">
+  <div class="modal-sheet">
+    <div class="modal-head">
+      <div class="modal-title" id="manage-student-title">Manage student</div>
+      <button class="modal-close" id="manage-student-close" type="button" aria-label="Close">✕</button>
+    </div>
+    <div class="meta" id="manage-student-email" style="margin-bottom:16px"></div>
+
+    <div class="manage-field">
+      <label for="manage-name-input">Full name</label>
+      <input type="text" id="manage-name-input" placeholder="Corrected name">
+    </div>
+    <button class="btn-primary" id="manage-save-name-btn" type="button" style="margin-top:0">Save name</button>
+    <div class="manage-result" id="manage-name-result"></div>
+
+    <div class="manage-section">
+      <div class="manage-section-label">Remove from app</div>
+      <p>Deletes this student's profile and all their app data (enrolments, notes, quiz history) but leaves their login registered. They could sign up again.</p>
+      <button class="btn-danger" id="manage-remove-btn" type="button">Remove profile &amp; data</button>
+      <div class="manage-result" id="manage-remove-result"></div>
+    </div>
+
+    <div class="manage-section">
+      <div class="manage-section-label" style="color:#a9491f">Delete account entirely</div>
+      <p>Permanently deletes everything including the login, freeing the email to sign up fresh. Use this to fully reset an account. This cannot be undone.</p>
+      <button class="btn-danger" id="manage-delete-btn" type="button">Delete account permanently</button>
+      <div id="manage-delete-confirm" style="display:none"></div>
+      <div class="manage-result" id="manage-delete-result"></div>
+    </div>
   </div>
 </div>
 
@@ -1353,10 +1405,106 @@ function renderRoster(list) {
     <div class="roster-row" data-id="${s.id}">
       <div class="roster-top">
         <div><div class="roster-name">${s.full_name || s.email}</div><div class="roster-matric">${[s.matric_number, s.email].filter(Boolean).join(' · ')}</div></div>
-        <div style="text-align:right"><div class="roster-ca">${s.streak}d streak</div><div class="roster-matric">${s.lastActive ? 'Active ' + new Date(s.lastActive).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : 'No activity yet'}</div></div>
+        <div style="display:flex;align-items:center">
+          <div style="text-align:right"><div class="roster-ca">${s.streak}d streak</div><div class="roster-matric">${s.lastActive ? 'Active ' + new Date(s.lastActive).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : 'No activity yet'}</div></div>
+          <button class="roster-manage-btn" type="button" data-manage="${s.id}">Manage</button>
+        </div>
       </div>
     </div>`).join('');
+  el.querySelectorAll('[data-manage]').forEach(btn => {
+    btn.addEventListener('click', (e) => { e.stopPropagation(); openManageStudent(btn.dataset.manage); });
+  });
 }
+
+/* ---------- EDUCATOR: MANAGE STUDENT (edit name / remove / delete) ---------- */
+let manageStudentId = null;
+
+function openManageStudent(studentId) {
+  const s = allStudents.find(x => x.id === studentId);
+  if (!s) return;
+  manageStudentId = studentId;
+  document.getElementById('manage-student-title').textContent = 'Manage student';
+  document.getElementById('manage-student-email').textContent = s.email || '';
+  document.getElementById('manage-name-input').value = s.full_name && s.full_name !== s.email ? s.full_name : '';
+  ['manage-name-result','manage-remove-result','manage-delete-result'].forEach(id => {
+    const r = document.getElementById(id); r.textContent = ''; r.classList.remove('show','err');
+  });
+  document.getElementById('manage-delete-confirm').style.display = 'none';
+  document.getElementById('manage-delete-confirm').innerHTML = '';
+  document.getElementById('manage-student-overlay').classList.add('open');
+}
+
+function closeManageStudent() {
+  document.getElementById('manage-student-overlay').classList.remove('open');
+  manageStudentId = null;
+}
+document.getElementById('manage-student-close').addEventListener('click', closeManageStudent);
+document.getElementById('manage-student-overlay').addEventListener('click', (e) => { if (e.target.id === 'manage-student-overlay') closeManageStudent(); });
+
+// Edit name — uses the profiles_update_student_by_educator RLS policy.
+document.getElementById('manage-save-name-btn').addEventListener('click', async () => {
+  if (!manageStudentId) return;
+  const name = document.getElementById('manage-name-input').value.trim();
+  const res = document.getElementById('manage-name-result');
+  if (!name) { res.textContent = 'Enter a name first.'; res.classList.add('err','show'); return; }
+  const btn = document.getElementById('manage-save-name-btn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+  const { error } = await sb.from('profiles').update({ full_name: name }).eq('id', manageStudentId);
+  btn.disabled = false; btn.textContent = 'Save name';
+  if (error) { res.textContent = 'Could not save: ' + error.message; res.classList.add('err','show'); return; }
+  res.classList.remove('err'); res.textContent = 'Name updated.'; res.classList.add('show');
+  await loadEducatorRoster();
+});
+
+// Remove from app — deletes the profile row (cascades data), leaves the login.
+document.getElementById('manage-remove-btn').addEventListener('click', async () => {
+  if (!manageStudentId) return;
+  const s = allStudents.find(x => x.id === manageStudentId);
+  if (!confirm(`Remove ${s ? (s.full_name || s.email) : 'this student'} from the app? Their notes, quiz history and enrolments will be deleted. Their login stays registered.`)) return;
+  const res = document.getElementById('manage-remove-result');
+  const btn = document.getElementById('manage-remove-btn');
+  btn.disabled = true; btn.textContent = 'Removing…';
+  const { error } = await sb.from('profiles').delete().eq('id', manageStudentId);
+  btn.disabled = false; btn.textContent = 'Remove profile & data';
+  if (error) { res.textContent = 'Could not remove: ' + error.message; res.classList.add('err','show'); return; }
+  closeManageStudent();
+  await loadEducatorRoster();
+});
+
+// Delete account entirely — two-step typed confirmation, then the Edge Function.
+document.getElementById('manage-delete-btn').addEventListener('click', () => {
+  if (!manageStudentId) return;
+  const s = allStudents.find(x => x.id === manageStudentId);
+  const box = document.getElementById('manage-delete-confirm');
+  box.style.display = 'block';
+  box.className = 'manage-confirm-box';
+  box.innerHTML = `
+    <p>This permanently deletes <strong>${escapeHtml(s ? (s.full_name || s.email) : 'this account')}</strong> including the login. Type <strong>DELETE</strong> to confirm.</p>
+    <input type="text" id="manage-delete-typed" placeholder="DELETE" autocomplete="off">
+    <button class="btn-danger hard" id="manage-delete-final-btn" type="button">Permanently delete</button>`;
+  document.getElementById('manage-delete-final-btn').addEventListener('click', async () => {
+    const typed = document.getElementById('manage-delete-typed').value.trim();
+    const res = document.getElementById('manage-delete-result');
+    if (typed !== 'DELETE') { res.textContent = 'Type DELETE exactly to confirm.'; res.classList.add('err','show'); return; }
+    const fbtn = document.getElementById('manage-delete-final-btn');
+    fbtn.disabled = true; fbtn.textContent = 'Deleting…';
+    const { data: { session } } = await sb.auth.getSession();
+    let error = null;
+    try {
+      const resp = await fetch(`${SUPABASE_URL}/functions/v1/delete-student`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
+        body: JSON.stringify({ student_id: manageStudentId }),
+      });
+      const out = await resp.json();
+      if (!resp.ok) error = out.error || 'Delete failed';
+    } catch (e) { error = e.message; }
+    fbtn.disabled = false; fbtn.textContent = 'Permanently delete';
+    if (error) { res.textContent = 'Could not delete: ' + error; res.classList.add('err','show'); return; }
+    closeManageStudent();
+    await loadEducatorRoster();
+  });
+});
 document.getElementById('roster-search').addEventListener('input', (e) => {
   const q = e.target.value.trim().toLowerCase();
   renderRoster(allStudents.filter(s => (s.full_name || '').toLowerCase().includes(q) || (s.email || '').toLowerCase().includes(q) || (s.matric_number || '').toLowerCase().includes(q)));
