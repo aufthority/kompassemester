@@ -314,10 +314,11 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
 <div id="course-picker-screen">
   <div class="picker-card glass fade-up">
     <div class="auth-mark"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M15 9l-2.5 6-6 2.5 2.5-6 6-2.5z" fill="#fff" stroke="none"/></svg></div>
-    <h1>Pick your course(s)</h1>
-    <p class="sub">You can add more later — this app is separate from your official course registration.</p>
+    <h1 id="picker-title">Pick your course(s)</h1>
+    <p class="sub" id="picker-sub">You can add more later — this app is separate from your official course registration.</p>
     <div class="picker-list" id="picker-list"></div>
     <button type="button" class="btn-primary" id="picker-continue-btn">Continue</button>
+    <button type="button" class="course-modal-skip" id="picker-back-btn" style="display:none;margin-top:10px">← Back to My Courses</button>
     <div class="auth-error" id="picker-error"></div>
   </div>
 </div>
@@ -349,6 +350,9 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
         <div class="courses-count" id="courses-count"></div>
         <div id="add-course-row" style="display:none">
           <button class="btn-primary btn-add-course" id="add-course-btn" type="button">+ Add new course</button>
+        </div>
+        <div id="enroll-more-row" style="display:none">
+          <button class="btn-primary btn-add-course" id="enroll-more-btn" type="button">+ Enroll in another course</button>
         </div>
         <div class="glass" id="courses-list"></div>
       </section>
@@ -623,11 +627,12 @@ async function boot(opts = {}) {
   }
   myProfile = profile;
 
-  if (opts.afterSignup && profile.role === 'student') {
+  if (profile.role === 'student') {
     const { data: enrollments } = await sb.from('enrollments').select('id').eq('student_id', profile.id);
     if (!enrollments || enrollments.length === 0) {
       document.getElementById('auth-screen').style.display = 'none';
-      await showCoursePicker();
+      document.getElementById('app').classList.remove('active');
+      await showCoursePicker('onboarding');
       return;
     }
   }
@@ -647,6 +652,7 @@ async function boot(opts = {}) {
     showView('courses');
     setupUploads();
   } else {
+    document.getElementById('enroll-more-row').style.display = '';
     await loadStudentCourses();
     showView('courses');
   }
@@ -659,20 +665,32 @@ function showView(view) {
   document.querySelectorAll('.sidenav button, .bottomnav button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
 }
 
-/* ---------- COURSE PICKER (post-signup) ---------- */
-async function showCoursePicker() {
+/* ---------- COURSE PICKER (post-signup + add-more) ---------- */
+let pickerMode = 'onboarding';
+
+async function showCoursePicker(mode = 'onboarding') {
+  pickerMode = mode;
   const listEl = document.getElementById('picker-list');
   const errEl = document.getElementById('picker-error');
+  const backBtn = document.getElementById('picker-back-btn');
+  const titleEl = document.getElementById('picker-title');
+  const subEl = document.getElementById('picker-sub');
   errEl.classList.remove('show');
   listEl.innerHTML = '<div class="loading-state">Loading courses…</div>';
   document.getElementById('course-picker-screen').classList.add('active');
+  backBtn.style.display = mode === 'addmore' ? '' : 'none';
+  titleEl.textContent = mode === 'addmore' ? 'Enroll in another course' : 'Pick your course(s)';
+  subEl.textContent = mode === 'addmore' ? 'Any course you\'re not already in shows up here.' : 'You can add more later — this app is separate from your official course registration.';
 
+  const enrolledIds = new Set((myCourses || []).map(c => c.id));
   const { data: courses } = await sb.from('courses').select('*').order('code');
-  if (!courses || !courses.length) {
-    listEl.innerHTML = '<div class="empty-state">No courses available yet. Contact your lecturer.</div>';
+  const available = (courses || []).filter(c => !enrolledIds.has(c.id));
+
+  if (!available.length) {
+    listEl.innerHTML = `<div class="empty-state">${mode === 'addmore' ? 'You\'re already enrolled in every course available right now.' : 'No courses available yet. Contact your lecturer.'}</div>`;
     return;
   }
-  listEl.innerHTML = courses.map(c => `
+  listEl.innerHTML = available.map(c => `
     <div class="picker-item">
       <input type="checkbox" id="pick-${c.id}" value="${c.id}">
       <label for="pick-${c.id}">
@@ -681,6 +699,11 @@ async function showCoursePicker() {
       </label>
     </div>`).join('');
 }
+
+document.getElementById('picker-back-btn').addEventListener('click', () => {
+  document.getElementById('course-picker-screen').classList.remove('active');
+  document.getElementById('app').classList.add('active');
+});
 
 document.getElementById('picker-continue-btn').addEventListener('click', async () => {
   const btn = document.getElementById('picker-continue-btn');
@@ -701,7 +724,13 @@ document.getElementById('picker-continue-btn').addEventListener('click', async (
     errEl.classList.add('show');
     return;
   }
+  document.getElementById('course-picker-screen').classList.remove('active');
   await boot();
+});
+
+document.getElementById('enroll-more-btn').addEventListener('click', async () => {
+  document.getElementById('app').classList.remove('active');
+  await showCoursePicker('addmore');
 });
 
 /* ---------- MY COURSES (shared landing) ---------- */
