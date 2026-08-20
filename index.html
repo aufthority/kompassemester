@@ -206,6 +206,35 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
 
 .loading-state, .empty-state{padding:40px 20px;text-align:center;color:var(--ink-soft);font-size:13px;}
 
+/* EDUCATOR CONTENT (question bank + study notes) */
+.content-topic-select{width:100%;padding:11px 14px;border:1px solid rgba(27,67,50,0.18);border-radius:var(--radius-sm);background:rgba(255,255,255,0.7);font-size:14px;color:var(--ink);margin-bottom:16px;}
+.content-tabs{display:flex;gap:6px;margin-bottom:16px;}
+.content-tab{flex:1;padding:9px 12px;border:1px solid rgba(27,67,50,0.16);background:rgba(255,255,255,0.4);border-radius:99px;font-size:12.5px;font-weight:600;color:var(--ink-soft);}
+.content-tab.active{background:var(--forest-700);color:#fff;border-color:var(--forest-700);}
+.content-panel{display:none;}
+.content-panel.active{display:block;}
+.bank-q{padding:12px 4px;border-bottom:1px solid rgba(27,67,50,0.08);}
+.bank-q:last-child{border-bottom:none;}
+.bank-q-text{font-size:13px;font-weight:600;color:var(--forest-900);margin-bottom:6px;}
+.bank-opt{font-size:12px;color:var(--ink-soft);padding:2px 0 2px 18px;position:relative;}
+.bank-opt.correct{color:var(--forest-700);font-weight:600;}
+.bank-opt.correct::before{content:'✓';position:absolute;left:0;color:var(--forest-500);}
+.bank-q-actions{margin-top:6px;}
+.bank-del-btn{font-size:11px;font-weight:600;color:#a9491f;background:rgba(169,73,31,0.08);border:1px solid rgba(169,73,31,0.2);border-radius:99px;padding:4px 12px;}
+.bulk-textarea{width:100%;min-height:180px;padding:12px 14px;border:1px solid rgba(27,67,50,0.18);border-radius:var(--radius-sm);background:rgba(255,255,255,0.7);font-family:var(--font-mono);font-size:12.5px;line-height:1.6;color:var(--ink);resize:vertical;}
+.bulk-format-hint{font-size:11px;color:var(--ink-soft);line-height:1.6;margin:8px 0 12px;padding:10px 12px;background:rgba(255,255,255,0.4);border-radius:var(--radius-sm);border:1px solid rgba(27,67,50,0.1);}
+.bulk-format-hint code{font-family:var(--font-mono);background:rgba(27,67,50,0.06);padding:1px 4px;border-radius:3px;}
+.parse-error{font-size:11.5px;color:#a9491f;padding:2px 0;}
+.notes-editor-textarea{width:100%;min-height:160px;padding:12px 14px;border:1px solid rgba(27,67,50,0.18);border-radius:var(--radius-sm);background:rgba(255,255,255,0.7);font-family:var(--font-body);font-size:13.5px;line-height:1.6;color:var(--ink);resize:vertical;}
+.content-save-result{margin-top:10px;font-size:12px;color:var(--forest-700);display:none;}
+.content-save-result.show{display:block;}
+.content-save-result.err{color:#a9491f;}
+
+/* STUDENT STUDY NOTE (read-only, in learning guide) */
+.guide-studynote{margin:4px 0 12px;padding:12px 14px;background:rgba(201,162,39,0.08);border:1px solid rgba(201,162,39,0.22);border-radius:var(--radius-sm);}
+.guide-studynote-label{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-600);margin-bottom:5px;}
+.guide-studynote-body{font-size:12.5px;color:var(--ink);line-height:1.6;white-space:pre-wrap;}
+
 /* PRACTICE / NOTES MODAL */
 .modal-overlay{position:fixed;inset:0;z-index:200;background:rgba(16,36,28,0.45);backdrop-filter:blur(3px);display:none;align-items:flex-end;justify-content:center;}
 .modal-overlay.open{display:flex;}
@@ -339,6 +368,7 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
     <nav class="sidenav" id="educator-sidenav" style="display:none">
       <button data-view="courses" class="active">📚 My Courses</button>
       <button data-view="roster">🎓 Students</button>
+      <button data-view="content">✏️ Content</button>
       <button data-view="uploads">⬆️ Uploads</button>
     </nav>
 
@@ -453,6 +483,50 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
           <div id="coverage-map"></div>
         </div>
       </section>
+
+      <!-- EDUCATOR: CONTENT (question bank + study notes) -->
+      <section class="view" id="view-content">
+        <div class="section-label" id="content-section-label">Course content</div>
+        <div class="greeting" style="font-size:20px;margin-bottom:4px">Content for students</div>
+        <div class="meta" style="font-size:12px;color:var(--ink-soft);margin-bottom:16px">Add practice questions and study notes per topic. Students see these in their Learning tab; only you can edit them here.</div>
+
+        <select class="content-topic-select" id="content-topic-select"></select>
+
+        <div class="content-tabs">
+          <button class="content-tab active" id="content-tab-bank" type="button" data-panel="bank">Question bank</button>
+          <button class="content-tab" id="content-tab-notes" type="button" data-panel="notes">Study note</button>
+        </div>
+
+        <!-- QUESTION BANK PANEL -->
+        <div class="content-panel active" id="content-panel-bank">
+          <div class="upload-card glass" style="margin-bottom:16px">
+            <h3>Existing questions</h3>
+            <div class="glass" id="bank-list" style="margin-top:10px"></div>
+          </div>
+          <div class="upload-card glass">
+            <h3>Add questions (bulk paste)</h3>
+            <div class="bulk-format-hint">
+              Separate each question with a <strong>blank line</strong>. Options on their own lines as <code>A)</code> <code>B)</code> <code>C)</code> <code>D)</code>.
+              Mark the correct answer <strong>either</strong> with a <code>*</code> before the option <strong>or</strong> an <code>Answer: B</code> line.
+            </div>
+            <textarea class="bulk-textarea" id="bulk-textarea" placeholder="Which enzyme unwinds DNA during replication?&#10;A) Ligase&#10;*B) Helicase&#10;C) Polymerase&#10;D) Primase&#10;&#10;The powerhouse of the cell is the?&#10;A) Nucleus&#10;B) Ribosome&#10;C) Mitochondria&#10;D) Golgi&#10;Answer: C"></textarea>
+            <div id="bulk-preview"></div>
+            <button class="btn-import" id="bulk-preview-btn" type="button">Preview</button>
+            <div class="content-save-result" id="bulk-save-result"></div>
+          </div>
+        </div>
+
+        <!-- STUDY NOTE PANEL -->
+        <div class="content-panel" id="content-panel-notes">
+          <div class="upload-card glass">
+            <h3>Study note for this topic</h3>
+            <div class="meta">One note per topic. Students read this in their weekly learning guide. Leave blank and save to remove it.</div>
+            <textarea class="notes-editor-textarea" id="studynote-textarea" placeholder="Write a short study summary, key points, or exam tips for this topic…"></textarea>
+            <button class="btn-import" id="studynote-save-btn" type="button">Save study note</button>
+            <div class="content-save-result" id="studynote-save-result"></div>
+          </div>
+        </div>
+      </section>
     </div>
   </main>
 
@@ -465,6 +539,7 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
   <nav class="bottomnav" id="educator-bottomnav" style="display:none">
     <button data-view="courses" class="active">📚<span>Courses</span></button>
     <button data-view="roster">🎓<span>Students</span></button>
+    <button data-view="content">✏️<span>Content</span></button>
     <button data-view="uploads">⬆️<span>Uploads</span></button>
   </nav>
 </div>
@@ -532,6 +607,7 @@ const ACTIVITY_TYPES = [
 
 let myProfile = null, currentCourse = null, currentAssessments = [], myActivities = [], myCourses = [];
 let myTopics = [], myNotes = [], myQuizAttempts = [];
+let studyNotesByTopic = {}; // topic_id -> educator study note content (student view)
 let quizQuestionCache = {}; // topic_id -> questions[]
 let modalType = null; // 'practice' | 'notes'
 
@@ -807,6 +883,11 @@ async function loadEducatorCourses() {
 async function openEducatorCourse(courseId) {
   currentCourse = myCourses.find(c => c.id === courseId);
   if (!currentCourse) return;
+  const { data: topics } = await sb.from('topics').select('*').eq('course_id', currentCourse.id).order('week_number', { nullsFirst: false });
+  myTopics = topics || [];
+  document.getElementById('content-section-label').textContent = currentCourse.code + ' · ' + currentCourse.name;
+  document.getElementById('uploads-section-label').textContent = currentCourse.code;
+  setupContentEditor();
   await loadEducatorRoster();
   showView('roster');
 }
@@ -825,6 +906,12 @@ async function loadStudentData() {
   myActivities = activities || [];
   const { data: topics } = await sb.from('topics').select('*').eq('course_id', currentCourse.id).order('week_number');
   myTopics = topics || [];
+  // Educator-authored study notes for this course's topics (students read-only).
+  studyNotesByTopic = {};
+  if (myTopics.length) {
+    const { data: studyNotes } = await sb.from('topic_study_notes').select('topic_id, content').in('topic_id', myTopics.map(t => t.id));
+    (studyNotes || []).forEach(n => { studyNotesByTopic[n.topic_id] = n.content; });
+  }
   const { data: notes } = await sb.from('student_notes').select('*').eq('student_id', myProfile.id).eq('course_id', currentCourse.id).order('created_at', { ascending: false });
   myNotes = notes || [];
   const { data: attempts } = await sb.from('quiz_attempts').select('*').eq('student_id', myProfile.id).eq('course_id', currentCourse.id).order('created_at', { ascending: false });
@@ -1023,7 +1110,11 @@ const GUIDE_WEEK_COUNT = 14;
 
 function renderLearningGuide(topics) {
   const card = document.getElementById('guide-card');
-  if (!currentCourse.notebook_url) { card.style.display = 'none'; return; }
+  const hasNotebook = !!currentCourse.notebook_url;
+  const hasStudyNotes = Object.keys(studyNotesByTopic).length > 0;
+  // Show the guide if there's a course notebook OR any educator study note to
+  // surface. Prompt/notebook-link bits below stay gated on the notebook URL.
+  if (!hasNotebook && !hasStudyNotes) { card.style.display = 'none'; return; }
   card.style.display = 'block';
 
   const byWeek = {};
@@ -1047,11 +1138,18 @@ function renderLearningGuide(topics) {
       `Quiz me on ${subject}${tlo ? ' — specifically: ' + tlo : ''}.`,
     ];
     const tloHtml = tlo ? `<div class="guide-tlo">${tlo}</div>` : '';
-    const promptsHtml = prompts.map(p => `
+    const studyNote = t && studyNotesByTopic[t.id] ? studyNotesByTopic[t.id] : null;
+    const studyNoteHtml = studyNote
+      ? `<div class="guide-studynote"><div class="guide-studynote-label">📌 Study note from your lecturer</div><div class="guide-studynote-body">${escapeHtml(studyNote)}</div></div>`
+      : '';
+    const promptsHtml = hasNotebook ? prompts.map(p => `
       <div class="guide-prompt">
         <div class="guide-prompt-text">${p}</div>
         <button class="guide-copy-btn" type="button" data-prompt="${p.replace(/"/g, '&quot;')}">Copy</button>
-      </div>`).join('');
+      </div>`).join('') : '';
+    const notebookLinkHtml = hasNotebook
+      ? `<a href="${currentCourse.notebook_url}" target="_blank" rel="noopener" class="guide-open-link">Open in course notebook →</a>`
+      : '';
     return `
       <div class="guide-row${isThisWeek ? ' open' : ''}" data-week="${n}">
         <button class="guide-head" type="button" aria-expanded="${isThisWeek}">
@@ -1063,8 +1161,9 @@ function renderLearningGuide(topics) {
         <div class="guide-body">
           <div class="guide-body-inner">
             ${tloHtml}
+            ${studyNoteHtml}
             ${promptsHtml}
-            <a href="${currentCourse.notebook_url}" target="_blank" rel="noopener" class="guide-open-link">Open in course notebook →</a>
+            ${notebookLinkHtml}
           </div>
         </div>
       </div>`;
@@ -1562,6 +1661,198 @@ function renderCoverageAutoImport(parsed) {
     res.textContent = error ? ('Import failed: ' + error.message) : (`Imported ${toInsert.length} topics.`);
     res.classList.add('show');
   });
+}
+
+/* ================= EDUCATOR CONTENT EDITOR ================= */
+let contentSetupDone = false;
+
+function parseBulkMCQ(raw) {
+  const errors = [];
+  const questions = [];
+  const blocks = String(raw || '').replace(/\r\n/g, '\n').split(/\n\s*\n/).map(b => b.trim()).filter(Boolean);
+  blocks.forEach((block, bi) => {
+    const bnum = bi + 1;
+    const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+    if (!lines.length) return;
+    let answerLetter = null;
+    const qLines = [];
+    const opts = [];
+    lines.forEach(line => {
+      const am = line.match(/^ans(?:wer)?\s*[:\-]?\s*([A-Da-d])\b/i);
+      if (am) { answerLetter = am[1].toUpperCase(); return; }
+      const om = line.match(/^(\*?)\s*([A-Da-d])\s*[\.\)\:]\s*(.*)$/);
+      if (om && opts.length < 4) {
+        opts.push({ letter: om[2].toUpperCase(), text: om[3].trim(), starred: om[1] === '*' });
+        return;
+      }
+      if (!opts.length) qLines.push(line.replace(/^\d+[\.\)]\s*/, ''));
+      else qLines.push(line);
+    });
+    const question = qLines.join(' ').trim();
+    if (!question) { errors.push(`Question ${bnum}: no question text found.`); return; }
+    if (opts.length !== 4) { errors.push(`Question ${bnum}: found ${opts.length} option(s), need exactly 4 (A–D).`); return; }
+    if (opts.some(o => !o.text)) { errors.push(`Question ${bnum}: an option is empty.`); return; }
+    let correct = -1;
+    const starred = opts.filter(o => o.starred);
+    if (answerLetter) {
+      correct = opts.findIndex(o => o.letter === answerLetter);
+      if (correct < 0) { errors.push(`Question ${bnum}: Answer "${answerLetter}" doesn't match A–D.`); return; }
+    }
+    if (starred.length === 1) {
+      const sIdx = opts.indexOf(starred[0]);
+      if (correct >= 0 && correct !== sIdx) { errors.push(`Question ${bnum}: the * and the Answer line disagree.`); return; }
+      correct = sIdx;
+    } else if (starred.length > 1) { errors.push(`Question ${bnum}: more than one option starred.`); return; }
+    if (correct < 0) { errors.push(`Question ${bnum}: no correct answer marked (use * or an Answer: line).`); return; }
+    questions.push({ question, options: opts.map(o => o.text), correct_index: correct });
+  });
+  return { questions, errors };
+}
+
+function contentCurrentTopicId() {
+  const sel = document.getElementById('content-topic-select');
+  return sel ? sel.value : null;
+}
+
+async function renderBankList(topicId) {
+  const el = document.getElementById('bank-list');
+  el.innerHTML = '<div class="loading-state">Loading…</div>';
+  // Bypass the per-topic cache used by the student quiz so edits show immediately.
+  const { data } = await sb.from('topic_quiz_questions').select('*').eq('topic_id', topicId).order('created_at');
+  const questions = data || [];
+  if (!questions.length) { el.innerHTML = '<div class="empty-state">No questions yet for this topic.</div>'; return; }
+  el.innerHTML = questions.map((q, qi) => `
+    <div class="bank-q" data-qid="${q.id}">
+      <div class="bank-q-text">${qi + 1}. ${escapeHtml(q.question)}</div>
+      ${(q.options || []).map((opt, oi) => `<div class="bank-opt${oi === q.correct_index ? ' correct' : ''}">${'ABCD'[oi]}) ${escapeHtml(opt)}</div>`).join('')}
+      <div class="bank-q-actions"><button class="bank-del-btn" type="button" data-del="${q.id}">Delete</button></div>
+    </div>`).join('');
+  el.querySelectorAll('[data-del]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Delete this question? This cannot be undone.')) return;
+      btn.disabled = true; btn.textContent = 'Deleting…';
+      const { error } = await sb.from('topic_quiz_questions').delete().eq('id', btn.dataset.del);
+      if (error) { btn.disabled = false; btn.textContent = 'Delete'; alert('Could not delete: ' + error.message); return; }
+      delete quizQuestionCache[topicId];
+      await renderBankList(topicId);
+    });
+  });
+}
+
+function escapeHtml(s) {
+  return String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+}
+
+async function loadStudyNoteEditor(topicId) {
+  const ta = document.getElementById('studynote-textarea');
+  ta.value = '';
+  ta.disabled = true;
+  const { data } = await sb.from('topic_study_notes').select('content').eq('topic_id', topicId).maybeSingle();
+  ta.value = data && data.content ? data.content : '';
+  ta.disabled = false;
+}
+
+function refreshContentPanels() {
+  const topicId = contentCurrentTopicId();
+  if (!topicId) return;
+  document.getElementById('bulk-preview').innerHTML = '';
+  document.getElementById('bulk-textarea').value = '';
+  document.getElementById('bulk-save-result').classList.remove('show');
+  document.getElementById('studynote-save-result').classList.remove('show');
+  renderBankList(topicId);
+  loadStudyNoteEditor(topicId);
+}
+
+function setupContentEditor() {
+  const sel = document.getElementById('content-topic-select');
+  if (!myTopics.length) {
+    sel.innerHTML = '<option value="">No topics yet — upload a lesson plan first</option>';
+    document.getElementById('bank-list').innerHTML = '<div class="empty-state">Upload a lesson plan to add topics, then add questions here.</div>';
+    return;
+  }
+  sel.innerHTML = myTopics.map(t => `<option value="${t.id}">${t.week_number != null ? 'Week ' + t.week_number + ': ' : ''}${escapeHtml(t.title)}</option>`).join('');
+
+  if (contentSetupDone) { refreshContentPanels(); return; }
+  contentSetupDone = true;
+
+  sel.addEventListener('change', refreshContentPanels);
+
+  document.querySelectorAll('.content-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.content-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById('content-panel-' + tab.dataset.panel).classList.add('active');
+    });
+  });
+
+  document.getElementById('bulk-preview-btn').addEventListener('click', async () => {
+    const raw = document.getElementById('bulk-textarea').value;
+    const previewEl = document.getElementById('bulk-preview');
+    const btn = document.getElementById('bulk-preview-btn');
+    const { questions, errors } = parseBulkMCQ(raw);
+
+    if (!questions.length && !errors.length) { previewEl.innerHTML = '<div class="preview-note warn">Nothing to parse — paste some questions above.</div>'; return; }
+
+    const errHtml = errors.length ? `<div class="upload-card glass" style="margin-top:10px">${errors.map(e => `<div class="parse-error">${escapeHtml(e)}</div>`).join('')}</div>` : '';
+    if (!questions.length) {
+      previewEl.innerHTML = errHtml + '<div class="preview-note warn">No valid questions to add — fix the issues above and preview again.</div>';
+      btn.textContent = 'Preview';
+      return;
+    }
+    const previewList = questions.slice(0, 3).map((q, i) => `
+      <div class="bank-q">
+        <div class="bank-q-text">${i + 1}. ${escapeHtml(q.question)}</div>
+        ${q.options.map((o, oi) => `<div class="bank-opt${oi === q.correct_index ? ' correct' : ''}">${'ABCD'[oi]}) ${escapeHtml(o)}</div>`).join('')}
+      </div>`).join('');
+    const more = questions.length > 3 ? `<div class="preview-note">…and ${questions.length - 3} more</div>` : '';
+    previewEl.innerHTML = `
+      ${errHtml}
+      <div class="preview-note">${questions.length} valid question(s) ready to add${errors.length ? `, ${errors.length} skipped` : ''}.</div>
+      <div class="glass" style="margin-top:8px">${previewList}</div>${more}
+      <button class="btn-import" id="bulk-confirm-btn" type="button">Add ${questions.length} question(s)</button>`;
+
+    document.getElementById('bulk-confirm-btn').addEventListener('click', async () => {
+      const topicId = contentCurrentTopicId();
+      if (!topicId) return;
+      const cbtn = document.getElementById('bulk-confirm-btn');
+      cbtn.disabled = true; cbtn.textContent = 'Adding…';
+      const rows = questions.map(q => ({ topic_id: topicId, question: q.question, options: q.options, correct_index: q.correct_index }));
+      const { error } = await sb.from('topic_quiz_questions').insert(rows);
+      const res = document.getElementById('bulk-save-result');
+      if (error) {
+        cbtn.disabled = false; cbtn.textContent = `Add ${questions.length} question(s)`;
+        res.textContent = 'Could not add: ' + error.message; res.classList.add('err', 'show');
+        return;
+      }
+      delete quizQuestionCache[topicId];
+      document.getElementById('bulk-textarea').value = '';
+      previewEl.innerHTML = '';
+      res.textContent = `Added ${rows.length} question(s).`; res.classList.remove('err'); res.classList.add('show');
+      await renderBankList(topicId);
+    });
+  });
+
+  document.getElementById('studynote-save-btn').addEventListener('click', async () => {
+    const topicId = contentCurrentTopicId();
+    if (!topicId) return;
+    const btn = document.getElementById('studynote-save-btn');
+    const res = document.getElementById('studynote-save-result');
+    const content = document.getElementById('studynote-textarea').value.trim();
+    btn.disabled = true; btn.textContent = 'Saving…';
+    let error;
+    if (!content) {
+      // Blank = remove the note.
+      ({ error } = await sb.from('topic_study_notes').delete().eq('topic_id', topicId));
+    } else {
+      ({ error } = await sb.from('topic_study_notes').upsert({ topic_id: topicId, content, updated_at: new Date().toISOString() }, { onConflict: 'topic_id' }));
+    }
+    btn.disabled = false; btn.textContent = 'Save study note';
+    if (error) { res.textContent = 'Could not save: ' + error.message; res.classList.add('err', 'show'); return; }
+    res.textContent = content ? 'Study note saved.' : 'Study note removed.'; res.classList.remove('err'); res.classList.add('show');
+  });
+
+  refreshContentPanels();
 }
 
 function setupUploads() {
