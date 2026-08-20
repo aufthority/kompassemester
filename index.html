@@ -1344,7 +1344,7 @@ function renderRoster(list) {
   el.innerHTML = list.map(s => `
     <div class="roster-row" data-id="${s.id}">
       <div class="roster-top">
-        <div><div class="roster-name">${s.full_name}</div>${s.matric_number ? `<div class="roster-matric">${s.matric_number}</div>` : ''}</div>
+        <div><div class="roster-name">${s.full_name || s.email}</div><div class="roster-matric">${[s.matric_number, s.email].filter(Boolean).join(' · ')}</div></div>
         <div style="text-align:right"><div class="roster-ca">${s.streak}d streak</div><div class="roster-matric">${s.lastActive ? 'Active ' + new Date(s.lastActive).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : 'No activity yet'}</div></div>
       </div>
     </div>`).join('');
