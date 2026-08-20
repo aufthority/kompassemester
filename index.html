@@ -1396,6 +1396,91 @@ function cellCandidates(row) {
   return out;
 }
 
+/* ---------- SEMESTER CALENDAR (for date→week derivation) ---------- */
+// Anchor = first teaching Tuesday. Week number is derived from the gap
+// between a topic's date and this anchor, so gap weeks (e.g. a study/
+// break week) are skipped automatically rather than mis-numbered.
+const SEMESTER_ANCHOR = '2026-09-15';
+const MONTH_MAP = { jan:0, feb:1, mar:2, apr:3, may:4, jun:5, jul:6, aug:7, sep:8, oct:9, nov:10, dec:11 };
+
+function parseLooseDate(s) {
+  const m = String(s || '').match(/(\d{1,2})\s+([A-Za-z]{3,})\s+(\d{4})/);
+  if (!m) return null;
+  const day = parseInt(m[1], 10);
+  const mon = MONTH_MAP[m[2].slice(0, 3).toLowerCase()];
+  const yr = parseInt(m[3], 10);
+  if (mon === undefined) return null;
+  const d = new Date(Date.UTC(yr, mon, day));
+  return isNaN(d.getTime()) ? null : d;
+}
+
+function weekFromDate(d) {
+  if (!d) return null;
+  const anchor = new Date(SEMESTER_ANCHOR + 'T00:00:00Z');
+  const diffDays = Math.round((d - anchor) / 86400000);
+  return Math.floor(diffDays / 7) + 1;
+}
+
+/* ---------- KEY-VALUE LESSON PLAN (vertical layout) ---------- */
+// A second, different lesson-plan shape: instead of one row per week
+// starting with "Topic 1", each unit is a vertical block of key→value
+// rows — "Topic | Unit 1 – Thermodynamics", "Date / Duration | 15 Sep
+// 2026", "•TLO1: ..." — repeated once per table. The key cell literally
+// reads "Topic" (no trailing number), so the horizontal parser below
+// misses it entirely. Week number is derived from the date, not the
+// unit number, since units don't map 1:1 to teaching weeks (double
+// blocks, gap weeks, undated make-up topics).
+function looksLikeKeyValueLessonPlan(rows) {
+  let topicKeys = 0, tloBullets = 0;
+  (rows || []).forEach(r => {
+    const cc = cellCandidates(r);
+    if (cc.length > 1 && /^topic$/i.test(cc[0])) topicKeys++;
+    cc.forEach(c => { if (/^\s*[•·●]?\s*TLO\s*\d/i.test(c)) tloBullets++; });
+  });
+  return topicKeys >= 2 && tloBullets >= 2;
+}
+
+function parseKeyValueLessonPlan(rows) {
+  const blocks = [];
+  let current = null;
+  (rows || []).forEach(r => {
+    const cc = cellCandidates(r);
+    if (!cc.length) return;
+    const key = cc[0].trim().toLowerCase();
+    if (key === 'topic' && cc.length > 1) {
+      if (current) blocks.push(current);
+      current = { title: cc[1].trim(), date: null, tlos: [] };
+      return;
+    }
+    if ((key === 'date / duration' || key === 'duration' || key === 'date') && current && cc.length > 1) {
+      current.date = cc[1].trim();
+      return;
+    }
+    // TLO bullets: a cell may hold several "•TLOn: ..." joined together.
+    cc.forEach(c => {
+      if (!current) return;
+      if (!/TLO\s*\d/i.test(c)) return;
+      c.split(/[•·●]/).forEach(part => {
+        const m = part.trim().match(/^TLO\s*\d+\s*[:.\-]?\s*(.*)$/i);
+        if (m && m[1].trim()) current.tlos.push(m[1].trim());
+      });
+    });
+  });
+  if (current) blocks.push(current);
+  return blocks
+    .map(b => {
+      const d = parseLooseDate(b.date);
+      const tlo = [...new Set(b.tlos)].join(' ');
+      return {
+        week_number: weekFromDate(d),
+        week_start_date: d ? d.toISOString().slice(0, 10) : null,
+        title: b.title,
+        tlo: tlo || null,
+      };
+    })
+    .filter(t => t.title && !/^(sub-?total|grand total|total)$/i.test(t.title));
+}
+
 function looksLikeLessonPlanDump(rows) {
   // Search for the marker within the first few characters rather than
   // anchoring exactly at position 0 — a mangled bullet character from a
@@ -1442,32 +1527,34 @@ function parseLessonPlanDump(rows) {
     .filter(t => t.title && !Number.isNaN(t.week_number) && !/^(sub-?total|grand total|total)$/i.test(t.title));
 }
 
-function renderCoverageAutoImport(rows) {
-  const parsed = parseLessonPlanDump(rows);
+function renderCoverageAutoImport(parsed) {
   const mapEl = document.getElementById('coverage-map');
 
-  if (!parsed.length) {
+  if (!parsed || !parsed.length) {
     mapEl.innerHTML = `<div class="preview-note warn">Recognised this as a Lesson Plan-style file but couldn't find any complete Topic + TLO entries. Try the column-mapping upload instead, or check the file content.</div>`;
     return;
   }
 
+  const undated = parsed.filter(t => t.week_number == null).length;
   const previewHtml = parsed.slice(0, 5).map(t =>
-    `<div class="coverage-row"><div class="coverage-week">Wk ${t.week_number}</div><div class="coverage-title">${t.title}</div></div>`
+    `<div class="coverage-row"><div class="coverage-week">${t.week_number != null ? 'Wk ' + t.week_number : '—'}</div><div class="coverage-title">${t.title}</div></div>`
   ).join('');
   const more = parsed.length > 5 ? `<div class="preview-note">…and ${parsed.length - 5} more</div>` : '';
+  const undatedNote = undated ? `<div class="preview-note warn">${undated} topic${undated > 1 ? 's have' : ' has'} no date and will import without a week number.</div>` : '';
 
   mapEl.innerHTML = `
     <div class="preview-note">Recognised this as a Lesson Plan-style file — found ${parsed.length} topics with TLOs, no column mapping needed.</div>
     <div class="glass" style="margin-top:10px;margin-bottom:4px">${previewHtml}</div>
     ${more}
-    <div class="preview-note">Importing will replace the current lesson plan for PHIA 4312.</div>
+    ${undatedNote}
+    <div class="preview-note">Importing will replace the current lesson plan for ${currentCourse.code}.</div>
     <button class="btn-import" id="coverage-import-btn">Import lesson plan</button>
     <div class="import-result" id="coverage-import-result"></div>`;
 
   document.getElementById('coverage-import-btn').addEventListener('click', async () => {
     const btn = document.getElementById('coverage-import-btn');
     btn.disabled = true; btn.textContent = 'Importing…';
-    const toInsert = parsed.map(t => ({ course_id: currentCourse.id, week_number: t.week_number, week_start_date: null, title: t.title, tlo: t.tlo || null }));
+    const toInsert = parsed.map(t => ({ course_id: currentCourse.id, week_number: t.week_number ?? null, week_start_date: t.week_start_date || null, title: t.title, tlo: t.tlo || null }));
     await sb.from('topics').delete().eq('course_id', currentCourse.id);
     const { error } = await sb.from('topics').insert(toInsert);
     btn.disabled = false; btn.textContent = 'Import lesson plan';
@@ -1483,8 +1570,10 @@ function setupUploads() {
     document.getElementById('coverage-drop').classList.add('has-file');
     try {
       const { bestRows, allRows } = await parseUploadedFile(file);
-      if (looksLikeLessonPlanDump(allRows)) {
-        renderCoverageAutoImport(allRows);
+      if (looksLikeKeyValueLessonPlan(allRows)) {
+        renderCoverageAutoImport(parseKeyValueLessonPlan(allRows));
+      } else if (looksLikeLessonPlanDump(allRows)) {
+        renderCoverageAutoImport(parseLessonPlanDump(allRows));
       } else {
         renderCoverageMapping(bestRows);
       }
@@ -1650,7 +1739,9 @@ document.getElementById('course-modal-file').addEventListener('change', async (e
   statusEl.innerHTML = '<div class="preview-note">Reading file…</div>';
   try {
     const parsed = await parseUploadedFile(file);
-    const topics = looksLikeLessonPlanDump(parsed.allRows) ? parseLessonPlanDump(parsed.allRows) : mapRowsToTopics(parsed.bestRows);
+    const topics = looksLikeKeyValueLessonPlan(parsed.allRows) ? parseKeyValueLessonPlan(parsed.allRows)
+      : looksLikeLessonPlanDump(parsed.allRows) ? parseLessonPlanDump(parsed.allRows)
+      : mapRowsToTopics(parsed.bestRows);
     courseModalParsedTopics = topics;
 
     if (!topics.length) {
