@@ -109,6 +109,41 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
 @media(min-width:900px){.bottomnav{display:none;}}
 .bottomnav button{border:none;background:transparent;padding:9px 16px;border-radius:99px;font-size:12px;font-weight:600;color:var(--ink-soft);display:flex;flex-direction:column;align-items:center;gap:2px;}
 .bottomnav button.active{background:var(--forest-700);color:#fff;}
+
+/* ICON SYSTEM — static Lucide SVGs (vanilla, no React/Motion dependency) with
+   hand-rolled micro-interactions in place of lucide-animated's React components. */
+.icon{width:17px;height:17px;flex-shrink:0;transition:transform .35s cubic-bezier(.34,1.56,.64,1);}
+.sidenav .icon{width:16px;height:16px;}
+.bottomnav .icon{width:19px;height:19px;}
+.modal-close .icon{width:14px;height:14px;transition:transform .3s ease;}
+.course-edit-btn .icon{width:13px;height:13px;}
+
+button:hover .icon-compass,button:focus-visible .icon-compass{transform:rotate(30deg);}
+.badge-icon{color:#fff;}
+.badge-icon .icon{width:20px;height:20px;animation:compassSway 6s ease-in-out infinite;}
+@keyframes compassSway{0%,100%{transform:rotate(-8deg);}50%{transform:rotate(8deg);}}
+
+button:hover .icon-flame,button:focus-visible .icon-flame{animation:flameFlicker .6s ease-in-out infinite;}
+@keyframes flameFlicker{0%,100%{transform:scale(1) rotate(0deg);}30%{transform:scale(1.1) rotate(-4deg);}60%{transform:scale(.94) rotate(4deg);}}
+
+button:hover .icon-book-open,button:focus-visible .icon-book-open{transform:scale(1.14);}
+
+button:hover .icon-clipboard-list,button:focus-visible .icon-clipboard-list{transform:translateY(-2px);}
+
+button:hover .icon-graduation-cap,button:focus-visible .icon-graduation-cap{transform:rotate(-12deg) scale(1.06);}
+
+button:hover .icon-pencil,.course-edit-btn:hover .icon-pencil,button:hover .icon-square-pen{animation:penWiggle .5s ease-in-out;}
+@keyframes penWiggle{0%,100%{transform:rotate(0deg);}25%{transform:rotate(-14deg);}75%{transform:rotate(10deg);}}
+
+button:hover .icon-upload,button:focus-visible .icon-upload{animation:uploadBounce .55s ease-in-out;}
+@keyframes uploadBounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+
+button:hover .icon-flask-conical,button:focus-visible .icon-flask-conical{transform:rotate(-16deg);}
+
+.guide-studynote-label .icon-pin{animation:pinDrop .45s cubic-bezier(.34,1.56,.64,1);}
+@keyframes pinDrop{0%{transform:translateY(-5px);opacity:0;}100%{transform:translateY(0);opacity:1;}}
+
+.modal-close:hover .icon-x{transform:rotate(90deg);}
 .view{display:none;}
 .view.active{display:block;}
 .section-label{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold-600);margin-bottom:8px;}
@@ -126,8 +161,9 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
 .badge-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--forest-500),var(--gold-500));transition:width .4s ease;}
 .badge-info-tier{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed rgba(27,67,50,0.15);}
 .badge-info-tier:last-child{border-bottom:none;}
-.badge-info-tier-icon{width:34px;height:34px;border-radius:50%;background:rgba(27,67,50,0.06);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
-.badge-info-tier.current .badge-info-tier-icon{background:conic-gradient(from -90deg, var(--forest-500), var(--gold-500), var(--forest-500));}
+.badge-info-tier-icon{width:34px;height:34px;border-radius:50%;background:rgba(27,67,50,0.06);display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--forest-700);}
+.badge-info-tier-icon .icon{width:16px;height:16px;}
+.badge-info-tier.current .badge-info-tier-icon{background:conic-gradient(from -90deg, var(--forest-500), var(--gold-500), var(--forest-500));color:#fff;}
 .badge-info-tier-name{font-family:var(--font-display);font-size:14.5px;font-weight:600;color:var(--forest-900);}
 .badge-info-tier.current .badge-info-tier-name::after{content:" · current";font-family:var(--font-body);font-size:11px;font-weight:500;color:var(--gold-500);}
 .badge-info-tier-range{font-size:11.5px;color:var(--ink-soft);margin-top:1px;}
@@ -137,7 +173,8 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
 .health-summary{font-size:12px;color:var(--ink-soft);margin-bottom:18px;}
 .habit-row{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(27,67,50,0.07);}
 .habit-row:last-child{border-bottom:none;}
-.habit-icon{font-size:18px;width:26px;text-align:center;flex-shrink:0;}
+.habit-icon{width:26px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--forest-700);}
+.habit-icon .icon{width:17px;height:17px;}
 .habit-label{font-size:13px;font-weight:600;color:var(--forest-900);width:76px;flex-shrink:0;}
 .habit-dots{display:flex;gap:5px;flex:1;}
 .habit-dots .dot{flex:1;aspect-ratio:1;border-radius:50%;background:rgba(27,67,50,0.09);max-width:16px;}
@@ -148,7 +185,8 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
 .quick-action-btn{flex:1;padding:12px 10px;border-radius:14px;border:1px solid rgba(27,67,50,0.15);background:rgba(255,255,255,0.55);font-size:12.5px;font-weight:600;color:var(--forest-900);display:flex;align-items:center;justify-content:center;gap:7px;transition:border-color .12s, background .12s;}
 .quick-action-btn:hover{border-color:var(--forest-500);background:rgba(255,255,255,0.8);}
 .quick-action-btn.done{color:var(--forest-700);border-color:rgba(45,106,79,0.3);background:rgba(45,106,79,0.06);}
-.quick-action-btn .qa-icon{font-size:15px;}
+.quick-action-btn .qa-icon{display:flex;align-items:center;}
+.quick-action-btn .qa-icon .icon{width:16px;height:16px;}
 
 .card-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
 @media(max-width:480px){.card-row{grid-template-columns:1fr;}}
@@ -267,7 +305,8 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
 
 /* STUDENT STUDY NOTE (read-only, in learning guide) */
 .guide-studynote{margin:4px 0 12px;padding:12px 14px;background:rgba(201,162,39,0.08);border:1px solid rgba(201,162,39,0.22);border-radius:var(--radius-sm);}
-.guide-studynote-label{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-600);margin-bottom:5px;}
+.guide-studynote-label{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-600);margin-bottom:5px;display:flex;align-items:center;gap:5px;}
+.guide-studynote-label .icon{width:12px;height:12px;}
 .guide-studynote-body{font-size:12.5px;color:var(--ink);line-height:1.6;white-space:pre-wrap;}
 
 /* PRACTICE / NOTES MODAL */
@@ -277,7 +316,8 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
 .modal-sheet{width:100%;max-width:480px;max-height:88vh;overflow-y:auto;background:var(--ivory);border-radius:22px 22px 0 0;padding:22px 22px 28px;box-shadow:0 -8px 30px rgba(16,36,28,0.25);}
 @media(min-width:640px){.modal-sheet{border-radius:var(--radius-lg);box-shadow:0 20px 50px rgba(16,36,28,0.3);}}
 .modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:4px;}
-.modal-title{font-family:var(--font-display);font-size:18px;font-weight:600;color:var(--forest-900);}
+.modal-title{font-family:var(--font-display);font-size:18px;font-weight:600;color:var(--forest-900);display:flex;align-items:center;gap:8px;}
+.modal-title .icon{width:18px;height:18px;}
 .modal-close{flex-shrink:0;width:28px;height:28px;border-radius:50%;border:none;background:rgba(27,67,50,0.08);color:var(--ink-soft);font-size:16px;line-height:1;}
 .modal-topic-select{width:100%;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid rgba(27,67,50,0.18);background:#fff;font-size:13px;color:var(--ink);margin:12px 0 16px;}
 .modal-topic-tlo{font-size:11.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:16px;padding-bottom:14px;border-bottom:1px dashed rgba(27,67,50,0.15);}
@@ -395,16 +435,16 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
 
   <main class="shell">
     <nav class="sidenav" id="student-sidenav">
-      <button data-view="courses" class="active">📚 My Courses</button>
-      <button data-view="home">🧭 Home</button>
-      <button data-view="assessments">📋 Assessments</button>
-      <button data-view="learning">🔥 Learning</button>
+      <button data-view="courses" class="active"><svg class="icon icon-book-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16" /><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg> My Courses</button>
+      <button data-view="home"><svg class="icon icon-compass" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z" /></svg> Home</button>
+      <button data-view="assessments"><svg class="icon icon-clipboard-list" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg> Assessments</button>
+      <button data-view="learning"><svg class="icon icon-flame" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /></svg> Learning</button>
     </nav>
     <nav class="sidenav" id="educator-sidenav" style="display:none">
-      <button data-view="courses" class="active">📚 My Courses</button>
-      <button data-view="roster">🎓 Students</button>
-      <button data-view="content">✏️ Content</button>
-      <button data-view="uploads">⬆️ Uploads</button>
+      <button data-view="courses" class="active"><svg class="icon icon-book-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16" /><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg> My Courses</button>
+      <button data-view="roster"><svg class="icon icon-graduation-cap" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" /><path d="M22 10v6" /><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" /></svg> Students</button>
+      <button data-view="content"><svg class="icon icon-pencil" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg> Content</button>
+      <button data-view="uploads"><svg class="icon icon-upload" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12" /><path d="m17 8-5-5-5 5" /><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /></svg> Uploads</button>
     </nav>
 
     <div id="views">
@@ -569,16 +609,16 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
   </main>
 
   <nav class="bottomnav" id="student-bottomnav">
-    <button data-view="courses" class="active">📚<span>Courses</span></button>
-    <button data-view="home">🧭<span>Home</span></button>
-    <button data-view="assessments">📋<span>Marks</span></button>
-    <button data-view="learning">🔥<span>Streak</span></button>
+    <button data-view="courses" class="active"><svg class="icon icon-book-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16" /><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg><span>Courses</span></button>
+    <button data-view="home"><svg class="icon icon-compass" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z" /></svg><span>Home</span></button>
+    <button data-view="assessments"><svg class="icon icon-clipboard-list" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1" /><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" /><path d="M12 11h4" /><path d="M12 16h4" /><path d="M8 11h.01" /><path d="M8 16h.01" /></svg><span>Marks</span></button>
+    <button data-view="learning"><svg class="icon icon-flame" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3q1 4 4 6.5t3 5.5a1 1 0 0 1-14 0 5 5 0 0 1 1-3 1 1 0 0 0 5 0c0-2-1.5-3-1.5-5q0-2 2.5-4" /></svg><span>Streak</span></button>
   </nav>
   <nav class="bottomnav" id="educator-bottomnav" style="display:none">
-    <button data-view="courses" class="active">📚<span>Courses</span></button>
-    <button data-view="roster">🎓<span>Students</span></button>
-    <button data-view="content">✏️<span>Content</span></button>
-    <button data-view="uploads">⬆️<span>Uploads</span></button>
+    <button data-view="courses" class="active"><svg class="icon icon-book-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16" /><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg><span>Courses</span></button>
+    <button data-view="roster"><svg class="icon icon-graduation-cap" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" /><path d="M22 10v6" /><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" /></svg><span>Students</span></button>
+    <button data-view="content"><svg class="icon icon-pencil" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg><span>Content</span></button>
+    <button data-view="uploads"><svg class="icon icon-upload" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12" /><path d="m17 8-5-5-5 5" /><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /></svg><span>Uploads</span></button>
   </nav>
 </div>
 
@@ -587,7 +627,7 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
   <div class="modal-sheet">
     <div class="modal-head">
       <div class="modal-title" id="modal-title">—</div>
-      <button class="modal-close" id="modal-close" type="button" aria-label="Close">✕</button>
+      <button class="modal-close" id="modal-close" type="button" aria-label="Close"><svg class="icon icon-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg></button>
     </div>
     <select class="modal-topic-select" id="modal-topic-select"></select>
     <div class="modal-topic-tlo" id="modal-topic-tlo"></div>
@@ -600,7 +640,7 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
   <div class="modal-sheet">
     <div class="modal-head">
       <div class="modal-title" id="manage-student-title">Manage student</div>
-      <button class="modal-close" id="manage-student-close" type="button" aria-label="Close">✕</button>
+      <button class="modal-close" id="manage-student-close" type="button" aria-label="Close"><svg class="icon icon-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg></button>
     </div>
     <div class="meta" id="manage-student-email" style="margin-bottom:16px"></div>
 
@@ -633,7 +673,7 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
   <div class="modal-sheet">
     <div class="modal-head">
       <div class="modal-title">Your progress badge</div>
-      <button class="modal-close" id="badge-info-close" type="button" aria-label="Close">✕</button>
+      <button class="modal-close" id="badge-info-close" type="button" aria-label="Close"><svg class="icon icon-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg></button>
     </div>
     <div class="meta" style="margin-bottom:16px">Your badge reflects how consistently you engage across the whole semester — quizzes attempted, notes taken, and the course notebook opened and used. It never resets, and starting a topic early counts more than cramming it late.</div>
     <div id="badge-info-tiers"></div>
@@ -645,7 +685,7 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
   <div class="modal-sheet">
     <div class="modal-head">
       <div class="modal-title" id="course-modal-title">Add new course</div>
-      <button class="modal-close" id="course-modal-close" type="button" aria-label="Close">✕</button>
+      <button class="modal-close" id="course-modal-close" type="button" aria-label="Close"><svg class="icon icon-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg></button>
     </div>
 
     <div class="meta" id="course-modal-upload-label" style="margin-bottom:8px">Upload the course's lesson plan (.xlsx, .xls, .csv, .docx) — we'll pull the topics, TLOs, and course details from it.</div>
@@ -683,9 +723,16 @@ const SUPABASE_URL = 'https://jtkskwopnprgmxlhppro.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0a3Nrd29wbnByZ214bGhwcHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDU0NDQsImV4cCI6MjEwMjUyMTQ0NH0.MVvaIH6fPhzC0aRk8XIZMU1OrAZYNbsT9V1diP8fuGw';
 const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+// Inline Lucide SVGs (static, vanilla — used wherever icons are built in JS
+// rather than hardcoded in markup). Same icon set as the nav/modal markup.
+const ICON_FLASK = '<svg class="icon icon-flask-conical" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2v6a2 2 0 0 0 .245.96l5.51 10.08A2 2 0 0 1 18 22H6a2 2 0 0 1-1.755-2.96l5.51-10.08A2 2 0 0 0 10 8V2" /><path d="M6.453 15h11.094" /><path d="M8.5 2h7" /></svg>';
+const ICON_SQUARE_PEN = '<svg class="icon icon-square-pen" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" /><path d="M18.375 2.625a1 1 0 0 1 3 3l-9.013 9.014a2 2 0 0 1-.853.505l-2.873.84a.5.5 0 0 1-.62-.62l.84-2.873a2 2 0 0 1 .506-.852z" /></svg>';
+const ICON_COMPASS = '<svg class="icon icon-compass" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><path d="m16.24 7.76-1.804 5.411a2 2 0 0 1-1.265 1.265L7.76 16.24l1.804-5.411a2 2 0 0 1 1.265-1.265z" /></svg>';
+const ICON_PIN = '<svg class="icon icon-pin" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5" /><path d="M9 10.76a2 2 0 0 1-1.11 1.79l-1.78.9A2 2 0 0 0 5 15.24V16a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-.76a2 2 0 0 0-1.11-1.79l-1.78-.9A2 2 0 0 1 15 10.76V7a1 1 0 0 1 1-1 2 2 0 0 0 0-4H8a2 2 0 0 0 0 4 1 1 0 0 1 1 1z" /></svg>';
+
 const ACTIVITY_TYPES = [
-  {key:'practice', label:'Practice', icon:'🧪'},
-  {key:'notes', label:'Notes', icon:'📝'},
+  {key:'practice', label:'Practice', icon:ICON_FLASK},
+  {key:'notes', label:'Notes', icon:ICON_SQUARE_PEN},
 ];
 
 let myProfile = null, currentCourse = null, currentAssessments = [], myActivities = [], myCourses = [];
@@ -932,7 +979,7 @@ function renderCourseList(courses, subtitleFn, onOpen, onEdit) {
           <div class="course-card-name">${c.name}</div>
           <div class="course-card-sub">${subtitleFn(c)}</div>
         </div>
-        ${onEdit ? `<button type="button" class="course-edit-btn" data-edit="${c.id}" aria-label="Edit course">✎</button>` : ''}
+        ${onEdit ? `<button type="button" class="course-edit-btn" data-edit="${c.id}" aria-label="Edit course"><svg class="icon icon-pencil" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg></button>` : ''}
         <div class="course-card-arrow"></div>
       </div>`).join('')}`).join('');
 
@@ -1049,7 +1096,7 @@ function openActivityModal(type) {
   modalType = type;
   const modal = document.getElementById('activity-modal');
   const select = document.getElementById('modal-topic-select');
-  document.getElementById('modal-title').textContent = type === 'practice' ? '🧪 Practice quiz' : '📝 Write a note';
+  document.getElementById('modal-title').innerHTML = type === 'practice' ? ICON_FLASK + ' Practice quiz' : ICON_SQUARE_PEN + ' Write a note';
 
   if (!myTopics.length) {
     select.style.display = 'none';
@@ -1254,7 +1301,7 @@ async function renderBadgeCard() {
   card.style.display = '';
   card.innerHTML = `
     <div class="badge-head">
-      <div class="badge-icon">🧭</div>
+      <div class="badge-icon">${ICON_COMPASS}</div>
       <div>
         <div class="badge-name-row">
           <div class="badge-name">${current.badge_name}</div>
@@ -1277,7 +1324,7 @@ function openBadgeInfoModal(tiers, current) {
     const isCurrent = t.badge_name === current.badge_name;
     return `
       <div class="badge-info-tier${isCurrent ? ' current' : ''}">
-        <div class="badge-info-tier-icon">🧭</div>
+        <div class="badge-info-tier-icon">${ICON_COMPASS}</div>
         <div>
           <div class="badge-info-tier-name">${t.badge_name}</div>
           <div class="badge-info-tier-range">${range}</div>
@@ -1328,7 +1375,7 @@ function renderLearningGuide(topics) {
     const tloHtml = tlo ? `<div class="guide-tlo">${tlo}</div>` : '';
     const studyNote = t && studyNotesByTopic[t.id] ? studyNotesByTopic[t.id] : null;
     const studyNoteHtml = studyNote
-      ? `<div class="guide-studynote"><div class="guide-studynote-label">📌 Study note from your lecturer</div><div class="guide-studynote-body">${escapeHtml(studyNote)}</div></div>`
+      ? `<div class="guide-studynote"><div class="guide-studynote-label">${ICON_PIN} Study note from your lecturer</div><div class="guide-studynote-body">${escapeHtml(studyNote)}</div></div>`
       : '';
     const promptsHtml = hasNotebook ? prompts.map(p => `
       <div class="guide-prompt">
