@@ -115,6 +115,13 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
 .greeting{font-family:var(--font-display);font-size:24px;font-weight:600;color:var(--forest-900);margin-bottom:20px;}
 
 /* ACADEMIC HEALTH HERO */
+.badge-card{padding:18px 20px;margin-bottom:16px;}
+.badge-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.badge-icon{width:40px;height:40px;border-radius:50%;background:conic-gradient(from -90deg, var(--forest-500), var(--gold-500), var(--forest-500));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.badge-name{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--forest-900);}
+.badge-sub{font-size:11.5px;color:var(--ink-soft);margin-top:1px;}
+.badge-track{height:6px;border-radius:99px;background:rgba(27,67,50,0.08);overflow:hidden;}
+.badge-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--forest-500),var(--gold-500));transition:width .4s ease;}
 .health-card{padding:24px;margin-bottom:16px;}
 .health-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;}
 .health-head h2{font-family:var(--font-display);font-size:19px;font-weight:600;color:var(--forest-900);}
@@ -409,6 +416,8 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
       <!-- STUDENT: HOME (Academic Health hero) -->
       <section class="view" id="view-home">
         <div class="greeting" id="home-greeting">Hi there</div>
+
+        <div class="badge-card glass fade-up" id="badge-card"></div>
 
         <div class="health-card glass fade-up">
           <div class="health-head"><h2>Your academic health this week</h2></div>
@@ -980,6 +989,7 @@ async function loadStudentData() {
   renderHealthHero();
   renderCountdown();
   renderStreakStat();
+  renderBadgeCard();
   renderAssessments();
   renderCoverage(myTopics);
   renderLearningGuide(myTopics);
@@ -997,6 +1007,7 @@ async function refreshAfterActivityLog() {
   myQuizAttempts = attempts || [];
   renderHealthHero();
   renderStreakStat();
+  renderBadgeCard();
   renderLearningDetail();
   renderNotesHistory();
   renderQuizHistory();
@@ -1166,7 +1177,74 @@ function renderQuizHistory() {
     </div>`).join('');
 }
 
+// Fire-and-forget engagement logging for the Pathfinder→Wayfinder→Navigator→
+// Voyager scoring engine. Never blocks the UI action it's attached to — a
+// failed insert (e.g. offline) should not stop a copy or a notebook open.
+async function logEngagementEvent(eventType, { topicId = null, metadata = {} } = {}) {
+  if (!myProfile || !currentCourse) return;
+  try {
+    await sb.from('engagement_events').insert({
+      student_id: myProfile.id,
+      course_id: currentCourse.id,
+      topic_id: topicId || null,
+      event_type: eventType,
+      metadata,
+    });
+  } catch (err) {
+    console.warn('Could not log engagement event:', err);
+  }
+}
+
+let badgeTiers = null;
+
+async function loadBadgeTiers() {
+  if (badgeTiers) return badgeTiers;
+  const { data } = await sb.from('badge_thresholds').select('*').order('sort_order');
+  badgeTiers = data || [];
+  return badgeTiers;
+}
+
+// Pathfinder -> Wayfinder -> Navigator -> Voyager. Cumulative across the
+// semester by design (no weekly reset) — see engagement scoring engine.
+async function renderBadgeCard() {
+  const card = document.getElementById('badge-card');
+  if (!card || !myProfile || !currentCourse) return;
+
+  const tiers = await loadBadgeTiers();
+  if (!tiers.length) { card.style.display = 'none'; return; }
+
+  const { data: row } = await sb.from('student_cumulative_scores')
+    .select('cumulative_score')
+    .eq('student_id', myProfile.id)
+    .eq('course_id', currentCourse.id)
+    .maybeSingle();
+  const score = row ? Number(row.cumulative_score) : 0;
+
+  let current = tiers[0];
+  tiers.forEach(t => { if (score >= Number(t.min_score)) current = t; });
+  const next = tiers.find(t => Number(t.min_score) > score) || null;
+
+  const span = next ? Number(next.min_score) - Number(current.min_score) : 1;
+  const pct = next ? Math.max(0, Math.min(100, Math.round(((score - Number(current.min_score)) / span) * 100))) : 100;
+  const subText = next
+    ? Math.max(0, Math.ceil(Number(next.min_score) - score)) + ' pts to ' + next.badge_name
+    : 'Highest tier reached';
+
+  card.style.display = '';
+  card.innerHTML = `
+    <div class="badge-head">
+      <div class="badge-icon">🧭</div>
+      <div>
+        <div class="badge-name">${current.badge_name}</div>
+        <div class="badge-sub">${subText}</div>
+      </div>
+    </div>
+    <div class="badge-track"><div class="badge-fill" style="width:${pct}%"></div></div>
+  `;
+}
+
 const GUIDE_WEEK_COUNT = 14;
+
 
 function renderLearningGuide(topics) {
   const card = document.getElementById('guide-card');
@@ -1205,10 +1283,10 @@ function renderLearningGuide(topics) {
     const promptsHtml = hasNotebook ? prompts.map(p => `
       <div class="guide-prompt">
         <div class="guide-prompt-text">${p}</div>
-        <button class="guide-copy-btn" type="button" data-prompt="${p.replace(/"/g, '&quot;')}">Copy</button>
+        <button class="guide-copy-btn" type="button" data-prompt="${p.replace(/"/g, '&quot;')}" data-topic-id="${t ? t.id : ''}">Copy</button>
       </div>`).join('') : '';
     const notebookLinkHtml = hasNotebook
-      ? `<a href="${currentCourse.notebook_url}" target="_blank" rel="noopener" class="guide-open-link">Open in course notebook →</a>`
+      ? `<a href="${currentCourse.notebook_url}" target="_blank" rel="noopener" class="guide-open-link" data-topic-id="${t ? t.id : ''}">Open in course notebook →</a>`
       : '';
     return `
       <div class="guide-row${isThisWeek ? ' open' : ''}" data-week="${n}">
@@ -1253,7 +1331,14 @@ function renderLearningGuide(topics) {
       } catch (err) {
         btn.textContent = 'Copy failed';
       }
+      logEngagementEvent('notebook_copy', { topicId: btn.dataset.topicId || null, metadata: { prompt } });
       setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1400);
+    });
+  });
+
+  document.querySelectorAll('#guide-list .guide-open-link').forEach(link => {
+    link.addEventListener('click', () => {
+      logEngagementEvent('notebook_open', { topicId: link.dataset.topicId || null });
     });
   });
 }
@@ -1351,7 +1436,7 @@ function renderCoverage(topics) {
       thisWeek = today >= start && today < end;
     }
     const notebookLink = thisWeek && currentCourse.notebook_url
-      ? `<a href="${currentCourse.notebook_url}" target="_blank" rel="noopener" style="font-size:10.5px;font-weight:600;color:var(--forest-700);text-decoration:none;white-space:nowrap">Open notebook →</a>` : '';
+      ? `<a href="${currentCourse.notebook_url}" target="_blank" rel="noopener" class="coverage-notebook-link" data-topic-id="${t.id}" style="font-size:10.5px;font-weight:600;color:var(--forest-700);text-decoration:none;white-space:nowrap">Open notebook →</a>` : '';
     return `<div class="coverage-row">
       <div class="coverage-week">${t.week_number ? 'Wk ' + t.week_number : ''}</div>
       <div class="coverage-title">${t.title}</div>
@@ -1359,6 +1444,12 @@ function renderCoverage(topics) {
       ${notebookLink}
     </div>`;
   }).join('');
+
+  document.querySelectorAll('#coverage-list .coverage-notebook-link').forEach(link => {
+    link.addEventListener('click', () => {
+      logEngagementEvent('notebook_open', { topicId: link.dataset.topicId || null });
+    });
+  });
 }
 
 function renderLearningDetail() {
