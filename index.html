@@ -118,10 +118,19 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
 .badge-card{padding:18px 20px;margin-bottom:16px;}
 .badge-head{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
 .badge-icon{width:40px;height:40px;border-radius:50%;background:conic-gradient(from -90deg, var(--forest-500), var(--gold-500), var(--forest-500));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.badge-name-row{display:flex;align-items:center;gap:6px;}
 .badge-name{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--forest-900);}
+.badge-info-btn{width:18px;height:18px;border-radius:50%;border:none;background:rgba(27,67,50,0.08);color:var(--ink-soft);font-size:11px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;padding:0;}
 .badge-sub{font-size:11.5px;color:var(--ink-soft);margin-top:1px;}
 .badge-track{height:6px;border-radius:99px;background:rgba(27,67,50,0.08);overflow:hidden;}
 .badge-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--forest-500),var(--gold-500));transition:width .4s ease;}
+.badge-info-tier{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed rgba(27,67,50,0.15);}
+.badge-info-tier:last-child{border-bottom:none;}
+.badge-info-tier-icon{width:34px;height:34px;border-radius:50%;background:rgba(27,67,50,0.06);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.badge-info-tier.current .badge-info-tier-icon{background:conic-gradient(from -90deg, var(--forest-500), var(--gold-500), var(--forest-500));}
+.badge-info-tier-name{font-family:var(--font-display);font-size:14.5px;font-weight:600;color:var(--forest-900);}
+.badge-info-tier.current .badge-info-tier-name::after{content:" · current";font-family:var(--font-body);font-size:11px;font-weight:500;color:var(--gold-500);}
+.badge-info-tier-range{font-size:11.5px;color:var(--ink-soft);margin-top:1px;}
 .health-card{padding:24px;margin-bottom:16px;}
 .health-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;}
 .health-head h2{font-family:var(--font-display);font-size:19px;font-weight:600;color:var(--forest-900);}
@@ -616,6 +625,18 @@ main.shell{max-width:920px;margin:0 auto;padding:20px 20px 100px;}
       <div id="manage-delete-confirm" style="display:none"></div>
       <div class="manage-result" id="manage-delete-result"></div>
     </div>
+  </div>
+</div>
+
+<!-- BADGE PROGRESSION INFO MODAL -->
+<div class="modal-overlay" id="badge-info-overlay">
+  <div class="modal-sheet">
+    <div class="modal-head">
+      <div class="modal-title">Your progress badge</div>
+      <button class="modal-close" id="badge-info-close" type="button" aria-label="Close">✕</button>
+    </div>
+    <div class="meta" style="margin-bottom:16px">Your badge reflects how consistently you engage across the whole semester — quizzes attempted, notes taken, and the course notebook opened and used. It never resets, and starting a topic early counts more than cramming it late.</div>
+    <div id="badge-info-tiers"></div>
   </div>
 </div>
 
@@ -1235,13 +1256,42 @@ async function renderBadgeCard() {
     <div class="badge-head">
       <div class="badge-icon">🧭</div>
       <div>
-        <div class="badge-name">${current.badge_name}</div>
+        <div class="badge-name-row">
+          <div class="badge-name">${current.badge_name}</div>
+          <button class="badge-info-btn" id="badge-info-btn" type="button" aria-label="How badges work">ⓘ</button>
+        </div>
         <div class="badge-sub">${subText}</div>
       </div>
     </div>
     <div class="badge-track"><div class="badge-fill" style="width:${pct}%"></div></div>
   `;
+  const infoBtn = document.getElementById('badge-info-btn');
+  if (infoBtn) infoBtn.addEventListener('click', () => openBadgeInfoModal(tiers, current));
 }
+
+function openBadgeInfoModal(tiers, current) {
+  const list = document.getElementById('badge-info-tiers');
+  list.innerHTML = tiers.map((t, i) => {
+    const next = tiers[i + 1];
+    const range = next ? `${Number(t.min_score)}–${Number(next.min_score) - 1} pts` : `${Number(t.min_score)}+ pts`;
+    const isCurrent = t.badge_name === current.badge_name;
+    return `
+      <div class="badge-info-tier${isCurrent ? ' current' : ''}">
+        <div class="badge-info-tier-icon">🧭</div>
+        <div>
+          <div class="badge-info-tier-name">${t.badge_name}</div>
+          <div class="badge-info-tier-range">${range}</div>
+        </div>
+      </div>`;
+  }).join('');
+  document.getElementById('badge-info-overlay').classList.add('open');
+}
+
+function closeBadgeInfoModal() {
+  document.getElementById('badge-info-overlay').classList.remove('open');
+}
+document.getElementById('badge-info-close').addEventListener('click', closeBadgeInfoModal);
+document.getElementById('badge-info-overlay').addEventListener('click', (e) => { if (e.target.id === 'badge-info-overlay') closeBadgeInfoModal(); });
 
 const GUIDE_WEEK_COUNT = 14;
 
