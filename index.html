@@ -227,7 +227,7 @@ button:hover .icon-flask-conical,button:focus-visible .icon-flask-conical{transf
 .guide-chevron{width:8px;height:8px;border-right:1.6px solid var(--ink-soft);border-bottom:1.6px solid var(--ink-soft);transform:rotate(45deg);transition:transform .18s ease;flex-shrink:0;margin-left:2px;}
 .guide-row.open .guide-chevron{transform:rotate(-135deg);}
 .guide-body{max-height:0;overflow:hidden;transition:max-height .25s ease;}
-.guide-row.open .guide-body{max-height:320px;}
+.guide-row.open .guide-body{max-height:none;}
 .guide-body-inner{padding:0 2px 16px 42px;}
 .guide-tlo{font-size:11.5px;color:var(--ink-soft);line-height:1.5;padding-bottom:8px;margin-bottom:8px;border-bottom:1px dashed rgba(27,67,50,0.12);}
 .guide-prompt{display:flex;align-items:center;gap:8px;padding:6px 0;}
@@ -1451,17 +1451,38 @@ function renderLearningGuide(topics) {
 
   document.getElementById('guide-list').innerHTML = rowsHtml;
 
+  function closeGuideRow(row) {
+    const body = row.querySelector('.guide-body');
+    // Lock in the current pixel height first so the collapse animates
+    // from a real number instead of jumping from "none" to 0.
+    body.style.maxHeight = body.scrollHeight + 'px';
+    requestAnimationFrame(() => { body.style.maxHeight = '0px'; });
+    row.classList.remove('open');
+    row.querySelector('.guide-head').setAttribute('aria-expanded', 'false');
+  }
+
+  function openGuideRow(row) {
+    const body = row.querySelector('.guide-body');
+    row.classList.add('open');
+    row.querySelector('.guide-head').setAttribute('aria-expanded', 'true');
+    // Use the row's actual content height instead of a fixed guess,
+    // so longer TLOs / prompt sets never get clipped.
+    body.style.maxHeight = body.scrollHeight + 'px';
+  }
+
   document.querySelectorAll('#guide-list .guide-head').forEach(btn => {
     btn.addEventListener('click', () => {
       const row = btn.closest('.guide-row');
       const wasOpen = row.classList.contains('open');
-      document.querySelectorAll('#guide-list .guide-row.open').forEach(r => {
-        r.classList.remove('open');
-        r.querySelector('.guide-head').setAttribute('aria-expanded', 'false');
-      });
-      if (!wasOpen) { row.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
+      document.querySelectorAll('#guide-list .guide-row.open').forEach(closeGuideRow);
+      if (!wasOpen) openGuideRow(row);
     });
   });
+
+  // The "current week" row renders pre-opened; give it a real measured
+  // height too, otherwise it starts clipped until the user toggles it.
+  const preOpenRow = document.querySelector('#guide-list .guide-row.open');
+  if (preOpenRow) openGuideRow(preOpenRow);
 
   document.querySelectorAll('#guide-list .guide-copy-btn').forEach(btn => {
     btn.addEventListener('click', async (e) => {
