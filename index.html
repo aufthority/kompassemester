@@ -1243,8 +1243,13 @@ function renderNotesBody(topicId) {
   const body = document.getElementById('modal-body');
   body.innerHTML = `
     <textarea class="notes-textarea" id="notes-textarea" placeholder="What do you remember about this topic? A summary, a question you still have, anything counts."></textarea>
-    <div class="notes-hint">At least a couple of sentences — writing it from memory is the point.</div>
+    <div class="notes-hint">At least a couple of sentences — writing it from memory is the point. Pasting is disabled here on purpose: typing it yourself is what makes it stick.</div>
     <button class="btn-primary" id="notes-submit-btn" type="button" style="margin-top:14px">Save note</button>`;
+
+  const textarea = document.getElementById('notes-textarea');
+  const blockPaste = (e) => { e.preventDefault(); };
+  textarea.addEventListener('paste', blockPaste);
+  textarea.addEventListener('drop', blockPaste);
 
   document.getElementById('notes-submit-btn').addEventListener('click', async () => {
     const text = document.getElementById('notes-textarea').value.trim();
