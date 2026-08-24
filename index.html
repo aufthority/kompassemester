@@ -742,22 +742,37 @@ const BADGE_ICONS = {
 };
 
 const BADGE_COPY = {
-  Ghoster: "No activity logged in 3+ days. It happens — pick one topic and knock out a quick practice set or note to get moving again.",
+  Ghoster: "No activity logged in over 5 working days — about a full school week. It happens — pick one topic and knock out a quick practice set or note to get moving again.",
   Pathfinder: "You're just starting to find this course's rhythm. Setting one regular day a week to check in is the fastest way to build momentum from here.",
   Wayfinder: "You're building a habit of steady engagement. Starting topics earlier in the week — rather than closer to the deadline — is what tends to move students up fastest from here.",
   Navigator: "You've found a strong rhythm, showing up early and often. At this stage, going deeper on each topic (longer notes, retrying quizzes) tends to pay off more than doing more of the same.",
   Voyager: "You've sustained strong engagement across the whole semester. From here, quality of engagement — really thinking through a topic, not just logging activity — matters more than volume.",
 };
 
-// Days since the most recent learning_activities row, or null if the student
-// has never logged any activity at all (new/never-active students show their
-// real score tier, not Ghoster — ghosting implies going quiet, not never starting).
-function daysSinceLastActivity() {
+// Working (Mon–Fri) days since the most recent learning_activities row, or
+// null if the student has never logged any activity at all (new/never-active
+// students show their real score tier, not Ghoster — ghosting implies going
+// quiet, not never starting).
+//
+// Counts only business days between the last activity and today — a weekend
+// never advances the count, so a student quiet from Friday to Monday isn't
+// penalised the same as one quiet for four weekdays in a row.
+// ASSUMPTION (flag if wrong): standard Mon–Fri working week. If DPH 48 or any
+// KPJU cohort runs on a different week (e.g. Sun–Thu), this needs updating.
+function idleWorkingDaysSinceLastActivity() {
   if (!myActivities.length) return null;
   const dates = myActivities.map(a => new Date(a.activity_date + 'T00:00:00'));
   const last = new Date(Math.max(...dates));
   const today = new Date(dateStr(new Date()) + 'T00:00:00');
-  return Math.round((today - last) / 86400000);
+  let count = 0;
+  const cursor = new Date(last);
+  cursor.setDate(cursor.getDate() + 1);
+  while (cursor <= today) {
+    const day = cursor.getDay(); // 0 = Sun, 6 = Sat
+    if (day !== 0 && day !== 6) count++;
+    cursor.setDate(cursor.getDate() + 1);
+  }
+  return count;
 }
 
 const ACTIVITY_TYPES = [
@@ -1304,9 +1319,10 @@ async function loadBadgeTiers() {
 
 // Ghoster -> Pathfinder -> Wayfinder -> Navigator -> Voyager. The four earned
 // tiers are cumulative across the semester (no weekly reset) — see engagement
-// scoring engine. Ghoster is a display-only override for 3+ days of silence:
-// it never touches the stored cumulative_score, so a student's real progress
-// is untouched and picks back up the moment they're active again.
+// scoring engine. Ghoster is a display-only override for more than 5 working
+// days (a full Mon–Fri business week) of silence: it never touches the stored
+// cumulative_score, so a student's real progress is untouched and picks back
+// up the moment they're active again.
 async function renderBadgeCard() {
   const card = document.getElementById('badge-card');
   if (!card || !myProfile || !currentCourse) return;
@@ -1326,14 +1342,14 @@ async function renderBadgeCard() {
   tiers.forEach(t => { if (score >= Number(t.min_score)) earned = t; });
   const next = tiers.find(t => Number(t.min_score) > score) || null;
 
-  const idleDays = daysSinceLastActivity();
-  const isGhosting = idleDays !== null && idleDays >= 3;
+  const idleDays = idleWorkingDaysSinceLastActivity();
+  const isGhosting = idleDays !== null && idleDays > 5;
   const current = isGhosting ? { badge_name: 'Ghoster' } : earned;
 
   const span = next ? Number(next.min_score) - Number(earned.min_score) : 1;
   const pct = next ? Math.max(0, Math.min(100, Math.round(((score - Number(earned.min_score)) / span) * 100))) : 100;
   const subText = isGhosting
-    ? `${idleDays} days quiet — ${earned.badge_name} progress is saved`
+    ? `${idleDays} working days quiet — ${earned.badge_name} progress is saved`
     : next
       ? Math.max(0, Math.ceil(Number(next.min_score) - score)) + ' pts to ' + next.badge_name
       : 'Highest tier reached';
@@ -1364,7 +1380,7 @@ function openBadgeInfoModal(tiers, current) {
     const scored = tiers.filter(x => x.badge_name !== 'Ghoster');
     const idx = scored.findIndex(x => x.badge_name === t.badge_name);
     const next = scored[idx + 1];
-    const range = isGhoster ? '3+ days inactive' : next ? `${Number(t.min_score)}–${Number(next.min_score) - 1} pts` : `${Number(t.min_score)}+ pts`;
+    const range = isGhoster ? '6+ working days inactive' : next ? `${Number(t.min_score)}–${Number(next.min_score) - 1} pts` : `${Number(t.min_score)}+ pts`;
     const isCurrent = t.badge_name === current.badge_name;
     return `
       <div class="badge-info-tier${isCurrent ? ' current' : ''}${isGhoster ? ' ghoster' : ''}">
