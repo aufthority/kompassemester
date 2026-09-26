@@ -176,6 +176,9 @@ button:hover .icon-flask-conical,button:focus-visible .icon-flask-conical{transf
 .badge-info-btn{width:18px;height:18px;border-radius:50%;border:none;background:rgba(27,67,50,0.08);color:var(--ink-soft);font-size:11px;line-height:1;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;padding:0;}
 .badge-sub{font-size:11.5px;color:var(--ink-soft);margin-top:1px;}
 .badge-track{height:6px;border-radius:99px;background:rgba(27,67,50,0.08);overflow:hidden;}
+.badge-goal{margin-top:10px;font-size:12px;line-height:1.5;color:var(--ink-soft);}
+.badge-goal strong{color:var(--forest-700);font-weight:600;}
+.badge-goal-done{color:var(--forest-500);font-weight:700;}
 .badge-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--forest-500),var(--gold-500));transition:width .4s ease;}
 .badge-info-tier{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px dashed rgba(27,67,50,0.15);}
 .badge-info-tier:last-child{border-bottom:none;}
@@ -1715,13 +1718,33 @@ async function logEngagementEvent(eventType, { topicId = null, metadata = {} } =
   }
 }
 
-let badgeTiers = null;
+// Thresholds are a share of each course's maximum possible points (see the
+// course_badge_thresholds view), so they differ per course — cache per course.
+const badgeTiersByCourse = {};
 
-async function loadBadgeTiers() {
-  if (badgeTiers) return badgeTiers;
-  const { data } = await sb.from('badge_thresholds').select('*').order('sort_order');
-  badgeTiers = data || [];
-  return badgeTiers;
+async function loadBadgeTiers(courseId = currentCourse && currentCourse.id) {
+  if (badgeTiersByCourse[courseId]) return badgeTiersByCourse[courseId];
+  let { data } = await sb.from('course_badge_thresholds').select('badge_name, min_score, sort_order').eq('course_id', courseId).order('sort_order');
+  if (!data || !data.length) {
+    ({ data } = await sb.from('badge_thresholds').select('*').order('sort_order'));
+  }
+  badgeTiersByCourse[courseId] = data || [];
+  return badgeTiersByCourse[courseId];
+}
+
+// One line under the badge: what full points this week takes, with progress.
+function weeklyGoalHtml() {
+  const t = findThisWeekTopic(myTopics);
+  if (!t || !t.week_start_date) return '';
+  const due = new Date(t.week_start_date + 'T00:00:00');
+  due.setDate(due.getDate() + 6);
+  const dueStr = due.toLocaleDateString('en-GB', { weekday: 'short', day: 'numeric', month: 'short' });
+  const quizDone = myQuizAttempts.some(a => a.topic_id === t.id);
+  const words = Math.max(0, ...myNotes.filter(n => n.topic_id === t.id).map(n => (n.content || '').trim().split(/\s+/).filter(Boolean).length));
+  const tick = '<span class="badge-goal-done">✓</span>';
+  const quiz = quizDone ? `quiz ${tick}` : 'take the quiz';
+  const note = words >= 150 ? `150-word note ${tick}` : words > 0 ? `note ${words}/150 words` : 'write a 150-word note';
+  return `<div class="badge-goal"><strong>Full points this week:</strong> open the guide, copy a prompt, ${quiz}, ${note} — by ${dueStr}.</div>`;
 }
 
 // Ghoster -> Pathfinder -> Wayfinder -> Navigator -> Voyager. The four earned
@@ -1775,6 +1798,7 @@ async function renderBadgeCard() {
       </div>
     </div>
     <div class="badge-track"><div class="badge-fill" style="width:${isGhosting ? 0 : pct}%"></div></div>
+    ${weeklyGoalHtml()}
   `;
   const infoBtn = document.getElementById('badge-info-btn');
   if (infoBtn) infoBtn.addEventListener('click', () => openBadgeInfoModal(allTiers, current));
@@ -2077,12 +2101,13 @@ async function loadEducatorRoster() {
     sb.from('quiz_attempts').select('student_id, topic_id, score, total, created_at').eq('course_id', currentCourse.id).order('created_at'),
     sb.from('student_notes').select('student_id, topic_id').eq('course_id', currentCourse.id),
   ]);
-  // Quiz average = latest attempt per topic, so a retry after a weak first try
-  // counts as improvement rather than dragging the average down.
-  const latestQuiz = new Map(); // student -> Map(topic -> attempt)
+  // Quiz average = FIRST attempt per topic (same rule as scoring): answers are
+  // shown after submitting, so a retake says little about understanding.
+  const latestQuiz = new Map(); // student -> Map(topic -> first attempt)
   (quizRows || []).forEach(a => {
     if (!latestQuiz.has(a.student_id)) latestQuiz.set(a.student_id, new Map());
-    latestQuiz.get(a.student_id).set(a.topic_id, a);
+    const m = latestQuiz.get(a.student_id);
+    if (!m.has(a.topic_id)) m.set(a.topic_id, a);
   });
   const noteTopics = new Map(); // student -> Set(topic)
   (noteRows || []).forEach(n => {
@@ -2247,7 +2272,7 @@ function renderRoster(list) {
       </div>
       <div class="roster-stats">
         <div class="roster-ca">${s.points} pts</div>
-        <div class="roster-meta" title="Quiz average uses the latest attempt per topic">${s.quizPct === null ? 'No quizzes' : `Quiz ${s.quizPct}% (${s.quizTopics} topic${s.quizTopics === 1 ? '' : 's'})`} · ${s.noteCount} note${s.noteCount === 1 ? '' : 's'}</div>
+        <div class="roster-meta" title="Quiz average uses the first attempt per topic">${s.quizPct === null ? 'No quizzes' : `Quiz ${s.quizPct}% (${s.quizTopics} topic${s.quizTopics === 1 ? '' : 's'})`} · ${s.noteCount} note${s.noteCount === 1 ? '' : 's'}</div>
         <div class="roster-meta">${s.lastActive ? 'Active ' + new Date(s.lastActive).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : 'No activity yet'}</div>
       </div>
       <button class="roster-manage-btn" type="button" data-manage="${s.id}">Manage</button>
