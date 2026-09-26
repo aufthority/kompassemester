@@ -2036,11 +2036,25 @@ async function loadEducatorRoster() {
   const { data: activities } = await sb.from('learning_activities').select('student_id, activity_date').eq('course_id', currentCourse.id);
   // Server-computed signals (working days quiet, any engagement, last nudge) and
   // cumulative scores for badge tiers. Same Ghoster rule as the student app.
-  const [{ data: signals }, { data: scores }, tierRows] = await Promise.all([
+  const [{ data: signals }, { data: scores }, tierRows, { data: quizRows }, { data: noteRows }] = await Promise.all([
     sb.rpc('course_student_signals', { p_course_id: currentCourse.id }),
     sb.from('student_cumulative_scores').select('student_id, cumulative_score').eq('course_id', currentCourse.id),
     loadBadgeTiers(),
+    sb.from('quiz_attempts').select('student_id, topic_id, score, total, created_at').eq('course_id', currentCourse.id).order('created_at'),
+    sb.from('student_notes').select('student_id, topic_id').eq('course_id', currentCourse.id),
   ]);
+  // Quiz average = latest attempt per topic, so a retry after a weak first try
+  // counts as improvement rather than dragging the average down.
+  const latestQuiz = new Map(); // student -> Map(topic -> attempt)
+  (quizRows || []).forEach(a => {
+    if (!latestQuiz.has(a.student_id)) latestQuiz.set(a.student_id, new Map());
+    latestQuiz.get(a.student_id).set(a.topic_id, a);
+  });
+  const noteTopics = new Map(); // student -> Set(topic)
+  (noteRows || []).forEach(n => {
+    if (!noteTopics.has(n.student_id)) noteTopics.set(n.student_id, new Set());
+    noteTopics.get(n.student_id).add(n.topic_id);
+  });
   const sigById = new Map((signals || []).map(x => [x.student_id, x]));
   const scoreById = new Map((scores || []).map(x => [x.student_id, Number(x.cumulative_score)]));
   rosterTiers = (tierRows || []).filter(t => t.badge_name !== 'Ghoster');
@@ -2052,8 +2066,15 @@ async function loadEducatorRoster() {
     const score = scoreById.get(s.id) || 0;
     let tier = rosterTiers[0] ? rosterTiers[0].badge_name : null;
     rosterTiers.forEach(t => { if (score >= Number(t.min_score)) tier = t.badge_name; });
+    const attempts = [...(latestQuiz.get(s.id) || new Map()).values()];
+    const qScore = attempts.reduce((a, x) => a + Number(x.score || 0), 0);
+    const qTotal = attempts.reduce((a, x) => a + Number(x.total || 0), 0);
     return {
       ...s, streak: computeStreak(myAct), lastActive,
+      points: Math.round(score),
+      quizPct: qTotal ? Math.round((qScore / qTotal) * 100) : null,
+      quizTopics: attempts.length,
+      noteCount: (noteTopics.get(s.id) || new Set()).size,
       idleDays: sig.idle_working_days ?? null,
       hasEngaged: !!sig.has_any_engagement,
       lastNudgedAt: sig.last_nudged_at || null,
@@ -2183,7 +2204,7 @@ function renderRoster(list) {
       <div class="roster-top">
         <div><div class="roster-name">${s.full_name || s.email}</div><div class="roster-matric">${[s.matric_number, s.email].filter(Boolean).join(' · ')}</div>${chips.join('')}</div>
         <div style="display:flex;align-items:center">
-          <div style="text-align:right"><div class="roster-ca">${s.streak}d streak</div><div class="roster-matric">${s.lastActive ? 'Active ' + new Date(s.lastActive).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : 'No activity yet'}</div></div>
+          <div style="text-align:right"><div class="roster-ca">${s.points} pts</div><div class="roster-matric" title="Quiz average uses the latest attempt per topic">${s.quizPct === null ? 'No quizzes' : `Quiz ${s.quizPct}% (${s.quizTopics} topic${s.quizTopics === 1 ? '' : 's'})`} · ${s.noteCount} note${s.noteCount === 1 ? '' : 's'}</div><div class="roster-matric">${s.lastActive ? 'Active ' + new Date(s.lastActive).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : 'No activity yet'}</div></div>
           <button class="roster-manage-btn" type="button" data-manage="${s.id}">Manage</button>
         </div>
       </div>
