@@ -2139,8 +2139,8 @@ function applyRosterView() {
     const label = rosterFilter === 'checkin' ? 'needs a check-in' : rosterFilter === 'notstarted' ? "haven't started" : rosterFilter.slice(5) + ' tier';
     document.getElementById('roster-filter-label').textContent = `Filtered: ${label} (${count})`;
     bar.style.display = '';
-    if (rosterFilter === 'checkin') {
-      const eligible = allStudents.filter(needsCheckin).filter(s => !nudgedRecently(s)).length;
+    if (NUDGE_REASON[rosterFilter]) {
+      const eligible = allStudents.filter(rosterFilterFn(rosterFilter)).filter(s => !nudgedRecently(s)).length;
       nudgeBtn.style.display = '';
       nudgeBtn.textContent = eligible ? `Nudge ${eligible} by email` : 'All nudged this week';
     } else { nudgeBtn.style.display = 'none'; }
@@ -2153,15 +2153,20 @@ document.getElementById('roster-filter-clear').addEventListener('click', () => s
 
 // Bulk check-in email. The server re-derives who is flagged and skips anyone
 // nudged in this course in the last 7 days, so the browser can't over-send.
+const NUDGE_REASON = { checkin: 'ghoster_checkin', notstarted: 'not_started' };
+const NUDGE_EMAIL_LABEL = { checkin: 'check-in email', notstarted: '"first step" email' };
 document.getElementById('nudge-btn').addEventListener('click', async () => {
   const res = document.getElementById('nudge-result');
-  const flagged = allStudents.filter(needsCheckin);
+  const filterAtClick = rosterFilter;
+  const reason = NUDGE_REASON[filterAtClick];
+  if (!reason) return;
+  const flagged = allStudents.filter(rosterFilterFn(filterAtClick));
   const eligible = flagged.filter(s => !nudgedRecently(s));
   const skipped = flagged.length - eligible.length;
   if (!eligible.length) {
-    res.className = 'nudge-result show'; res.textContent = 'Everyone flagged was already nudged in the last 7 days.'; return;
+    res.className = 'nudge-result show'; res.textContent = 'Everyone in this list was already nudged in the last 7 days.'; return;
   }
-  if (!confirm(`Send the check-in email to ${eligible.length} student${eligible.length === 1 ? '' : 's'}?` +
+  if (!confirm(`Send the ${NUDGE_EMAIL_LABEL[filterAtClick]} to ${eligible.length} student${eligible.length === 1 ? '' : 's'}?` +
     (skipped ? ` ${skipped} already nudged this week will be skipped.` : ''))) return;
 
   const btn = document.getElementById('nudge-btn');
@@ -2172,7 +2177,7 @@ document.getElementById('nudge-btn').addEventListener('click', async () => {
     const resp = await fetch(`${SUPABASE_URL}/functions/v1/send-nudges`, {
       method: 'POST',
       headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
-      body: JSON.stringify({ course_id: currentCourse.id }),
+      body: JSON.stringify({ course_id: currentCourse.id, reason }),
     });
     out = await resp.json();
     if (!resp.ok) error = out.error || 'Nudge failed';
@@ -2180,7 +2185,7 @@ document.getElementById('nudge-btn').addEventListener('click', async () => {
   btn.disabled = false;
   await loadEducatorRoster();
   if (error) { res.className = 'nudge-result show err'; res.textContent = 'Could not send nudges: ' + error; return; }
-  let msg = `Nudged ${out.sent} of ${out.flagged} flagged student${out.flagged === 1 ? '' : 's'}`;
+  let msg = `Nudged ${out.sent} of ${out.flagged} student${out.flagged === 1 ? '' : 's'} in this list`;
   if (out.skipped_recent) msg += ` — ${out.skipped_recent} already reached this week`;
   msg += '.';
   if (out.failed) msg += ` ${out.failed} failed to send; try again shortly.`;
