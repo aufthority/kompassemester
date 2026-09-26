@@ -264,6 +264,31 @@ button:hover .icon-flask-conical,button:focus-visible .icon-flask-conical{transf
 .roster-ca{font-family:var(--font-mono);font-weight:600;font-size:14px;color:var(--forest-700);}
 .roster-manage-btn{flex-shrink:0;font-size:11px;font-weight:600;color:var(--forest-700);background:rgba(45,106,79,0.08);border:1px solid rgba(45,106,79,0.2);border-radius:99px;padding:5px 12px;margin-left:12px;}
 .roster-manage-btn:hover{background:rgba(45,106,79,0.15);}
+/* educator roster: summary cards, filter bar, nudge */
+.stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px;}
+.stat-card{text-align:left;padding:14px 16px;border-radius:var(--radius-sm);background:var(--glass-bg-strong);border:1px solid var(--glass-border);font:inherit;color:inherit;}
+button.stat-card{cursor:pointer;transition:border-color .15s, box-shadow .15s;}
+button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
+.stat-card.active{border:2px solid var(--forest-700);padding:13px 15px;}
+.stat-label{font-size:11.5px;color:var(--ink-soft);margin-bottom:4px;}
+.stat-value{font-family:var(--font-display);font-size:24px;font-weight:600;color:var(--forest-900);line-height:1.2;}
+.stat-value small{font-family:var(--font-body, inherit);font-size:12px;font-weight:400;color:var(--ink-soft);}
+.stat-sub{font-size:10.5px;color:var(--ink-soft);margin-top:4px;}
+.tier-bar{display:flex;height:10px;border-radius:99px;overflow:hidden;margin:6px 0 2px;background:rgba(27,67,50,0.08);}
+.tier-bar button{border:none;padding:0;height:100%;cursor:pointer;}
+.tier-bar button.active{outline:2px solid var(--forest-900);outline-offset:-2px;}
+.filter-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 14px;margin-bottom:12px;border-radius:var(--radius-sm);background:var(--forest-700);color:#eef2e6;font-size:13px;}
+.filter-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.filter-clear,.btn-nudge{font-size:11.5px;font-weight:600;border-radius:99px;padding:6px 12px;border:none;cursor:pointer;}
+.filter-clear{background:#eef2e6;color:var(--forest-900);}
+.btn-nudge{background:var(--gold-500);color:var(--forest-900);}
+.btn-nudge[disabled]{opacity:.6;cursor:default;}
+.nudge-result{display:none;font-size:12.5px;padding:9px 12px;margin-bottom:12px;border-radius:var(--radius-sm);background:rgba(45,106,79,0.08);border:1px solid rgba(45,106,79,0.2);color:var(--forest-700);}
+.nudge-result.show{display:block;}
+.nudge-result.err{background:rgba(169,73,31,0.08);border-color:rgba(169,73,31,0.3);color:#a9491f;}
+.roster-chip{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:99px;margin:4px 6px 0 0;background:rgba(45,106,79,0.1);color:var(--forest-700);}
+.roster-chip.warn{background:rgba(201,162,39,0.18);color:#7a5a10;}
+.roster-chip.muted{background:rgba(27,67,50,0.06);color:var(--ink-soft);}
 .manage-field{text-align:left;margin-bottom:16px;}
 .manage-field label{display:block;font-size:12px;font-weight:600;color:var(--forest-700);margin-bottom:5px;}
 .manage-field input{width:100%;padding:11px 14px;border:1px solid rgba(27,67,50,0.18);border-radius:var(--radius-sm);background:rgba(255,255,255,0.7);font-size:14px;color:var(--ink);outline:none;}
@@ -670,6 +695,24 @@ button:hover .icon-flask-conical,button:focus-visible .icon-flask-conical{transf
         <div class="section-label" id="roster-section-label">PHIA 4312 · DPH 48</div>
         <div class="greeting" style="font-size:20px;margin-bottom:16px">Students</div>
 
+        <div class="stat-cards" id="roster-stats">
+          <button class="stat-card" type="button" data-roster-filter="checkin">
+            <div class="stat-label">Needs a check-in</div>
+            <div class="stat-value"><span id="stat-checkin">–</span> <small>students</small></div>
+            <div class="stat-sub">Quiet for more than 5 working days</div>
+          </button>
+          <button class="stat-card" type="button" data-roster-filter="notstarted">
+            <div class="stat-label">Haven't started</div>
+            <div class="stat-value"><span id="stat-notstarted">–</span> <small>students</small></div>
+            <div class="stat-sub">No activity in this course yet</div>
+          </button>
+          <div class="stat-card" id="stat-tiers-card">
+            <div class="stat-label">Badge tiers</div>
+            <div class="tier-bar" id="tier-bar"></div>
+            <div class="stat-sub" id="tier-legend">Pathfinder → Voyager</div>
+          </div>
+        </div>
+
         <div class="inova-card glass fade-up">
           <div class="inova-card-text">
             <h3>Marks &amp; grading</h3>
@@ -679,6 +722,14 @@ button:hover .icon-flask-conical,button:focus-visible .icon-flask-conical{transf
         </div>
 
         <div class="search-wrap"><input type="text" id="roster-search" placeholder="Search by name or matric number…"></div>
+        <div class="filter-bar" id="roster-filter-bar" style="display:none">
+          <span id="roster-filter-label"></span>
+          <div class="filter-actions">
+            <button class="btn-nudge" id="nudge-btn" type="button" style="display:none">Nudge all</button>
+            <button class="filter-clear" id="roster-filter-clear" type="button">✕ Clear filter</button>
+          </div>
+        </div>
+        <div class="nudge-result" id="nudge-result"></div>
         <div class="glass" id="roster-list"></div>
       </section>
 
@@ -1983,28 +2034,161 @@ async function loadEducatorRoster() {
   const enrolledIds = new Set((enrolled || []).map(e => e.student_id));
   const { data: students } = await sb.from('profiles').select('*').eq('role', 'student').order('full_name');
   const { data: activities } = await sb.from('learning_activities').select('student_id, activity_date').eq('course_id', currentCourse.id);
+  // Server-computed signals (working days quiet, any engagement, last nudge) and
+  // cumulative scores for badge tiers. Same Ghoster rule as the student app.
+  const [{ data: signals }, { data: scores }, tierRows] = await Promise.all([
+    sb.rpc('course_student_signals', { p_course_id: currentCourse.id }),
+    sb.from('student_cumulative_scores').select('student_id, cumulative_score').eq('course_id', currentCourse.id),
+    loadBadgeTiers(),
+  ]);
+  const sigById = new Map((signals || []).map(x => [x.student_id, x]));
+  const scoreById = new Map((scores || []).map(x => [x.student_id, Number(x.cumulative_score)]));
+  rosterTiers = (tierRows || []).filter(t => t.badge_name !== 'Ghoster');
 
   allStudents = (students || []).filter(s => enrolledIds.has(s.id)).map(s => {
     const myAct = [...new Set((activities || []).filter(a => a.student_id === s.id).map(a => a.activity_date))];
     const lastActive = myAct.sort().slice(-1)[0];
-    return { ...s, streak: computeStreak(myAct), lastActive };
+    const sig = sigById.get(s.id) || {};
+    const score = scoreById.get(s.id) || 0;
+    let tier = rosterTiers[0] ? rosterTiers[0].badge_name : null;
+    rosterTiers.forEach(t => { if (score >= Number(t.min_score)) tier = t.badge_name; });
+    return {
+      ...s, streak: computeStreak(myAct), lastActive,
+      idleDays: sig.idle_working_days ?? null,
+      hasEngaged: !!sig.has_any_engagement,
+      lastNudgedAt: sig.last_nudged_at || null,
+      tier,
+    };
   });
-  renderRoster(allStudents);
+  renderRosterStats();
+  applyRosterView();
 }
+
+/* ---------- EDUCATOR: ROSTER SUMMARY CARDS, FILTERS, NUDGE ---------- */
+let rosterTiers = [];
+let rosterFilter = null; // 'checkin' | 'notstarted' | 'tier:<name>' | null
+const NUDGE_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
+const TIER_COLORS = ['#a8c98a', '#6f9d55', '#3f6d33', '#1c3d1f'];
+
+const needsCheckin = s => s.idleDays !== null && s.idleDays > 5;
+const notStarted = s => !s.hasEngaged;
+const nudgedRecently = s => s.lastNudgedAt && (Date.now() - new Date(s.lastNudgedAt).getTime()) < NUDGE_COOLDOWN_MS;
+
+function rosterFilterFn(f) {
+  if (f === 'checkin') return needsCheckin;
+  if (f === 'notstarted') return notStarted;
+  if (f && f.startsWith('tier:')) { const name = f.slice(5); return s => s.tier === name; }
+  return () => true;
+}
+
+function renderRosterStats() {
+  document.getElementById('stat-checkin').textContent = allStudents.filter(needsCheckin).length;
+  document.getElementById('stat-notstarted').textContent = allStudents.filter(notStarted).length;
+  const total = allStudents.length || 1;
+  const bar = document.getElementById('tier-bar');
+  bar.innerHTML = rosterTiers.map((t, i) => {
+    const n = allStudents.filter(s => s.tier === t.badge_name).length;
+    if (!n) return '';
+    const key = 'tier:' + t.badge_name;
+    return `<button type="button" data-roster-filter="${escapeHtml(key)}" class="${rosterFilter === key ? 'active' : ''}" style="width:${(n / total) * 100}%;background:${TIER_COLORS[i] || TIER_COLORS[TIER_COLORS.length - 1]}" title="${escapeHtml(t.badge_name)}: ${n}" aria-label="Show ${escapeHtml(t.badge_name)} students (${n})"></button>`;
+  }).join('');
+  document.getElementById('tier-legend').textContent = rosterTiers.map(t => `${t.badge_name} ${allStudents.filter(s => s.tier === t.badge_name).length}`).join(' · ') || 'Pathfinder → Voyager';
+  bar.querySelectorAll('[data-roster-filter]').forEach(b => b.addEventListener('click', () => setRosterFilter(b.dataset.rosterFilter)));
+  document.querySelectorAll('#roster-stats > [data-roster-filter]').forEach(c => c.classList.toggle('active', c.dataset.rosterFilter === rosterFilter));
+}
+
+function setRosterFilter(f) {
+  rosterFilter = rosterFilter === f ? null : f; // clicking the active card again clears it
+  const res = document.getElementById('nudge-result');
+  res.className = 'nudge-result'; res.textContent = '';
+  renderRosterStats();
+  applyRosterView();
+}
+
+function applyRosterView() {
+  const q = document.getElementById('roster-search').value.trim().toLowerCase();
+  const list = allStudents.filter(rosterFilterFn(rosterFilter)).filter(s => !q ||
+    (s.full_name || '').toLowerCase().includes(q) || (s.email || '').toLowerCase().includes(q) || (s.matric_number || '').toLowerCase().includes(q));
+
+  const bar = document.getElementById('roster-filter-bar');
+  const nudgeBtn = document.getElementById('nudge-btn');
+  if (!rosterFilter) { bar.style.display = 'none'; }
+  else {
+    const count = allStudents.filter(rosterFilterFn(rosterFilter)).length;
+    const label = rosterFilter === 'checkin' ? 'needs a check-in' : rosterFilter === 'notstarted' ? "haven't started" : rosterFilter.slice(5) + ' tier';
+    document.getElementById('roster-filter-label').textContent = `Filtered: ${label} (${count})`;
+    bar.style.display = '';
+    if (rosterFilter === 'checkin') {
+      const eligible = allStudents.filter(needsCheckin).filter(s => !nudgedRecently(s)).length;
+      nudgeBtn.style.display = '';
+      nudgeBtn.textContent = eligible ? `Nudge ${eligible} by email` : 'All nudged this week';
+    } else { nudgeBtn.style.display = 'none'; }
+  }
+  renderRoster(list);
+}
+
+document.querySelectorAll('#roster-stats > [data-roster-filter]').forEach(c => c.addEventListener('click', () => setRosterFilter(c.dataset.rosterFilter)));
+document.getElementById('roster-filter-clear').addEventListener('click', () => setRosterFilter(rosterFilter));
+
+// Bulk check-in email. The server re-derives who is flagged and skips anyone
+// nudged in this course in the last 7 days, so the browser can't over-send.
+document.getElementById('nudge-btn').addEventListener('click', async () => {
+  const res = document.getElementById('nudge-result');
+  const flagged = allStudents.filter(needsCheckin);
+  const eligible = flagged.filter(s => !nudgedRecently(s));
+  const skipped = flagged.length - eligible.length;
+  if (!eligible.length) {
+    res.className = 'nudge-result show'; res.textContent = 'Everyone flagged was already nudged in the last 7 days.'; return;
+  }
+  if (!confirm(`Send the check-in email to ${eligible.length} student${eligible.length === 1 ? '' : 's'}?` +
+    (skipped ? ` ${skipped} already nudged this week will be skipped.` : ''))) return;
+
+  const btn = document.getElementById('nudge-btn');
+  btn.disabled = true; btn.textContent = 'Sending…';
+  let out = null, error = null;
+  try {
+    const { data: { session } } = await sb.auth.getSession();
+    const resp = await fetch(`${SUPABASE_URL}/functions/v1/send-nudges`, {
+      method: 'POST',
+      headers: { 'Authorization': `Bearer ${session.access_token}`, 'Content-Type': 'application/json', 'apikey': SUPABASE_ANON_KEY },
+      body: JSON.stringify({ course_id: currentCourse.id }),
+    });
+    out = await resp.json();
+    if (!resp.ok) error = out.error || 'Nudge failed';
+  } catch (e) { error = e.message; }
+  btn.disabled = false;
+  await loadEducatorRoster();
+  if (error) { res.className = 'nudge-result show err'; res.textContent = 'Could not send nudges: ' + error; return; }
+  let msg = `Nudged ${out.sent} of ${out.flagged} flagged student${out.flagged === 1 ? '' : 's'}`;
+  if (out.skipped_recent) msg += ` — ${out.skipped_recent} already reached this week`;
+  msg += '.';
+  if (out.failed) msg += ` ${out.failed} failed to send; try again shortly.`;
+  res.className = 'nudge-result show' + (out.failed ? ' err' : '');
+  res.textContent = msg;
+});
 
 function renderRoster(list) {
   const el = document.getElementById('roster-list');
-  if (!list.length) { el.innerHTML = '<div class="empty-state">No students enrolled in this course yet.</div>'; return; }
-  el.innerHTML = list.map(s => `
+  if (!list.length) {
+    el.innerHTML = `<div class="empty-state">${allStudents.length ? 'No students match this view.' : 'No students enrolled in this course yet.'}</div>`;
+    return;
+  }
+  el.innerHTML = list.map(s => {
+    const chips = [];
+    if (s.tier) chips.push(`<span class="roster-chip">${escapeHtml(s.tier)}</span>`);
+    if (needsCheckin(s)) chips.push(`<span class="roster-chip warn">${s.idleDays} working days quiet</span>`);
+    if (nudgedRecently(s)) chips.push(`<span class="roster-chip muted">Nudged ${new Date(s.lastNudgedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span>`);
+    return `
     <div class="roster-row" data-id="${s.id}">
       <div class="roster-top">
-        <div><div class="roster-name">${s.full_name || s.email}</div><div class="roster-matric">${[s.matric_number, s.email].filter(Boolean).join(' · ')}</div></div>
+        <div><div class="roster-name">${s.full_name || s.email}</div><div class="roster-matric">${[s.matric_number, s.email].filter(Boolean).join(' · ')}</div>${chips.join('')}</div>
         <div style="display:flex;align-items:center">
           <div style="text-align:right"><div class="roster-ca">${s.streak}d streak</div><div class="roster-matric">${s.lastActive ? 'Active ' + new Date(s.lastActive).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : 'No activity yet'}</div></div>
           <button class="roster-manage-btn" type="button" data-manage="${s.id}">Manage</button>
         </div>
       </div>
-    </div>`).join('');
+    </div>`;
+  }).join('');
   el.querySelectorAll('[data-manage]').forEach(btn => {
     btn.addEventListener('click', (e) => { e.stopPropagation(); openManageStudent(btn.dataset.manage); });
   });
@@ -2099,10 +2283,7 @@ document.getElementById('manage-delete-btn').addEventListener('click', () => {
     await loadEducatorRoster();
   });
 });
-document.getElementById('roster-search').addEventListener('input', (e) => {
-  const q = e.target.value.trim().toLowerCase();
-  renderRoster(allStudents.filter(s => (s.full_name || '').toLowerCase().includes(q) || (s.email || '').toLowerCase().includes(q) || (s.matric_number || '').toLowerCase().includes(q)));
-});
+document.getElementById('roster-search').addEventListener('input', applyRosterView);
 
 /* ---------- EDUCATOR: UPLOADS ---------- */
 function parseWorkbook(file) {
