@@ -265,8 +265,8 @@ button:hover .icon-flask-conical,button:focus-visible .icon-flask-conical{transf
 .roster-manage-btn{flex-shrink:0;font-size:11px;font-weight:600;color:var(--forest-700);background:rgba(45,106,79,0.08);border:1px solid rgba(45,106,79,0.2);border-radius:99px;padding:5px 12px;margin-left:12px;}
 .roster-manage-btn:hover{background:rgba(45,106,79,0.15);}
 /* educator roster: summary cards, filter bar, nudge */
-.stat-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:16px;}
-.stat-card{text-align:left;padding:14px 16px;border-radius:var(--radius-sm);background:var(--glass-bg-strong);border:1px solid var(--glass-border);font:inherit;color:inherit;}
+.stat-cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px;}
+.stat-card{min-width:0;text-align:left;padding:14px 16px;border-radius:var(--radius-sm);background:var(--glass-bg-strong);border:1px solid var(--glass-border);font:inherit;color:inherit;}
 button.stat-card{cursor:pointer;transition:border-color .15s, box-shadow .15s;}
 button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
 .stat-card.active{border:2px solid var(--forest-700);padding:13px 15px;}
@@ -289,6 +289,30 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
 .roster-chip{display:inline-block;font-size:10.5px;font-weight:600;padding:2px 8px;border-radius:99px;margin:4px 6px 0 0;background:rgba(45,106,79,0.1);color:var(--forest-700);}
 .roster-chip.warn{background:rgba(201,162,39,0.18);color:#7a5a10;}
 .roster-chip.muted{background:rgba(27,67,50,0.06);color:var(--ink-soft);}
+.tier-legend span{white-space:nowrap;}
+/* roster row: identity | stats | Manage on desktop; stats drop to a full-width
+   line under the name on phones so nothing wraps word-by-word */
+.roster-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:14px;}
+.roster-main{min-width:0;}
+.roster-email{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.roster-stats{text-align:right;white-space:nowrap;}
+.roster-meta{font-size:11px;color:var(--ink-soft);}
+.roster-row .roster-manage-btn{margin-left:0;}
+@media(max-width:640px){
+  .stat-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  #stat-tiers-card{grid-column:1 / -1;}
+  .stat-card{padding:12px 14px;}
+  .stat-card.active{padding:11px 13px;}
+  .inova-card{flex-direction:column;align-items:stretch;gap:12px;padding:16px;}
+  .inova-card .btn-inova{justify-content:center;}
+  .roster-row{grid-template-columns:minmax(0,1fr) auto;padding:14px 16px;}
+  .roster-stats{grid-column:1 / -1;grid-row:2;text-align:left;white-space:normal;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;margin-top:8px;}
+  .roster-stats .roster-ca{font-size:13px;}
+  .roster-row .roster-manage-btn{grid-column:2;grid-row:1;align-self:start;}
+  .filter-bar{padding:10px 12px;}
+  .bottomnav{left:10px;right:10px;transform:none;justify-content:space-between;}
+  .bottomnav button{flex:1 1 0;min-width:0;padding:8px 2px;font-size:11px;}
+}
 .manage-field{text-align:left;margin-bottom:16px;}
 .manage-field label{display:block;font-size:12px;font-weight:600;color:var(--forest-700);margin-bottom:5px;}
 .manage-field input{width:100%;padding:11px 14px;border:1px solid rgba(27,67,50,0.18);border-radius:var(--radius-sm);background:rgba(255,255,255,0.7);font-size:14px;color:var(--ink);outline:none;}
@@ -699,17 +723,17 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
           <button class="stat-card" type="button" data-roster-filter="checkin">
             <div class="stat-label">Needs a check-in</div>
             <div class="stat-value"><span id="stat-checkin">–</span> <small>students</small></div>
-            <div class="stat-sub">Quiet for more than 5 working days</div>
+            <div class="stat-sub">Quiet 6+ working days</div>
           </button>
           <button class="stat-card" type="button" data-roster-filter="notstarted">
             <div class="stat-label">Haven't started</div>
             <div class="stat-value"><span id="stat-notstarted">–</span> <small>students</small></div>
-            <div class="stat-sub">No activity in this course yet</div>
+            <div class="stat-sub">No activity yet</div>
           </button>
           <div class="stat-card" id="stat-tiers-card">
             <div class="stat-label">Badge tiers</div>
             <div class="tier-bar" id="tier-bar"></div>
-            <div class="stat-sub" id="tier-legend">Pathfinder → Voyager</div>
+            <div class="stat-sub tier-legend" id="tier-legend">Pathfinder → Voyager</div>
           </div>
         </div>
 
@@ -1271,8 +1295,10 @@ async function boot(opts = {}) {
   if (profile.role === 'educator') {
     document.getElementById('student-sidenav').style.display = 'none';
     document.getElementById('student-bottomnav').style.display = 'none';
-    document.getElementById('educator-sidenav').style.display = 'flex';
-    document.getElementById('educator-bottomnav').style.display = 'flex';
+    // '' (not 'flex') so the stylesheet decides: sidenav on desktop only,
+    // bottom bar on mobile only. 'flex' forced the unstyled sidenav onto phones.
+    document.getElementById('educator-sidenav').style.display = '';
+    document.getElementById('educator-bottomnav').style.display = '';
     document.getElementById('add-course-row').style.display = '';
     await loadEducatorCourses();
     showView('courses');
@@ -2113,7 +2139,7 @@ function renderRosterStats() {
     const key = 'tier:' + t.badge_name;
     return `<button type="button" data-roster-filter="${escapeHtml(key)}" class="${rosterFilter === key ? 'active' : ''}" style="width:${(n / total) * 100}%;background:${TIER_COLORS[i] || TIER_COLORS[TIER_COLORS.length - 1]}" title="${escapeHtml(t.badge_name)}: ${n}" aria-label="Show ${escapeHtml(t.badge_name)} students (${n})"></button>`;
   }).join('');
-  document.getElementById('tier-legend').textContent = rosterTiers.map(t => `${t.badge_name} ${allStudents.filter(s => s.tier === t.badge_name).length}`).join(' · ') || 'Pathfinder → Voyager';
+  document.getElementById('tier-legend').innerHTML = rosterTiers.map(t => `<span>${escapeHtml(t.badge_name)} ${allStudents.filter(s => s.tier === t.badge_name).length}</span>`).join(' · ') || 'Pathfinder → Voyager';
   bar.querySelectorAll('[data-roster-filter]').forEach(b => b.addEventListener('click', () => setRosterFilter(b.dataset.rosterFilter)));
   document.querySelectorAll('#roster-stats > [data-roster-filter]').forEach(c => c.classList.toggle('active', c.dataset.rosterFilter === rosterFilter));
 }
@@ -2206,13 +2232,17 @@ function renderRoster(list) {
     if (nudgedRecently(s)) chips.push(`<span class="roster-chip muted">Nudged ${new Date(s.lastNudgedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span>`);
     return `
     <div class="roster-row" data-id="${s.id}">
-      <div class="roster-top">
-        <div><div class="roster-name">${s.full_name || s.email}</div><div class="roster-matric">${[s.matric_number, s.email].filter(Boolean).join(' · ')}</div>${chips.join('')}</div>
-        <div style="display:flex;align-items:center">
-          <div style="text-align:right"><div class="roster-ca">${s.points} pts</div><div class="roster-matric" title="Quiz average uses the latest attempt per topic">${s.quizPct === null ? 'No quizzes' : `Quiz ${s.quizPct}% (${s.quizTopics} topic${s.quizTopics === 1 ? '' : 's'})`} · ${s.noteCount} note${s.noteCount === 1 ? '' : 's'}</div><div class="roster-matric">${s.lastActive ? 'Active ' + new Date(s.lastActive).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : 'No activity yet'}</div></div>
-          <button class="roster-manage-btn" type="button" data-manage="${s.id}">Manage</button>
-        </div>
+      <div class="roster-main">
+        <div class="roster-name">${escapeHtml(s.full_name || s.email)}</div>
+        <div class="roster-matric roster-email">${escapeHtml([s.matric_number, s.email].filter(Boolean).join(' · '))}</div>
+        ${chips.join('')}
       </div>
+      <div class="roster-stats">
+        <div class="roster-ca">${s.points} pts</div>
+        <div class="roster-meta" title="Quiz average uses the latest attempt per topic">${s.quizPct === null ? 'No quizzes' : `Quiz ${s.quizPct}% (${s.quizTopics} topic${s.quizTopics === 1 ? '' : 's'})`} · ${s.noteCount} note${s.noteCount === 1 ? '' : 's'}</div>
+        <div class="roster-meta">${s.lastActive ? 'Active ' + new Date(s.lastActive).toLocaleDateString('en-GB',{day:'numeric',month:'short'}) : 'No activity yet'}</div>
+      </div>
+      <button class="roster-manage-btn" type="button" data-manage="${s.id}">Manage</button>
     </div>`;
   }).join('');
   el.querySelectorAll('[data-manage]').forEach(btn => {
