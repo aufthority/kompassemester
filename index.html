@@ -448,7 +448,8 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
 .modal-title{font-family:var(--font-display);font-size:18px;font-weight:600;color:var(--forest-900);display:flex;align-items:center;gap:8px;}
 .modal-title .icon{width:18px;height:18px;}
 .modal-close{flex-shrink:0;width:28px;height:28px;border-radius:50%;border:none;background:rgba(27,67,50,0.08);color:var(--ink-soft);font-size:16px;line-height:1;}
-.modal-topic-select{width:100%;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid rgba(27,67,50,0.18);background:#fff;font-size:13px;color:var(--ink);margin:12px 0 16px;}
+.modal-topic-select{width:100%;padding:10px 12px;border-radius:var(--radius-sm);border:1px solid rgba(27,67,50,0.18);background:#fff;font-size:16px;color:var(--ink);margin:6px 0 16px;}
+.modal-topic-label{display:block;margin-top:12px;font-size:12px;font-weight:600;color:var(--forest-700);}
 .modal-topic-tlo{font-size:11.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:16px;padding-bottom:14px;border-bottom:1px dashed rgba(27,67,50,0.15);}
 
 .quiz-q{margin-bottom:18px;}
@@ -924,6 +925,7 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
       <div class="modal-title" id="modal-title">—</div>
       <button class="modal-close" id="modal-close" type="button" aria-label="Close"><svg class="icon icon-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg></button>
     </div>
+    <label class="modal-topic-label" for="modal-topic-select">Choose a week — past weeks stay open for revision</label>
     <select class="modal-topic-select" id="modal-topic-select"></select>
     <div class="modal-topic-tlo" id="modal-topic-tlo"></div>
     <div id="modal-body"></div>
@@ -1537,6 +1539,8 @@ function openActivityModal(type) {
   const select = document.getElementById('modal-topic-select');
   document.getElementById('modal-title').innerHTML = type === 'practice' ? ICON_FLASK + ' Practice quiz' : ICON_SQUARE_PEN + ' Write a note';
 
+  const topicLabelEl = document.querySelector('.modal-topic-label');
+  topicLabelEl.style.display = myTopics.length ? '' : 'none';
   if (!myTopics.length) {
     select.style.display = 'none';
     document.getElementById('modal-topic-tlo').textContent = '';
@@ -1545,6 +1549,9 @@ function openActivityModal(type) {
     return;
   }
   select.style.display = '';
+  // The quiz submit handler locks the picker while saving; always unlock on
+  // open, or every later quiz/note in the session is stuck on one week.
+  select.disabled = false;
   const thisWeek = findThisWeekTopic(myTopics);
   select.innerHTML = myTopics.map(t => `<option value="${t.id}">Week ${t.week_number ?? '—'}: ${t.title}${thisWeek && t.id === thisWeek.id ? ' (this week)' : ''}</option>`).join('');
   select.value = (thisWeek || myTopics[0]).id;
@@ -1556,6 +1563,7 @@ function openActivityModal(type) {
 function closeActivityModal() {
   document.getElementById('activity-modal').classList.remove('open');
   document.getElementById('modal-topic-select').onchange = null;
+  document.getElementById('modal-topic-select').disabled = false;
 }
 document.getElementById('modal-close').addEventListener('click', closeActivityModal);
 document.getElementById('activity-modal').addEventListener('click', (e) => { if (e.target.id === 'activity-modal') closeActivityModal(); });
