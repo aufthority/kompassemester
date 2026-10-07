@@ -737,6 +737,13 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
           </div>
           <span class="lab-card-go">Open</span>
         </a>
+        <a class="card glass fade-up lab-card" id="lab-atomic-structure-link" href="labs/atomic-structure.html">
+          <div>
+            <h3>Atomic Structure Explorer</h3>
+            <div class="meta">Fly into hydrogen, neon and sodium in 3D: orbital clouds, electron configuration, then the nucleus. Build any atom from 1 to 11 electrons.</div>
+          </div>
+          <span class="lab-card-go">Open</span>
+        </a>
 
         <div class="section-label" style="margin-top:22px">Your notes</div>
         <div class="glass" id="notes-history" style="margin-bottom:16px"></div>
@@ -1817,14 +1824,16 @@ async function logEngagementEvent(eventType, { topicId = null, metadata = {} } =
 /* Interactive labs: log the open, then go. Waits at most 700 ms for the
    insert so leaving the page doesn't cancel it; a slow or failed log never
    blocks the student. */
-document.getElementById('lab-orbitals-link').addEventListener('click', async e => {
-  e.preventDefault();
-  const href = e.currentTarget.getAttribute('href');
-  await Promise.race([
-    logEngagementEvent('lab_open', { metadata: { lab: 'orbitals' } }),
-    new Promise(r => setTimeout(r, 700))
-  ]);
-  window.location.href = href;
+['orbitals', 'atomic-structure'].forEach(lab => {
+  document.getElementById('lab-' + lab + '-link').addEventListener('click', async e => {
+    e.preventDefault();
+    const href = e.currentTarget.getAttribute('href');
+    await Promise.race([
+      logEngagementEvent('lab_open', { metadata: { lab } }),
+      new Promise(r => setTimeout(r, 700))
+    ]);
+    window.location.href = href;
+  });
 });
 
 // Thresholds are a share of each course's maximum possible points (see the
