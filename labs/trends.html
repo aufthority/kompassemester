@@ -1,0 +1,2094 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Periodic Trends Lab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* Layout: one pinned periodic table (the "bench") that every section recolours;
+   phone = table sticky on top, text scrolls under it; desktop = table left, text right. */
+:root {
+  --bg: #f2f3ef;
+  --surface: #ffffff;
+  --ink: #1b1f1c;
+  --muted: #5b625d;
+  --rule: #d8dcd5;
+  --gold: #e8c468;
+  --gold-ink: #8a6416;
+  --forest: #2f5d46;
+  --forest-soft: #e3ece6;
+  --hatch: #c9cdc6;
+  --wrong: #a4502a;
+  --f-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-cond: 'IBM Plex Sans Condensed', 'IBM Plex Sans', system-ui, sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141815; --surface: #1d221e; --ink: #e9ece7; --muted: #9aa39c; --rule: #323a34;
+    --gold: #e8c468; --gold-ink: #e8c468; --forest: #7fb897; --forest-soft: #22322a;
+    --hatch: #3a423c; --wrong: #e48b63; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141815; --surface: #1d221e; --ink: #e9ece7; --muted: #9aa39c; --rule: #323a34;
+  --gold: #e8c468; --gold-ink: #e8c468; --forest: #7fb897; --forest-soft: #22322a;
+  --hatch: #3a423c; --wrong: #e48b63; color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--f-sans); font-size: 16px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+sub, sup { line-height: 0; }
+a { color: var(--forest); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--gold-ink); outline-offset: 2px; }
+
+/* ── Top bar ─────────────────────────────── */
+.top {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px; border-bottom: 1px solid var(--rule); background: var(--surface);
+}
+.back { font-family: var(--f-mono); font-size: 13px; text-decoration: none; color: var(--muted); }
+.back:hover { color: var(--ink); }
+.lab-name { font-family: var(--f-cond); font-weight: 600; font-size: 17px; letter-spacing: 0.01em; }
+.lvl {
+  margin-left: auto; font-family: var(--f-mono); font-size: 11px; color: var(--muted);
+  border: 1px solid var(--rule); border-radius: 999px; padding: 2px 10px; white-space: nowrap;
+}
+
+/* ── Frame ───────────────────────────────── */
+.wrap { max-width: 1140px; margin: 0 auto; }
+@media (min-width: 900px) {
+  .wrap { display: grid; grid-template-columns: minmax(400px, 470px) minmax(0, 1fr); gap: 40px; padding-inline: 24px; }
+}
+
+/* ── Stage (pinned table) ────────────────── */
+.stage {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  background: var(--surface); border-bottom: 1px solid var(--rule);
+  padding: 10px 16px 10px;
+}
+@media (min-width: 900px) {
+  .stage {
+    top: calc(env(safe-area-inset-top, 0px) + 20px); align-self: start;
+    margin-top: 20px; border: 1px solid var(--rule); border-radius: 14px; padding: 14px 16px 14px;
+  }
+}
+.chips { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; padding-bottom: 2px; }
+.chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: none; border: 1px solid var(--rule); background: transparent; border-radius: 999px;
+  padding: 4px 11px; font-size: 13px; font-weight: 500; cursor: pointer; color: var(--muted);
+  white-space: nowrap;
+}
+.chip:hover { color: var(--ink); border-color: var(--muted); }
+.chip.on { background: var(--ink); color: var(--surface); border-color: var(--ink); }
+.chip.ghost { margin-left: auto; font-family: var(--f-mono); font-size: 11px; font-weight: 400; }
+
+.ptable {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)) 12px repeat(6, minmax(0, 1fr));
+  grid-template-rows: repeat(4, 36px); gap: 3px; margin-top: 8px;
+}
+@media (min-width: 900px) { .ptable { grid-template-rows: repeat(4, 52px); gap: 4px; } }
+.cell {
+  position: relative; border: 1px solid var(--rule); border-radius: 6px; background: var(--bg);
+  padding: 0; cursor: pointer; overflow: hidden; text-align: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  transition: background-color .35s ease, color .35s ease;
+}
+.cell .z { position: absolute; top: 2px; left: 4px; font-family: var(--f-mono); font-size: 8px; opacity: .75; }
+.cell .sym { position: relative; font-weight: 600; font-size: 14px; line-height: 1; }
+.cell .val { position: relative; font-family: var(--f-mono); font-size: 9px; line-height: 1; margin-top: 3px; font-variant-numeric: tabular-nums; }
+@media (min-width: 900px) {
+  .cell .sym { font-size: 17px; } .cell .val { font-size: 10.5px; margin-top: 5px; } .cell .z { font-size: 9px; }
+}
+.cell svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.cell.circ .sym { font-size: 11px; position: absolute; top: 2px; right: 4px; }
+.cell.circ .z { display: none; }
+.cell.circ .val { position: absolute; bottom: 2px; left: 0; right: 0; margin: 0; }
+.cell.hatch {
+  background: repeating-linear-gradient(135deg, var(--hatch) 0 2px, transparent 2px 6px), var(--bg) !important;
+  color: var(--muted) !important;
+}
+.cell.h-el { border-style: dashed; border-color: var(--muted); }
+.cell.hl { box-shadow: inset 0 0 0 2px var(--gold-ink); }
+.cell.sel { box-shadow: inset 0 0 0 2px var(--ink); }
+.cell.dim { opacity: .35; }
+.dstrip {
+  grid-row: 4; grid-column: 3; border: 1px dashed var(--rule); border-radius: 4px; background: transparent;
+  cursor: pointer; padding: 0; font-family: var(--f-mono); font-size: 8px; color: var(--muted);
+  writing-mode: vertical-rl; text-orientation: mixed;
+}
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 2px 10px; margin-top: 6px; font-size: 11.5px; line-height: 1.4; color: var(--muted); }
+.legend .bar { width: 90px; height: 8px; border-radius: 4px; }
+.legend .ends { display: flex; align-items: center; gap: 6px; font-family: var(--f-mono); font-size: 11px; }
+.legend .sw { display: inline-block; width: 12px; height: 12px; border-radius: 3px; vertical-align: -2px; margin-right: 4px;
+  background: repeating-linear-gradient(135deg, var(--hatch) 0 2px, transparent 2px 5px); border: 1px solid var(--rule); }
+.legend b { color: var(--ink); font-weight: 500; }
+.info {
+  margin-top: 5px; font-size: 12.5px; line-height: 1.4; min-height: 2.8em; color: var(--ink);
+  border-top: 1px solid var(--rule); padding-top: 5px;
+}
+.info .k { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+.stage.min .ptable, .stage.min .legend, .stage.min .info { display: none; }
+
+/* ── Story (scrolling text) ──────────────── */
+.story { padding: 8px 16px 40px; min-width: 0; }
+@media (min-width: 900px) { .story { padding: 20px 0 80px; } }
+.sec { max-width: 640px; padding-block: 36px; border-bottom: 1px solid var(--rule); }
+.sec:last-of-type { border-bottom: 0; }
+.eyebrow { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--gold-ink); margin: 0 0 6px; }
+h1, h2 { font-family: var(--f-cond); font-weight: 600; letter-spacing: -0.01em; text-wrap: balance; margin: 0 0 14px; line-height: 1.15; }
+h1 { font-size: clamp(30px, 6vw, 42px); }
+h2 { font-size: clamp(24px, 4.6vw, 30px); }
+.sec p { margin: 0 0 14px; }
+.sec ul, .sec ol { margin: 0 0 14px; padding-left: 22px; }
+.sec li { margin-bottom: 6px; }
+.lead { font-size: 18px; color: var(--ink); }
+.rule-box {
+  border: 1px solid var(--rule); background: var(--surface); border-radius: 10px; padding: 14px 16px; margin: 0 0 16px;
+  display: grid; gap: 8px;
+}
+.rule-box div { display: grid; grid-template-columns: 26px 1fr; gap: 8px; align-items: baseline; }
+.rule-box .n { font-family: var(--f-mono); font-size: 12px; color: var(--gold-ink); }
+.note { font-size: 14px; color: var(--muted); }
+.tag { font-family: var(--f-mono); font-size: 12px; }
+
+details { border-top: 1px solid var(--rule); margin-top: 6px; }
+details:last-of-type { border-bottom: 1px solid var(--rule); }
+summary {
+  list-style: none; cursor: pointer; padding: 11px 0; font-weight: 500; font-size: 15px;
+  display: flex; align-items: center; gap: 10px;
+}
+summary::-webkit-details-marker { display: none; }
+summary::before {
+  content: ''; width: 7px; height: 7px; border-right: 1.5px solid var(--muted); border-bottom: 1.5px solid var(--muted);
+  transform: rotate(-45deg); transition: transform .2s ease; flex: none; margin-left: 2px;
+}
+details[open] summary::before { transform: rotate(45deg); }
+summary .lv { font-family: var(--f-mono); font-size: 11px; font-weight: 400; color: var(--muted); margin-left: auto; }
+details > div { padding: 0 0 14px; font-size: 15px; }
+details > div p { margin: 0 0 10px; }
+.eq {
+  font-family: var(--f-mono); font-size: 14px; background: var(--surface); border: 1px solid var(--rule);
+  border-radius: 8px; padding: 10px 12px; margin: 0 0 10px; overflow-x: auto; white-space: nowrap;
+}
+
+/* figures */
+.fig { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 14px; margin: 0 0 16px; }
+.fig svg { display: block; width: 100%; height: auto; }
+.fig-cap { font-size: 12.5px; color: var(--muted); margin-top: 8px; line-height: 1.45; }
+.svg-ink { fill: var(--ink); } .svg-muted { fill: var(--muted); } .svg-gold { fill: var(--gold); }
+.svg-forest { fill: var(--forest); } .svg-surface { fill: var(--surface); } .svg-soft { fill: var(--forest-soft); }
+.svg-rule-s { stroke: var(--rule); } .svg-ink-s { stroke: var(--ink); } .svg-muted-s { stroke: var(--muted); }
+.svg-gold-s { stroke: var(--gold-ink); } .svg-forest-s { stroke: var(--forest); }
+svg text { font-family: var(--f-sans); }
+svg .mono { font-family: var(--f-mono); }
+
+/* opening animation */
+.hook-cap { font-size: 14px; line-height: 1.45; min-height: 4.4em; margin: 8px 0 0; color: var(--ink); }
+.trend-chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.trend-chips span {
+  font-size: 12px; border: 1px solid var(--gold-ink); color: var(--gold-ink); border-radius: 999px; padding: 2px 10px;
+  opacity: var(--o, 1); transform: translateY(calc((1 - var(--o, 1)) * 6px));
+}
+.hook-ctl { display: flex; gap: 8px; margin-top: 10px; }
+.hook-ctl button {
+  border: 1px solid var(--rule); background: transparent; border-radius: 999px; padding: 3px 12px;
+  font-size: 12px; cursor: pointer; font-family: var(--f-mono);
+}
+.hook-ctl button:hover { border-color: var(--muted); }
+
+.tbl-wrap { overflow-x: auto; margin: 0 0 16px; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--f-mono); font-size: 11px; font-weight: 400; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+td.num { font-family: var(--f-mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* molecule cards */
+.mols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 0 0 16px; }
+@media (min-width: 620px) { .mols { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+.mol { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 10px 10px 12px; display: flex; flex-direction: column; gap: 4px; }
+.mol h3 { margin: 0; font-family: var(--f-cond); font-size: 18px; font-weight: 600; }
+.mol .shape { font-size: 12px; color: var(--muted); }
+.mol .verdict { font-family: var(--f-mono); font-size: 12px; }
+.mol .verdict.polar { color: var(--gold-ink); }
+.mol button {
+  margin-top: 4px; align-self: flex-start; border: 1px solid var(--rule); background: transparent; border-radius: 999px;
+  padding: 3px 10px; font-size: 12px; cursor: pointer;
+}
+.mol button:hover { border-color: var(--muted); }
+
+/* bond builder */
+.bb { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 14px; margin: 0 0 16px; }
+.bb-pick { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-bottom: 10px; }
+.bb-pick label { display: grid; gap: 3px; font-size: 12px; color: var(--muted); }
+.bb-pick select {
+  font: inherit; font-size: 15px; color: var(--ink); background: var(--bg); border: 1px solid var(--rule);
+  border-radius: 8px; padding: 6px 10px; min-width: 140px;
+}
+.bb-out { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 8px; }
+.bb-out div { border-top: 1px solid var(--rule); padding-top: 6px; }
+.bb-out .k { font-size: 11px; font-family: var(--f-mono); color: var(--muted); text-transform: uppercase; letter-spacing: .05em; }
+.bb-out .v { font-size: 17px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.bb-msg { font-size: 14px; margin-top: 10px; color: var(--muted); }
+
+/* quiz */
+.q { border: 1px solid var(--rule); background: var(--surface); border-radius: 12px; padding: 14px; margin: 0 0 12px; }
+.q p.qt { font-weight: 500; margin: 0 0 10px; }
+.q .opts { display: grid; gap: 6px; }
+.q .opt {
+  text-align: left; border: 1px solid var(--rule); background: var(--bg); border-radius: 8px; padding: 8px 12px;
+  cursor: pointer; font-size: 15px;
+}
+.q .opt:hover { border-color: var(--muted); }
+.q .opt.right { border-color: var(--forest); box-shadow: inset 3px 0 0 var(--forest); }
+.q .opt.wrong { border-color: var(--wrong); box-shadow: inset 3px 0 0 var(--wrong); }
+.q .fb { font-size: 14px; margin-top: 8px; color: var(--muted); }
+
+.next-card {
+  display: flex; gap: 14px; align-items: center; border: 1px dashed var(--muted); border-radius: 12px; padding: 14px 16px; margin: 0 0 16px;
+}
+.next-card .soon { font-family: var(--f-mono); font-size: 11px; color: var(--gold-ink); border: 1px solid var(--gold-ink); border-radius: 999px; padding: 1px 8px; white-space: nowrap; }
+.next-card strong { display: block; }
+
+footer.src { font-size: 12.5px; color: var(--muted); padding: 24px 16px 48px; max-width: 1140px; margin: 0 auto; border-top: 1px solid var(--rule); }
+@media (min-width: 900px) { footer.src { padding-inline: 24px; } }
+footer.src p { margin: 0 0 8px; max-width: 760px; }
+footer.src .review { color: var(--gold-ink); font-family: var(--f-mono); font-size: 12px; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition: none !important; animation: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <a class="back" href="../">← Kompas</a>
+  <span class="lab-name">Periodic Trends</span>
+  <span class="lvl">SPM · STPM</span>
+</header>
+
+<div class="wrap">
+
+  <aside class="stage" id="stage" aria-label="Periodic table">
+    <div class="chips" id="chips">
+      <button class="chip" data-mode="zeff">Z<sub>eff</sub></button>
+      <button class="chip" data-mode="radius" title="Atomic radius">Size</button>
+      <button class="chip" data-mode="ion" title="Ionic radius">Ions</button>
+      <button class="chip" data-mode="ie" title="Ionisation energy">IE</button>
+      <button class="chip" data-mode="ea" title="Electron affinity">EA</button>
+      <button class="chip" data-mode="en" title="Electronegativity">EN</button>
+      <button class="chip ghost" id="collapse" aria-expanded="true">Hide</button>
+    </div>
+    <div class="ptable" id="ptable"></div>
+    <div class="legend" id="legend"></div>
+    <div class="info" id="info" aria-live="polite"></div>
+  </aside>
+
+  <main class="story" id="story">
+
+    <!-- 1 -->
+    <section class="sec" id="s1" data-mode="plain" data-hl="F,K" data-collapse="1">
+      <p class="eyebrow">Periodic Trends Lab</p>
+      <h1>Same particles, opposite behaviour</h1>
+      <p class="lead">Fluorine and potassium are built from the same three particles: protons, neutrons and electrons. Yet fluorine snatches electrons from almost anything, and potassium gives its outer electron away to almost anything.</p>
+      <div class="fig anim-fig" id="hook">
+        <svg id="hookSvg" viewBox="0 0 340 250" role="img" aria-label="Animation: fluorine pulls in an extra electron while potassium loses its outer electron"></svg>
+        <p class="hook-cap" id="hookCap" aria-live="polite"></p>
+        <div class="trend-chips" id="hookChips" aria-hidden="true">
+          <span>Atomic size</span><span>Ion size</span><span>Ionisation energy</span><span>Electron affinity</span><span>Electronegativity</span>
+        </div>
+        <div class="hook-ctl">
+          <button type="button" id="hookPause">Pause</button>
+          <button type="button" id="hookReplay">Replay</button>
+        </div>
+      </div>
+      <p>The difference comes from one tug-of-war inside every atom. Once you see it, every trend on this page follows: atomic size, ion size, ionisation energy, electron affinity and electronegativity, and from those, how bonds and molecules behave.</p>
+      <p class="note">The table stays pinned as you scroll and changes colour for each idea. Tap any element to see its value. Use the buttons above the table to switch properties yourself.</p>
+    </section>
+
+    <!-- 2 -->
+    <section class="sec" id="s2" data-mode="zeff">
+      <p class="eyebrow">1 · The root cause</p>
+      <h2>The tug-of-war: effective nuclear charge</h2>
+      <p>The nucleus pulls on the outer electrons. The inner electrons sit in between and block part of that pull; this is called <strong>shielding</strong>. The pull that is left over is the <strong>effective nuclear charge, Z<sub>eff</sub></strong>.</p>
+      <ul>
+        <li><strong>Across a period</strong>, each element adds one proton, but the new electron joins the same shell. Electrons in the same shell shield each other poorly, so Z<sub>eff</sub> climbs: lithium 1.30, fluorine 5.20.</li>
+        <li><strong>Down a group</strong>, each row adds a whole new shell. Z<sub>eff</sub> stays about the same in groups 1 and 2 (sodium and potassium are both 2.20) and rises slowly further right. But the outer electron is now much farther from the nucleus.</li>
+      </ul>
+      <div class="fig anim-fig" id="zf">
+        <svg id="zfSvg" viewBox="0 0 340 236" role="img" aria-label="Animation: effective nuclear charge across period 2 and down group 1"></svg>
+        <p class="hook-cap" id="zfCap" aria-live="polite"></p>
+        <div class="trend-chips" id="zfChips" aria-hidden="true">
+          <span>Across →  Z<sub>eff</sub> 1.30 to 5.20 · atom shrinks</span><span>Down ↓  Z<sub>eff</sub> 2.20 to 2.20 · atom grows</span>
+        </div>
+        <div class="hook-ctl">
+          <button type="button" id="zfPause">Pause</button>
+          <button type="button" id="zfReplay">Replay</button>
+        </div>
+      </div>
+      <div class="rule-box">
+        <div><span class="n">01</span><span>A bigger Z<sub>eff</sub> pulls harder.</span></div>
+        <div><span class="n">02</span><span>A farther electron feels the pull less.</span></div>
+      </div>
+      <p>These two rules carry the rest of the page. Tap elements on the table to compare their tug-of-war below.</p>
+      <div class="fig">
+        <svg id="tug" viewBox="0 0 320 190" role="img" aria-label="Tug-of-war diagram for the selected element"></svg>
+        <p class="fig-cap">A sketch, not to scale. Pull index = Z<sub>eff</sub> ÷ r², with fluorine set to 100. Ring size follows covalent radius.</p>
+      </div>
+      <details>
+        <summary>Go deeper <span class="lv">STPM · Matriculation</span></summary>
+        <div>
+          <p>Slater's rules estimate shielding for an s or p electron: each other electron in the same shell shields 0.35, each electron one shell in shields 0.85, and each electron deeper shields 1.00.</p>
+          <p>They are a model, not a measurement. Other methods (Clementi–Raimondi) give larger values that rise more clearly down a group. The trends across a period agree.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Into the maths <span class="lv">Degree</span></summary>
+        <div>
+          <div class="eq">Z<sub>eff</sub> = Z − S</div>
+          <p>Chlorine: Z = 17, configuration 1s² 2s² 2p⁶ 3s² 3p⁵. For one 3p electron:</p>
+          <div class="eq">S = (6 × 0.35) + (8 × 0.85) + (2 × 1.00) = 10.90 → Z<sub>eff</sub> = 6.10</div>
+        </div>
+      </details>
+    </section>
+
+    <!-- 3 -->
+    <section class="sec" id="s3" data-mode="radius">
+      <p class="eyebrow">2 · Size</p>
+      <h2>Atomic radius</h2>
+      <p>Across a period, atoms get <strong>smaller</strong>: the same shell is pulled in by a stronger Z<sub>eff</sub> (lithium 128 pm, fluorine 57 pm).</p>
+      <p>Down a group, atoms get <strong>bigger</strong>: each row adds a shell, like adding a layer to an onion (fluorine 57 pm, chlorine 102 pm, bromine 120 pm).</p>
+      <div class="fig anim-fig" id="rf">
+        <svg id="rfSvg" viewBox="0 0 340 200" role="img" aria-label="Animation: atoms shrink across period 2 and grow down group 17, drawn to scale"></svg>
+        <p class="hook-cap" id="rfCap" aria-live="polite"></p>
+        <div class="trend-chips" id="rfChips" aria-hidden="true">
+          <span>Across →  128 to 57 pm · smaller</span><span>Down ↓  57 to 120 pm · bigger</span>
+        </div>
+        <div class="hook-ctl">
+          <button type="button" id="rfPause">Pause</button>
+          <button type="button" id="rfReplay">Replay</button>
+        </div>
+      </div>
+      <p class="note">1 pm (picometre) = 10⁻¹² m. Noble gases are hatched: they rarely form bonds, so their radii are estimates.</p>
+      <details>
+        <summary>Go deeper <span class="lv">STPM · Matriculation</span></summary>
+        <div>
+          <p>An atom has no hard edge, so "radius" needs a definition. This table uses the covalent radius: half the distance between two identical atoms bonded together.</p>
+          <p>Gallium (122 pm) is barely bigger than aluminium (121 pm). The ten 3d electrons added in between (the thin strip in row 4) shield poorly, so gallium's outer electrons feel a stronger pull than expected. This is the d-block contraction.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Into the maths <span class="lv">Degree</span></summary>
+        <div>
+          <p>For a hydrogen-like orbital, the most likely distance of the electron grows with n² and shrinks with Z<sub>eff</sub>. The Orbital Lab sizes its clouds the same way.</p>
+          <div class="eq">r ∝ n² ÷ Z<sub>eff</sub></div>
+        </div>
+      </details>
+    </section>
+
+    <!-- 4 -->
+    <section class="sec" id="s4" data-mode="ion">
+      <p class="eyebrow">3 · Size after a change</p>
+      <h2>Ionic radius</h2>
+      <p>Atoms that <strong>lose</strong> electrons shrink; atoms that <strong>gain</strong> electrons swell. On the table, the dashed ring is the atom and the filled circle is its common ion.</p>
+      <ul>
+        <li>Sodium (166 pm) becomes Na⁺ (102 pm): it loses its whole outer shell.</li>
+        <li>Chlorine (102 pm) becomes Cl⁻ (181 pm): one extra electron, the same 17 protons, more repulsion.</li>
+      </ul>
+      <div class="fig anim-fig" id="if">
+        <svg id="ifSvg" viewBox="0 0 340 214" role="img" aria-label="Animation: sodium loses an electron and shrinks; chlorine gains it and swells"></svg>
+        <p class="hook-cap" id="ifCap" aria-live="polite"></p>
+        <div class="trend-chips" id="ifChips" aria-hidden="true">
+          <span>Na → Na⁺  166 to 102 pm · shrinks</span><span>Cl → Cl⁻  102 to 181 pm · swells</span>
+        </div>
+        <div class="hook-ctl">
+          <button type="button" id="ifPause">Pause</button>
+          <button type="button" id="ifReplay">Replay</button>
+        </div>
+      </div>
+      <p>Ions with the same number of electrons line up by proton count. All five below have 10 electrons. More protons pull the same cloud tighter.</p>
+      <div class="fig">
+        <svg id="iso" viewBox="0 0 340 140" role="img" aria-label="Ions with 10 electrons, from largest to smallest"></svg>
+        <p class="fig-cap">Circles drawn to scale. Ionic radii for six-fold coordination (Shannon).</p>
+      </div>
+      <details>
+        <summary>Go deeper <span class="lv">STPM · Matriculation</span></summary>
+        <div>
+          <p>Small, highly charged cations distort (polarise) large anions and pull their electron cloud towards themselves. This gives an ionic bond some covalent character (Fajans' rules).</p>
+          <p>It is why aluminium chloride behaves partly like a covalent compound while sodium chloride is ionic.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Into the maths <span class="lv">Degree</span></summary>
+        <div>
+          <p>Polarising power tracks charge density, roughly charge ÷ radius.</p>
+          <div class="eq">Na⁺: 1 ÷ 102 = 0.0098 &nbsp;·&nbsp; Al³⁺: 3 ÷ 53.5 = 0.0561</div>
+          <p>Al³⁺ is about 5.7 times stronger.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- 5 -->
+    <section class="sec" id="s5" data-mode="ie" data-hl="Be,B,N,O">
+      <p class="eyebrow">4 · Holding on</p>
+      <h2>Ionisation energy</h2>
+      <p>Ionisation energy is the energy needed to remove one electron from a gaseous atom. High means the atom holds on tightly.</p>
+      <ul>
+        <li>Across a period it <strong>rises</strong> (lithium 520 kJ/mol, neon 2081 kJ/mol).</li>
+        <li>Down a group it <strong>falls</strong> (lithium 520, sodium 496, potassium 419).</li>
+      </ul>
+      <p>Two dips break the pattern (outlined on the table), and they are evidence for subshells:</p>
+      <ol>
+        <li><strong>Beryllium 900 → boron 801.</strong> Boron's electron sits in a 2p orbital, slightly higher in energy and shielded by the 2s pair.</li>
+        <li><strong>Nitrogen 1402 → oxygen 1314.</strong> Oxygen's fourth p electron has to share an orbital, and the pair repel each other.</li>
+      </ol>
+      <div class="fig anim-fig" id="ief">
+        <svg id="ieSvg" viewBox="0 0 340 348" role="img" aria-label="Animation: first ionisation energy across period 2 with two dips explained by orbital boxes, then down group 1"></svg>
+        <p class="hook-cap" id="ieCap" aria-live="polite"></p>
+        <div class="trend-chips" id="ieChips" aria-hidden="true">
+          <span>Across →  520 to 2081 kJ/mol · rises</span><span>Down ↓  520 to 419 kJ/mol · falls</span>
+        </div>
+        <div class="hook-ctl">
+          <button type="button" id="iePause">Pause</button>
+          <button type="button" id="ieReplay">Replay</button>
+        </div>
+      </div>
+      <details>
+        <summary>Go deeper <span class="lv">STPM · Matriculation</span></summary>
+        <div>
+          <div class="eq">X(g) → X⁺(g) + e⁻ &nbsp;&nbsp; ΔH &gt; 0</div>
+          <p>Successive ionisation energies reveal the shells. The huge jump shows where an electron has to come from an inner shell. Exam questions use this to deduce an element's group.</p>
+          <div class="fig" style="margin-top:6px">
+            <svg id="succ" viewBox="0 0 340 200" role="img" aria-label="Successive ionisation energies of sodium and magnesium"></svg>
+            <p class="fig-cap">Log scale: each gridline is ten times the one below. Gold bar = the first electron taken from an inner shell.</p>
+          </div>
+        </div>
+      </details>
+      <details>
+        <summary>Into the maths <span class="lv">Degree</span></summary>
+        <div>
+          <p>For a hydrogen-like atom the energy of an electron is set by Z<sub>eff</sub> and n. Hydrogen itself: 13.6 eV, which is 1312 kJ/mol (1 eV = 96.485 kJ/mol).</p>
+          <div class="eq">E<sub>n</sub> = −13.6 eV × Z<sub>eff</sub>² ÷ n²</div>
+          <p>With Slater's Z<sub>eff</sub> this predicts the direction of the trends but not the exact values.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- 6 -->
+    <section class="sec" id="s6" data-mode="ea" data-hl="N,F,Cl">
+      <p class="eyebrow">5 · Welcoming one more</p>
+      <h2>Electron affinity</h2>
+      <p>Electron affinity is the energy change when a gaseous atom gains one electron. Negative means energy is released: the atom welcomes the electron. Chlorine releases the most (−349 kJ/mol).</p>
+      <p>It generally gets more negative across a period and less negative down a group, with three exceptions:</p>
+      <ul>
+        <li><strong>No stable negative ion</strong> (hatched): noble gases, beryllium, magnesium. The electron would have to start a new shell or subshell.</li>
+        <li><strong>Nitrogen ≈ 0</strong>: its half-filled p subshell resists.</li>
+        <li><strong>Fluorine (−328) releases less than chlorine (−349)</strong>: it is so small that the new electron is crowded.</li>
+      </ul>
+      <div class="fig anim-fig" id="eaf">
+        <svg id="eaSvg" viewBox="0 0 340 352" role="img" aria-label="Animation: electrons dropping into period 2 atoms, with energy released as downward bars, then fluorine, chlorine and bromine compared"></svg>
+        <p class="hook-cap" id="eaCap" aria-live="polite"></p>
+        <div class="trend-chips" id="eaChips" aria-hidden="true">
+          <span>Across →  generally more negative</span><span>Down ↓  generally less negative</span>
+        </div>
+        <div class="hook-ctl">
+          <button type="button" id="eaPause">Pause</button>
+          <button type="button" id="eaReplay">Replay</button>
+        </div>
+      </div>
+      <p class="note">Darker cells release more energy. Some textbooks drop the minus sign (+349); same fact.</p>
+      <details>
+        <summary>Go deeper <span class="lv">STPM · Matriculation</span></summary>
+        <div>
+          <div class="eq">X(g) + e⁻ → X⁻(g)</div>
+          <p>The second electron affinity is always positive: adding an electron to an ion that is already negative costs energy (O⁻ + e⁻ → O²⁻, about +800 kJ/mol).</p>
+          <p>So why does O²⁻ exist in compounds? Because the lattice energy released when the solid forms pays that cost. Section 9 does the same accounting for salt.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- 7 -->
+    <section class="sec" id="s7" data-mode="en">
+      <p class="eyebrow">6 · Pull inside a bond</p>
+      <h2>Electronegativity</h2>
+      <p>Electronegativity is how strongly an atom pulls <strong>shared</strong> electrons towards itself in a bond. The Pauling scale runs from about 0.8 to 4.0: fluorine is highest (3.98), potassium lowest here (0.82).</p>
+      <p>It rises across a period and falls down a group, for the same two reasons.</p>
+      <div class="fig anim-fig" id="enf">
+        <svg id="enSvg" viewBox="0 0 340 296" role="img" aria-label="Animation: electron affinity on a lone atom compared with electronegativity in a bond, then electronegativity values on the Pauling scale"></svg>
+        <p class="hook-cap" id="enCap" aria-live="polite"></p>
+        <div class="trend-chips" id="enChips" aria-hidden="true">
+          <span>Across →  rises to F 3.98</span><span>Down ↓  falls (F 3.98 → Br 2.96)</span>
+        </div>
+        <div class="hook-ctl">
+          <button type="button" id="enPause">Pause</button>
+          <button type="button" id="enReplay">Replay</button>
+        </div>
+      </div>
+      <p class="note">Helium, neon and argon have no value: they form no ordinary bonds.</p>
+      <details>
+        <summary>Go deeper <span class="lv">STPM · Matriculation</span></summary>
+        <div>
+          <p>Mulliken's definition makes the link visible: electronegativity is roughly the average of how hard an atom holds its own electrons (ionisation energy) and how much it welcomes a new one (electron affinity).</p>
+          <p>Pauling built his scale from bond energies instead. The two scales agree closely.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Into the maths <span class="lv">Degree</span></summary>
+        <div>
+          <p>Pauling compared the real A–B bond energy with what a perfectly non-polar bond would have. The extra energy comes from the electronegativity difference. One common form, with energies in kJ/mol:</p>
+          <div class="eq">|χ<sub>A</sub> − χ<sub>B</sub>| = 0.102 √Δ</div>
+          <div class="eq">Δ = E(A–B) − √( E(A–A) × E(B–B) )</div>
+        </div>
+      </details>
+    </section>
+
+    <!-- 8 -->
+    <section class="sec" id="s8" data-mode="en" data-hl="H,Cl,Na">
+      <p class="eyebrow">7 · Bonds</p>
+      <h2>From sharing to giving: the bond spectrum</h2>
+      <p>When two atoms bond, they share electrons. How fairly they share depends on the electronegativity difference, ΔEN.</p>
+      <ul>
+        <li><strong>Equal pull</strong> (H–H, Cl–Cl, ΔEN = 0): equal sharing, a <strong>non-polar covalent</strong> bond.</li>
+        <li><strong>Unequal pull</strong> (H–Cl, ΔEN 0.96): the shared electrons lean towards chlorine. Chlorine becomes slightly negative (δ−), hydrogen slightly positive (δ+). A <strong>polar covalent</strong> bond.</li>
+        <li><strong>Very unequal pull</strong> (Na–Cl, ΔEN 2.23): the electron is effectively handed over. Na⁺ and Cl⁻: an <strong>ionic</strong> bond.</li>
+      </ul>
+      <div class="fig anim-fig" id="bsf">
+        <svg id="bsSvg" viewBox="0 0 340 222" role="img" aria-label="Animation: the shared electron pair in Cl–Cl, H–Cl and Na–Cl, with a marker sliding along the bond spectrum"></svg>
+        <p class="hook-cap" id="bsCap" aria-live="polite"></p>
+        <div class="trend-chips" id="bsChips" aria-hidden="true">
+          <span>ΔEN 0 · non-polar</span><span>ΔEN 0.96 · polar covalent</span><span>ΔEN 2.23 · ionic</span>
+        </div>
+        <div class="hook-ctl">
+          <button type="button" id="bsPause">Pause</button>
+          <button type="button" id="bsReplay">Replay</button>
+        </div>
+      </div>
+      <div class="fig">
+        <svg id="spec" viewBox="0 0 340 120" role="img" aria-label="Bond spectrum by electronegativity difference"></svg>
+        <p class="fig-cap">One continuous scale. The 0.4 and 1.7 boundaries are rules of thumb, so the zones blend.</p>
+      </div>
+      <p>Hydrogen fluoride (ΔEN 1.78) sits past the 1.7 line, yet it is still a covalent molecule. Treat the cut-offs as a guide.</p>
+      <details>
+        <summary>Go deeper <span class="lv">STPM · Matriculation</span></summary>
+        <div>
+          <p>Pauling estimated a bond's percentage ionic character from ΔEN: H–Cl about 21%, H–F about 55%, Na–Cl about 71%. Even "ionic" NaCl keeps some sharing.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Into the maths <span class="lv">Degree</span></summary>
+        <div>
+          <div class="eq">% ionic = 100 × (1 − e<sup>−(ΔEN)²/4</sup>)</div>
+          <p>H–Cl: ΔEN = 0.96 → 100 × (1 − e<sup>−0.230</sup>) ≈ 21%.</p>
+        </div>
+      </details>
+    </section>
+
+    <!-- 9 -->
+    <section class="sec" id="s9" data-mode="en" data-hl="C,N,O,B,Cl,F">
+      <p class="eyebrow">8 · Molecules</p>
+      <h2>Polar bonds, polar molecules?</h2>
+      <p>Picture each polar bond as an arrow pointing towards the more electronegative atom. A molecule is polar only if its arrows do <strong>not</strong> cancel out. Shape decides.</p>
+      <div class="mols" id="mols"></div>
+      <p class="note">Non-polar means the arrows cancel. 2D sketches of 3D shapes. Grey arrows are bond dipoles, their length set by ΔEN; the gold arrow is their sum. D = debye, the unit of dipole moment (measured values).</p>
+      <details>
+        <summary>Go deeper <span class="lv">STPM · Matriculation</span></summary>
+        <div>
+          <p>Lone pairs are what bend water and lift ammonia into a pyramid (VSEPR). Without them, both would be flat and non-polar. Try "Flatten it" on those two cards.</p>
+        </div>
+      </details>
+      <details>
+        <summary>Into the maths <span class="lv">Degree</span></summary>
+        <div>
+          <p>Dipoles add as vectors. For water, with bond angle θ = 104.5°:</p>
+          <div class="eq">μ(H₂O) = 2 μ(O–H) cos(θ/2)</div>
+          <div class="eq">μ(O–H) ≈ 1.85 ÷ (2 × cos 52.25°) ≈ 1.51 D</div>
+        </div>
+      </details>
+    </section>
+
+    <!-- 10 -->
+    <section class="sec" id="s10" data-mode="en" data-hl="Li,Na,K,F,Cl,Br">
+      <p class="eyebrow">9 · Reactions, the bridge</p>
+      <h2>Why atoms react</h2>
+      <p>Atoms on the left hold their outer electrons loosely (low ionisation energy). Atoms on the right, except the noble gases, pull electrons strongly (high electronegativity). Put one of each together and an electron moves. Sodium and chlorine give salt.</p>
+      <p>The same logic explains reactivity down a group:</p>
+      <ul>
+        <li><strong>Group 1 gets more reactive going down</strong> (lithium &lt; sodium &lt; potassium): the outer electron is farther away and easier to lose (520 → 496 → 419 kJ/mol).</li>
+        <li><strong>Group 17 gets less reactive going down</strong> (fluorine &gt; chlorine &gt; bromine): the incoming electron is pulled less strongly (3.98 → 3.16 → 2.96). That is why chlorine water turns potassium bromide solution orange: chlorine takes bromide's electron.</li>
+        <li><strong>Noble gases barely react</strong>: full shells, very high ionisation energy, no stable negative ion.</li>
+      </ul>
+      <div class="rule-box">
+        <div><span class="n">Rx</span><span><strong>Why it matters in pharmacy.</strong> Polarity decides what dissolves in what. Water is polar, so it dissolves salts and polar molecules; oils are non-polar and dissolve non-polar ones. A medicine has to dissolve in blood yet cross fatty cell membranes, so its polarity is a design choice.</span></div>
+      </div>
+      <details>
+        <summary>Go deeper <span class="lv">STPM · Matriculation</span></summary>
+        <div>
+          <p>Moving an electron from a gas-phase sodium atom to a gas-phase chlorine atom actually costs energy:</p>
+          <div class="eq">+496 (IE of Na) − 349 (EA of Cl) = +147 kJ/mol</div>
+          <p>Salt still forms because the ions pack into a crystal and release lattice energy (about −787 kJ/mol). The full accounting is the Born–Haber cycle.</p>
+        </div>
+      </details>
+      <a class="next-card" href="acidbase.html" style="margin-top:16px;text-decoration:none;color:inherit">
+        <div>
+          <strong>See a reaction happen at particle level</strong>
+          <span class="note">Acid–Base Lab: neutralisation, equivalence point and equilibrium.</span>
+        </div>
+        <span class="soon">Open →</span>
+      </a>
+    </section>
+
+    <!-- 11 -->
+    <section class="sec" id="s11" data-mode="en" data-free="1">
+      <p class="eyebrow">10 · Your turn</p>
+      <h2>Try it yourself</h2>
+      <p>Pick two elements, or tap them on the table while this section is on screen.</p>
+      <div class="bb">
+        <div class="bb-pick">
+          <label for="bbA">Atom 1<select id="bbA"></select></label>
+          <label for="bbB">Atom 2<select id="bbB"></select></label>
+        </div>
+        <svg id="bbSvg" viewBox="0 0 340 120" role="img" aria-label="Shared electron cloud between the two atoms"></svg>
+        <div class="bb-out">
+          <div><div class="k">ΔEN</div><div class="v" id="bbD">–</div></div>
+          <div><div class="k">Ionic character</div><div class="v" id="bbI">–</div></div>
+          <div><div class="k">Bond type</div><div class="v" id="bbT">–</div></div>
+        </div>
+        <p class="bb-msg" id="bbMsg"></p>
+      </div>
+
+      <h2 style="font-size:22px;margin-top:28px">All trends on one page</h2>
+      <div class="tbl-wrap">
+        <table>
+          <thead><tr><th>Property</th><th>Across →</th><th>Down ↓</th><th>Because</th></tr></thead>
+          <tbody>
+            <tr><td>Z<sub>eff</sub></td><td>Rises</td><td>Similar or rises slowly</td><td>Same-shell electrons shield poorly</td></tr>
+            <tr><td>Atomic size</td><td>Shrinks</td><td>Grows</td><td>Stronger pull; then extra shells</td></tr>
+            <tr><td>Ion size</td><td>Shrinks</td><td>Grows</td><td>Cations lose a shell; anions gain repulsion</td></tr>
+            <tr><td>Ionisation energy</td><td>Rises</td><td>Falls</td><td>Tighter hold; then a farther electron</td></tr>
+            <tr><td>Electron affinity</td><td>More negative</td><td>Less negative</td><td>Same, with many exceptions</td></tr>
+            <tr><td>Electronegativity</td><td>Rises</td><td>Falls</td><td>Same two rules, inside a bond</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 style="font-size:22px;margin-top:28px">Quick check</h2>
+      <p class="note">Three questions. Answers show on screen only; nothing is saved.</p>
+      <div id="quiz"></div>
+    </section>
+
+  </main>
+</div>
+
+<footer class="src">
+  <p class="review">Review build: data values are pending a check against the sources below.</p>
+  <p><strong>Data.</strong> Ionisation energies: NIST Atomic Spectra Database (measured). Electron affinities: CRC Handbook of Chemistry and Physics (measured). Covalent radii: Cordero et al. 2008, Dalton Transactions (derived from bond lengths). Ionic radii: Shannon 1976, Acta Crystallographica A, six-fold coordination (derived). Electronegativity: Pauling scale as revised by Allred 1961 (derived scale). Z<sub>eff</sub>: Slater's rules, 1930 (model). Dipole moments: CRC Handbook (measured).</p>
+  <p><strong>Model note.</strong> Z<sub>eff</sub> uses Slater's rules, the same approximation as the Orbital Lab. Covalent and ionic radii come from different methods, so compare an ion with its own atom, not across scales.</p>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  /* ── Data: [sym, name, Z, row, group, Zeff(Slater), r_cov pm, ion, r_ion pm, IE1 kJ/mol, EA ΔH kJ/mol (null = no stable anion), EN Pauling] ── */
+  const RAW = [
+    ['H','Hydrogen',1,1,1,1.00,31,null,null,1312,-73,2.20],
+    ['He','Helium',2,1,18,1.70,28,null,null,2372,null,null],
+    ['Li','Lithium',3,2,1,1.30,128,'Li⁺',76,520,-60,0.98],
+    ['Be','Beryllium',4,2,2,1.95,96,'Be²⁺',45,900,null,1.57],
+    ['B','Boron',5,2,13,2.60,84,null,null,801,-27,2.04],
+    ['C','Carbon',6,2,14,3.25,76,null,null,1086,-122,2.55],
+    ['N','Nitrogen',7,2,15,3.90,71,null,null,1402,null,3.04],
+    ['O','Oxygen',8,2,16,4.55,66,'O²⁻',140,1314,-141,3.44],
+    ['F','Fluorine',9,2,17,5.20,57,'F⁻',133,1681,-328,3.98],
+    ['Ne','Neon',10,2,18,5.85,58,null,null,2081,null,null],
+    ['Na','Sodium',11,3,1,2.20,166,'Na⁺',102,496,-53,0.93],
+    ['Mg','Magnesium',12,3,2,2.85,141,'Mg²⁺',72,738,null,1.31],
+    ['Al','Aluminium',13,3,13,3.50,121,'Al³⁺',54,578,-42,1.61],
+    ['Si','Silicon',14,3,14,4.15,111,null,null,787,-134,1.90],
+    ['P','Phosphorus',15,3,15,4.80,107,null,null,1012,-72,2.19],
+    ['S','Sulfur',16,3,16,5.45,105,'S²⁻',184,1000,-200,2.58],
+    ['Cl','Chlorine',17,3,17,6.10,102,'Cl⁻',181,1251,-349,3.16],
+    ['Ar','Argon',18,3,18,6.75,106,null,null,1521,null,null],
+    ['K','Potassium',19,4,1,2.20,203,'K⁺',138,419,-48,0.82],
+    ['Ca','Calcium',20,4,2,2.85,176,'Ca²⁺',100,590,-2,1.00],
+    ['Ga','Gallium',31,4,13,5.00,122,'Ga³⁺',62,579,-41,1.81],
+    ['Ge','Germanium',32,4,14,5.65,120,null,null,762,-119,2.01],
+    ['As','Arsenic',33,4,15,6.30,119,null,null,947,-78,2.18],
+    ['Se','Selenium',34,4,16,6.95,120,'Se²⁻',198,941,-195,2.55],
+    ['Br','Bromine',35,4,17,7.60,120,'Br⁻',196,1140,-325,2.96],
+    ['Kr','Krypton',36,4,18,8.25,116,null,null,1351,null,3.00]
+  ];
+  const EL = RAW.map(r => ({ sym:r[0], name:r[1], Z:r[2], row:r[3], group:r[4], zeff:r[5], rcov:r[6], ion:r[7], rion:r[8], ie:r[9], ea:r[10], en:r[11] }));
+  const BY = {}; EL.forEach(e => BY[e.sym] = e);
+  const NOBLE = new Set(['He','Ne','Ar','Kr']);
+  const METALS = new Set(['Li','Be','Na','Mg','Al','K','Ca','Ga']);
+  const COL = { 1:1, 2:2, 13:4, 14:5, 15:6, 16:7, 17:8, 18:9 };
+
+  /* ── Colour ramp (data colours, same in both themes) ── */
+  const STOPS = ['#f5efd9', '#ecd27f', '#a9b56c', '#4f8160', '#22423a'];
+  function hex(h) { return [1,3,5].map(i => parseInt(h.slice(i, i+2), 16)); }
+  function ramp(t) {
+    t = Math.max(0, Math.min(1, t));
+    const s = t * (STOPS.length - 1), i = Math.min(STOPS.length - 2, Math.floor(s)), f = s - i;
+    const a = hex(STOPS[i]), b = hex(STOPS[i+1]);
+    const c = a.map((v, k) => Math.round(v + (b[k] - v) * f));
+    const lum = (0.299*c[0] + 0.587*c[1] + 0.114*c[2]) / 255;
+    return { bg: `rgb(${c[0]},${c[1]},${c[2]})`, fg: lum < 0.52 ? '#f6f4ec' : '#1b1f1c' };
+  }
+  const RAMP_CSS = 'linear-gradient(90deg,' + STOPS.join(',') + ')';
+
+  /* ── Modes ── */
+  const MODES = {
+    plain:  { title: 'Main-group elements, H to Kr', kind: 'plain' },
+    zeff:   { title: 'Effective nuclear charge', unit: 'Slater', kind: 'heat', get: e => e.zeff, min: 1, max: 8.25, fmt: v => v.toFixed(2), across: 'rises', down: 'similar or rises slowly' },
+    radius: { title: 'Atomic radius', unit: 'pm', kind: 'circ', get: e => e.rcov, fmt: v => v, across: 'shrinks', down: 'grows' },
+    ion:    { title: 'Ionic radius', unit: 'pm', kind: 'ion', get: e => e.rion, fmt: v => v, across: 'shrinks', down: 'grows' },
+    ie:     { title: 'First ionisation energy', unit: 'kJ/mol', kind: 'heat', get: e => e.ie, min: 400, max: 2400, fmt: v => v, across: 'rises', down: 'falls' },
+    ea:     { title: 'Electron affinity, ΔH', unit: 'kJ/mol', kind: 'heat', get: e => e.ea, min: 0, max: 350, t: v => -v, fmt: v => (v < 0 ? '−' + (-v) : v), across: 'more negative', down: 'less negative' },
+    en:     { title: 'Electronegativity', unit: 'Pauling', kind: 'heat', get: e => e.en, min: 0.8, max: 4.0, fmt: v => v.toFixed(2), across: 'rises', down: 'falls' }
+  };
+
+  let userToggled = false;
+  let mode = 'plain', manual = false, activeSec = null, selected = 'Cl', hl = new Set();
+  const cells = {};
+  const ptable = document.getElementById('ptable');
+  const legend = document.getElementById('legend');
+  const info = document.getElementById('info');
+  const stage = document.getElementById('stage');
+
+  /* ── Build table ── */
+  EL.forEach(e => {
+    const b = document.createElement('button');
+    b.className = 'cell' + (e.sym === 'H' ? ' h-el' : '');
+    b.style.gridRow = e.row; b.style.gridColumn = COL[e.group];
+    b.setAttribute('aria-label', e.name);
+    b.addEventListener('click', () => onTap(e.sym));
+    ptable.appendChild(b); cells[e.sym] = b;
+  });
+  const strip = document.createElement('button');
+  strip.className = 'dstrip'; strip.textContent = 'Sc–Zn';
+  strip.setAttribute('aria-label', 'Transition metals, scandium to zinc');
+  strip.addEventListener('click', () => {
+    info.innerHTML = '<strong>Sc to Zn</strong>, the transition metals, are left out here. Their 3d filling is covered in the Orbital Lab. They sit between calcium and gallium, which is why gallium is smaller than expected.';
+  });
+  ptable.appendChild(strip);
+
+  function render() {
+    const m = MODES[mode];
+    EL.forEach(e => {
+      const c = cells[e.sym];
+      c.className = 'cell' + (e.sym === 'H' ? ' h-el' : '');
+      c.style.background = ''; c.style.color = '';
+      let val = '', svg = '';
+      if (m.kind === 'heat') {
+        const v = m.get(e);
+        if (v === null || v === undefined) { c.classList.add('hatch'); val = '—'; }
+        else {
+          const tv = m.t ? m.t(v) : v;
+          const col = ramp((tv - m.min) / (m.max - m.min));
+          c.style.background = col.bg; c.style.color = col.fg; val = m.fmt(v);
+        }
+      } else if (m.kind === 'circ') {
+        c.classList.add('circ');
+        if (NOBLE.has(e.sym)) c.classList.add('hatch');
+        const r = 46 * e.rcov / 203;
+        svg = `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><circle cx="50" cy="52" r="${r.toFixed(1)}" style="fill:var(--forest);fill-opacity:.28;stroke:var(--forest);stroke-width:1.5"/></svg>`;
+        val = e.rcov;
+      } else if (m.kind === 'ion') {
+        c.classList.add('circ');
+        const ra = 46 * e.rcov / 203;
+        let inner = `<circle cx="50" cy="52" r="${ra.toFixed(1)}" style="fill:none;stroke:var(--muted);stroke-width:1.5;stroke-dasharray:4 3"/>`;
+        if (e.ion) {
+          const ri = 46 * e.rion / 203;
+          const cation = e.ion.includes('⁺');
+          inner += `<circle cx="50" cy="52" r="${ri.toFixed(1)}" style="fill:${cation ? 'var(--gold)' : 'var(--forest)'};fill-opacity:${cation ? .75 : .45}"/>`;
+          val = e.ion;
+        } else { c.classList.add('dim'); val = ''; }
+        svg = `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" aria-hidden="true">${inner}</svg>`;
+      }
+      c.innerHTML = svg + `<span class="z">${e.Z}</span><span class="sym">${e.sym}</span>` + (val !== '' ? `<span class="val">${val}</span>` : '');
+      if (hl.has(e.sym)) c.classList.add('hl');
+      if (e.sym === selected) c.classList.add('sel');
+    });
+    renderLegend();
+    document.querySelectorAll('.chip[data-mode]').forEach(ch => ch.classList.toggle('on', ch.dataset.mode === mode));
+    updateInfo();
+  }
+
+  function renderLegend() {
+    const m = MODES[mode];
+    if (m.kind === 'plain') { legend.innerHTML = `<b>${m.title}</b><span>Groups 1, 2 and 13–18. Dashed H: placed above lithium, behaves like a non-metal.</span>`; return; }
+    let scale = '';
+    if (m.kind === 'heat') {
+      const lo = mode === 'ea' ? '0' : m.fmt(m.min), hi = mode === 'ea' ? '−350' : m.fmt(m.max);
+      scale = `<span class="ends">${lo}<span class="bar" style="background:${RAMP_CSS}"></span>${hi}</span>`;
+    } else if (m.kind === 'circ') scale = '<span>Circle size = radius</span>';
+    else scale = '<span>Dashed ring = atom · gold = cation · green = anion</span>';
+    const hatchNote = mode === 'radius' ? 'estimated' : mode === 'ea' ? 'no stable anion' : mode === 'ion' ? '' : 'no value';
+    legend.innerHTML = `<b>${m.title}</b><span class="tag">${m.unit}</span>${scale}<span>Across → ${m.across} · Down ↓ ${m.down}</span>` +
+      (hatchNote && (m.kind === 'heat' || mode === 'radius') ? `<span><i class="sw"></i>${hatchNote}</span>` : '');
+  }
+
+  function updateInfo() {
+    const e = BY[selected]; if (!e) return;
+    let t = '';
+    const head = `<strong>${e.name}</strong> <span class="k">Z ${e.Z}</span> · `;
+    switch (mode) {
+      case 'zeff': t = `Z<sub>eff</sub> on the outer electron ≈ ${e.zeff.toFixed(2)} (out of ${e.Z} protons).`; break;
+      case 'radius': t = `Covalent radius ${e.rcov} pm` + (NOBLE.has(e.sym) ? ' (estimate; noble gases rarely bond).' : '.'); break;
+      case 'ion': t = e.ion ? `Atom ${e.rcov} pm → ${e.ion} ${e.rion} pm: ${e.rion < e.rcov ? 'smaller, electrons lost' : 'larger, electron gained'}.` : 'No simple common ion shown for this element.'; break;
+      case 'ie': t = `First ionisation energy ${e.ie} kJ/mol.`; break;
+      case 'ea': t = e.ea === null ? (e.sym === 'N' ? 'Close to zero; no stable negative ion.' : 'No stable negative ion.') : `Electron affinity ΔH = −${-e.ea} kJ/mol (energy released).`; break;
+      case 'en': t = e.en === null ? 'No value: forms no ordinary bonds.' : `Electronegativity ${e.en.toFixed(2)} (Pauling).`; break;
+      default: t = `Group ${e.group}, period ${e.row}. Tap another element, or scroll on.`;
+    }
+    if (e.sym === 'H' && mode === 'plain') t += ' Sits above lithium but behaves like a non-metal.';
+    info.innerHTML = head + t;
+  }
+
+  function onTap(sym) {
+    selected = sym;
+    if (activeSec && activeSec.dataset.free) bbTap(sym);
+    render(); drawTug();
+  }
+
+  /* chips + collapse */
+  document.querySelectorAll('.chip[data-mode]').forEach(ch => ch.addEventListener('click', () => { mode = ch.dataset.mode; manual = true; render(); }));
+  const collapseBtn = document.getElementById('collapse');
+  function setMin(min) {
+    stage.classList.toggle('min', min);
+    collapseBtn.textContent = min ? 'Show table' : 'Hide';
+    collapseBtn.setAttribute('aria-expanded', String(!min));
+  }
+  collapseBtn.addEventListener('click', () => {
+    const min = stage.classList.toggle('min');
+    userToggled = true;
+    collapseBtn.textContent = min ? 'Show table' : 'Hide';
+    collapseBtn.setAttribute('aria-expanded', String(!min));
+  });
+
+  /* ── Scroll: section drives the table ── */
+  const secs = Array.from(document.querySelectorAll('.sec'));
+  function spy() {
+    const wide = window.matchMedia('(min-width: 900px)').matches;
+    const line = wide ? window.innerHeight * 0.4 : stage.getBoundingClientRect().bottom + 80;
+    let cur = secs[0];
+    secs.forEach(s => { if (s.getBoundingClientRect().top < line) cur = s; });
+    if (cur !== activeSec) {
+      activeSec = cur; manual = false;
+      mode = cur.dataset.mode || 'plain';
+      hl = new Set((cur.dataset.hl || '').split(',').filter(Boolean));
+      if (!wide && !userToggled) setMin(!!cur.dataset.collapse);   /* phones: table folds away during the opening animation */
+      render();
+    }
+  }
+  let ticking = false;
+  window.addEventListener('scroll', () => { if (!ticking) { ticking = true; requestAnimationFrame(() => { spy(); ticking = false; }); } }, { passive: true });
+  window.addEventListener('resize', spy);
+
+  /* ── SVG helpers ── */
+  const NS = 'http://www.w3.org/2000/svg';
+  function arrowHead(id, cls) {
+    return `<marker id="${id}" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M1 1L9 5L1 9z" class="${cls}"/></marker>`;
+  }
+
+  /* ── Tug-of-war (section 1) ── */
+  const pullF = 5.20 / Math.pow(0.57, 2);
+  function drawTug() {
+    const e = BY[selected];
+    const svg = document.getElementById('tug');
+    if (!svg) return;
+    const cx = 92, cy = 95;
+    const R = 26 + e.rcov * 0.33;               // outer ring
+    const shells = e.row;
+    let g = `<defs>${arrowHead('ah-tug', 'svg-gold')}</defs>`;
+    for (let n = 1; n <= shells; n++) {
+      const r = 14 + (R - 14) * (n / shells);
+      g += `<circle cx="${cx}" cy="${cy}" r="${r.toFixed(1)}" style="fill:none" class="svg-rule-s" stroke-width="1" ${n < shells ? 'stroke-dasharray="2 3"' : ''}/>`;
+    }
+    const nr = 9 + e.zeff * 1.1;
+    g += `<circle cx="${cx}" cy="${cy}" r="${nr.toFixed(1)}" class="svg-gold"/>`;
+    g += `<text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="11" font-weight="600" fill="#1b1f1c">+${e.zeff.toFixed(1)}</text>`;
+    const ex = cx + R, ey = cy;
+    const pull = e.zeff / Math.pow(e.rcov / 100, 2);
+    const idx = Math.round(100 * pull / pullF);
+    const w = 1.2 + 6 * Math.sqrt(Math.min(1, pull / pullF));
+    g += `<line x1="${ex - 7}" y1="${ey}" x2="${cx + nr + 6}" y2="${cy}" class="svg-gold-s" stroke-width="${w.toFixed(1)}" stroke-linecap="round" marker-end="url(#ah-tug)"/>`;
+    g += `<circle cx="${ex}" cy="${ey}" r="5" class="svg-forest"/>`;
+    const tx = Math.max(cx + R + 18, 218);
+    g += `<text x="${tx}" y="44" font-size="20" font-weight="600" class="svg-ink">${e.sym}</text>`;
+    g += `<text x="${tx}" y="62" font-size="11.5" class="svg-muted">${e.name}</text>`;
+    g += `<text x="${tx}" y="88" font-size="11" class="svg-muted mono">Zeff ${e.zeff.toFixed(2)}</text>`;
+    g += `<text x="${tx}" y="104" font-size="11" class="svg-muted mono">r ${e.rcov} pm</text>`;
+    g += `<text x="${tx}" y="120" font-size="11" class="svg-muted mono">${shells} shell${shells > 1 ? 's' : ''}</text>`;
+    g += `<text x="${tx}" y="146" font-size="11" class="svg-muted">Pull index</text>`;
+    g += `<text x="${tx}" y="168" font-size="20" font-weight="600" class="svg-ink mono">${idx}</text>`;
+    svg.innerHTML = g;
+  }
+
+  /* ── Isoelectronic series (section 3) ── */
+  (function drawIso() {
+    const svg = document.getElementById('iso');
+    const ions = [['O²⁻',140,8],['F⁻',133,9],['Na⁺',102,11],['Mg²⁺',72,12],['Al³⁺',54,13]];
+    const k = 0.27; let x = 6, g = '';
+    ions.forEach(([lab, r, p]) => {
+      const rr = r * k; const cx = x + rr; x += 2 * rr + 12;
+      const anion = lab.includes('⁻');
+      g += `<circle cx="${cx.toFixed(1)}" cy="52" r="${rr.toFixed(1)}" style="fill:${anion ? 'var(--forest)' : 'var(--gold)'};fill-opacity:${anion ? .45 : .75}"/>`;
+      g += `<text x="${cx.toFixed(1)}" y="108" text-anchor="middle" font-size="12.5" font-weight="600" class="svg-ink">${lab}</text>`;
+      g += `<text x="${cx.toFixed(1)}" y="123" text-anchor="middle" font-size="10.5" class="svg-muted mono">${r} pm</text>`;
+      g += `<text x="${cx.toFixed(1)}" y="136" text-anchor="middle" font-size="10.5" class="svg-muted mono">${p} p⁺</text>`;
+    });
+    svg.setAttribute('viewBox', `0 0 ${Math.ceil(x)} 140`);
+    svg.innerHTML = g;
+  })();
+
+  /* ── Successive IE (section 4) ── */
+  (function drawSucc() {
+    const svg = document.getElementById('succ');
+    const sets = [['Sodium', [496, 4562, 6910], 1], ['Magnesium', [738, 1451, 7733], 2]];
+    const top = 18, bot = 160, x0 = 44;
+    const y = v => bot - (Math.log10(v) - 2) / 2 * (bot - top);
+    let g = '';
+    [100, 1000, 10000].forEach(v => {
+      g += `<line x1="${x0}" x2="336" y1="${y(v)}" y2="${y(v)}" class="svg-rule-s" stroke-width="1"/>`;
+      g += `<text x="${x0 - 6}" y="${y(v) + 4}" text-anchor="end" font-size="10" class="svg-muted mono">${v.toLocaleString('en')}</text>`;
+    });
+    sets.forEach(([name, vals, jump], si) => {
+      const gx = x0 + 14 + si * 148;
+      vals.forEach((v, i) => {
+        const bx = gx + i * 42, by = y(v);
+        g += `<rect x="${bx}" y="${by.toFixed(1)}" width="30" height="${(bot - by).toFixed(1)}" rx="2" class="${i === jump ? 'svg-gold' : 'svg-soft'}" ${i === jump ? '' : 'style="stroke:var(--forest);stroke-width:1"'}/>`;
+        g += `<text x="${bx + 15}" y="${(by - 4).toFixed(1)}" text-anchor="middle" font-size="9.5" class="svg-ink mono">${v}</text>`;
+        g += `<text x="${bx + 15}" y="${bot + 13}" text-anchor="middle" font-size="9.5" class="svg-muted mono">${['1st','2nd','3rd'][i]}</text>`;
+      });
+      g += `<text x="${gx + 57}" y="${bot + 32}" text-anchor="middle" font-size="11.5" font-weight="600" class="svg-ink">${name}</text>`;
+    });
+    g += `<text x="${x0 - 6}" y="10" text-anchor="end" font-size="9.5" class="svg-muted">kJ/mol</text>`;
+    svg.innerHTML = g;
+  })();
+
+  /* ── Bond spectrum (section 7) ── */
+  function specX(d, x0, x1) { return x0 + (Math.min(d, 3.3) / 3.3) * (x1 - x0); }
+  function spectrumBar(x0, x1, y, h) {
+    return `<defs><linearGradient id="specg" x1="0" x2="1">
+      <stop offset="0" stop-color="#e3ece6"/><stop offset="${(0.4/3.3).toFixed(3)}" stop-color="#e3ece6"/>
+      <stop offset="${(0.6/3.3).toFixed(3)}" stop-color="#ecd27f"/><stop offset="${(1.5/3.3).toFixed(3)}" stop-color="#ecd27f"/>
+      <stop offset="${(1.9/3.3).toFixed(3)}" stop-color="#4f8160"/><stop offset="1" stop-color="#22423a"/></linearGradient></defs>
+      <rect x="${x0}" y="${y}" width="${x1 - x0}" height="${h}" rx="5" fill="url(#specg)"/>`;
+  }
+  (function drawSpec() {
+    const svg = document.getElementById('spec');
+    const x0 = 16, x1 = 324, y = 54, h = 16;
+    let g = spectrumBar(x0, x1, y, h);
+    [[0.2,'Non-polar'],[1.05,'Polar covalent'],[2.5,'Mostly ionic']].forEach(([d, l]) => {
+      g += `<text x="${specX(d,x0,x1)}" y="${y + h + 32}" text-anchor="middle" font-size="10.5" class="svg-muted">${l}</text>`;
+    });
+    [0, 0.4, 1.7, 3.3].forEach(d => {
+      g += `<text x="${specX(d,x0,x1)}" y="${y + h + 14}" text-anchor="middle" font-size="9.5" class="svg-muted mono">${d}</text>`;
+    });
+    /* two label levels above the bar so neighbours never collide */
+    const pts = [['H–H', 0, 0], ['C–H', 0.35, 1], ['H–Cl', 0.96, 0], ['H–F', 1.78, 1], ['Na–Cl', 2.23, 0], ['K–F', 3.16, 1]];
+    pts.forEach(([l, d, lvl]) => {
+      const x = specX(d, x0, x1);
+      const ly = lvl ? y - 30 : y - 12;
+      g += `<line x1="${x}" x2="${x}" y1="${ly + 3}" y2="${y + h / 2}" class="svg-ink-s" stroke-width="1"/>`;
+      g += `<circle cx="${x}" cy="${y + h / 2}" r="3.5" class="svg-ink"/>`;
+      g += `<text x="${x}" y="${ly}" text-anchor="middle" font-size="10.5" font-weight="600" class="svg-ink">${l}</text>`;
+    });
+    svg.setAttribute('viewBox', '0 0 340 112');
+    svg.innerHTML = g;
+  })();
+
+  /* ── Molecules (section 8) ── */
+  const MOLS = [
+    { f: 'CO₂', center: 'C', shape: 'Straight line', lig: [['O',0],['O',180]], lp: [], D: 0 },
+    { f: 'H₂O', center: 'O', shape: 'Bent, 104.5°', lig: [['H',217.75],['H',322.25]], lp: [60,120], D: 1.85,
+      flat: { shape: 'Hypothetical straight water', lig: [['H',180],['H',0]], lp: [] } },
+    { f: 'BF₃', center: 'B', shape: 'Flat triangle', lig: [['F',90],['F',210],['F',330]], lp: [], D: 0 },
+    { f: 'NH₃', center: 'N', shape: 'Pyramid', lig: [['H',210],['H',270],['H',330]], lp: [90], D: 1.47,
+      flat: { shape: 'Hypothetical flat ammonia', lig: [['H',90],['H',210],['H',330]], lp: [] } },
+    { f: 'CCl₄', center: 'C', shape: 'Tetrahedron, four C–Cl', lig: [['Cl',0],['Cl',90],['Cl',180],['Cl',270]], lp: [], D: 0 },
+    { f: 'CHCl₃', center: 'C', shape: 'Tetrahedron, one C–H', lig: [['H',90],['Cl',0],['Cl',180],['Cl',270]], lp: [], D: 1.04 }
+  ];
+  const molBox = document.getElementById('mols');
+  MOLS.forEach((m, i) => {
+    const card = document.createElement('div'); card.className = 'mol';
+    card.innerHTML = `<h3>${m.f}</h3><div class="shape"></div><svg viewBox="0 0 160 130" aria-hidden="true"></svg><div class="verdict"></div>` + (m.flat ? '<button type="button">Flatten it</button>' : '');
+    molBox.appendChild(card);
+    let flat = false;
+    const draw = () => drawMol(card, m, flat);
+    if (m.flat) card.querySelector('button').addEventListener('click', e => { flat = !flat; e.target.textContent = flat ? 'Restore real shape' : 'Flatten it'; draw(); });
+    draw();
+  });
+  function drawMol(card, m, flat) {
+    const svg = card.querySelector('svg');
+    const geo = flat ? m.flat : m;
+    const cx = 80, cy = 62, L = 42;
+    const enC = BY[m.center].en;
+    const uid = 'm' + Math.random().toString(36).slice(2, 7);
+    let g = `<defs>${arrowHead(uid + 'a', 'svg-muted')}${arrowHead(uid + 'n', 'svg-gold')}</defs>`;
+    let nx = 0, ny = 0;
+    geo.lig.forEach(([s, ang]) => {
+      const a = ang * Math.PI / 180, ux = Math.cos(a), uy = -Math.sin(a);
+      const lx = cx + ux * L, ly = cy + uy * L;
+      g += `<line x1="${cx}" y1="${cy}" x2="${lx.toFixed(1)}" y2="${ly.toFixed(1)}" class="svg-muted-s" stroke-width="2"/>`;
+      const d = BY[s].en - enC;           // + means arrow points to ligand
+      nx += ux * d; ny += uy * d;
+      const len = Math.min(26, 8 + 16 * Math.abs(d));
+      const ox = -uy * 9, oy = ux * 9;    // offset parallel to bond
+      const mx = cx + ux * L * 0.5 + ox, my = cy + uy * L * 0.5 + oy;
+      const sx = mx - ux * len / 2 * Math.sign(d), sy = my - uy * len / 2 * Math.sign(d);
+      const tx = mx + ux * len / 2 * Math.sign(d), ty = my + uy * len / 2 * Math.sign(d);
+      g += `<line x1="${sx.toFixed(1)}" y1="${sy.toFixed(1)}" x2="${tx.toFixed(1)}" y2="${ty.toFixed(1)}" class="svg-muted-s" stroke-width="1.3" marker-end="url(#${uid}a)"/>`;
+      g += `<circle cx="${lx.toFixed(1)}" cy="${ly.toFixed(1)}" r="10" class="svg-surface" style="stroke:var(--rule)"/>`;
+      g += `<text x="${lx.toFixed(1)}" y="${(ly + 4).toFixed(1)}" text-anchor="middle" font-size="${s.length > 1 ? 10 : 11.5}" font-weight="600" class="svg-ink">${s}</text>`;
+    });
+    (geo.lp || []).forEach(ang => {
+      const a = ang * Math.PI / 180, ux = Math.cos(a), uy = -Math.sin(a);
+      const px = cx + ux * 22, py = cy + uy * 22;
+      g += `<circle cx="${(px - uy * 3).toFixed(1)}" cy="${(py + ux * 3).toFixed(1)}" r="2" class="svg-muted"/><circle cx="${(px + uy * 3).toFixed(1)}" cy="${(py - ux * 3).toFixed(1)}" r="2" class="svg-muted"/>`;
+    });
+    g += `<circle cx="${cx}" cy="${cy}" r="12" class="svg-soft" style="stroke:var(--forest)"/>`;
+    g += `<text x="${cx}" y="${cy + 4}" text-anchor="middle" font-size="12" font-weight="600" class="svg-ink">${m.center}</text>`;
+    const net = Math.hypot(nx, ny);
+    if (net > 0.05) {
+      const k = Math.min(48, 14 + 30 * net) / net;
+      g += `<line x1="${cx}" y1="${cy}" x2="${(cx + nx * k).toFixed(1)}" y2="${(cy + ny * k).toFixed(1)}" class="svg-gold-s" stroke-width="3" stroke-linecap="round" marker-end="url(#${uid}n)"/>`;
+    }
+    svg.innerHTML = g;
+    card.querySelector('.shape').textContent = geo.shape;
+    const v = card.querySelector('.verdict');
+    const polar = net > 0.05;
+    v.className = 'verdict' + (polar ? ' polar' : '');
+    v.textContent = flat ? (polar ? 'Polar' : 'Non-polar') : (polar ? `Polar · ${m.D} D` : `Non-polar · 0 D`);
+  }
+
+  /* ── Bond Builder (section 10) ── */
+  const selA = document.getElementById('bbA'), selB = document.getElementById('bbB');
+  EL.forEach(e => {
+    [selA, selB].forEach(s => { const o = document.createElement('option'); o.value = e.sym; o.textContent = `${e.sym} · ${e.name}`; s.appendChild(o); });
+  });
+  selA.value = 'Na'; selB.value = 'Cl';
+  let bbNext = 0;
+  function bbTap(sym) { (bbNext === 0 ? selA : selB).value = sym; bbNext = 1 - bbNext; drawBB(); }
+  selA.addEventListener('change', drawBB); selB.addEventListener('change', drawBB);
+  function drawBB() {
+    const a = BY[selA.value], b = BY[selB.value];
+    const svg = document.getElementById('bbSvg');
+    const D = document.getElementById('bbD'), I = document.getElementById('bbI'), T = document.getElementById('bbT'), M = document.getElementById('bbMsg');
+    const ax = 110, bx = 230, y = 50;
+    let g = '', msg = '';
+    const atom = (x, e, charge) => `<circle cx="${x}" cy="${y}" r="15" class="svg-surface" style="stroke:var(--ink);stroke-width:1.3"/><text x="${x}" y="${y + 4.5}" text-anchor="middle" font-size="13" font-weight="600" class="svg-ink">${e.sym}</text>` +
+      (charge ? `<text x="${x}" y="${y + 38}" text-anchor="middle" font-size="13" font-weight="600" class="svg-gold-s" style="fill:var(--gold-ink)">${charge}</text>` : '');
+    if (a.en === null || b.en === null) {
+      const n = a.en === null ? a : b;
+      D.textContent = '–'; I.textContent = '–'; T.textContent = 'No bond';
+      msg = `${n.name} has a full outer shell and forms no ordinary bonds, so it has no electronegativity value.`;
+      g = atom(ax, a) + atom(bx, b);
+    } else if (METALS.has(a.sym) && METALS.has(b.sym)) {
+      D.textContent = Math.abs(a.en - b.en).toFixed(2); I.textContent = '–'; T.textContent = 'Metallic';
+      msg = 'Two metals do not share or transfer electrons this way. They form metallic bonding (a "sea" of electrons), which this lab does not cover.';
+      g = atom(ax, a) + atom(bx, b);
+    } else {
+      const d = Math.abs(a.en - b.en);
+      const pct = Math.round(100 * (1 - Math.exp(-d * d / 4)));
+      const type = d < 0.4 ? 'Non-polar' : d < 1.7 ? 'Polar covalent' : 'Mostly ionic';
+      D.textContent = d.toFixed(2); I.textContent = pct + '%'; T.textContent = type;
+      const toB = b.en > a.en;
+      const shift = Math.min(1, d / 3.3) * 62 * (toB ? 1 : -1);
+      const ccx = (ax + bx) / 2 + (a.sym === b.sym ? 0 : shift);
+      const rx = 78 - Math.min(1, d / 3.3) * 34;
+      const strong = d >= 1.7;
+      g += `<ellipse cx="${ccx.toFixed(1)}" cy="${y}" rx="${rx.toFixed(1)}" ry="${(30 - Math.min(1, d / 3.3) * 6).toFixed(1)}" style="fill:var(--forest);fill-opacity:.22"/>`;
+      const plus = strong ? '+' : 'δ+', minus = strong ? '−' : 'δ−';
+      const ca = d < 0.05 ? '' : (toB ? plus : minus), cb = d < 0.05 ? '' : (toB ? minus : plus);
+      g += atom(ax, a, ca) + atom(bx, b, cb);
+      if (a.sym === b.sym) msg = 'Identical atoms pull equally, so the electrons are shared evenly.';
+      else if ((a.sym === 'H' && b.sym === 'F') || (a.sym === 'F' && b.sym === 'H')) msg = 'Past the 1.7 line, yet hydrogen fluoride is a covalent molecule. The cut-offs are only a guide.';
+      else msg = `The shared electrons sit closer to ${toB ? b.name.toLowerCase() : a.name.toLowerCase()}, the stronger puller.`;
+    }
+    g += `<text x="170" y="112" text-anchor="middle" font-size="10" class="svg-muted">Green cloud = shared electrons (sketch)</text>`;
+    svg.innerHTML = g; M.textContent = msg;
+  }
+
+  /* ── Quiz (section 10) ── */
+  const QUIZ = [
+    { q: 'Na⁺ and F⁻ both have 10 electrons. Which ion is larger?',
+      o: ['Na⁺, because sodium is the bigger atom', 'F⁻, because it has fewer protons pulling the same 10 electrons', 'They are the same size'], a: 1,
+      e: 'Same electron count, so proton count decides. Fluoride has 9 protons, sodium 11, so F⁻ (133 pm) is larger than Na⁺ (102 pm).' },
+    { q: 'Why is the first ionisation energy of oxygen lower than that of nitrogen?',
+      o: ['Oxygen has fewer protons', 'Oxygen\'s fourth p electron shares an orbital and is repelled by its partner', 'Oxygen\'s outer electron is in a new shell'], a: 1,
+      e: 'Nitrogen has three unpaired p electrons. Oxygen\'s fourth one has to pair up, and the repulsion makes it easier to remove.' },
+    { q: 'CO₂ has two polar C=O bonds. Why is the molecule non-polar?',
+      o: ['Carbon and oxygen have the same electronegativity', 'The molecule is straight, so the two bond dipoles cancel', 'Double bonds are never polar'], a: 1,
+      e: 'Each C=O bond is polar, but they point in exactly opposite directions. Water is bent, so its dipoles add instead.' }
+  ];
+  const quiz = document.getElementById('quiz');
+  QUIZ.forEach((item, qi) => {
+    const box = document.createElement('div'); box.className = 'q';
+    box.innerHTML = `<p class="qt">${qi + 1}. ${item.q}</p><div class="opts"></div><p class="fb" hidden></p>`;
+    const opts = box.querySelector('.opts'), fb = box.querySelector('.fb');
+    item.o.forEach((txt, oi) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'opt'; b.textContent = txt;
+      b.addEventListener('click', () => {
+        opts.querySelectorAll('.opt').forEach((x, xi) => { x.classList.remove('right', 'wrong'); if (xi === item.a) x.classList.add('right'); });
+        if (oi !== item.a) b.classList.add('wrong');
+        fb.hidden = false;
+        fb.textContent = (oi === item.a ? 'Correct. ' : 'Not quite. ') + item.e;
+      });
+      opts.appendChild(b);
+    });
+    quiz.appendChild(box);
+  });
+
+  /* ── Opening animation: fluorine grabs, potassium gives (autoplay once in view) ── */
+  (function hook() {
+    const svg = document.getElementById('hookSvg');
+    const cap = document.getElementById('hookCap');
+    const chips = Array.from(document.querySelectorAll('#hookChips span'));
+    const btnPause = document.getElementById('hookPause'), btnReplay = document.getElementById('hookReplay');
+    const END = 10.4;
+    const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
+    const seg = (t, a, b) => ease((t - a) / (b - a));
+    const mk = (tag, attrs, parent) => {
+      const el = document.createElementNS(NS, tag);
+      for (const k in attrs) el.setAttribute(k, attrs[k]);
+      (parent || svg).appendChild(el); return el;
+    };
+    const K = 72 / 203;   // px per pm: both atoms at true relative size
+
+    mk('text', { x: 4, y: 12, 'font-size': 9.5, class: 'svg-muted' }).textContent = 'Simplified shells · true relative size';
+
+    const atoms = [
+      { sym: 'F', ion: 'F⁻', name: 'Fluorine', pm: 57, cx: 85, Zp: 9, zeff: '+5.2', shells: [2, 7], nucR: 7, ionAt: 7.2,
+        concl: ['Strong pull, close in:', 'grabs electrons'] },
+      { sym: 'K', ion: 'K⁺', name: 'Potassium', pm: 203, cx: 245, Zp: 19, zeff: '+2.2', shells: [2, 8, 8, 1], nucR: 10, ionAt: 8.0,
+        concl: ['Weak pull, far out:', 'gives one away'] }
+    ];
+    const CY = 116;
+    const electrons = [];   // {el, appear, atom}
+    let eIndex = 0;
+    const total = 9 + 19;
+
+    atoms.forEach(a => {
+      const R = a.pm * K, N = a.shells.length;
+      a.R = R;
+      a.radii = a.shells.map((_, i) => N === 1 ? R : a.nucR + 5 + (R - a.nucR - 5) * i / (N - 1));
+      const g = mk('g', {});
+      a.shellEls = []; a.firstAppear = [];
+      // inner shells, nucleus, inner electrons
+      for (let i = 0; i < N - 1; i++) a.shellEls.push(mk('circle', { cx: a.cx, cy: CY, r: a.radii[i].toFixed(1), style: 'fill:none', class: 'svg-rule-s', 'stroke-width': 1 }, g));
+      a.nuc = mk('circle', { cx: a.cx, cy: CY, r: a.nucR, class: 'svg-gold' }, g);
+      a.nucTxt = mk('text', { x: a.cx, y: CY + 2.5, 'text-anchor': 'middle', 'font-size': a.nucR > 8 ? 7 : 6.5, 'font-weight': 600, fill: '#1b1f1c' }, g);
+      a.nucTxt.textContent = a.Zp + '+';
+      const place = (shellI, count, offset, skip, parent) => {
+        const out = [];
+        const slots = shellI === N - 1 && a.sym === 'F' ? 8 : count;
+        for (let k = 0, made = 0; k < slots && made < count; k++) {
+          if (skip !== undefined && k === skip) continue;
+          const ang = (offset + k * 360 / slots) * Math.PI / 180;
+          const el = mk('circle', { cx: (a.cx + Math.cos(ang) * a.radii[shellI]).toFixed(1), cy: (CY - Math.sin(ang) * a.radii[shellI]).toFixed(1), r: 2.4, class: 'svg-forest' }, parent);
+          electrons.push({ el, appear: 0.6 + (eIndex++) * (1.8 / total) });
+          out.push(el); made++;
+        }
+        return out;
+      };
+      for (let i = 0; i < N - 1; i++) {
+        a.firstAppear[i] = 0.6 + eIndex * (1.8 / total);
+        place(i, a.shells[i], a.shells[i] === 2 ? 90 : (i % 2 ? 22.5 : 0), undefined, g);
+      }
+      // veil: dims nucleus + inner shells to show shielding
+      const veilR = N > 1 ? (a.radii[N - 2] + a.radii[N - 1]) / 2 : a.nucR + 3;
+      a.veil = mk('circle', { cx: a.cx, cy: CY, r: veilR.toFixed(1), style: 'fill:var(--surface)' }, g);
+      // outer shell + outer electrons (F: 8 slots, slot 4 at 180° left empty for the incoming electron)
+      a.firstAppear[N - 1] = 0.6 + eIndex * (1.8 / total);
+      a.shellEls.push(mk('circle', { cx: a.cx, cy: CY, r: R.toFixed(1), style: 'fill:none', class: 'svg-muted-s', 'stroke-width': 1 }, g));
+      const outer = place(N - 1, a.shells[N - 1], 0, a.sym === 'F' ? 4 : undefined, g);
+      a.outer = outer[0];   // the electron at 0°, target of the pull line
+      // pull line, net badge
+      a.pull = mk('line', { x1: (a.cx + R - 3).toFixed(1), y1: CY, x2: (a.cx + R - 3).toFixed(1), y2: CY, class: 'svg-gold-s', 'stroke-linecap': 'round',
+        'stroke-width': a.sym === 'F' ? 4 : 1.3 }, g);
+      a.badge = mk('text', { x: a.cx, y: (CY - R - 10).toFixed(1), 'text-anchor': 'middle', 'font-size': 11, 'font-weight': 600, style: 'fill:var(--gold-ink)', class: 'mono' }, g);
+      a.badge.textContent = 'net pull ' + a.zeff;
+      // labels
+      a.symTxt = mk('text', { x: a.cx, y: 206, 'text-anchor': 'middle', 'font-size': 19, 'font-weight': 600, class: 'svg-ink' }, g);
+      a.nameTxt = mk('text', { x: a.cx, y: 221, 'text-anchor': 'middle', 'font-size': 10.5, class: 'svg-muted' }, g);
+      a.nameTxt.textContent = a.name + ' · ' + a.pm + ' pm';
+      a.c1 = mk('text', { x: a.cx, y: 238, 'text-anchor': 'middle', 'font-size': 11, 'font-weight': 600, class: 'svg-ink' }, g);
+      a.c2 = mk('text', { x: a.cx, y: 252, 'text-anchor': 'middle', 'font-size': 11, class: 'svg-ink' }, g);
+      a.c1.textContent = a.concl[0]; a.c2.textContent = a.concl[1];
+    });
+    svg.setAttribute('viewBox', '0 0 340 258');
+    const [F, Kat] = atoms;
+    const stray = mk('circle', { r: 2.4, class: 'svg-forest' });
+    const strayFrom = [14, 34], strayTo = [F.cx - F.R, CY];
+    const kFrom = [Kat.cx + Kat.R, CY], kTo = [338, 52];
+
+    const CAPS = [
+      [3.0, 'Fluorine has 9 protons; potassium has 19. Same three particles: protons and neutrons in the nucleus, electrons in shells around it.'],
+      [5.4, 'Inner electrons shield the nucleus. The pull left on the outer electron is about +5.2 for fluorine, close in, and +2.2 for potassium, much farther out.'],
+      [8.6, 'Fluorine pulls a passing electron in and becomes F⁻. Potassium\'s outer electron drifts away, leaving K⁺.'],
+      [99, 'One tug-of-war explains five trends. Scroll on to see each one.']
+    ];
+
+    function render(t) {
+      const op = (el, v) => el.setAttribute('opacity', v.toFixed(3));
+      atoms.forEach(a => {
+        op(a.nuc, seg(t, 0, 0.6)); op(a.nucTxt, seg(t, 0, 0.6));
+        a.shellEls.forEach((s, i) => op(s, seg(t, a.firstAppear[i] - 0.15, a.firstAppear[i] + 0.15)));
+        op(a.veil, 0.72 * seg(t, 3.0, 4.0));
+        op(a.badge, seg(t, 3.8, 4.4));
+        const p = seg(t, 4.2, 5.2);
+        const x1 = a.cx + a.R - 3, x2 = x1 - p * (a.R - 3 - a.nucR - 3);
+        a.pull.setAttribute('x2', x2.toFixed(1));
+        let pullOp = p > 0 ? 1 : 0;
+        if (a === Kat) pullOp *= 1 - seg(t, 6.2, 6.6);
+        op(a.pull, pullOp);
+        op(a.symTxt, seg(t, 0, 0.6));
+        a.symTxt.textContent = t >= a.ionAt ? a.ion : a.sym;
+        op(a.c1, seg(t, 8.6, 9.2)); op(a.c2, seg(t, 8.6, 9.2));
+      });
+      electrons.forEach(e => op(e.el, seg(t, e.appear, e.appear + 0.15)));
+      // stray electron joins fluorine
+      const sp = seg(t, 5.6, 7.2);
+      stray.setAttribute('cx', (strayFrom[0] + (strayTo[0] - strayFrom[0]) * sp).toFixed(1));
+      stray.setAttribute('cy', (strayFrom[1] + (strayTo[1] - strayFrom[1]) * sp).toFixed(1));
+      op(stray, seg(t, 5.4, 5.8));
+      // potassium's outer electron leaves
+      const kp = seg(t, 6.4, 8.0);
+      Kat.outer.setAttribute('cx', (kFrom[0] + (kTo[0] - kFrom[0]) * kp).toFixed(1));
+      Kat.outer.setAttribute('cy', (kFrom[1] + (kTo[1] - kFrom[1]) * kp).toFixed(1));
+      const kAppear = electrons.find(e => e.el === Kat.outer).appear;
+      op(Kat.outer, seg(t, kAppear, kAppear + 0.15) * (1 - seg(t, 7.4, 8.0)));
+      const c = CAPS.find(x => t < x[0]);
+      if (cap.textContent !== c[1]) cap.textContent = c[1];
+      chips.forEach((ch, i) => ch.style.setProperty('--o', seg(t, 9.2 + i * 0.15, 9.6 + i * 0.15).toFixed(3)));
+    }
+
+    let t = END, playing = false, last = 0;
+    function frame(now) {
+      if (!playing) return;
+      t = Math.min(END, t + (now - last) / 1000); last = now;
+      render(t);
+      if (t >= END) { playing = false; btnPause.textContent = 'Pause'; btnPause.disabled = true; return; }
+      requestAnimationFrame(frame);
+    }
+    function play(from) {
+      if (from !== undefined) t = from;
+      playing = true; last = performance.now(); btnPause.disabled = false; btnPause.textContent = 'Pause';
+      requestAnimationFrame(frame);
+    }
+    btnPause.addEventListener('click', () => {
+      if (playing) { playing = false; btnPause.textContent = 'Play'; } else play();
+    });
+    btnReplay.addEventListener('click', () => play(0));
+
+    render(END);                       // complete resting frame
+    btnPause.disabled = true;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) { btnPause.hidden = true; return; }
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver(entries => {
+        if (entries.some(en => en.isIntersecting)) { io.disconnect(); play(0); }
+      }, { threshold: 0.5 });
+      io.observe(svg);
+    }
+  })();
+
+  /* ── Zeff animation (section 1): shielding in Li, across period 2, down group 1 ── */
+  (function zeffAnim() {
+    const svg = document.getElementById('zfSvg');
+    const cap = document.getElementById('zfCap');
+    const chips = Array.from(document.querySelectorAll('#zfChips span'));
+    const btnPause = document.getElementById('zfPause'), btnReplay = document.getElementById('zfReplay');
+    const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
+    const seg = (t, a, b) => ease((t - a) / (b - a));
+    const CONF = { Li: [2,1], Be: [2,2], B: [2,3], C: [2,4], N: [2,5], O: [2,6], F: [2,7], Na: [2,8,1], K: [2,8,8,1] };
+    const KF = [[0,'Li'],[3.6,'Be'],[4.4,'B'],[5.2,'C'],[6.0,'N'],[6.8,'O'],[7.6,'F'],[9.6,'Na'],[11.6,'K']];
+    const END = 14.4, CX = 100, CY = 106, KS = 82 / 203;
+    const CAPS = [
+      [3.6, 'Lithium has 3 protons. Its 2 inner electrons shield about 1.70 of that charge, so the outer electron feels about +1.30.'],
+      [9.4, 'Across period 2, each step adds a proton, and the new electron joins the same shell. Same-shell electrons shield poorly, so Zeff climbs to 5.20 and the atom shrinks.'],
+      [13.2, 'Down group 1, each row adds a whole shell. Zeff stays at 2.20 for sodium and potassium, but the outer electron sits much farther out.'],
+      [99, 'A bigger Zeff pulls harder. A farther electron feels the pull less.']
+    ];
+    const f = (v, d) => v.toFixed(d);
+
+    function render(t) {
+      let i = 0; KF.forEach((k, j) => { if (t >= k[0]) i = j; });
+      const e = BY[KF[i][1]], ep = i > 0 ? BY[KF[i - 1][1]] : e;
+      const tw = i > 0 ? seg(t, KF[i][0], KF[i][0] + 0.5) : 1;
+      const R = (ep.rcov + (e.rcov - ep.rcov) * tw) * KS;
+      const zeff = ep.zeff + (e.zeff - ep.zeff) * tw;
+      const conf = CONF[e.sym], N = conf.length;
+      const nucR = 7 + e.Z * 0.15;
+      const radii = conf.map((_, s) => s === N - 1 ? R : nucR + 6 + (R - nucR - 6) * s / (N - 1));
+      // beat A reveals (lithium only); afterwards everything stays on
+      const aNuc = seg(t, 0, 0.5), aEl = seg(t, 0.3, 0.9), aProt = seg(t, 0.6, 1.1),
+            aShield = seg(t, 1.4, 2.2), aZ = seg(t, 2.4, 3.0), aPull = seg(t, 2.6, 3.2);
+      let g = '';
+      for (let s = 0; s < N; s++) {
+        g += `<circle cx="${CX}" cy="${CY}" r="${f(radii[s], 1)}" style="fill:none" class="${s === N - 1 ? 'svg-muted-s' : 'svg-rule-s'}" stroke-width="1" opacity="${f(aEl, 2)}"/>`;
+      }
+      g += `<circle cx="${CX}" cy="${CY}" r="${f(nucR, 1)}" class="svg-gold" opacity="${f(aNuc, 2)}"/>`;
+      g += `<text x="${CX}" y="${CY + 3}" text-anchor="middle" font-size="8" font-weight="600" fill="#1b1f1c" opacity="${f(aNuc, 2)}">${e.Z}+</text>`;
+      const dot = (s, k, c) => {
+        const off = s === N - 1 ? 0 : (c <= 2 ? 90 : 22.5);
+        const a = (off + k * 360 / Math.max(c, s === N - 1 ? 8 : c)) * Math.PI / 180;
+        return `<circle cx="${f(CX + Math.cos(a) * radii[s], 1)}" cy="${f(CY - Math.sin(a) * radii[s], 1)}" r="2.6" class="svg-forest" opacity="${f(aEl, 2)}"/>`;
+      };
+      for (let s = 0; s < N - 1; s++) for (let k = 0; k < conf[s]; k++) g += dot(s, k, conf[s]);
+      const veilR = (radii[N - 2] + R) / 2;
+      g += `<circle cx="${CX}" cy="${CY}" r="${f(veilR, 1)}" style="fill:var(--surface)" opacity="${f(0.72 * aShield, 2)}"/>`;
+      for (let k = 0; k < conf[N - 1]; k++) g += dot(N - 1, k, conf[N - 1]);
+      // pull line: thickness follows Zeff / r²
+      const pull = zeff / Math.pow(R / KS / 100, 2);
+      const w = 1.2 + 6 * Math.sqrt(Math.min(1, pull / pullF));
+      g += `<line x1="${f(CX + R - 5, 1)}" y1="${CY}" x2="${f(CX + nucR + 7, 1)}" y2="${CY}" class="svg-gold-s" stroke-width="${f(w, 1)}" stroke-linecap="round" opacity="${f(aPull, 2)}"/>`;
+      // readout panel
+      const X = 214, XR = 334;
+      const row = (y, k, v, op, strong) => `<text x="${X}" y="${y}" font-size="10.5" class="svg-muted mono" opacity="${f(op, 2)}">${k}</text><text x="${XR}" y="${y}" text-anchor="end" font-size="${strong ? 15 : 11.5}" font-weight="${strong ? 600 : 500}" class="${strong ? 'mono' : 'svg-ink mono'}" ${strong ? 'style="fill:var(--gold-ink)"' : ''} opacity="${f(op, 2)}">${v}</text>`;
+      g += `<text x="${X}" y="34" font-size="26" font-weight="600" class="svg-ink" opacity="${f(aNuc, 2)}">${e.sym}</text>`;
+      g += `<text x="${X}" y="50" font-size="11" class="svg-muted" opacity="${f(aNuc, 2)}">${e.name}</text>`;
+      g += row(76, 'protons', e.Z, aProt);
+      g += row(94, 'shielding', '−' + f(e.Z - zeff, 2), aShield);
+      g += row(116, 'Zeff', f(zeff, 2), aZ, true);
+      g += `<rect x="${X}" y="124" width="${XR - X}" height="7" rx="3.5" class="svg-soft" opacity="${f(aZ, 2)}"/>`;
+      g += `<rect x="${X}" y="124" width="${f((XR - X) * zeff / 8.25, 1)}" height="7" rx="3.5" class="svg-gold" opacity="${f(aZ, 2)}"/>`;
+      g += row(156, 'radius', Math.round(R / KS) + ' pm', aEl);
+      g += row(174, 'shells', N, aEl);
+      g += `<text x="4" y="12" font-size="9.5" class="svg-muted">Simplified shells · true relative size</text>`;
+      svg.innerHTML = g;
+      const c = CAPS.find(x => t < x[0]);
+      if (cap.textContent !== c[1]) cap.textContent = c[1];
+      chips.forEach((ch, j) => ch.style.setProperty('--o', f(seg(t, 13.2 + j * 0.3, 13.7 + j * 0.3), 3)));
+    }
+    svg.setAttribute('viewBox', '0 0 340 196');
+
+    let t = END, playing = false, last = 0;
+    function frame(now) {
+      if (!playing) return;
+      t = Math.min(END, t + (now - last) / 1000); last = now;
+      render(t);
+      if (t >= END) { playing = false; btnPause.textContent = 'Pause'; btnPause.disabled = true; return; }
+      requestAnimationFrame(frame);
+    }
+    function play(from) {
+      if (from !== undefined) t = from;
+      playing = true; last = performance.now(); btnPause.disabled = false; btnPause.textContent = 'Pause';
+      requestAnimationFrame(frame);
+    }
+    btnPause.addEventListener('click', () => { if (playing) { playing = false; btnPause.textContent = 'Play'; } else play(); });
+    btnReplay.addEventListener('click', () => play(0));
+
+    render(END);   // resting frame: potassium, with both summary chips
+    btnPause.disabled = true;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { btnPause.hidden = true; return; }
+    if ('IntersectionObserver' in window) {
+      // on phones the pinned table covers the top of the screen, so only count the area below it
+      const narrow = !window.matchMedia('(min-width: 900px)').matches;
+      const io = new IntersectionObserver(entries => {
+        if (entries.some(en => en.isIntersecting)) { io.disconnect(); play(0); }
+      }, { threshold: 0.6, rootMargin: narrow ? '-300px 0px 0px 0px' : '0px' });
+      io.observe(svg);
+    }
+  })();
+
+  /* ── Radius animation (section 2): period 2 across the top, group 17 down from fluorine ── */
+  (function radiusAnim() {
+    const svg = document.getElementById('rfSvg');
+    const cap = document.getElementById('rfCap');
+    const chips = Array.from(document.querySelectorAll('#rfChips span'));
+    const btnPause = document.getElementById('rfPause'), btnReplay = document.getElementById('rfReplay');
+    const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
+    const seg = (t, a, b) => ease((t - a) / (b - a));
+    const f = (v, d) => v.toFixed(d);
+    const KS = 0.228, Y0 = 70, END = 10.4;
+    // row: Li..F placed edge to edge with 6px gaps; column: Cl, Br under F
+    const rowSyms = ['Li','Be','B','C','N','O','F'];
+    const items = [];
+    let x = 14;
+    rowSyms.forEach((s, i) => {
+      const r = BY[s].rcov * KS;
+      const cx = i === 0 ? x + r : x + 6 + r;
+      items.push({ e: BY[s], r, cx, cy: Y0, shells: 2, appear: 0.4 + i * 0.55, col: false });
+      x = cx + r;
+    });
+    const fx = items[6].cx;
+    let y = Y0 + items[6].r;
+    [['Cl', 3, 5.6], ['Br', 4, 7.4]].forEach(([s, n, at]) => {
+      const r = BY[s].rcov * KS;
+      const cy = y + 10 + r;
+      items.push({ e: BY[s], r, cx: fx, cy, shells: n, appear: at, col: true });
+      y = cy + r;
+    });
+    const CAPS = [
+      [4.9, 'Across period 2, every atom has the same two shells, but a bigger Zeff pulls them in. Lithium is 128 pm; fluorine is 57 pm.'],
+      [9.4, 'Down group 17, each row adds a shell, like a new layer on an onion: fluorine 57 pm, chlorine 102 pm, bromine 120 pm.'],
+      [99, 'Across, the stronger pull wins and atoms shrink. Down, the extra shells win and atoms grow.']
+    ];
+
+    function render(t) {
+      let g = `<defs>${arrowHead('ah-rf', 'svg-muted')}</defs>`;
+      g += `<text x="4" y="12" font-size="9.5" class="svg-muted">Simplified shells · drawn to scale</text>`;
+      items.forEach(it => {
+        const a = seg(t, it.appear, it.appear + 0.45);
+        if (a <= 0) return;
+        const r = it.r * a;
+        g += `<circle cx="${f(it.cx, 1)}" cy="${f(it.cy, 1)}" r="${f(r, 1)}" style="fill:var(--forest);fill-opacity:.14"/>`;
+        for (let n = 1; n <= it.shells; n++) {
+          const isNew = it.col && n === it.shells;
+          const glow = isNew ? seg(t, it.appear + 0.5, it.appear + 0.8) * (1 - seg(t, it.appear + 1.6, it.appear + 2.0)) : 0;
+          const ringOp = isNew ? seg(t, it.appear + 0.5, it.appear + 0.8) : 1;
+          g += `<circle cx="${f(it.cx, 1)}" cy="${f(it.cy, 1)}" r="${f(r * n / it.shells, 1)}" style="fill:none;stroke:${glow > 0.5 ? 'var(--gold-ink)' : 'var(--forest)'}" stroke-width="${f(1 + glow * 1.4, 2)}" opacity="${f(a * ringOp, 2)}"/>`;
+        }
+        g += `<circle cx="${f(it.cx, 1)}" cy="${f(it.cy, 1)}" r="${f((1.4 + it.e.zeff * 0.45) * a, 1)}" class="svg-gold" opacity="${f(a, 2)}"/>`;
+        // labels: row above the circles, column to the left
+        if (!it.col) {
+          g += `<text x="${f(it.cx, 1)}" y="31" text-anchor="middle" font-size="10.5" font-weight="600" class="svg-ink" opacity="${f(a, 2)}">${it.e.sym}</text>`;
+          g += `<text x="${f(it.cx, 1)}" y="42" text-anchor="middle" font-size="8.5" class="svg-muted mono" opacity="${f(a, 2)}">${it.e.rcov}</text>`;
+        } else {
+          g += `<text x="${f(it.cx - it.r - 6, 1)}" y="${f(it.cy - 1, 1)}" text-anchor="end" font-size="11" font-weight="600" class="svg-ink" opacity="${f(a, 2)}">${it.e.sym}</text>`;
+          g += `<text x="${f(it.cx - it.r - 6, 1)}" y="${f(it.cy + 11, 1)}" text-anchor="end" font-size="9" class="svg-muted mono" opacity="${f(a, 2)}">${it.e.rcov} pm</text>`;
+        }
+      });
+      g += `<text x="${f(items[6].cx + items[6].r + 3, 1)}" y="42" font-size="8.5" class="svg-muted mono" opacity="${f(seg(t, 0.4, 0.8), 2)}">pm</text>`;
+      // trend arrows
+      const ar = seg(t, 4.3, 4.9), ad = seg(t, 8.8, 9.4);
+      g += `<line x1="20" y1="114" x2="${f(20 + 180 * ar, 1)}" y2="114" class="svg-muted-s" stroke-width="1.3" marker-end="url(#ah-rf)" opacity="${f(ar > 0 ? 1 : 0, 0)}"/>`;
+      g += `<text x="20" y="130" font-size="11" class="svg-ink" opacity="${f(ar, 2)}">Across: smaller</text>`;
+      g += `<line x1="226" y1="108" x2="226" y2="${f(108 + 84 * ad, 1)}" class="svg-muted-s" stroke-width="1.3" marker-end="url(#ah-rf)" opacity="${f(ad > 0 ? 1 : 0, 0)}"/>`;
+      g += `<text x="218" y="160" text-anchor="end" font-size="11" class="svg-ink" opacity="${f(ad, 2)}">Down: bigger</text>`;
+      svg.innerHTML = g;
+      const c = CAPS.find(z => t < z[0]);
+      if (cap.textContent !== c[1]) cap.textContent = c[1];
+      chips.forEach((ch, j) => ch.style.setProperty('--o', f(seg(t, 9.6 + j * 0.3, 10.1 + j * 0.3), 3)));
+    }
+    svg.setAttribute('viewBox', `0 0 340 ${Math.ceil(y + 8)}`);
+
+    let t = END, playing = false, last = 0;
+    function frame(now) {
+      if (!playing) return;
+      t = Math.min(END, t + (now - last) / 1000); last = now;
+      render(t);
+      if (t >= END) { playing = false; btnPause.textContent = 'Pause'; btnPause.disabled = true; return; }
+      requestAnimationFrame(frame);
+    }
+    function play(from) {
+      if (from !== undefined) t = from;
+      playing = true; last = performance.now(); btnPause.disabled = false; btnPause.textContent = 'Pause';
+      requestAnimationFrame(frame);
+    }
+    btnPause.addEventListener('click', () => { if (playing) { playing = false; btnPause.textContent = 'Play'; } else play(); });
+    btnReplay.addEventListener('click', () => play(0));
+
+    render(END);
+    btnPause.disabled = true;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { btnPause.hidden = true; return; }
+    if ('IntersectionObserver' in window) {
+      const narrow = !window.matchMedia('(min-width: 900px)').matches;
+      const io = new IntersectionObserver(entries => {
+        if (entries.some(en => en.isIntersecting)) { io.disconnect(); play(0); }
+      }, { threshold: 0.6, rootMargin: narrow ? '-300px 0px 0px 0px' : '0px' });
+      io.observe(svg);
+    }
+  })();
+
+  /* ── Ion animation (section 3): Na gives its outer electron to Cl; Na⁺ shrinks, Cl⁻ swells ── */
+  (function ionAnim() {
+    const svg = document.getElementById('ifSvg');
+    const cap = document.getElementById('ifCap');
+    const chips = Array.from(document.querySelectorAll('#ifChips span'));
+    const btnPause = document.getElementById('ifPause'), btnReplay = document.getElementById('ifReplay');
+    const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
+    const seg = (t, a, b) => ease((t - a) / (b - a));
+    const f = (v, d) => v.toFixed(d);
+    const KS = 70 / 181, CY = 90, END = 9.6;
+    const NA = { cx: 85, nucR: 9, radii: [15, 102 * KS, 166 * KS] };     // 2nd shell = Na⁺ radius
+    const CL = { cx: 250, nucR: 10, radii: [16, 28, 102 * KS], swell: 181 * KS };
+    const CAPS = [
+      [2.4, 'Sodium has 11 protons and 11 electrons; chlorine has 17 of each.'],
+      [4.8, 'Sodium loses its single outer electron. Its whole third shell is now empty, so Na⁺ shrinks from 166 to 102 pm.'],
+      [8.2, 'Chlorine gains that electron. Same 17 protons, one more electron, more repulsion: Cl⁻ swells from 102 to 181 pm.'],
+      [99, 'Losing electrons shrinks an atom; gaining them swells it. The dashed rings show each atom before the change.']
+    ];
+    const dotsOn = (cx, r, n, slots, off, op, skip) => {
+      let s = '';
+      for (let k = 0, made = 0; k < slots && made < n; k++) {
+        if (k === skip) continue;
+        const a = (off + k * 360 / slots) * Math.PI / 180;
+        s += `<circle cx="${f(cx + Math.cos(a) * r, 1)}" cy="${f(CY - Math.sin(a) * r, 1)}" r="2.5" class="svg-forest" opacity="${f(op, 2)}"/>`;
+        made++;
+      }
+      return s;
+    };
+
+    function render(t) {
+      const aIn = seg(t, 0, 0.9), aE = seg(t, 0.3, 1.2);
+      let g = `<text x="4" y="12" font-size="9.5" class="svg-muted">Simplified shells · drawn to scale</text>`;
+      /* sodium */
+      const naIon = seg(t, 3.6, 4.4);
+      g += `<circle cx="${NA.cx}" cy="${CY}" r="${f(NA.radii[1], 1)}" style="fill:var(--gold);fill-opacity:${f(0.45 * naIon, 2)}"/>`;
+      const naOuterDashed = seg(t, 3.0, 3.6);
+      g += `<circle cx="${NA.cx}" cy="${CY}" r="${f(NA.radii[2], 1)}" style="fill:none;stroke:var(--muted)" stroke-width="1.2" ${naOuterDashed > 0.5 ? 'stroke-dasharray="4 3"' : ''} opacity="${f(aIn, 2)}"/>`;
+      g += `<circle cx="${NA.cx}" cy="${CY}" r="${f(NA.radii[0], 1)}" style="fill:none;stroke:var(--rule)" opacity="${f(aIn, 2)}"/>`;
+      g += `<circle cx="${NA.cx}" cy="${CY}" r="${f(NA.radii[1], 1)}" style="fill:none;stroke:${naIon > 0.5 ? 'var(--gold-ink)' : 'var(--rule)'}" stroke-width="${naIon > 0.5 ? 1.5 : 1}" opacity="${f(aIn, 2)}"/>`;
+      g += `<circle cx="${NA.cx}" cy="${CY}" r="${NA.nucR}" class="svg-gold" opacity="${f(aIn, 2)}"/>`;
+      g += `<text x="${NA.cx}" y="${CY + 3}" text-anchor="middle" font-size="7.5" font-weight="600" fill="#1b1f1c" opacity="${f(aIn, 2)}">11+</text>`;
+      g += dotsOn(NA.cx, NA.radii[0], 2, 2, 90, aE) + dotsOn(NA.cx, NA.radii[1], 8, 8, 22.5, aE);
+      /* chlorine: outer shell swells after the electron arrives */
+      const sw = seg(t, 5.0, 6.4);
+      const rOut = CL.radii[2] + (CL.swell - CL.radii[2]) * sw;
+      g += `<circle cx="${CL.cx}" cy="${CY}" r="${f(rOut, 1)}" style="fill:var(--forest);fill-opacity:${f(0.22 * sw, 2)}"/>`;
+      g += `<circle cx="${CL.cx}" cy="${CY}" r="${f(CL.radii[2], 1)}" style="fill:none;stroke:var(--muted)" stroke-width="1.2" stroke-dasharray="4 3" opacity="${f(seg(t, 5.0, 5.4), 2)}"/>`;
+      g += `<circle cx="${CL.cx}" cy="${CY}" r="${f(rOut, 1)}" style="fill:none;stroke:var(--forest)" stroke-width="1.3" opacity="${f(aIn, 2)}"/>`;
+      g += `<circle cx="${CL.cx}" cy="${CY}" r="${CL.radii[0]}" style="fill:none;stroke:var(--rule)" opacity="${f(aIn, 2)}"/>`;
+      g += `<circle cx="${CL.cx}" cy="${CY}" r="${CL.radii[1]}" style="fill:none;stroke:var(--rule)" opacity="${f(aIn, 2)}"/>`;
+      g += `<circle cx="${CL.cx}" cy="${CY}" r="${CL.nucR}" class="svg-gold" opacity="${f(aIn, 2)}"/>`;
+      g += `<text x="${CL.cx}" y="${CY + 3}" text-anchor="middle" font-size="7.5" font-weight="600" fill="#1b1f1c" opacity="${f(aIn, 2)}">17+</text>`;
+      g += dotsOn(CL.cx, CL.radii[0], 2, 2, 90, aE) + dotsOn(CL.cx, CL.radii[1], 8, 8, 22.5, aE);
+      const arrived = t >= 4.4;
+      g += dotsOn(CL.cx, rOut, arrived ? 8 : 7, 8, 0, aE, arrived ? -1 : 4);
+      // repulsion: outward ticks while the shell swells
+      const rp = seg(t, 5.0, 5.4) * (1 - seg(t, 6.4, 6.9));
+      if (rp > 0) [45, 135, 225, 315].forEach(deg => {
+        const a = deg * Math.PI / 180, r1 = rOut + 3, r2 = rOut + 11;
+        g += `<line x1="${f(CL.cx + Math.cos(a) * r1, 1)}" y1="${f(CY - Math.sin(a) * r1, 1)}" x2="${f(CL.cx + Math.cos(a) * r2, 1)}" y2="${f(CY - Math.sin(a) * r2, 1)}" class="svg-gold-s" stroke-width="1.6" stroke-linecap="round" opacity="${f(rp, 2)}"/>`;
+      });
+      /* the travelling electron: Na outer shell (0°) → Cl empty slot (180°) */
+      const mv = seg(t, 2.4, 4.4);
+      if (t < 4.4) {
+        const x0 = NA.cx + NA.radii[2], x1 = CL.cx - CL.radii[2];
+        const ex = x0 + (x1 - x0) * mv, ey = CY - Math.sin(mv * Math.PI) * 22;
+        g += `<circle cx="${f(ex, 1)}" cy="${f(ey, 1)}" r="2.8" class="svg-forest" opacity="${f(aE, 2)}"/>`;
+      }
+      /* labels */
+      const lab = (cx, sym, line2, line3, op) =>
+        `<text x="${cx}" y="182" text-anchor="middle" font-size="19" font-weight="600" class="svg-ink" opacity="${f(op, 2)}">${sym}</text>` +
+        `<text x="${cx}" y="197" text-anchor="middle" font-size="10.5" class="svg-muted mono" opacity="${f(op, 2)}">${line2}</text>` +
+        `<text x="${cx}" y="210" text-anchor="middle" font-size="10.5" class="svg-muted mono" opacity="${f(op, 2)}">${line3}</text>`;
+      const naDone = t >= 3.6, clDone = t >= 5.0;
+      g += lab(NA.cx, naDone ? 'Na⁺' : 'Na', naDone ? '166 → 102 pm' : '166 pm', naDone ? '11 p⁺ · 10 e⁻' : '11 p⁺ · 11 e⁻', aIn);
+      g += lab(CL.cx, clDone ? 'Cl⁻' : 'Cl', clDone ? '102 → 181 pm' : '102 pm', arrived ? '17 p⁺ · 18 e⁻' : '17 p⁺ · 17 e⁻', aIn);
+      svg.innerHTML = g;
+      const c = CAPS.find(z => t < z[0]);
+      if (cap.textContent !== c[1]) cap.textContent = c[1];
+      chips.forEach((ch, j) => ch.style.setProperty('--o', f(seg(t, 8.4 + j * 0.3, 8.9 + j * 0.3), 3)));
+    }
+
+    let t = END, playing = false, last = 0;
+    function frame(now) {
+      if (!playing) return;
+      t = Math.min(END, t + (now - last) / 1000); last = now;
+      render(t);
+      if (t >= END) { playing = false; btnPause.textContent = 'Pause'; btnPause.disabled = true; return; }
+      requestAnimationFrame(frame);
+    }
+    function play(from) {
+      if (from !== undefined) t = from;
+      playing = true; last = performance.now(); btnPause.disabled = false; btnPause.textContent = 'Pause';
+      requestAnimationFrame(frame);
+    }
+    btnPause.addEventListener('click', () => { if (playing) { playing = false; btnPause.textContent = 'Play'; } else play(); });
+    btnReplay.addEventListener('click', () => play(0));
+
+    render(END);
+    btnPause.disabled = true;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { btnPause.hidden = true; return; }
+    if ('IntersectionObserver' in window) {
+      const narrow = !window.matchMedia('(min-width: 900px)').matches;
+      const io = new IntersectionObserver(entries => {
+        if (entries.some(en => en.isIntersecting)) { io.disconnect(); play(0); }
+      }, { threshold: 0.6, rootMargin: narrow ? '-300px 0px 0px 0px' : '0px' });
+      io.observe(svg);
+    }
+  })();
+
+  /* ── Ionisation energy animation (section 4): period 2 bars, the two dips in orbital boxes, group 1 ── */
+  (function ieAnim() {
+    const svg = document.getElementById('ieSvg');
+    const cap = document.getElementById('ieCap');
+    const chips = Array.from(document.querySelectorAll('#ieChips span'));
+    const btnPause = document.getElementById('iePause'), btnReplay = document.getElementById('ieReplay');
+    const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
+    const seg = (t, a, b) => ease((t - a) / (b - a));
+    const f = (v, d) => v.toFixed(d);
+    const END = 12.2, BASE = 140, HMAX = 110, VMAX = 2400;
+    const P2 = ['Li','Be','B','C','N','O','F','Ne'].map((s, i) => ({ e: BY[s], x: 34 + i * 37.5, at: 0.4 + i * 0.45 }));
+    const DIPS = { B: 1, O: 1 };
+    const CAPS = [
+      [4.4, 'Across period 2 the pull on the outer electrons grows, so removing one costs more: lithium 520 kJ/mol, neon 2081 kJ/mol.'],
+      [8.6, 'Two dips. Boron\'s outer electron sits alone in a higher-energy 2p orbital, shielded by 2s. Oxygen\'s fourth p electron is paired and repelled. Both are easier to remove.'],
+      [11.0, 'Down group 1 the outer electron is farther away, so it is easier to remove: 520, 496, 419 kJ/mol.'],
+      [99, 'Tighter hold across, looser hold down, and two dips that reveal subshells.']
+    ];
+    const col = v => ramp((v - 400) / 2000);
+
+    // orbital box row: 2s + three 2p boxes; spins like ['ud'] / ['u','u','u']; hi = index in 2p (or 's') to highlight
+    function boxes(x, y, label, s2, p2, hi, op) {
+      const W = 17, H = 16;
+      let g = `<text x="${x}" y="${y + 12}" font-size="11" font-weight="600" class="svg-ink" opacity="${f(op, 2)}">${label}</text>`;
+      const box = (bx, spin, hl) => {
+        let b = `<rect x="${bx}" y="${y}" width="${W}" height="${H}" style="fill:var(--surface);stroke:var(--muted)" stroke-width="1" opacity="${f(op, 2)}"/>`;
+        const arr = (cx, up, h) => `<text x="${cx}" y="${y + 12.5}" text-anchor="middle" font-size="12" font-weight="600" style="fill:${h ? 'var(--gold-ink)' : 'var(--ink)'}" opacity="${f(op, 2)}">${up ? '↑' : '↓'}</text>`;
+        if (spin === 'u') b += arr(bx + W / 2, true, hl);
+        if (spin === 'ud') b += arr(bx + 5.5, true, false) + arr(bx + 11.5, false, hl);
+        return b;
+      };
+      g += box(x + 24, s2, false);
+      p2.forEach((sp, i) => { g += box(x + 50 + i * W, sp, hi === i); });
+      return g;
+    }
+
+    function render(t) {
+      let g = `<text x="4" y="12" font-size="9.5" class="svg-muted">First ionisation energy, kJ/mol</text>`;
+      g += `<line x1="20" x2="334" y1="${BASE}" y2="${BASE}" class="svg-rule-s" stroke-width="1" opacity="${f(seg(t, 0, 0.4), 2)}"/>`;
+      const tops = [];
+      P2.forEach(b => {
+        const a = seg(t, b.at, b.at + 0.4);
+        const h = HMAX * b.e.ie / VMAX * a;
+        const c = col(b.e.ie);
+        const dip = DIPS[b.e.sym] && t >= b.at + 0.4;
+        g += `<rect x="${f(b.x - 13, 1)}" y="${f(BASE - h, 1)}" width="26" height="${f(h, 1)}" rx="2" fill="${c.bg}" ${dip ? 'style="stroke:var(--gold-ink);stroke-width:2"' : ''}/>`;
+        g += `<text x="${b.x}" y="${BASE + 14}" text-anchor="middle" font-size="11" font-weight="600" class="svg-ink" opacity="${f(seg(t, 0, 0.4), 2)}">${b.e.sym}</text>`;
+        if (a > 0) g += `<text x="${b.x}" y="${f(BASE - h - 5, 1)}" text-anchor="middle" font-size="9" class="svg-ink mono" opacity="${f(a, 2)}">${b.e.ie}</text>`;
+        if (dip) g += `<text x="${b.x}" y="${BASE + 27}" text-anchor="middle" font-size="9" class="mono" style="fill:var(--gold-ink)" opacity="${f(seg(t, b.at + 0.4, b.at + 0.8), 2)}">dip</text>`;
+        if (a > 0) tops.push(`${b.x},${f(BASE - h - 18, 1)}`);
+      });
+      if (tops.length > 1) g += `<polyline points="${tops.join(' ')}" style="fill:none;stroke:var(--muted)" stroke-width="1" stroke-dasharray="3 3"/>`;
+      // the two dips as orbital boxes
+      const pA = seg(t, 4.6, 5.4), hA = seg(t, 5.4, 5.8), pB = seg(t, 6.4, 7.2), hB = seg(t, 7.2, 7.6);
+      const Y = 188;
+      g += `<text x="10" y="${Y}" font-size="10.5" class="svg-muted mono" opacity="${f(pA, 2)}">Be 900 → B 801</text>`;
+      g += boxes(10, Y + 10, 'Be', 'ud', ['', '', ''], -1, pA);
+      g += boxes(10, Y + 32, 'B', 'ud', [hA > 0.5 ? 'u' : '', '', ''], 0, pA);
+      g += `<text x="10" y="${Y + 76}" font-size="10" class="svg-muted" opacity="${f(hA, 2)}">Lone 2p: higher, shielded</text>`;
+      g += `<text x="182" y="${Y}" font-size="10.5" class="svg-muted mono" opacity="${f(pB, 2)}">N 1402 → O 1314</text>`;
+      g += boxes(182, Y + 10, 'N', 'ud', ['u', 'u', 'u'], -1, pB);
+      g += boxes(182, Y + 32, 'O', 'ud', [hB > 0.5 ? 'ud' : 'u', 'u', 'u'], 0, pB);
+      g += `<text x="182" y="${Y + 76}" font-size="10" class="svg-muted" opacity="${f(hB, 2)}">Paired 2p: repels, easier out</text>`;
+      g += `<text x="${10 + 30}" y="${Y + 61}" text-anchor="middle" font-size="8.5" class="svg-muted mono" opacity="${f(pA, 2)}">2s</text><text x="${10 + 50 + 25}" y="${Y + 61}" text-anchor="middle" font-size="8.5" class="svg-muted mono" opacity="${f(pA, 2)}">2p</text>`;
+      g += `<text x="${182 + 30}" y="${Y + 61}" text-anchor="middle" font-size="8.5" class="svg-muted mono" opacity="${f(pB, 2)}">2s</text><text x="${182 + 50 + 25}" y="${Y + 61}" text-anchor="middle" font-size="8.5" class="svg-muted mono" opacity="${f(pB, 2)}">2p</text>`;
+      // down group 1
+      const G1 = [['Li', 8.8], ['Na', 9.3], ['K', 9.8]];
+      g += `<text x="4" y="290" font-size="10.5" class="svg-muted mono" opacity="${f(seg(t, 8.6, 9.0), 2)}">Down group 1</text>`;
+      G1.forEach(([s, at], i) => {
+        const e = BY[s], a = seg(t, at, at + 0.4), y = 298 + i * 16;
+        const w = 250 * e.ie / 600 * a;
+        g += `<text x="30" y="${y + 10}" text-anchor="end" font-size="11" font-weight="600" class="svg-ink" opacity="${f(a, 2)}">${s}</text>`;
+        g += `<rect x="36" y="${y}" width="${f(w, 1)}" height="12" rx="2" fill="${col(e.ie).bg}"/>`;
+        if (a > 0) g += `<text x="${f(40 + w, 1)}" y="${y + 10}" font-size="9.5" class="svg-ink mono" opacity="${f(a, 2)}">${e.ie}</text>`;
+      });
+      svg.innerHTML = g;
+      const c = CAPS.find(z => t < z[0]);
+      if (cap.textContent !== c[1]) cap.textContent = c[1];
+      chips.forEach((ch, j) => ch.style.setProperty('--o', f(seg(t, 11.2 + j * 0.3, 11.7 + j * 0.3), 3)));
+    }
+
+    let t = END, playing = false, last = 0;
+    function frame(now) {
+      if (!playing) return;
+      t = Math.min(END, t + (now - last) / 1000); last = now;
+      render(t);
+      if (t >= END) { playing = false; btnPause.textContent = 'Pause'; btnPause.disabled = true; return; }
+      requestAnimationFrame(frame);
+    }
+    function play(from) {
+      if (from !== undefined) t = from;
+      playing = true; last = performance.now(); btnPause.disabled = false; btnPause.textContent = 'Pause';
+      requestAnimationFrame(frame);
+    }
+    btnPause.addEventListener('click', () => { if (playing) { playing = false; btnPause.textContent = 'Play'; } else play(); });
+    btnReplay.addEventListener('click', () => play(0));
+
+    render(END);
+    btnPause.disabled = true;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { btnPause.hidden = true; return; }
+    if ('IntersectionObserver' in window) {
+      const narrow = !window.matchMedia('(min-width: 900px)').matches;
+      const io = new IntersectionObserver(entries => {
+        if (entries.some(en => en.isIntersecting)) { io.disconnect(); play(0); }
+      }, { threshold: 0.4, rootMargin: narrow ? '-300px 0px 0px 0px' : '0px' });
+      io.observe(svg);
+    }
+  })();
+
+  /* ── Electron affinity animation (section 5): electrons drop into period 2 atoms; group 17 compared ── */
+  (function eaAnim() {
+    const svg = document.getElementById('eaSvg');
+    const cap = document.getElementById('eaCap');
+    const chips = Array.from(document.querySelectorAll('#eaChips span'));
+    const btnPause = document.getElementById('eaPause'), btnReplay = document.getElementById('eaReplay');
+    const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
+    const seg = (t, a, b) => ease((t - a) / (b - a));
+    const f = (v, d) => v.toFixed(d);
+    const RATE = 0.625;   // playback at 1/1.6 speed so each caption has time to be read
+    const END = 13.4, BASE = 56, DROP = 22, HMAX = 120, VMAX = 350;
+    const P2 = ['Li','Be','B','C','N','O','F','Ne'].map((s, i) => ({ e: BY[s], x: 34 + i * 37.5, at: 0.5 + i * 0.6 }));
+    const REJECT = { Be: 1, Ne: 1 };
+    const EXC = [['Be', 5.8], ['N', 6.6], ['Ne', 7.4]];
+    const G17 = [
+      { e: BY.F,  cx: 58,  radii: [9, 23],           at: 9.2,  crowd: true },
+      { e: BY.Cl, cx: 160, radii: [9, 25, 41],       at: 9.8 },
+      { e: BY.Br, cx: 274, radii: [9, 22, 35, 48],   at: 10.4 }
+    ];
+    const GY = 262;
+    const CAPS = [
+      [5.6, 'Across period 2, atoms generally release more energy as they take an electron.'],
+      [9.0, 'Beryllium and neon turn the electron away. Nitrogen barely holds it (≈ 0).'],
+      [12.2, 'Down group 17, chlorine releases the most. Fluorine is so small that the new electron is crowded.'],
+      [99, 'More negative across, less negative down, with exceptions.']
+    ];
+    const col = v => ramp(-v / VMAX);
+
+    function render(t) {
+      let g = `<text x="4" y="12" font-size="9.5" class="svg-muted">Electron affinity, ΔH (kJ/mol)</text>`;
+      g += `<line x1="16" x2="334" y1="${BASE}" y2="${BASE}" class="svg-muted-s" stroke-width="1" opacity="${f(seg(t, 0, 0.4), 2)}"/>`;
+      g += `<text x="12" y="${BASE + 3}" text-anchor="end" font-size="9" class="svg-muted mono" opacity="${f(seg(t, 0, 0.4), 2)}">0</text>`;
+      P2.forEach(b => {
+        const s = b.e.sym, show = seg(t, 0, 0.4);
+        const exc = EXC.find(x => x[0] === s);
+        const hl = exc ? seg(t, exc[1], exc[1] + 0.3) : 0;
+        g += `<text x="${b.x}" y="${BASE - 26}" text-anchor="middle" font-size="11" font-weight="600" class="svg-ink" opacity="${f(show, 2)}">${s}</text>`;
+        const fall = seg(t, b.at, b.at + 0.3);
+        let dotY = DROP + (BASE - DROP) * fall, dotOp = t >= b.at ? 1 : 0;
+        if (REJECT[s]) {
+          const back = seg(t, b.at + 0.3, b.at + 0.7);
+          dotY = BASE - (BASE - DROP - 4) * back;
+          dotOp *= 1 - seg(t, b.at + 0.6, b.at + 0.9);
+          const st = seg(t, b.at + 0.5, b.at + 0.8);
+          g += `<rect x="${b.x - 13}" y="${BASE + 2}" width="26" height="12" rx="2" style="fill:url(#eaHatch);stroke:${hl > 0.5 ? 'var(--gold-ink)' : 'var(--rule)'}" stroke-width="${hl > 0.5 ? 2 : 1}" opacity="${f(st, 2)}"/>`;
+          g += `<text x="${b.x}" y="${BASE + 26}" text-anchor="middle" font-size="8.5" class="svg-muted mono" opacity="${f(st, 2)}">none</text>`;
+        } else if (s === 'N') {
+          const st = seg(t, b.at + 0.3, b.at + 0.6);
+          dotOp *= 1 - seg(t, b.at + 0.5, b.at + 0.8);
+          g += `<rect x="${b.x - 13}" y="${BASE}" width="26" height="2" class="svg-muted" opacity="${f(st, 2)}" ${hl > 0.5 ? 'style="stroke:var(--gold-ink);stroke-width:2"' : ''}/>`;
+          g += `<text x="${b.x}" y="${BASE + 16}" text-anchor="middle" font-size="9" class="svg-ink mono" opacity="${f(st, 2)}">≈0</text>`;
+        } else {
+          const grow = seg(t, b.at + 0.3, b.at + 0.65);
+          dotOp *= 1 - seg(t, b.at + 0.3, b.at + 0.5);
+          const h = HMAX * -b.e.ea / VMAX * grow;
+          g += `<rect x="${b.x - 13}" y="${BASE}" width="26" height="${f(h, 1)}" rx="2" fill="${col(b.e.ea).bg}"/>`;
+          if (grow > 0) g += `<text x="${b.x}" y="${f(BASE + h + 12, 1)}" text-anchor="middle" font-size="9" class="svg-ink mono" opacity="${f(grow, 2)}">−${-b.e.ea}</text>`;
+        }
+        if (dotOp > 0.01) g += `<circle cx="${b.x}" cy="${f(dotY, 1)}" r="3" class="svg-forest" opacity="${f(dotOp, 2)}"/>`;
+      });
+      // group 17: incoming electron lands in the empty outer slot
+      const gh = seg(t, 9.0, 9.4);
+      g += `<text x="4" y="212" font-size="10.5" class="svg-muted mono" opacity="${f(gh, 2)}">Group 17, drawn to scale</text>`;
+      G17.forEach(a => {
+        const ap = seg(t, a.at, a.at + 0.4);
+        if (ap <= 0) return;
+        const R = a.radii[a.radii.length - 1];
+        a.radii.forEach((r, i) => {
+          g += `<circle cx="${a.cx}" cy="${GY}" r="${r}" style="fill:none;stroke:${i === a.radii.length - 1 ? 'var(--muted)' : 'var(--rule)'}" opacity="${f(ap, 2)}"/>`;
+        });
+        g += `<circle cx="${a.cx}" cy="${GY}" r="6" class="svg-gold" opacity="${f(ap, 2)}"/>`;
+        const land = seg(t, a.at + 0.5, a.at + 1.1);
+        for (let k = 0; k < 8; k++) {
+          const ang = (k * 45) * Math.PI / 180;
+          if (k === 2) continue;   // top slot: filled by the incoming electron
+          g += `<circle cx="${f(a.cx + Math.cos(ang) * R, 1)}" cy="${f(GY - Math.sin(ang) * R, 1)}" r="2.5" class="svg-forest" opacity="${f(ap, 2)}"/>`;
+        }
+        const iy = (GY - R - 26) + 26 * land;
+        g += `<circle cx="${a.cx}" cy="${f(iy, 1)}" r="2.8" style="fill:var(--gold-ink)" opacity="${f(ap, 2)}"/>`;
+        if (a.crowd) {
+          const cr = seg(t, a.at + 1.1, a.at + 1.4);
+          [60, 120, 30, 150].forEach(deg => {
+            const an = deg * Math.PI / 180, r1 = R + 3, r2 = R + 9;
+            g += `<line x1="${f(a.cx + Math.cos(an) * r1, 1)}" y1="${f(GY - Math.sin(an) * r1, 1)}" x2="${f(a.cx + Math.cos(an) * r2, 1)}" y2="${f(GY - Math.sin(an) * r2, 1)}" class="svg-gold-s" stroke-width="1.5" stroke-linecap="round" opacity="${f(cr, 2)}"/>`;
+          });
+          g += `<text x="${a.cx}" y="${GY + R + 14}" text-anchor="middle" font-size="9" class="mono" style="fill:var(--gold-ink)" opacity="${f(cr, 2)}">crowded</text>`;
+        }
+        const lv = seg(t, a.at + 1.1, a.at + 1.4);
+        g += `<text x="${a.cx}" y="330" text-anchor="middle" font-size="15" font-weight="600" class="svg-ink" opacity="${f(ap, 2)}">${a.e.sym}</text>`;
+        g += `<text x="${a.cx}" y="345" text-anchor="middle" font-size="10.5" class="svg-ink mono" opacity="${f(lv, 2)}">−${-a.e.ea}</text>`;
+      });
+      svg.innerHTML = `<defs><pattern id="eaHatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" style="stroke:var(--hatch)" stroke-width="2"/></pattern></defs>` + g;
+      const c = CAPS.find(z => t < z[0]);
+      if (cap.textContent !== c[1]) cap.textContent = c[1];
+      chips.forEach((ch, j) => ch.style.setProperty('--o', f(seg(t, 12.4 + j * 0.3, 12.9 + j * 0.3), 3)));
+    }
+
+    let t = END, playing = false, last = 0;
+    function frame(now) {
+      if (!playing) return;
+      t = Math.min(END, t + (now - last) / 1000 * RATE); last = now;
+      render(t);
+      if (t >= END) { playing = false; btnPause.textContent = 'Pause'; btnPause.disabled = true; return; }
+      requestAnimationFrame(frame);
+    }
+    function play(from) {
+      if (from !== undefined) t = from;
+      playing = true; last = performance.now(); btnPause.disabled = false; btnPause.textContent = 'Pause';
+      requestAnimationFrame(frame);
+    }
+    btnPause.addEventListener('click', () => { if (playing) { playing = false; btnPause.textContent = 'Play'; } else play(); });
+    btnReplay.addEventListener('click', () => play(0));
+
+    render(END);
+    btnPause.disabled = true;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { btnPause.hidden = true; return; }
+    if ('IntersectionObserver' in window) {
+      const narrow = !window.matchMedia('(min-width: 900px)').matches;
+      const io = new IntersectionObserver(entries => {
+        if (entries.some(en => en.isIntersecting)) { io.disconnect(); play(0); }
+      }, { threshold: 0.4, rootMargin: narrow ? '-300px 0px 0px 0px' : '0px' });
+      io.observe(svg);
+    }
+  })();
+
+  /* ── Electronegativity animation (section 6): EA vs EN side by side, then the Pauling scale ── */
+  (function enAnim() {
+    const svg = document.getElementById('enSvg');
+    const cap = document.getElementById('enCap');
+    const chips = Array.from(document.querySelectorAll('#enChips span'));
+    const btnPause = document.getElementById('enPause'), btnReplay = document.getElementById('enReplay');
+    const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
+    const seg = (t, a, b) => ease((t - a) / (b - a));
+    const f = (v, d) => v.toFixed(d);
+    const RATE = 0.625;   // same reading pace as the electron affinity animation
+    const END = 11.6, PY = 86;
+    const SX = v => 20 + (v - 0.8) / 3.2 * 300, SY = 226;
+    const ACROSS = ['Li','Be','B','C','N','O','F'].map((s, i) => ({ e: BY[s], at: 6.0 + i * 0.35 }));
+    const DOWN = [['F', 8.9, 'end'], ['Cl', 9.2, 'start'], ['Br', 9.6, 'end']];   // values split left/right so neighbours never collide
+    const CAPS = [
+      [2.6, 'Electron affinity: a lone atom gains an electron. We measure the energy released, in kJ/mol.'],
+      [5.6, 'Electronegativity: two bonded atoms share a pair, and the stronger puller drags it closer. A scale with no unit.'],
+      [8.8, 'Across period 2, electronegativity rises, up to fluorine at 3.98.'],
+      [10.4, 'Down group 17 it falls: 3.98, 3.16, 2.96.'],
+      [99, 'Same two rules as before: a stronger pull on closer electrons.']
+    ];
+    const ring7 = (cx, R, op) => {
+      let s = '';
+      for (let k = 0; k < 8; k++) {
+        if (k === 3) continue;   // empty slot, upper left
+        const a = k * 45 * Math.PI / 180;
+        s += `<circle cx="${f(cx + Math.cos(a) * R, 1)}" cy="${f(PY - Math.sin(a) * R, 1)}" r="2.3" class="svg-forest" opacity="${f(op, 2)}"/>`;
+      }
+      return s;
+    };
+
+    function render(t) {
+      const pIn = seg(t, 0, 0.5);
+      let g = '';
+      /* two panels */
+      [[4, 'Electron affinity', 'one lone atom'], [174, 'Electronegativity', 'an atom in a bond']].forEach(([x, title, sub]) => {
+        g += `<rect x="${x}" y="18" width="162" height="140" rx="10" style="fill:var(--bg);stroke:var(--rule)" opacity="${f(pIn, 2)}"/>`;
+        g += `<text x="${x + 10}" y="36" font-size="12" font-weight="600" class="svg-ink" opacity="${f(pIn, 2)}">${title}</text>`;
+        g += `<text x="${x + 10}" y="49" font-size="9.5" class="svg-muted" opacity="${f(pIn, 2)}">${sub}</text>`;
+      });
+      /* left: lone Cl catches a free electron */
+      const LX = 85, LR = 26;
+      g += `<circle cx="${LX}" cy="${PY}" r="${LR}" style="fill:none;stroke:var(--muted)" opacity="${f(pIn, 2)}"/>`;
+      g += `<circle cx="${LX}" cy="${PY}" r="7" class="svg-gold" opacity="${f(pIn, 2)}"/>`;
+      g += `<text x="${LX}" y="${PY + 3}" text-anchor="middle" font-size="7" font-weight="600" fill="#1b1f1c" opacity="${f(pIn, 2)}">Cl</text>`;
+      g += ring7(LX, LR, pIn);
+      const fly = seg(t, 0.6, 1.6);
+      const sa = 135 * Math.PI / 180;
+      const ex0 = 20, ey0 = 58, ex1 = LX + Math.cos(sa) * LR, ey1 = PY - Math.sin(sa) * LR;
+      g += `<circle cx="${f(ex0 + (ex1 - ex0) * fly, 1)}" cy="${f(ey0 + (ey1 - ey0) * fly, 1)}" r="2.6" style="fill:var(--gold-ink)" opacity="${f(seg(t, 0.4, 0.7), 2)}"/>`;
+      const burst = seg(t, 1.6, 1.9) * (1 - seg(t, 2.3, 2.7));
+      if (burst > 0) [0, 60, 120, 180, 240, 300].forEach(d => {
+        const a = d * Math.PI / 180, r1 = LR + 4, r2 = LR + 10;
+        g += `<line x1="${f(LX + Math.cos(a) * r1, 1)}" y1="${f(PY - Math.sin(a) * r1, 1)}" x2="${f(LX + Math.cos(a) * r2, 1)}" y2="${f(PY - Math.sin(a) * r2, 1)}" class="svg-gold-s" stroke-width="1.5" stroke-linecap="round" opacity="${f(burst, 2)}"/>`;
+      });
+      const lv = seg(t, 1.6, 2.0);
+      g += `<text x="${LX}" y="134" text-anchor="middle" font-size="14" font-weight="600" class="mono" style="fill:var(--gold-ink)" opacity="${f(lv, 2)}">−349 kJ/mol</text>`;
+      g += `<text x="${LX}" y="149" text-anchor="middle" font-size="9.5" class="svg-muted" opacity="${f(seg(t, 2.0, 2.4), 2)}">measured energy</text>`;
+      /* right: H–Cl, shared pair slides toward Cl */
+      const pR = seg(t, 2.6, 3.0), HX = 218, CX2 = 286, HR = 12, CR = 26;
+      const slide = seg(t, 3.2, 4.2);
+      const mid = (HX + HR + CX2 - CR) / 2;
+      const px = mid + slide * 12;
+      g += `<circle cx="${HX}" cy="${PY}" r="${HR}" class="svg-surface" style="stroke:var(--ink)" opacity="${f(pR, 2)}"/>`;
+      g += `<text x="${HX}" y="${PY + 4}" text-anchor="middle" font-size="11" font-weight="600" class="svg-ink" opacity="${f(pR, 2)}">H</text>`;
+      g += `<circle cx="${CX2}" cy="${PY}" r="${CR}" class="svg-surface" style="stroke:var(--ink)" opacity="${f(pR, 2)}"/>`;
+      g += `<text x="${CX2}" y="${PY + 5}" text-anchor="middle" font-size="13" font-weight="600" class="svg-ink" opacity="${f(pR, 2)}">Cl</text>`;
+      g += `<ellipse cx="${f(px, 1)}" cy="${PY}" rx="${f(26 - slide * 6, 1)}" ry="14" style="fill:var(--forest);fill-opacity:.22" opacity="${f(pR, 2)}"/>`;
+      g += `<circle cx="${f(px, 1)}" cy="${PY - 4}" r="2.5" class="svg-forest" opacity="${f(pR, 2)}"/><circle cx="${f(px, 1)}" cy="${PY + 4}" r="2.5" class="svg-forest" opacity="${f(pR, 2)}"/>`;
+      const dl = seg(t, 4.2, 4.6);
+      g += `<text x="${HX}" y="${PY - 18}" text-anchor="middle" font-size="11" class="mono" style="fill:var(--gold-ink)" opacity="${f(dl, 2)}">δ+</text>`;
+      g += `<text x="${CX2}" y="${PY - 32}" text-anchor="middle" font-size="11" class="mono" style="fill:var(--gold-ink)" opacity="${f(dl, 2)}">δ−</text>`;
+      const rv = seg(t, 4.4, 4.8);
+      g += `<text x="255" y="134" text-anchor="middle" font-size="14" font-weight="600" class="svg-ink mono" opacity="${f(rv, 2)}">3.16 vs 2.20</text>`;
+      g += `<text x="255" y="149" text-anchor="middle" font-size="9.5" class="svg-muted" opacity="${f(seg(t, 4.8, 5.2), 2)}">scale, no unit</text>`;
+      /* Pauling scale */
+      const sc = seg(t, 5.8, 6.2);
+      g += `<text x="4" y="176" font-size="10.5" class="svg-muted mono" opacity="${f(sc, 2)}">Pauling scale</text>`;
+      g += `<line x1="20" x2="320" y1="${SY}" y2="${SY}" class="svg-muted-s" stroke-width="1.2" opacity="${f(sc, 2)}"/>`;
+      g += `<text x="16" y="${SY + 4}" text-anchor="end" font-size="9" class="svg-muted mono" opacity="${f(sc, 2)}">0.8</text>`;
+      g += `<text x="324" y="${SY + 4}" font-size="9" class="svg-muted mono" opacity="${f(sc, 2)}">4.0</text>`;
+      g += `<text x="4" y="190" font-size="9.5" class="svg-muted" opacity="${f(seg(t, 6.0, 6.4), 2)}">Period 2 →</text>`;
+      ACROSS.forEach(m => {
+        const a = seg(t, m.at, m.at + 0.3);
+        if (a <= 0) return;
+        const x = SX(m.e.en), c = ramp((m.e.en - 0.8) / 3.2);
+        g += `<circle cx="${f(x, 1)}" cy="${SY}" r="${f(5 * a, 1)}" fill="${c.bg}" style="stroke:var(--ink)" stroke-width="0.8"/>`;
+        g += `<text x="${f(x, 1)}" y="${SY - 12}" text-anchor="middle" font-size="10" font-weight="600" class="svg-ink" opacity="${f(a, 2)}">${m.e.sym}</text>`;
+        g += `<text x="${f(x, 1)}" y="${SY - 24}" text-anchor="middle" font-size="8.5" class="svg-muted mono" opacity="${f(a, 2)}">${m.e.en.toFixed(2)}</text>`;
+      });
+      const dh = seg(t, 8.8, 9.2), SY2 = SY + 30;
+      g += `<text x="4" y="${SY2 - 10}" font-size="9.5" class="svg-muted" opacity="${f(dh, 2)}">Group 17 ↓</text>`;
+      g += `<line x1="20" x2="320" y1="${SY2}" y2="${SY2}" class="svg-rule-s" stroke-width="1.2" opacity="${f(dh, 2)}"/>`;
+      DOWN.forEach(([s, at, side]) => {
+        const a = seg(t, at, at + 0.35);
+        if (a <= 0) return;
+        const e = BY[s], x = SX(e.en), c = ramp((e.en - 0.8) / 3.2);
+        g += `<circle cx="${f(x, 1)}" cy="${SY2}" r="${f(5 * a, 1)}" fill="${c.bg}" style="stroke:var(--ink)" stroke-width="0.8"/>`;
+        g += `<text x="${f(x, 1)}" y="${SY2 + 17}" text-anchor="middle" font-size="10" font-weight="600" class="svg-ink" opacity="${f(a, 2)}">${s}</text>`;
+        g += `<text x="${f(side === 'start' ? x + 9 : x - 9, 1)}" y="${SY2 + 3.5}" text-anchor="${side}" font-size="8.5" class="svg-muted mono" opacity="${f(a, 2)}">${e.en.toFixed(2)}</text>`;
+      });
+      svg.innerHTML = g;
+      const c = CAPS.find(z => t < z[0]);
+      if (cap.textContent !== c[1]) cap.textContent = c[1];
+      chips.forEach((ch, j) => ch.style.setProperty('--o', f(seg(t, 10.6 + j * 0.3, 11.1 + j * 0.3), 3)));
+    }
+
+    let t = END, playing = false, last = 0;
+    function frame(now) {
+      if (!playing) return;
+      t = Math.min(END, t + (now - last) / 1000 * RATE); last = now;
+      render(t);
+      if (t >= END) { playing = false; btnPause.textContent = 'Pause'; btnPause.disabled = true; return; }
+      requestAnimationFrame(frame);
+    }
+    function play(from) {
+      if (from !== undefined) t = from;
+      playing = true; last = performance.now(); btnPause.disabled = false; btnPause.textContent = 'Pause';
+      requestAnimationFrame(frame);
+    }
+    btnPause.addEventListener('click', () => { if (playing) { playing = false; btnPause.textContent = 'Play'; } else play(); });
+    btnReplay.addEventListener('click', () => play(0));
+
+    render(END);
+    btnPause.disabled = true;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { btnPause.hidden = true; return; }
+    if ('IntersectionObserver' in window) {
+      const narrow = !window.matchMedia('(min-width: 900px)').matches;
+      const io = new IntersectionObserver(entries => {
+        if (entries.some(en => en.isIntersecting)) { io.disconnect(); play(0); }
+      }, { threshold: 0.4, rootMargin: narrow ? '-300px 0px 0px 0px' : '0px' });
+      io.observe(svg);
+    }
+  })();
+
+  /* ── Bond spectrum animation (section 7): Cl–Cl → H–Cl → Na–Cl, marker slides along ΔEN ── */
+  (function bondAnim() {
+    const svg = document.getElementById('bsSvg');
+    const cap = document.getElementById('bsCap');
+    const chips = Array.from(document.querySelectorAll('#bsChips span'));
+    const btnPause = document.getElementById('bsPause'), btnReplay = document.getElementById('bsReplay');
+    const ease = x => x <= 0 ? 0 : x >= 1 ? 1 : x * x * (3 - 2 * x);
+    const seg = (t, a, b) => ease((t - a) / (b - a));
+    const f = (v, d) => v.toFixed(d);
+    const lerp = (a, b, p) => a + (b - a) * p;
+    const RATE = 0.625;   // reading pace
+    const END = 12.4, CY = 74;
+    const CASES = [
+      { L: 'Cl', R: 'Cl', lR: 26, Lx: 120, Rx: 220, shift: 0,  cx: 0,  crx: 46, cry: 18, d: 0,    name: 'Non-polar covalent' },
+      { L: 'H',  R: 'Cl', lR: 14, Lx: 120, Rx: 220, shift: 16, cx: 14, crx: 40, cry: 17, d: 0.96, name: 'Polar covalent' },
+      { L: 'Na', R: 'Cl', lR: 22, Lx: 104, Rx: 232, shift: 0,  cx: 0,  crx: 32, cry: 31, d: 2.23, name: 'Ionic' }
+    ];
+    const CAPS = [
+      [3.6, 'Two identical atoms pull equally, so the shared pair sits in the middle: a non-polar covalent bond.'],
+      [7.6, 'Chlorine pulls harder than hydrogen (ΔEN 0.96). The pair leans towards chlorine: δ− on Cl, δ+ on H.'],
+      [11.2, 'Sodium barely pulls (ΔEN 2.23). The electron is handed over: Na⁺ and Cl⁻, an ionic bond.'],
+      [99, 'One sliding scale, from equal sharing to handing over.']
+    ];
+    const BX0 = 20, BX1 = 320, BY0 = 186;
+    const bx = d => BX0 + Math.min(d, 3.3) / 3.3 * (BX1 - BX0);
+
+    function render(t) {
+      const ab = seg(t, 4.4, 5.4), bc = seg(t, 8.4, 9.6);
+      const mix = k => lerp(lerp(CASES[0][k], CASES[1][k], ab), CASES[2][k], bc);
+      const ci = t < 3.6 ? 0 : t < 7.6 ? 1 : 2, C = CASES[ci];
+      const Lx = mix('Lx'), Rx = mix('Rx');
+      const lR = ci === 0 ? 26 : ci === 1 ? lerp(26, 14, seg(t, 3.6, 4.1)) : lerp(14, 22, seg(t, 7.6, 8.1));
+      const pIn = seg(t, 0, 0.6);
+      const mid = (Lx + lR + Rx - 26) / 2;
+      // pair position: middle → leaning → inside Cl
+      const pairX = lerp(lerp(mid, mid + 16, ab), Rx - 17, bc);   // inside Cl, clear of its label
+      const cloudX = lerp(lerp(mid, mid + 14, ab), Rx, bc);
+      let g = `<defs><linearGradient id="bsg" x1="0" x2="1">
+        <stop offset="0" stop-color="#e3ece6"/><stop offset="${(0.4/3.3).toFixed(3)}" stop-color="#e3ece6"/>
+        <stop offset="${(0.6/3.3).toFixed(3)}" stop-color="#ecd27f"/><stop offset="${(1.5/3.3).toFixed(3)}" stop-color="#ecd27f"/>
+        <stop offset="${(1.9/3.3).toFixed(3)}" stop-color="#4f8160"/><stop offset="1" stop-color="#22423a"/></linearGradient></defs>`;
+      // atoms
+      g += `<circle cx="${f(Lx, 1)}" cy="${CY}" r="${f(lR, 1)}" class="svg-surface" style="stroke:var(--ink)" stroke-width="1.2" opacity="${f(pIn, 2)}"/>`;
+      g += `<circle cx="${f(Rx, 1)}" cy="${CY}" r="26" class="svg-surface" style="stroke:var(--ink)" stroke-width="1.2" opacity="${f(pIn, 2)}"/>`;
+      // shared cloud + pair drawn over both atoms
+      g += `<ellipse cx="${f(cloudX, 1)}" cy="${CY}" rx="${f(mix('crx'), 1)}" ry="${f(mix('cry'), 1)}" style="fill:var(--forest);fill-opacity:.22" opacity="${f(pIn, 2)}"/>`;
+      g += `<circle cx="${f(pairX, 1)}" cy="${CY - 4}" r="2.7" class="svg-forest" opacity="${f(pIn, 2)}"/><circle cx="${f(pairX, 1)}" cy="${CY + 4}" r="2.7" class="svg-forest" opacity="${f(pIn, 2)}"/>`;
+      g += `<text x="${f(Lx, 1)}" y="${CY + 5}" text-anchor="middle" font-size="${lR < 18 ? 12 : 14}" font-weight="600" class="svg-ink" opacity="${f(pIn, 2)}">${C.L}</text>`;
+      g += `<text x="${f(Rx, 1)}" y="${CY + 5}" text-anchor="middle" font-size="14" font-weight="600" class="svg-ink" opacity="${f(pIn, 2)}">${C.R}</text>`;
+      // charges
+      const dp = seg(t, 5.4, 5.8) * (1 - seg(t, 7.4, 7.6)), ip = seg(t, 9.6, 10.0);
+      const chg = (x, r, txt, op) => `<text x="${f(x, 1)}" y="${f(CY - r - 8, 1)}" text-anchor="middle" font-size="13" font-weight="600" class="mono" style="fill:var(--gold-ink)" opacity="${f(op, 2)}">${txt}</text>`;
+      if (dp > 0) g += chg(Lx, lR, 'δ+', dp) + chg(Rx, 26, 'δ−', dp);
+      if (ip > 0) g += chg(Lx, lR, '+', ip) + chg(Rx, 32, '−', ip);
+      // case name
+      const nameOp = ci === 0 ? seg(t, 0.4, 0.8) : seg(t, ci === 1 ? 5.4 : 9.6, ci === 1 ? 5.8 : 10.0);
+      g += `<text x="170" y="136" text-anchor="middle" font-size="14" font-weight="600" class="svg-ink" opacity="${f(nameOp, 2)}">${C.name}</text>`;
+      g += `<text x="170" y="152" text-anchor="middle" font-size="10.5" class="svg-muted mono" opacity="${f(nameOp, 2)}">${C.L}–${C.R} · ΔEN ${C.d}</text>`;
+      // spectrum bar + sliding marker
+      g += `<rect x="${BX0}" y="${BY0}" width="${BX1 - BX0}" height="12" rx="4" fill="url(#bsg)" opacity="${f(pIn, 2)}"/>`;
+      [0, 0.4, 1.7, 3.3].forEach(v => {
+        g += `<text x="${f(bx(v), 1)}" y="${BY0 + 25}" text-anchor="middle" font-size="9" class="svg-muted mono" opacity="${f(pIn, 2)}">${v}</text>`;
+      });
+      const d = lerp(lerp(0, 0.96, ab), 2.23, bc), mx = bx(d);
+      g += `<path d="M${f(mx - 6, 1)} ${BY0 - 9} L${f(mx + 6, 1)} ${BY0 - 9} L${f(mx, 1)} ${BY0 - 1} Z" class="svg-ink" opacity="${f(pIn, 2)}"/>`;
+      g += `<text x="${f(Math.max(28, Math.min(312, mx)), 1)}" y="${BY0 - 13}" text-anchor="middle" font-size="9.5" class="svg-ink mono" opacity="${f(pIn, 2)}">${d.toFixed(2)}</text>`;
+      svg.innerHTML = g;
+      const c = CAPS.find(z => t < z[0]);
+      if (cap.textContent !== c[1]) cap.textContent = c[1];
+      chips.forEach((ch, j) => ch.style.setProperty('--o', f(seg(t, 11.2 + j * 0.3, 11.7 + j * 0.3), 3)));
+    }
+
+    let t = END, playing = false, last = 0;
+    function frame(now) {
+      if (!playing) return;
+      t = Math.min(END, t + (now - last) / 1000 * RATE); last = now;
+      render(t);
+      if (t >= END) { playing = false; btnPause.textContent = 'Pause'; btnPause.disabled = true; return; }
+      requestAnimationFrame(frame);
+    }
+    function play(from) {
+      if (from !== undefined) t = from;
+      playing = true; last = performance.now(); btnPause.disabled = false; btnPause.textContent = 'Pause';
+      requestAnimationFrame(frame);
+    }
+    btnPause.addEventListener('click', () => { if (playing) { playing = false; btnPause.textContent = 'Play'; } else play(); });
+    btnReplay.addEventListener('click', () => play(0));
+
+    render(END);
+    btnPause.disabled = true;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { btnPause.hidden = true; return; }
+    if ('IntersectionObserver' in window) {
+      const narrow = !window.matchMedia('(min-width: 900px)').matches;
+      const io = new IntersectionObserver(entries => {
+        if (entries.some(en => en.isIntersecting)) { io.disconnect(); play(0); }
+      }, { threshold: 0.5, rootMargin: narrow ? '-300px 0px 0px 0px' : '0px' });
+      io.observe(svg);
+    }
+  })();
+
+  /* ── Start ── */
+  drawTug(); drawBB(); render(); spy();
+})();
+</script>
+</body>
+</html>
