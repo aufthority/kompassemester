@@ -2,7 +2,7 @@
 
 A lightweight course companion for university educators — practice quizzes, study notes, and streak tracking that sits *alongside* an institution's official LMS, not instead of it.
 
-Built for a single pharmacy course at a Malaysian university as a self-serve tool for a lecturer with no dedicated dev support. Single static HTML file, Supabase backend, no build step. Installable to a phone's home screen as a lightweight app (PWA).
+Built for a single pharmacy course at a Malaysian university as a self-serve tool for a lecturer with no dedicated dev support. Single static HTML file (plus standalone interactive labs), Supabase backend, no build step. Installable to a phone's home screen as a lightweight app (PWA).
 
 ## Why this exists
 
@@ -36,6 +36,7 @@ A few product principles guided decisions throughout the app, not just at launch
 - **Server-gated educator role** — an educator account can only ever be created by an existing educator adding an email to an allowlist beforehand; there is no signup path, screen, or toggle a student could use to grant themselves the role. See [Educator role assignment](#educator-role-assignment) below.
 - **Educator Students page** — three summary cards (needs a check-in, haven't started, badge-tier breakdown) that double as roster filters, and per-student points, first-attempt quiz average, notes count, and last-active date, with a link out to the institution's own gradebook for actual marks. See [Educator Students page & nudges](#educator-students-page--nudges) below.
 - **Email nudges** — one button sends a warm, bilingual (English / Bahasa Malaysia) email to every student in the "needs a check-in" or "haven't started" list, at most once per student per week.
+- **Interactive labs** — five standalone chemistry explainers opened from the Learning tab (atomic orbitals, atomic structure, periodic trends, acid–base, titration & gravimetry), with animations students can drive themselves. See [Interactive labs](#interactive-labs) below.
 - **Multi-course landing page** — both roles land on "My Courses" first, so the same app can hold more than one course.
 - **Installable home-screen app** — an in-app banner offers a one-tap install on Android/Chrome/desktop, or shows "Add to Home Screen" instructions on iOS Safari, so the app can open full-screen like a native app without going through an app store.
 
@@ -54,7 +55,8 @@ This was built with Malaysia's Personal Data Protection Act 2010 (as amended in 
 - **Email:** [Resend](https://resend.com) — as custom SMTP for Supabase Auth's transactional email (signup confirmation, password reset), and through its API for nudge emails
 - **Server-side functions:** Supabase Edge Functions (`send-nudges`, `delete-student`) for the few actions that need a secret or admin rights the browser must never hold
 - **Hosting:** [Vercel](https://vercel.com)
-- **Fonts:** Fraunces (display), IBM Plex Sans/Mono (body)
+- **Fonts:** Fraunces (display), IBM Plex Sans/Mono (body); the labs also use IBM Plex Sans Condensed
+- **Labs:** one static HTML file per lab under `labs/`, no backend calls; the Acid–Base and Titration & Gravimetry labs are plain JS on canvas 2D with no libraries
 - **PWA:** a web app manifest and a minimal pass-through service worker enable "Add to Home Screen" / native install prompts; neither adds offline caching, so the app always talks to Supabase live
 
 ## Architecture
@@ -163,6 +165,30 @@ The actual fix: a role is never something a signing-up user can declare, communi
 
 Practically, this means becoming an educator is a two-step, adult-in-the-room process: an existing educator adds an email to `educator_allowlist` *before* that person signs up (via Supabase's Table Editor — no code, no new UI needed for this), and then that person just signs up normally through the same form as any student. Nothing in the client ever reads or writes that table, so a student inspecting the page's network traffic or JavaScript gains no information about who's on the list or how to get on it.
 
+## Interactive labs
+
+The Learning tab ends with an **Interactive labs** card list. Each lab is a guided, animated explainer for a topic students find hard to picture from text alone: what particles are doing inside a flask, or why a trend runs the way it does.
+
+| Lab | File | `lab` id | Covers |
+|---|---|---|---|
+| Atomic Orbital Lab | `labs/orbitals.html` | `orbitals` | s, p and d orbitals in 3D, hydrogen to krypton; energy levels and orbital shapes |
+| Atomic Structure Explorer | `labs/atomic-structure.html` | `atomic-structure` | Orbital clouds, electron configuration, the nucleus; build any atom from 1 to 11 electrons |
+| Periodic Trends Lab | `labs/trends.html` | `trends` | Effective nuclear charge, atomic and ionic size, ionisation energy, electron affinity, electronegativity, bonds and polarity |
+| Acid–Base Lab | `labs/acidbase.html` | `acidbase` | Strong vs weak acids, dynamic equilibrium, titration curves, equivalence vs end point, plus an Explore mode |
+| Titration & Gravimetry Lab | `labs/titration.html` | `titration` | Acid–base, precipitation, redox and EDTA titrations, and gravimetric analysis |
+
+Design decisions and why:
+
+- **Each lab is a standalone page, not part of `index.html`.** The labs are animation-heavy and change often; keeping each in its own file under `labs/` means a lab can be rebuilt without touching the app, and the app file doesn't grow with every new topic. A lab never talks to Supabase: no login, no reads, no writes. The labs link back to the app ("← Kompas").
+- **Opening a lab is logged, nothing inside it is.** Clicking a lab card writes one `lab_open` row to `engagement_events` with `metadata: { lab: '<id>' }`, then navigates. The click waits at most 700 ms for the insert so leaving the page doesn't cancel it; a slow or failed log never blocks the student. Educator preview skips the log, like every other engagement event. `lab_open` is not in the points table above, so labs show who is exploring without adding a way to farm points.
+- **One level structure for every lab.** The core text is pitched at SPM level; "Go deeper" adds STPM / Matriculation detail and "Into the maths" adds degree-level working. Students can stop at the level they need, and the same lab serves first-years and revision before the final.
+- **Short text, animation first.** In the Acid–Base and Titration labs each step's core text is kept to about 30–45 words; the animation carries the explanation, and longer reasoning sits behind Go deeper.
+- **One screen, no scrolling to operate** (Acid–Base and Titration labs). On phones and laptops, the controls, the stage and the readouts of a step all fit in one screen, so a student never scrolls away from the animation they're driving. Longer material opens in sheets.
+- **A shared look for the newer labs.** The Acid–Base and Titration & Gravimetry labs share one template: the Periodic Trends Lab's type and colours (IBM Plex, forest and gold, light with a dark theme) and a toon-style 2D stage (outlined, cel-shaded particles on a lab bench). Each animation zooms from the flask into a particle lens so students connect what they'd see with what's happening. On titration scenes students can add drops themselves instead of watching an autoplay. Motion respects the device's reduced-motion setting.
+- **The labs link to each other** where topics meet (the Titration Lab hands off to the Acid–Base Lab for the full acid–base treatment) instead of repeating content.
+
+To add a lab: put the file in `labs/`, add a card to the Interactive labs list in `index.html` with `id="lab-<id>-link"`, and add `'<id>'` to the lab click list next to it so its open is logged. No database change is needed.
+
 ## Account page & password recovery
 
 Three related but distinct concerns live here, each solving a different failure mode:
@@ -200,7 +226,7 @@ This repo points at a specific Supabase project by design — to run your own in
 11. **Set up email nudges (optional).** Deploy the `send-nudges` Edge Function, then add a secret named `RESEND_API_KEY` under Edge Functions → Secrets. Use a Resend API key with *Sending access* only, restricted to your sending domain. This is separate from the SMTP password in Auth settings, which Edge Functions can't read. Optionally set `NUDGE_FROM` to change the sender address (the default is `Kompas Semester <no-reply@mail.aufthority.com>`, so change it for your own domain). Until the secret exists, the Nudge button shows "Email is not configured yet" and nothing is sent or logged.
 12. **Revisit the group max size for your own assignment structure**: `courses.group_max_size` defaults to 5. Change it per course to whatever your assignment actually calls for — this is a plain column, not a hardcoded constant, specifically so it doesn't need a code change to adjust.
 13. **Rebrand the icons (optional)**: `manifest.json`, the favicon, and the install banner all reference `icon-192.png` / `icon-512.png` (and their `-maskable` variants for Android's circular crop). Swap these four PNGs for your own artwork if you're forking this for a different course or institution, and update `name`/`short_name`/`theme_color` in `manifest.json` to match.
-14. **Deploy**: push this repo to GitHub, then import it in Vercel. No framework preset needed — it's a static site. **All files must sit in the repo root** (not a subfolder) — `manifest.json`, `service-worker.js`, and the icon PNGs are fetched by absolute path (`/manifest.json`, `/icon-192.png`, etc.) alongside `index.html`. Point a custom domain at it if you like.
+14. **Deploy**: push this repo to GitHub, then import it in Vercel. No framework preset needed — it's a static site. **All app files must sit in the repo root** (not a subfolder) — `manifest.json`, `service-worker.js`, and the icon PNGs are fetched by absolute path (`/manifest.json`, `/icon-192.png`, etc.) alongside `index.html`. The one exception is the `labs/` folder, which sits beside them in the root. If you add rewrites in `vercel.json`, make sure they don't catch `/labs/`, or the lab cards will land on the app instead of the lab. Point a custom domain at it if you like.
 
 ## Project structure
 
@@ -218,6 +244,12 @@ icon-192.png                — app icon, 192×192, used by the manifest and ins
 icon-512.png                — app icon, 512×512, used by the manifest
 icon-192-maskable.png       — 192×192 icon with safe-zone padding for Android's circular icon mask
 icon-512-maskable.png       — 512×512 icon with safe-zone padding for Android's circular icon mask
+labs/                      — interactive labs, one standalone HTML file each (no backend calls)
+  orbitals.html             — Atomic Orbital Lab
+  atomic-structure.html     — Atomic Structure Explorer
+  trends.html               — Periodic Trends Lab
+  acidbase.html             — Acid–Base Lab
+  titration.html            — Titration & Gravimetry Lab
 README.md                  — this file
 ```
 
@@ -236,6 +268,10 @@ README.md                  — this file
 - Moving a student between presentation groups is currently two manual steps for the educator (remove from the old group, have them rejoin the new one) rather than a single action. The underlying `move_student_to_group()` database function already supports a one-step move; it just isn't wired to a UI control yet.
 - Presentation-group topics allow duplicates across groups by design (a free-text field, not a constrained list) — there's no warning if two groups end up with the same topic, since this is left to educator discretion rather than enforced.
 - Changing password while logged in doesn't require re-entering the current password first — a deliberate trade-off, not an oversight; see [Account page & password recovery](#account-page--password-recovery).
+- The labs don't save progress: a student who leaves mid-lab starts again from the first step. Only the open is recorded (`lab_open`), not how far a student got.
+- The labs are English only; the bilingual (English / Bahasa Malaysia) treatment used in nudge emails hasn't been applied to them.
+- Chemistry data in the labs (constants, pKa values, ionisation energies and so on) are standard textbook values entered by hand (the Acid–Base and Titration labs label them approximate in their footers); they haven't been checked against a pharmacopoeia or data handbook.
+- Lab opens are logged but not yet shown anywhere on the educator Students page; reading them currently means querying `engagement_events` directly.
 - Adding someone to `educator_allowlist` is a manual Table Editor action with no in-app admin screen — appropriate at the current single-educator scale, but worth revisiting alongside the `educator_id` limitation above if a second educator setup becomes routine rather than occasional.
 
 ## License
