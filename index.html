@@ -223,6 +223,12 @@ button:hover .icon-flask-conical,button:focus-visible .icon-flask-conical{transf
 .card:last-child{margin-bottom:0;}
 .card h3{font-size:14px;font-weight:600;color:var(--forest-900);margin-bottom:2px;}
 .card .meta{font-size:12px;color:var(--ink-soft);}
+/* INTERACTIVE LABS (Learning view) */
+.lab-card{display:flex;align-items:center;justify-content:space-between;gap:14px;text-decoration:none;color:inherit;transition:box-shadow .15s, transform .1s;}
+.lab-card:hover{box-shadow:0 12px 30px rgba(16,36,28,0.16);}
+.lab-card:active{transform:scale(0.99);}
+.lab-card .meta{margin-top:2px;line-height:1.5;}
+.lab-card-go{flex-shrink:0;font-size:12px;font-weight:600;color:#fff;background:linear-gradient(135deg, var(--forest-700), var(--forest-500));padding:7px 14px;border-radius:99px;white-space:nowrap;}
 
 .assess-row{display:flex;align-items:flex-start;justify-content:space-between;padding:14px 20px;border-bottom:1px solid rgba(27,67,50,0.08);gap:10px;}
 .assess-row:last-child{border-bottom:none;}
@@ -710,6 +716,15 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
           <div class="meta" id="learning-streak-sub">Keep showing up — consistency compounds.</div>
         </div>
         <div id="learning-detail"></div>
+
+        <div class="section-label" style="margin-top:22px">Interactive labs</div>
+        <a class="card glass fade-up lab-card" id="lab-orbitals-link" href="labs/orbitals.html">
+          <div>
+            <h3>Atomic Orbital Lab</h3>
+            <div class="meta">See s, p and d orbitals in 3D, from hydrogen to krypton, with a guided lesson on energy levels and orbital shapes.</div>
+          </div>
+          <span class="lab-card-go">Open</span>
+        </a>
 
         <div class="section-label" style="margin-top:22px">Your notes</div>
         <div class="glass" id="notes-history" style="margin-bottom:16px"></div>
@@ -1717,6 +1732,19 @@ async function logEngagementEvent(eventType, { topicId = null, metadata = {} } =
     console.warn('Could not log engagement event:', err);
   }
 }
+
+/* Interactive labs: log the open, then go. Waits at most 700 ms for the
+   insert so leaving the page doesn't cancel it; a slow or failed log never
+   blocks the student. */
+document.getElementById('lab-orbitals-link').addEventListener('click', async e => {
+  e.preventDefault();
+  const href = e.currentTarget.getAttribute('href');
+  await Promise.race([
+    logEngagementEvent('lab_open', { metadata: { lab: 'orbitals' } }),
+    new Promise(r => setTimeout(r, 700))
+  ]);
+  window.location.href = href;
+});
 
 // Thresholds are a share of each course's maximum possible points (see the
 // course_badge_thresholds view), so they differ per course — cache per course.
