@@ -1,0 +1,1546 @@
+<title>Atomic Orbital Lab</title>
+<meta name="description" content="See s, p and d orbitals in 3D for every element from hydrogen to krypton, with plain-language explanations of energy levels and orbital shapes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one-screen instrument. 3D stage on the left (top on phones), a reading panel on the right (below on phones). Dark by design: probability clouds need a dark field. */
+:root {
+  color-scheme: dark;
+  --ink:      #070a10;  /* stage + page ground */
+  --panel:    #0c111a;  /* reading panel */
+  --raised:   #131a26;  /* controls, cards */
+  --line:     #212b3b;
+  --text:     #e7ecf3;
+  --muted:    #93a0b3;
+  --faint:    #5d697c;
+  --plus:     #ffbd4a;  /* wave phase + (amber) */
+  --minus:    #4cc3ff;  /* wave phase − (sky) */
+  --s:        #6fe0a0;  /* s subshell */
+  --p:        #ff8e6e;  /* p subshell */
+  --d:        #b59cff;  /* d subshell */
+  --py:       #f2d36b;  /* p orbital along y (px uses --p, pz uses --minus) */
+  --gold:     #e8c468;  /* Kompas Semester gold, lifted for a dark ground */
+  --focus:    #e8c468;
+  --font-display: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-body:    'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:    'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--text);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  overflow: hidden;
+}
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--focus); outline-offset: 2px; }
+sub, sup { font-size: 0.7em; line-height: 0; }
+
+.app { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr); grid-template-columns: minmax(0, 1fr); }
+
+/* ── Top bar ── */
+.bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  padding: 10px 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--ink);
+}
+.brand { display: flex; align-items: baseline; gap: 10px; min-width: 0; flex: 1 1 auto; }
+.back { font-size: 13px; font-weight: 600; color: var(--gold); text-decoration: none; white-space: nowrap; margin-right: 4px; }
+.back:hover { text-decoration: underline; }
+.brand b { font-family: var(--font-display); font-weight: 800; font-size: 17px; letter-spacing: -0.02em; white-space: nowrap; }
+.brand span { font-family: var(--font-mono); font-size: 11px; color: var(--faint); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tabs { display: flex; background: var(--raised); border: 1px solid var(--line); border-radius: 999px; padding: 3px; flex-shrink: 0; }
+.tabs button {
+  border: 0; background: transparent; padding: 6px 16px; border-radius: 999px;
+  font-size: 13px; font-weight: 600; color: var(--muted); cursor: pointer;
+}
+.tabs button[aria-selected="true"] { background: var(--gold); color: var(--ink); }
+
+/* ── Main split ── */
+main { display: grid; grid-template-columns: minmax(0, 1fr) 448px; min-height: 0; }
+.stage { position: relative; min-height: 0; overflow: hidden; background: var(--ink); }
+#gl { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: none; }
+.labels { position: absolute; inset: 0; pointer-events: none; }
+.olabel {
+  position: absolute; transform: translate(-50%, 0);
+  font-family: var(--font-mono); font-size: 12px; color: var(--text);
+  background: rgba(7,10,16,0.72); border: 1px solid var(--line); border-radius: 6px;
+  padding: 2px 8px; white-space: nowrap; text-align: center; line-height: 1.4;
+}
+.olabel small { display: block; color: var(--muted); font-size: 10.5px; }
+.axlabel { position: absolute; transform: translate(-50%, -50%); font-family: var(--font-mono); font-size: 12px; font-style: italic; color: var(--muted); }
+
+.stage-top { position: absolute; top: 12px; left: 12px; right: 12px; display: flex; justify-content: space-between; gap: 8px; pointer-events: none; }
+.legend {
+  pointer-events: auto; display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center;
+  font-size: 11.5px; color: var(--muted);
+  background: rgba(7,10,16,0.7); border: 1px solid var(--line); border-radius: 8px; padding: 6px 10px;
+}
+.legend i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 5px; vertical-align: -1px; }
+.hint { font-size: 11px; color: var(--faint); align-self: center; text-align: right; }
+
+.toolbar {
+  position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
+  display: flex; gap: 6px; flex-wrap: wrap; justify-content: center;
+  max-width: calc(100% - 24px);
+}
+.seg { display: flex; background: rgba(19,26,38,0.92); border: 1px solid var(--line); border-radius: 10px; padding: 3px; }
+.seg button, .tog {
+  border: 0; background: transparent; color: var(--muted);
+  font-size: 12px; font-weight: 600; padding: 6px 10px; border-radius: 7px; cursor: pointer; white-space: nowrap;
+}
+.seg button[aria-pressed="true"] { background: var(--text); color: var(--ink); }
+.tog { background: rgba(19,26,38,0.92); border: 1px solid var(--line); border-radius: 10px; padding: 7px 11px; }
+.tog[aria-pressed="true"] { color: var(--text); border-color: var(--muted); }
+.tog[aria-pressed="true"]::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--gold); margin-right: 6px; vertical-align: 1px; }
+
+.loading {
+  position: absolute; inset: 0; display: grid; place-items: center;
+  font-family: var(--font-mono); font-size: 12px; color: var(--muted); pointer-events: none;
+}
+
+/* ── Panel ── */
+.panel { background: var(--panel); border-left: 1px solid var(--line); min-height: 0; display: flex; flex-direction: column; }
+.panel-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 22px 24px 24px; }
+.panel-foot { border-top: 1px solid var(--line); padding: 12px 24px; }
+
+.kicker { font-family: var(--font-mono); font-size: 11px; color: var(--faint); letter-spacing: 0.04em; text-transform: uppercase; display: flex; align-items: center; gap: 10px; }
+.dots { display: flex; gap: 4px; }
+.dots i { width: 14px; height: 3px; border-radius: 2px; background: var(--line); }
+.dots i.on { background: var(--gold); }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; }
+.step h2 { font-size: 27px; line-height: 1.12; letter-spacing: -0.025em; font-weight: 800; margin: 12px 0 14px; }
+.prose p { margin: 0 0 12px; color: #c9d2de; max-width: 62ch; }
+.prose p strong { color: var(--text); font-weight: 600; }
+.prose ul { margin: 0 0 12px; padding-left: 18px; color: #c9d2de; }
+.prose li { margin-bottom: 4px; }
+.prose .k { font-family: var(--font-mono); font-size: 0.92em; color: var(--text); }
+.ph-plus { color: var(--plus); font-weight: 600; }
+.ph-minus { color: var(--minus); font-weight: 600; }
+
+.extra { margin: 16px 0 18px; display: grid; gap: 12px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  border: 1px solid var(--line); background: var(--raised); color: var(--text);
+  font-size: 14px; font-weight: 600; padding: 10px 16px; border-radius: 10px; cursor: pointer;
+}
+.btn:hover { border-color: var(--muted); }
+.btn.primary { background: var(--gold); color: var(--ink); border-color: var(--gold); }
+.btn.primary:hover { opacity: 0.9; }
+
+details.more { border-top: 1px solid var(--line); }
+details.more:last-of-type { border-bottom: 1px solid var(--line); }
+details.more summary {
+  list-style: none; cursor: pointer; padding: 12px 0; display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  font-weight: 700; font-size: 14px;
+}
+details.more summary::-webkit-details-marker { display: none; }
+details.more summary span { font-family: var(--font-mono); font-size: 11px; color: var(--faint); font-weight: 400; }
+details.more summary::after { content: "+"; font-family: var(--font-mono); color: var(--muted); margin-left: auto; padding-left: 8px; }
+details.more[open] summary::after { content: "−"; }
+details.more .prose { padding-bottom: 12px; }
+details.more .prose p { font-size: 14px; }
+.eq { font-family: var(--font-mono); font-size: 13px; background: var(--raised); border: 1px solid var(--line); border-radius: 8px; padding: 8px 12px; margin: 0 0 12px; color: var(--text); overflow-x: auto; white-space: nowrap; }
+
+.nav { display: flex; gap: 8px; }
+.nav .btn { flex: 1; }
+.nav .btn:disabled { opacity: 0.35; cursor: default; }
+
+.note { font-size: 12px; color: var(--faint); line-height: 1.5; }
+.note b { color: var(--muted); font-weight: 600; }
+
+/* capacity table */
+.cap { width: 100%; border-collapse: collapse; font-size: 13.5px; font-variant-numeric: tabular-nums; }
+.cap th { text-align: left; font-weight: 500; font-size: 11px; color: var(--faint); text-transform: uppercase; letter-spacing: 0.04em; padding: 0 8px 6px 0; border-bottom: 1px solid var(--line); }
+.cap td { padding: 7px 8px 7px 0; border-bottom: 1px solid var(--line); color: #c9d2de; }
+.cap td:last-child, .cap th:last-child { text-align: right; padding-right: 0; }
+.cap td.num { font-family: var(--font-mono); color: var(--text); }
+
+/* energy ladder (box diagram) */
+.ladder { display: grid; gap: 4px; background: var(--raised); border: 1px solid var(--line); border-radius: 12px; padding: 12px 14px; }
+.ladder .row { display: grid; grid-template-columns: 34px 1fr; align-items: center; gap: 10px; }
+.ladder .row.gap { margin-top: 8px; }
+.ladder .lab { font-family: var(--font-mono); font-size: 13px; color: var(--muted); text-align: right; }
+.ladder .boxes { display: flex; gap: 4px; }
+.ladder .box {
+  width: 30px; height: 26px; border: 1px solid var(--faint); border-radius: 4px;
+  display: grid; place-items: center; font-size: 14px; letter-spacing: -2px; color: var(--text); font-family: var(--font-mono);
+}
+.ladder .row.s .box.f { border-color: var(--s); }
+.ladder .row.p .box.f { border-color: var(--p); }
+.ladder .row.d .box.f { border-color: var(--d); }
+.ladder .boxes { flex-wrap: wrap; }
+.ladder .row.ghost .box { border-style: dashed; border-color: var(--line); }
+.ladder .row.ghost .lab { color: var(--faint); }
+.ladder .ghost-note { font-size: 11px; color: var(--faint); margin-left: 6px; align-self: center; }
+.ladder .axis { font-size: 10.5px; color: var(--faint); font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+
+.config { font-family: var(--font-mono); font-size: 15px; color: var(--text); }
+.config sup { font-size: 0.65em; }
+
+.slider-row { display: grid; gap: 6px; }
+.slider-row label { display: flex; justify-content: space-between; font-size: 13px; color: var(--muted); }
+.slider-row label b { color: var(--text); font-family: var(--font-mono); font-weight: 500; }
+input[type="range"] { width: 100%; accent-color: var(--gold); }
+
+/* drum */
+.drums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; background: var(--raised); border: 1px solid var(--line); border-radius: 12px; padding: 12px 8px 10px; }
+.drum { text-align: center; font-size: 12px; color: var(--muted); }
+.drum svg { width: 100%; max-width: 92px; height: auto; display: block; margin: 0 auto 6px; }
+.drum b { display: block; color: var(--text); font-weight: 600; font-size: 12.5px; }
+.osc-b { animation: osc 1.6s ease-in-out infinite alternate; }
+@keyframes osc { from { opacity: 0; } to { opacity: 1; } }
+
+/* radial plot */
+.plot { background: var(--raised); border: 1px solid var(--line); border-radius: 10px; padding: 8px 6px 4px; margin-bottom: 12px; }
+.plot svg { width: 100%; height: auto; display: block; }
+
+/* ── Explore ── */
+.ptable { display: grid; grid-template-columns: repeat(18, minmax(0, 1fr)); gap: 2px; }
+.el {
+  aspect-ratio: 1 / 1.3; max-width: 100%; min-width: 0;
+  border: 1px solid var(--line); background: var(--raised); border-radius: 4px; cursor: pointer;
+  display: flex; flex-direction: column; justify-content: space-between; padding: 2px 2px 4px; text-align: left; position: relative; overflow: hidden;
+}
+.el .z { font-family: var(--font-mono); font-size: 7.5px; color: var(--faint); line-height: 1; }
+.el .sym { font-family: var(--font-display); font-weight: 700; font-size: 11px; line-height: 1; letter-spacing: -0.02em; }
+.el::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--s); opacity: 0.8; }
+.el.pb::after { background: var(--p); }
+.el.db::after { background: var(--d); }
+.el[aria-pressed="true"] { border-color: var(--text); background: #1d2635; }
+.el:hover { border-color: var(--muted); }
+.pt-legend { display: flex; gap: 14px; font-size: 11.5px; color: var(--faint); margin-top: 8px; }
+.pt-legend i { display: inline-block; width: 12px; height: 3px; border-radius: 2px; margin-right: 6px; vertical-align: 3px; }
+
+.el-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin: 18px 0 4px; }
+.el-head h2 { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+.el-head .zbig { font-family: var(--font-mono); font-size: 12px; color: var(--muted); text-align: right; }
+
+.section-title { font-size: 11px; color: var(--faint); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; margin: 20px 0 8px; display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.quick { display: flex; gap: 4px; }
+.quick button { border: 1px solid var(--line); background: transparent; color: var(--muted); font-size: 11.5px; padding: 3px 8px; border-radius: 6px; cursor: pointer; text-transform: none; letter-spacing: 0; font-weight: 500; }
+.quick button:hover { color: var(--text); border-color: var(--muted); }
+
+.olist { display: grid; gap: 2px; }
+.sub-head { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--muted); margin: 8px 0 2px; }
+.sub-head i { width: 8px; height: 8px; border-radius: 50%; }
+.sub-head .zeff { margin-left: auto; font-family: var(--font-mono); font-size: 11px; color: var(--faint); }
+.orow {
+  display: grid; grid-template-columns: 26px minmax(0, 1fr) auto; align-items: center; gap: 8px;
+  padding: 5px 8px; border-radius: 8px; border: 1px solid transparent; cursor: pointer;
+}
+.orow:hover { background: var(--raised); }
+.orow.focus { border-color: var(--line); background: var(--raised); }
+.orow.empty .oname { color: var(--faint); }
+.eye { width: 22px; height: 22px; border-radius: 6px; border: 1px solid var(--line); background: transparent; cursor: pointer; display: grid; place-items: center; padding: 0; }
+.eye::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: transparent; }
+.eye[aria-pressed="true"]::after { background: var(--sw, var(--text)); }
+.oname { font-family: var(--font-mono); font-size: 13.5px; }
+.oocc { font-family: var(--font-mono); font-size: 13px; color: var(--text); letter-spacing: -1px; min-width: 28px; text-align: right; }
+.oocc.none { color: var(--faint); letter-spacing: 0; font-size: 11px; }
+
+.lab-opts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.lab-opts .seg { background: var(--raised); }
+.lab-opts .seg button { flex: 1; }
+.opt-label { font-size: 11px; color: var(--faint); margin-bottom: 4px; }
+
+.info { background: var(--raised); border: 1px solid var(--line); border-radius: 12px; padding: 14px 16px; }
+.info h3 { font-family: var(--font-mono); font-size: 18px; font-weight: 500; margin-bottom: 8px; }
+.qn { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 10px 0 12px; }
+.qn div { border: 1px solid var(--line); border-radius: 8px; padding: 6px 8px; }
+.qn small { display: block; font-size: 10.5px; color: var(--faint); }
+.qn b { font-family: var(--font-mono); font-weight: 500; font-size: 14px; }
+.badge { display: inline-block; font-size: 11px; font-family: var(--font-mono); color: var(--plus); border: 1px solid rgba(255,189,74,0.35); border-radius: 999px; padding: 1px 8px; }
+
+@media (max-width: 860px) {
+  main { grid-template-columns: minmax(0, 1fr); grid-template-rows: 46% minmax(0, 1fr); }
+  .panel { border-left: 0; border-top: 1px solid var(--line); }
+  .panel-scroll { padding: 18px 16px 20px; }
+  .panel-foot { padding: 10px 16px; }
+  .step h2 { font-size: 23px; }
+  .hint { display: none; }
+  .brand span { display: none; }
+  .brand b { font-size: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
+  .bar { gap: 10px; padding-inline: 12px; }
+  .tabs button { padding: 6px 12px; }
+  .toolbar { bottom: 8px; gap: 4px; }
+  .seg button, .tog { padding: 5px 8px; font-size: 11.5px; }
+  .ptable { gap: 1.5px; }
+  .el { aspect-ratio: 1 / 1.25; padding: 1px 0 4px; justify-content: center; align-items: center; }
+  .el .z { display: none; }
+  .el .sym { font-size: 9.5px; letter-spacing: -0.04em; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .osc-b { animation: none; opacity: 0.5; }
+}
+</style>
+
+<div class="app">
+  <header class="bar">
+    <div class="brand"><a class="back" href="../">← Kompas</a><b>Atomic Orbital Lab</b><span>s · p · d orbitals, n = 1 to 4</span></div>
+    <div class="tabs" role="tablist" aria-label="Mode">
+      <button role="tab" id="tab-learn" aria-selected="true">Learn</button>
+      <button role="tab" id="tab-explore" aria-selected="false">Explore</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="stage" aria-label="3D orbital view">
+      <canvas id="gl"></canvas>
+      <div class="labels" id="labels"></div>
+      <div class="loading" id="loading">Loading 3D view…</div>
+      <div class="stage-top">
+        <div class="legend" id="legend"></div>
+        <div class="hint">Drag to rotate · scroll or pinch to zoom</div>
+      </div>
+      <div class="toolbar" role="toolbar" aria-label="View options">
+        <div class="seg" aria-label="Draw orbitals as">
+          <button id="v-cloud" aria-pressed="true" title="Each dot is a place the electron could be found">Cloud</button>
+          <button id="v-both" aria-pressed="false" title="Dots plus the 90% boundary">Both</button>
+          <button id="v-surface" aria-pressed="false" title="Surface holding 90% of the cloud">Surface</button>
+        </div>
+        <button class="tog" id="t-nodes" aria-pressed="false" title="Show the places where the electron is never found">Nodes</button>
+        <button class="tog" id="t-cut" aria-pressed="false" title="Slice away the front half">Cutaway</button>
+        <button class="tog" id="t-axes" aria-pressed="false" title="Show x, y, z axes">Axes</button>
+      </div>
+    </section>
+
+    <aside class="panel">
+      <div class="panel-scroll" id="panel-scroll">
+        <div id="learn"></div>
+        <div id="explore" hidden></div>
+      </div>
+      <div class="panel-foot" id="learn-foot">
+        <div class="nav">
+          <button class="btn" id="prev">Back</button>
+          <button class="btn primary" id="next">Next</button>
+        </div>
+      </div>
+    </aside>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/objects/MarchingCubes.js"></script>
+<script>
+(function () {
+'use strict';
+
+/* ════════════════════════════════════════════════════════════════
+   1. ORBITAL MATHS — hydrogen-like real orbitals, lengths in a0/Z
+   ════════════════════════════════════════════════════════════════ */
+
+const ORB = {};
+[
+  ['1s', 1, 0, 's'],
+  ['2s', 2, 0, 's'], ['2px', 2, 1, 'x'], ['2py', 2, 1, 'y'], ['2pz', 2, 1, 'z'],
+  ['3s', 3, 0, 's'], ['3px', 3, 1, 'x'], ['3py', 3, 1, 'y'], ['3pz', 3, 1, 'z'],
+  ['3dxy', 3, 2, 'xy'], ['3dxz', 3, 2, 'xz'], ['3dyz', 3, 2, 'yz'], ['3dx2y2', 3, 2, 'x2y2'], ['3dz2', 3, 2, 'z2'],
+  ['4s', 4, 0, 's'], ['4px', 4, 1, 'x'], ['4py', 4, 1, 'y'], ['4pz', 4, 1, 'z']
+].forEach(([key, n, l, m]) => { ORB[key] = { key, n, l, m, sub: n + 'spd'[l] }; });
+
+const MHTML = { s: '', x: 'x', y: 'y', z: 'z', xy: 'xy', xz: 'xz', yz: 'yz', x2y2: 'x²−y²', z2: 'z²' };
+function oHTML(key) { const o = ORB[key]; return o.sub + (o.m === 's' ? '' : '<sub>' + MHTML[o.m] + '</sub>'); }
+function oText(key) { const o = ORB[key]; return o.sub + (o.m === 's' ? '' : MHTML[o.m]); }
+
+function radial(n, l, r) {
+  switch (n * 10 + l) {
+    case 10: return Math.exp(-r);
+    case 20: return (2 - r) * Math.exp(-r / 2);
+    case 21: return r * Math.exp(-r / 2);
+    case 30: return (27 - 18 * r + 2 * r * r) * Math.exp(-r / 3);
+    case 31: return r * (6 - r) * Math.exp(-r / 3);
+    case 32: return r * r * Math.exp(-r / 3);
+    case 40: return (192 - 144 * r + 24 * r * r - r * r * r) * Math.exp(-r / 4);
+    case 41: return r * (80 - 20 * r + r * r) * Math.exp(-r / 4);
+  }
+  return 0;
+}
+/* angular parts of the real orbitals (chemistry axes) */
+function angular(m, x, y, z, r) {
+  if (r < 1e-9) r = 1e-9;
+  switch (m) {
+    case 's': return 1;
+    case 'x': return x / r;
+    case 'y': return y / r;
+    case 'z': return z / r;
+    case 'xy': return x * y / (r * r);
+    case 'xz': return x * z / (r * r);
+    case 'yz': return y * z / (r * r);
+    case 'x2y2': return (x * x - y * y) / (2 * r * r);
+    case 'z2': return (3 * z * z - r * r) / (2 * r * r) / 1.7320508;
+  }
+  return 0;
+}
+function psiChem(o, x, y, z) {
+  const r = Math.sqrt(x * x + y * y + z * z);
+  return radial(o.n, o.l, r) * angular(o.m, x, y, z, r);
+}
+/* Three.js is y-up; chemistry draws z up. three(X,Y,Z) = chem(x, z, −y) */
+function psiThree(o, X, Y, Z) { return psiChem(o, X, -Z, Y); }
+function chemToThree(v) { return new THREE.Vector3(v[0], v[2], -v[1]); }
+
+/* radial extent: radius holding a given fraction of the radial probability */
+const radialCache = {};
+function radialInfo(n, l) {
+  const id = n * 10 + l;
+  if (radialCache[id]) return radialCache[id];
+  const dr = 0.01, rMax = 90;
+  let tot = 0; const cum = [];
+  for (let r = 0; r <= rMax; r += dr) { const R = radial(n, l, r); tot += r * r * R * R * dr; cum.push(tot); }
+  const at = f => { const t = f * tot; for (let i = 0; i < cum.length; i++) if (cum[i] >= t) return i * dr; return rMax; };
+  return (radialCache[id] = { r90: at(0.90), r95: at(0.95), r997: at(0.997) });
+}
+/* radial node radii (hydrogen units) */
+const RADIAL_NODES = { 20: [2], 30: [(18 - Math.sqrt(108)) / 4, (18 + Math.sqrt(108)) / 4], 31: [6], 41: [10 - Math.sqrt(20), 10 + Math.sqrt(20)] };
+/* 4s nodes: roots of r³ − 24r² + 144r − 192 (≈ 1.87, 6.61, 15.52 a₀) */
+RADIAL_NODES[40] = (() => {
+  const f = r => radial(4, 0, r), roots = [];
+  for (let r = 0.01; r < 30; r += 0.01) if (f(r) * f(r + 0.01) < 0) {
+    let a = r, b = r + 0.01; for (let i = 0; i < 40; i++) { const m = (a + b) / 2; if (f(a) * f(m) <= 0) b = m; else a = m; }
+    roots.push((a + b) / 2);
+  }
+  return roots;
+})();
+
+/* angular nodes, chemistry-axis normals; 'cones' for dz² */
+const ANG_NODES = {
+  x: [[1, 0, 0]], y: [[0, 1, 0]], z: [[0, 0, 1]],
+  xy: [[1, 0, 0], [0, 1, 0]], xz: [[1, 0, 0], [0, 0, 1]], yz: [[0, 1, 0], [0, 0, 1]],
+  x2y2: [[Math.SQRT1_2, Math.SQRT1_2, 0], [Math.SQRT1_2, -Math.SQRT1_2, 0]],
+  z2: 'cones'
+};
+
+/* ── density grid, 90% threshold, sampling ── */
+const N = 64, HALF = N / 2;
+const gridCache = {};
+function grid(key) {
+  if (gridCache[key]) return gridCache[key];
+  const o = ORB[key];
+  const L = radialInfo(o.n, o.l).r997 * 1.06;
+  const vals = new Float32Array(N * N * N);
+  const c = i => (i - HALF) / HALF * L;
+  let g = 0, total = 0;
+  for (let k = 0; k < N; k++) {
+    const Z = c(k);
+    for (let j = 0; j < N; j++) {
+      const Y = c(j);
+      for (let i = 0; i < N; i++, g++) {
+        const v = psiThree(o, c(i), Y, Z);
+        vals[g] = v; total += v * v;
+      }
+    }
+  }
+  /* threshold on psi² that encloses 90% of the probability */
+  const d2 = new Float32Array(vals.length);
+  for (let i = 0; i < vals.length; i++) d2[i] = vals[i] * vals[i];
+  const sorted = d2.slice().sort();
+  let acc = 0, thr = 0;
+  for (let i = sorted.length - 1; i >= 0; i--) { acc += sorted[i]; if (acc >= 0.9 * total) { thr = sorted[i]; break; } }
+  const cum = new Float64Array(d2.length);
+  let run = 0;
+  for (let i = 0; i < d2.length; i++) { run += d2[i]; cum[i] = run; }
+  return (gridCache[key] = { L, vals, iso: Math.sqrt(thr), cum, total: run });
+}
+
+const IS_SMALL = window.matchMedia('(max-width: 860px)').matches;
+const PTS = IS_SMALL ? 11000 : 20000;
+const ptsCache = {};
+function samplePoints(key) {
+  if (ptsCache[key]) return ptsCache[key];
+  const o = ORB[key], G = grid(key), h = G.L / HALF;
+  const pos = new Float32Array(PTS * 3), sign = new Int8Array(PTS);
+  for (let p = 0; p < PTS; p++) {
+    const u = Math.random() * G.total;
+    let lo = 0, hi = G.cum.length - 1;
+    while (lo < hi) { const mid = (lo + hi) >> 1; if (G.cum[mid] < u) lo = mid + 1; else hi = mid; }
+    const i = lo % N, j = ((lo / N) | 0) % N, k = (lo / (N * N)) | 0;
+    const X = (i - HALF) * h + (Math.random() - 0.5) * h;
+    const Y = (j - HALF) * h + (Math.random() - 0.5) * h;
+    const Z = (k - HALF) * h + (Math.random() - 0.5) * h;
+    pos[p * 3] = X; pos[p * 3 + 1] = Y; pos[p * 3 + 2] = Z;
+    sign[p] = psiThree(o, X, Y, Z) >= 0 ? 1 : -1;
+  }
+  return (ptsCache[key] = { pos, sign });
+}
+
+/* thin cross-section: dots only from voxels with |Z| < w (local units) */
+function sampleSlab(key, w) {
+  const id = key + '|' + w.toFixed(3);
+  if (ptsCache[id]) return ptsCache[id];
+  const o = ORB[key], G = grid(key), h = G.L / HALF;
+  const ks = [];
+  for (let k = 0; k < N; k++) if (Math.abs((k - HALF) * h) <= w) ks.push(k);
+  const n2 = N * N, idx = [], cum = [];
+  let run = 0;
+  ks.forEach(k => { for (let q = 0; q < n2; q++) { const g = k * n2 + q, v = G.vals[g]; run += v * v; idx.push(g); cum.push(run); } });
+  const M = Math.round(PTS * 0.6);
+  const pos = new Float32Array(M * 3), sign = new Int8Array(M);
+  for (let p = 0; p < M; p++) {
+    const u = Math.random() * run;
+    let lo = 0, hi = cum.length - 1;
+    while (lo < hi) { const mid = (lo + hi) >> 1; if (cum[mid] < u) lo = mid + 1; else hi = mid; }
+    const g = idx[lo], i = g % N, j = ((g / N) | 0) % N, k = (g / n2) | 0;
+    const X = (i - HALF) * h + (Math.random() - 0.5) * h;
+    const Y = (j - HALF) * h + (Math.random() - 0.5) * h;
+    let Z = (k - HALF) * h + (Math.random() - 0.5) * h;
+    Z = Math.max(-w, Math.min(w, Z));
+    pos[p * 3] = X; pos[p * 3 + 1] = Y; pos[p * 3 + 2] = Z;
+    sign[p] = psiThree(o, X, Y, Z) >= 0 ? 1 : -1;
+  }
+  return (ptsCache[id] = { pos, sign });
+}
+
+/* ════════════════════════════════════════════════════════════════
+   2. CHEMISTRY — configurations and Slater effective nuclear charge
+   ════════════════════════════════════════════════════════════════ */
+
+const ELEMENTS = [
+  null,
+  ['H', 'Hydrogen'], ['He', 'Helium'], ['Li', 'Lithium'], ['Be', 'Beryllium'], ['B', 'Boron'], ['C', 'Carbon'],
+  ['N', 'Nitrogen'], ['O', 'Oxygen'], ['F', 'Fluorine'], ['Ne', 'Neon'], ['Na', 'Sodium'], ['Mg', 'Magnesium'],
+  ['Al', 'Aluminium'], ['Si', 'Silicon'], ['P', 'Phosphorus'], ['S', 'Sulfur'], ['Cl', 'Chlorine'], ['Ar', 'Argon'],
+  ['K', 'Potassium'], ['Ca', 'Calcium'], ['Sc', 'Scandium'], ['Ti', 'Titanium'], ['V', 'Vanadium'], ['Cr', 'Chromium'],
+  ['Mn', 'Manganese'], ['Fe', 'Iron'], ['Co', 'Cobalt'], ['Ni', 'Nickel'], ['Cu', 'Copper'], ['Zn', 'Zinc'],
+  ['Ga', 'Gallium'], ['Ge', 'Germanium'], ['As', 'Arsenic'], ['Se', 'Selenium'], ['Br', 'Bromine'], ['Kr', 'Krypton']
+];
+const ZMAX = 36;
+/* Aufbau filling order; SUBS is the written (shell) order */
+const FILL = [['1s', 2], ['2s', 2], ['2p', 6], ['3s', 2], ['3p', 6], ['4s', 2], ['3d', 10], ['4p', 6]];
+const SUBS = ['1s', '2s', '2p', '3s', '3p', '3d', '4s', '4p'];
+/* the two exceptions in this range: a half-full or full 3d set wins over a full 4s */
+const EXCEPTIONS = { 24: { '4s': 1, '3d': 5 }, 29: { '4s': 1, '3d': 10 } };
+const SUB_ORBS = {
+  '1s': ['1s'], '2s': ['2s'], '2p': ['2px', '2py', '2pz'], '3s': ['3s'], '3p': ['3px', '3py', '3pz'],
+  '3d': ['3dxy', '3dxz', '3dyz', '3dx2y2', '3dz2'], '4s': ['4s'], '4p': ['4px', '4py', '4pz']
+};
+function subConfig(Z) {
+  const c = {}; SUBS.forEach(s => c[s] = 0);
+  let left = Z;
+  for (const [s, cap] of FILL) { const k = Math.min(cap, left); c[s] = k; left -= k; }
+  if (EXCEPTIONS[Z]) Object.assign(c, EXCEPTIONS[Z]);
+  return c;
+}
+/* electrons in each real orbital, following Hund's rule (px, py, pz) */
+function orbOccupancy(Z) {
+  const c = subConfig(Z), occ = {};
+  for (const s of SUBS) {
+    const list = SUB_ORBS[s], k = c[s], m = list.length;
+    list.forEach((key, i) => { occ[key] = k <= m ? (i < k ? 1 : 0) : (1 + (i < k - m ? 1 : 0)); });
+  }
+  return occ;
+}
+/* Slater groups: (1s)(2s,2p)(3s,3p)(3d) */
+const GROUP = { '1s': 0, '2s': 1, '2p': 1, '3s': 2, '3p': 2, '3d': 3, '4s': 4, '4p': 4 };
+const SHELL = { '1s': 1, '2s': 2, '2p': 2, '3s': 3, '3p': 3, '3d': 3, '4s': 4, '4p': 4 };
+function slater(Z, sub) {
+  const c = subConfig(Z), g = GROUP[sub], isD = sub.endsWith('d');
+  let S = 0;
+  for (const s of SUBS) {
+    let k = c[s];
+    if (s === sub && k > 0) k -= 1;          /* leave out the electron itself */
+    if (!k) continue;
+    const gs = GROUP[s];
+    if (gs > g) continue;
+    if (gs === g) S += k * (sub === '1s' ? 0.30 : 0.35);
+    else if (isD) S += k * 1.0;
+    else if (SHELL[s] === SHELL[sub] - 1) S += k * 0.85;
+    else S += k * 1.0;
+  }
+  return Math.max(1, Z - S);
+}
+function configHTML(Z) {
+  const c = subConfig(Z);
+  return SUBS.filter(s => c[s] > 0).map(s => s + '<sup>' + c[s] + '</sup>').join(' ');
+}
+/* noble-gas shorthand, e.g. [Ar] 3d⁵ 4s¹ */
+function shortConfigHTML(Z) {
+  if (Z <= 2) return '';
+  const core = Z > 18 ? ['Ar', ['1s', '2s', '2p', '3s', '3p']] : Z > 10 ? ['Ne', ['1s', '2s', '2p']] : ['He', ['1s']];
+  const c = subConfig(Z);
+  return '[' + core[0] + '] ' + SUBS.filter(s => c[s] > 0 && !core[1].includes(s)).map(s => s + '<sup>' + c[s] + '</sup>').join(' ');
+}
+function arrows(e) { return e === 2 ? '↑↓' : e === 1 ? '↑' : ''; }
+
+/* ════════════════════════════════════════════════════════════════
+   3. THREE.JS STAGE
+   ════════════════════════════════════════════════════════════════ */
+
+const canvas = document.getElementById('gl');
+const labelsEl = document.getElementById('labels');
+const legendEl = document.getElementById('legend');
+const COL = {};
+(function readColors() {
+  const cs = getComputedStyle(document.documentElement);
+  ['plus', 'minus', 's', 'p', 'd', 'py', 'text', 'muted', 'line', 'ink'].forEach(n => COL[n] = cs.getPropertyValue('--' + n).trim());
+})();
+
+let renderer, scene, camera, controls, mc;
+const clipPlane = (window.THREE ? new THREE.Plane(new THREE.Vector3(0, 0, -1), 0) : null);
+const state = { view: 'cloud', nodes: false, cut: false, axes: false, mode: 'learn' };
+let current = { items: [], groups: [], labelEls: [], bohr: null, axes: null };
+let camAnim = null;
+let fitRadius = 6;
+let slabHalf = 0.3;
+function slabPlanes() {
+  return [new THREE.Plane(new THREE.Vector3(0, 0, -1), slabHalf * 1.02), new THREE.Plane(new THREE.Vector3(0, 0, 1), slabHalf * 1.02)];
+}
+
+function initStage() {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: false, powerPreference: 'high-performance' });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setClearColor(new THREE.Color(COL.ink), 1);
+  renderer.localClippingEnabled = true;
+  scene = new THREE.Scene();
+  camera = new THREE.PerspectiveCamera(38, 1, 0.05, 2000);
+  camera.position.set(6, 5, 12);
+  controls = new THREE.OrbitControls(camera, canvas);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.08;
+  controls.enablePan = false;
+  controls.rotateSpeed = 0.8;
+  controls.autoRotateSpeed = 0.7;
+  controls.addEventListener('start', () => { controls.autoRotate = false; camAnim = null; });
+
+  scene.add(new THREE.HemisphereLight(0xdfe8ff, 0x1a1408, 0.75));
+  const key = new THREE.DirectionalLight(0xffffff, 0.85); key.position.set(4, 6, 8); scene.add(key);
+  const rim = new THREE.DirectionalLight(0x9fc8ff, 0.35); rim.position.set(-6, -2, -6); scene.add(rim);
+
+  /* nucleus */
+  const nuc = new THREE.Mesh(new THREE.SphereGeometry(1, 20, 14), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+  nuc.name = 'nucleus';
+  scene.add(nuc);
+
+  mc = new THREE.MarchingCubes(N, new THREE.MeshBasicMaterial(), false, false, 90000);
+
+  resize();
+  new ResizeObserver(resize).observe(canvas.parentElement);
+  renderer.setAnimationLoop(frame);
+}
+
+function resize() {
+  const el = canvas.parentElement, w = el.clientWidth, h = el.clientHeight;
+  if (!w || !h) return;
+  renderer.setSize(w, h, false);
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  if (current.items.length) fitCamera(false);
+}
+
+/* round sprite for cloud dots */
+let dotTex = null;
+function getDotTex() {
+  if (dotTex) return dotTex;
+  const c = document.createElement('canvas'); c.width = c.height = 64;
+  const g = c.getContext('2d'), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+  gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.45, 'rgba(255,255,255,0.75)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+  return (dotTex = new THREE.CanvasTexture(c));
+}
+
+/* isosurface geometry, cached per orbital and phase */
+const surfCache = {};
+function surfaceGeom(key, phase) {
+  const id = key + phase;
+  if (surfCache[id]) return surfCache[id];
+  const G = grid(key);
+  mc.reset();
+  const f = mc.field;
+  for (let i = 0; i < G.vals.length; i++) { const v = G.vals[i] * phase; f[i] = v > 0 ? v : 0; }
+  mc.isolation = G.iso;
+  mc.update();
+  const n = mc.count;
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position', new THREE.BufferAttribute(mc.positionArray.slice(0, n * 3), 3));
+  geo.setAttribute('normal', new THREE.BufferAttribute(mc.normalArray.slice(0, n * 3), 3));
+  return (surfCache[id] = geo);
+}
+
+function colorFor(item, phase) {
+  if (item.color === 'phase') return phase > 0 ? COL.plus : COL.minus;
+  return item.color;
+}
+
+/* Build the visual for one orbital item.
+   item = { key, scale, pos:[x,y,z] (three coords), color:'phase'|css, label, sub } */
+function buildItem(item) {
+  const o = ORB[item.key], G = grid(item.key);
+  const grp = new THREE.Group();
+  grp.position.set(item.pos[0], item.pos[1], item.pos[2]);
+  grp.scale.setScalar(item.scale);
+  const showCloud = state.view !== 'surface';
+  const showSurf = state.view !== 'cloud';
+  const slab = state.cut && state.view === 'cloud';
+  const clip = state.cut && !slab ? [clipPlane] : [];
+  const nItems = Math.max(1, current.items.length);
+
+  if (showCloud) {
+    const P = slab ? sampleSlab(item.key, slabHalf / item.scale) : samplePoints(item.key);
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.BufferAttribute(P.pos, 3));
+    const cols = new Float32Array(P.sign.length * 3);
+    const cPlus = new THREE.Color(colorFor(item, 1)), cMinus = new THREE.Color(colorFor(item, -1));
+    if (item.color !== 'phase') cMinus.multiplyScalar(0.62);
+    for (let i = 0; i < P.sign.length; i++) {
+      const c = P.sign[i] > 0 ? cPlus : cMinus;
+      cols[i * 3] = c.r; cols[i * 3 + 1] = c.g; cols[i * 3 + 2] = c.b;
+    }
+    geo.setAttribute('color', new THREE.BufferAttribute(cols, 3));
+    const mat = new THREE.PointsMaterial({
+      size: G.L * (slab ? 0.024 : 0.02) * item.scale, map: getDotTex(), vertexColors: true, transparent: true,
+      opacity: (showSurf ? 0.4 : 0.78) * (nItems > 3 ? 0.5 : nItems > 1 ? 0.72 : 1) * (item.alpha || 1), depthWrite: false, blending: THREE.AdditiveBlending,
+      sizeAttenuation: true, clippingPlanes: clip, alphaTest: 0.02
+    });
+    grp.add(new THREE.Points(geo, mat));
+  }
+  if (showSurf) {
+    [1, -1].forEach(ph => {
+      const geo = surfaceGeom(item.key, ph);
+      const mat = new THREE.MeshStandardMaterial({
+        color: colorFor(item, ph), roughness: 0.42, metalness: 0.0, side: THREE.DoubleSide,
+        transparent: true, opacity: (showCloud ? 0.28 : nItems > 3 ? 0.5 : 0.9) * (item.alpha || 1), depthWrite: !showCloud && !(item.alpha < 1) && nItems <= 3, clippingPlanes: clip
+      });
+      if (item.color !== 'phase' && ph < 0) mat.color.multiplyScalar(0.62);
+      const mesh = new THREE.Mesh(geo, mat);
+      mesh.scale.setScalar(G.L);
+      grp.add(mesh);
+    });
+  }
+  if (state.nodes) grp.add(buildNodes(o, G.L, slab ? slabPlanes() : clip));
+  return grp;
+}
+
+function buildNodes(o, L, sphereClip) {
+  const g = new THREE.Group();
+  const fill = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.07, side: THREE.DoubleSide, depthWrite: false });
+  const edge = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.45 });
+  const size = radialInfo(o.n, o.l).r90 * 2.1;
+  const ang = ANG_NODES[o.m];
+  if (Array.isArray(ang)) {
+    ang.forEach(nv => {
+      const n3 = chemToThree(nv).normalize();
+      const pg = new THREE.PlaneGeometry(size, size);
+      const plane = new THREE.Mesh(pg, fill);
+      const ln = new THREE.LineSegments(new THREE.EdgesGeometry(pg), edge);
+      const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), n3);
+      plane.quaternion.copy(q); ln.quaternion.copy(q);
+      g.add(plane, ln);
+    });
+  } else if (ang === 'cones') {
+    const h = size * 0.42, rad = h * Math.tan(Math.acos(1 / Math.sqrt(3)));
+    const cg = new THREE.ConeGeometry(rad, h, 48, 1, true);
+    const up = new THREE.Mesh(cg, fill); up.rotation.x = Math.PI; up.position.y = h / 2;
+    const dn = new THREE.Mesh(cg, fill); dn.position.y = -h / 2;
+    const wf = new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.25 });
+    const w1 = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.ConeGeometry(rad, h, 16, 1, true), 1), wf); w1.rotation.x = Math.PI; w1.position.y = h / 2;
+    const w2 = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.ConeGeometry(rad, h, 16, 1, true), 1), wf); w2.position.y = -h / 2;
+    g.add(up, dn, w1, w2);
+  }
+  (RADIAL_NODES[o.n * 10 + o.l] || []).forEach(r => {
+    const s = new THREE.Mesh(new THREE.SphereGeometry(r, 40, 24), new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.06, side: THREE.DoubleSide, depthWrite: false, clippingPlanes: sphereClip }));
+    const w = new THREE.LineSegments(new THREE.WireframeGeometry(new THREE.SphereGeometry(r, 18, 10)), new THREE.LineBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.16, clippingPlanes: sphereClip }));
+    g.add(s, w);
+  });
+  return g;
+}
+
+function disposeGroup(obj) {
+  obj.traverse(ch => {
+    if (ch.material) ch.material.dispose();
+    if (ch.geometry && !Object.values(surfCache).includes(ch.geometry)) ch.geometry.dispose();
+  });
+  scene.remove(obj);
+}
+
+/* ── Bohr model (step 1) ── */
+function buildBohr(shells) {
+  const g = new THREE.Group();
+  const radii = [1.05, 3.1, 5.4];
+  const ringMat = new THREE.LineBasicMaterial({ color: COL.muted, transparent: true, opacity: 0.6 });
+  const eMat = new THREE.MeshBasicMaterial({ color: COL.minus });
+  g.userData.electrons = [];
+  shells.forEach((count, si) => {
+    const r = radii[si];
+    const pts = [];
+    for (let a = 0; a <= 128; a++) { const t = a / 128 * Math.PI * 2; pts.push(new THREE.Vector3(Math.cos(t) * r, 0, Math.sin(t) * r)); }
+    const ring = new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(pts), ringMat);
+    const tilt = new THREE.Group(); tilt.rotation.x = 0.35 + si * 0.25; tilt.rotation.z = si * 0.5;
+    tilt.add(ring);
+    for (let e = 0; e < count; e++) {
+      const m = new THREE.Mesh(new THREE.SphereGeometry(0.13, 16, 10), eMat);
+      tilt.add(m);
+      g.userData.electrons.push({ m, r, a: e / count * Math.PI * 2, w: 1.4 / (si + 1) });
+    }
+    g.add(tilt);
+  });
+  return g;
+}
+
+/* ── Axes ── */
+function buildAxes(len) {
+  const g = new THREE.Group();
+  const m = new THREE.LineBasicMaterial({ color: COL.muted, transparent: true, opacity: 0.55 });
+  const dirs = { x: [1, 0, 0], y: [0, 1, 0], z: [0, 0, 1] };
+  g.userData.tips = [];
+  Object.entries(dirs).forEach(([name, d]) => {
+    const v = chemToThree(d).multiplyScalar(len);
+    g.add(new THREE.Line(new THREE.BufferGeometry().setFromPoints([v.clone().negate(), v]), m));
+    g.userData.tips.push({ name, v: v.clone().multiplyScalar(1.07) });
+  });
+  return g;
+}
+
+/* ── Apply a scene description ── */
+let axisLabelEls = [];
+function applyScene(desc, opts) {
+  opts = opts || {};
+  current.groups.forEach(disposeGroup);
+  if (current.bohr) { disposeGroup(current.bohr); current.bohr = null; }
+  if (current.axes) { disposeGroup(current.axes); current.axes = null; }
+  labelsEl.innerHTML = '';
+  current = { items: desc.items || [], groups: [], labelEls: [], bohr: null, axes: null, desc };
+  computeFit(!!desc.bohr);
+  slabHalf = fitRadius * 0.035;
+
+  if (desc.bohr) {
+    current.bohr = buildBohr(desc.bohr);
+    scene.add(current.bohr);
+  }
+  current.items.forEach(item => {
+    const grp = buildItem(item);
+    scene.add(grp);
+    current.groups.push(grp);
+    if (item.label) {
+      const el = document.createElement('div');
+      el.className = 'olabel';
+      el.innerHTML = item.label;
+      labelsEl.appendChild(el);
+      current.labelEls.push({ el, item });
+    }
+  });
+  /* nucleus size: tiny dot, scaled to view */
+  const nuc = scene.getObjectByName('nucleus');
+  nuc.visible = !desc.hideNucleus;
+  nuc.scale.setScalar(fitRadius * (desc.bohr ? 0.035 : 0.012));
+  if (desc.nucleusAt) { /* one nucleus per item in row layouts */ }
+  extraNuclei();
+  if (state.axes) {
+    current.axes = buildAxes(fitRadius * 0.95);
+    scene.add(current.axes);
+  }
+  axisLabelEls = [];
+  if (current.axes) current.axes.userData.tips.forEach(t => {
+    const el = document.createElement('div'); el.className = 'axlabel'; el.textContent = t.name; labelsEl.appendChild(el);
+    axisLabelEls.push({ el, v: t.v });
+  });
+  renderLegend(desc);
+  if (opts.refit !== false) fitCamera(true, desc.camDir);
+  controls.autoRotate = !!desc.spin && !matchMedia('(prefers-reduced-motion: reduce)').matches;
+}
+
+/* extra nucleus dots for row layouts (items not at the origin) */
+let nucleiExtras = [];
+function extraNuclei() {
+  nucleiExtras.forEach(m => { scene.remove(m); });
+  nucleiExtras = [];
+  const base = scene.getObjectByName('nucleus');
+  const offs = current.items.filter(it => Math.abs(it.pos[0]) + Math.abs(it.pos[1]) + Math.abs(it.pos[2]) > 1e-6);
+  if (!offs.length) return;
+  base.visible = current.items.some(it => Math.abs(it.pos[0]) + Math.abs(it.pos[1]) + Math.abs(it.pos[2]) < 1e-6) && !current.desc.hideNucleus;
+  const seen = new Set();
+  offs.forEach(it => {
+    const id = it.pos.join(',');
+    if (seen.has(id)) return; seen.add(id);
+    const m = base.clone(); m.visible = true; m.position.set(it.pos[0], it.pos[1], it.pos[2]);
+    scene.add(m); nucleiExtras.push(m);
+  });
+}
+
+function itemRadius(item) {
+  const o = ORB[item.key];
+  return radialInfo(o.n, o.l).r997 * 0.8 * item.scale;
+}
+let fitBox = { w: 6, h: 6, d: 6 };
+function computeFit(hasBohr) {
+  let R = 1, w = 1, h = 1, d = 1;
+  current.items.forEach(it => {
+    const p = new THREE.Vector3(it.pos[0], it.pos[1], it.pos[2]), r = itemRadius(it);
+    R = Math.max(R, p.length() + r);
+    w = Math.max(w, Math.abs(p.x) + r); h = Math.max(h, Math.abs(p.y) + r); d = Math.max(d, Math.abs(p.z) + r);
+  });
+  if (hasBohr) { R = Math.max(R, 3.6); w = Math.max(w, 3.6); h = Math.max(h, 3.6); d = Math.max(d, 3.6); }
+  fitRadius = R; fitBox = { w, h, d };
+}
+function fitCamera(animate, dir) {
+  const d = new THREE.Vector3().fromArray(dir || [0.55, 0.42, 1]).normalize();
+  const fov = camera.fov * Math.PI / 180;
+  const fovH = 2 * Math.atan(Math.tan(fov / 2) * camera.aspect);
+  /* tilted views see a little of the depth; pad for the toolbar and legend */
+  const hEff = fitBox.h + fitBox.d * 0.45, wEff = fitBox.w + fitBox.d * 0.25;
+  const dist = (Math.max(wEff / Math.tan(fovH / 2), hEff * (IS_SMALL ? 1.4 : 1.18) / Math.tan(fov / 2)) + fitBox.d * 0.5) * 1.02;
+  const target = d.multiplyScalar(dist);
+  controls.minDistance = fitRadius * 0.4;
+  controls.maxDistance = dist * 3;
+  if (animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    camAnim = { from: camera.position.clone(), to: target, t0: performance.now(), dur: 700 };
+  } else {
+    camera.position.copy(target);
+    camAnim = null;
+  }
+  controls.target.set(0, 0, 0);
+}
+
+function renderLegend(desc) {
+  const parts = [];
+  if (desc.legend === 'subshell') {
+    parts.push('<span><i style="background:var(--s)"></i>s</span><span><i style="background:var(--p)"></i>p</span>');
+    if (desc.showD) parts.push('<span><i style="background:var(--d)"></i>d</span>');
+  } else if (desc.legend === 'custom' && desc.legendHTML) {
+    parts.push(desc.legendHTML);
+  } else if (!desc.bohr) {
+    parts.push('<span><i style="background:var(--plus)"></i>wave phase +</span><span><i style="background:var(--minus)"></i>wave phase −</span>');
+  } else {
+    parts.push('<span><i style="background:var(--minus)"></i>electron (Bohr picture)</span>');
+  }
+  if (desc.sizeNote) parts.push('<span>' + desc.sizeNote + '</span>');
+  legendEl.innerHTML = parts.join('');
+  legendEl.hidden = !parts.length;
+}
+
+const tmpV = new THREE.Vector3();
+function projectTo(el, v, dyPx) {
+  tmpV.copy(v).project(camera);
+  const w = canvas.clientWidth, h = canvas.clientHeight;
+  const behind = tmpV.z > 1;
+  el.style.display = behind ? 'none' : '';
+  el.style.left = ((tmpV.x * 0.5 + 0.5) * w) + 'px';
+  el.style.top = ((-tmpV.y * 0.5 + 0.5) * h + (dyPx || 0)) + 'px';
+}
+
+let lastT = performance.now();
+function frame(now) {
+  const dt = Math.min(0.05, (now - lastT) / 1000); lastT = now;
+  if (camAnim) {
+    const t = Math.min(1, (now - camAnim.t0) / camAnim.dur), e = 1 - Math.pow(1 - t, 3);
+    camera.position.lerpVectors(camAnim.from, camAnim.to, e);
+    if (t >= 1) camAnim = null;
+  }
+  if (current.bohr) current.bohr.userData.electrons.forEach(el => {
+    el.a += el.w * dt; el.m.position.set(Math.cos(el.a) * el.r, 0, Math.sin(el.a) * el.r);
+  });
+  controls.update();
+  renderer.render(scene, camera);
+  current.labelEls.forEach(({ el, item }) => {
+    projectTo(el, tmpV.set(item.pos[0], item.pos[1] - itemRadius(item) * 1.02, item.pos[2]).clone(), 6);
+  });
+  axisLabelEls.forEach(({ el, v }) => projectTo(el, v, 0));
+}
+
+/* ── Toolbar ── */
+const vBtns = { cloud: $('#v-cloud'), both: $('#v-both'), surface: $('#v-surface') };
+function $(s) { return document.querySelector(s); }
+function syncToolbar() {
+  Object.entries(vBtns).forEach(([k, b]) => b.setAttribute('aria-pressed', String(state.view === k)));
+  $('#t-nodes').setAttribute('aria-pressed', String(state.nodes));
+  $('#t-cut').setAttribute('aria-pressed', String(state.cut));
+  $('#t-axes').setAttribute('aria-pressed', String(state.axes));
+}
+function rebuild() { if (current.desc) applyScene(current.desc, { refit: false }); }
+Object.entries(vBtns).forEach(([k, b]) => b.addEventListener('click', () => { state.view = k; syncToolbar(); rebuild(); afterViewChange(); }));
+$('#t-nodes').addEventListener('click', () => { state.nodes = !state.nodes; syncToolbar(); rebuild(); });
+$('#t-cut').addEventListener('click', () => { state.cut = !state.cut; syncToolbar(); rebuild(); });
+$('#t-axes').addEventListener('click', () => { state.axes = !state.axes; syncToolbar(); rebuild(); });
+let afterViewChange = () => {};
+
+/* ════════════════════════════════════════════════════════════════
+   4. SCENE HELPERS
+   ════════════════════════════════════════════════════════════════ */
+
+function rowLayout(items, gapFrac) {
+  const radii = items.map(itemRadius);
+  const gap = Math.max(...radii) * (gapFrac == null ? 0.25 : gapFrac);
+  const total = radii.reduce((a, r) => a + 2 * r, 0) + gap * (items.length - 1);
+  let x = -total / 2;
+  items.forEach((it, i) => { x += radii[i]; it.pos = [x, 0, 0]; x += radii[i] + gap; });
+  return items;
+}
+function subColor(key) { return COL['spd'[ORB[key].l]]; }
+
+const DIRCOL = () => ({ s: COL.s, x: COL.p, y: COL.py, z: COL.minus });
+function orbitalColor(key) {
+  const o = ORB[key];
+  if (o.l === 0) return COL.s;
+  if (o.l === 1) return DIRCOL()[o.m];
+  return COL.d;
+}
+/* one group per occupied subshell, side by side, same size; p coloured by direction;
+   one electron = translucent, two = solid */
+function shellRow(Z) {
+  const occ = orbOccupancy(Z), c = subConfig(Z);
+  const groups = SUBS.filter(sb => c[sb] > 0);
+  const items = [];
+  const R = 4;
+  groups.forEach(sb => {
+    SUB_ORBS[sb].filter(k => occ[k] > 0).forEach((k, i) => {
+      const o = ORB[k];
+      items.push({
+        key: k, group: sb, scale: R / (radialInfo(o.n, o.l).r997 * 0.8), color: orbitalColor(k),
+        alpha: occ[k] === 2 ? 1 : 0.42,
+        label: i === 0 ? sb + '<sup>' + c[sb] + '</sup>' : null
+      });
+    });
+  });
+  /* grid: column by l (s, p, d), row by n with n = 1 at the bottom, like an energy ladder */
+  const step = 2 * R + R * 0.45;
+  const cols = Math.max(...groups.map(sb => 'spd'.indexOf(sb[1]))) + 1;
+  const nMax = Math.max(...groups.map(sb => +sb[0]));
+  groups.forEach(sb => {
+    const x = ('spd'.indexOf(sb[1]) - (cols - 1) / 2) * step;
+    const y = (+sb[0] - 1 - (nMax - 1) / 2) * (step + R * 0.55);  /* extra room for the label under each group */
+    items.filter(it => it.group === sb).forEach(it => { it.pos = [x, y, 0]; });
+  });
+  return items;
+}
+const SHELL_LEGEND = '<span><i style="background:var(--s)"></i>s</span><span><i style="background:var(--p)"></i>p<sub>x</sub></span><span><i style="background:var(--py)"></i>p<sub>y</sub></span><span><i style="background:var(--minus)"></i>p<sub>z</sub></span><span><i style="background:var(--d)"></i>d</span><span>faint = 1 electron · solid = 2</span>';
+
+function elementItems(Z, opts) {
+  opts = opts || {};
+  const occ = orbOccupancy(Z);
+  const keys = opts.keys || Object.keys(ORB).filter(k => occ[k] > 0);
+  return keys.map(k => {
+    const o = ORB[k];
+    const ze = slater(Z, o.sub);
+    let scale = 1 / ze;
+    if (opts.sameSize) scale = 4 / radialInfo(o.n, o.l).r95;
+    const color = opts.color === 'phase' ? 'phase' : opts.color === 'orbital' ? orbitalColor(k) : subColor(k);
+    return { key: k, scale, pos: [0, 0, 0], color };
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════
+   5. LEARN MODE
+   ════════════════════════════════════════════════════════════════ */
+
+const learnEl = $('#learn');
+let stepIndex = 0;
+const bohrState = { quantum: false };
+const fillState = { Z: 7 };
+
+function drumSVG(kind) {
+  /* A: phase pattern, B: the inverse, crossfading */
+  const r = 40, c = 46;
+  const plus = 'var(--plus)', minus = 'var(--minus)';
+  const disc = (fill) => `<circle cx="${c}" cy="${c}" r="${r}" fill="${fill}"/>`;
+  const halves = (a, b) => `<path d="M${c} ${c - r} A${r} ${r} 0 0 0 ${c} ${c + r} Z" fill="${a}"/><path d="M${c} ${c - r} A${r} ${r} 0 0 1 ${c} ${c + r} Z" fill="${b}"/>`;
+  const quads = (a, b) => {
+    const q = (sx, sy, f) => `<path d="M${c} ${c} L${c + sx * r} ${c} A${r} ${r} 0 0 ${sx * sy > 0 ? 1 : 0} ${c} ${c + sy * r} Z" fill="${f}"/>`;
+    return q(1, -1, a) + q(-1, -1, b) + q(-1, 1, a) + q(1, 1, b);
+  };
+  let A, B, lines = '';
+  if (kind === 0) { A = disc(plus); B = disc(minus); }
+  if (kind === 1) { A = halves(plus, minus); B = halves(minus, plus); lines = `<line x1="${c}" y1="${c - r}" x2="${c}" y2="${c + r}" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="3 3"/>`; }
+  if (kind === 2) { A = quads(plus, minus); B = quads(minus, plus); lines = `<line x1="${c}" y1="${c - r}" x2="${c}" y2="${c + r}" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="3 3"/><line x1="${c - r}" y1="${c}" x2="${c + r}" y2="${c}" stroke="var(--text)" stroke-width="1.5" stroke-dasharray="3 3"/>`; }
+  return `<svg viewBox="0 0 92 92" aria-hidden="true"><g opacity="0.85">${A}</g><g class="osc-b" opacity="0.85">${B}</g>${lines}<circle cx="${c}" cy="${c}" r="${r}" fill="none" stroke="var(--muted)" stroke-width="1.5"/></svg>`;
+}
+
+function radialPlotSVG() {
+  const W = 360, H = 170, padL = 34, padR = 10, padT = 10, padB = 26;
+  const xMax = 25;
+  const series = [[1, 0, 'var(--s)', '1s'], [2, 0, 'var(--plus)', '2s'], [3, 0, 'var(--minus)', '3s']];
+  const data = series.map(([n, l, col, name]) => {
+    const pts = []; let area = 0; const dr = 0.05;
+    for (let r = 0; r <= xMax; r += dr) { const R = radial(n, l, r); const P = r * r * R * R; pts.push([r, P]); area += P * dr; }
+    return { col, name, pts: pts.map(([r, P]) => [r, P / area]) };
+  });
+  const yMax = Math.max(...data.flatMap(d => d.pts.map(p => p[1]))) * 1.1;
+  const sx = r => padL + r / xMax * (W - padL - padR), sy = v => H - padB - v / yMax * (H - padT - padB);
+  let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Radial probability against distance for 1s, 2s and 3s">`;
+  for (let r = 0; r <= xMax; r += 5) {
+    svg += `<line x1="${sx(r)}" y1="${padT}" x2="${sx(r)}" y2="${H - padB}" stroke="var(--line)" stroke-width="1"/>`;
+    svg += `<text x="${sx(r)}" y="${H - padB + 14}" fill="var(--faint)" font-size="10" text-anchor="middle" font-family="IBM Plex Mono, monospace">${r}</text>`;
+  }
+  svg += `<text x="${W - padR}" y="${H - 2}" fill="var(--faint)" font-size="10" text-anchor="end" font-family="IBM Plex Mono, monospace">r / a₀</text>`;
+  svg += `<text x="12" y="${(H - padB + padT) / 2}" fill="var(--faint)" font-size="10" text-anchor="middle" transform="rotate(-90 12 ${(H - padB + padT) / 2})" font-family="IBM Plex Mono, monospace">P(r)</text>`;
+  svg += `<line x1="${padL}" y1="${H - padB}" x2="${W - padR}" y2="${H - padB}" stroke="var(--faint)"/>`;
+  data.forEach(d => {
+    const path = d.pts.map((p, i) => (i ? 'L' : 'M') + sx(p[0]).toFixed(1) + ' ' + sy(p[1]).toFixed(1)).join(' ');
+    svg += `<path d="${path}" fill="none" stroke="${d.col}" stroke-width="2"/>`;
+    const peak = d.pts.reduce((a, b) => (b[1] > a[1] ? b : a));
+    svg += `<text x="${sx(peak[0]) + 5}" y="${sy(peak[1]) - 4}" fill="${d.col}" font-size="11" font-family="IBM Plex Mono, monospace">${d.name}</text>`;
+  });
+  return svg + '</svg>';
+}
+
+function ladderHTML(Z) {
+  const occ = orbOccupancy(Z), c = subConfig(Z);
+  const rows = [
+    ['4p', 'p'], ['3d', 'd'], ['4s', 's'], ['3p', 'p'], ['3s', 's'], ['2p', 'p'], ['2s', 's'], ['1s', 's']
+  ];
+  let h = '<div class="ladder" aria-label="Orbital box diagram"><div class="axis">↑ higher energy</div>';
+  rows.forEach(([sub, cls, note], idx) => {
+    const gapCls = (sub === '2p' || sub === '1s' || sub === '3p' || sub === '4s') && idx > 0 ? ' gap' : '';
+    h += `<div class="row ${cls}${gapCls}"><div class="lab">${sub}</div><div class="boxes">`;
+    SUB_ORBS[sub].forEach(k => { const e = occ[k] || 0; h += `<div class="box${e ? ' f' : ''}">${arrows(e)}</div>`; });
+    if (note) h += `<span class="ghost-note">${note}</span>`;
+    h += '</div></div>';
+  });
+  return h + '</div>';
+}
+
+/* step definitions */
+const STEPS = [
+  {
+    title: 'Electrons are not tiny planets',
+    body: `
+      <p>You have probably drawn an atom as a nucleus with electrons circling it on rings, like planets around the Sun. That picture is the <strong>Bohr model</strong> from 1913. It gets one thing right: electrons sit at fixed <strong>energy levels</strong>.</p>
+      <p>It gets the rest wrong. An electron has no path you could trace. All we can know is <strong>where it is likely to be found</strong>. Press the button to swap the rings for what quantum mechanics predicts for a carbon atom.</p>`,
+    extra: () => `<button class="btn primary" id="bohr-toggle">${bohrState.quantum ? 'Back to the ring picture' : 'Show the quantum picture'}</button>`,
+    deeper: `
+      <p>Bohr's model predicts hydrogen's energy levels well, but it fails for every atom with more than one electron. It also cannot explain why bonds point in fixed directions, such as the 109.5° angles in methane.</p>
+      <p>The deeper problem is the <strong>uncertainty principle</strong>: an electron's exact position and exact momentum cannot both be known at once. A sharp orbit would require both, so it cannot exist.</p>`,
+    maths: `
+      <p>Electrons are described by a wavefunction ψ that solves the Schrödinger equation:</p>
+      <div class="eq">Ĥψ = Eψ</div>
+      <p>Only certain solutions are allowed, each with a fixed energy E. Each allowed ψ is an <strong>orbital</strong>, labelled by quantum numbers n, l and m<sub>l</sub>. The probability of finding the electron in a small volume is |ψ|² (the Born interpretation).</p>`,
+    scene: () => {
+      if (!bohrState.quantum) return { bohr: [2, 4], items: [], spin: true, hideNucleus: false };
+      return { items: elementItems(6), legend: 'subshell', spin: true, sizeNote: 'carbon: 1s inside, 2s and 2p outside' };
+    },
+    enter: () => { state.view = 'cloud'; state.nodes = false; state.cut = false; state.axes = false; },
+    bind: () => {
+      const b = $('#bohr-toggle');
+      b.addEventListener('click', () => { bohrState.quantum = !bohrState.quantum; b.textContent = bohrState.quantum ? 'Back to the ring picture' : 'Show the quantum picture'; showScene(); });
+    }
+  },
+  {
+    title: 'An orbital is a cloud of chances',
+    body: `
+      <p>Each dot marks one place the electron could be found if you checked. Dots crowd together where the electron spends more of its time. <strong>An orbital is the shape of that cloud.</strong></p>
+      <p>The cloud fades out gradually and never quite ends. So textbooks draw a surface that holds <strong>90% of the cloud</strong>. That surface is the "shape" you see in diagrams. Switch between Cloud, Both and Surface below the 3D view to compare.</p>
+      <p>This is hydrogen's <span class="k">1s</span> orbital, the lowest-energy orbital in any atom.</p>`,
+    deeper: `
+      <p>The 1s cloud is densest right at the nucleus. Yet the most likely <strong>distance</strong> from the nucleus is 1 Bohr radius (a₀ = 52.9 pm), not zero. A thin shell far out holds far more volume than a tiny sphere at the centre, so the chance of finding the electron at that distance is highest.</p>`,
+    maths: `
+      <p>The probability density is |ψ|². The probability of finding the electron between r and r + dr is the <strong>radial distribution function</strong>:</p>
+      <div class="eq">P(r) = 4πr² |R(r)|²,  R<sub>1s</sub> ∝ e<sup>−r/a₀</sup></div>
+      <p>Setting dP/dr = 0 gives a maximum at r = a₀ for hydrogen.</p>`,
+    scene: () => ({ items: [{ key: '1s', scale: 1, pos: [0, 0, 0], color: 'phase' }], spin: true, legend: 'custom', legendHTML: '<span><i style="background:var(--plus)"></i>1s cloud</span>' }),
+    enter: () => { state.view = 'cloud'; state.nodes = false; state.cut = false; state.axes = false; }
+  },
+  {
+    title: 'Higher energy levels: bigger clouds with hollow layers',
+    body: `
+      <p>The number in front of an orbital, <strong>n</strong>, is its energy level (or shell). A higher n means more energy, and the electron is usually found farther from the nucleus. So <span class="k">1s</span>, <span class="k">2s</span> and <span class="k">3s</span> grow bigger, shown here at their true relative sizes.</p>
+      <p>The cutaway slices them open. <span class="k">2s</span> has one hollow layer inside, and <span class="k">3s</span> has two. These are <strong>nodes</strong>: places where the electron is never found.</p>
+      <p>A guitar string works the same way. The higher the note, the more points along the string stay perfectly still.</p>`,
+    deeper: `
+      <p>The hollow layers are <strong>radial nodes</strong>. Their number follows a simple rule:</p>
+      <div class="eq">radial nodes = n − l − 1      total nodes = n − 1</div>
+      <p>For s orbitals l = 0, so 1s has 0, 2s has 1 and 3s has 2. The colour changes at each node because the wave flips sign there.</p>`,
+    maths: `
+      <div class="plot">${'{{RADIAL}}'}</div>
+      <p>Radial distribution P(r) = r²R(r)² for hydrogen, each curve scaled to an area of 1. The zeros are the radial nodes: 2s at r = 2a₀; 3s at r ≈ 1.90a₀ and 7.10a₀. Each higher shell puts most of its probability farther out, but a small inner bump stays close to the nucleus.</p>`,
+    scene: () => ({
+      items: rowLayout(['1s', '2s', '3s'].map(k => ({ key: k, scale: 1, color: 'phase', label: k + '<small>' + (ORB[k].n - 1) + ' hollow layer' + (ORB[k].n - 1 === 1 ? '' : 's') + '</small>' })), 0.15),
+      camDir: [0.12, 0.3, 1]
+    }),
+    enter: () => { state.view = 'cloud'; state.nodes = true; state.cut = true; state.axes = false; }
+  },
+  {
+    title: 'Why the shapes are different',
+    body: `
+      <p>An electron in an atom behaves like a wave trapped around the nucleus, a bit like the skin of a drum. A drum can only vibrate in certain patterns:</p>`,
+    extra: () => `
+      <div class="drums">
+        <div class="drum">${drumSVG(0)}<b>No still line</b>whole skin moves</div>
+        <div class="drum">${drumSVG(1)}<b>1 still line</b>halves move opposite</div>
+        <div class="drum">${drumSVG(2)}<b>2 still lines</b>quarters alternate</div>
+      </div>
+      <div class="prose">
+        <p>Orbitals follow the same rule in 3D. The still lines become flat <strong>nodal planes</strong>. Count the planes and you know the shape:</p>
+        <ul>
+          <li><strong>0 planes → s</strong>: a sphere.</li>
+          <li><strong>1 plane → p</strong>: two lobes, one on each side of the plane.</li>
+          <li><strong>2 planes → d</strong>: four lobes, one in each gap.</li>
+        </ul>
+        <p>The colours show the two halves of the wave, <span class="ph-plus">+</span> and <span class="ph-minus">−</span>, moving in opposite directions. They are not positive and negative charges.</p>
+      </div>`,
+    deeper: `
+      <p>The number of angular nodes equals the quantum number <strong>l</strong>. Its values 0, 1, 2 are named s, p, d, letters left over from early spectroscopy (sharp, principal, diffuse).</p>
+      <p>l can only run from 0 up to n − 1. That is why there is no 1p or 2d orbital: shell 1 only allows l = 0, and shell 2 allows l = 0 or 1.</p>`,
+    maths: `
+      <p>Each orbital splits into a radial part and an angular part:</p>
+      <div class="eq">ψ<sub>nlm</sub>(r, θ, φ) = R<sub>nl</sub>(r) · Y<sub>l</sub><sup>m</sup>(θ, φ)</div>
+      <p>The spherical harmonic Y sets the shape. Drawings use real combinations such as p<sub>z</sub> ∝ z/r and d<sub>xy</sub> ∝ xy/r². The phase sign matters in bonding: lobes of the same sign overlap to build a bond, opposite signs cancel.</p>`,
+    scene: () => ({
+      items: rowLayout([
+        { key: '1s', scale: 1, color: 'phase', label: '1s<small>0 planes</small>' },
+        { key: '2pz', scale: 1, color: 'phase', label: '2p<sub>z</sub><small>1 plane</small>' },
+        { key: '3dxy', scale: 1, color: 'phase', label: '3d<sub>xy</sub><small>2 planes</small>' }
+      ].map(it => ({ ...it, scale: 6 / radialInfo(ORB[it.key].n, ORB[it.key].l).r95 })), 0.2),
+      camDir: [0.25, 0.55, 1], sizeNote: 'resized to match'
+    }),
+    enter: () => { state.view = 'surface'; state.nodes = true; state.cut = false; state.axes = false; }
+  },
+  {
+    title: 'p orbitals come in threes',
+    body: `
+      <p>A p orbital's nodal plane can face three directions. So every energy level from n = 2 has <strong>three p orbitals</strong>: <span class="k">p<sub>x</sub></span>, <span class="k">p<sub>y</sub></span> and <span class="k">p<sub>z</sub></span>, each lined up along one axis.</p>
+      <p>They have the same shape and the same energy. Only the direction differs. Fill all three and the combined cloud is round.</p>`,
+    deeper: `
+      <p>The quantum number <strong>m<sub>l</sub></strong> runs from −l to +l. For p (l = 1) that gives −1, 0, +1: three orbitals. In general a subshell holds <strong>2l + 1</strong> orbitals, so s has 1, p has 3, d has 5.</p>`,
+    maths: `
+      <p>p<sub>z</sub> is the m = 0 solution. p<sub>x</sub> and p<sub>y</sub> are real combinations of the complex m = +1 and m = −1 solutions, which is why textbooks label them by axis instead of by m.</p>
+      <div class="eq">|p<sub>x</sub>|² + |p<sub>y</sub>|² + |p<sub>z</sub>|² ∝ (x² + y² + z²)/r² = 1</div>
+      <p>The sum is spherically symmetric (Unsöld's theorem), so a filled p subshell has no preferred direction.</p>`,
+    scene: () => ({
+      items: [
+        { key: '2px', scale: 1, pos: [0, 0, 0], color: COL.p },
+        { key: '2py', scale: 1, pos: [0, 0, 0], color: COL.py },
+        { key: '2pz', scale: 1, pos: [0, 0, 0], color: COL.minus }
+      ], legend: 'custom',
+      legendHTML: '<span><i style="background:var(--p)"></i>2p<sub>x</sub></span><span><i style="background:var(--py)"></i>2p<sub>y</sub></span><span><i style="background:var(--minus)"></i>2p<sub>z</sub></span>',
+      spin: true
+    }),
+    enter: () => { state.view = 'surface'; state.nodes = false; state.cut = false; state.axes = true; }
+  },
+  {
+    title: 'd orbitals come in fives',
+    body: `
+      <p>From n = 3 there are <strong>five d orbitals</strong>. Four look like four-leaf clovers, tilted different ways. Three have their lobes between the axes; <span class="k">d<sub>x²−y²</sub></span> has its lobes on the axes.</p>
+      <p>The fifth, <span class="k">d<sub>z²</sub></span>, looks different: two lobes along the z axis and a ring around its middle. It still has two nodes, but they are cone-shaped instead of flat. Turn on Nodes to see them.</p>
+      <p>The 3d orbitals stay <strong>empty</strong> until scandium, element 21. They fill from scandium to zinc, the first row of transition metals. Pick iron or copper in the lab to see them occupied.</p>`,
+    deeper: `
+      <p>For d (l = 2), m<sub>l</sub> runs from −2 to +2: five orbitals. Whether lobes point along or between the axes matters in transition metal chemistry. In crystal field theory, ligands on the axes push the d<sub>x²−y²</sub> and d<sub>z²</sub> orbitals up in energy, which helps explain the colours of transition metal compounds.</p>`,
+    maths: `
+      <p>d<sub>z²</sub> is shorthand for d<sub>2z²−x²−y²</sub>. Its angular part is ∝ (3cos²θ − 1), which is zero on two cones at θ = 54.7° from the z axis:</p>
+      <div class="eq">3cos²θ − 1 = 0  →  θ = arccos(1/√3) ≈ 54.7°</div>`,
+    scene: () => ({
+      items: rowLayout(['3dxy', '3dxz', '3dyz', '3dx2y2', '3dz2'].map(k => ({ key: k, scale: 1, color: 'phase', label: oHTML(k) })), 0.06),
+      camDir: [0.3, 0.5, 1]
+    }),
+    enter: () => { state.view = 'surface'; state.nodes = false; state.cut = false; state.axes = false; }
+  },
+  {
+    title: 'Two electrons per orbital',
+    body: `
+      <p>Each orbital holds <strong>at most two electrons</strong>, and the two must spin in opposite directions, drawn as ↑ and ↓. Count the orbitals in each shell and you get its capacity:</p>`,
+    extra: () => `
+      <table class="cap">
+        <thead><tr><th>Shell</th><th>Orbitals</th><th>Electrons</th></tr></thead>
+        <tbody>
+          <tr><td>n = 1</td><td>1s</td><td class="num">2</td></tr>
+          <tr><td>n = 2</td><td>2s + three 2p = 4</td><td class="num">8</td></tr>
+          <tr><td>n = 3</td><td>3s + three 3p + five 3d = 9</td><td class="num">18</td></tr>
+        </tbody>
+      </table>
+      ${ladderHTML(10)}
+      <div class="prose"><p>Neon, shown in 3D with each subshell side by side, has shells 1 and 2 completely full. A full shell is very stable, which is why neon hardly reacts with anything.</p></div>`,
+    deeper: `
+      <p>The <strong>Pauli exclusion principle</strong>: no two electrons in an atom can share all four quantum numbers (n, l, m<sub>l</sub>, m<sub>s</sub>). Two electrons in one orbital already share n, l and m<sub>l</sub>, so they must differ in spin. Shell capacity follows as <strong>2n²</strong>.</p>`,
+    maths: `
+      <p>The spin quantum number m<sub>s</sub> takes only two values, +½ and −½. Spin is an intrinsic angular momentum with no everyday counterpart: the electron is not literally spinning like a top. "Up" and "down" are labels for the two allowed states.</p>`,
+    scene: () => ({ items: shellRow(10), legend: 'custom', legendHTML: SHELL_LEGEND, camDir: [0.35, 0.45, 1] }),
+    enter: () => { state.view = 'surface'; state.nodes = false; state.cut = false; state.axes = false; }
+  },
+  {
+    title: 'The filling order',
+    body: `
+      <p>Electrons fill the <strong>lowest-energy orbitals first</strong>, like water filling a staircase of tanks from the bottom. Drag the slider to add electrons one at a time. The 3D view lays each subshell side by side: an orbital with one electron is faint, and one with two is solid.</p>
+      <p>Watch the p boxes. Electrons take an <strong>empty orbital each</strong> before any of them pair up, because electrons repel each other and keep apart when they can.</p>
+      <p>Then watch potassium (19). Its last electron goes into <span class="k">4s</span>, not <span class="k">3d</span>, because for these atoms 4s sits slightly lower in energy. The 3d orbitals fill next, from scandium to zinc, and then 4p from gallium to krypton.</p>`,
+    extra: () => `
+      <div class="slider-row">
+        <label for="fill-z"><span>Electrons: <b id="fill-n">${fillState.Z}</b></span><span id="fill-name">${ELEMENTS[fillState.Z][1]}</span></label>
+        <input type="range" id="fill-z" min="1" max="36" step="1" value="${fillState.Z}">
+      </div>
+      <div class="config" id="fill-config">${configHTML(fillState.Z)}</div>
+      <div class="note" id="fill-short">${shortConfigHTML(fillState.Z)}</div>
+      <div id="fill-ladder">${ladderHTML(fillState.Z)}</div>`,
+    deeper: `
+      <p><strong>Aufbau principle</strong>: fill from lowest energy up. <strong>Hund's rule</strong>: in orbitals of equal energy, electrons occupy separate orbitals with parallel spins before pairing.</p>
+      <p>Within one shell, s fills before p before d. An s electron spends some of its time very close to the nucleus, inside the inner electrons (it <strong>penetrates</strong>), so it feels a stronger pull and has lower energy. The same effect makes 4s fill before 3d, starting at potassium, element 19.</p>
+      <p>Two elements break the pattern. <strong>Chromium</strong> is [Ar] 3d⁵ 4s¹, not 3d⁴ 4s², and <strong>copper</strong> is [Ar] 3d¹⁰ 4s¹, not 3d⁹ 4s². A half-full or completely full set of d orbitals is extra stable, so one 4s electron moves into 3d. Try both on the slider.</p>`,
+    maths: `
+      <p>The usual filling order follows the <strong>n + l rule</strong> (Madelung rule): lower n + l fills first; for a tie, lower n fills first.</p>
+      <div class="eq">1s (1) · 2s (2) · 2p (3) · 3s (3) · 3p (4) · 4s (4) · 3d (5)</div>
+      <p>It is an empirical guide. For transition metals the 3d and 4s energies cross, and chromium and copper break the simple pattern.</p>`,
+    scene: () => ({ items: shellRow(fillState.Z), legend: 'custom', legendHTML: SHELL_LEGEND, camDir: [0.35, 0.45, 1] }),
+    enter: () => { state.view = 'surface'; state.nodes = false; state.cut = false; state.axes = false; },
+    bind: () => {
+      const s = $('#fill-z');
+      s.addEventListener('input', () => {
+        fillState.Z = +s.value;
+        $('#fill-n').textContent = fillState.Z;
+        $('#fill-name').textContent = ELEMENTS[fillState.Z][1];
+        $('#fill-config').innerHTML = configHTML(fillState.Z);
+        $('#fill-short').innerHTML = shortConfigHTML(fillState.Z);
+        $('#fill-ladder').innerHTML = ladderHTML(fillState.Z);
+        showScene();
+      });
+    }
+  },
+  {
+    title: 'Same orbital, different atom',
+    body: `
+      <p>A <span class="k">2p</span> orbital has the same shape in every atom, but not the same size. Here are the 2p<sub>z</sub> orbitals of boron, nitrogen and fluorine at their true relative sizes.</p>
+      <p>Moving across a row, each element adds one proton to the nucleus. The extra electron goes into the same shell, where it does little to block the pull of the nucleus from the others. The stronger pull squeezes the cloud. That is why <strong>atoms get smaller from left to right</strong> across the periodic table.</p>`,
+    extra: () => `<button class="btn primary" id="go-explore">Explore any element from H to Kr</button>`,
+    deeper: `
+      <p>The pull an electron actually feels is the <strong>effective nuclear charge</strong>, Z<sub>eff</sub> = Z − S, where S is the shielding from the other electrons. Slater's rules give a quick estimate:</p>
+      <div class="eq">B 2.60 · N 3.90 · F 5.20</div>`,
+    maths: `
+      <p>Slater's rules for a 2p electron in fluorine (Z = 9, 1s² 2s² 2p⁵): the 6 other n = 2 electrons shield 0.35 each; the two 1s electrons shield 0.85 each.</p>
+      <div class="eq">S = 6 × 0.35 + 2 × 0.85 = 3.80   Z<sub>eff</sub> = 9 − 3.80 = 5.20</div>
+      <p>For a hydrogen-like orbital, size scales as n²a₀/Z<sub>eff</sub>. This lab draws every element's orbitals that way: hydrogen shapes with Z replaced by Z<sub>eff</sub>. Real many-electron orbitals come from Hartree–Fock calculations and differ in detail.</p>`,
+    scene: () => ({
+      items: rowLayout([5, 7, 9].map(Z => {
+        const ze = slater(Z, '2p');
+        return { key: '2pz', scale: 1 / ze, color: 'phase', label: ELEMENTS[Z][0] + '<small>Z<sub>eff</sub> ' + ze.toFixed(2) + '</small>' };
+      }), 0.25),
+      camDir: [0.2, 0.35, 1], sizeNote: 'true relative size'
+    }),
+    enter: () => { state.view = 'surface'; state.nodes = false; state.cut = false; state.axes = false; },
+    bind: () => { $('#go-explore').addEventListener('click', () => setMode('explore')); }
+  }
+];
+
+function renderStep() {
+  const s = STEPS[stepIndex];
+  s.enter && s.enter();
+  syncToolbar();
+  const dots = STEPS.map((_, i) => `<i class="${i <= stepIndex ? 'on' : ''}"></i>`).join('');
+  learnEl.innerHTML = `
+    <article class="step">
+      <div class="kicker"><span>Step ${stepIndex + 1} of ${STEPS.length}</span><span class="dots" aria-hidden="true">${dots}</span></div>
+      <h2>${s.title}</h2>
+      <div class="prose">${s.body}</div>
+      ${s.extra ? `<div class="extra">${s.extra()}</div>` : ''}
+      <details class="more"><summary>Go deeper <span>quantum numbers & rules</span></summary><div class="prose">${s.deeper}</div></details>
+      <details class="more"><summary>Into the maths <span>equations & evidence</span></summary><div class="prose">${s.maths.replace('{{RADIAL}}', radialPlotSVG())}</div></details>
+      <p class="note" style="margin-top:16px"><b>About the shapes.</b> Orbitals are exact solutions for hydrogen. Other elements use the same shapes, sized with Slater's rules: a good approximation, not a measurement.</p>
+    </article>`;
+  s.bind && s.bind();
+  $('#prev').disabled = stepIndex === 0;
+  $('#next').textContent = stepIndex === STEPS.length - 1 ? 'Open the lab' : 'Next';
+  $('#panel-scroll').scrollTop = 0;
+  showScene();
+}
+function showScene() {
+  if (state.mode === 'learn') applyScene(STEPS[stepIndex].scene());
+  else applyScene(labScene());
+}
+$('#prev').addEventListener('click', () => { if (stepIndex > 0) { stepIndex--; renderStep(); } });
+$('#next').addEventListener('click', () => {
+  if (stepIndex < STEPS.length - 1) { stepIndex++; renderStep(); } else setMode('explore');
+});
+
+/* ════════════════════════════════════════════════════════════════
+   6. EXPLORE MODE
+   ════════════════════════════════════════════════════════════════ */
+
+const exploreEl = $('#explore');
+const lab = { Z: 7, shown: null, focus: null, color: 'orbital', size: 'true' };
+
+const PT_POS = (() => {
+  const pos = {};
+  pos[1] = [0, 0]; pos[2] = [0, 7];
+  pos[1] = [0, 0]; pos[2] = [0, 17];
+  [3, 4].forEach((Z, i) => pos[Z] = [1, i]); for (let Z = 5; Z <= 10; Z++) pos[Z] = [1, Z + 7];
+  [11, 12].forEach((Z, i) => pos[Z] = [2, i]); for (let Z = 13; Z <= 18; Z++) pos[Z] = [2, Z - 1];
+  for (let Z = 19; Z <= 36; Z++) pos[Z] = [3, Z - 19];
+  return pos;
+})();
+function isPBlock(Z) { return (Z >= 5 && Z <= 10) || (Z >= 13 && Z <= 18) || (Z >= 31 && Z <= 36); }
+function isDBlock(Z) { return Z >= 21 && Z <= 30; }
+
+/* the subshell filled last (Aufbau order), so iron opens on 3d and gallium on 4p */
+function outerSub(Z) { const c = subConfig(Z); return FILL.map(f => f[0]).filter(sb => c[sb] > 0).pop(); }
+function labDefaults() {
+  const occ = orbOccupancy(lab.Z), sb = outerSub(lab.Z);
+  lab.shown = new Set(SUB_ORBS[sb].filter(k => occ[k] > 0));
+  lab.focus = [...lab.shown].pop();
+}
+
+function labScene() {
+  const keys = Object.keys(ORB).filter(k => lab.shown.has(k));
+  const items = elementItems(lab.Z, { keys, color: lab.color, sameSize: lab.size === 'same' });
+  const hasD = keys.some(k => ORB[k].l === 2);
+  return {
+    items, spin: false,
+    legend: lab.color === 'phase' ? 'phase' : lab.color === 'orbital' ? 'custom' : 'subshell', showD: hasD,
+    legendHTML: '<span><i style="background:var(--s)"></i>s</span><span><i style="background:var(--p)"></i>p<sub>x</sub></span><span><i style="background:var(--py)"></i>p<sub>y</sub></span><span><i style="background:var(--minus)"></i>p<sub>z</sub></span>' + (hasD ? '<span><i style="background:var(--d)"></i>d</span>' : ''),
+    sizeNote: lab.size === 'true' ? 'true relative size' : 'each resized to match'
+  };
+}
+
+function nodeSummary(o) {
+  const rad = o.n - o.l - 1, ang = o.l;
+  const angType = o.m === 'z2' ? (ang === 1 ? 'cone' : 'cones') : (ang === 1 ? 'plane' : 'planes');
+  return { rad, ang, angType };
+}
+const AXIS_WORD = { x: 'x', y: 'y', z: 'z' };
+function describe(key) {
+  const o = ORB[key];
+  if (o.l === 0) {
+    const r = o.n - 1;
+    return `A sphere: the electron is equally likely in every direction from the nucleus. ${r === 0 ? 'No hollow layers inside.' : `Inside are ${['', 'one hollow layer', 'two hollow layers', 'three hollow layers'][r]} where the electron is never found; turn on Cutaway and Nodes to see ${r === 1 ? 'it' : 'them'}.`}`;
+  }
+  if (o.l === 1) {
+    const a = AXIS_WORD[o.m], plane = { x: 'yz', y: 'xz', z: 'xy' }[o.m];
+    return `Two lobes on opposite sides of the nucleus along the ${a} axis. The flat ${plane} plane between them is a node: the electron is never found there. The lobes have opposite wave phase.${o.n === 3 ? ' 3p also has one hollow spherical node, so each lobe has a small inner lobe near the nucleus.' : o.n === 4 ? ' 4p also has two hollow spherical nodes, so each lobe has smaller inner lobes nested inside it.' : ''}`;
+  }
+  if (o.m === 'z2') return 'Two lobes along the z axis plus a ring around the middle. Its two nodes are cones (54.7° from the z axis), not flat planes. It has the same energy as the other four 3d orbitals.';
+  if (o.m === 'x2y2') return 'Four lobes lying on the x and y axes. Two nodal planes cut between them, at 45° to the axes.';
+  const pl = { xy: ['x', 'y', 'xz and yz'], xz: ['x', 'z', 'yz and xy'], yz: ['y', 'z', 'xz and xy'] }[o.m];
+  return `Four lobes in the ${pl[0]}${pl[1]} plane, pointing between the ${pl[0]} and ${pl[1]} axes. The ${pl[2]} planes are its two nodes.`;
+}
+const L_DEEPER = [
+  '<p>s orbitals have l = 0: no angular nodes, so no preferred direction. Every shell has exactly one s orbital (m<sub>l</sub> = 0). Radial nodes = n − 1.</p>',
+  '<p>p orbitals have l = 1: one angular node (a plane). m<sub>l</sub> = −1, 0, +1 gives three p orbitals per shell from n = 2. Radial nodes = n − 2.</p>',
+  '<p>d orbitals have l = 2: two angular nodes. m<sub>l</sub> = −2 … +2 gives five d orbitals per shell from n = 3. The 3d set fills from scandium (Z = 21) to zinc (Z = 30), after 4s. Chromium and copper take an extra 3d electron from 4s.</p>'
+];
+
+function renderExplore() {
+  const occ = orbOccupancy(lab.Z);
+  const c = subConfig(lab.Z);
+  let pt = '<div class="ptable" role="group" aria-label="Choose an element">';
+  for (let row = 0; row < 4; row++) for (let col = 0; col < 18; col++) {
+    const Z = Object.keys(PT_POS).find(z => PT_POS[z][0] === row && PT_POS[z][1] === col);
+    if (!Z) { pt += '<div></div>'; continue; }
+    pt += `<button class="el${isPBlock(+Z) ? ' pb' : isDBlock(+Z) ? ' db' : ''}" data-z="${Z}" aria-pressed="${+Z === lab.Z}" aria-label="${ELEMENTS[Z][1]}"><span class="z">${Z}</span><span class="sym">${ELEMENTS[Z][0]}</span></button>`;
+  }
+  pt += '</div><div class="pt-legend"><span><i style="background:var(--s)"></i>s block</span><span><i style="background:var(--p)"></i>p block</span><span><i style="background:var(--d)"></i>d block</span></div>';
+
+  let list = '';
+  SUBS.forEach(sub => {
+    const l = 'spd'.indexOf(sub[1]);
+    const subOcc = c[sub];
+    const ze = slater(lab.Z, sub);
+    const tag = subOcc ? subOcc + ' e⁻' : 'empty';
+    list += `<div class="sub-head"><i style="background:var(--${'spd'[l]})"></i><span>${sub} · ${tag}</span><span class="zeff">Z<sub>eff</sub> ${ze.toFixed(2)}</span></div>`;
+    SUB_ORBS[sub].forEach(k => {
+      const e = occ[k] || 0;
+      const on = lab.shown.has(k);
+      list += `<div class="orow${lab.focus === k ? ' focus' : ''}${e ? '' : ' empty'}" data-k="${k}">
+        <button class="eye" data-eye="${k}" aria-pressed="${on}" aria-label="${on ? 'Hide' : 'Show'} ${oText(k)}" style="--sw:${lab.color === 'phase' ? 'var(--plus)' : lab.color === 'orbital' ? orbitalColor(k) : 'var(--' + 'spd'[l] + ')'}"></button>
+        <span class="oname">${oHTML(k)}</span>
+        <span class="oocc${e ? '' : ' none'}">${e ? arrows(e) : 'empty'}</span>
+      </div>`;
+    });
+  });
+
+  const fo = ORB[lab.focus], ns = nodeSummary(fo);
+  const zeF = slater(lab.Z, fo.sub);
+  const focusOcc = occ[lab.focus] || 0;
+  const info = `
+    <div class="info">
+      <h3>${oHTML(lab.focus)} <span class="badge">${focusOcc ? focusOcc + ' electron' + (focusOcc > 1 ? 's' : '') : 'empty'}</span></h3>
+      <div class="qn">
+        <div><small>n (level)</small><b>${fo.n}</b></div>
+        <div><small>l (shape)</small><b>${fo.l} · ${'spd'[fo.l]}</b></div>
+        <div><small>${ns.angType}</small><b>${ns.ang}</b></div>
+        <div><small>hollow layers</small><b>${ns.rad}</b></div>
+      </div>
+      <div class="prose"><p>${describe(lab.focus)}</p></div>
+      <details class="more"><summary>Go deeper <span>quantum numbers</span></summary><div class="prose">${L_DEEPER[fo.l]}</div></details>
+      <details class="more"><summary>Into the maths <span>size estimate</span></summary><div class="prose">
+        <p>In ${ELEMENTS[lab.Z][1].toLowerCase()} (Z = ${lab.Z}), Slater's rules give this electron Z<sub>eff</sub> ≈ ${zeF.toFixed(2)}${focusOcc ? '' : ' (estimated as if one electron were placed here)'}. The orbital is drawn as hydrogen's ${fo.sub} shape shrunk by that factor.</p>
+        <div class="eq">90% radius ≈ ${(radialInfo(fo.n, fo.l).r90 / zeF * 52.9).toFixed(0)} pm  (${(radialInfo(fo.n, fo.l).r90 / zeF).toFixed(2)} a₀)</div>
+      </div></details>
+    </div>`;
+
+  exploreEl.innerHTML = `
+    ${pt}
+    <div class="el-head"><h2>${ELEMENTS[lab.Z][1]}</h2><div class="zbig">Z = ${lab.Z}<br>${lab.Z} electrons</div></div>
+    <div class="config">${configHTML(lab.Z)}</div>
+    ${lab.Z > 2 ? `<div class="note" style="margin-top:4px">${shortConfigHTML(lab.Z)}${EXCEPTIONS[lab.Z] ? ' · an exception: one 4s electron moves into 3d' : ''}</div>` : ''}
+    <div class="section-title"><span>Orbitals</span>
+      <span class="quick"><button data-q="occ">Occupied</button><button data-q="outer">Outer shell</button><button data-q="none">Clear</button></span>
+    </div>
+    <div class="olist">${list}</div>
+    <div class="section-title"><span>Display</span></div>
+    <div class="lab-opts">
+      <div style="grid-column:1 / -1"><div class="opt-label">Colour by</div><div class="seg"><button data-color="orbital" aria-pressed="${lab.color === 'orbital'}">Orbital</button><button data-color="phase" aria-pressed="${lab.color === 'phase'}">Wave phase</button><button data-color="sub" aria-pressed="${lab.color === 'sub'}">Subshell</button></div></div>
+      <div><div class="opt-label">Size</div><div class="seg"><button data-size="true" aria-pressed="${lab.size === 'true'}">True</button><button data-size="same" aria-pressed="${lab.size === 'same'}">Matched</button></div></div>
+    </div>
+    <div class="section-title"><span>Selected orbital</span></div>
+    ${info}
+    <div class="section-title"><span>Box diagram</span></div>
+    ${ladderHTML(lab.Z)}
+    <p class="note" style="margin-top:16px"><b>About the shapes.</b> Exact for hydrogen. For other elements: hydrogen shapes sized by Slater's effective nuclear charge, an approximation. Tap an orbital name to select it; tap the dot to show or hide it.</p>`;
+
+  exploreEl.querySelectorAll('.el').forEach(b => b.addEventListener('click', () => { lab.Z = +b.dataset.z; labDefaults(); renderExplore(); showScene(); }));
+  exploreEl.querySelectorAll('.orow').forEach(r => r.addEventListener('click', e => {
+    const k = r.dataset.k;
+    if (e.target.closest('.eye')) {
+      if (lab.shown.has(k)) lab.shown.delete(k); else { lab.shown.add(k); lab.focus = k; }
+    } else {
+      lab.focus = k; lab.shown.add(k);
+    }
+    renderExplore(); showScene();
+  }));
+  exploreEl.querySelectorAll('[data-q]').forEach(b => b.addEventListener('click', () => {
+    const occ2 = orbOccupancy(lab.Z);
+    if (b.dataset.q === 'occ') lab.shown = new Set(Object.keys(ORB).filter(k => occ2[k] > 0));
+    if (b.dataset.q === 'none') lab.shown = new Set();
+    if (b.dataset.q === 'outer') {
+      const nMax = Math.max(...Object.keys(ORB).filter(k => occ2[k] > 0).map(k => ORB[k].n));
+      lab.shown = new Set(Object.keys(ORB).filter(k => occ2[k] > 0 && ORB[k].n === nMax));
+    }
+    renderExplore(); showScene();
+  }));
+  exploreEl.querySelectorAll('[data-color]').forEach(b => b.addEventListener('click', () => { lab.color = b.dataset.color; renderExplore(); showScene(); }));
+  exploreEl.querySelectorAll('[data-size]').forEach(b => b.addEventListener('click', () => { lab.size = b.dataset.size; renderExplore(); showScene(); }));
+}
+
+/* ════════════════════════════════════════════════════════════════
+   7. MODES + BOOT
+   ════════════════════════════════════════════════════════════════ */
+
+function setMode(m) {
+  state.mode = m;
+  $('#tab-learn').setAttribute('aria-selected', String(m === 'learn'));
+  $('#tab-explore').setAttribute('aria-selected', String(m === 'explore'));
+  learnEl.hidden = m !== 'learn';
+  exploreEl.hidden = m !== 'explore';
+  $('#learn-foot').hidden = m !== 'learn';
+  $('#panel-scroll').scrollTop = 0;
+  if (m === 'learn') { renderStep(); }
+  else {
+    if (!lab.shown) labDefaults();
+    state.view = 'surface'; state.nodes = false; state.cut = false; state.axes = true;
+    syncToolbar();
+    renderExplore();
+    applyScene(labScene());
+  }
+  try { history.replaceState(null, '', '#' + m); } catch (e) {}
+}
+$('#tab-learn').addEventListener('click', () => setMode('learn'));
+$('#tab-explore').addEventListener('click', () => setMode('explore'));
+
+function boot() {
+  if (!window.THREE || !THREE.OrbitControls || !THREE.MarchingCubes) {
+    $('#loading').textContent = 'The 3D library could not load. Check your connection and reload.';
+    return;
+  }
+  try {
+    initStage();
+  } catch (e) {
+    $('#loading').textContent = 'This device could not start the 3D view (WebGL unavailable).';
+    return;
+  }
+  $('#loading').hidden = true;
+  setMode(location.hash === '#explore' ? 'explore' : 'learn');
+}
+boot();
+})();
+</script>
