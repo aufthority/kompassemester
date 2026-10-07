@@ -758,6 +758,13 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
           </div>
           <span class="lab-card-go">Open</span>
         </a>
+        <a class="card glass fade-up lab-card" id="lab-titration-link" href="labs/titration.html">
+          <div>
+            <h3>Titration &amp; Gravimetry Lab</h3>
+            <div class="meta">Acid–base, precipitation, redox and EDTA titrations, plus gravimetric analysis: zoom from the flask to the particles and add drops yourself.</div>
+          </div>
+          <span class="lab-card-go">Open</span>
+        </a>
 
         <div class="section-label" style="margin-top:22px">Your notes</div>
         <div class="glass" id="notes-history" style="margin-bottom:16px"></div>
@@ -1838,7 +1845,7 @@ async function logEngagementEvent(eventType, { topicId = null, metadata = {} } =
 /* Interactive labs: log the open, then go. Waits at most 700 ms for the
    insert so leaving the page doesn't cancel it; a slow or failed log never
    blocks the student. */
-['orbitals', 'atomic-structure', 'trends', 'acidbase'].forEach(lab => {
+['orbitals', 'atomic-structure', 'trends', 'acidbase', 'titration'].forEach(lab => {
   document.getElementById('lab-' + lab + '-link').addEventListener('click', async e => {
     e.preventDefault();
     const href = e.currentTarget.getAttribute('href');
