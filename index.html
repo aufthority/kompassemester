@@ -109,6 +109,17 @@ button{cursor:pointer;}
 .btn-account-icon{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.5);border:1px solid var(--glass-border);color:var(--forest-700);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .12s;}
 .btn-account-icon:hover{background:rgba(255,255,255,0.8);}
 .btn-account-icon .icon{width:18px;height:18px;}
+/* STUDENT PREVIEW (educator only) */
+.btn-preview{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;color:var(--forest-700);background:rgba(255,255,255,0.5);border:1px solid var(--glass-border);padding:6px 12px;border-radius:99px;white-space:nowrap;}
+.btn-preview .icon{width:15px;height:15px;}
+.btn-preview:hover{background:rgba(255,255,255,0.8);}
+.btn-preview[aria-pressed="true"]{background:var(--gold-500);border-color:var(--gold-600);color:var(--forest-900);}
+.preview-banner{position:sticky;top:62px;z-index:45;display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;padding:9px 16px;background:linear-gradient(135deg, var(--gold-300), var(--gold-500));color:var(--forest-900);font-size:13px;font-weight:500;text-align:center;}
+.preview-banner[hidden]{display:none;}
+.preview-banner button{font-size:12px;font-weight:600;color:#fff;background:var(--forest-700);border:none;padding:5px 12px;border-radius:99px;}
+.preview-toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%);z-index:300;background:var(--forest-900);color:#fff;font-size:13px;padding:10px 16px;border-radius:99px;box-shadow:0 10px 30px rgba(16,36,28,0.3);max-width:calc(100% - 32px);text-align:center;}
+@media(max-width:520px){.topbar.has-preview .topbar-user{display:none;}.btn-preview .lbl-long{display:none;}}
+@media(min-width:521px){.btn-preview .lbl-short{display:none;}}
 .acct-info-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(27,67,50,0.08);font-size:13px;}
 .acct-info-row:last-child{border-bottom:none;}
 .acct-info-label{font-size:11px;font-weight:600;color:var(--ink-soft);text-transform:uppercase;letter-spacing:.04em;}
@@ -621,8 +632,9 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
 <div id="app">
   <div class="topbar">
     <div class="topbar-brand"><div class="topbar-mark"><img src="data:image/png;base64,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" alt=""></div><span class="topbar-name">Kompas Semester</span></div>
-    <div class="topbar-right"><span class="topbar-user" id="topbar-user"></span><button class="btn-account-icon" id="account-icon-btn" type="button" aria-label="Account"><svg class="icon icon-user-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="10" r="3" /><path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855" /></svg></button></div>
+    <div class="topbar-right"><span class="topbar-user" id="topbar-user"></span><button class="btn-preview" id="preview-toggle" type="button" aria-pressed="false" style="display:none" title="See this course as a student sees it. Nothing is saved."><svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0" /><circle cx="12" cy="12" r="3" /></svg><span id="preview-toggle-label"><span class="lbl-long">View as student</span><span class="lbl-short">Student</span></span></button><button class="btn-account-icon" id="account-icon-btn" type="button" aria-label="Account"><svg class="icon icon-user-circle" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10" /><circle cx="12" cy="10" r="3" /><path d="M6.168 18.849A4 4 0 0 1 10 16h4a4 4 0 0 1 3.834 2.855" /></svg></button></div>
   </div>
+  <div class="preview-banner" id="preview-banner" hidden><span id="preview-banner-text">Student preview: nothing you do here is saved.</span><button type="button" id="preview-exit-btn">Exit preview</button></div>
 
   <main class="shell">
     <nav class="sidenav" id="student-sidenav">
@@ -1484,9 +1496,68 @@ async function openEducatorCourse(courseId) {
   const { data: topics } = await sb.from('topics').select('*').eq('course_id', currentCourse.id).order('week_number', { nullsFirst: false });
   myTopics = topics || [];
   document.getElementById('uploads-section-label').textContent = currentCourse.code;
+  document.getElementById('preview-toggle').style.display = '';
+  document.querySelector('.topbar').classList.add('has-preview');
   await loadEducatorRoster();
   showView('roster');
 }
+
+/* ---------- STUDENT PREVIEW (educator) ----------
+   Shows the open course through the student navigation and pages, using the
+   educator's own (empty) student data. Every student save checks
+   previewMode and skips the database: quizzes still score on screen. */
+let previewMode = false;
+
+function previewToast(msg) {
+  const t = document.createElement('div');
+  t.className = 'preview-toast'; t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 2600);
+}
+
+function setNavForPreview(on) {
+  document.getElementById('student-sidenav').style.display = on ? '' : 'none';
+  document.getElementById('student-bottomnav').style.display = on ? '' : 'none';
+  document.getElementById('educator-sidenav').style.display = on ? 'none' : '';
+  document.getElementById('educator-bottomnav').style.display = on ? 'none' : '';
+  document.getElementById('add-course-row').style.display = on ? 'none' : '';
+}
+
+async function openPreviewCourse(courseId) {
+  currentCourse = myCourses.find(c => c.id === courseId);
+  if (!currentCourse) return;
+  document.getElementById('preview-banner-text').textContent = 'Student preview of ' + currentCourse.code + ': nothing you do here is saved.';
+  await loadStudentData();
+  showView('home');
+}
+
+async function enterPreview() {
+  if (!currentCourse || myProfile.role !== 'educator') return;
+  previewMode = true;
+  setNavForPreview(true);
+  document.getElementById('preview-banner').hidden = false;
+  const tog = document.getElementById('preview-toggle');
+  tog.setAttribute('aria-pressed', 'true');
+  document.getElementById('preview-toggle-label').innerHTML = '<span class="lbl-long">Exit preview</span><span class="lbl-short">Exit</span>';
+  renderCourseList(myCourses, () => 'Tap to preview as a student', openPreviewCourse);
+  await openPreviewCourse(currentCourse.id);
+}
+
+async function exitPreview() {
+  previewMode = false;
+  closeActivityModal();
+  setNavForPreview(false);
+  document.getElementById('preview-banner').hidden = true;
+  const tog = document.getElementById('preview-toggle');
+  tog.setAttribute('aria-pressed', 'false');
+  document.getElementById('preview-toggle-label').innerHTML = '<span class="lbl-long">View as student</span><span class="lbl-short">Student</span>';
+  const courseId = currentCourse && currentCourse.id;
+  await loadEducatorCourses();
+  if (courseId) await openEducatorCourse(courseId); else showView('courses');
+}
+
+document.getElementById('preview-toggle').addEventListener('click', () => (previewMode ? exitPreview() : enterPreview()));
+document.getElementById('preview-exit-btn').addEventListener('click', exitPreview);
 
 /* ---------- STUDENT DATA ---------- */
 async function loadStudentData() {
@@ -1643,6 +1714,11 @@ async function renderQuizBody(topicId) {
     });
 
     const btn = document.getElementById('quiz-submit-btn');
+    if (previewMode) {
+      body.insertAdjacentHTML('beforeend', `<div class="quiz-result"><div class="score">${score}/${groups.length}</div><div class="label">Preview: score shown, not saved.</div></div>`);
+      btn.style.display = 'none';
+      return;
+    }
     btn.disabled = true; btn.textContent = 'Saving…';
     await sb.from('quiz_attempts').insert({
       student_id: myProfile.id, topic_id: topicId, course_id: currentCourse.id,
@@ -1675,6 +1751,11 @@ function renderNotesBody(topicId) {
     const text = document.getElementById('notes-textarea').value.trim();
     if (text.length < 15) { alert('Write a little more — at least a sentence or two.'); return; }
     const btn = document.getElementById('notes-submit-btn');
+    if (previewMode) {
+      closeActivityModal();
+      previewToast('Preview: note not saved.');
+      return;
+    }
     btn.disabled = true; btn.textContent = 'Saving…';
     await sb.from('student_notes').insert({
       student_id: myProfile.id, topic_id: topicId, course_id: currentCourse.id,
@@ -1719,7 +1800,7 @@ function renderQuizHistory() {
 // Voyager scoring engine. Never blocks the UI action it's attached to — a
 // failed insert (e.g. offline) should not stop a copy or a notebook open.
 async function logEngagementEvent(eventType, { topicId = null, metadata = {} } = {}) {
-  if (!myProfile || !currentCourse) return;
+  if (!myProfile || !currentCourse || previewMode) return;
   try {
     await sb.from('engagement_events').insert({
       student_id: myProfile.id,
@@ -2815,7 +2896,7 @@ async function loadGroupsView() {
 
   renderGroupsStatusBanner();
 
-  if (myProfile.role === 'educator') {
+  if (myProfile.role === 'educator' && !previewMode) {
     document.getElementById('groups-student').style.display = 'none';
     document.getElementById('groups-educator').style.display = '';
     const { data: enrollments } = await sb.from('enrollments').select('profiles(id, full_name)').eq('course_id', currentCourse.id);
@@ -2835,7 +2916,7 @@ function renderGroupsStatusBanner() {
   const locked = currentCourse.group_formation_locked;
   banner.className = 'grp-status-banner' + (locked ? ' locked' : '');
   title.textContent = locked ? 'Group formation is locked' : 'Group formation is open';
-  if (myProfile.role === 'educator') {
+  if (myProfile.role === 'educator' && !previewMode) {
     sub.textContent = locked ? 'Students can no longer join, switch, or leave groups. You can still move or remove anyone.' : 'Students can join, switch, or leave groups freely.';
   } else {
     sub.textContent = locked ? "Your educator has assigned topics below. Contact them if something needs fixing." : "You can join, switch, or leave a group until your educator locks it.";
@@ -2899,18 +2980,21 @@ function renderStudentGroups() {
 }
 
 async function joinGroup(groupId) {
+  if (previewMode) { previewToast('Preview: joining a group is not saved.'); return; }
   const { error } = await sb.rpc('join_project_group', { p_group_id: groupId });
   if (error) { alert(error.message); return; }
   await loadGroupsView();
 }
 
 async function leaveGroup(groupId) {
+  if (previewMode) { previewToast('Preview: leaving a group is not saved.'); return; }
   const { error } = await sb.from('project_group_members').delete().eq('group_id', groupId).eq('student_id', myProfile.id);
   if (error) { alert(error.message); return; }
   await loadGroupsView();
 }
 
 async function createGroup() {
+  if (previewMode) { previewToast('Preview: creating a group is not saved.'); return; }
   const { error } = await sb.rpc('create_project_group', { p_course_id: currentCourse.id, p_group_name: null });
   if (error) { alert(error.message); return; }
   await loadGroupsView();
