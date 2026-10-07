@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Titration &amp; Gravimetry Lab</title>
+<meta name="description" content="Acid–base, precipitation, redox and complexometric titration, plus gravimetric analysis: the same four questions, five answers.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+/* ── TOKENS (same as Periodic Trends Lab) ──────────────── */
+:root {
+  --bg: #f2f3ef;
+  --surface: #ffffff;
+  --ink: #1b1f1c;
+  --muted: #5b625d;
+  --rule: #d8dcd5;
+  --gold: #e8c468;
+  --gold-ink: #8a6416;
+  --forest: #2f5d46;
+  --forest-soft: #e3ece6;
+  --hatch: #c9cdc6;
+  --wrong: #a4502a;
+  --f-sans: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --f-cond: 'IBM Plex Sans Condensed', 'IBM Plex Sans', system-ui, sans-serif;
+  --f-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141815; --surface: #1d221e; --ink: #e9ece7; --muted: #9aa39c; --rule: #323a34;
+    --gold: #e8c468; --gold-ink: #e8c468; --forest: #7fb897; --forest-soft: #22322a;
+    --hatch: #3a423c; --wrong: #e48b63; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #141815; --surface: #1d221e; --ink: #e9ece7; --muted: #9aa39c; --rule: #323a34;
+  --gold: #e8c468; --gold-ink: #e8c468; --forest: #7fb897; --forest-soft: #22322a;
+  --hatch: #3a423c; --wrong: #e48b63; color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-snap-type: y proximity; scroll-padding-top: var(--hdrH, 92px); scroll-behavior: smooth; }
+body {
+  margin: 0; background: var(--bg); color: var(--ink);
+  font-family: var(--f-sans); font-size: 16px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; overflow-x: hidden;
+}
+sub, sup { line-height: 0; }
+a { color: var(--forest); }
+button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; }
+:focus-visible { outline: 2px solid var(--gold-ink); outline-offset: 2px; }
+p, h1, h2, h3, figure, dl, dd { margin: 0; }
+
+/* ── Header ──────────────────────────────── */
+.hdr { position: sticky; top: 0; z-index: 40; background: var(--surface); border-bottom: 1px solid var(--rule); }
+.top { display: flex; align-items: center; gap: 12px; padding: 10px 16px 6px; max-width: 1180px; margin: 0 auto; }
+.back { font-family: var(--f-mono); font-size: 13px; text-decoration: none; color: var(--muted); white-space: nowrap; }
+.back:hover { color: var(--ink); }
+.lab-name { font-family: var(--f-cond); font-weight: 600; font-size: 17px; letter-spacing: 0.01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.lvl { margin-left: auto; font-family: var(--f-mono); font-size: 11px; color: var(--muted); border: 1px solid var(--rule); border-radius: 999px; padding: 2px 10px; white-space: nowrap; }
+.jump { display: flex; gap: 6px; overflow-x: auto; padding: 4px 16px 9px; max-width: 1180px; margin: 0 auto; scrollbar-width: none; }
+.jump::-webkit-scrollbar { display: none; }
+.jump a { flex: none; font-family: var(--f-mono); font-size: 12px; color: var(--muted); text-decoration: none; border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: var(--bg); }
+.jump a:hover { color: var(--ink); }
+.jump a.on { background: var(--forest-soft); color: var(--forest); border-color: var(--forest); }
+
+/* ── Frame ───────────────────────────────── */
+.wrap { max-width: 1180px; margin: 0 auto; padding-inline: 16px; }
+@media (min-width: 960px) {
+  .wrap { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 40px; padding-inline: 24px; }
+}
+main { min-width: 0; }
+
+/* ── Pipeline strip (desktop only) ───────── */
+.strip { display: none; }
+@media (min-width: 960px) {
+  .strip { display: block; position: sticky; top: calc(var(--hdrH, 92px) + 20px); align-self: start; margin-top: 20px;
+    background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 14px; }
+}
+.strip-head { font-family: var(--f-mono); font-size: 11px; color: var(--muted); margin-bottom: 10px; }
+.strip-head b { color: var(--ink); font-weight: 500; }
+.st { position: relative; border: 1px solid var(--rule); border-radius: 10px; padding: 9px 11px; background: var(--bg); }
+.st + .st { margin-top: 16px; }
+.st + .st::before { content: '↓'; position: absolute; top: -16px; left: 50%; transform: translateX(-50%); font-size: 11px; line-height: 16px; color: var(--muted); }
+.st small { display: block; font-family: var(--f-mono); font-size: 10.5px; color: var(--forest); margin-bottom: 2px; }
+.st span { display: block; font-family: var(--f-cond); font-weight: 600; font-size: 15px; line-height: 1.3; }
+.st.flash span { animation: flash .45s ease; }
+@keyframes flash { from { opacity: .15; } to { opacity: 1; } }
+.strip-note { font-size: 12px; line-height: 1.5; color: var(--muted); margin-top: 12px; }
+
+/* ── Screens: one screen each ────────────── */
+.scr {
+  min-height: calc(100svh - var(--hdrH, 92px));
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 18px 0; border-bottom: 1px solid var(--rule);
+  scroll-snap-align: start;
+}
+.scr:last-of-type { border-bottom: 0; }
+@media (min-width: 960px) {
+  .scr.split { display: grid; grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr); gap: 32px; align-items: center; align-content: center; }
+}
+.tag { font-family: var(--f-mono); font-size: 12px; color: var(--forest); margin-bottom: 8px; display: block; }
+.tag i { font-style: normal; color: var(--muted); }
+h1, h2 { font-family: var(--f-cond); font-weight: 600; letter-spacing: -0.005em; }
+h1 { font-size: clamp(30px, 6vw, 46px); line-height: 1.08; margin-bottom: 12px; }
+h2 { font-size: clamp(23px, 4vw, 32px); line-height: 1.12; margin-bottom: 10px; }
+h1 em, h2 em { font-style: normal; color: var(--forest); }
+.core { font-size: 15.5px; line-height: 1.55; color: var(--muted); max-width: 58ch; }
+.core strong { color: var(--ink); font-weight: 600; }
+.core + .core { margin-top: 8px; }
+
+.q-grid { display: grid; grid-template-columns: 1fr; gap: 6px; margin-top: 12px; }
+@media (min-width: 640px) { .q-grid { grid-template-columns: 1fr 1fr; gap: 8px; } }
+.q { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 9px 12px 10px; }
+.q-n { display: block; font-family: var(--f-mono); font-size: 11px; color: var(--forest); margin-bottom: 2px; }
+.q p { font-size: 14px; line-height: 1.45; }
+
+.reqs { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.reqs span { font-family: var(--f-mono); font-size: 12px; border: 1px solid var(--rule); border-radius: 999px; padding: 3px 10px; background: var(--surface); }
+.reqs b { color: var(--forest); font-weight: 500; margin-right: 4px; }
+
+.more-btns { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.more-btns button { border: 1px solid var(--rule); background: var(--surface); border-radius: 999px; padding: 6px 13px; font-size: 13.5px; font-weight: 500; }
+.more-btns button:hover { border-color: var(--forest); }
+.more-btns button small { font-family: var(--f-mono); font-size: 11px; color: var(--muted); margin-left: 6px; }
+
+/* animation */
+figure.anim { background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 10px 10px 8px; margin-top: 12px; }
+.scr.split figure.anim { margin-top: 0; }
+.anim-name { font-family: var(--f-mono); font-size: 11px; color: var(--muted); text-align: center; margin-bottom: 4px; }
+figure.anim canvas { display: block; margin: 0 auto; border-radius: 10px; box-shadow: 0 0 0 2px #1f2422, 3px 3px 0 2px #1f2422; touch-action: manipulation; }
+.cap { min-height: 2.9em; margin-top: 10px; font-size: 14px; line-height: 1.45; text-align: center; margin: 6px auto 0; max-width: 48ch; }
+.anim-ctrl { display: flex; gap: 8px; justify-content: center; align-items: center; margin-top: 6px; }
+.anim-ctrl button { font-family: var(--f-mono); font-size: 12px; border: 1px solid var(--rule); border-radius: 999px; padding: 3px 12px; color: var(--muted); }
+.anim-ctrl button:hover { color: var(--ink); border-color: var(--muted); }
+.anim-ctrl button.add { background: var(--forest); border-color: var(--forest); color: var(--bg); font-weight: 500; }
+.anim-ctrl button.add:hover { color: var(--bg); opacity: .88; }
+.anim-ctrl button:disabled { opacity: .45; cursor: default; }
+.anim-ctrl .note { font-size: 11.5px; color: var(--muted); }
+
+.watch { margin-top: 12px; border-left: 3px solid var(--wrong); background: var(--surface); border-radius: 0 10px 10px 0; padding: 8px 12px; font-size: 14px; line-height: 1.5; }
+.watch b { display: block; font-family: var(--f-mono); font-weight: 500; font-size: 11px; color: var(--wrong); }
+.pharm { margin-top: 10px; font-size: 13.5px; line-height: 1.5; color: var(--muted); border-left: 2px solid var(--gold); padding-left: 10px; }
+.pharm b { color: var(--ink); font-weight: 600; }
+a.handoff { display: flex; align-items: center; gap: 12px; margin-top: 10px; background: var(--forest-soft); border: 1px solid var(--forest); border-radius: 10px; padding: 8px 12px; text-decoration: none; color: var(--ink); font-size: 14px; line-height: 1.4; }
+a.handoff b { font-family: var(--f-cond); font-weight: 600; color: var(--forest); }
+a.handoff span { margin-left: auto; font-family: var(--f-mono); font-size: 12px; color: var(--forest); white-space: nowrap; }
+
+/* method cards (precipitation, iodine) */
+.mcards { display: grid; gap: 8px; margin-top: 12px; }
+@media (min-width: 760px) { .mcards.three { grid-template-columns: repeat(3, 1fr); } .mcards.two { grid-template-columns: 1fr 1fr; } }
+.mc { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 10px 12px; }
+.mc h3 { font-family: var(--f-cond); font-weight: 600; font-size: 17px; margin-bottom: 4px; }
+.mc dl { display: grid; grid-template-columns: auto 1fr; gap: 1px 10px; font-size: 13.5px; line-height: 1.45; }
+.mc dt { font-family: var(--f-mono); font-size: 11px; color: var(--muted); padding-top: 2px; }
+.mc .short { display: none; font-size: 13.5px; line-height: 1.45; }
+
+/* sheet (Go deeper / Into the maths) */
+dialog.sheet { width: min(640px, calc(100% - 24px)); max-height: 82svh; border: 1px solid var(--rule); border-radius: 16px; padding: 0; background: var(--surface); color: var(--ink); }
+dialog.sheet::backdrop { background: rgba(0,0,0,.45); }
+.sheet-head { display: flex; align-items: center; gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--rule); position: sticky; top: 0; background: var(--surface); }
+.sheet-head h3 { font-family: var(--f-cond); font-weight: 600; font-size: 18px; margin: 0; }
+.sheet-head small { font-family: var(--f-mono); font-size: 11px; color: var(--muted); }
+.sheet-head button { margin-left: auto; font-family: var(--f-mono); font-size: 12px; border: 1px solid var(--rule); border-radius: 999px; padding: 3px 12px; }
+.sheet-body { padding: 14px 16px 18px; font-size: 15px; line-height: 1.6; }
+.sheet-body p + p, .sheet-body p + ul, .sheet-body ul + p, .sheet-body .eq + p, .sheet-body p + .eq { margin-top: 10px; }
+.sheet-body ul { padding-left: 18px; margin: 0; }
+.sheet-body li + li { margin-top: 6px; }
+.sheet-body .pharm { margin-top: 14px; }
+.eq { background: var(--bg); border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px; font-size: 15px; overflow-x: auto; white-space: nowrap; line-height: 1.8; }
+.frac { display: inline-flex; flex-direction: column; vertical-align: middle; text-align: center; margin: 0 3px; line-height: 1.25; }
+.frac span:first-child { border-bottom: 1px solid var(--muted); padding: 0 4px; }
+[hidden] { display: none !important; }
+
+/* picker */
+.pk { background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 14px 16px; margin-top: 12px; }
+.pk-head { display: flex; align-items: baseline; gap: 10px; }
+.pk-head small { font-family: var(--f-mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
+.pk-head h3 { font-family: var(--f-cond); font-weight: 600; font-size: 20px; }
+.pk .step { font-family: var(--f-mono); font-size: 11px; color: var(--muted); margin: 10px 0 6px; }
+.opts { display: flex; flex-wrap: wrap; gap: 6px; }
+.opts button { font-size: 13.5px; padding: 5px 12px; border: 1px solid var(--rule); border-radius: 999px; background: var(--bg); text-align: left; }
+.opts button:hover { border-color: var(--muted); }
+.opts button.right { background: var(--forest-soft); border-color: var(--forest); color: var(--forest); font-weight: 600; }
+.opts button.wrong { border-color: var(--wrong); color: var(--wrong); }
+.opts button.meh { border-color: var(--gold-ink); color: var(--gold-ink); }
+.fb { font-size: 14px; line-height: 1.45; margin-top: 6px; }
+.fb:empty { display: none; }
+.fb.good { color: var(--forest); } .fb.bad { color: var(--wrong); } .fb.meh { color: var(--gold-ink); }
+.step2 { display: none; }
+.pk.s2 .step2 { display: block; }
+.pk-nav { display: flex; align-items: center; gap: 10px; margin-top: 12px; }
+.pk-nav button.nav { font-family: var(--f-mono); font-size: 12px; border: 1px solid var(--rule); border-radius: 999px; padding: 4px 12px; background: var(--surface); }
+.pk-nav button.nav:disabled { opacity: .35; cursor: default; }
+.dots { display: flex; gap: 6px; flex: 1; justify-content: center; }
+.dots button { width: 9px; height: 9px; border-radius: 50%; border: 1px solid var(--muted); padding: 0; }
+.dots button.cur { background: var(--ink); border-color: var(--ink); }
+.dots button.done { background: var(--forest); border-color: var(--forest); }
+
+/* summary */
+.sum-tbl { overflow-x: auto; margin-top: 12px; background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; }
+table.sum { width: 100%; border-collapse: collapse; font-size: 13.5px; line-height: 1.4; }
+table.sum th, table.sum td { padding: 8px 10px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; }
+table.sum tr:last-child td { border-bottom: 0; }
+table.sum th { font-family: var(--f-cond); font-weight: 600; font-size: 15px; }
+table.sum td:first-child { font-family: var(--f-mono); font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+table.sum a { color: inherit; text-decoration-color: var(--rule); }
+.sum-tabs { display: none; }
+@media (max-width: 759px) {
+  .sum-tbl { display: none; }
+  .sum-tabs { display: block; margin-top: 12px; }
+}
+.seg { display: flex; flex-wrap: wrap; gap: 6px; }
+.seg button { font-family: var(--f-mono); font-size: 12px; border: 1px solid var(--rule); border-radius: 999px; padding: 3px 11px; background: var(--surface); color: var(--muted); }
+.seg button.on { background: var(--forest-soft); border-color: var(--forest); color: var(--forest); }
+.sum-card { margin-top: 10px; background: var(--surface); border: 1px solid var(--rule); border-radius: 14px; padding: 4px 14px; }
+.sum-card div { padding: 8px 0; border-bottom: 1px solid var(--rule); font-size: 14.5px; line-height: 1.45; }
+.sum-card div:last-child { border-bottom: 0; }
+.sum-card small { display: block; font-family: var(--f-mono); font-size: 11px; color: var(--muted); }
+
+footer { max-width: 1180px; margin: 0 auto; padding: 20px 16px 36px; font-size: 12.5px; line-height: 1.6; color: var(--muted); border-top: 1px solid var(--rule); }
+
+/* ── Phone tightening ────────────────────── */
+@media (max-width: 959px) {
+  .scr { padding: 8px 0; }
+  .anim-name { display: none; }
+  .mc { padding: 8px 12px; }
+  .mc h3 { font-size: 16px; margin-bottom: 2px; }
+  .mc dl { display: none; }
+  .mc .short { display: block; }
+  a.handoff { padding: 6px 10px; font-size: 13px; }
+  .more-btns { margin-top: 10px; }
+  .more-btns button { padding: 5px 11px; font-size: 13px; }
+}
+@media (max-width: 420px) {
+  .more-btns button small { display: none; }
+  .core { font-size: 15px; }
+  .q p { font-size: 13.5px; }
+  .cap { font-size: 13.5px; }
+  .watch { font-size: 13.5px; }
+}
+@media (max-height: 700px) and (max-width: 959px) {
+  h1 { font-size: 30px; }
+  h2 { font-size: 22px; margin-bottom: 6px; }
+  .q { padding: 7px 10px 8px; }
+  .q p { font-size: 13px; }
+}
+</style>
+</head>
+<body>
+
+<header class="hdr" id="hdr">
+  <div class="top">
+    <a class="back" href="../">← Kompas</a>
+    <span class="lab-name">Titration &amp; Gravimetry Lab</span>
+    <span class="lvl">SPM → degree</span>
+  </div>
+  <nav class="jump" id="jump" aria-label="Chapters">
+    <a href="#basics" data-for="basics">Basics</a>
+    <a href="#acidbase" data-for="acidbase">Acid–base</a>
+    <a href="#precip" data-for="precip">Precipitation</a>
+    <a href="#redox" data-for="redox">Redox</a>
+    <a href="#edta" data-for="edta">EDTA</a>
+    <a href="#grav" data-for="grav">Gravimetric</a>
+    <a href="#picker" data-for="picker">Try it</a>
+    <a href="#summary" data-for="summary">Summary</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <aside class="strip" id="strip" aria-label="Pipeline: the four questions">
+    <div class="strip-head">Pipeline · <b id="stripName">Any method</b></div>
+    <div class="st"><small>1 · Reacts</small><span id="st0">analyte + reagent</span></div>
+    <div class="st"><small>2 · Finishes</small><span id="st1">K is huge</span></div>
+    <div class="st"><small>3 · End seen</small><span id="st2">a visible signal</span></div>
+    <div class="st"><small>4 · Number</small><span id="st3">ratio × amount</span></div>
+    <p class="strip-note">Every method answers the same four questions. This shows the current chapter's answers.</p>
+  </aside>
+
+  <main>
+
+  <!-- ══ HOOK ═══════════════════════════════════════════ -->
+  <section class="scr split" id="hook" data-ch="hook">
+    <div>
+      <span class="tag">Titration &amp; gravimetry</span>
+      <h1>Count it, or <em>weigh it.</em></h1>
+      <p class="core">Two flasks look identical; one holds twice the chloride. Measure the difference by the reagent it takes to react (<strong>titration</strong>), or by the mass of solid it becomes (<strong>gravimetry</strong>).</p>
+    </div>
+    <figure class="anim" data-anim="hook">
+      <div class="anim-name">Count it or weigh it</div>
+      <canvas></canvas><figcaption class="cap"></figcaption>
+      <div class="anim-ctrl"><button class="pp">Pause</button><button class="rp">Replay</button></div>
+    </figure>
+  </section>
+
+  <!-- ══ BASICS ═════════════════════════════════════════ -->
+  <section class="scr" id="basics" data-ch="basics">
+    <span class="tag">Basics <i>· 1/2</i></span>
+    <h2>Every method asks the <em>same four questions.</em></h2>
+    <div class="q-grid">
+      <div class="q"><span class="q-n">1 · What reacts?</span><p>Analyte + reagent, in a fixed ratio.</p></div>
+      <div class="q"><span class="q-n">2 · Why does it finish?</span><p>The reaction runs to completion: K is huge.</p></div>
+      <div class="q"><span class="q-n">3 · How do we see the end?</span><p>A visible signal: a colour, a solid, or no more cloudiness.</p></div>
+      <div class="q"><span class="q-n">4 · How does it become a number?</span><p>Ratio × amount of reagent used, or mass of solid formed.</p></div>
+    </div>
+    <div class="reqs"><span><b>1</b>Fast</span><span><b>2</b>Complete</span><span><b>3</b>Known ratio</span><span><b>4</b>Visible end</span></div>
+    <div class="more-btns"><button data-sheet="basics-deeper">Go deeper<small>STPM · Matric</small></button><button data-sheet="basics-maths">Into the maths<small>Degree</small></button></div>
+  </section>
+
+  <section class="scr split" data-ch="basics">
+    <div>
+      <span class="tag">Basics <i>· 2/2</i></span>
+      <h2>Equivalence vs <em>end point.</em></h2>
+      <p class="core"><strong>Equivalence:</strong> reagent exactly matches analyte. <strong>End point:</strong> where we see it. The gap is titration error; a good indicator keeps it under one drop.</p>
+    </div>
+    <figure class="anim" data-anim="counter">
+      <div class="anim-name">Particle counter</div>
+      <canvas></canvas><figcaption class="cap"></figcaption>
+      <div class="anim-ctrl"><button class="add">Add drop</button><button class="auto">Auto</button><button class="rp">Reset</button></div>
+    </figure>
+  </section>
+
+  <!-- ══ CH1 ACID–BASE ══════════════════════════════════ -->
+  <section class="scr" id="acidbase" data-ch="acidbase">
+    <span class="tag">01 · Acid–base <i>· 1/2</i></span>
+    <h2>An acid hands H⁺ to a base. <em>Count the base it takes.</em></h2>
+    <div class="q-grid">
+      <div class="q"><span class="q-n">1 · What reacts?</span><p>H⁺ + OH⁻ → H₂O. A weak acid works too: HA + OH⁻ → A⁻ + H₂O.</p></div>
+      <div class="q"><span class="q-n">2 · Why does it finish?</span><p>Water barely splits back (K ≈ 10¹⁴ for H⁺ + OH⁻).</p></div>
+      <div class="q"><span class="q-n">3 · How do we see the end?</span><p>The indicator is a weak acid. HIn and In⁻ differ in colour; it flips over ~2 pH units.</p></div>
+      <div class="q"><span class="q-n">4 · How does it become a number?</span><p>Mole ratio from the equation × C × V of titrant.</p></div>
+    </div>
+    <p class="pharm"><b>Pharmacy:</b> non-aqueous perchloric acid titration is the standard pharmacopoeial assay for many weak-base drugs.</p>
+    <div class="more-btns"><button data-sheet="ab-deeper">Go deeper<small>Non-aqueous</small></button><button data-sheet="ab-maths">Into the maths<small>Degree</small></button></div>
+  </section>
+
+  <section class="scr split" data-ch="acidbase">
+    <div>
+      <span class="tag">01 · Acid–base <i>· 2/2</i></span>
+      <h2>Pick the indicator for the <em>equivalence pH.</em></h2>
+      <div class="watch"><b>Watch out</b>Not pH 7. Weak acid + strong base ends above 7, so use phenolphthalein (8.2–10.0), not methyl orange (3.1–4.4).</div>
+      <a class="handoff" href="acidbase.html"><b>Acid–Base Lab</b> Full titration curve and the molecules at equivalence <span>Open →</span></a>
+    </div>
+    <figure class="anim" data-anim="indflip">
+      <div class="anim-name">Indicator flip</div>
+      <canvas></canvas><figcaption class="cap"></figcaption>
+      <div class="anim-ctrl"><button class="pp">Pause</button><button class="rp">Replay</button><span class="note">simplified shape</span></div>
+    </figure>
+  </section>
+
+  <!-- ══ CH2 PRECIPITATION ═════════════════════════════ -->
+  <section class="scr" id="precip" data-ch="precip">
+    <span class="tag">02 · Precipitation <i>· 1/4</i></span>
+    <h2>Silver grabs chloride and drops out as a solid. <em>Count the silver.</em></h2>
+    <div class="q-grid">
+      <div class="q"><span class="q-n">1 · What reacts?</span><p>Ag⁺ + Cl⁻ → AgCl(s), 1 : 1.</p></div>
+      <div class="q"><span class="q-n">2 · Why does it finish?</span><p>AgCl barely dissolves (K<sub>sp</sub> ≈ 1.8 × 10⁻¹⁰): almost no Cl⁻ is left.</p></div>
+      <div class="q"><span class="q-n">3 · How do we see the end?</span><p>Three ways: Mohr, Volhard, Fajans.</p></div>
+      <div class="q"><span class="q-n">4 · How does it become a number?</span><p>mol Cl⁻ = mol Ag⁺ used.</p></div>
+    </div>
+    <p class="pharm"><b>Pharmacy:</b> chloride content of sodium chloride and potassium chloride preparations.</p>
+    <div class="more-btns"><button data-sheet="pr-deeper">Go deeper<small>STPM · Matric</small></button><button data-sheet="pr-maths">Into the maths<small>Degree</small></button></div>
+  </section>
+
+  <section class="scr" data-ch="precip">
+    <span class="tag">02 · Precipitation <i>· 2/4</i></span>
+    <h2>Three ways to <em>see the end.</em></h2>
+    <div class="mcards three">
+      <div class="mc"><h3>Mohr</h3><p class="short">Ag⁺ direct. Chromate turns red-brown (Ag₂CrO₄). Needs pH ≈ 6.5–10.</p><dl><dt>titrant</dt><dd>Ag⁺, direct</dd><dt>indicator</dt><dd>Chromate, CrO₄²⁻</dd><dt>you see</dt><dd>Red-brown Ag₂CrO₄</dd><dt>needs</dt><dd>pH ≈ 6.5–10</dd></dl></div>
+      <div class="mc"><h3>Volhard</h3><p class="short">Excess Ag⁺, back-titrated with SCN⁻. Fe³⁺ turns red. Needs acid (HNO₃).</p><dl><dt>titrant</dt><dd>Excess Ag⁺, back with SCN⁻</dd><dt>indicator</dt><dd>Fe³⁺</dd><dt>you see</dt><dd>Red Fe(SCN)²⁺</dd><dt>needs</dt><dd>Acid (HNO₃)</dd></dl></div>
+      <div class="mc"><h3>Fajans</h3><p class="short">Ag⁺ direct. A dye turns the solid's surface pink. Needs colloidal AgCl.</p><dl><dt>titrant</dt><dd>Ag⁺, direct</dd><dt>indicator</dt><dd>Adsorption dye</dd><dt>you see</dt><dd>Pink solid surface</dd><dt>needs</dt><dd>Colloidal AgCl</dd></dl></div>
+    </div>
+    <div class="watch"><b>Watch out</b>Mohr at the wrong pH fails. Too acidic: chromate becomes dichromate and no red forms. Too alkaline: silver oxide forms and the end point blurs.</div>
+  </section>
+
+  <section class="scr split" data-ch="precip">
+    <div>
+      <span class="tag">02 · Precipitation <i>· 3/4</i></span>
+      <h2>Mohr: <em>who precipitates first.</em></h2>
+      <p class="core">AgCl needs far less Ag⁺ to form than Ag₂CrO₄ does, so chromate waits until the chloride is gone.</p>
+    </div>
+    <figure class="anim" data-anim="mohr">
+      <div class="anim-name">Mohr</div>
+      <canvas></canvas><figcaption class="cap"></figcaption>
+      <div class="anim-ctrl"><button class="add">Add drop</button><button class="auto">Auto</button><button class="rp">Reset</button></div>
+    </figure>
+  </section>
+
+  <section class="scr split" data-ch="precip">
+    <div>
+      <span class="tag">02 · Precipitation <i>· 4/4</i></span>
+      <h2>Fajans: <em>the surface flips.</em></h2>
+      <p class="core">The dye never reacts. It sticks to the solid once the surface turns positive.</p>
+    </div>
+    <figure class="anim" data-anim="fajans">
+      <div class="anim-name">Fajans · one AgCl particle, magnified</div>
+      <canvas></canvas><figcaption class="cap"></figcaption>
+      <div class="anim-ctrl"><button class="pp">Pause</button><button class="rp">Replay</button></div>
+    </figure>
+  </section>
+
+  <!-- ══ CH3 REDOX ═════════════════════════════════════ -->
+  <section class="scr" id="redox" data-ch="redox">
+    <span class="tag">03 · Redox <i>· 1/3</i></span>
+    <h2>One gives electrons, the other takes them. <em>Count the electrons.</em></h2>
+    <div class="q-grid">
+      <div class="q"><span class="q-n">1 · What reacts?</span><p>MnO₄⁻ + 5Fe²⁺ + 8H⁺ → Mn²⁺ + 5Fe³⁺ + 4H₂O</p></div>
+      <div class="q"><span class="q-n">2 · Why does it finish?</span><p>A big potential gap: MnO₄⁻/Mn²⁺ +1.51 V vs Fe³⁺/Fe²⁺ +0.77 V.</p></div>
+      <div class="q"><span class="q-n">3 · How do we see the end?</span><p>Permanganate is its own indicator: purple persists once the analyte runs out. Iodine: starch turns blue-black.</p></div>
+      <div class="q"><span class="q-n">4 · How does it become a number?</span><p>Balance electrons first: MnO₄⁻ takes 5, Fe²⁺ gives 1, so 1 : 5.</p></div>
+    </div>
+    <div class="more-btns"><button data-sheet="rx-deeper">Go deeper<small>STPM · Matric</small></button><button data-sheet="rx-maths">Into the maths<small>Degree</small></button></div>
+  </section>
+
+  <section class="scr split" data-ch="redox">
+    <div>
+      <span class="tag">03 · Redox <i>· 2/3</i></span>
+      <h2>The titrant is <em>the indicator.</em></h2>
+      <div class="watch"><b>Watch out</b>Acidify permanganate with sulfuric acid, not hydrochloric. It oxidises Cl⁻ to chlorine, uses extra titrant, and the result reads high.</div>
+    </div>
+    <figure class="anim" data-anim="ehop">
+      <div class="anim-name">Electron hop</div>
+      <canvas></canvas><figcaption class="cap"></figcaption>
+      <div class="anim-ctrl"><button class="add">Add drop</button><button class="auto">Auto</button><button class="rp">Reset</button></div>
+    </figure>
+  </section>
+
+  <section class="scr" data-ch="redox">
+    <span class="tag">03 · Redox <i>· 3/3</i></span>
+    <h2>Iodine, <em>two ways.</em></h2>
+    <div class="mcards two">
+      <div class="mc"><h3>Iodimetry · direct</h3><p class="short">Standard I₂ oxidises the analyte. Example: ascorbic acid.</p><dl><dt>happens</dt><dd>I₂ oxidises the analyte</dd><dt>titrant</dt><dd>Standard I₂</dd><dt>example</dt><dd>Ascorbic acid</dd></dl></div>
+      <div class="mc"><h3>Iodometry · indirect</h3><p class="short">The analyte frees I₂ from excess I⁻; titrate that I₂ with thiosulfate. Example: oxidants (Cu²⁺, peroxides).</p><dl><dt>happens</dt><dd>Analyte oxidises excess I⁻ to I₂; titrate the I₂ released</dd><dt>titrant</dt><dd>Thiosulfate, S₂O₃²⁻</dd><dt>example</dt><dd>Oxidants (Cu²⁺, peroxides)</dd></dl></div>
+    </div>
+    <p class="pharm"><b>Pharmacy:</b> hydrogen peroxide solution by permanganate; ascorbic acid by iodine; ferrous salts by cerium(IV).</p>
+  </section>
+
+  <!-- ══ CH4 EDTA ═════════════════════════════════════ -->
+  <section class="scr" id="edta" data-ch="edta">
+    <span class="tag">04 · Complexometric <i>· 1/2</i></span>
+    <h2>EDTA wraps a metal ion like a claw. <em>Count the claws.</em></h2>
+    <div class="q-grid">
+      <div class="q"><span class="q-n">1 · What reacts?</span><p>M²⁺ + EDTA⁴⁻ → [M–EDTA]²⁻. Always 1 : 1.</p></div>
+      <div class="q"><span class="q-n">2 · Why does it finish?</span><p>Six arms grip at once: very stable (log K<sub>f</sub> ≈ 10.7 for Ca²⁺).</p></div>
+      <div class="q"><span class="q-n">3 · How do we see the end?</span><p>Eriochrome Black T is wine-red holding the metal, blue when free.</p></div>
+      <div class="q"><span class="q-n">4 · How does it become a number?</span><p>mol metal = mol EDTA. The simplest ratio here.</p></div>
+    </div>
+    <p class="pharm"><b>Pharmacy:</b> calcium salts (e.g. calcium gluconate), zinc salts, and Al/Mg in antacids.</p>
+    <div class="more-btns"><button data-sheet="ed-deeper">Go deeper<small>STPM · Matric</small></button><button data-sheet="ed-maths">Into the maths<small>Degree</small></button></div>
+  </section>
+
+  <section class="scr split" data-ch="edta">
+    <div>
+      <span class="tag">04 · Complexometric <i>· 2/2</i></span>
+      <h2>The end point is <em>a steal.</em></h2>
+      <p class="core">The indicator must hold the metal more weakly than EDTA does, or it never lets go.</p>
+      <div class="watch"><b>Watch out</b>Buffer at pH 10 (ammonia) for Ca²⁺/Mg²⁺. Too acidic: H⁺ blocks EDTA. Too alkaline: the metal precipitates as hydroxide.</div>
+    </div>
+    <figure class="anim" data-anim="steal">
+      <div class="anim-name">The steal · EDTA drawn as a claw</div>
+      <canvas></canvas><figcaption class="cap"></figcaption>
+      <div class="anim-ctrl"><button class="add">Add drop</button><button class="auto">Auto</button><button class="rp">Reset</button></div>
+    </figure>
+  </section>
+
+  <!-- ══ CH5 GRAVIMETRIC ══════════════════════════════ -->
+  <section class="scr" id="grav" data-ch="grav">
+    <span class="tag">05 · Gravimetric <i>· 1/3</i></span>
+    <h2>Make a pure solid of known formula. <em>Weigh it.</em></h2>
+    <div class="q-grid">
+      <div class="q"><span class="q-n">1 · What reacts?</span><p>Ba²⁺ + SO₄²⁻ → BaSO₄(s)</p></div>
+      <div class="q"><span class="q-n">2 · Why does it finish?</span><p>BaSO₄ barely dissolves (K<sub>sp</sub> ≈ 1.1 × 10⁻¹⁰); excess Ba²⁺ pushes it further.</p></div>
+      <div class="q"><span class="q-n">3 · How do we see the end?</span><p>Add a drop more reagent to the clear liquid. No new cloudiness: complete.</p></div>
+      <div class="q"><span class="q-n">4 · How does it become a number?</span><p>Mass of solid × gravimetric factor = mass of analyte.</p></div>
+    </div>
+    <div class="more-btns"><button data-sheet="gr-deeper">Go deeper<small>STPM · Matric</small></button><button data-sheet="gr-maths">Into the maths<small>Degree</small></button></div>
+  </section>
+
+  <section class="scr split" data-ch="grav">
+    <div>
+      <span class="tag">05 · Gravimetric <i>· 2/3</i></span>
+      <h2>From cloud <em>to crucible.</em></h2>
+      <p class="core">A good precipitate is <strong>very insoluble, pure, of known formula,</strong> with crystals big enough to filter.</p>
+      <div class="watch"><b>Watch out</b>Weigh only at constant mass. A wet precipitate weighs too much and the result reads high.</div>
+      <p class="pharm"><b>Pharmacy:</b> loss on drying, sulfated ash and residue on ignition are gravimetric tests.</p>
+    </div>
+    <figure class="anim" data-anim="grav">
+      <div class="anim-name">From cloud to crucible</div>
+      <canvas></canvas><figcaption class="cap"></figcaption>
+      <div class="anim-ctrl"><button class="pp">Pause</button><button class="rp">Replay</button></div>
+    </figure>
+  </section>
+
+  <section class="scr split" data-ch="grav">
+    <div>
+      <span class="tag">05 · Gravimetric <i>· 3/3</i></span>
+      <h2>What goes wrong: <em>occlusion.</em></h2>
+      <p class="core">A crystal that grows too fast traps stray ions. Washing can't reach them, so the mass reads high. Slow, hot, dilute precipitation and digestion prevent it.</p>
+    </div>
+    <figure class="anim" data-anim="occl">
+      <div class="anim-name">Occlusion</div>
+      <canvas></canvas><figcaption class="cap"></figcaption>
+      <div class="anim-ctrl"><button class="pp">Pause</button><button class="rp">Replay</button></div>
+    </figure>
+  </section>
+
+  <!-- ══ PICKER ════════════════════════════════════════ -->
+  <section class="scr" id="picker" data-ch="picker">
+    <span class="tag">Try it</span>
+    <h2>Which method <em>would you use?</em></h2>
+    <p class="core">Pick a method, then how you'd see the end. Wrong picks tell you why. Nothing is saved.</p>
+    <div class="pk" id="pk"></div>
+    <div class="pk-nav">
+      <button class="nav" id="pkPrev">← Prev</button>
+      <div class="dots" id="pkDots"></div>
+      <button class="nav" id="pkNext">Next →</button>
+    </div>
+  </section>
+
+  <!-- ══ SUMMARY ═══════════════════════════════════════ -->
+  <section class="scr" id="summary" data-ch="summary">
+    <span class="tag">Summary</span>
+    <h2>Five methods, <em>one frame.</em></h2>
+    <div class="sum-tbl"><table class="sum" id="sumTable"></table></div>
+    <div class="sum-tabs"><div class="seg" id="sumSeg"></div><div class="sum-card" id="sumCard"></div></div>
+  </section>
+
+  </main>
+</div>
+
+<footer>
+  <b>About the numbers.</b> K<sub>sp</sub>, E°, K<sub>f</sub>, indicator ranges and the Mohr pH window are standard reference values recalled without lookup; treat them as approximate until checked (CRC Handbook; Harris, <em>Quantitative Chemical Analysis</em>). Pharmacy examples name general uses only, not monograph conditions. Particles are representative, not to scale.
+</footer>
+
+<!-- ══ SHEET CONTENT (Go deeper / Into the maths) ══════ -->
+<dialog class="sheet" id="sheet" aria-labelledby="sheetTitle">
+  <div class="sheet-head"><h3 id="sheetTitle"></h3><small id="sheetLvl"></small><button id="sheetClose">Close</button></div>
+  <div class="sheet-body" id="sheetBody"></div>
+</dialog>
+
+<div hidden>
+  <div id="basics-deeper" data-title="Standard solutions" data-lvl="STPM · Matriculation">
+    <p><strong>Primary standard:</strong> weighed straight into solution. High purity, stable, not hygroscopic, high molar mass (potassium hydrogen phthalate, sodium carbonate, sodium chloride). A <strong>secondary standard</strong>, such as NaOH, is first standardised against a primary one.</p>
+    <p><strong>Direct vs back titration.</strong> Direct: titrant reacts with the analyte itself. Back: add a known excess of reagent, then titrate what is left. Useful when the reaction is slow or the end point is poor.</p>
+    <p><strong>Blank titration.</strong> Run the procedure without sample and subtract its titre, to cancel reagent impurities and the indicator's own consumption.</p>
+  </div>
+  <div id="basics-maths" data-title="The general equation" data-lvl="Degree">
+    <p>For a reaction <strong>a A + b T → products</strong> (A = analyte, T = titrant):</p>
+    <div class="eq">n<sub>A</sub> = <span class="frac"><span>a</span><span>b</span></span> × C<sub>T</sub> × V<sub>T</sub></div>
+    <p>Titration error = V<sub>end point</sub> − V<sub>equivalence</sub>. A good indicator keeps it under one drop (~0.05 mL).</p>
+  </div>
+  <div id="ab-deeper" data-title="Non-aqueous titration" data-lvl="STPM · Matriculation">
+    <p>Very weak bases (many amine drugs) barely react in water, because water competes as a base and blurs the end point.</p>
+    <p>Dissolve them in <strong>glacial acetic acid</strong> and titrate with <strong>perchloric acid in acetic acid</strong>. Acetic acid is a poorer base than water, so the drug's basicity stands out and the end point sharpens.</p>
+    <p>End point by crystal violet (violet → blue-green) or potentiometrically. Keep reagents dry: water blunts the end point.</p>
+  </div>
+  <div id="ab-maths" data-title="Indicator range and equivalence pH" data-lvl="Degree">
+    <div class="eq">pH = pK<sub>In</sub> + log <span class="frac"><span>[In⁻]</span><span>[HIn]</span></span></div>
+    <p>The eye sees a change as the ratio moves from about 1:10 to 10:1, so the range is roughly pK<sub>In</sub> ± 1. Equivalence pH for a weak acid titrated with strong base:</p>
+    <div class="eq">pH = 7 + ½ pK<sub>a</sub> + ½ log C<sub>salt</sub></div>
+  </div>
+  <div id="pr-deeper" data-title="Precipitation, deeper" data-lvl="STPM · Matriculation">
+    <ul>
+      <li><strong>Why AgCl forms before Ag₂CrO₄.</strong> Compare the [Ag⁺] each needs to start precipitating, not K<sub>sp</sub> alone: the formulas differ (1:1 vs 2:1).</li>
+      <li><strong>Volhard for chloride.</strong> AgCl is more soluble than AgSCN, so it would react back with SCN⁻. Filter the AgCl off, or coat it, before the back titration.</li>
+      <li><strong>Volhard works in acid,</strong> so it suits samples Mohr can't handle.</li>
+    </ul>
+  </div>
+  <div id="pr-maths" data-title="Which solid forms first" data-lvl="Degree">
+    <div class="eq">AgCl: [Ag⁺] = <span class="frac"><span>K<sub>sp</sub></span><span>[Cl⁻]</span></span> &nbsp;&nbsp; Ag₂CrO₄: [Ag⁺] = √( <span class="frac"><span>K<sub>sp</sub></span><span>[CrO₄²⁻]</span></span> )</div>
+    <p>With Cl⁻ still at 0.05 M, AgCl needs only ~4 × 10⁻⁹ M Ag⁺. Ag₂CrO₄ at 5 × 10⁻³ M chromate needs ~1.5 × 10⁻⁵ M, reached only once nearly all Cl⁻ is gone.</p>
+  </div>
+  <div id="rx-deeper" data-title="Redox, deeper" data-lvl="STPM · Matriculation">
+    <ul>
+      <li><strong>Starch timing.</strong> In iodometry, add starch near the end point. Added early, it binds iodine tightly and the end point drags.</li>
+      <li><strong>Losses.</strong> Iodine is volatile and I⁻ is air-oxidised in acid. Work quickly and keep flasks closed.</li>
+      <li><strong>Cerium(IV):</strong> stable, gains one electron, works in HCl.</li>
+      <li><strong>Dichromate:</strong> a primary standard, but needs a redox indicator such as diphenylamine sulfonate.</li>
+    </ul>
+  </div>
+  <div id="rx-maths" data-title="The Nernst equation" data-lvl="Degree">
+    <p>At 25 °C. The potential jumps at equivalence as the controlling couple switches from analyte to titrant:</p>
+    <div class="eq">E = E° − <span class="frac"><span>0.0592</span><span>n</span></span> log <span class="frac"><span>[Red]</span><span>[Ox]</span></span></div>
+  </div>
+  <div id="ed-deeper" data-title="EDTA, deeper" data-lvl="STPM · Matriculation">
+    <ul>
+      <li><strong>Why always 1 : 1.</strong> One hexadentate EDTA fills all six coordination sites of the metal.</li>
+      <li><strong>Back titration</strong> when the metal reacts slowly or blocks the indicator: add excess EDTA, then titrate the surplus with Mg²⁺ or Zn²⁺.</li>
+      <li><strong>Water hardness</strong> (Ca²⁺ + Mg²⁺) is the everyday example.</li>
+      <li><strong>Other indicators</strong> (xylenol orange, calcon) suit other metals and pH ranges.</li>
+    </ul>
+  </div>
+  <div id="ed-maths" data-title="Conditional formation constant" data-lvl="Degree">
+    <p>Only fully deprotonated EDTA (Y⁴⁻) binds. K<sub>f</sub> is scaled by the fraction present as Y⁴⁻ at the working pH:</p>
+    <div class="eq">K<sub>f</sub>′ = α<sub>Y⁴⁻</sub> × K<sub>f</sub></div>
+    <p>α<sub>Y⁴⁻</sub> falls steeply below pH 8, which is why the buffer matters.</p>
+  </div>
+  <div id="gr-deeper" data-title="Gravimetry, deeper" data-lvl="STPM · Matriculation">
+    <ul>
+      <li><strong>Particle size.</strong> Keep relative supersaturation low: hot, dilute solution, slow addition, steady stirring. Then digest.</li>
+      <li><strong>Coprecipitation</strong> types: surface adsorption, occlusion, mixed crystals. Remedies: digestion, washing with an electrolyte that evaporates on heating, reprecipitation.</li>
+      <li><strong>Drying vs ignition.</strong> Some precipitates change formula on strong heating, so the weighed form must be known.</li>
+    </ul>
+  </div>
+  <div id="gr-maths" data-title="Gravimetric factor" data-lvl="Degree">
+    <div class="eq">GF = <span class="frac"><span>a × M<sub>analyte</sub></span><span>b × M<sub>precipitate</sub></span></span> &nbsp;&nbsp; GF(SO₄²⁻ in BaSO₄) = <span class="frac"><span>96.06</span><span>233.39</span></span> = 0.4116</div>
+    <p>So the 0.4668 g of BaSO₄ in the animation holds 0.4668 × 0.4116 = 0.1921 g of sulfate.</p>
+    <div class="eq">Relative supersaturation = <span class="frac"><span>Q − S</span><span>S</span></span></div>
+    <p>Q = concentration at the moment of mixing, S = solubility. Low values give fewer, larger crystals.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ── CONSTANTS ─────────────────────────────────────────── */
+const RATE = 1/1.6;                       /* same pace as the slowed Trends animations */
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const FONT = "'IBM Plex Sans', system-ui, sans-serif";
+const MONO = "'IBM Plex Mono', ui-monospace, monospace";
+/* Toon diorama palette (WardRun-inspired). The stage paints its own scene,
+   so it looks the same in the page's light and dark themes. */
+const OUT = '#1f2422';
+const TP = { wall:'#dde8e3', wallLine:'#cbd9d2', benchTop:'#4fa59c', benchFace:'#2f7f78', cream:'#f6f2e6',
+  lensBg:'#f8f6ee', glass:'#eaf4f3', forest:'#2f5d46', display:'#1b1f1c', gold:'#e8c468' };
+const SP = { blue:'#5b8fe0', orange:'#ee8a45', green:'#45b277', violet:'#8b7ae6', yellow:'#f4c552', lilac:'#c9c9f5',
+  pink:'#f06aa9', redbrown:'#b9563c', wine:'#a8385f', ebtBlue:'#4d7cea', white:'#fbfaf5', grey:'#b9bdb7', water:'#7fb3e8' };
+const ON = { bg:TP.forest, fg:TP.cream };
+
+/* ── MATH HELPERS ──────────────────────────────────────── */
+const cl = (x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const ez = x=>x<.5?2*x*x:1-Math.pow(-2*x+2,2)/2;
+const P  = (t,a,b)=>ez(cl((t-a)/(b-a)));
+const lin= (t,a,b)=>cl((t-a)/(b-a));
+const L  = (a,b,p)=>a+(b-a)*p;
+const rnd= i=>{const s=Math.sin(i*12.9898+78.233)*43758.5453;return s-Math.floor(s);};
+function hexRGB(h){h=h.replace('#','');return [parseInt(h.slice(0,2),16),parseInt(h.slice(2,4),16),parseInt(h.slice(4,6),16)];}
+function mixHex(a,b,p){const x=hexRGB(a),y=hexRGB(b);return '#'+x.map((v,i)=>Math.round(L(v,y[i],cl(p))).toString(16).padStart(2,'0')).join('');}
+function rgba(h,a){const x=hexRGB(h);return `rgba(${x[0]},${x[1]},${x[2]},${a})`;}
+const lumi=h=>{const [r,g,b]=hexRGB(h);return (0.299*r+0.587*g+0.114*b)/255;};
+const dark=(h,k=.24)=>mixHex(h,OUT,k);
+const jig=(i,amb,a=2.4)=>[Math.sin(amb*1.9+i*2.13)*a,Math.cos(amb*1.47+i*1.31)*a];
+/* deterministic, evenly spread points inside a circle (lens coordinates) */
+function scatter(n,seed,rad,minD){const out=[];let k=0;while(out.length<n&&k<5000){const a=rnd(seed+k*2)*Math.PI*2,rr=Math.sqrt(rnd(seed+k*2+1))*rad;const p=[Math.cos(a)*rr,Math.sin(a)*rr];
+  if(out.every(q=>Math.hypot(q[0]-p[0],q[1]-p[1])>=minD))out.push(p);k++;}return out.length<n?scatter(n,seed+1,rad,minD*.92):out;}
+
+/* points inside the lens that sit farthest from existing particles (for late arrivals) */
+function gaps(pts,n,rad=66){const out=[];for(let k=0;k<n;k++){let best=null,bd=-1;
+  for(let x=-rad;x<=rad;x+=6)for(let y=-rad;y<=rad;y+=6){if(Math.hypot(x,y)>rad)continue;const d=Math.min(...pts.concat(out).map(q=>Math.hypot(q[0]-x,q[1]-y)));if(d>bd){bd=d;best=[x,y];}}
+  out.push(best);}return out;}
+
+/* ── TOON DRAW HELPERS ─────────────────────────────────── */
+let BOIL=0;                               /* hand-drawn "boiling" outline seed, ~7 per second */
+function jit(i,amp){return reduced?0:(rnd(BOIL*131.7+i*7.3)-.5)*1.2*amp;}
+function jPath(c,pts,closed=true,amp=1){c.beginPath();pts.forEach((p,i)=>{const x=p[0]+jit(i*2,amp),y=p[1]+jit(i*2+1,amp);i?c.lineTo(x,y):c.moveTo(x,y);});if(closed)c.closePath();}
+function plainPath(c,pts,closed=true){c.beginPath();pts.forEach((p,i)=>i?c.lineTo(p[0],p[1]):c.moveTo(p[0],p[1]));if(closed)c.closePath();}
+function circPts(x,y,r){const n=Math.max(10,Math.min(32,Math.round(r*1.3)));const a=[];for(let i=0;i<n;i++){const t=i/n*Math.PI*2;a.push([x+Math.cos(t)*r,y+Math.sin(t)*r]);}return a;}
+function inkStroke(c,lw=2){c.lineWidth=lw;c.strokeStyle=OUT;c.lineJoin='round';c.lineCap='round';c.stroke();}
+function circ(c,x,y,r,fill,stroke,lw){c.beginPath();c.arc(x,y,Math.max(0,r),0,Math.PI*2);if(fill){c.fillStyle=fill;c.fill();}if(stroke){c.strokeStyle=stroke;c.lineWidth=lw||1.5;c.stroke();}}
+function txt(c,s,x,y,o={}){c.save();c.font=`${o.w||600} ${o.s||11}px ${o.f||FONT}`;c.fillStyle=o.c||OUT;c.textAlign=o.a||'center';c.textBaseline=o.b||'middle';if(o.al!=null)c.globalAlpha*=o.al;c.fillText(s,x,y);c.restore();}
+function rrect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+/* cel-shaded particle: flat fill, one shadow band, one highlight, ink outline */
+function ball(c,x,y,r,fill,lab,o={}){const al=o.al??1;if(al<=.01||r<=.3)return;c.save();c.globalAlpha*=al;
+  c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.fillStyle=dark(fill);c.fill();
+  c.save();c.beginPath();c.arc(x,y,r,0,Math.PI*2);c.clip();c.beginPath();c.arc(x-r*.16,y-r*.2,r*.94,0,Math.PI*2);c.fillStyle=fill;c.fill();c.restore();
+  if(r>5){c.beginPath();c.ellipse(x-r*.38,y-r*.44,r*.26,r*.14,-.6,0,Math.PI*2);c.fillStyle='rgba(255,255,255,.75)';c.fill();}
+  jPath(c,circPts(x,y,r),true,Math.min(1,r/14));inkStroke(c,r<8?1.4:2);
+  if(lab)txt(c,lab,x,y+.5,{s:o.fs||Math.max(7.5,r*.72),w:700,c:o.lc||(lumi(fill)>.62?OUT:'#ffffff')});
+  c.restore();}
+/* boxed sign, like the ward signage: mono text, ink outline, hard offset shadow */
+function sign(c,s,x,y,o={}){const fs=o.fs||9,al=o.al??1;if(al<=.01)return 0;c.save();c.globalAlpha*=al;c.font=`500 ${fs}px ${MONO}`;
+  const w=c.measureText(s).width+12,h=fs+8,x0=o.a==='left'?x:(o.a==='right'?x-w:x-w/2),y0=y-h/2;
+  rrect(c,x0+2.5,y0+2.5,w,h,4);c.fillStyle=OUT;c.fill();
+  rrect(c,x0,y0,w,h,4);c.fillStyle=o.bg||TP.cream;c.fill();c.lineWidth=1.6;c.strokeStyle=OUT;c.stroke();
+  c.fillStyle=o.fg||OUT;c.textAlign='center';c.textBaseline='middle';c.fillText(s,x0+w/2,y0+h/2+.5);c.restore();return w;}
+/* HUD card, like the game's clock card */
+function hudCard(c,x,y,rows,w=88){const h=8+rows.length*27;rrect(c,x+3,y+3,w,h,7);c.fillStyle=OUT;c.fill();rrect(c,x,y,w,h,7);c.fillStyle=TP.cream;c.fill();c.lineWidth=1.8;c.strokeStyle=OUT;c.stroke();
+  rows.forEach(([lab,val,hot],i)=>{const yy=y+6+i*27;c.textAlign='left';c.textBaseline='top';c.font=`500 8px ${MONO}`;c.fillStyle='rgba(31,36,34,.72)';c.fillText(lab,x+8,yy+2);
+    c.font=`700 14px ${FONT}`;c.fillStyle=hot?TP.forest:OUT;c.fillText(String(val),x+8,yy+11);});}
+function legend(c,items,x=12,y=88){items.forEach(([col,lab],i)=>{ball(c,x,y+i*15,5,col,'');txt(c,lab,x+10,y+i*15,{s:8,w:500,f:MONO,a:'left'});});}
+function display(c,x,y,w,h,s,fg){rrect(c,x,y,w,h,5);c.fillStyle=TP.display;c.fill();c.lineWidth=1.6;c.strokeStyle=OUT;c.stroke();txt(c,s,x+w/2,y+h/2+.5,{s:Math.min(15,h*.55),w:700,c:fg||TP.gold});}
+function card(c,x,y,w,h,fill=TP.cream){rrect(c,x+3,y+3,w,h,8);c.fillStyle=OUT;c.fill();rrect(c,x,y,w,h,8);c.fillStyle=fill;c.fill();c.lineWidth=1.8;c.strokeStyle=OUT;c.stroke();}
+
+/* the lab bench diorama: tiled wall + teal bench */
+function bench(c){c.fillStyle=TP.wall;c.fillRect(0,0,400,250);c.strokeStyle=TP.wallLine;c.lineWidth=1;
+  for(let y=44;y<204;y+=40){c.beginPath();c.moveTo(0,y);c.lineTo(400,y);c.stroke();}
+  for(let row=0;row<5;row++)for(let x=(row%2)*40;x<400;x+=80){c.beginPath();c.moveTo(x,4+row*40);c.lineTo(x,Math.min(204,44+row*40));c.stroke();}
+  c.fillStyle=TP.benchFace;c.fillRect(0,212,400,38);c.fillStyle=TP.benchTop;c.fillRect(0,204,400,9);
+  c.beginPath();c.moveTo(0,204);c.lineTo(400,204);c.moveTo(0,213);c.lineTo(400,213);inkStroke(c,2);}
+
+function flaskPts(cx,by,bw,h){const nw=bw*.28,ny=by-h*.62,r=8;return [[cx-nw/2,by-h],[cx-nw/2,ny],[cx-bw/2,by-r],[cx-bw/2+2.5,by-2.5],[cx-bw/2+r,by],[cx+bw/2-r,by],[cx+bw/2-2.5,by-2.5],[cx+bw/2,by-r],[cx+nw/2,ny],[cx+nw/2,by-h]];}
+function wave(c,x0,x1,sy,amb){c.beginPath();for(let x=x0;x<=x1+.1;x+=5){const y=sy+Math.sin(x*.11+amb*2.2)*1.3;x===x0?c.moveTo(x,y):c.lineTo(x,y);}}
+function flaskT(c,cx,by,bw,h,liq,amb,o={}){const pts=flaskPts(cx,by,bw,h),nw=bw*.28,ny=by-h*.62,sy=by-h*(o.lvl||.52);
+  c.save();plainPath(c,pts);c.fillStyle=TP.glass;c.fill();c.clip();
+  wave(c,cx-bw/2-2,cx+bw/2+2,sy,amb);c.lineTo(cx+bw/2+2,by+2);c.lineTo(cx-bw/2-2,by+2);c.closePath();c.fillStyle=liq;c.fill();
+  if(o.inner)o.inner(c,sy);
+  wave(c,cx-bw/2-2,cx+bw/2+2,sy,amb);c.strokeStyle=mixHex(liq,'#ffffff',.45);c.lineWidth=2.5;c.stroke();
+  c.restore();
+  c.beginPath();c.moveTo(cx-nw/2+4,by-h+8);c.lineTo(cx-nw/2+4,ny+2);c.lineTo(cx-bw/2+13,by-16);c.strokeStyle='rgba(255,255,255,.85)';c.lineWidth=2.6;c.stroke();
+  jPath(c,pts,false,1);inkStroke(c,2.2);
+  rrect(c,cx-nw/2-4,by-h-4,nw+8,6,2);c.fillStyle=TP.glass;c.fill();c.lineWidth=1.8;c.strokeStyle=OUT;c.stroke();}
+function beakerT(c,cx,by,w,h,liq,amb,lvl=.6,inner){const x0=cx-w/2,x1=cx+w/2,top=by-h,sy=by-h*lvl;
+  c.save();c.fillStyle=TP.glass;c.fillRect(x0,top,w,h);c.beginPath();c.rect(x0,top,w,h);c.clip();
+  wave(c,x0,x1,sy,amb);c.lineTo(x1,by);c.lineTo(x0,by);c.closePath();c.fillStyle=liq;c.fill();if(inner)inner(c,sy);
+  wave(c,x0,x1,sy,amb);c.strokeStyle=mixHex(liq,'#ffffff',.45);c.lineWidth=2.5;c.stroke();c.restore();
+  c.beginPath();c.moveTo(x0+6,top+8);c.lineTo(x0+6,by-8);c.strokeStyle='rgba(255,255,255,.85)';c.lineWidth=2.6;c.stroke();
+  jPath(c,[[x0-4,top],[x0,top+3],[x0,by],[x1,by],[x1,top+3],[x1+3,top]],false,1);inkStroke(c,2.2);}
+function buretteT(c,x,y0,y1,frac,col){const w=12,tb=y1-14;
+  c.beginPath();c.moveTo(x-30,y0+16);c.lineTo(x-6,y0+16);inkStroke(c,3);
+  c.fillStyle=TP.glass;c.fillRect(x-w/2,y0,w,tb-y0);const fh=(tb-y0-3)*cl(frac);c.fillStyle=col;c.fillRect(x-w/2,tb-fh,w,fh);
+  c.beginPath();c.moveTo(x-2.5,y0+4);c.lineTo(x-2.5,tb-4);c.strokeStyle='rgba(255,255,255,.8)';c.lineWidth=2;c.stroke();
+  jPath(c,[[x-w/2,y0],[x-w/2,tb],[x+w/2,tb],[x+w/2,y0]],false,.8);inkStroke(c,2);
+  for(let i=1;i<6;i++){const yy=y0+(tb-y0)*i/6;c.beginPath();c.moveTo(x-w/2,yy);c.lineTo(x-w/2+4,yy);inkStroke(c,1);}
+  rrect(c,x-9,tb,18,6,2);c.fillStyle=OUT;c.fill();rrect(c,x+9,tb-1,7,8,2);c.fillStyle=SP.orange;c.fill();c.lineWidth=1.4;c.strokeStyle=OUT;c.stroke();
+  jPath(c,[[x-3,tb+6],[x-1.2,y1],[x+1.2,y1],[x+3,tb+6]],true,.5);c.fillStyle=TP.glass;c.fill();inkStroke(c,1.6);}
+function dropT(c,x,y,col,al=1){if(al<=.01)return;c.save();c.globalAlpha*=al;c.beginPath();c.moveTo(x,y-7);c.quadraticCurveTo(x+5.5,y,x,y+5);c.quadraticCurveTo(x-5.5,y,x,y-7);c.fillStyle=col;c.fill();inkStroke(c,1.4);c.restore();}
+function splash(c,x,y,p){if(p<=0||p>=1)return;c.save();c.globalAlpha=1-p;c.beginPath();c.ellipse(x,y,L(3,16,p),L(1,4,p),0,0,Math.PI*2);c.strokeStyle=OUT;c.lineWidth=1.4;c.stroke();c.restore();}
+/* drops falling from a burette tip into a liquid surface */
+function macroDrops(c,D,t,x,tip,surf,col){D.forEach(r=>{if(t>=r&&t<r+.45){const p=lin(t,r,r+.45);dropT(c,x,L(tip+4,surf-4,p*p),col);}splash(c,x,surf,lin(t,r+.45,r+.85));});}
+
+/* ── THE ZOOM: a lens grows out of the flask into a particle view ── */
+const LC=[286,114],LR=98;
+function lens(c,ox,oy,open,micro,o={}){if(open<=.01)return;const e=ez(cl(open)),tx=o.cx??LC[0],ty=o.cy??LC[1],R=o.R??LR;
+  const cx=L(ox,tx,e),cy=L(oy,ty,e),r=L(6,R,e);
+  circ(c,ox,oy,9,'rgba(255,255,255,.45)',OUT,1.8);
+  const dx=cx-ox,dy=cy-oy,d=Math.hypot(dx,dy);
+  if(d>r+12){const nx=-dy/d,ny=dx/d;c.save();c.globalAlpha=.6;c.beginPath();c.moveTo(ox+nx*9,oy+ny*9);c.lineTo(cx+nx*r,cy+ny*r);c.moveTo(ox-nx*9,oy-ny*9);c.lineTo(cx-nx*r,cy-ny*r);c.lineWidth=1.4;c.strokeStyle=OUT;c.stroke();c.restore();}
+  circ(c,cx+4,cy+4,r,OUT);circ(c,cx,cy,r,TP.lensBg);
+  c.save();c.beginPath();c.arc(cx,cy,r,0,Math.PI*2);c.clip();
+  c.fillStyle='rgba(31,36,34,.09)';for(let gx=cx-r;gx<cx+r;gx+=14)for(let gy=cy-r;gy<cy+r;gy+=14)c.fillRect(gx,gy,1.4,1.4);
+  c.translate(cx,cy);c.scale(r/100,r/100);micro(c);c.restore();
+  jPath(c,circPts(cx,cy,r),true,.7);inkStroke(c,3);
+  c.beginPath();c.arc(cx,cy,r-3.5,Math.PI*1.05,Math.PI*1.55);c.strokeStyle='rgba(255,255,255,.9)';c.lineWidth=2.4;c.stroke();
+  if(o.label!==false&&e>.6)sign(c,o.label||'particle view',cx,cy-r,{fs:8,al:(e-.6)/.4});}
+
+/* ── PLAYER: ambient loop + auto or tap mode ───────────── */
+const players=[];
+const isPhone=()=>innerWidth<960;
+function capAt(caps,t){let s='';for(const [ts,str] of caps){if(t>=ts-1e-6)s=str;}return s;}
+class Player{
+  constructor(fig,def){
+    this.fig=fig;this.def=def;this.tap=def.mode==='tap';this.cv=fig.querySelector('canvas');this.capEl=fig.querySelector('.cap');
+    this.ctx=this.cv.getContext('2d');this.W=400;this.H=250;
+    this.amb=0;this.drops=[];this.visible=false;this.looping=false;this.played=false;this.playing=false;this.lastCap=null;
+    this.t=this.tap?def.introEnd:def.dur;
+    const q=s=>fig.querySelector(s);this.rp=q('.rp');
+    if(this.tap){this.addB=q('.add');this.autoB=q('.auto');
+      this.addB.addEventListener('click',()=>this.addDrop());this.autoB.addEventListener('click',()=>this.autoRun());this.rp.addEventListener('click',()=>this.reset());
+      this.cv.addEventListener('click',()=>this.addDrop());this.cv.style.cursor='pointer';}
+    else{this.pp=q('.pp');this.pp.addEventListener('click',()=>this.toggle());this.rp.addEventListener('click',()=>this.play());}
+    this.tick=this.tick.bind(this);this.resize();this.syncBtn();
+  }
+  resize(){const avail=this.fig.clientWidth-20;const maxH=(isPhone()&&this.fitH)?this.fitH:innerHeight*(isPhone()?.30:.44);
+    const cw=Math.max(200,Math.min(avail,maxH*this.W/this.H,560));const ch=cw*this.H/this.W;
+    const dpr=Math.min(2,window.devicePixelRatio||1);
+    this.cv.style.width=cw+'px';this.cv.style.height=ch+'px';this.cv.width=Math.round(cw*dpr);this.cv.height=Math.round(ch*dpr);this.k=cw/this.W*dpr;this.draw();}
+  draw(){const c=this.ctx;c.setTransform(1,0,0,1,0,0);c.clearRect(0,0,this.cv.width,this.cv.height);c.setTransform(this.k,0,0,this.k,0,0);
+    c.lineCap='round';c.lineJoin='round';BOIL=reduced?0:Math.floor(this.amb*7);
+    this.def.draw(c,this.t,this.amb,this);
+    const s=this.tap?this.def.caption(this):capAt(this.def.caps,this.t);
+    if(s!==this.lastCap){this.capEl.textContent=s;this.lastCap=s;}}
+  loop(){if(this.looping)return;this.looping=true;this.last=performance.now();requestAnimationFrame(this.tick);}
+  setVisible(v){this.visible=v;if(v)this.loop();}
+  tick(now){const dt=Math.min(.1,(now-this.last)/1000);this.last=now;
+    if(!reduced)this.amb+=dt;
+    if(this.tap)this.t+=dt*RATE;
+    else if(this.playing){this.t=Math.min(this.def.dur,this.t+dt*RATE);if(this.t>=this.def.dur){this.playing=false;this.syncBtn();}}
+    this.draw();
+    if(this.visible||this.playing)requestAnimationFrame(this.tick);else this.looping=false;}
+  /* auto mode */
+  play(){this.t=0;this.playing=true;this.played=true;this.syncBtn();this.loop();}
+  toggle(){if(this.playing)this.playing=false;else if(this.t<this.def.dur){this.playing=true;this.loop();}else{this.play();return;}this.syncBtn();}
+  /* tap mode: the zoom intro plays, then each tap adds one drop */
+  start(){this.t=reduced?this.def.introEnd:0;this.played=true;this.loop();}
+  nextAt(){const last=this.drops.length?this.drops[this.drops.length-1]:-1e9;return Math.max(this.t,this.def.introEnd,last+this.def.gap);}
+  addDrop(){if(this.drops.length>=this.def.maxDrops)return;this.drops.push(reduced?this.t-60:this.nextAt());this.syncBtn();this.loop();}
+  autoRun(){while(this.drops.length<this.def.maxDrops)this.drops.push(reduced?this.t-60:this.nextAt());this.syncBtn();this.loop();}
+  reset(){this.drops=[];this.t=reduced?this.def.introEnd:0;this.played=true;this.syncBtn();this.loop();}
+  syncBtn(){if(this.tap){const full=this.drops.length>=this.def.maxDrops;this.addB.disabled=full;this.autoB.disabled=full;this.addB.textContent=full?'All drops added':'Add drop';}
+    else this.pp.textContent=this.playing?'Pause':(this.t<this.def.dur&&this.played?'Resume':'Play');}
+}
+
+/* ── ANIMATION: HOOK (auto) ────────────────────────────── */
+const HOOKPTS=[scatter(5,20,58,40),scatter(10,40,62,32)];
+const hook={dur:9.6,caps:[[0,'Two flasks. Same look.'],[2,'Zoom in: flask B holds twice the chloride of flask A.'],[5.6,'Measure it by the volume of reagent used, or by the mass of product formed.']],
+draw(c,t,amb){bench(c);
+  const s=L(1.22,1,P(t,0,1.4));c.save();c.translate(200,170);c.scale(s,s);c.translate(-200,-170);
+  [110,290].forEach(cx=>flaskT(c,cx,206,112,100,'#cfe6ea',amb));c.restore();
+  sign(c,'flask A',110,231);sign(c,'flask B',290,231);
+  const op=P(t,1.8,3)*(1-P(t,5.2,6));
+  [110,290].forEach((cx,k)=>lens(c,cx,172,op,m=>{HOOKPTS[k].forEach((p,i)=>{const j=jig(i+k*10,amb,3);ball(m,p[0]+j[0],p[1]+j[1],16,SP.green,'Cl⁻',{fs:13});});},{cx,cy:62,R:50,label:k?'0.20 g Cl⁻':'0.10 g Cl⁻'}));
+  const m=P(t,5.6,6.4);if(m<=0)return;c.save();c.globalAlpha=m;
+  const vA=28.2*P(t,6.2,8.8);buretteT(c,110,6,100,1-vA/45,SP.lilac);
+  if(t>6.2&&t<8.8){const ph=((t-6.2)*2.6)%1;dropT(c,110,L(104,150,ph*ph),SP.lilac);}
+  sign(c,`${vA.toFixed(1)} mL Ag⁺`,128,30,{a:'left',...ON});sign(c,'count the volume',128,52,{a:'left',fs:8});
+  card(c,238,22,104,50);display(c,250,32,80,24,`${(0.808*P(t,6.4,9)).toFixed(3)} g`);sign(c,'weigh the AgCl',290,88,{fs:8});
+  c.restore();}};
+
+/* ── PAIRING ENGINE, tap mode (counter, Mohr) ──────────── */
+function pairTap(cfg){
+  const nI=cfg.ind?cfg.ind.n:0;const all=scatter(cfg.nA+nI,cfg.seed,66,cfg.minD||34);
+  const aPos=all.slice(0,cfg.nA),iPos=all.slice(cfg.nA);
+  const FX=112,FBY=206,FBW=118,FH=108,TIP=88,SURF=FBY-FH*.52;
+  const free=gaps(all,1)[0];const tgt=i=>i<cfg.nA?aPos[i]:(i-cfg.nA<nI?iPos[i-cfg.nA]:free);
+  const reacts=i=>i<cfg.nA||(i-cfg.nA<nI);
+  const state=Pl=>{const t=Pl.t,D=Pl.drops;let gone=0,ex=0,indR=0;D.forEach((r,i)=>{if(i<cfg.nA&&t>r+1.25)gone++;if(i>=cfg.nA&&t>r+.95){ex++;if(i-cfg.nA<nI)indR++;}});
+    return{aLeft:cfg.nA-gone,ex,indR,n:D.length,endT:D[cfg.nA]};};
+  return {mode:'tap',introEnd:1.2,gap:.9,maxDrops:cfg.nA+1,
+    caption:Pl=>Pl.t<1.15?'Zooming in on the flask…':cfg.caption(state(Pl)),
+    draw(c,t,amb,Pl){bench(c);const s=state(Pl),D=Pl.drops;
+      let liq=cfg.liq0;if(cfg.turb)liq=mixHex(liq,'#f4f2ea',(cfg.nA-s.aLeft)/cfg.nA*.75);
+      if(s.endT!=null)liq=mixHex(liq,cfg.liqEnd,P(t,s.endT+.95,s.endT+1.7)*cfg.endK);
+      buretteT(c,FX,6,TIP,1-D.filter(r=>t>=r).length*.06,cfg.T.c);
+      flaskT(c,FX,FBY,FBW,FH,liq,amb);
+      macroDrops(c,D,t,FX,TIP,SURF,cfg.T.c);
+      lens(c,FX,FBY-34,P(t,.15,1.15),m=>{
+        aPos.forEach((p,i)=>{const r=D[i],j=jig(i,amb),k=r==null?0:lin(t,r+.95,r+1.25);
+          ball(m,p[0]+j[0],p[1]+j[1],15,cfg.A.c,cfg.A.l,{al:1-k,fs:11});if(k>0)ball(m,p[0]+j[0],p[1]+j[1],L(15,cfg.Pr.r,k),cfg.Pr.c,'',{al:k});});
+        iPos.forEach((p,x)=>{const i=cfg.nA+x,r=D[i],j=jig(i+20,amb),k=r==null?0:lin(t,r+.95,r+1.25);
+          ball(m,p[0]+j[0],p[1]+j[1],15,cfg.ind.c,cfg.ind.l,{al:1-k,fs:11});if(k>0)ball(m,p[0]+j[0],p[1]+j[1],L(15,cfg.ind.pr,k),cfg.ind.pc,'',{al:k});});
+        D.forEach((r,i)=>{if(t<r+.45)return;const g=tgt(i),j=jig(i+(i>=cfg.nA?20:0),amb),gx=g[0]+j[0],gy=g[1]+j[1];
+          if(t<r+.95){const p=P(t,r+.45,r+.95);ball(m,L(0,gx,p),L(-112,gy,p),13,cfg.T.c,cfg.T.l,{fs:10});}
+          else if(!reacts(i))ball(m,gx,gy,13,cfg.T.c,cfg.T.l,{fs:10});
+          else ball(m,gx,gy,13,cfg.T.c,cfg.T.l,{al:1-lin(t,r+.95,r+1.25),fs:10});});
+      });
+      hudCard(c,6,6,cfg.hud(s));legend(c,cfg.legend);
+      if(cfg.marks){const ep=s.endT!=null&&t>s.endT+1.2;sign(c,'equivalence',236,231,s.aLeft===0?ON:{});sign(c,'end point',330,231,ep?{bg:SP.pink}:{});}
+    }};
+}
+const counter=pairTap({nA:8,seed:7,A:{c:SP.blue,l:'A'},T:{c:SP.orange,l:'T'},Pr:{c:SP.grey,r:8},liq0:'#dbe9ee',liqEnd:'#f3a6c8',endK:1,marks:true,
+  legend:[[SP.blue,'analyte'],[SP.orange,'titrant'],[SP.grey,'product']],
+  hud:s=>[['ANALYTE LEFT',s.aLeft,s.aLeft===0],['EXCESS',s.ex,s.ex>0]],
+  caption:s=>{if(s.n===0)return 'Tap Add drop. Each drop of titrant (T) reacts 1 : 1 with analyte (A).';
+    if(s.ex>0)return 'End point: one extra drop meets the indicator and the flask turns pink. The gap is titration error.';
+    if(s.aLeft===0)return 'Equivalence: titrant exactly matches analyte, but nothing is visible yet. Add one more drop.';
+    return `Each drop removes one analyte particle. ${s.aLeft} left.`;}});
+const mohr=pairTap({nA:6,seed:31,A:{c:SP.green,l:'Cl⁻'},T:{c:SP.lilac,l:'Ag⁺'},Pr:{c:SP.white,r:10},ind:{n:3,c:SP.yellow,l:'Cr',pc:SP.redbrown,pr:12},
+  liq0:'#f6dc84',liqEnd:'#c97a5a',endK:.38,turb:true,marks:false,
+  legend:[[SP.green,'Cl⁻'],[SP.lilac,'Ag⁺'],[SP.yellow,'chromate'],[SP.white,'AgCl'],[SP.redbrown,'Ag₂CrO₄']],
+  hud:s=>[['Cl⁻ LEFT',s.aLeft,s.aLeft===0],['RED SOLID',s.indR>0?'yes':'no',s.indR>0]],
+  caption:s=>{if(s.n===0)return 'Tap Add drop. Silver (Ag⁺) meets chloride first: white AgCl forms.';
+    if(s.indR>0)return 'The next Ag⁺ meets chromate: red-brown Ag₂CrO₄. That is the end point.';
+    if(s.aLeft===0)return 'The last Cl⁻ is gone. Add one more drop.';
+    return `White AgCl builds up while chromate waits. ${s.aLeft} Cl⁻ left.`;}});
+
+/* ── ANIMATION: INDICATOR FLIP (auto) ──────────────────── */
+const indflip={dur:9.8,caps:[[0,'Zoom in: phenolphthalein is a weak acid, HIn. Colourless.'],[3.2,'OH⁻ arrives as the solution turns basic.'],[5.2,'It pulls H⁺ off the indicator.'],[6.5,'In⁻ is pink, so the flask turns pink. The flip happens between pH 8.2 and 10.']],
+draw(c,t,amb){bench(c);const pink=P(t,6.2,7.8),pv=L(7,9.6,P(t,2.7,7.7));
+  flaskT(c,112,206,118,108,mixHex('#e2eef0','#f39ac3',pink),amb);
+  hudCard(c,6,6,[['pH',pv.toFixed(1),pv>=8.2]],64);
+  lens(c,112,172,P(t,.15,1.15),m=>{const x=-40,y=-10,fill=mixHex('#f7f7f2',SP.pink,pink);
+    for(const dx of [-19,19]){const pts=[];for(let i=0;i<6;i++){const a=Math.PI/6+i*Math.PI/3;pts.push([x+dx+21*Math.cos(a),y+21*Math.sin(a)]);}jPath(m,pts,true,.6);m.fillStyle=fill;m.fill();inkStroke(m,2);}
+    m.beginPath();m.moveTo(x+38,y);m.lineTo(x+54,y);inkStroke(m,2);
+    txt(m,pink>.5?'O⁻':'O',x+62,y,{s:14,w:700});
+    const hp=P(t,5.2,6.2),gone=P(t,6.2,7.4),ohx=L(130,x+118,P(t,3.2,5.2)),hx=L(x+84,ohx-18,hp);
+    if(t<6.2){if(hp<1){m.beginPath();m.moveTo(x+70,y);m.lineTo(hx-10,y);inkStroke(m,1.6);}ball(m,hx,y,10,SP.lilac,'H',{fs:10});ball(m,ohx,y,15,SP.blue,'OH⁻',{fs:10});}
+    else ball(m,L(ohx,ohx+18,gone),L(y,y-58,gone),16,SP.blue,'H₂O',{al:1-gone*.9,fs:10});
+    txt(m,pink>.5?'In⁻ · pink':'HIn · colourless',0,48,{s:13,w:700,c:pink>.5?'#c2387a':OUT});});
+  const sx=30,ex=370,sy=232,p2x=v=>sx+(v-6)/(11-6)*(ex-sx);
+  rrect(c,sx,sy-6,ex-sx,12,6);c.fillStyle=TP.cream;c.fill();
+  c.save();rrect(c,sx,sy-6,ex-sx,12,6);c.clip();const g=c.createLinearGradient(p2x(8.2),0,p2x(10),0);g.addColorStop(0,'rgba(240,106,169,.05)');g.addColorStop(1,SP.pink);
+  c.fillStyle=g;c.fillRect(p2x(8.2),sy-6,p2x(10)-p2x(8.2),12);c.fillStyle=SP.pink;c.fillRect(p2x(10),sy-6,ex,12);c.restore();
+  rrect(c,sx,sy-6,ex-sx,12,6);c.lineWidth=1.6;c.strokeStyle=OUT;c.stroke();
+  for(let v=6;v<=11;v++)txt(c,String(v),p2x(v),sy+13,{s:9,c:TP.cream,w:600});
+  txt(c,'pH',sx-14,sy,{s:9,c:TP.cream,w:700});
+  const mx=p2x(pv);c.beginPath();c.moveTo(mx,sy-7);c.lineTo(mx-6,sy-16);c.lineTo(mx+6,sy-16);c.closePath();c.fillStyle=TP.cream;c.fill();inkStroke(c,1.5);}};
+
+/* ── ANIMATION: FAJANS SURFACE FLIP (auto) ─────────────── */
+const fajans={dur:15.2,caps:[[0,'Zoom in on one AgCl particle. Spare Cl⁻ coats its surface, so it is negative.'],[2.8,'The dye is an anion too, so it is pushed away.'],[5.2,'Ag⁺ drops in and uses up the surface Cl⁻.'],[8.2,'Equivalence: no spare Cl⁻ left.'],[8.8,'One more drop: Ag⁺ coats the surface. Now it is positive.'],[10.8,'The dye sticks and the solid turns pink. The dye does not react; it adsorbs.']],
+draw(c,t,amb){bench(c);const pinkP=P(t,11.2,13.2);
+  const drip=[];for(let d=5.2;d<10.6;d+=.55)drip.push(d);
+  buretteT(c,112,6,88,.8-lin(t,5.2,10.6)*.3,SP.lilac);
+  flaskT(c,112,206,118,108,mixHex('#eceee6','#f2b3cf',pinkP),amb,{inner:(cc,sy)=>{for(let i=0;i<40;i++){cc.fillStyle='rgba(255,255,255,.9)';cc.fillRect(62+rnd(i)*100,sy+6+rnd(i+50)*40,2.2,2.2);}}});
+  macroDrops(c,drip,t,112,88,206-108*.52,SP.lilac);
+  lens(c,112,172,P(t,.15,1.15),m=>{const R=42,RR=56,N=12;
+    m.save();m.beginPath();m.arc(0,0,R,0,Math.PI*2);m.clip();m.fillStyle=mixHex('#eceee6',SP.pink,.12+pinkP*.55);m.fillRect(-R,-R,2*R,2*R);
+    for(let i=-5;i<=5;i++)for(let j=-5;j<=5;j++)circ(m,i*9,j*9,2.6,((i+j)&1)?SP.lilac:SP.green);m.restore();
+    jPath(m,circPts(0,0,R),true,.8);inkStroke(m,2.2);
+    for(let k=0;k<N;k++){const a=k/N*Math.PI*2-Math.PI/2,px=Math.cos(a)*RR,py=Math.sin(a)*RR;const tk=5.2+k*(3/N);
+      if(t>=tk-.6&&t<tk)ball(m,px,L(-112,py,P(t,tk-.6,tk)),8,SP.lilac,'+',{fs:10});
+      ball(m,px,py,8,SP.green,'−',{al:1-lin(t,tk,tk+.25),fs:11});
+      const ta=8.5+k*(1.7/N);
+      if(t>=ta-.5&&t<ta)ball(m,px,L(-112,py,P(t,ta-.5,ta)),8,SP.lilac,'+',{fs:10});
+      if(t>=ta)ball(m,px,py,8,SP.lilac,'+',{fs:10});}
+    [-.6,-.2,.2,.6].forEach((a,i)=>{const free=84+7*Math.sin(amb*2.1+i*1.7);const d=t<10.8?free:L(84,RR+15,P(t,10.8,12.4));
+      ball(m,Math.cos(a)*d,Math.sin(a)*d,9,SP.pink,'−',{fs:11});});});
+  if(t<8.1)sign(c,'surface −  (Cl⁻ layer)',286,231,{bg:SP.green,fg:'#fff'});
+  else if(t<8.6)sign(c,'surface neutral',286,231);
+  else sign(c,'surface +  (Ag⁺ layer)',286,231,{bg:SP.lilac});
+  if(t>=8.2)sign(c,'equivalence',112,231,{...ON,al:P(t,8.2,8.5)});
+  legend(c,[[SP.green,'Cl⁻'],[SP.lilac,'Ag⁺'],[SP.pink,'dye']],12,14);}};
+
+/* ── ANIMATION: ELECTRON HOP (tap) ─────────────────────── */
+const EH=scatter(10,77,74,38);
+const EHO=EH.map((p,i)=>i).sort((a,b)=>EH[a][0]-EH[b][0]);
+const EHG=[EHO.slice(0,5),EHO.slice(5)];
+const EHC=gaps(EH,3,60);
+const hopT=(r,j)=>r+1.0+j*.38;
+function ehS(Pl){const t=Pl.t,D=Pl.drops;let hops=0,mnDone=0;D.forEach((r,i)=>{if(i<2){for(let j=0;j<5;j++)if(t>hopT(r,j)+.32)hops++;if(t>r+3.4)mnDone++;}});
+  return{n:D.length,fe:10-hops,hops,mnDone,pinkOn:D[2]!=null&&t>D[2]+1.2};}
+const ehop={mode:'tap',introEnd:1.2,gap:3.6,maxDrops:3,
+caption(Pl){if(Pl.t<1.15)return 'Zooming in on the flask…';const s=ehS(Pl);
+  if(s.n===0)return 'Tap Add drop. Each purple MnO₄⁻ takes 5 electrons, one from each of 5 Fe²⁺.';
+  if(s.pinkOn)return 'Nothing left to give electrons, so the purple stays: faint pink. The titrant is the indicator.';
+  if(s.fe===0&&s.mnDone>=2)return 'Fe²⁺ is gone. Add one more drop.';
+  if(s.mnDone>=1&&s.mnDone>=s.n)return 'One MnO₄⁻ took 5 e⁻ and became colourless Mn²⁺. Ratio 1 : 5. Add another drop.';
+  return 'Electrons hop from Fe²⁺ to MnO₄⁻…';},
+draw(c,t,amb,Pl){bench(c);const D=Pl.drops,s=ehS(Pl);
+  let liq='#dcebd8';if(D[2]!=null)liq=mixHex(liq,'#e7a3d3',P(t,D[2]+.6,D[2]+1.4));
+  buretteT(c,112,6,88,.85-D.filter(r=>t>=r).length*.12,SP.violet);
+  flaskT(c,112,206,118,108,liq,amb,{inner:(cc,sy)=>{D.forEach((r,i)=>{if(i>1)return;const q=lin(t,r+.45,r+1.6);if(q>0&&q<1){cc.beginPath();cc.ellipse(112,sy+18,L(6,40,q),L(4,16,q),0,0,Math.PI*2);cc.fillStyle=rgba(SP.violet,.75*(1-q));cc.fill();}});}});
+  macroDrops(c,D,t,112,88,206-108*.52,SP.violet);
+  lens(c,112,172,P(t,.15,1.15),m=>{
+    EH.forEach((p,i)=>{const j=jig(i,amb),g=EHG[0].includes(i)?0:1,jj=EHG[g].indexOf(i),r=D[g];const te=r==null?1e9:hopT(r,jj)+.32,k=P(t,te-.1,te+.2);
+      ball(m,p[0]+j[0],p[1]+j[1],12.5,mixHex(SP.blue,SP.lilac,k),k>.5?'Fe³⁺':'Fe²⁺',{fs:8.5});});
+    D.forEach((r,i)=>{if(t<r+.45)return;const tg=EHC[i],p=P(t,r+.45,r+.95),x=L(0,tg[0],p),y=L(-112,tg[1],p);const fade=i<2?P(t,r+3.0,r+3.4):0;
+      if(i<2)for(let jj=0;jj<5;jj++){const fi=EHG[i][jj],fp=EH[fi],j=jig(fi,amb),h0=hopT(r,jj);
+        if(t>=h0&&t<h0+.32){const q=P(t,h0,h0+.32);ball(m,L(fp[0]+j[0],x,q),L(fp[1]+j[1],y,q),6,SP.yellow,'e⁻',{fs:7});}}
+      ball(m,x,y,18,mixHex(SP.violet,'#e9e6f4',fade),fade>.5?'Mn²⁺':'MnO₄⁻',{fs:9.5});
+      if(i<2)for(let jj=0;jj<5;jj++){if(t>=hopT(r,jj)+.32&&fade<1){const a=jj/5*Math.PI*2-Math.PI/2;ball(m,x+Math.cos(a)*22,y+Math.sin(a)*22,3.5,SP.yellow,'',{al:1-fade});}}});
+  });
+  hudCard(c,6,6,[['Fe²⁺ LEFT',s.fe,s.fe===0],['e⁻ TAKEN',s.hops,false]]);
+  legend(c,[[SP.blue,'Fe²⁺'],[SP.lilac,'Fe³⁺'],[SP.violet,'MnO₄⁻'],[SP.yellow,'e⁻']]);}};
+
+/* ── ANIMATION: EDTA STEAL (tap) ───────────────────────── */
+function claw(m,cx,cy,tx,ty,wrap,ir){const ox=L(cx,tx,wrap),oy=L(cy,ty,wrap),pts=[];
+  for(let i=0;i<6;i++){const a=i*Math.PI/3+Math.PI/6,op=[cx+Math.cos(a)*22,cy+Math.sin(a)*22],sh=[tx+Math.cos(a)*(ir+7),ty+Math.sin(a)*(ir+7)];pts.push([L(op[0],sh[0],wrap),L(op[1],sh[1],wrap)]);}
+  m.save();pts.forEach(p=>{m.beginPath();m.moveTo(ox,oy);m.lineTo(p[0],p[1]);m.globalAlpha=1-wrap*.8;m.lineWidth=3.4;m.strokeStyle=TP.forest;m.lineCap='round';m.stroke();m.globalAlpha=1;});
+  if(wrap>.55){m.globalAlpha=(wrap-.55)/.45;jPath(m,pts,true,.6);m.lineWidth=3.4;m.strokeStyle=TP.forest;m.stroke();m.globalAlpha=1;}
+  pts.forEach(p=>circ(m,p[0],p[1],3.6,'#7cc48f',OUT,1.3));if(wrap<.95)circ(m,ox,oy,5,'#7cc48f',OUT,1.5);m.restore();}
+const CA=[[-54,-30],[-6,42],[36,-46]],MGI=[50,24];
+const stS=Pl=>{const t=Pl.t,D=Pl.drops;let w=0;D.forEach((r,i)=>{if(t>r+(i<3?2.0:2.4))w++;});return{n:D.length,wrapped:w,blueOn:D[3]!=null&&t>D[3]+2.4};};
+const steal={mode:'tap',introEnd:1.2,gap:2.4,maxDrops:4,
+caption(Pl){if(Pl.t<1.15)return 'Zooming in on the flask…';const s=stS(Pl);
+  if(s.n===0)return 'Tap Add drop. Each EDTA (the claw) wraps one metal ion, 1 : 1. Mg–In is wine-red.';
+  if(s.blueOn)return 'EDTA grips harder than the indicator and steals the Mg²⁺. Free indicator is blue: end point.';
+  if(s.wrapped>=3)return 'Free ions are gone, but it is still red: the indicator holds Mg²⁺. Add one more drop.';
+  return `Free Ca²⁺ wrapped: ${s.wrapped} of 3. The solution stays red.`;},
+draw(c,t,amb,Pl){bench(c);const D=Pl.drops,s=stS(Pl);const blue=D[3]==null?0:P(t,D[3]+2.0,D[3]+3.0);
+  buretteT(c,112,6,88,.85-D.filter(r=>t>=r).length*.1,'#e9e6f4');
+  flaskT(c,112,206,118,108,mixHex('#c96f92','#86a5f0',blue),amb);
+  macroDrops(c,D,t,112,88,206-108*.52,'#e9e6f4');
+  lens(c,112,172,P(t,.15,1.15),m=>{
+    CA.forEach((p,k)=>{const r=D[k],j=r!=null&&t>r+1.3?[0,0]:jig(k,amb);const x=p[0]+j[0],y=p[1]+j[1];ball(m,x,y,15,SP.yellow,'Ca²⁺',{fs:10});
+      if(r!=null&&t>=r+.45){if(t<r+1.3){const q=P(t,r+.45,r+1.3);claw(m,L(0,x,q),L(-120,y-32,q),x,y,0,15);}else claw(m,x,y-32,x,y,P(t,r+1.3,r+2.0),15);}});
+    const r3=D[3],pull=r3==null?0:P(t,r3+1.3,r3+2.2),inCol=mixHex('#c0406f',SP.ebtBlue,blue);
+    m.save();m.beginPath();m.arc(MGI[0],MGI[1],24,Math.PI*.35,Math.PI*1.65,true);m.lineWidth=9;m.strokeStyle=OUT;m.lineCap='round';m.stroke();m.lineWidth=5.5;m.strokeStyle=inCol;m.stroke();m.restore();
+    txt(m,'In',MGI[0]+36,MGI[1],{s:13,w:700,c:inCol});
+    const mx=L(MGI[0],MGI[0]-40,pull),my=L(MGI[1],MGI[1]-30,pull);ball(m,mx,my,13,SP.green,'Mg²⁺',{fs:9});
+    if(r3!=null&&t>=r3+.45){if(t<r3+1.3){const q=P(t,r3+.45,r3+1.3);claw(m,L(0,MGI[0]-26,q),L(-120,MGI[1]-40,q),MGI[0],MGI[1],0,13);}
+      else{const w=P(t,r3+1.7,r3+2.4);claw(m,mx,my-32*(1-w),mx,my,w,13);}}});
+  hudCard(c,6,6,[['EDTA ADDED',s.n,false],['METAL–EDTA',s.wrapped,s.wrapped===4]]);
+  legend(c,[[SP.yellow,'Ca²⁺'],[SP.green,'Mg²⁺'],['#7cc48f','EDTA']]);
+  sign(c,blue>.5?'blue · end point':'wine-red',112,231,blue>.5?{bg:SP.ebtBlue,fg:'#fff'}:{bg:SP.wine,fg:'#fff'});}};
+
+/* ── ANIMATION: GRAVIMETRIC PIPELINE (auto) ────────────── */
+const ST=['precipitate','digest','filter','dry','weigh'];const SB=[1.2,4.7,8.2,11.7,15.2,19.2];
+const GC=scatter(15,91,62,28),GBIG=[1,6,11];
+const grav={dur:19.2,caps:[[0,'Zoom in on the beaker.'],[1.2,'Precipitate: Ba²⁺ meets SO₄²⁻. Add reagent slowly to a hot, dilute, stirred solution.'],[4.7,'Digest: held warm, small crystals dissolve and big ones grow.'],[8.2,'Filter and wash: water passes, crystals stay.'],[11.7,'Dry or ignite: drive off the water.'],[15.2,'Weigh, then reweigh. The same mass twice means constant mass: pure BaSO₄.']],
+draw(c,t,amb){bench(c);
+  const fade=i=>i===0?(1-P(t,SB[1]-.35,SB[1])):P(t,SB[i]-.01,SB[i]+.4)*(i===4?1:1-P(t,SB[i+1]-.35,SB[i+1]));
+  ST.forEach((s,i)=>{const on=t>=SB[i]&&t<SB[i+1],x=44+i*78;sign(c,s,x,231,on?ON:{al:t>=SB[i+1]?1:.55});});
+  const sq=(m,x,y,s)=>{if(s<.5)return;m.save();m.translate(x,y);m.rotate(.3);jPath(m,[[-s/2,-s/2],[s/2,-s/2],[s/2,s/2],[-s/2,s/2]],true,Math.min(1,s/14));m.fillStyle=SP.white;m.fill();inkStroke(m,s<8?1.2:1.8);m.restore();};
+  const orig=[[100,170],[100,170],[100,112],[100,140],[100,150]];let oi=0;for(let i=1;i<5;i++)if(t>=SB[i]-.35)oi=i;
+  let a=fade(0);if(a>0){c.save();c.globalAlpha=a;buretteT(c,100,6,96,.6,SP.lilac);
+    beakerT(c,100,206,110,96,'#e3eef0',amb,.62,(cc,sy)=>{const n=Math.floor(30*P(t,1.4,4.4));for(let i=0;i<n;i++){cc.fillStyle='#ffffff';cc.fillRect(52+rnd(i)*96,sy+8+rnd(i+30)*50,2.5,2.5);}});
+    if(t>1.4&&t<4.4){const ph=((t-1.4)*2.4)%1;dropT(c,100,L(100,140,ph*ph),SP.lilac);}c.restore();}
+  a=fade(1);if(a>0){c.save();c.globalAlpha=a;
+    beakerT(c,100,206,110,96,'#e3eef0',amb,.62,(cc,sy)=>{for(let i=0;i<8;i++){cc.fillStyle='#ffffff';cc.fillRect(54+rnd(i+7)*90,sy+12+rnd(i+70)*44,5,5);}});
+    for(let k=0;k<3;k++){const w=((amb*.8+k*.33)%1);c.beginPath();c.moveTo(72+k*28,106-w*14);c.quadraticCurveTo(78+k*28,98-w*14,72+k*28,90-w*14);c.strokeStyle=rgba(SP.orange,1-w);c.lineWidth=2;c.stroke();}
+    sign(c,'held warm',100,72,{fs:8});c.restore();}
+  a=fade(2);if(a>0){c.save();c.globalAlpha=a;
+    jPath(c,[[44,56],[100,124],[156,56]],false,1);c.fillStyle=TP.glass;c.fill();inkStroke(c,2.2);
+    c.setLineDash([3,3]);c.beginPath();c.moveTo(54,60);c.lineTo(100,116);c.lineTo(146,60);c.strokeStyle=OUT;c.lineWidth=1.2;c.stroke();c.setLineDash([]);
+    for(let i=0;i<5;i++){c.save();c.translate(84+(i%3)*14,90+Math.floor(i/3)*12);jPath(c,[[-5,-5],[5,-5],[5,5],[-5,5]],true,.6);c.fillStyle=SP.white;c.fill();inkStroke(c,1.5);c.restore();}
+    jPath(c,[[96,124],[96,160],[104,160],[104,124]],false,.6);inkStroke(c,2);
+    beakerT(c,100,206,64,40,'#e3eef0',amb,cl(.15+lin(t,8.4,11.4)*.6));
+    const ph=(amb*2.2)%1;if(t<11.4)dropT(c,100,L(164,190,ph),'#cfe6ea');c.restore();}
+  a=fade(3);if(a>0){c.save();c.globalAlpha=a;const gl=.5+.5*Math.sin(amb*6);
+    jPath(c,[[60,172],[140,172]],false,.6);inkStroke(c,3);jPath(c,[[68,172],[60,204]],false,.6);inkStroke(c,3);jPath(c,[[132,172],[140,204]],false,.6);inkStroke(c,3);
+    for(let k=0;k<3;k++){jPath(c,[[86+k*14,200],[79+k*14,186],[93+k*14,168-gl*5],[100+k*14,186]],true,1);c.fillStyle=k===1?SP.yellow:SP.orange;c.fill();inkStroke(c,1.5);}
+    jPath(c,[[66,128],[134,128],[124,168],[76,168]],true,1);c.fillStyle=mixHex('#e7e2d6',SP.orange,.18+.15*gl);c.fill();inkStroke(c,2.2);
+    for(let k=0;k<4;k++){const q=((amb*.6+k*.25)%1);ball(c,80+k*13,L(122,60,q),4,SP.water,'',{al:1-q});}
+    sign(c,'H₂O leaves',150,70,{fs:8});c.restore();}
+  a=fade(4);if(a>0){c.save();c.globalAlpha=a;card(c,40,150,120,54);display(c,54,170,92,26,`${(.4668*P(t,15.6,17)).toFixed(4)} g`);
+    c.beginPath();c.ellipse(100,146,46,6,0,0,Math.PI*2);c.fillStyle='#d9ddd8';c.fill();inkStroke(c,1.8);
+    jPath(c,[[80,112],[120,112],[113,140],[87,140]],true,.8);c.fillStyle='#e7e2d6';c.fill();inkStroke(c,2);
+    if(t>17.4){sign(c,'reweigh 0.4668 g',100,64,{...ON,fs:8,al:P(t,17.4,17.9)});sign(c,'constant mass',100,84,{...ON,fs:8,al:P(t,17.4,17.9)});}c.restore();}
+  const og=orig[oi];
+  lens(c,og[0],og[1],P(t,.15,1.15),m=>{
+    const f0=fade(0),f1=fade(1),f2=fade(2),f3=fade(3),f4=fade(4);
+    if(f0>0){m.save();m.globalAlpha=f0;const n=Math.floor(15*P(t,1.6,4.4));
+      for(let i=0;i<8;i++){const ph=(amb*.35+i*.125)%1,a=i/8*Math.PI*2+amb*.2;if(i>=n/2){ball(m,Math.cos(a)*70,Math.sin(a)*70,9,i%2?SP.blue:SP.yellow,i%2?'Ba':'SO₄',{fs:7});}}
+      GC.forEach((p,i)=>{if(i<n)sq(m,p[0],p[1],7);});m.restore();}
+    if(f1>0){m.save();m.globalAlpha=f1;const g=P(t,5.2,7.8);GC.forEach((p,i)=>sq(m,p[0],p[1],GBIG.includes(i)?L(7,30,g):L(7,0,g)));
+      sign(m,'fewer · bigger',0,82,{fs:9});m.restore();}
+    if(f2>0||f3>0||f4>0){const big=GBIG.map((g,i)=>[-38+i*38,-14]);
+      if(f2>0){m.save();m.globalAlpha=f2;for(let y=14;y<=26;y+=6){m.beginPath();m.moveTo(-100,y+Math.sin(y)*2);for(let x=-100;x<=100;x+=20)m.lineTo(x,y+((x/20)%2?2:-2));inkStroke(m,1.4);}
+        big.forEach(p=>sq(m,p[0],p[1],30));for(let i=0;i<7;i++){const q=((amb*.5+i/7)%1);ball(m,-80+i*26,L(-60,90,q),5,SP.water,'');}m.restore();}
+      if(f3>0){m.save();m.globalAlpha=f3;big.forEach(p=>sq(m,p[0],p[1]+10,30));for(let i=0;i<6;i++){const q=((amb*.45+i/6)%1);ball(m,-50+i*20,L(0,-90,q),5,SP.water,'',{al:1-q});}m.restore();}
+      if(f4>0){m.save();m.globalAlpha=f4;big.forEach(p=>sq(m,p[0],p[1]+10,30));sign(m,'pure BaSO₄',0,52,{fs:10});m.restore();}}
+  },{label:'particle view'});}};
+
+/* ── ANIMATION: OCCLUSION (auto) ───────────────────────── */
+const occl={dur:7.9,caps:[[0,'Zoom in: reagent dumped in too fast, and a crystal grows too fast…'],[3.4,'…and wraps a stray ion inside it. This is occlusion.'],[4.9,'Washing cannot reach it.'],[6.1,'The balance reads high.']],
+draw(c,t,amb){bench(c);const bal=P(t,5.8,6.4);
+  if(bal<1){c.save();c.globalAlpha=1-bal;
+    c.save();c.translate(52,40);c.rotate(.9);rrect(c,-12,-26,24,40,5);c.fillStyle=TP.glass;c.fill();inkStroke(c,2);c.restore();
+    if(t<3.8){c.beginPath();c.moveTo(68,52);c.quadraticCurveTo(92,70,98,120);c.lineWidth=8;c.strokeStyle=OUT;c.stroke();c.lineWidth=5;c.strokeStyle='#cfe6ea';c.stroke();}
+    beakerT(c,100,206,110,96,mixHex('#e3eef0','#f4f2ea',P(t,1.4,3)),amb,.62);c.restore();}
+  if(bal>0){c.save();c.globalAlpha=bal;card(c,40,150,120,54);display(c,54,170,92,26,'0.4712 g','#e48b63');sign(c,'expected 0.4668 g',100,134,{fs:8});c.restore();}
+  lens(c,100,170,P(t,.15,1.15),m=>{const s=L(20,112,P(t,1.5,4.6));
+    for(let k=4;k>=0;k--){const ss=s*(.4+.15*k);m.strokeStyle=rgba(OUT,.12+.08*k);m.lineWidth=1.2;m.strokeRect(-ss/2,-ss/2,ss,ss);}
+    m.fillStyle='rgba(255,255,255,.55)';m.fillRect(-s/2,-s/2,s,s);jPath(m,[[-s/2,-s/2],[s/2,-s/2],[s/2,s/2],[-s/2,s/2]],true,1);inkStroke(m,2.2);
+    const j=s/2>40?[0,0]:jig(3,amb,3);ball(m,22+j[0],-22+j[1],10,SP.orange,'Na⁺',{fs:9});
+    if(s/2>40)sign(m,'trapped',22,-46,{bg:'#e48b63',fs:9,al:P(t,3.6,4)});
+    for(let k=0;k<4;k++){const q=lin(t,4.9+k*.18,5.8+k*.18);if(q<=0||q>=1)continue;const yy=-40+k*26,bx=-s/2-7;
+      const xx=q<.6?L(-100,bx,q/.6):L(bx,bx-30,(q-.6)/.4);ball(m,xx,yy,5,SP.water,'',{al:1-Math.max(0,(q-.6)/.4)});}},{label:'particle view'});}};
+
+/* ── WIRE PLAYERS ──────────────────────────────────────── */
+const DEFS={hook,counter,indflip,mohr,fajans,ehop,steal,grav,occl};
+document.querySelectorAll('figure.anim').forEach(f=>{const d=DEFS[f.dataset.anim];if(d)players.push(new Player(f,d));});
+
+/* ── STRIP + JUMP BAR ──────────────────────────────────── */
+const STRIP={
+  generic:{name:'Any method',v:['analyte + reagent','K is huge','a visible signal','ratio × amount']},
+  basics:{name:'Basics',v:['A + T → product','fast, complete','indicator changes','(a/b) × C × V']},
+  acidbase:{name:'Acid–base',v:['H⁺ + OH⁻ → H₂O','K ≈ 10¹⁴','pH indicator','mol ratio × C × V']},
+  precip:{name:'Precipitation',v:['Ag⁺ + Cl⁻ → AgCl↓','Ksp ≈ 1.8 × 10⁻¹⁰','Mohr · Volhard · Fajans','1 : 1']},
+  redox:{name:'Redox',v:['e⁻ transfer','E° gap 0.74 V','purple persists','1 : 5']},
+  edta:{name:'Complexometric',v:['M²⁺ + EDTA','log Kf ≈ 10.7','wine-red → blue','always 1 : 1']},
+  grav:{name:'Gravimetric',v:['Ba²⁺ + SO₄²⁻ → BaSO₄↓','Ksp ≈ 1.1 × 10⁻¹⁰','no new cloudiness','mass × GF']}
+};
+const hdr=document.getElementById('hdr');
+let cur='hook',shownKey='';
+function setOffsets(){document.documentElement.style.setProperty('--hdrH',hdr.offsetHeight+'px');}
+function applyChapter(){
+  const key=STRIP[cur]?cur:'generic';
+  if(key!==shownKey){shownKey=key;const s=STRIP[key];document.getElementById('stripName').textContent=s.name;
+    s.v.forEach((v,i)=>{const el=document.getElementById('st'+i);el.textContent=v;const st=el.parentElement;st.classList.remove('flash');void st.offsetWidth;st.classList.add('flash');});}
+  document.querySelectorAll('#jump a').forEach(a=>{const on=a.dataset.for===cur;a.classList.toggle('on',on);
+    if(on){const j=document.getElementById('jump');const l=a.offsetLeft-16;if(l<j.scrollLeft||l+a.offsetWidth>j.scrollLeft+j.clientWidth-16)j.scrollTo({left:l,behavior:'smooth'});}});
+}
+const secObs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){cur=e.target.dataset.ch;applyChapter();}});},{rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('section[data-ch]').forEach(s=>secObs.observe(s));
+
+let animObs=null;
+function makeAnimObs(){if(animObs)animObs.disconnect();
+  animObs=new IntersectionObserver(es=>{es.forEach(e=>{const p=players.find(p=>p.fig===e.target);if(!p)return;
+    p.setVisible(e.isIntersecting);
+    if(e.isIntersecting&&e.intersectionRatio>=.6&&!p.played){if(p.tap)p.start();else if(!reduced)p.play();}});},
+    {rootMargin:`-${hdr.offsetHeight}px 0px 0px 0px`,threshold:[0,.6]});
+  players.forEach(p=>animObs.observe(p.fig));}
+
+/* ── SHEET (Go deeper / Into the maths) ────────────────── */
+const sheet=document.getElementById('sheet');
+document.querySelectorAll('[data-sheet]').forEach(b=>b.addEventListener('click',()=>{const src=document.getElementById(b.dataset.sheet);
+  document.getElementById('sheetTitle').textContent=src.dataset.title;document.getElementById('sheetLvl').textContent=src.dataset.lvl;
+  document.getElementById('sheetBody').innerHTML=src.innerHTML;sheet.showModal();sheet.querySelector('.sheet-body').scrollTop=0;}));
+document.getElementById('sheetClose').addEventListener('click',()=>sheet.close());
+sheet.addEventListener('click',e=>{if(e.target===sheet)sheet.close();});
+
+/* ── PICKER (one case at a time) ───────────────────────── */
+const METHODS=['Acid–base','Precipitation','Redox','Complexometric','Gravimetric'];
+const CASES=[
+ {name:'Chloride in sodium chloride',ok:1,okWhy:'Ag⁺ grabs Cl⁻ 1 : 1 and AgCl barely dissolves.',
+  why:{0:['bad','Cl⁻ is neither acidic nor basic enough to titrate.'],2:['bad','There is no simple, clean redox titrant for Cl⁻.'],3:['bad','Cl⁻ is not a metal ion; EDTA has nothing to grab.'],4:['meh','It works (weigh AgCl), but it is slow. A titration does it in minutes.']},
+  ends:[['Chromate (Mohr)',true,'Red-brown Ag₂CrO₄ appears once Cl⁻ is gone. Neutral pH.'],['Phenolphthalein',false,'A pH indicator; the pH does not change here.'],['Starch',false,'Starch detects iodine, not silver or chloride.']]},
+ {name:'Iron(II) in ferrous sulfate',ok:2,okWhy:'Fe²⁺ gives one electron easily (cerium(IV) works too).',
+  why:{0:['bad','Fe²⁺ is not the acid or base being measured.'],1:['bad','No clean 1 : 1 precipitating titrant for Fe²⁺.'],3:['bad','EDTA binds iron, but cannot tell Fe²⁺ from Fe³⁺. Redox targets the Fe²⁺ itself.'],4:['bad','Weighing Fe₂O₃ gives total iron; it cannot tell Fe²⁺ from Fe³⁺.']},
+  ends:[['Permanganate, self-indicating',true,'Purple persists once Fe²⁺ runs out.'],['Eriochrome Black T',false,'A metal indicator for EDTA titrations.'],['Chromate',false,'Mohr\'s indicator for chloride.']]},
+ {name:'Calcium in calcium gluconate',ok:3,okWhy:'Ca²⁺ has no useful acid–base or redox handle, but EDTA grips it 1 : 1.',
+  why:{0:['bad','Ca²⁺ has no useful acid–base handle.'],1:['bad','Calcium oxalate precipitates, but there is no quick indicator for a direct titration.'],2:['bad','Ca²⁺ does not gain or lose electrons in solution.'],4:['meh','Possible (weigh calcium oxalate or oxide), but slow.']},
+  ends:[['Metal indicator, pH 10 buffer',true,'The indicator releases the metal to EDTA and changes colour.'],['Phenolphthalein',false,'A pH indicator; EDTA titrations are buffered.'],['Starch',false,'Starch detects iodine.']]},
+ {name:'Benzoic acid',ok:0,okWhy:'A weak acid: titrate it with strong base.',
+  why:{1:['bad','No clean precipitating titrant for benzoate.'],2:['bad','Benzoic acid is not readily oxidised or reduced.'],3:['bad','Not a metal ion.'],4:['bad','Nothing insoluble to weigh.']},
+  ends:[['Phenolphthalein',true,'Weak acid: equivalence pH is above 7, inside 8.2–10.'],['Methyl orange',false,'Changes at pH 3.1–4.4, long before equivalence.'],['Crystal violet',false,'Used for non-aqueous titration of weak bases.']]},
+ {name:'Weak-base amine drug',ok:0,okWhy:'Its weak basicity is the handle, but water blurs it.',
+  why:{1:['bad','This drug is a weak base; that is the handle to use.'],2:['bad','This drug is a weak base; that is the handle to use.'],3:['bad','Not a metal ion.'],4:['bad','Nothing simple to precipitate and weigh.']},
+  ends:[['Perchloric acid in acetic acid, crystal violet',true,'Non-aqueous: acetic acid lets the weak basicity stand out.'],['Aqueous HCl, methyl orange',false,'Too weak a base in water; the end point is blurred.'],['EDTA, metal indicator',false,'For metal ions, not organic bases.']]},
+ {name:'Sulfate in a sample',ok:4,okWhy:'No good titrant or indicator for sulfate, and BaSO₄ is very insoluble.',
+  why:{0:['bad','Sulfate is a very weak base; no usable end point.'],1:['bad','Ba²⁺ precipitates it, but there is no simple indicator for a direct titration.'],2:['bad','Sulfate is already fully oxidised.'],3:['bad','Not a metal ion.']},
+  ends:[['Completeness test, then weigh BaSO₄',true,'No new cloudiness, then filter, dry and weigh to constant mass.'],['Starch',false,'Starch detects iodine.'],['Phenolphthalein',false,'A pH indicator; nothing is being titrated.']]}
+];
+const pkState=CASES.map(()=>({m:{},e:{},m1:null,f1:null,e1:null,f2:null,s1:false,s2:false}));
+let pkIdx=0;const pkEl=document.getElementById('pk'),dotsEl=document.getElementById('pkDots');
+function renderPick(){
+  const cs=CASES[pkIdx],st=pkState[pkIdx];
+  pkEl.className='pk'+(st.s1?' s2':'');
+  pkEl.innerHTML=`<div class="pk-head"><small>${pkIdx+1} / ${CASES.length}</small><h3>${cs.name}</h3></div>
+    <div class="step">Step 1 · Method</div><div class="opts m"></div><p class="fb f1"></p>
+    <div class="step2"><div class="step">Step 2 · How do you see the end?</div><div class="opts e"></div><p class="fb f2"></p></div>`;
+  const mo=pkEl.querySelector('.opts.m'),eo=pkEl.querySelector('.opts.e'),f1=pkEl.querySelector('.f1'),f2=pkEl.querySelector('.f2');
+  if(st.f1){f1.className='fb f1 '+st.f1[0];f1.textContent=st.f1[1];}
+  if(st.f2){f2.className='fb f2 '+st.f2[0];f2.textContent=st.f2[1];}
+  METHODS.forEach((m,mi)=>{const b=document.createElement('button');b.textContent=m;if(st.m[mi])b.className=st.m[mi];mo.appendChild(b);
+    b.addEventListener('click',()=>{if(st.s1)return;
+      if(mi===cs.ok){st.s1=true;st.m[mi]='right';st.f1=['good',cs.okWhy];}
+      else{const [k,msg]=cs.why[mi];st.m[mi]=k==='meh'?'meh':'wrong';st.f1=[k,(k==='meh'?'Works, but: ':'Not this one. ')+msg];}
+      renderPick();});});
+  cs.ends.slice().sort((a,b)=>(a[0]>b[0]?1:-1)).forEach(([lab,ok,msg])=>{const b=document.createElement('button');b.textContent=lab;if(st.e[lab])b.className=st.e[lab];eo.appendChild(b);
+    b.addEventListener('click',()=>{if(st.s2)return;
+      if(ok){st.s2=true;st.e[lab]='right';st.f2=['good',msg];}else{st.e[lab]='wrong';st.f2=['bad','Not this one. '+msg];}
+      renderPick();});});
+  dotsEl.innerHTML='';CASES.forEach((_,i)=>{const d=document.createElement('button');d.setAttribute('aria-label','Case '+(i+1));
+    d.className=(i===pkIdx?'cur':'')+(pkState[i].s2&&i!==pkIdx?' done':'');d.addEventListener('click',()=>{pkIdx=i;renderPick();});dotsEl.appendChild(d);});
+  document.getElementById('pkPrev').disabled=pkIdx===0;document.getElementById('pkNext').disabled=pkIdx===CASES.length-1;
+}
+document.getElementById('pkPrev').addEventListener('click',()=>{if(pkIdx>0){pkIdx--;renderPick();}});
+document.getElementById('pkNext').addEventListener('click',()=>{if(pkIdx<CASES.length-1){pkIdx++;renderPick();}});
+renderPick();
+
+/* ── SUMMARY (table on wide screens, tabs on phones) ───── */
+const SUM_ROWS=['What reacts?','Why it finishes','End seen','Number','Watch out'];
+const SUM=[
+  {id:'acidbase',name:'Acid–base',v:['H⁺ + OH⁻ → H₂O','Large K','pH indicator','Mole ratio × C × V','Indicator vs equivalence pH']},
+  {id:'precip',name:'Precipitation',v:['Ag⁺ + Cl⁻ → AgCl↓','Tiny K<sub>sp</sub>','Mohr · Volhard · Fajans','1 : 1','Mohr at the wrong pH']},
+  {id:'redox',name:'Redox',v:['Electron transfer','Large E° gap','Self-indicating, or starch–iodine','Balance electrons first','HCl with permanganate; iodine loss']},
+  {id:'edta',name:'Complexometric',v:['EDTA wraps a metal ion','Huge K<sub>f</sub>, buffered pH','Metal indicator, red → blue','Always 1 : 1','Wrong buffer']},
+  {id:'grav',name:'Gravimetric',v:['Analyte → insoluble solid','Tiny K<sub>sp</sub>','No new cloudiness','Mass × gravimetric factor','Not at constant mass; occlusion']}
+];
+document.getElementById('sumTable').innerHTML=`<thead><tr><th></th>${SUM.map(s=>`<th><a href="#${s.id}">${s.name}</a></th>`).join('')}</tr></thead><tbody>${SUM_ROWS.map((r,i)=>`<tr><td>${r}</td>${SUM.map(s=>`<td>${s.v[i]}</td>`).join('')}</tr>`).join('')}</tbody>`;
+let sumIdx=0;const sumSeg=document.getElementById('sumSeg');
+function renderSum(){sumSeg.querySelectorAll('button').forEach((b,i)=>b.classList.toggle('on',i===sumIdx));
+  document.getElementById('sumCard').innerHTML=SUM_ROWS.map((r,i)=>`<div><small>${r}</small>${SUM[sumIdx].v[i]}</div>`).join('');}
+SUM.forEach((s,i)=>{const b=document.createElement('button');b.textContent=s.name;b.addEventListener('click',()=>{sumIdx=i;renderSum();});sumSeg.appendChild(b);});
+renderSum();
+
+/* ── INIT ──────────────────────────────────────────────── */
+function redrawAll(){players.forEach(p=>p.draw());}
+/* phones: grow or shrink each canvas so its whole screen fits the viewport */
+function fitPhone(){if(!isPhone())return;const H=innerHeight-hdr.offsetHeight;
+  players.forEach(p=>{const sec=p.fig.closest('section');const cs=getComputedStyle(sec);
+    const used=[...sec.children].reduce((a,k)=>{const s=getComputedStyle(k);return a+k.getBoundingClientRect().height+parseFloat(s.marginTop)+parseFloat(s.marginBottom);},0)
+      +parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom);
+    const curH=p.cv.getBoundingClientRect().height;p.fitH=Math.max(140,Math.min(innerHeight*.34,curH+(H-used)));p.resize();});}
+function onResize(){setOffsets();players.forEach(p=>{p.fitH=0;p.resize();});fitPhone();makeAnimObs();}
+let rT;addEventListener('resize',()=>{clearTimeout(rT);rT=setTimeout(onResize,150);});
+setOffsets();applyChapter();
+window.__lab={players};   /* read-only handle for testing */
+(document.fonts&&document.fonts.ready?document.fonts.ready:Promise.resolve()).then(()=>{setOffsets();players.forEach(p=>p.resize());fitPhone();makeAnimObs();});
+})();
+</script>
+</body>
+</html>
