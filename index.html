@@ -744,6 +744,13 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
           </div>
           <span class="lab-card-go">Open</span>
         </a>
+        <a class="card glass fade-up lab-card" id="lab-trends-link" href="labs/trends.html">
+          <div>
+            <h3>Periodic Trends Lab</h3>
+            <div class="meta">One tug-of-war behind every trend: effective nuclear charge, atomic and ionic size, ionisation energy, electron affinity and electronegativity, then bonds and molecular polarity.</div>
+          </div>
+          <span class="lab-card-go">Open</span>
+        </a>
         <a class="card glass fade-up lab-card" id="lab-acidbase-link" href="labs/acidbase.html">
           <div>
             <h3>Acid–Base Lab</h3>
@@ -1831,7 +1838,7 @@ async function logEngagementEvent(eventType, { topicId = null, metadata = {} } =
 /* Interactive labs: log the open, then go. Waits at most 700 ms for the
    insert so leaving the page doesn't cancel it; a slow or failed log never
    blocks the student. */
-['orbitals', 'atomic-structure', 'acidbase'].forEach(lab => {
+['orbitals', 'atomic-structure', 'trends', 'acidbase'].forEach(lab => {
   document.getElementById('lab-' + lab + '-link').addEventListener('click', async e => {
     e.preventDefault();
     const href = e.currentTarget.getAttribute('href');
