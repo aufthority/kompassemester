@@ -365,6 +365,48 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
   .bottomnav{left:10px;right:10px;transform:none;justify-content:space-between;}
   .bottomnav button{flex:1 1 0;min-width:0;padding:8px 2px;font-size:11px;}
 }
+/* EDUCATOR INSIGHTS */
+.ins-head{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.ins-refresh{font-size:12px;font-weight:600;color:var(--forest-700);background:var(--glass-bg-strong);border:1px solid var(--glass-border);padding:6px 14px;border-radius:99px;}
+.ins-meta{font-size:11.5px;color:var(--ink-soft);margin:4px 0 18px;}
+.ins-panel{padding:20px;margin-bottom:16px;}
+.ins-panel h3{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--forest-900);}
+.ins-q{font-size:12px;color:var(--ink-soft);margin:2px 0 14px;}
+.ins-tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px;}
+.ins-tiles.three{grid-template-columns:repeat(3,minmax(0,1fr));}
+@media(max-width:640px){.ins-tiles,.ins-tiles.three{grid-template-columns:repeat(2,minmax(0,1fr));}}
+.ins-tile{min-width:0;padding:12px 14px;border-radius:var(--radius-sm);background:rgba(255,255,255,0.62);border:1px solid rgba(27,67,50,0.1);}
+.ins-tile-label{font-size:11px;color:var(--ink-soft);}
+.ins-tile-val{font-family:var(--font-mono);font-size:22px;font-weight:600;color:var(--forest-900);margin-top:2px;}
+.ins-tile-sub{font-size:11px;color:var(--ink-soft);margin-top:2px;line-height:1.4;}
+.ins-chart-title{font-size:12px;font-weight:600;color:var(--forest-700);margin-bottom:8px;}
+.ins-bars{display:flex;align-items:flex-end;gap:2px;height:150px;padding-bottom:2px;border-bottom:1px solid rgba(27,67,50,0.18);}
+.ins-bar-col{flex:1 1 0;min-width:0;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;position:relative;cursor:default;}
+.ins-bar-col:hover .ins-bar,.ins-bar-col:focus-visible .ins-bar{background:var(--forest-700);}
+.ins-bar{width:100%;max-width:44px;background:var(--forest-500);border-radius:4px 4px 0 0;min-height:0;}
+.ins-bar-val{font-family:var(--font-mono);font-size:10.5px;color:var(--ink-soft);margin-bottom:3px;}
+.ins-bar-labels{display:flex;gap:2px;margin-top:5px;}
+.ins-bar-labels span{flex:1 1 0;min-width:0;text-align:center;font-size:10px;color:var(--ink-soft);line-height:1.25;}
+.ins-bin-sub{font-style:normal;}
+@media(max-width:480px){.ins-bin-sub{display:none;}}
+.ins-tip{position:fixed;z-index:400;pointer-events:none;background:var(--forest-900);color:#fff;font-size:12px;line-height:1.45;padding:7px 10px;border-radius:8px;box-shadow:0 8px 22px rgba(16,36,28,0.25);max-width:240px;display:none;}
+.ins-mix{display:flex;gap:2px;height:28px;margin:4px 0 10px;}
+.ins-mix > div{border-radius:4px;min-width:0;}
+.ins-legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:12px;color:var(--ink);}
+.ins-legend span{display:inline-flex;align-items:center;gap:6px;}
+.ins-legend i{width:10px;height:10px;border-radius:3px;display:inline-block;}
+.ins-legend b{font-family:var(--font-mono);font-weight:600;}
+.ins-flag{display:flex;gap:8px;align-items:flex-start;margin-top:12px;padding:10px 12px;border-radius:var(--radius-sm);font-size:12px;line-height:1.5;background:rgba(199,131,22,0.1);border:1px solid rgba(199,131,22,0.3);color:#6b4708;}
+.ins-flag.ok{background:rgba(45,106,79,0.08);border-color:rgba(45,106,79,0.2);color:var(--forest-700);}
+.ins-flag strong{font-weight:600;}
+.ins-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -4px;}
+.ins-table{width:100%;border-collapse:collapse;font-size:12px;min-width:720px;}
+.ins-table th{text-align:right;font-size:10.5px;font-weight:600;color:var(--ink-soft);padding:6px 6px;border-bottom:1px solid rgba(27,67,50,0.15);white-space:nowrap;}
+.ins-table td{text-align:right;padding:8px 6px;border-bottom:1px solid rgba(27,67,50,0.07);font-family:var(--font-mono);color:var(--forest-900);white-space:nowrap;}
+.ins-table th:nth-child(-n+2),.ins-table td:nth-child(-n+2){text-align:left;}
+.ins-table td.t{font-family:var(--font-body);white-space:normal;min-width:180px;}
+.ins-table tr.closed td{color:var(--ink-soft);opacity:.6;}
+.ins-chip{display:inline-block;margin:3px 4px 0 0;padding:1px 7px;border-radius:99px;font-family:var(--font-body);font-size:10.5px;font-weight:600;background:rgba(199,131,22,0.14);color:#6b4708;}
 .manage-field{text-align:left;margin-bottom:16px;}
 .manage-field label{display:block;font-size:12px;font-weight:600;color:var(--forest-700);margin-bottom:5px;}
 .manage-field input{width:100%;padding:11px 14px;border:1px solid rgba(27,67,50,0.18);border-radius:var(--radius-sm);background:rgba(255,255,255,0.7);font-size:14px;color:var(--ink);outline:none;}
@@ -680,6 +722,7 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
     <nav class="sidenav" id="educator-sidenav" style="display:none">
       <button data-view="courses" class="active"><svg class="icon icon-book-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16" /><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg> My Courses</button>
       <button data-view="roster"><svg class="icon icon-graduation-cap" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" /><path d="M22 10v6" /><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" /></svg> Students</button>
+      <button data-view="insights"><svg class="icon icon-chart-column" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" /></svg> Insights</button>
       <button data-view="content"><svg class="icon icon-pencil" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg> Content</button>
       <button data-view="uploads"><svg class="icon icon-upload" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12" /><path d="m17 8-5-5-5 5" /><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /></svg> Uploads</button>
       <button data-view="groups"><svg class="icon icon-users" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg> Groups</button>
@@ -855,6 +898,17 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
         <div class="glass" id="roster-list"></div>
       </section>
 
+      <!-- EDUCATOR: INSIGHTS -->
+      <section class="view" id="view-insights">
+        <div class="section-label" id="insights-section-label"></div>
+        <div class="ins-head">
+          <div class="greeting" style="font-size:20px;margin-bottom:0">Insights</div>
+          <button class="ins-refresh" id="insights-refresh" type="button">Refresh</button>
+        </div>
+        <div class="ins-meta" id="insights-meta"></div>
+        <div id="insights-body"><div class="loading-state">Loading…</div></div>
+      </section>
+
       <!-- EDUCATOR: UPLOADS -->
       <section class="view" id="view-uploads">
         <div class="section-label" id="uploads-section-label">PHIA 4312</div>
@@ -1009,6 +1063,7 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
   <nav class="bottomnav" id="educator-bottomnav" style="display:none">
     <button data-view="courses" class="active"><svg class="icon icon-book-open" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v16" /><path d="M20.001 19A2 2 0 0022 17V5a2 2 0 00-1.999-2L16 3.002A5 5 0 0012 5a5 5 0 00-4-2H4a2 2 0 00-2 2v12a2 2 0 001.999 2H8a5 5 0 014 2 5 5 0 014-2z" /></svg><span>Courses</span></button>
     <button data-view="roster"><svg class="icon icon-graduation-cap" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z" /><path d="M22 10v6" /><path d="M6 12.5V16a6 3 0 0 0 12 0v-3.5" /></svg><span>Students</span></button>
+    <button data-view="insights"><svg class="icon icon-chart-column" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v16a2 2 0 0 0 2 2h16" /><path d="M18 17V9" /><path d="M13 17V5" /><path d="M8 17v-3" /></svg><span>Insights</span></button>
     <button data-view="content"><svg class="icon icon-pencil" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z" /><path d="m15 5 4 4" /></svg><span>Content</span></button>
     <button data-view="uploads"><svg class="icon icon-upload" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12" /><path d="m17 8-5-5-5 5" /><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" /></svg><span>Uploads</span></button>
     <button data-view="groups"><svg class="icon icon-users" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.87" /><path d="M16 3.13a4 4 0 0 1 0 7.75" /></svg><span>Groups</span></button>
@@ -1431,6 +1486,7 @@ function showView(view) {
   document.querySelectorAll('.sidenav button, .bottomnav button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
   if (view === 'content') populateContentEditor();
   if (view === 'groups') loadGroupsView();
+  if (view === 'insights') loadInsightsView();
 }
 
 /* ---------- COURSE PICKER (post-signup + add-more) ---------- */
@@ -2147,6 +2203,219 @@ function closeDailyUpdate() { document.getElementById('daily-update-overlay').cl
 document.getElementById('daily-update-close').addEventListener('click', closeDailyUpdate);
 document.getElementById('daily-update-ok').addEventListener('click', closeDailyUpdate);
 document.getElementById('daily-update-overlay').addEventListener('click', (e) => { if (e.target.id === 'daily-update-overlay') closeDailyUpdate(); });
+
+/* ---------- EDUCATOR: INSIGHTS ----------
+   Reads three security_invoker views (insights_enrolment, insights_topic,
+   insights_weekly_active). Test accounts listed in test_accounts are excluded
+   in the views themselves, so every number here matches the Dean report method. */
+const INS_COLORS = { quiz: '#2f8a5b', notes: '#5a6fc0', clicks: '#c78316' }; // validated: CVD + contrast pass
+const INS_CLICK_WARN = 0.30;   // notebook + prompt share of points that triggers the rebalance flag
+const INS_EASY_PCT = 0.50;     // share of perfect first attempts that flags a quiz bank
+const INS_LATE_PCT = 0.40;     // share of late engagement that flags a topic
+const INS_MIN_N = 5;           // ignore flags on topics with fewer students than this
+const INS_W_BINS = [
+  { label: 'None', test: w => w === 0 },
+  { label: '≤0.05', test: w => w > 0 && w <= 0.05 },
+  { label: '0.05–0.10', test: w => w > 0.05 && w <= 0.10 },
+  { label: '0.10–0.25', test: w => w > 0.10 && w < 0.25 },
+  { label: '0.25–0.55', sub: 'Wayfinder', test: w => w >= 0.25 && w < 0.55 },
+  { label: '0.55–0.85', sub: 'Navigator', test: w => w >= 0.55 && w < 0.85 },
+  { label: '0.85+', sub: 'Voyager', test: w => w >= 0.85 },
+];
+let insightsLoadToken = 0;
+
+const insMonday = d => { const x = new Date(d + 'T00:00:00'); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return dateStr(x); };
+const insPct = (a, b) => (b ? Math.round((a / b) * 100) : 0);
+const insFmtDate = d => new Date(d + 'T00:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+const insTile = (label, val, sub) =>
+  `<div class="ins-tile"><div class="ins-tile-label">${label}</div><div class="ins-tile-val">${val}</div>${sub ? `<div class="ins-tile-sub">${sub}</div>` : ''}</div>`;
+
+function insBarChart(items, ariaLabel) {
+  const max = Math.max(1, ...items.map(i => i.value));
+  return `
+    <div class="ins-bars" role="img" aria-label="${escapeHtml(ariaLabel)}">
+      ${items.map(i => `
+        <div class="ins-bar-col" tabindex="0" data-tip="${escapeHtml(i.tip)}">
+          <div class="ins-bar-val">${i.value}</div>
+          <div class="ins-bar" style="height:${(i.value / max) * 82}%"></div>
+        </div>`).join('')}
+    </div>
+    <div class="ins-bar-labels">${items.map(i => `<span>${i.label}</span>`).join('')}</div>`;
+}
+
+async function loadInsightsView() {
+  const body = document.getElementById('insights-body');
+  if (!currentCourse) { body.innerHTML = '<div class="empty-state">Open a course from My Courses first.</div>'; return; }
+  const token = ++insightsLoadToken;
+  const course = currentCourse;
+  document.getElementById('insights-section-label').textContent = course.code;
+  document.getElementById('insights-meta').textContent = '';
+  body.innerHTML = '<div class="loading-state">Loading…</div>';
+
+  const [enrR, topR, wkR, semR, testR] = await Promise.all([
+    sb.from('insights_enrolment').select('*').eq('course_id', course.id),
+    sb.from('insights_topic').select('*').eq('course_id', course.id),
+    sb.from('insights_weekly_active').select('*').eq('course_id', course.id),
+    sb.from('topics').select('week_start_date').not('week_start_date', 'is', null).order('week_start_date').limit(1),
+    sb.from('test_accounts').select('student_id', { count: 'exact', head: true }),
+  ]);
+  if (token !== insightsLoadToken) return; // a newer load has started
+  const err = [enrR, topR, wkR, semR].find(r => r.error);
+  if (err) { body.innerHTML = `<div class="empty-state">Couldn't load insights: ${escapeHtml(err.error.message)}</div>`; return; }
+
+  const enr = enrR.data || [], topics = topR.data || [], weeks = wkR.data || [];
+  const today = dateStr(new Date());
+  const thisMonday = insMonday(today);
+  const n = enr.length;
+  const maxScore = Number(enr[0]?.max_score) || 0;
+  const avail = Number(enr[0]?.available_so_far) || 0;
+  const pts = enr.map(e => Number(e.points));
+  const ws = enr.map(e => Number(e.weightage) || 0).sort((a, b) => a - b);
+  const engaged = pts.filter(p => p > 0).length;
+  const meanPts = n ? pts.reduce((a, b) => a + b, 0) / n : 0;
+  const meanW = n ? ws.reduce((a, b) => a + b, 0) / n : 0;
+  const medW = n ? (n % 2 ? ws[(n - 1) / 2] : (ws[n / 2 - 1] + ws[n / 2]) / 2) : 0;
+  const topW = n ? ws[n - 1] : 0;
+  const share = avail ? meanPts / avail : 0;
+  const allOpen = maxScore && avail >= maxScore;
+
+  // Panel 1 — weekly active, from semester week 1 to this week, zero-filled
+  const semStart = semR.data?.[0]?.week_start_date ? insMonday(semR.data[0].week_start_date) : (weeks.map(w => w.week_start).sort()[0] || thisMonday);
+  const wkMap = new Map(weeks.map(w => [w.week_start, Number(w.active_students)]));
+  const wkItems = [];
+  for (let d = new Date(semStart + 'T00:00:00'), i = 1; dateStr(d) <= thisMonday && i <= 20; d.setDate(d.getDate() + 7), i++) {
+    const k = dateStr(d), v = wkMap.get(k) || 0;
+    wkItems.push({ label: 'W' + i, value: v, tip: `Week ${i} (from ${insFmtDate(k)})${k === thisMonday ? ', so far' : ''}: ${v} active student${v === 1 ? '' : 's'}, ${insPct(v, n)}% of enrolled` });
+  }
+  const activeNow = wkMap.get(thisMonday) || 0;
+
+  // Panel 2 — weightage distribution, bins aligned to badge thresholds
+  const binItems = INS_W_BINS.map(b => {
+    const c = ws.filter(b.test).length;
+    return { label: b.sub ? `${b.label}<em class="ins-bin-sub"><br>${b.sub}</em>` : b.label, value: c, tip: `Weightage ${b.label}${b.sub ? ' (' + b.sub + ')' : ''}: ${c} student${c === 1 ? '' : 's'}, ${insPct(c, n)}%` };
+  });
+
+  // Panel 3 — behaviour mix
+  const sum = k => topics.reduce((a, t) => a + Number(t[k] || 0), 0);
+  const mix = [
+    { key: 'quiz', label: 'Practice quiz', v: sum('pts_quiz') },
+    { key: 'notes', label: 'Notes', v: sum('pts_notes') },
+    { key: 'clicks', label: 'Notebook + prompt', v: sum('pts_clicks') },
+  ];
+  const mixTotal = mix.reduce((a, m) => a + m.v, 0);
+  const clickShare = mixTotal ? mix[2].v / mixTotal : 0;
+
+  // Panel 4 — topics
+  const rows = [...topics].sort((a, b) => (a.week_number ?? 999) - (b.week_number ?? 999) || (a.title || '').localeCompare(b.title || ''));
+  const flagged = { easy: 0, late: 0, none: 0 };
+  const rowHtml = rows.map(t => {
+    const sN = Number(t.students_engaged), qN = Number(t.quiz_attempts);
+    const perfect = qN ? Number(t.perfect_attempts) / qN : 0, late = sN ? Number(t.late) / sN : 0;
+    const chips = [];
+    if (!t.is_open) chips.push(`Opens ${insFmtDate(t.week_start_date)}`);
+    else {
+      if (t.has_quiz && qN >= INS_MIN_N && perfect >= INS_EASY_PCT) { chips.push('Quiz may be too easy'); flagged.easy++; }
+      if (sN >= INS_MIN_N && late >= INS_LATE_PCT) { chips.push('Mostly late'); flagged.late++; }
+      if (sN === 0) { chips.push('No engagement yet'); flagged.none++; }
+    }
+    const dash = '—';
+    return `<tr class="${t.is_open ? '' : 'closed'}">
+      <td>${t.week_number ?? dash}</td>
+      <td class="t">${escapeHtml(t.title || 'Untitled')}${chips.length ? '<br>' + chips.map(c => `<span class="ins-chip">${c}</span>`).join('') : ''}</td>
+      <td>${sN}</td>
+      <td>${t.has_quiz ? qN : dash}</td>
+      <td>${t.has_quiz && qN ? Number(t.avg_first_pct).toFixed(0) + '%' : dash}</td>
+      <td title="${t.perfect_attempts} of ${qN}">${t.has_quiz && qN ? insPct(Number(t.perfect_attempts), qN) + '%' : dash}</td>
+      <td title="${t.late} of ${sN}">${sN && t.week_start_date ? insPct(Number(t.late), sN) + '%' : dash}</td>
+      <td>${t.notes}</td>
+      <td>${Number(t.notes) ? t.avg_note_words : dash}</td>
+      <td>${t.notebook_opens}</td>
+      <td>${t.prompt_copies}</td>
+    </tr>`;
+  }).join('');
+
+  document.getElementById('insights-meta').textContent =
+    `Live data · loaded ${new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })}` +
+    (testR.count ? ` · ${testR.count} test account${testR.count === 1 ? '' : 's'} excluded` : '') +
+    (maxScore ? ` · weightage = points ÷ ${maxScore}` : '');
+
+  body.innerHTML = `
+    <div class="ins-panel glass">
+      <h3>Cohort health</h3>
+      <div class="ins-q">Is the app being used, and is use holding up week to week?</div>
+      <div class="ins-tiles">
+        ${insTile('Enrolled', n, 'Test accounts excluded')}
+        ${insTile('Participation', insPct(engaged, n) + '%', `${engaged} have earned points`)}
+        ${insTile('Active this week', activeNow, `${insPct(activeNow, n)}% of enrolled, since Monday`)}
+        ${insTile('Not started', n - engaged, 'No points yet')}
+      </div>
+      <div class="ins-chart-title">Active students per semester week</div>
+      ${insBarChart(wkItems, 'Active students per semester week')}
+    </div>
+
+    <div class="ins-panel glass">
+      <h3>Weightage tracker</h3>
+      <div class="ins-q">Where does the class stand on the 0.00–1.00 scale, and where is it heading?</div>
+      <div class="ins-tiles">
+        ${insTile('Mean weightage', meanW.toFixed(2), `Median ${medW.toFixed(2)}`)}
+        ${insTile('Highest', topW.toFixed(2), 'Top student today')}
+        ${insTile('Share of points available', Math.round(share * 100) + '%', allOpen ? 'All topics already open' : `Class mean, out of ${avail} pts open so far`)}
+        ${insTile('Projected end mean', allOpen ? meanW.toFixed(2) : share.toFixed(2), allOpen ? 'Rises only with more engagement' : 'If the current pace holds to the last topic')}
+      </div>
+      <div class="ins-chart-title">Students by weightage band (bands match badge tiers)</div>
+      ${insBarChart(binItems, 'Students by weightage band')}
+      ${(() => {
+        const proj = allOpen ? meanW : share;
+        return proj < 0.5
+          ? `<div class="ins-flag"><span aria-hidden="true">▲</span><div><strong>Low projected weightage.</strong> At this pace the average student ends at ${proj.toFixed(2)}. Under a CA × weightage multiplier they would keep ${Math.round(proj * 100)}% of their CA marks.</div></div>`
+          : `<div class="ins-flag ok"><span aria-hidden="true">✓</span><div>The average student is on course for ${proj.toFixed(2)} or above.</div></div>`;
+      })()}
+    </div>
+
+    <div class="ins-panel glass">
+      <h3>Behaviour mix</h3>
+      <div class="ins-q">Which behaviours are earning the points? By design, notebook and prompt clicks are 23% of a topic's maximum.</div>
+      ${mixTotal ? `
+        <div class="ins-mix" role="img" aria-label="Share of points by behaviour">
+          ${mix.map(m => `<div tabindex="0" style="flex:${m.v} 1 0;background:${INS_COLORS[m.key]}" data-tip="${m.label}: ${Math.round(m.v)} pts, ${insPct(m.v, mixTotal)}%"></div>`).join('')}
+        </div>
+        <div class="ins-legend">${mix.map(m => `<span><i style="background:${INS_COLORS[m.key]}"></i>${m.label} <b>${insPct(m.v, mixTotal)}%</b></span>`).join('')}</div>
+        ${clickShare > INS_CLICK_WARN
+          ? `<div class="ins-flag"><span aria-hidden="true">▲</span><div><strong>Clicks are ${Math.round(clickShare * 100)}% of points earned</strong> (warning above ${INS_CLICK_WARN * 100}%). Low-effort actions are carrying more weight than intended. Consider reducing their points or counting them only alongside a quiz or notes.</div></div>`
+          : `<div class="ins-flag ok"><span aria-hidden="true">✓</span><div>Clicks are ${Math.round(clickShare * 100)}% of points earned, within the ${INS_CLICK_WARN * 100}% guide.</div></div>`}`
+        : '<div class="empty-state">No points earned yet.</div>'}
+    </div>
+
+    <div class="ins-panel glass">
+      <h3>Topics</h3>
+      <div class="ins-q">Which quiz banks are too easy, and which topics are students reaching late?
+        ${flagged.easy || flagged.late || flagged.none ? ` Flagged: ${[flagged.easy && flagged.easy + ' too easy', flagged.late && flagged.late + ' mostly late', flagged.none && flagged.none + ' no engagement'].filter(Boolean).join(', ')}.` : ''}</div>
+      ${rows.length ? `
+      <div class="ins-table-wrap"><table class="ins-table">
+        <thead><tr><th>Wk</th><th>Topic</th><th>Students</th><th>Quizzes</th><th>Avg 1st</th><th>Perfect</th><th>Late</th><th>Notes</th><th>Avg words</th><th>Opens</th><th>Copies</th></tr></thead>
+        <tbody>${rowHtml}</tbody>
+      </table></div>` : '<div class="empty-state">No topics in this course yet.</div>'}
+    </div>`;
+}
+
+document.getElementById('insights-refresh').addEventListener('click', loadInsightsView);
+(() => {
+  const tip = document.createElement('div');
+  tip.className = 'ins-tip';
+  document.body.appendChild(tip);
+  const body = document.getElementById('insights-body');
+  const show = (el, x, y) => {
+    tip.textContent = el.dataset.tip;
+    tip.style.display = 'block';
+    const r = tip.getBoundingClientRect();
+    tip.style.left = Math.max(8, Math.min(x + 12, window.innerWidth - r.width - 8)) + 'px';
+    tip.style.top = Math.max(8, y - r.height - 12) + 'px';
+  };
+  body.addEventListener('mousemove', e => { const el = e.target.closest('[data-tip]'); el ? show(el, e.clientX, e.clientY) : (tip.style.display = 'none'); });
+  body.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+  body.addEventListener('focusin', e => { const el = e.target.closest('[data-tip]'); if (el) { const r = el.getBoundingClientRect(); show(el, r.left + r.width / 2, r.top); } });
+  body.addEventListener('focusout', () => { tip.style.display = 'none'; });
+})();
 
 const GUIDE_WEEK_COUNT = 14;
 
