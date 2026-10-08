@@ -273,7 +273,7 @@ footer { max-width: 1180px; margin: 0 auto; padding: 20px 16px 36px; font-size: 
   <aside class="strip" id="strip" aria-label="Pipeline: the four questions">
     <div class="strip-head">Pipeline · <b id="stripName">Any method</b></div>
     <div class="st"><small>1 · Reacts</small><span id="st0">analyte + reagent</span></div>
-    <div class="st"><small>2 · Finishes</small><span id="st1">K is huge</span></div>
+    <div class="st"><small>2 · Finishes</small><span id="st1">goes to completion</span></div>
     <div class="st"><small>3 · End seen</small><span id="st2">a visible signal</span></div>
     <div class="st"><small>4 · Number</small><span id="st3">ratio × amount</span></div>
     <p class="strip-note">Every method answers the same four questions. This shows the current chapter's answers.</p>
@@ -301,7 +301,7 @@ footer { max-width: 1180px; margin: 0 auto; padding: 20px 16px 36px; font-size: 
     <h2>Every method asks the <em>same four questions.</em></h2>
     <div class="q-grid">
       <div class="q"><span class="q-n">1 · What reacts?</span><p>Analyte + reagent, in a fixed ratio.</p></div>
-      <div class="q"><span class="q-n">2 · Why does it finish?</span><p>The reaction runs to completion: K is huge.</p></div>
+      <div class="q"><span class="q-n">2 · Why does it finish?</span><p>It goes almost fully to products: the equilibrium constant, K, is very large.</p></div>
       <div class="q"><span class="q-n">3 · How do we see the end?</span><p>A visible signal: a colour, a solid, or no more cloudiness.</p></div>
       <div class="q"><span class="q-n">4 · How does it become a number?</span><p>Ratio × amount of reagent used, or mass of solid formed.</p></div>
     </div>
@@ -1026,7 +1026,7 @@ document.querySelectorAll('figure.anim').forEach(f=>{const d=DEFS[f.dataset.anim
 
 /* ── STRIP + JUMP BAR ──────────────────────────────────── */
 const STRIP={
-  generic:{name:'Any method',v:['analyte + reagent','K is huge','a visible signal','ratio × amount']},
+  generic:{name:'Any method',v:['analyte + reagent','goes to completion','a visible signal','ratio × amount']},
   basics:{name:'Basics',v:['A + T → product','fast, complete','indicator changes','(a/b) × C × V']},
   acidbase:{name:'Acid–base',v:['H⁺ + OH⁻ → H₂O','K ≈ 10¹⁴','pH indicator','mol ratio × C × V']},
   precip:{name:'Precipitation',v:['Ag⁺ + Cl⁻ → AgCl↓','Ksp ≈ 1.8 × 10⁻¹⁰','Mohr · Volhard · Fajans','1 : 1']},
