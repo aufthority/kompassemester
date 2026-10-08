@@ -202,6 +202,24 @@ button:hover .icon-flask-conical,button:focus-visible .icon-flask-conical{transf
 .badge-info-tier.current .badge-info-tier-name::after{content:" · current";font-family:var(--font-body);font-size:11px;font-weight:500;color:var(--gold-500);}
 .badge-info-tier-range{font-size:11.5px;color:var(--ink-soft);margin-top:1px;}
 .badge-info-tier-copy{font-size:11.5px;color:var(--ink-soft);line-height:1.5;margin-top:5px;}
+/* DAILY PROGRESS UPDATE (student, first open each day) */
+.du-intro{font-size:12px;color:var(--ink-soft);line-height:1.5;margin-bottom:6px;}
+.du-course{padding:16px 0;border-top:1px solid rgba(27,67,50,0.1);}
+.du-course:first-of-type{border-top:none;}
+.du-badge{display:flex;align-items:center;gap:10px;margin:10px 0 8px;}
+.du-badge .badge-icon{width:34px;height:34px;}
+.du-badge.ghosting .badge-icon{background:linear-gradient(135deg,#5b4a8a,#8b7fc7);}
+.du-badge.ghosting .badge-name{color:#5b4a8a;}
+.du-badge .badge-name{font-size:15px;}
+.du-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px;}
+@media(max-width:420px){.du-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+.du-stat{min-width:0;padding:9px 10px;border-radius:var(--radius-sm);background:rgba(255,255,255,0.6);border:1px solid rgba(27,67,50,0.1);}
+.du-stat-label{font-size:10.5px;color:var(--ink-soft);}
+.du-stat-val{font-family:var(--font-mono);font-size:16px;font-weight:600;color:var(--forest-900);margin-top:2px;}
+.du-delta{display:block;font-size:10.5px;font-weight:600;color:var(--forest-500);margin-top:1px;}
+.du-sofar{font-size:11.5px;color:var(--ink-soft);line-height:1.5;margin-top:10px;}
+.du-sofar strong{color:var(--forest-700);font-weight:600;}
+.du-foot{font-size:11px;color:var(--ink-soft);line-height:1.5;margin:8px 0 14px;padding-top:12px;border-top:1px dashed rgba(27,67,50,0.15);}
 .health-card{padding:24px;margin-bottom:16px;}
 .health-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px;}
 .health-head h2{font-family:var(--font-display);font-size:19px;font-weight:600;color:var(--forest-900);}
@@ -592,8 +610,9 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
       <div class="pdpa-notice">
         <h4>About this app &amp; your data</h4>
         <p>Kompas Semester is an independent study companion created by your lecturer for all chemistry courses — it is <strong>not an official KPJU system</strong> and does not hold your official grades or attendance records (those remain in INOVA). Signing up is optional.</p>
+        <p><strong>How it counts towards your marks:</strong> your engagement points in each course set a weightage between 0.0 and 1.0 (points ÷ the course's maximum points). Your lecturer applies this weightage to your continuous assessment marks (tests, quizzes and assignments), which stay in INOVA.</p>
         <p><strong>What we collect:</strong> your full name, the email address you choose to sign up with, and your activity on this app — practice quiz results and study notes you write.</p>
-        <p><strong>Why:</strong> to track your course progress, show you a study streak, and let your lecturer see engagement (not scores) for the course you enroll in.</p>
+        <p><strong>Why:</strong> to track your course progress, show you a study streak, let your lecturer see your engagement and practice-quiz results for the course you enroll in, and calculate your engagement weightage for continuous assessment.</p>
         <p><strong>Where it's stored:</strong> on Supabase, hosted in Australia (Sydney region). Your data leaves Malaysia to be processed there.</p>
         <p><strong>Who can see it:</strong> you, and the lecturer(s) of courses you're enrolled in. It is not shared with any other third party.</p>
         <p><strong>Your rights:</strong> you may request access to, correction of, or deletion of your data at any time by contacting <strong>aufali@gmail.com</strong>. Deleting your account removes your notes and quiz history from this app.</p>
@@ -1043,6 +1062,20 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
   </div>
 </div>
 
+<!-- DAILY PROGRESS UPDATE (student, first open each day) -->
+<div class="modal-overlay" id="daily-update-overlay">
+  <div class="modal-sheet" role="dialog" aria-modal="true" aria-labelledby="daily-update-title">
+    <div class="modal-head">
+      <div class="modal-title" id="daily-update-title">Your learning update</div>
+      <button class="modal-close" id="daily-update-close" type="button" aria-label="Close"><svg class="icon icon-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg></button>
+    </div>
+    <div class="du-intro" id="daily-update-date"></div>
+    <div id="daily-update-body"></div>
+    <div class="du-foot">Weightage = your points ÷ the course's maximum points (0.00 to 1.00). It is applied to your continuous assessment marks (tests, quizzes and assignments), which are recorded in INOVA. It keeps rising as you engage with new topics through the semester.</div>
+    <button class="btn-primary" id="daily-update-ok" type="button">Got it</button>
+  </div>
+</div>
+
 <!-- BADGE PROGRESSION INFO MODAL -->
 <div class="modal-overlay" id="badge-info-overlay">
   <div class="modal-sheet">
@@ -1130,9 +1163,9 @@ const BADGE_COPY = {
 // penalised the same as one quiet for four weekdays in a row.
 // ASSUMPTION (flag if wrong): standard Mon–Fri working week. If DPH 48 or any
 // KPJU cohort runs on a different week (e.g. Sun–Thu), this needs updating.
-function idleWorkingDaysSinceLastActivity() {
-  if (!myActivities.length) return null;
-  const dates = myActivities.map(a => new Date(a.activity_date + 'T00:00:00'));
+function idleWorkingDaysSinceLastActivity(acts = myActivities) {
+  if (!acts.length) return null;
+  const dates = acts.map(a => new Date(a.activity_date + 'T00:00:00'));
   const last = new Date(Math.max(...dates));
   const today = new Date(dateStr(new Date()) + 'T00:00:00');
   let count = 0;
@@ -1387,6 +1420,7 @@ async function boot(opts = {}) {
     document.getElementById('enroll-more-row').style.display = '';
     await loadStudentCourses();
     showView('courses');
+    maybeShowDailyUpdate();
   }
 }
 
@@ -1990,6 +2024,129 @@ function closeBadgeInfoModal() {
 }
 document.getElementById('badge-info-close').addEventListener('click', closeBadgeInfoModal);
 document.getElementById('badge-info-overlay').addEventListener('click', (e) => { if (e.target.id === 'badge-info-overlay') closeBadgeInfoModal(); });
+
+/* ---------- DAILY PROGRESS UPDATE (student) ----------
+   Shown on the first app open each day, one section per enrolled course.
+   Weightage = points ÷ course maximum (course_score_max: 65 per topic with a
+   quiz bank, 40 without). "Available so far" counts only topics whose week has
+   started, the same cut-off the scoring view uses. Notes and practice-quiz
+   counts show the change since the last update, from a browser snapshot. */
+const PER_TOPIC_MAX_WITH_QUIZ = 65, PER_TOPIC_MAX_NO_QUIZ = 40;
+
+async function maybeShowDailyUpdate() {
+  if (!myProfile || myProfile.role !== 'student' || previewMode || !myCourses.length) return;
+  const today = dateStr(new Date());
+  const dayKey = 'kompas_daily_update_' + myProfile.id;
+  const snapKey = 'kompas_update_snap_' + myProfile.id;
+  let lastShown = null, snap = {};
+  try {
+    lastShown = localStorage.getItem(dayKey);
+    snap = JSON.parse(localStorage.getItem(snapKey) || '{}') || {};
+  } catch (_) {}
+  if (lastShown === today) return;
+
+  const sid = myProfile.id;
+  const ids = myCourses.map(c => c.id);
+  let results;
+  try {
+    results = await Promise.all([
+      sb.from('student_cumulative_scores').select('course_id, cumulative_score').eq('student_id', sid).in('course_id', ids),
+      sb.from('course_badge_thresholds').select('course_id, badge_name, min_score, sort_order').in('course_id', ids).order('sort_order'),
+      sb.from('course_score_max').select('course_id, max_score').in('course_id', ids),
+      sb.from('topics').select('id, course_id, week_start_date').in('course_id', ids),
+      sb.from('student_notes').select('course_id').eq('student_id', sid).in('course_id', ids),
+      sb.from('quiz_attempts').select('course_id').eq('student_id', sid).in('course_id', ids),
+      sb.from('engagement_events').select('course_id, event_type').eq('student_id', sid).in('course_id', ids).in('event_type', ['notebook_open', 'notebook_copy']),
+      sb.from('learning_activities').select('course_id, activity_date').eq('student_id', sid).in('course_id', ids),
+    ]);
+  } catch (_) { return; }
+  if (results.some(r => r.error)) return; // never show a half-filled update
+  const [scoresR, tiersR, maxR, topicsR, notesR, quizR, eventsR, actsR] = results.map(r => r.data || []);
+
+  let quizTopicIds = new Set();
+  if (topicsR.length) {
+    const { data: qs, error } = await sb.from('topic_quiz_questions').select('topic_id').in('topic_id', topicsR.map(t => t.id));
+    if (error) return;
+    quizTopicIds = new Set((qs || []).map(q => q.topic_id));
+  }
+
+  const countBy = (rows, pred = () => true) => {
+    const m = {};
+    rows.forEach(r => { if (pred(r)) m[r.course_id] = (m[r.course_id] || 0) + 1; });
+    return m;
+  };
+  const notesBy = countBy(notesR), quizBy = countBy(quizR);
+  const opensBy = countBy(eventsR, r => r.event_type === 'notebook_open');
+  const copiesBy = countBy(eventsR, r => r.event_type === 'notebook_copy');
+  const scoreBy = new Map(scoresR.map(r => [r.course_id, Number(r.cumulative_score)]));
+  const maxBy = new Map(maxR.map(r => [r.course_id, Number(r.max_score)]));
+  const topicMax = t => (quizTopicIds.has(t.id) ? PER_TOPIC_MAX_WITH_QUIZ : PER_TOPIC_MAX_NO_QUIZ);
+
+  const newSnap = {};
+  const sections = myCourses.map(c => {
+    const points = Math.round(scoreBy.get(c.id) || 0);
+    const courseTopics = topicsR.filter(t => t.course_id === c.id);
+    const max = maxBy.get(c.id) || courseTopics.reduce((a, t) => a + topicMax(t), 0);
+    const soFar = courseTopics.filter(t => !t.week_start_date || t.week_start_date <= today).reduce((a, t) => a + topicMax(t), 0);
+    const weight = max ? Math.min(1, points / max) : null;
+
+    const tiers = tiersR.filter(t => t.course_id === c.id && t.badge_name !== 'Ghoster');
+    let earned = tiers[0] || null;
+    tiers.forEach(t => { if (points >= Number(t.min_score)) earned = t; });
+    const next = tiers.find(t => Number(t.min_score) > points) || null;
+    const idle = idleWorkingDaysSinceLastActivity(actsR.filter(a => a.course_id === c.id));
+    const ghosting = idle !== null && idle > 5;
+    const badgeName = ghosting ? 'Ghoster' : (earned ? earned.badge_name : null);
+    const pct = !earned ? 0 : next
+      ? Math.max(0, Math.min(100, Math.round(((points - Number(earned.min_score)) / (Number(next.min_score) - Number(earned.min_score) || 1)) * 100)))
+      : 100;
+    const badgeSub = ghosting
+      ? `${idle} working days quiet. Your ${earned ? earned.badge_name : ''} progress is saved.`
+      : next ? `${Math.max(0, Math.ceil(Number(next.min_score) - points))} more pts to ${next.badge_name}` : 'Highest tier reached';
+
+    const notes = notesBy[c.id] || 0, quizzes = quizBy[c.id] || 0;
+    const prev = snap[c.id];
+    newSnap[c.id] = { notes, quizzes };
+    const delta = (now, before) => (prev && now > before ? `<span class="du-delta">+${now - before} since last update</span>` : '');
+
+    return `
+      <div class="du-course">
+        <div class="course-card-code">${escapeHtml(c.code)}</div>
+        <div class="course-card-name">${escapeHtml(c.name)}</div>
+        ${badgeName ? `
+        <div class="du-badge${ghosting ? ' ghosting' : ''}">
+          <div class="badge-icon"><img src="${BADGE_ICONS[badgeName]}" alt=""></div>
+          <div><div class="badge-name">${badgeName}</div><div class="badge-sub">${badgeSub}</div></div>
+        </div>
+        <div class="badge-track"><div class="badge-fill" style="width:${ghosting ? 0 : pct}%"></div></div>` : ''}
+        <div class="du-grid">
+          <div class="du-stat"><div class="du-stat-label">Points</div><div class="du-stat-val">${points}</div></div>
+          <div class="du-stat"><div class="du-stat-label">CA weightage</div><div class="du-stat-val">${weight === null ? '—' : weight.toFixed(2)}</div></div>
+          <div class="du-stat"><div class="du-stat-label">Notes written</div><div class="du-stat-val">${notes}</div>${delta(notes, prev && prev.notes)}</div>
+          <div class="du-stat"><div class="du-stat-label">Practice quizzes</div><div class="du-stat-val">${quizzes}</div>${delta(quizzes, prev && prev.quizzes)}</div>
+          <div class="du-stat"><div class="du-stat-label">Notebook visits</div><div class="du-stat-val">${opensBy[c.id] || 0}</div></div>
+          <div class="du-stat"><div class="du-stat-label">Prompts copied</div><div class="du-stat-val">${copiesBy[c.id] || 0}</div></div>
+        </div>
+        ${max ? `<div class="du-sofar">So far: <strong>${points} of ${soFar} pts</strong> available from topics already started. Semester maximum: ${max} pts.</div>` : ''}
+      </div>`;
+  });
+
+  document.getElementById('daily-update-date').textContent =
+    'Where you stand on ' + new Date().toLocaleDateString('en-GB', { weekday: 'long', day: 'numeric', month: 'long' }) + '.';
+  document.getElementById('daily-update-body').innerHTML = sections.join('');
+  document.getElementById('daily-update-overlay').classList.add('open');
+  // Saved on show, so it appears once a day even if the tab is closed unread,
+  // and tomorrow's "+n" compares against what the student saw today.
+  try {
+    localStorage.setItem(dayKey, today);
+    localStorage.setItem(snapKey, JSON.stringify(newSnap));
+  } catch (_) {}
+}
+
+function closeDailyUpdate() { document.getElementById('daily-update-overlay').classList.remove('open'); }
+document.getElementById('daily-update-close').addEventListener('click', closeDailyUpdate);
+document.getElementById('daily-update-ok').addEventListener('click', closeDailyUpdate);
+document.getElementById('daily-update-overlay').addEventListener('click', (e) => { if (e.target.id === 'daily-update-overlay') closeDailyUpdate(); });
 
 const GUIDE_WEEK_COUNT = 14;
 
