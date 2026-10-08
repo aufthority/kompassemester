@@ -275,6 +275,15 @@ button:hover .icon-flask-conical,button:focus-visible .icon-flask-conical{transf
 
 /* educator roster */
 .search-wrap{margin-bottom:14px;}
+.search-wrap.has-sort{display:flex;align-items:center;gap:10px;}
+.search-wrap.has-sort input{flex:1;min-width:0;}
+.sort-toggle{display:inline-flex;flex-shrink:0;padding:3px;border-radius:99px;background:var(--glass-bg-strong);border:1px solid var(--glass-border);}
+.sort-toggle button{border:none;background:transparent;padding:7px 14px;border-radius:99px;font-size:12px;font-weight:600;color:var(--ink-soft);white-space:nowrap;}
+.sort-toggle button.active{background:var(--forest-700);color:#fff;}
+#roster-list.ranked .roster-row{grid-template-columns:auto minmax(0,1fr) auto auto;}
+.roster-rank{min-width:34px;text-align:center;font-family:var(--font-mono);font-size:13px;font-weight:600;color:var(--ink-soft);}
+.roster-rank.top{padding:4px 0;border-radius:99px;background:linear-gradient(135deg,var(--gold-300),var(--gold-500));color:var(--forest-900);}
+.roster-rank.none{font-weight:500;opacity:.55;}
 .search-wrap input{width:100%;padding:11px 16px;border-radius:99px;border:1px solid var(--glass-border);background:var(--glass-bg-strong);font-size:13.5px;outline:none;}
 .roster-row{padding:14px 18px;border-bottom:1px solid rgba(27,67,50,0.08);cursor:pointer;}
 .roster-row:last-child{border-bottom:none;}
@@ -329,6 +338,11 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
   .roster-stats{grid-column:1 / -1;grid-row:2;text-align:left;white-space:normal;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;margin-top:8px;}
   .roster-stats .roster-ca{font-size:13px;}
   .roster-row .roster-manage-btn{grid-column:2;grid-row:1;align-self:start;}
+  #roster-list.ranked .roster-row{grid-template-columns:auto minmax(0,1fr) auto;}
+  #roster-list.ranked .roster-rank{grid-column:1;grid-row:1;align-self:start;}
+  #roster-list.ranked .roster-stats{grid-column:2 / -1;}
+  #roster-list.ranked .roster-row .roster-manage-btn{grid-column:3;}
+  .sort-toggle button{padding:7px 11px;}
   .filter-bar{padding:10px 12px;}
   .bottomnav{left:10px;right:10px;transform:none;justify-content:space-between;}
   .bottomnav button{flex:1 1 0;min-width:0;padding:8px 2px;font-size:11px;}
@@ -804,7 +818,13 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
           <a href="#" target="_blank" rel="noopener" class="btn-inova" id="inova-roster-link">Open Grader report →</a>
         </div>
 
-        <div class="search-wrap"><input type="text" id="roster-search" placeholder="Search by name or matric number…"></div>
+        <div class="search-wrap has-sort">
+          <input type="text" id="roster-search" placeholder="Search by name or matric number…">
+          <div class="sort-toggle" role="group" aria-label="Sort students">
+            <button type="button" data-roster-sort="az">A–Z</button>
+            <button type="button" data-roster-sort="leaderboard">Leaderboard</button>
+          </div>
+        </div>
         <div class="filter-bar" id="roster-filter-bar" style="display:none">
           <span id="roster-filter-label"></span>
           <div class="filter-actions">
@@ -2279,6 +2299,7 @@ async function loadEducatorRoster() {
       tier,
     };
   });
+  assignRosterRanks();
   renderRosterStats();
   applyRosterView();
 }
@@ -2286,6 +2307,54 @@ async function loadEducatorRoster() {
 /* ---------- EDUCATOR: ROSTER SUMMARY CARDS, FILTERS, NUDGE ---------- */
 let rosterTiers = [];
 let rosterFilter = null; // 'checkin' | 'notstarted' | 'tier:<name>' | null
+
+/* ---------- EDUCATOR: LEADERBOARD SORT ----------
+   Whole-class rank by points, ties broken by first-attempt quiz average
+   (no quizzes counts lowest). Shared ranks (1, 2, 2, 4). Zero-point students
+   are unranked and listed last. Rank is computed once per load, so it stays
+   the same under any filter or search. */
+const ROSTER_SORT_KEY = 'kompas_roster_sort';
+let rosterSort = 'az';
+try { if (localStorage.getItem(ROSTER_SORT_KEY) === 'leaderboard') rosterSort = 'leaderboard'; } catch (_) {}
+
+const rosterQuizKey = s => (s.quizPct === null ? -1 : s.quizPct);
+const byName = (a, b) => (a.full_name || a.email || '').localeCompare(b.full_name || b.email || '');
+
+function assignRosterRanks() {
+  const ranked = allStudents.filter(s => s.points > 0)
+    .sort((a, b) => b.points - a.points || rosterQuizKey(b) - rosterQuizKey(a) || byName(a, b));
+  allStudents.forEach(s => { s.rank = null; });
+  ranked.forEach((s, i) => {
+    const prev = ranked[i - 1];
+    s.rank = prev && prev.points === s.points && rosterQuizKey(prev) === rosterQuizKey(s) ? prev.rank : i + 1;
+  });
+}
+
+function sortRosterList(list) {
+  if (rosterSort !== 'leaderboard') return list;
+  return [...list].sort((a, b) => {
+    if (a.rank === null && b.rank === null) return byName(a, b);
+    if (a.rank === null) return 1;
+    if (b.rank === null) return -1;
+    return a.rank - b.rank || byName(a, b);
+  });
+}
+
+function syncRosterSortToggle() {
+  document.querySelectorAll('[data-roster-sort]').forEach(b => {
+    const on = b.dataset.rosterSort === rosterSort;
+    b.classList.toggle('active', on);
+    b.setAttribute('aria-pressed', on);
+  });
+}
+
+document.querySelectorAll('[data-roster-sort]').forEach(b => b.addEventListener('click', () => {
+  rosterSort = b.dataset.rosterSort;
+  try { localStorage.setItem(ROSTER_SORT_KEY, rosterSort); } catch (_) {}
+  syncRosterSortToggle();
+  applyRosterView();
+}));
+syncRosterSortToggle();
 const NUDGE_COOLDOWN_MS = 7 * 24 * 60 * 60 * 1000;
 const TIER_COLORS = ['#a8c98a', '#6f9d55', '#3f6d33', '#1c3d1f'];
 
@@ -2343,7 +2412,7 @@ function applyRosterView() {
       nudgeBtn.textContent = eligible ? `Nudge ${eligible} by email` : 'All nudged this week';
     } else { nudgeBtn.style.display = 'none'; }
   }
-  renderRoster(list);
+  renderRoster(sortRosterList(list));
 }
 
 document.querySelectorAll('#roster-stats > [data-roster-filter]').forEach(c => c.addEventListener('click', () => setRosterFilter(c.dataset.rosterFilter)));
@@ -2393,17 +2462,23 @@ document.getElementById('nudge-btn').addEventListener('click', async () => {
 
 function renderRoster(list) {
   const el = document.getElementById('roster-list');
+  const ranked = rosterSort === 'leaderboard';
+  el.classList.toggle('ranked', ranked && list.length > 0);
   if (!list.length) {
     el.innerHTML = `<div class="empty-state">${allStudents.length ? 'No students match this view.' : 'No students enrolled in this course yet.'}</div>`;
     return;
   }
   el.innerHTML = list.map(s => {
+    const rankHtml = !ranked ? ''
+      : s.rank === null ? '<div class="roster-rank none" title="No points yet">—</div>'
+      : `<div class="roster-rank${s.rank <= 3 ? ' top' : ''}" title="Class rank by points">#${s.rank}</div>`;
     const chips = [];
     if (s.tier) chips.push(`<span class="roster-chip">${escapeHtml(s.tier)}</span>`);
     if (needsCheckin(s)) chips.push(`<span class="roster-chip warn">${s.idleDays} working days quiet</span>`);
     if (nudgedRecently(s)) chips.push(`<span class="roster-chip muted">Nudged ${new Date(s.lastNudgedAt).toLocaleDateString('en-GB',{day:'numeric',month:'short'})}</span>`);
     return `
     <div class="roster-row" data-id="${s.id}">
+      ${rankHtml}
       <div class="roster-main">
         <div class="roster-name">${escapeHtml(s.full_name || s.email)}</div>
         <div class="roster-matric roster-email">${escapeHtml([s.matric_number, s.email].filter(Boolean).join(' · '))}</div>
