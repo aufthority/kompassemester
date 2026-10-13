@@ -3154,12 +3154,12 @@ function renderCopySourceOptions(targetCourseId) {
 }
 
 // Title normaliser for topic matching: case/spacing/dash-insensitive, and
-// ignores a leading "Unit 3 –" / "Topic 4:" / "Week 2" prefix so a topic that
-// was renumbered between course versions still matches.
+// ignores any leading "Unit 3 –" / "Topic 4:" / "Week 2" prefixes (stacked
+// ones too, e.g. "Topic 1: Unit 1:") so a renumbered topic still matches.
 function normTopicTitle(s) {
   return String(s || '').toLowerCase()
     .replace(/[–—]/g, '-')
-    .replace(/^\s*(unit|topic|chapter|week)\s*\d+\s*[:.\-]*\s*/i, '')
+    .replace(/^(\s*(unit|topic|chapter|week)\s*\d+\s*[:.\-]*\s*)+/i, '')
     .replace(/[^a-z0-9]+/g, ' ')
     .trim();
 }
