@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Oral Solid Doses, Explained — Aufthority</title>
+<script defer src="https://cloud.umami.is/script.js"
+  data-website-id="f79c60f1-f9e7-4170-a979-f357ba756a18"></script>
+<meta name="description" content="How tablets, hard capsules and softgels are developed, manufactured and tested, with a focus on quality control testing in the Malaysian context.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="article">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="Oral Solid Doses, Explained">
+<meta property="og:description"  content="Tablets, hard capsules and softgels: how they are made and tested before they reach the patient.">
+<meta property="og:url"          content="https://www.aufthority.com/osd/">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale"       content="en_MY">
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:site"        content="@theaufthority">
+<meta name="twitter:title"       content="Oral Solid Doses, Explained">
+<meta name="twitter:description" content="How tablets and capsules are made and tested.">
+<meta name="twitter:image"       content="https://www.aufthority.com/preview_v2.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#6f7771;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#9a6a1c;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;--k:1;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;overflow:hidden;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+b,strong{color:var(--ink);font-weight:700}
+
+#shell{height:100vh;height:100dvh;max-width:1120px;margin:0 auto;padding:0 16px;display:flex;flex-direction:column}
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 8px}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.icon-btn{background:#fff;border:1px solid var(--rule);color:var(--body);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;cursor:pointer}
+#progress-label{font-size:.78rem;color:var(--muted);min-width:44px;text-align:right}
+#progress-track{flex:0 0 3px;background:var(--rule);border-radius:3px}
+#progress-fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.slide{position:absolute;inset:0;display:none;overflow:hidden;font-size:calc(var(--k) * 16px)}
+.slide.active{display:block}
+.si{height:100%;display:flex;flex-direction:column;justify-content:center;gap:.7em;padding:.8em 0 .4em;max-width:720px;margin:0 auto}
+.si.has-ill{max-width:none}
+.ill{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;align-items:stretch;min-height:0}
+.ill svg{width:100%;height:calc(var(--k) * 29vh);height:calc(var(--k) * 29dvh);display:block}
+.ill figcaption{font-size:.72em;color:var(--muted);text-align:center;margin-top:.25em}
+.txt{flex:0 0 auto;min-width:0}
+@media (min-width:760px) and (orientation:landscape){
+  .slide{font-size:calc(var(--k) * 17px)}
+  .si.has-ill{flex-direction:row;align-items:center;gap:2.4em;padding:1em 0}
+  .si.has-ill .ill{flex:0 0 46%}
+  .si.has-ill .ill svg{height:auto;max-height:calc(var(--k) * 64vh);max-height:calc(var(--k) * 64dvh)}
+  .si.has-ill .txt{flex:1 1 auto}
+}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.45em}
+h1,h2{color:var(--ink);font-weight:800;line-height:1.08;letter-spacing:-.025em;margin-bottom:.45em}
+h1{font-size:2.05em}
+h2{font-size:1.65em}
+@media (min-width:760px){h1{font-size:2.4em}h2{font-size:1.9em}}
+h1 .ac,h2 .ac{color:var(--accent)}
+p{margin-bottom:.6em;font-size:.97em}
+.small{font-size:.82em;color:var(--muted)}
+.cite{font-size:.78em;color:var(--muted);white-space:nowrap}
+.cite a{color:var(--muted)}
+.callout{border-left:3px solid var(--accent);background:var(--g-bg);padding:.5em .85em;margin:.55em 0;font-size:.92em;border-radius:0 8px 8px 0}
+.callout.warn{border-color:var(--red);background:var(--r-bg)}
+.callout.note{border-color:var(--orange);background:var(--o-bg)}
+.pill-list{display:flex;flex-wrap:wrap;gap:.4em;margin:.55em 0}
+.pill{background:var(--g-bg);color:var(--accent-dark);padding:.3em .8em;font-size:.82em;font-weight:500;border-radius:100px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:.5em;margin:.55em 0}
+.tile{border:1px solid var(--rule);border-radius:var(--radius);padding:.55em .75em}
+.tile .n{font-size:1.3em;font-weight:800;color:var(--accent);line-height:1.15;letter-spacing:-.02em;margin-bottom:.15em}
+.tile .l{font-size:.84em;color:var(--body)}
+.steps{list-style:none;margin:.55em 0;display:flex;flex-direction:column;gap:.45em}
+.steps li{display:flex;gap:.65em;align-items:flex-start;font-size:.92em}
+.steps .n{flex:0 0 1.65em;height:1.65em;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82em;margin-top:.05em}
+.data-table{width:100%;border-collapse:collapse;font-size:.84em;margin:.45em 0}
+.data-table th,.data-table td{border-bottom:1px solid var(--rule);padding:.4em .55em;text-align:left;vertical-align:top}
+.data-table th{font-weight:700;color:var(--muted);font-size:.8em;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid var(--rule)}
+.data-table td:first-child{color:var(--ink);font-weight:500}
+.data-table tr.hl td{background:var(--g-bg)}
+.map3{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.55em 0}
+.box{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .75em;font-size:.86em}
+.box h3{font-size:1.1em;font-weight:800;color:var(--accent);margin-bottom:.15em}
+.box .q{font-size:.9em;color:var(--muted);margin-bottom:.3em}
+.box ul{padding-left:1.1em}
+
+/* HTML diagrams */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.4em;margin:.6em 0}
+.node{border:1.5px solid var(--ink);border-radius:8px;padding:.35em .65em;font-size:.84em;font-weight:500;color:var(--ink);background:#fff;text-align:center}
+.node small{display:block;font-weight:400;color:var(--muted);font-size:.85em}
+.node.g{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.node.o{border-color:var(--orange);background:var(--o-bg)}
+.node.r{border-color:var(--red);background:var(--r-bg)}
+.node.ghost{border-style:dashed;color:var(--muted)}
+.arr{color:var(--orange);font-weight:800;font-size:1em}
+.lane{display:grid;grid-template-columns:8.5em 1fr;gap:.6em;align-items:center;padding:.45em 0;border-bottom:1px solid var(--rule)}
+.lane:last-of-type{border-bottom:none}
+.lane .lname{font-weight:800;color:var(--ink);font-size:.9em;line-height:1.2}
+.lane .lname small{display:block;font-weight:500;color:var(--muted);font-size:.8em}
+.lane .flow{margin:0}
+.stack{display:flex;flex-direction:column;gap:.4em;margin:.6em 0}
+.layer{display:grid;grid-template-columns:2.2em 1fr;gap:.6em;align-items:center;border:1px solid var(--g-line);background:var(--g-bg);border-radius:var(--radius);padding:.5em .7em;font-size:.88em}
+.layer .ln{width:2.2em;height:2.2em;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+.layer > div > b:first-child{display:block;margin-bottom:.1em}
+.htl{display:grid;grid-template-columns:repeat(4,1fr);gap:.6em;margin:.6em 0}
+.htl .ev{border-top:3px solid var(--accent);padding-top:.4em;font-size:.86em}
+.htl .yr{font-weight:800;color:var(--accent);font-size:1.25em;letter-spacing:-.02em;display:block}
+@media (max-width:520px){.htl{grid-template-columns:1fr 1fr}.map3{grid-template-columns:1fr}.lane{grid-template-columns:1fr;gap:.25em}}
+.eq{display:flex;align-items:center;justify-content:center;gap:.6em;flex-wrap:wrap;margin:.6em 0}
+.eq .term{text-align:center;font-size:.82em;color:var(--ink);font-weight:500}
+.eq .term svg{width:5.2em;height:auto;display:block;margin:0 auto .25em}
+.eq .op{font-size:1.6em;font-weight:800;color:var(--orange)}
+.forms{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.6em 0}
+.form{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .7em;font-size:.86em}
+.form svg{width:100%;height:3.4em;display:block;margin-bottom:.3em}
+.form h3{font-size:1.05em;font-weight:800;color:var(--ink);margin-bottom:.1em}
+@media (max-width:520px){.forms{grid-template-columns:1fr}.form{display:grid;grid-template-columns:4.5em 1fr;gap:.6em;align-items:center}.form svg{height:2.6em;margin:0}}
+
+/* interactions */
+.toggle-wrap{border:1px solid var(--rule);border-radius:var(--radius);margin:.45em 0;overflow:hidden}
+.toggle-btn{width:100%;background:#fff;border:none;color:var(--ink);font:600 .92em 'DM Sans',sans-serif;text-align:left;padding:.6em .85em;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:.6em}
+.toggle-btn .hint{font-weight:600;color:var(--accent);font-size:.8em;white-space:nowrap}
+.toggle-btn .hint::after{content:" +"}
+.toggle-wrap.open .toggle-btn .hint::after{content:" −"}
+.toggle-wrap.seen{border-color:var(--g-line)}
+.toggle-body{display:none;padding:0 .85em .7em;font-size:.9em}
+.toggle-wrap.open .toggle-body{display:block}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5em,1fr));gap:.45em;margin:.55em 0}
+.rcard{border:1px solid var(--rule);border-radius:var(--radius);background:#fff;text-align:left;padding:.55em .7em;cursor:pointer;font:400 .84em 'DM Sans',sans-serif;color:var(--body);display:block}
+.rcard .rt{font-weight:800;color:var(--ink);display:flex;justify-content:space-between;gap:.4em}
+.rcard .rt::after{content:"Tap";font-weight:600;font-size:.8em;color:var(--accent)}
+.rcard .rb{display:none;margin-top:.3em}
+.rcard.seen{border-color:var(--accent);background:var(--g-bg)}
+.rcard.seen .rt::after{content:""}
+.rcard.seen .rb{display:block}
+.rcard svg{width:100%;height:3.2em;display:block;margin:.2em 0}
+.choice-q{font-weight:700;color:var(--ink);font-size:.95em;margin-bottom:.45em}
+.choices{display:flex;flex-wrap:wrap;gap:.4em}
+.choice{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:500 .88em 'DM Sans',sans-serif;padding:.45em .85em;border-radius:100px;cursor:pointer}
+.choice:hover{border-color:var(--ink)}
+.choice.right{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.choice.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red);text-decoration:line-through}
+.feedback{display:none;font-size:.88em;margin-top:.5em;padding:.45em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.feedback.show{display:block}
+.stepper .choice-set{display:none}
+.stepper .choice-set.cur{display:block}
+.step-count{font-size:.75em;font-weight:700;color:var(--eyebrow);letter-spacing:.08em;margin-bottom:.3em}
+.next-q{margin-top:.55em;background:#fff;border:1.5px solid var(--ink);border-radius:100px;font:600 .84em 'DM Sans',sans-serif;padding:.38em .9em;cursor:pointer;display:none}
+.choice-set.done .next-q{display:inline-block}
+.calc{border:1px solid var(--rule);border-radius:var(--radius);padding:.65em .75em;margin:.55em 0}
+.calc-row{display:flex;gap:.6em;margin-bottom:.5em;flex-wrap:wrap}
+.calc label{font-size:.76em;font-weight:600;color:var(--muted);display:flex;flex-direction:column;gap:.2em;flex:1;min-width:8em}
+.calc input,.calc select{font:500 1.05em 'DM Sans',sans-serif;padding:.32em .45em;border:1px solid var(--rule);border-radius:6px;background:#fff;color:var(--ink);width:100%}
+.calc-out{font-size:.9em;padding:.45em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.calc-out.fail{border-color:var(--red);background:var(--r-bg)}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:600 .84em 'DM Sans',sans-serif;padding:.4em .95em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.range{width:100%;accent-color:var(--accent);margin:.4em 0}
+.scale-lbl{display:flex;justify-content:space-between;font-size:.74em;color:var(--muted);font-weight:600}
+.coa{display:flex;flex-direction:column;gap:.3em;margin:.45em 0}
+.coa-row{display:grid;grid-template-columns:1fr 1.3fr 4.8em;gap:.5em;align-items:center;background:#fff;border:1px solid var(--rule);border-radius:8px;color:var(--ink);font:400 .82em 'DM Sans',sans-serif;text-align:left;padding:.42em .65em;cursor:pointer}
+.coa-row b{font-weight:700}
+.coa-row .v{text-align:right;font-weight:700;color:var(--muted)}
+.coa-row.pass{border-color:var(--accent)}.coa-row.pass .v{color:var(--accent)}
+.coa-row.fail{border-color:var(--red);background:var(--r-bg)}.coa-row.fail .v{color:var(--red)}
+.coa-row.next{border-color:var(--orange);background:var(--o-bg)}.coa-row.next .v{color:var(--orange)}
+#coa-exp{min-height:2.7em;font-size:.86em;border-left:3px solid var(--rule);padding:.35em .65em}
+.coa-decision{display:none;margin-top:.5em}
+.coa-decision.show{display:block}
+.cards{display:flex;flex-direction:column;gap:.4em;margin:.55em 0}
+.card{display:flex;gap:.75em;border:1px solid var(--rule);border-radius:var(--radius);padding:.5em .75em;font-size:.88em}
+.card .cn{font-size:1.35em;font-weight:800;color:var(--accent);line-height:1}
+.madeby{border-top:1px solid var(--rule);padding-top:.6em;margin-top:.3em}
+.madeby p{font-size:.82em;color:var(--muted);margin-bottom:.45em}
+.madeby p b,.madeby p b a{color:var(--ink)}
+.socials{display:flex;flex-wrap:wrap;gap:.35em}
+.socials a{font-size:.8em;font-weight:600;color:var(--accent-dark);background:var(--g-bg);padding:.28em .75em;border-radius:100px;text-decoration:none}
+.socials a:hover{background:var(--g-line)}
+.score{font-size:1.25em;font-weight:800;color:var(--accent);margin-top:.5em}
+.pulse{animation:pulse 1s ease 2}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,130,31,0)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.45)}}
+
+#bottom{flex:0 0 auto;padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+#gate-hint{font-size:.78rem;color:var(--muted);text-align:center;min-height:1.2em;margin-bottom:5px}
+#gate-hint.alert{color:var(--orange);font-weight:600}
+#gate-hint button{background:none;border:none;color:var(--accent);text-decoration:underline;font:inherit;font-weight:600;cursor:pointer;padding:0}
+#nav-wrap{display:flex;justify-content:space-between;gap:10px}
+.nav-btn{flex:1;max-width:200px;background:#fff;border:1.5px solid var(--ink);color:var(--ink);font:700 .92rem 'DM Sans',sans-serif;padding:10px 14px;border-radius:100px;cursor:pointer}
+#btn-next{background:var(--ink);color:#fff;margin-left:auto}
+#btn-next.locked{background:#fff;color:var(--muted);border-color:var(--rule)}
+.nav-btn:disabled{opacity:.3;cursor:default}
+footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
+
+.overlay{display:none;position:fixed;inset:0;z-index:50;background:rgba(20,30,25,.35);padding:16px;overflow-y:auto}
+.overlay.open{display:block}
+.panel{max-width:620px;margin:16px auto;background:#fff;border-radius:14px;padding:18px 20px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.panel-head h3{font-weight:800;color:var(--ink);font-size:1.3rem;letter-spacing:-.02em}
+.toc-note{font-size:.82rem;color:var(--muted);margin-bottom:8px}
+.toc{list-style:none}
+.toc li{border-bottom:1px solid var(--rule)}
+.toc button{background:none;border:none;color:var(--ink);font:400 .9rem 'DM Sans',sans-serif;padding:7px 0;width:100%;text-align:left;cursor:pointer;display:flex;gap:10px}
+.toc button span{color:var(--muted);min-width:22px}
+.toc button.cur{color:var(--accent);font-weight:700}
+.toc .sec{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;padding:12px 0 3px;border:none}
+.refs{padding-left:20px;font-size:.82rem;color:var(--body)}
+.refs li{margin-bottom:7px;word-break:break-word}
+
+/* ---------- SVG diagram + chart styling ---------- */
+.ln{fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ln.thin{stroke-width:1.2}
+.ln.g{stroke:var(--accent)}.ln.r{stroke:var(--red)}.ln.o{stroke:var(--orange)}.ln.b{stroke:var(--blue)}.ln.m{stroke:#a3aaa5}
+.dash{stroke-dasharray:4 4}
+.fg{fill:var(--g-bg)}.fgs{fill:var(--accent)}.fb{fill:var(--b-bg)}.fr{fill:var(--r-bg)}.frs{fill:var(--red)}.fo{fill:var(--o-bg)}.fos{fill:var(--orange)}.fw{fill:#fff}.fk{fill:var(--ink)}.fgr{fill:#eef0ee}.fpow{fill:#d9d4c7}
+.tx{font-family:'DM Sans',sans-serif;font-size:12px;fill:var(--body)}
+.tx.s{font-size:10.5px;fill:var(--muted)}
+.tx.b{font-weight:700;fill:var(--ink)}
+.tx.g{fill:var(--accent-dark);font-weight:700}.tx.r{fill:var(--red);font-weight:700}.tx.o{fill:#a85f10;font-weight:700}.tx.bl{fill:var(--blue);font-weight:700}
+.tx.mid{text-anchor:middle}.tx.end{text-anchor:end}
+.bar{fill:var(--accent)}.bar.hl{fill:var(--red)}
+.axis{stroke:#c9cdca;stroke-width:1;fill:none}
+.grid{stroke:#eceeec;stroke-width:1}
+
+/* animations run only on the active slide, restart on every visit */
+.slide.active .draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.1s ease-out forwards;animation-delay:var(--d,0s)}
+.slide.active .fade{opacity:0;animation:fadeup .5s ease-out forwards;animation-delay:var(--d,.3s)}
+.slide.active .stagger > *{opacity:0;animation:fadeup .45s ease-out forwards;animation-delay:var(--d,0s)}
+.slide.active .grow-x{transform-box:fill-box;transform-origin:left center;animation:growx .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
+.slide.active .grow-y{transform-box:fill-box;transform-origin:center bottom;animation:growy .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
+.slide.active .updown{animation:updown 2s ease-in-out infinite}
+.slide.active .spin{transform-box:view-box;animation:spin 6s linear infinite}
+.slide.active .spin-r{transform-box:view-box;animation:spin 6s linear infinite reverse}
+.slide.active .drop{animation:drop 2.4s ease-in infinite}
+.slide.active .bounce{animation:bounce 1.2s ease-in-out infinite}
+.slide.active .cyc{animation:cyc 6s infinite;animation-delay:var(--d,0s)}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeup{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes growx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes growy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes updown{0%,100%{transform:translateY(0)}50%{transform:translateY(22px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes drop{0%{transform:translateY(0);opacity:0}10%{opacity:1}80%{opacity:1}100%{transform:translateY(46px);opacity:0}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes cyc{0%,22%{opacity:1}26%,100%{opacity:.28}}
+
+/* ---------- pharmacopoeia explainer modal ---------- */
+.ph-open{display:inline-flex;align-items:center;gap:.45em;background:#fff;border:1.5px solid var(--accent);color:var(--accent-dark);font:700 .84em 'DM Sans',sans-serif;padding:.42em .95em;border-radius:100px;cursor:pointer;margin:.3em 0}
+.ph-open .bk{width:1.05em;height:1.05em}
+#ph-overlay{overflow:hidden}
+.ph-panel{max-width:960px;margin:0 auto;background:#fff;border-radius:14px;height:100%;display:flex;flex-direction:column;padding:14px 18px 12px}
+.ph-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex:0 0 auto;margin-bottom:6px}
+.ph-head .ph-title{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700}
+.ph-body{flex:1 1 auto;min-height:0;position:relative}
+.ph-step{position:absolute;inset:0;display:none;overflow:hidden;font-size:calc(var(--k) * 16px)}
+.ph-step.active{display:block}
+.ph-in{height:100%;display:flex;flex-direction:column;justify-content:center;gap:.8em}
+.ph-fig{flex:0 0 auto;margin:0;text-align:center}
+.ph-fig img{max-width:100%;height:auto;max-height:calc(var(--k) * 30vh);max-height:calc(var(--k) * 30dvh);border:1px solid var(--rule);border-radius:8px;background:#fff;display:inline-block}
+.ph-fig figcaption{font-size:.7em;color:var(--muted);margin-top:.3em}
+.ph-txt{flex:0 0 auto;min-width:0}
+.ph-txt h2{font-size:1.5em}
+.ph-txt p,.ph-txt li{font-size:.93em}
+.ph-list{list-style:none;display:flex;flex-direction:column;gap:.3em;margin:.4em 0}
+.ph-list li{padding-left:.9em;border-left:3px solid var(--g-line)}
+.ph-foot{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:8px;border-top:1px solid var(--rule)}
+.ph-dots{display:flex;gap:6px}
+.ph-dots span{width:8px;height:8px;border-radius:50%;background:var(--rule)}
+.ph-dots span.on{background:var(--accent)}
+.ph-foot .nav-btn{max-width:150px;padding:8px 12px;font-size:.86rem}
+@media (min-width:760px) and (orientation:landscape){
+  .ph-in{flex-direction:row;align-items:center;gap:2em}
+  .ph-fig{flex:0 0 46%}
+  .ph-fig img{max-height:calc(var(--k) * 60vh);max-height:calc(var(--k) * 60dvh)}
+  .ph-txt{flex:1 1 auto}
+  .ph-step{font-size:calc(var(--k) * 17px)}
+}
+/* ---------- video buttons + player ---------- */
+.vbtn{display:inline-flex;align-items:center;gap:.5em;background:var(--ink);color:#fff;border:none;font:600 .82em 'DM Sans',sans-serif;padding:.45em .95em .45em .7em;border-radius:100px;cursor:pointer;margin:.25em .35em .25em 0}
+.vbtn svg{width:1.1em;height:1.1em}
+.vbtn[hidden]{display:none}
+#vid-overlay{overflow:hidden;background:rgba(10,15,12,.8)}
+.vid-panel{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.vid-frame{background:#000;border-radius:12px;overflow:hidden;width:min(100%, calc((100dvh - 170px) * 16 / 9));aspect-ratio:16/9}
+.vid-frame.vertical{width:min(100%, calc((100dvh - 170px) * 9 / 16));aspect-ratio:9/16}
+.vid-frame iframe{width:100%;height:100%;border:0;display:block}
+.vid-meta{color:#fff;text-align:center;font-size:.86rem;max-width:640px}
+.vid-meta a{color:#cfe6d9}
+.vid-close{background:#fff;color:var(--ink);border:none;border-radius:100px;font:700 .86rem 'DM Sans',sans-serif;padding:8px 18px;cursor:pointer}
+@media (prefers-reduced-motion: reduce){
+  .slide.active *{animation:none!important;opacity:1!important;stroke-dashoffset:0!important;transform:none!important}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ar-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#c0392b"/></marker>
+    <marker id="ar-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#d9821f"/></marker>
+  </defs>
+</svg>
+<div id="shell">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <button class="icon-btn" id="btn-toc" data-umami-event="open-contents">Contents</button>
+      <span id="progress-label">1 / 44</span>
+    </div>
+  </nav>
+  <div id="progress-track"><div id="progress-fill"></div></div>
+
+  <div id="stage">
+
+<!-- ================= 1 · INTRODUCTION ================= -->
+
+<section class="slide active" data-sec="intro" data-title="Start here">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="Bar showing 49 of 654 registered product samples failed NPRA lab testing in 2025">
+    <text class="tx b" x="20" y="34" style="font-size:15px">654 registered product samples tested</text>
+    <text class="tx s" x="20" y="54">NPRA laboratory testing, 2025</text>
+    <rect class="fg grow-x" x="20" y="74" width="360" height="40" rx="6" style="--d:.1s"/>
+    <rect class="frs grow-x" x="353" y="74" width="27" height="40" style="--d:.9s"/>
+    <text class="tx g fade" x="30" y="99" style="--d:.6s">605 met specification</text>
+    <path class="ln r fade" d="M366 120 L366 140" style="--d:1.2s"/>
+    <text class="tx r end fade" x="380" y="158" style="--d:1.2s;font-size:14px">49 failed (7.5%)</text>
+    <text class="tx s fade" x="20" y="196" style="--d:1.4s">Source: NPRA Surveillance and Complaints Section</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Start here</div>
+   <h1>Registered, approved, <span class="ac">and still failing.</span></h1>
+   <p>Every medicine sold in Malaysia must be registered with the National Pharmaceutical Regulatory Agency (NPRA). Yet when NPRA took registered products from the market in 2025 and tested them in its own laboratory, <b>49 of 654 samples did not meet their specification</b>. <span class="cite">(<a href="https://npra.gov.my/index.php/en/component/content/article/225-english/1527870-surveillance-and-complaints-section.html" target="_blank" rel="noopener">NPRA, 2025</a>)</span></p>
+   <p>Registration is a promise that every unit will be the same. This course shows how oral solid doses are designed and made to keep that promise, and how <b>quality control testing</b> checks that they do.</p>
+   <p class="small">Written for Diploma in Pharmacy students. Use Next to move through the pages, or Contents to jump around.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="intro" data-title="Three oral solid dose forms">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Introduction</div>
+   <h2>Three forms, <span class="ac">one route: swallowed.</span></h2>
+   <p>An <b>oral solid dose (OSD)</b> is a medicine given as a single solid unit that the patient swallows. Each unit contains a measured amount of the active drug, called the <b>dose</b>. This course covers the three most common forms:</p>
+   <div class="forms stagger">
+    <div class="form">
+     <svg viewBox="0 0 120 50" aria-hidden="true"><ellipse class="fg" cx="60" cy="28" rx="34" ry="14"/><ellipse class="ln g" cx="60" cy="25" rx="34" ry="14"/><path class="ln g" d="M60 12 L60 38"/></svg>
+     <div><h3>Tablet</h3>Powder or granules squeezed into shape in a metal die. It can be plain (uncoated) or covered with a coating.</div>
+    </div>
+    <div class="form">
+     <svg viewBox="0 0 120 50" aria-hidden="true"><path class="fw ln" d="M26 14 H66 V38 H26 A12 12 0 0 1 26 14 Z"/><path class="fg ln g" d="M58 12 H94 A13 13 0 0 1 94 40 H58 Z"/></svg>
+     <div><h3>Hard capsule</h3>A two-piece shell, a <b>body</b> and a <b>cap</b>, filled with powder, granules or small pellets.</div>
+    </div>
+    <div class="form">
+     <svg viewBox="0 0 120 50" aria-hidden="true"><ellipse class="fo" cx="60" cy="25" rx="30" ry="17"/><ellipse class="ln o" cx="60" cy="25" rx="30" ry="17"/><path d="M44 19 Q50 14 58 14" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round"/></svg>
+     <div><h3>Softgel</h3>A soft, sealed one-piece shell, usually filled with an oil, a solution or a suspension.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="intro" data-title="Why OSDs dominate">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Introduction</div>
+   <h2>Why do most medicines <span class="ac">come in this form?</span></h2>
+   <p>Oral solid doses are the most common way medicines are supplied because they suit patients, pharmacies and manufacturers at the same time:</p>
+   <div class="pill-list stagger">
+     <span class="pill">Accurate dose in every unit</span>
+     <span class="pill">More stable than liquids, because there is little water</span>
+     <span class="pill">Easy to carry, store and count</span>
+     <span class="pill">Low cost per dose</span>
+     <span class="pill">Patients can take them without help</span>
+   </div>
+   <p>But they also have limits. Open both sections below before moving on.</p>
+   <div class="toggle-wrap">
+     <button class="toggle-btn"><span>What are the drawbacks?</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>The drug works more slowly than an injection, because it must first be released and absorbed from the gut. Some drugs are also partly broken down by the liver before reaching the rest of the body, which is called <b>first-pass metabolism</b>.</p></div>
+   </div>
+   <div class="toggle-wrap">
+     <button class="toggle-btn"><span>Who struggles most with them?</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Young children and some older adults find tablets and capsules hard to swallow. This is one reason newer forms, such as tablets that disintegrate in the mouth, were developed.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="intro" data-title="A tablet's journey">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Key concept</div>
+   <h2>Swallowing it <span class="ac">is only the start.</span></h2>
+   <p>Before a drug in a tablet or capsule can work, three things must happen, always in this order:</p>
+   <div class="flow stagger">
+     <div class="node g">1. Disintegration<small>the unit breaks into small pieces</small></div><span class="arr">→</span>
+     <div class="node g">2. Dissolution<small>the drug dissolves in gut fluid</small></div><span class="arr">→</span>
+     <div class="node g">3. Absorption<small>dissolved drug passes into the blood</small></div>
+   </div>
+   <p>The order matters. A drug can only be absorbed once it is <b>dissolved</b>, and it can only dissolve quickly once the tablet has <b>broken up</b> and exposed a large surface to the fluid. If either of the first two steps is slow or incomplete, less drug reaches the blood, and the patient may not get the full effect.</p>
+   <div class="callout"><b>Keep this chain in mind.</b> Two of the most important quality control tests, disintegration and dissolution, exist to check steps 1 and 2 in the laboratory, batch after batch.</div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 2 · ORIGINS AND DEVELOPMENT ================= -->
+
+<section class="slide" data-sec="dev" data-title="A short history">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Origins</div>
+   <h2>Four dates <span class="ac">worth knowing.</span></h2>
+   <p>People made pills by hand for centuries. The forms we use today come from a handful of 19th and 20th century inventions:</p>
+   <div class="htl stagger">
+     <div class="ev"><span class="yr">1833</span>Mothes and Dublanc patent a one-piece gelatin capsule in France.</div>
+     <div class="ev"><span class="yr">1843</span>William Brockedon patents a machine that presses powder into shape in a die without glue: the start of the compressed tablet.</div>
+     <div class="ev"><span class="yr">1847</span>James Murdoch patents the two-piece hard capsule.</div>
+     <div class="ev"><span class="yr">1933</span>R. P. Scherer develops the rotary die process, still the basis of softgel making.</div>
+   </div>
+   <p class="cite"><a href="https://en.wikipedia.org/wiki/Tablet_(pharmacy)" target="_blank" rel="noopener">Tablet (pharmacy)</a>; <a href="https://en.wikipedia.org/wiki/Capsule_(pharmacy)" target="_blank" rel="noopener">Capsule (pharmacy)</a></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="dev" data-title="Excipients">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Formulation development</div>
+   <h2>The drug is only <span class="ac">part of the tablet.</span></h2>
+   <p>A tablet also contains <b>excipients</b>: ingredients with no medical effect of their own that make the tablet possible to manufacture, strong enough to handle, and able to release the drug in the body. Tap each card to see its job, and what goes wrong without it.</p>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Diluent (filler)</span><span class="rb">Adds bulk so the tablet is a practical size. Example: lactose. <b>Without it:</b> a low-dose drug would make a tablet too tiny to press or handle.</span></button>
+     <button class="rcard"><span class="rt">Binder</span><span class="rb">Holds particles together. Example: povidone. <b>Without it:</b> the tablet crumbles.</span></button>
+     <button class="rcard"><span class="rt">Disintegrant</span><span class="rb">Swells in water and pulls the tablet apart. Example: croscarmellose sodium. <b>Without it:</b> the tablet may stay whole and release the drug slowly.</span></button>
+     <button class="rcard"><span class="rt">Lubricant</span><span class="rb">Stops powder sticking to the metal punches and die. Example: magnesium stearate. <b>Without it:</b> sticking, and tablets that are hard to eject.</span></button>
+     <button class="rcard"><span class="rt">Glidant</span><span class="rb">Helps powder flow smoothly into the die. Example: colloidal silica. <b>Without it:</b> uneven filling, so tablet weights vary.</span></button>
+   </div>
+   <p class="cite"><a href="https://en.wikipedia.org/wiki/Tablet_(pharmacy)" target="_blank" rel="noopener">Tablet (pharmacy)</a></p>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 3 · MANUFACTURING ================= -->
+
+<section class="slide" data-sec="mfg" data-title="Why granulate">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="chart-gran" viewBox="0 0 400 232" role="img" aria-label="Illustrative tablet weights: fine powder spreads widely around the target, granules cluster closely"></svg>
+   <figcaption>Illustrative data: 20 tablets from each blend, target weight 250 mg.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Modern manufacturing</div>
+   <h2>Powder that won't flow <span class="ac">gives uneven doses.</span></h2>
+   <p>A tablet press fills each die with a fixed <b>volume</b> of powder, not a fixed weight. If the powder flows smoothly, every die receives about the same amount, so every tablet weighs about the same and contains about the same dose.</p>
+   <p>Fine, light powders tend to clump and flow unevenly, so some dies get more powder than others. <b>Granulation</b> fixes this by binding fine particles into larger, denser granules that pour freely, like sugar compared with flour.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="mfg" data-title="Three manufacturing routes">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Modern manufacturing</div>
+   <h2>Three routes <span class="ac">to the same tablet.</span></h2>
+   <p>The formulator chooses a route based on how well the powder flows and compacts, and whether the drug can tolerate water and heat.</p>
+   <div class="lane"><div class="lname">Direct compression<small>fewest steps</small></div>
+     <div class="flow stagger"><div class="node">Blend</div><span class="arr">→</span><div class="node g">Compress</div></div></div>
+   <div class="lane"><div class="lname">Dry granulation<small>no water, no heat</small></div>
+     <div class="flow stagger"><div class="node">Blend</div><span class="arr">→</span><div class="node o">Compact into ribbons</div><span class="arr">→</span><div class="node o">Mill into granules</div><span class="arr">→</span><div class="node">Add lubricant</div><span class="arr">→</span><div class="node g">Compress</div></div></div>
+   <div class="lane"><div class="lname">Wet granulation<small>most steps, best flow</small></div>
+     <div class="flow stagger"><div class="node">Blend</div><span class="arr">→</span><div class="node o">Add binder liquid</div><span class="arr">→</span><div class="node o">Dry</div><span class="arr">→</span><div class="node o">Mill</div><span class="arr">→</span><div class="node">Add lubricant</div><span class="arr">→</span><div class="node g">Compress</div></div></div>
+   <p class="small">Direct compression is preferred when the powder allows it, because every extra step adds time, cost and chances for error. Dry granulation (often by <b>roller compaction</b>) suits drugs damaged by moisture or heat. Wet granulation gives the best flow, but only for drugs that tolerate water and drying.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="mfg" data-title="Activity: choose the route">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Try it · made-up scenarios</div>
+   <h2>You are the formulator. <span class="ac">Pick the route.</span></h2>
+   <p class="small">Answer all three questions to continue. Go back one page if you need a reminder.</p>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="dry">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">The drug breaks down when it gets damp. Its powder also flows poorly.</div>
+      <div class="choices"><button class="choice" data-v="dc">Direct compression</button><button class="choice" data-v="dry">Dry granulation</button><button class="choice" data-v="wet">Wet granulation</button></div>
+      <div class="feedback">Dry granulation improves flow by compacting the powder, with no water or heat, so the moisture-sensitive drug is protected. Direct compression would not fix the poor flow.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="wet">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">A high-dose drug with a sticky, poorly flowing powder. It is stable to water and heat.</div>
+      <div class="choices"><button class="choice" data-v="dc">Direct compression</button><button class="choice" data-v="dry">Dry granulation</button><button class="choice" data-v="wet">Wet granulation</button></div>
+      <div class="feedback">Wet granulation is the most effective way to turn a sticky, poorly flowing powder into free-flowing granules, and this drug can survive wetting and drying.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="dc">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">The drug powder already flows well, and you are using excipients made specially for direct compression.</div>
+      <div class="choices"><button class="choice" data-v="dc">Direct compression</button><button class="choice" data-v="dry">Dry granulation</button><button class="choice" data-v="wet">Wet granulation</button></div>
+      <div class="feedback">If the blend already flows and compacts well, granulation adds time, cost and risk for no benefit. Direct compression is the simplest route.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="mfg" data-title="From powder to pack">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Modern manufacturing</div>
+   <h2>From raw powder <span class="ac">to a sealed pack.</span></h2>
+   <div class="flow stagger">
+     <div class="node">Dispense<small>weigh each ingredient</small></div><span class="arr">→</span>
+     <div class="node">Mill and sieve<small>even out particle size</small></div><span class="arr">→</span>
+     <div class="node">Blend<small>mix until uniform</small></div><span class="arr">→</span>
+     <div class="node ghost">Granulate and dry<small>only if needed</small></div><span class="arr">→</span>
+     <div class="node g">Compress<small>form tablets</small></div><span class="arr">→</span>
+     <div class="node ghost">Coat<small>only if needed</small></div><span class="arr">→</span>
+     <div class="node">Pack<small>blister or bottle</small></div>
+   </div>
+   <p>Every step is recorded in a <b>batch manufacturing record</b>, so anyone can trace what was used, by whom and when. Ingredients are weighed and checked against this record before mixing begins.</p>
+   <p>Blending matters because the drug must be spread evenly through the whole batch; otherwise some tablets get too much and others too little. Packaging is part of quality too: blister packs and sealed bottles protect tablets from moisture and light until they are used.</p>
+   <p class="small">Samples are also taken and tested <i>during</i> production. This is called <b>in-process control</b>, covered in the quality control section.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="mfg" data-title="Inside the tablet press">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 236" role="img" aria-label="Compression cycle in four panels: fill, pre-compression, main compression, ejection">
+    <g class="cyc" style="--d:0s">
+      <rect class="fgr" x="12" y="110" width="26" height="44"/><rect class="fgr" x="62" y="110" width="26" height="44"/>
+      <path class="ln" d="M12 110 H38 V154 H12 M88 110 H62 V154 H88"/>
+      <rect class="fpow" x="38" y="110" width="24" height="34"/>
+      <rect class="fw ln" x="40" y="144" width="20" height="56"/>
+      <rect class="fw ln" x="40" y="22" width="20" height="50"/>
+      <path class="ln o" d="M14 100 H52" marker-end="url(#ar-o)"/>
+      <text class="tx s" x="12" y="93">powder in</text>
+      <text class="tx b mid" x="50" y="222">1 Fill</text>
+    </g>
+    <g class="cyc" style="--d:1.5s">
+      <rect class="fgr" x="110" y="110" width="26" height="44"/><rect class="fgr" x="160" y="110" width="26" height="44"/>
+      <path class="ln" d="M110 110 H136 V154 H110 M186 110 H160 V154 H186"/>
+      <rect class="fpow" x="136" y="118" width="24" height="26"/>
+      <rect class="fw ln" x="138" y="144" width="20" height="56"/>
+      <rect class="fw ln" x="138" y="66" width="20" height="52"/>
+      <path class="ln r" d="M148 38 V60" marker-end="url(#ar-r)"/>
+      <text class="tx s mid" x="148" y="32">light press</text>
+      <text class="tx b mid" x="148" y="222">2 Pre-compress</text>
+    </g>
+    <g class="cyc" style="--d:3s">
+      <rect class="fgr" x="208" y="110" width="26" height="44"/><rect class="fgr" x="258" y="110" width="26" height="44"/>
+      <path class="ln" d="M208 110 H234 V154 H208 M284 110 H258 V154 H284"/>
+      <rect class="fgs" x="234" y="126" width="24" height="14"/>
+      <rect class="fw ln" x="236" y="140" width="20" height="60"/>
+      <rect class="fw ln" x="236" y="74" width="20" height="52"/>
+      <path class="ln r" d="M246 38 V66" marker-end="url(#ar-r)" style="stroke-width:3"/>
+      <text class="tx s mid" x="246" y="32">full force</text>
+      <text class="tx b mid" x="246" y="222">3 Compress</text>
+    </g>
+    <g class="cyc" style="--d:4.5s">
+      <rect class="fgr" x="306" y="110" width="26" height="44"/><rect class="fgr" x="356" y="110" width="26" height="44"/>
+      <path class="ln" d="M306 110 H332 V154 H306 M382 110 H356 V154 H382"/>
+      <rect class="fgs" x="332" y="96" width="24" height="14"/>
+      <rect class="fw ln" x="334" y="110" width="20" height="90"/>
+      <rect class="fw ln" x="334" y="22" width="20" height="50"/>
+      <path class="ln o" d="M360 92 H390" marker-end="url(#ar-o)"/>
+      <text class="tx s" x="362" y="86">out</text>
+      <text class="tx b mid" x="344" y="222">4 Eject</text>
+    </g>
+    <text class="tx s" x="64" y="40">upper punch</text>
+    <text class="tx s" x="92" y="168">die</text>
+    <text class="tx s" x="64" y="190">lower punch</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Modern manufacturing</div>
+   <h2>How a tablet <span class="ac">is pressed.</span></h2>
+   <p>A tablet is formed in a <b>die</b> (a hole in a steel plate) between an <b>upper punch</b> and a <b>lower punch</b>. On a rotary press, dozens of punch sets travel round a turntable, and each set repeats the same four steps:</p>
+   <ol class="steps">
+     <li><span class="n">1</span><span><b>Fill:</b> powder flows into the die above the lower punch.</span></li>
+     <li><span class="n">2</span><span><b>Pre-compress:</b> a light press pushes out trapped air.</span></li>
+     <li><span class="n">3</span><span><b>Compress:</b> full force bonds the particles into a tablet.</span></li>
+     <li><span class="n">4</span><span><b>Eject:</b> the lower punch rises and pushes the tablet out.</span></li>
+   </ol>
+   <p class="small">The amount of powder in step 1 sets the tablet's weight, and the force in step 3 sets its hardness. Both are checked during production.</p>
+   <button class="vbtn" data-video="press" data-umami-event="video-press"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 6.5 L14 10 L8 13.5 Z" fill="currentColor"/></svg>Watch the press cycle (Romaco)</button>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="mfg" data-title="Coatings">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Modern manufacturing</div>
+   <h2>Why some tablets <span class="ac">wear a coat.</span></h2>
+   <p>After compression, tablets can be sprayed with a coating in a rotating pan. The coating is chosen for a purpose:</p>
+   <table class="data-table">
+     <tr><th>Coating</th><th>What it is</th><th>Why it is used</th></tr>
+     <tr><td>Film coat</td><td>A thin polymer layer</td><td>Masks taste, eases swallowing, protects from light and moisture, adds colour for identification</td></tr>
+     <tr><td>Sugar coat</td><td>Many thick sugar layers; an older method</td><td>Masks taste and gives a smooth, glossy finish</td></tr>
+     <tr class="hl"><td>Enteric (gastro-resistant) coat</td><td>A polymer that does not dissolve in acid</td><td>Protects the drug from stomach acid, or the stomach from the drug, so release happens in the intestine</td></tr>
+     <tr><td>Modified-release coat</td><td>A layer that controls how fast drug escapes</td><td>Spreads release over many hours, so fewer doses are needed</td></tr>
+   </table>
+   <p class="small">Coating changes how a tablet must be tested. For example, film-coated and enteric tablets have different disintegration requirements from plain tablets.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="mfg" data-title="Tablet defects">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Modern manufacturing</div>
+   <h2>Three ways <span class="ac">tablets go wrong.</span></h2>
+   <p>Most tablet defects come from the formulation, the press settings or worn tooling. Tap each card to see the cause and the test that catches it.</p>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Sticking</span>
+       <svg viewBox="0 0 120 50" aria-hidden="true"><rect class="fw ln" x="44" y="2" width="32" height="18"/><circle class="fk" cx="52" cy="22" r="2"/><circle class="fk" cx="60" cy="23" r="2"/><circle class="fk" cx="68" cy="22" r="2"/><path class="fg ln g" d="M30 36 Q60 46 90 36 V44 Q60 54 30 44 Z"/><circle class="fw" cx="52" cy="38" r="2.5"/><circle class="fw" cx="66" cy="39" r="2.5"/></svg>
+       <span class="rb">Powder sticks to the punch face, leaving pits on the tablet surface. <b>Causes:</b> too little lubricant, worn or dirty punches, a damp blend. <b>Caught by:</b> visual inspection of appearance.</span></button>
+     <button class="rcard"><span class="rt">Capping</span>
+       <svg viewBox="0 0 120 50" aria-hidden="true"><path class="fg ln g" d="M30 34 Q60 44 90 34 V42 Q60 52 30 42 Z"/><path class="fg ln g" d="M34 22 Q62 6 88 18 L86 24 Q62 14 36 28 Z"/><path class="ln r" d="M60 25 V32"/></svg>
+       <span class="rb">The top of the tablet splits off like a cap. <b>Cause:</b> air trapped during compression expands when pressure is released; a brittle blend or wrong press settings make it worse. <b>Caught by:</b> friability and hardness tests.</span></button>
+     <button class="rcard"><span class="rt">Weight variation</span>
+       <svg viewBox="0 0 120 50" aria-hidden="true"><path class="ln m" d="M14 40 H106"/><circle class="fgs" cx="26" cy="30" r="4"/><circle class="fgs" cx="44" cy="22" r="4"/><circle class="fgs" cx="62" cy="34" r="4"/><circle class="frs" cx="80" cy="12" r="4"/><circle class="fgs" cx="98" cy="26" r="4"/></svg>
+       <span class="rb">Tablets in the same batch weigh noticeably different amounts. <b>Cause:</b> powder flows unevenly into the dies. <b>Caught by:</b> uniformity of mass and content uniformity tests.</span></button>
+   </div>
+   <p class="cite"><a href="https://en.wikipedia.org/wiki/Tablet_(pharmacy)" target="_blank" rel="noopener">Tablet (pharmacy)</a></p>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 4 · CAPSULES ================= -->
+
+<section class="slide" data-sec="caps" data-title="Hard capsules">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 200" role="img" aria-label="A hard capsule: the cap slides over the body">
+    <path class="fw ln draw" pathLength="1" d="M80 72 H250 V128 H80 A28 28 0 0 1 80 72 Z"/>
+    <path class="fpow fade" d="M64 82 H236 V118 H64 A18 18 0 0 1 64 82 Z" style="--d:.8s"/>
+    <path class="fg ln g draw" pathLength="1" d="M190 66 H320 A34 34 0 0 1 320 134 H190 Z" style="--d:.4s"/>
+    <path class="ln g fade" d="M206 66 V134" style="--d:1s;stroke-dasharray:3 3"/>
+    <text class="tx b mid fade" x="120" y="160" style="--d:1.1s">body</text>
+    <text class="tx s mid fade" x="120" y="176" style="--d:1.1s">holds the fill</text>
+    <text class="tx g mid fade" x="290" y="160" style="--d:1.2s">cap</text>
+    <text class="tx s mid fade" x="290" y="176" style="--d:1.2s">slides over and locks</text>
+    <text class="tx s fade" x="80" y="56" style="--d:1.3s">powder, granules or pellets</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Hard capsules and softgels</div>
+   <h2>Hard capsules: <span class="ac">fill the body, close the cap.</span></h2>
+   <p>The empty two-piece shells are bought ready-made. A filling machine then:</p>
+   <div class="flow stagger">
+     <div class="node">Orients the shells</div><span class="arr">→</span>
+     <div class="node">Separates cap from body</div><span class="arr">→</span>
+     <div class="node g">Fills the body</div><span class="arr">→</span>
+     <div class="node">Closes and locks</div><span class="arr">→</span>
+     <div class="node">Ejects</div>
+   </div>
+   <p>Shells are usually made of <b>gelatin</b>. Plant-based <b>HPMC</b> (hydroxypropyl methylcellulose) shells were introduced in 1989; gelatin remains more common because it costs less. Because capsule filling avoids compression, it can suit drugs that are hard to make into tablets. <span class="cite">(<a href="https://en.wikipedia.org/wiki/Capsule_(pharmacy)" target="_blank" rel="noopener">Capsule (pharmacy)</a>)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="caps" data-title="Capsule sizes">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="chart-caps" viewBox="0 0 400 236" role="img" aria-label="Bar chart of hard capsule size against fill volume in millilitres"></svg>
+   <figcaption>Approximate fill volume by capsule size.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Hard capsules and softgels</div>
+   <h2>Bigger number, <span class="ac">smaller capsule.</span></h2>
+   <p>Hard capsule sizes run backwards: <b>size 000</b> is the largest, holding about <b>1.36 mL</b>, and <b>size 5</b> is the smallest, about <b>0.13 mL</b>.</p>
+   <p>The formulator picks the smallest size that holds the full dose plus excipients, because smaller capsules are easier to swallow. A very large dose may need a big capsule or two capsules per dose, which is one reason some products are made as tablets instead.</p>
+   <p class="cite"><a href="https://en.wikipedia.org/wiki/Capsule_(pharmacy)" target="_blank" rel="noopener">Capsule (pharmacy)</a></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="caps" data-title="Softgels">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 236" role="img" aria-label="Rotary die process: two gelatin ribbons pass between two rotating die rolls while fill is injected between them">
+    <rect class="fb ln b" x="180" y="6" width="40" height="22" rx="4"/>
+    <text class="tx bl mid" x="200" y="21" style="font-size:10px">pump</text>
+    <path class="fb ln b" d="M186 34 H214 L202 90 H198 Z"/>
+    <path class="ln" d="M24 44 C 90 44, 122 50, 156 70"/>
+    <path class="ln" d="M376 44 C 310 44, 278 50, 244 70"/>
+    <circle class="fgr ln" cx="150" cy="120" r="50"/>
+    <circle class="fgr ln" cx="250" cy="120" r="50"/>
+    <g class="spin" style="transform-origin:150px 120px">
+      <ellipse class="fw ln thin" cx="150" cy="80" rx="9" ry="6"/><ellipse class="fw ln thin" cx="190" cy="120" rx="6" ry="9"/><ellipse class="fw ln thin" cx="150" cy="160" rx="9" ry="6"/><ellipse class="fw ln thin" cx="110" cy="120" rx="6" ry="9"/>
+    </g>
+    <g class="spin-r" style="transform-origin:250px 120px">
+      <ellipse class="fw ln thin" cx="250" cy="80" rx="9" ry="6"/><ellipse class="fw ln thin" cx="210" cy="120" rx="6" ry="9"/><ellipse class="fw ln thin" cx="250" cy="160" rx="9" ry="6"/><ellipse class="fw ln thin" cx="290" cy="120" rx="6" ry="9"/>
+    </g>
+    <g class="drop"><ellipse class="fo ln o" cx="200" cy="176" rx="11" ry="7"/></g>
+    <ellipse class="fo ln o" cx="186" cy="224" rx="11" ry="7"/><ellipse class="fo ln o" cx="214" cy="226" rx="11" ry="7"/>
+    <text class="tx s" x="24" y="34">gelatin ribbon</text>
+    <text class="tx s end" x="376" y="34">gelatin ribbon</text>
+    <text class="tx bl" x="226" y="50">fill injected</text>
+    <text class="tx b mid" x="92" y="190">die roll</text>
+    <text class="tx b mid" x="308" y="190">die roll</text>
+    <text class="tx o" x="240" y="230">softgels → dryer</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Hard capsules and softgels</div>
+   <h2>Softgels are formed, filled and sealed <span class="ac">in one step.</span></h2>
+   <p>Two continuous ribbons of warm gelatin, softened with a <b>plasticiser</b> such as glycerin, are fed between two rotating <b>die rolls</b>. Each roll has pockets cut into its surface.</p>
+   <p>As matching pockets meet, a pump injects a measured dose of fill between the ribbons, and the rolls press the ribbons together, sealing and cutting out each softgel. The softgels are then dried to firm up the shell.</p>
+   <p>Softgels suit drugs that are dissolved or suspended in oil, including drugs that dissolve poorly in water.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="caps" data-title="Comparing capsule types">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Hard capsules and softgels</div>
+   <h2>Choosing between <span class="ac">capsule types.</span></h2>
+   <table class="data-table">
+     <tr><th></th><th>Hard capsule</th><th>Softgel</th></tr>
+     <tr><td>Shell</td><td>Two rigid pieces of gelatin or HPMC</td><td>One soft, sealed piece of gelatin with plasticiser</td></tr>
+     <tr><td>Fill</td><td>Dry: powder, granules, pellets</td><td>Liquid: oils, solutions, suspensions</td></tr>
+     <tr><td>How made</td><td>Ready-made shells are filled and closed</td><td>Shell is formed and filled at the same moment (rotary die)</td></tr>
+     <tr><td>Good for</td><td>Drugs that are hard to compress</td><td>Oily or poorly water-soluble drugs</td></tr>
+   </table>
+   <div class="toggle-wrap">
+     <button class="toggle-btn"><span>Why does shell material matter to patients in Malaysia?</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Gelatin comes from animal sources, and many patients want to know which. Plant-based HPMC shells give patients who avoid animal-derived gelatin an alternative. Pharmacy staff should be ready to answer questions about capsule shells when dispensing.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 5 · QUALITY CONTROL ================= -->
+
+<section class="slide" data-sec="qc" data-title="QC: three levels of protection">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Quality control testing</div>
+   <h2>Quality is checked <span class="ac">at three levels.</span></h2>
+   <div class="stack stagger">
+     <div class="layer"><div class="ln">1</div><div><b>In the factory: Good Manufacturing Practice (GMP)</b>Malaysia joined the Pharmaceutical Inspection Co-operation Scheme (PIC/S) in January 2002, so local manufacturers are inspected against international GMP standards. <span class="cite">(<a href="https://picscheme.org/en/members" target="_blank" rel="noopener">PIC/S</a>)</span></div></div>
+     <div class="layer"><div class="ln">2</div><div><b>At registration: the specification</b>For a new product, NPRA expects at least the tests and limits in the <b>British Pharmacopoeia (BP)</b> and/or <b>United States Pharmacopeia (USP)</b> monograph. Writing "as per pharmacopoeia" is not accepted; the method must be stated. <span class="cite">(<a href="https://www.npra.gov.my/images/2019/12/NCE/ScreeningPackage/GUIDANCE_FOR_REGISTRATION_APPLICATION_FOR_NEW_DRUG_PRODUCTS_AND_BIOLOGICS.pdf" target="_blank" rel="noopener">NPRA</a>)</span></div></div>
+     <div class="layer"><div class="ln">3</div><div><b>On the market: surveillance</b>NPRA samples and tests registered products, investigates complaints and orders recalls. This is how the 49 failures on page 1 were found.</div></div>
+   </div>
+   <button class="ph-open" data-umami-event="open-pharmacopoeia"><svg class="bk" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4.5 Q6.5 3 10 4.5 V16.5 Q6.5 15 3 16.5 Z M17 4.5 Q13.5 3 10 4.5 V16.5 Q13.5 15 17 16.5 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>What exactly is a pharmacopoeia? Read the explainer</button>
+   <p class="small">A <b>specification</b> is the list of tests, methods and limits a product must pass. A <b>pharmacopoeia</b> is an official book of standard tests and limits.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="During and after production">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Quality control testing</div>
+   <h2>Two moments to test: <span class="ac">during and after.</span></h2>
+   <div class="flow stagger">
+     <div class="node">Blend</div><span class="arr">→</span>
+     <div class="node">Compress<small>IPC at intervals</small></div><span class="arr">→</span>
+     <div class="node">Coat<small>IPC</small></div><span class="arr">→</span>
+     <div class="node">Pack</div><span class="arr">→</span>
+     <div class="node o">QC laboratory<small>full specification</small></div><span class="arr">→</span>
+     <div class="node g">Released</div>
+   </div>
+   <p><b>In-process control (IPC)</b> happens on the production floor. Operators check tablet weight, hardness, thickness and friability at regular intervals while the press runs. If results drift, they adjust the press straight away, before a whole batch is wasted.</p>
+   <p><b>Finished product testing</b> happens in the quality control laboratory after production. Samples from the batch are tested against every item in the specification. The batch is released for sale only if every result passes.</p>
+   <p class="small">The limits on the following pages come from the pharmacopoeia texts cited on each page. Always check the current edition and the product's own monograph.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Map of QC tests">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Quality control testing</div>
+   <h2>Three families of tests, <span class="ac">three questions.</span></h2>
+   <div class="map3 stagger">
+     <div class="box"><h3>Physical</h3><div class="q">Is every unit alike, and does it behave correctly?</div><ul><li>Uniformity of mass</li><li>Hardness and friability</li><li>Disintegration</li><li>Dissolution</li></ul></div>
+     <div class="box"><h3>Chemical</h3><div class="q">Is it the right drug, in the right amount, and pure enough?</div><ul><li>Identity and assay</li><li>Content uniformity</li><li>Impurities</li><li>Residual solvents, water</li></ul></div>
+     <div class="box"><h3>Microbial</h3><div class="q">Is it clean enough to swallow safely?</div><ul><li>Total aerobic count</li><li>Yeasts and moulds</li><li>Absence of <i>E. coli</i></li></ul></div>
+   </div>
+   <div class="callout">Disintegration and dissolution directly test steps 1 and 2 of the tablet's journey: does it break up, and does the drug dissolve?</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Uniformity of mass: method">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="chart-uom" viewBox="0 0 400 226" role="img" aria-label="Simulated weights of 20 tablets plotted against the 5 percent and 10 percent limits"></svg>
+   <div style="display:flex;justify-content:space-between;align-items:center;gap:.5em;margin-top:.3em;font-size:.9em">
+     <span id="uom-verdict" style="font-weight:600"></span>
+     <button class="btn" id="uom-sim">Weigh another batch</button>
+   </div>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Physical test · uniformity of mass</div>
+   <h2>Weigh 20 tablets. <span class="ac">How far can they stray?</span></h2>
+   <p>Take <b>20 units at random</b>, weigh each one, and calculate the <b>average (mean) mass</b>. Then compare every unit with that average. <span class="cite">(<a href="https://www.drugfuture.com/Pharmacopoeia/EP7/DATA/20905E.PDF" target="_blank" rel="noopener">Ph. Eur. 2.9.5</a>)</span></p>
+   <div class="callout"><b>Pass rule:</b> no more than <b>2</b> of the 20 units may differ from the average by more than the limit, and <b>none</b> may differ by more than <b>twice</b> the limit.</div>
+   <p class="small">The chart shows tablets averaging about 250 mg, where the limit is 5%. Green band: within 5%. Dashed red lines: twice the limit (10%). Press the button to simulate new batches; the data are made up.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Uniformity of mass: limits">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Physical test · uniformity of mass</div>
+   <h2>The limit depends on <span class="ac">how heavy the unit is.</span></h2>
+   <p>Lighter units are allowed a larger percentage deviation, because the same small weighing error is a bigger share of a small tablet.</p>
+   <table class="data-table">
+     <tr><th>Dosage form</th><th>Average mass</th><th>Limit</th></tr>
+     <tr><td rowspan="3">Tablets (uncoated and film-coated)</td><td>80 mg or less</td><td>10%</td></tr>
+     <tr><td>More than 80 mg, less than 250 mg</td><td>7.5%</td></tr>
+     <tr><td>250 mg or more</td><td>5%</td></tr>
+     <tr><td rowspan="2">Capsules</td><td>Less than 300 mg</td><td>10%</td></tr>
+     <tr><td>300 mg or more</td><td>7.5%</td></tr>
+   </table>
+   <div class="calc">
+     <div class="calc-row">
+       <label>Dosage form<select id="uom-form"><option value="tab">Tablet</option><option value="cap">Capsule</option></select></label>
+       <label>Average mass (mg)<input id="uom-mass" type="number" inputmode="decimal" value="200" min="1"></label>
+     </div>
+     <div class="calc-out" id="uom-out"></div>
+   </div>
+   <p class="cite"><a href="https://www.drugfuture.com/Pharmacopoeia/EP7/DATA/20905E.PDF" target="_blank" rel="noopener">Ph. Eur. 2.9.5</a></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Content uniformity: when needed">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 200" role="img" aria-label="Two tablets of equal weight, one containing much less drug than the other">
+    <ellipse class="fgr" cx="110" cy="96" rx="78" ry="38"/><ellipse class="ln" cx="110" cy="92" rx="78" ry="38"/>
+    <ellipse class="fgr" cx="290" cy="96" rx="78" ry="38"/><ellipse class="ln" cx="290" cy="92" rx="78" ry="38"/>
+    <g class="stagger">
+     <circle class="frs" cx="80" cy="80" r="6"/><circle class="frs" cx="104" cy="72" r="6"/><circle class="frs" cx="130" cy="82" r="6"/><circle class="frs" cx="92" cy="104" r="6"/><circle class="frs" cx="120" cy="106" r="6"/><circle class="frs" cx="146" cy="96" r="6"/>
+     <circle class="frs" cx="282" cy="90" r="6"/><circle class="frs" cx="306" cy="98" r="6"/>
+    </g>
+    <text class="tx b mid" x="110" y="160">250 mg tablet</text>
+    <text class="tx s mid" x="110" y="176">drug on target</text>
+    <text class="tx b mid" x="290" y="160">250 mg tablet</text>
+    <text class="tx r mid" x="290" y="176">drug too low</text>
+    <circle class="frs" cx="146" cy="24" r="5"/><text class="tx s" x="156" y="28">= drug particles</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Chemical test · content uniformity</div>
+   <h2>Same weight <span class="ac">does not mean same dose.</span></h2>
+   <p>Weighing only works as a check on dose when the drug makes up a large part of each unit. If the drug is a tiny fraction of the tablet, it may be spread unevenly through the blend, so two tablets can weigh the same yet contain different amounts of drug. Then the drug in each unit must be measured directly.</p>
+   <div class="calc">
+     <div class="calc-row">
+       <label>Drug per unit (mg)<input id="cu-drug" type="number" inputmode="decimal" value="10"></label>
+       <label>Unit mass (mg)<input id="cu-unit" type="number" inputmode="decimal" value="200"></label>
+     </div>
+     <div class="calc-out" id="cu-out"></div>
+   </div>
+   <p class="small">The <b>25/25 rule</b> applies to hard capsules and uncoated or film-coated tablets; other dosage forms need content uniformity. <span class="cite">(<a href="https://drugfuture.com/Pharmacopoeia/usp38/data/v38332/usp38nf33s2_c905.html" target="_blank" rel="noopener">USP &lt;905&gt;</a>)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Content uniformity: method">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Chemical test · content uniformity</div>
+   <h2>One number decides: <span class="ac">the acceptance value.</span></h2>
+   <div class="flow stagger">
+     <div class="node">Assay 10 units one by one<small>usually by HPLC</small></div><span class="arr">→</span>
+     <div class="node o">Is AV ≤ 15.0?</div><span class="arr">→</span>
+     <div class="node g">Yes: pass</div>
+   </div>
+   <div class="flow stagger">
+     <div class="node o">No</div><span class="arr">→</span>
+     <div class="node">Assay 20 more units</div><span class="arr">→</span>
+     <div class="node">All 30: AV ≤ 15.0, and every unit within 75–125%?</div><span class="arr">→</span>
+     <div class="node g">Pass</div><span style="color:var(--muted)">or</span><div class="node r">Fail</div>
+   </div>
+   <p>The <b>acceptance value (AV)</b> is calculated from the results and combines two things: how far the <b>average</b> is from the target amount, and how <b>spread out</b> the individual units are. A batch with a perfect average can still fail if some units are very high and others very low, because each patient takes one unit, not the average. <span class="cite">(<a href="https://drugfuture.com/Pharmacopoeia/usp38/data/v38332/usp38nf33s2_c905.html" target="_blank" rel="noopener">USP &lt;905&gt;</a>)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Hardness">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Physical test · hardness</div>
+   <h2>Strong enough to survive, <span class="ac">weak enough to break up.</span></h2>
+   <p><b>Hardness</b>, properly called <b>breaking force</b>, is the force needed to crush a tablet between two jaws, usually measured in newtons (N). There is no single correct value: each product has its own target range, set during development.</p>
+   <p>Move the slider to see why a range is needed.</p>
+   <input type="range" min="1" max="5" step="1" value="3" class="range" id="hard-r" aria-label="Tablet hardness">
+   <div class="scale-lbl"><span>Too soft</span><span>Target range</span><span>Too hard</span></div>
+   <div class="calc-out" id="hard-out" style="margin-top:.5em"></div>
+   <p class="small" style="margin-top:.5em">Hardness is set mainly by the compression force in step 3 of the press cycle, which is why it is checked often during production.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Friability">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 220" role="img" aria-label="Friability drum: tablets tumble inside a rotating drum with a curved baffle">
+    <circle class="fgr" cx="200" cy="112" r="88"/>
+    <circle class="ln" cx="200" cy="112" r="88"/>
+    <g class="spin" style="transform-origin:200px 112px"><path class="ln" d="M200 112 C 220 82 250 62 284 86" style="stroke-width:2.5"/><circle class="fk" cx="200" cy="112" r="5"/></g>
+    <g class="bounce"><ellipse class="fg ln g" cx="170" cy="182" rx="12" ry="6"/><ellipse class="fg ln g" cx="200" cy="188" rx="12" ry="6"/><ellipse class="fg ln g" cx="232" cy="180" rx="12" ry="6"/></g>
+    <g class="bounce" style="animation-delay:.4s"><ellipse class="fg ln g" cx="186" cy="166" rx="12" ry="6"/><ellipse class="fg ln g" cx="216" cy="164" rx="12" ry="6"/></g>
+    <path class="ln o" d="M124 42 A100 100 0 0 1 196 14" marker-end="url(#ar-o)"/>
+    <text class="tx o" x="34" y="48">100 turns</text>
+    <text class="tx o" x="34" y="64">at 25 rpm</text>
+    <text class="tx s" x="296" y="42">curved baffle lifts</text>
+    <text class="tx s" x="296" y="56">and drops tablets</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Physical test · friability</div>
+   <h2>Tumble, weigh, <span class="ac">and measure what is lost.</span></h2>
+   <p><b>Friability</b> tests whether tablets chip or wear away when knocked about, as they are during packing and transport. <span class="cite">(<a href="https://www.drugfuture.com/Pharmacopoeia/usp38/data/v38332/usp38nf33s2_c1216.html" target="_blank" rel="noopener">USP &lt;1216&gt;</a>)</span></p>
+   <ol class="steps">
+     <li><span class="n">1</span><span>Take whole tablets totalling about <b>6.5 g</b> (if each weighs 650 mg or less), or <b>10 tablets</b> (if heavier). Remove loose dust and weigh.</span></li>
+     <li><span class="n">2</span><span>Rotate them in the drum <b>100 times at 25 rpm</b>.</span></li>
+     <li><span class="n">3</span><span>Remove dust, weigh again and calculate the percentage weight lost.</span></li>
+   </ol>
+   <div class="callout"><b>Pass:</b> mean weight loss of <b>1.0% or less</b> for most products, with no obviously cracked or broken tablets. If the result is unclear, repeat twice more and use the mean of three runs.</div>
+   <button class="vbtn" data-video="friability" data-umami-event="video-friability"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 6.5 L14 10 L8 13.5 Z" fill="currentColor"/></svg>Watch a friability test</button>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Friability calculator">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Physical test · friability · try it</div>
+   <h2>Work it out: <span class="ac">pass or fail?</span></h2>
+   <p>Friability is expressed as the percentage of the starting weight that was lost:</p>
+   <div class="callout note" style="font-weight:600;color:var(--ink)">Loss (%) = (initial weight − final weight) ÷ initial weight × 100</div>
+   <div class="calc">
+     <div class="calc-row">
+       <label>Initial weight (g)<input id="fr-a" type="number" inputmode="decimal" step="0.001" value="6.512"></label>
+       <label>Final weight (g)<input id="fr-b" type="number" inputmode="decimal" step="0.001" value="6.471"></label>
+     </div>
+     <div class="calc-out" id="fr-out"></div>
+   </div>
+   <p class="small">Try changing the final weight to 6.420 g. Losing only about 0.05 g more turns a pass into a fail, which shows how sensitive the test is.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Disintegration: method">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 236" role="img" aria-label="Disintegration apparatus: a basket of six tubes moves up and down in a beaker of medium at 37 degrees Celsius">
+    <rect class="fgr ln" x="170" y="6" width="60" height="22" rx="4"/>
+    <text class="tx s mid" x="200" y="21">motor</text>
+    <path class="fb" d="M112 96 H288 V214 Q288 226 276 226 H124 Q112 226 112 214 Z"/>
+    <path class="ln" d="M112 60 V214 Q112 226 124 226 H276 Q288 226 288 214 V60"/>
+    <path class="ln b" d="M114 96 H286"/>
+    <g class="updown">
+      <path class="ln" d="M200 28 V96"/>
+      <rect class="fw ln" x="140" y="96" width="120" height="10" rx="2"/>
+      <rect class="fw ln" x="140" y="164" width="120" height="8" rx="2"/>
+      <path class="ln thin" d="M152 106 V164 M168 106 V164 M184 106 V164 M200 106 V164 M216 106 V164 M232 106 V164 M248 106 V164"/>
+      <ellipse class="fg ln g" cx="160" cy="157" rx="6" ry="3"/><ellipse class="fg ln g" cx="176" cy="157" rx="6" ry="3"/><ellipse class="fg ln g" cx="192" cy="157" rx="6" ry="3"/>
+      <ellipse class="fg ln g" cx="208" cy="157" rx="6" ry="3"/><ellipse class="fg ln g" cx="224" cy="157" rx="6" ry="3"/><ellipse class="fg ln g" cx="240" cy="157" rx="6" ry="3"/>
+    </g>
+    <text class="tx bl" x="296" y="112">medium</text>
+    <text class="tx bl" x="296" y="128">at 37 °C</text>
+    <text class="tx s" x="14" y="118">6 tubes,</text><text class="tx s" x="14" y="132">1 unit each</text>
+    <text class="tx s" x="14" y="182">mesh base</text>
+    <text class="tx o" x="244" y="50">moves up and down</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Physical test · disintegration · journey step 1</div>
+   <h2>How long <span class="ac">before it breaks up?</span></h2>
+   <p>Six units are placed one per tube in a basket with a mesh floor. The basket moves steadily up and down in a liquid <b>medium</b> (usually water) kept at body temperature, <b>37 °C</b>.</p>
+   <p>A unit counts as disintegrated when no firm core is left on the mesh; only soft remains or bits of shell or coating may stay behind. The test passes when <b>all six</b> units have disintegrated within the time limit for that dosage form.</p>
+   <p class="small">Passing shows the unit breaks up in time. It does not prove the drug dissolves; that needs the dissolution test.</p>
+   <button class="vbtn" data-video="disiCoated" data-umami-event="video-disintegration-coated"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 6.5 L14 10 L8 13.5 Z" fill="currentColor"/></svg>Watch: coated vs uncoated</button><button class="vbtn" data-video="disiDemo" data-umami-event="video-disintegration-demo"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 6.5 L14 10 L8 13.5 Z" fill="currentColor"/></svg>Watch: automated tester</button>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Disintegration: time limits">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="chart-dis" viewBox="0 0 400 226" role="img" aria-label="Bar chart of disintegration time limits in minutes by dosage form"></svg>
+   <figcaption>Time limits from the BP / Ph. Eur. Tablets and Capsules monographs.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Physical test · disintegration</div>
+   <h2>Different forms, <span class="ac">different deadlines.</span></h2>
+   <p>The time limit reflects how each form is designed to behave. Dispersible and effervescent tablets are meant to break up in a glass of water before they are taken, so they must work within minutes.</p>
+   <p>Coatings and capsule shells must dissolve before the contents can break up, so film-coated tablets and capsules are allowed <b>30 minutes</b>, compared with <b>15 minutes</b> for a plain, uncoated tablet.</p>
+   <p class="cite"><a href="https://www.drugfuture.com/Pharmacopoeia/BP2012/data/6433.html" target="_blank" rel="noopener">BP/Ph. Eur., Tablets</a>; <a href="https://drugfuture.com/Pharmacopoeia/BP2010/data/6267.html" target="_blank" rel="noopener">BP/Ph. Eur., Capsules</a></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Enteric tablets">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 200" role="img" aria-label="Two-stage enteric test: two hours in acid with no disintegration, then up to sixty minutes in pH 6.8 buffer to disintegrate">
+    <rect class="fr grow-x" x="20" y="70" width="238" height="56" rx="6" style="--d:.1s"/>
+    <rect class="fg grow-x" x="262" y="70" width="118" height="56" rx="6" style="--d:.9s"/>
+    <text class="tx r" x="32" y="94">Stage 1: 0.1 M HCl</text>
+    <text class="tx s" x="32" y="112">must NOT break up or crack</text>
+    <text class="tx g" x="272" y="94">Stage 2: pH 6.8</text>
+    <text class="tx s" x="272" y="112">must break up</text>
+    <path class="axis" d="M20 140 H380"/>
+    <path class="axis" d="M20 136 V144 M260 136 V144 M380 136 V144"/>
+    <text class="tx s" x="20" y="158">0</text><text class="tx s mid" x="260" y="158">2 h</text><text class="tx s end" x="380" y="158">+60 min</text>
+    <g class="fade" style="--d:.5s"><ellipse class="fw ln" cx="140" cy="40" rx="20" ry="9"/><ellipse class="ln b" cx="140" cy="40" rx="25" ry="13"/><text class="tx s mid" x="140" y="16">coat holds</text></g>
+    <g class="fade" style="--d:1.3s"><path class="ln g" d="M300 36 l10 -5 l5 8 l-9 4 z M322 46 l9 -3 l3 8 l-8 3 z M312 52 l6 0 l1 6 l-6 0z"/><text class="tx s mid" x="318" y="16">breaks up</text></g>
+    <text class="tx s" x="20" y="188">Stomach-like acid first, then intestine-like buffer</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Physical test · disintegration</div>
+   <h2>Enteric tablets <span class="ac">must pass two opposite tests.</span></h2>
+   <p>An enteric (gastro-resistant) coat is designed to survive stomach acid and dissolve only in the less acidic intestine. So the test checks both halves of that promise:</p>
+   <ol class="steps">
+     <li><span class="n">1</span><span><b>0.1 M hydrochloric acid for 2 hours</b> (mimicking the stomach): no tablet may disintegrate or crack.</span></li>
+     <li><span class="n">2</span><span><b>pH 6.8 phosphate buffer</b> (mimicking the intestine): the tablets must disintegrate within <b>60 minutes</b>.</span></li>
+   </ol>
+   <p class="small">Failing stage 1 means the drug could be released, or damaged, in the stomach. Failing stage 2 means it might never be released at all.</p>
+   <p class="cite"><a href="https://www.drugfuture.com/Pharmacopoeia/BP2012/data/6433.html" target="_blank" rel="noopener">BP/Ph. Eur., Tablets</a></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Dissolution: method">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="chart-diss" viewBox="0 0 400 248" role="img" aria-label="Illustrative dissolution curves: batch A passes the Q plus 5 percent level at 30 minutes, batch B does not"></svg>
+   <figcaption>Illustrative curves, with Q = 80% at 30 minutes.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Physical test · dissolution · journey step 2</div>
+   <h2>Breaking up is not enough. <span class="ac">The drug must dissolve.</span></h2>
+   <p>A tablet can pass disintegration while its drug still dissolves too slowly. The <b>dissolution test</b> measures how much of the drug has dissolved after a set time. <span class="cite">(<a href="https://www.drugfuture.com/Pharmacopoeia/usp38/data/v38332/usp38nf33s2_c711.html" target="_blank" rel="noopener">USP &lt;711&gt;</a>)</span></p>
+   <p>Each unit sits in its own vessel of medium at 37 °C, stirred by a rotating <b>basket</b> (Apparatus 1) or <b>paddle</b> (Apparatus 2). Samples of the medium are taken at set times and analysed for drug.</p>
+   <p>The product's monograph sets <b>Q</b>: the percentage of the labelled dose that must be dissolved by the test time (see a real example in the <button class="ph-open" data-step="3" style="padding:.1em .6em;margin:0;font-size:.85em">USP monograph</button>). In the chart, batch A clears the S1 line at 30 minutes; batch B dissolves too slowly.</p>
+   <button class="vbtn" data-video="dissolution" data-umami-event="video-dissolution"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 6.5 L14 10 L8 13.5 Z" fill="currentColor"/></svg>Watch a dissolution test explained</button>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Dissolution: stages">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Physical test · dissolution</div>
+   <h2>Up to three stages, <span class="ac">not one chance.</span></h2>
+   <p>For immediate-release products, testing moves on to the next stage only if the current stage is not passed. <span class="cite">(<a href="https://www.drugfuture.com/Pharmacopoeia/usp38/data/v38332/usp38nf33s2_c711.html" target="_blank" rel="noopener">USP &lt;711&gt;</a>)</span></p>
+   <table class="data-table">
+     <tr><th>Stage</th><th>Units</th><th>To pass</th></tr>
+     <tr><td>S1</td><td>6</td><td>Every unit dissolves at least Q + 5%</td></tr>
+     <tr><td>S2</td><td>6 more (12 total)</td><td>Average of 12 is at least Q, and no unit is below Q − 15%</td></tr>
+     <tr><td>S3</td><td>12 more (24 total)</td><td>Average of 24 is at least Q, no more than 2 units below Q − 15%, and no unit below Q − 25%</td></tr>
+   </table>
+   <p>Example with Q = 80%: at S1, every unit must reach <b>85%</b>. At S2, the average of 12 must reach <b>80%</b> and no unit may be below <b>65%</b>.</p>
+   <div class="callout warn"><b>Common mistake:</b> not passing S1 does <b>not</b> mean the batch has failed. It means you continue to S2. The batch fails only if it does not pass S3.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Identity, assay, impurities">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 226" role="img" aria-label="Chromatogram with one large drug peak and two small impurity peaks">
+    <path class="axis" d="M40 20 V190 H380"/>
+    <text class="tx s" x="44" y="14">detector signal</text>
+    <text class="tx s end" x="380" y="208">time (min) →</text>
+    <path class="ln draw" pathLength="1" d="M40 186 L88 186 Q100 154 112 186 L182 186 Q200 -94 218 186 L278 186 Q290 140 302 186 L378 186"/>
+    <path class="ln b draw" pathLength="1" d="M182 186 Q200 -94 218 186" style="--d:.9s;stroke-width:2.6"/>
+    <path class="ln r draw" pathLength="1" d="M88 186 Q100 154 112 186" style="--d:1.1s;stroke-width:2.6"/>
+    <path class="ln r draw" pathLength="1" d="M278 186 Q290 140 302 186" style="--d:1.1s;stroke-width:2.6"/>
+    <text class="tx bl fade" x="224" y="58" style="--d:1.3s">drug peak</text>
+    <text class="tx s fade" x="224" y="74" style="--d:1.3s">size → assay</text>
+    <text class="tx s fade" x="224" y="90" style="--d:1.3s">position → identity</text>
+    <text class="tx r mid fade" x="100" y="146" style="--d:1.5s">impurity</text>
+    <text class="tx r mid fade" x="300" y="132" style="--d:1.5s">breakdown product</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Chemical tests</div>
+   <h2>The right drug, the right amount, <span class="ac">and little else.</span></h2>
+   <p>Most chemical tests use <b>high-performance liquid chromatography (HPLC)</b>, which separates the substances in a sample so each appears as its own peak.</p>
+   <ol class="steps">
+     <li><span class="n">1</span><span><b>Identity:</b> the drug peak must appear at the same time as a reference standard of the drug. Infrared spectroscopy is another common identity test.</span></li>
+     <li><span class="n">2</span><span><b>Assay:</b> the size of the drug peak shows how much drug is present, compared with the amount stated on the label.</span></li>
+     <li><span class="n">3</span><span><b>Related substances:</b> small extra peaks are impurities, such as leftovers from making the drug or products of it breaking down. Each must stay below its limit.</span></li>
+   </ol>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Residual solvents">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="chart-solv" viewBox="0 0 400 196" role="img" aria-label="Residual solvent limits on a logarithmic scale: benzene 2 ppm, methanol 3000 ppm, class 3 default 5000 ppm"></svg>
+   <figcaption>Limits in parts per million (ppm) on a logarithmic scale, where each gridline is ten times the last.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Chemical tests · residual solvents</div>
+   <h2>Solvents <span class="ac">left behind.</span></h2>
+   <p>Organic solvents are used to make drugs and coatings, and traces can remain in the final product. The international guideline <b>ICH Q3C</b> sorts them into three classes by how harmful they are: <span class="cite">(<a href="https://www.tga.gov.au/sites/default/files/ichq3cr5.pdf" target="_blank" rel="noopener">ICH Q3C(R5)</a>)</span></p>
+   <ul class="steps">
+     <li><span class="n">1</span><span><b>Class 1, avoid:</b> known or suspected carcinogens or environmental hazards, e.g. benzene (2 ppm).</span></li>
+     <li><span class="n">2</span><span><b>Class 2, limit:</b> significant toxicity, e.g. methanol (3000 ppm).</span></li>
+     <li><span class="n">3</span><span><b>Class 3, low toxic potential:</b> e.g. ethanol; up to 5000 ppm (0.5%) is accepted without justification.</span></li>
+   </ul>
+   <p class="small">Residual solvents are commonly measured by <b>headspace gas chromatography (GC)</b>: the sample is warmed in a sealed vial, and the vapour above it is injected into the GC.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Water content">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Chemical tests · water content</div>
+   <h2>A silent enemy: <span class="ac">moisture.</span></h2>
+   <p>Too much water can speed up chemical breakdown of the drug, soften tablets, and encourage microbial growth, so many specifications limit water content. Two methods are common, and they measure slightly different things:</p>
+   <div class="tiles stagger">
+     <div class="tile"><div class="n">Karl Fischer titration</div><div class="l">Uses a chemical reaction that is specific to water. It measures <b>water only</b>, even in small amounts.</div></div>
+     <div class="tile"><div class="n">Loss on drying</div><div class="l">The sample is weighed, heated, and weighed again. It measures <b>everything that evaporates</b>: water and any other volatile substances.</div></div>
+   </div>
+   <div class="callout">If a product contains volatile ingredients other than water, loss on drying will overestimate the water content, so Karl Fischer is the better choice.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Microbial limits">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Microbiological tests</div>
+   <h2>Not sterile, <span class="ac">but clean enough.</span></h2>
+   <p>Unlike injections, tablets and capsules are not sterile, but microbes must be kept low. Results are counted as <b>colony-forming units (CFU)</b> per gram. Example limits for non-aqueous oral products: <span class="cite">(<a href="https://www.tga.gov.au/sites/default/files/microbiological-quality-medicinal-cannabis-products.pdf" target="_blank" rel="noopener">TGA, citing Ph. Eur.</a>)</span></p>
+   <table class="data-table">
+     <tr><th>Test</th><th>What it counts</th><th>Maximum</th></tr>
+     <tr><td>TAMC</td><td>Total aerobic microbial count: bacteria and fungi that grow in air</td><td>2000 CFU/g</td></tr>
+     <tr><td>TYMC</td><td>Total combined yeasts and moulds</td><td>200 CFU/g</td></tr>
+     <tr class="hl"><td><i>Escherichia coli</i></td><td>A marker of contamination of faecal origin</td><td>Absent in 1 g</td></tr>
+   </table>
+   <p class="small">Products made with plant-derived raw materials have different limits. Always use the product's own specification.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Capsule fill mass">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Physical test · capsules</div>
+   <h2>Capsules have a shell. <span class="ac">That changes the weighing.</span></h2>
+   <p>Shells vary in weight, so weighing whole capsules would hide differences in the fill. Instead, the uniformity of mass test measures each capsule's contents:</p>
+   <div class="eq stagger">
+     <div class="term"><svg viewBox="0 0 100 44" aria-hidden="true"><path class="fpow" d="M22 8 H62 V36 H22 A14 14 0 0 1 22 8 Z"/><path class="ln" d="M22 8 H62 V36 H22 A14 14 0 0 1 22 8 Z"/><path class="fg ln g" d="M54 6 H78 A16 16 0 0 1 78 38 H54 Z"/></svg>Full capsule (A)</div>
+     <div class="op">−</div>
+     <div class="term"><svg viewBox="0 0 100 44" aria-hidden="true"><path class="fw ln" d="M18 10 H46 V34 H18 A12 12 0 0 1 18 10 Z"/><path class="fg ln g" d="M60 8 H76 A14 14 0 0 1 76 36 H60 Z"/></svg>Empty shell (B)</div>
+     <div class="op">=</div>
+     <div class="term"><svg viewBox="0 0 100 44" aria-hidden="true"><path class="fpow" d="M20 38 Q50 4 80 38 Z"/></svg>Fill mass (A − B)</div>
+   </div>
+   <p>Weigh the intact capsule, open it without losing any shell, empty out the contents as completely as possible, and weigh the shell. Repeat for 20 capsules, then apply the limits for capsules. For <b>softgels</b>, the shell is washed with a suitable solvent and left until the solvent has evaporated before weighing. <span class="cite">(<a href="https://www.drugfuture.com/Pharmacopoeia/EP7/DATA/20905E.PDF" target="_blank" rel="noopener">Ph. Eur. 2.9.5</a>)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Softgel rupture test">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Physical test · softgels</div>
+   <h2>Softgels must <span class="ac">open in time.</span></h2>
+   <p>A softgel does not crumble like a tablet; its shell has to <b>rupture</b> to release the liquid fill. Open both sections below to continue.</p>
+   <div class="toggle-wrap">
+    <button class="toggle-btn"><span>How does the rupture test work?</span><span class="hint">Open</span></button>
+    <div class="toggle-body"><p>The USP describes this test for dietary supplement softgels. One softgel is placed in 500 mL of water and stirred with the paddle apparatus at 50 rpm. All softgels must rupture within <b>15 minutes</b>. If 1 or 2 take between 15 and 30 minutes, 12 more are tested, and the batch passes if no more than 2 of all 18 take longer than 15 minutes. <span class="cite">(<a href="https://drugfuture.com/Pharmacopoeia/usp38/data/v38332/usp38nf33s2_c2040.html" target="_blank" rel="noopener">USP &lt;2040&gt;</a>)</span></p></div>
+   </div>
+   <div class="toggle-wrap">
+    <button class="toggle-btn"><span>Why can gelatin shells become slow to open?</span><span class="hint">Open</span></button>
+    <div class="toggle-body"><p>Over time, gelatin molecules can bond to each other, which is called <b>cross-linking</b>. The shell then becomes tougher and slower to dissolve. For gelatin softgels that fail, the USP allows a retest with the enzyme pepsin added to the water, which can digest the cross-linked gelatin much as the stomach would. <span class="cite">(<a href="https://drugfuture.com/Pharmacopoeia/usp38/data/v38332/usp38nf33s2_c2040.html" target="_blank" rel="noopener">USP &lt;2040&gt;</a>)</span></p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="Activity: release the batch?">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Try it · made-up batch</div>
+   <h2>You are in the QC lab. <span class="ac">Can this batch be released?</span></h2>
+   <p class="small">Paracetamol 500 mg uncoated tablets. Tap each result to judge it, then make your decision.</p>
+   <div class="coa">
+    <button class="coa-row" data-res="pass" data-exp="<b>Pass.</b> The tablets match the description in the specification."><b>Appearance</b><span>White, round, no defects</span><span class="v">Tap</span></button>
+    <button class="coa-row" data-res="pass" data-exp="<b>Pass.</b> The limit is 5% because the average is over 250 mg. Up to 2 units may be outside 5%, as long as none is outside 10%."><b>Uniformity of mass</b><span>Average 600 mg; 1 unit outside 5%, within 10%</span><span class="v">Tap</span></button>
+    <button class="coa-row" data-res="fail" data-exp="<b>Fail.</b> The limit is 1.0%, and the test has already been repeated three times. These tablets may chip or crumble in the pack."><b>Friability</b><span>Mean of 3 runs: 1.4% loss</span><span class="v">Tap</span></button>
+    <button class="coa-row" data-res="pass" data-exp="<b>Pass.</b> Uncoated tablets must disintegrate within 15 minutes."><b>Disintegration</b><span>All 6 within 9 minutes</span><span class="v">Tap</span></button>
+    <button class="coa-row" data-res="next" data-exp="<b>Go to S2.</b> At S1 every unit must reach Q + 5% = 85%. One unit at 83% does not pass S1, but it is not a failure: test 6 more units."><b>Dissolution S1 (Q = 80%)</b><span>5 units 88–94%, 1 unit 83%</span><span class="v">Tap</span></button>
+    <button class="coa-row" data-res="pass" data-exp="<b>Pass.</b> Within the specification range (made-up limits for this exercise)."><b>Assay</b><span>99.2% of label (limits 95–105%)</span><span class="v">Tap</span></button>
+   </div>
+   <div id="coa-exp">The explanation for each result appears here.</div>
+   <div class="choice-set coa-decision" data-answer="hold">
+     <div class="choice-q">What should happen to this batch?</div>
+     <div class="choices">
+       <button class="choice" data-v="release">Release it</button>
+       <button class="choice" data-v="hold">Hold it and investigate</button>
+       <button class="choice" data-v="destroy">Destroy it immediately</button>
+     </div>
+     <div class="feedback">One out-of-specification (OOS) result means the batch cannot be released. But it is not destroyed straight away: the cause must be investigated first (was it a laboratory error, or a real problem at the press?), and the dissolution test still needs to continue to S2.</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qc" data-title="After it reaches the market">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="chart-npra" viewBox="0 0 400 196" role="img" aria-label="Bar chart of 888 complaints about registered products in 2025, by type"></svg>
+   <figcaption>Complaints about registered products received by NPRA, 2025.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Quality control testing</div>
+   <h2>Quality does not stop <span class="ac">at the factory gate.</span></h2>
+   <p>After release, NPRA's Surveillance and Complaints Section keeps watching registered products on the market. In 2025 it received <b>888 complaints</b>, most about product quality and packaging, and <b>30 registered products were recalled</b>, mainly for quality defects. <span class="cite">(<a href="https://npra.gov.my/index.php/en/component/content/article/225-english/1527870-surveillance-and-complaints-section.html" target="_blank" rel="noopener">NPRA</a>)</span></p>
+   <div class="callout">Pharmacy staff are often the first to notice tablets that crumble, capsules stuck together, or a change in colour or smell. Reporting it starts the investigation that protects other patients.</div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 6 · FUTURE ================= -->
+
+<section class="slide" data-sec="future" data-title="Continuous manufacturing">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Future of OSDs</div>
+   <h2>From batches <span class="ac">to a continuous flow.</span></h2>
+   <div class="lane"><div class="lname">Batch<small>today's usual method</small></div>
+     <div class="flow stagger"><div class="node">Blend batch</div><span class="arr">→</span><div class="node ghost">wait</div><span class="arr">→</span><div class="node">Compress batch</div><span class="arr">→</span><div class="node ghost">wait</div><span class="arr">→</span><div class="node o">Test at the end</div></div></div>
+   <div class="lane"><div class="lname">Continuous<small>non-stop line</small></div>
+     <div class="flow stagger"><div class="node">Feed</div><span class="arr">→</span><div class="node">Blend</div><span class="arr">→</span><div class="node">Compress</div><span class="arr">→</span><div class="node g">Sensors check quality throughout</div></div></div>
+   <p>In <b>continuous manufacturing</b>, materials enter one end of a connected line and tablets leave the other without stopping. Orkambi (Vertex) has been made this way since its FDA approval in 2015, and in 2016 the FDA allowed Prezista (Janssen) to become the first product to switch from batch to continuous production. <span class="cite">(<a href="https://www.raps.org/resource/fda-allows-first-switch-from-batch-to-continuous-m.html" target="_blank" rel="noopener">RAPS, 2016</a>)</span></p>
+   <p class="small">For quality control, this means quality has to be monitored while the line runs, not only tested at the end.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="future" data-title="3D-printed tablets">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 196" role="img" aria-label="A tablet built up in thin porous layers by a print head">
+    <rect class="fgr ln" x="170" y="10" width="60" height="30" rx="4"/>
+    <path class="ln" d="M200 40 V56 L194 64 H206 L200 56"/>
+    <g class="stagger">
+      <rect class="fg ln g" x="100" y="160" width="200" height="14" rx="3"/>
+      <rect class="fg ln g" x="100" y="144" width="200" height="14" rx="3"/>
+      <rect class="fg ln g" x="100" y="128" width="200" height="14" rx="3"/>
+      <rect class="fg ln g" x="100" y="112" width="200" height="14" rx="3"/>
+      <rect class="fg ln g" x="100" y="96" width="200" height="14" rx="3"/>
+    </g>
+    <g class="fade" style="--d:1s"><circle class="fw" cx="130" cy="120" r="3"/><circle class="fw" cx="170" cy="150" r="3"/><circle class="fw" cx="214" cy="104" r="3"/><circle class="fw" cx="250" cy="136" r="3"/><circle class="fw" cx="276" cy="166" r="3"/><circle class="fw" cx="150" cy="166" r="3"/></g>
+    <text class="tx o" x="240" y="30">built layer by layer</text>
+    <text class="tx s" x="308" y="136">porous structure</text>
+    <text class="tx s" x="308" y="150">lets water in fast</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Future of OSDs</div>
+   <h2>Tablets that <span class="ac">are printed.</span></h2>
+   <p>In 2015, <b>Spritam</b> (levetiracetam, for epilepsy) became the first 3D-printed drug product approved by the FDA. It is built up in thin layers into a porous tablet that breaks up rapidly with a sip of liquid, even at doses up to 1000 mg. <span class="cite">(<a href="https://pharmtech.com/view/fda-approves-first-3d-printed-drug-product" target="_blank" rel="noopener">PharmTech, 2015</a>)</span></p>
+   <p>Technologies change, but the quality questions stay the same: is every unit alike, does it contain the right drug in the right amount, and does it release that drug as intended?</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="end" data-title="Quick quiz">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check your understanding</div>
+   <h2>Five questions, <span class="ac">no marks recorded.</span></h2>
+   <div class="stepper quiz">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 5</div>
+      <div class="choice-q">An uncoated tablet has an average mass of 200 mg. What is its uniformity of mass limit?</div>
+      <div class="choices"><button class="choice" data-v="a">5%</button><button class="choice" data-v="b">7.5%</button><button class="choice" data-v="c">10%</button></div>
+      <div class="feedback">200 mg is more than 80 mg and less than 250 mg, so the limit is 7.5%.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 5</div>
+      <div class="choice-q">For most products, friability passes if the mean weight loss is no more than:</div>
+      <div class="choices"><button class="choice" data-v="a">1.0%</button><button class="choice" data-v="b">2.5%</button><button class="choice" data-v="c">5.0%</button></div>
+      <div class="feedback">1.0%, with no obviously cracked or broken tablets.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 3 OF 5</div>
+      <div class="choice-q">At dissolution stage S1, one unit is below Q + 5%. What happens next?</div>
+      <div class="choices"><button class="choice" data-v="a">The batch fails</button><button class="choice" data-v="b">Ignore that unit</button><button class="choice" data-v="c">Continue to S2</button></div>
+      <div class="feedback">Continue to S2: test 6 more units. The average of 12 must be at least Q, with no unit below Q − 15%.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 4 OF 5</div>
+      <div class="choice-q">Benzene is a Class 1 residual solvent. This means it should be:</div>
+      <div class="choices"><button class="choice" data-v="a">Avoided</button><button class="choice" data-v="b">Merely limited</button><button class="choice" data-v="c">Accepted up to 5000 ppm</button></div>
+      <div class="feedback">Class 1 solvents are known or suspected carcinogens or environmental hazards and should be avoided; benzene is limited to 2 ppm.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 5 OF 5</div>
+      <div class="choice-q">A gastro-resistant tablet spends 2 hours in 0.1 M HCl. What is the correct result?</div>
+      <div class="choices"><button class="choice" data-v="a">Fully broken up</button><button class="choice" data-v="b">No breaking up or cracking</button><button class="choice" data-v="c">Half dissolved</button></div>
+      <div class="feedback">The enteric coat must resist acid. The tablet should break up only in the pH 6.8 buffer stage.</div>
+    </div>
+    <div class="score" id="quiz-score"></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="end" data-title="Summary">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Take home</div>
+   <h2>Every unit, <span class="ac">every time.</span></h2>
+   <div class="cards stagger">
+     <div class="card"><div class="cn">1</div><div>An oral solid dose must disintegrate, then dissolve, before the drug can be absorbed. Disintegration and dissolution tests check those two steps.</div></div>
+     <div class="card"><div class="cn">2</div><div>Excipients make tablets possible, and the manufacturing route is chosen by how the powder flows and whether the drug tolerates water and heat.</div></div>
+     <div class="card"><div class="cn">3</div><div>Physical, chemical and microbial tests together decide whether a batch is released. A single out-of-specification result stops release until it is investigated.</div></div>
+     <div class="card"><div class="cn">4</div><div>In Malaysia, factories follow PIC/S GMP, specifications build on BP/USP, and NPRA keeps testing products after they reach the market.</div></div>
+   </div>
+   <div style="margin:.6em 0"><button class="btn solid" id="btn-refs" data-umami-event="open-sources">Sources and further reading (15) →</button></div>
+   <div class="madeby">
+     <p><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Batches, scenarios and charts marked as illustrative are made up. Not a substitute for the current pharmacopoeia or a product's own specification.</p>
+     <div class="socials">
+       <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Website</a>
+       <a href="https://www.linkedin.com/in/aufbinali/" target="_blank" rel="noopener" data-umami-event="link-linkedin">LinkedIn</a>
+       <a href="https://aufthority.substack.com/" target="_blank" rel="noopener" data-umami-event="link-substack">Substack</a>
+       <a href="https://www.instagram.com/aufthority/" target="_blank" rel="noopener" data-umami-event="link-instagram">Instagram</a>
+       <a href="https://www.tiktok.com/@aufthority" target="_blank" rel="noopener" data-umami-event="link-tiktok">TikTok</a>
+       <a href="https://www.threads.com/@aufthority" target="_blank" rel="noopener" data-umami-event="link-threads">Threads</a>
+       <a href="mailto:the.aufthority@gmail.com" data-umami-event="link-email">the.aufthority@gmail.com</a>
+     </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+  </div><!-- /stage -->
+
+  <div id="bottom">
+    <div id="gate-hint"></div>
+    <div id="nav-wrap">
+      <button id="btn-back" class="nav-btn" disabled data-umami-event="nav-back">← Back</button>
+      <button id="btn-next" class="nav-btn" data-umami-event="nav-next">Next →</button>
+    </div>
+    <footer>Informed decisions, better health.</footer>
+  </div>
+</div>
+
+<div class="overlay" id="toc-overlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <div class="panel-head"><h3>Contents</h3><button class="icon-btn close-ov">Close</button></div>
+    <p class="toc-note">You can jump to any page from here, even if a page's questions are not finished.</p>
+    <button class="ph-open" data-umami-event="open-pharmacopoeia"><svg class="bk" viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4.5 Q6.5 3 10 4.5 V16.5 Q6.5 15 3 16.5 Z M17 4.5 Q13.5 3 10 4.5 V16.5 Q13.5 15 17 16.5 Z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg>Explainer: what is a pharmacopoeia?</button>
+    <ul class="toc" id="toc-list"></ul>
+  </div>
+</div>
+
+<div class="overlay" id="refs-overlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <div class="panel-head"><h3>Sources and further reading</h3><button class="icon-btn close-ov">Close</button></div>
+    <ol class="refs">
+      <li>British Pharmacopoeia Commission. (2010). Capsules [Ph. Eur. monograph 0016]. <i>British Pharmacopoeia 2010</i>, Vol. III. <a href="https://drugfuture.com/Pharmacopoeia/BP2010/data/6267.html" target="_blank" rel="noopener">drugfuture.com</a></li>
+      <li>British Pharmacopoeia Commission. (2012). Tablets [Ph. Eur. monograph 0478]. <i>British Pharmacopoeia 2012</i>, Vol. III. <a href="https://www.drugfuture.com/Pharmacopoeia/BP2012/data/6433.html" target="_blank" rel="noopener">drugfuture.com</a></li>
+      <li>Capsule (pharmacy). (n.d.). In <i>Wikipedia</i>. Retrieved October 14, 2026, from <a href="https://en.wikipedia.org/wiki/Capsule_(pharmacy)" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Capsule_(pharmacy)</a></li>
+      <li>European Pharmacopoeia. (2011). 2.9.5. Uniformity of mass of single-dose preparations (7th ed.). <a href="https://www.drugfuture.com/Pharmacopoeia/EP7/DATA/20905E.PDF" target="_blank" rel="noopener">drugfuture.com (PDF)</a></li>
+      <li>International Council for Harmonisation. (2011). <i>Impurities: Guideline for residual solvents Q3C(R5)</i>. <a href="https://www.tga.gov.au/sites/default/files/ichq3cr5.pdf" target="_blank" rel="noopener">tga.gov.au (PDF)</a></li>
+      <li>National Pharmaceutical Regulatory Agency. (n.d.). <i>Guidance for registration application for new drug products and biologics</i>. Ministry of Health Malaysia. <a href="https://www.npra.gov.my/images/2019/12/NCE/ScreeningPackage/GUIDANCE_FOR_REGISTRATION_APPLICATION_FOR_NEW_DRUG_PRODUCTS_AND_BIOLOGICS.pdf" target="_blank" rel="noopener">npra.gov.my (PDF)</a></li>
+      <li>National Pharmaceutical Regulatory Agency. (n.d.). <i>Surveillance and Complaints Section</i>. Retrieved October 14, 2026, from <a href="https://npra.gov.my/index.php/en/component/content/article/225-english/1527870-surveillance-and-complaints-section.html" target="_blank" rel="noopener">npra.gov.my</a></li>
+      <li>Pharmaceutical Inspection Co-operation Scheme. (n.d.). <i>Members</i>. Retrieved October 14, 2026, from <a href="https://picscheme.org/en/members" target="_blank" rel="noopener">picscheme.org</a></li>
+      <li>PharmTech. (2015, August 3). FDA approves first 3D-printed drug product. <a href="https://pharmtech.com/view/fda-approves-first-3d-printed-drug-product" target="_blank" rel="noopener">pharmtech.com</a></li>
+      <li>Regulatory Affairs Professionals Society. (2016, April 12). FDA allows first switch from batch to continuous manufacturing. <a href="https://www.raps.org/resource/fda-allows-first-switch-from-batch-to-continuous-m.html" target="_blank" rel="noopener">raps.org</a></li>
+      <li>Tablet (pharmacy). (n.d.). In <i>Wikipedia</i>. Retrieved October 14, 2026, from <a href="https://en.wikipedia.org/wiki/Tablet_(pharmacy)" target="_blank" rel="noopener">https://en.wikipedia.org/wiki/Tablet_(pharmacy)</a></li>
+      <li>Therapeutic Goods Administration. (n.d.). <i>Microbiological quality of medicinal cannabis products</i> [cites Ph. Eur. limits for non-aqueous oral preparations]. <a href="https://www.tga.gov.au/sites/default/files/microbiological-quality-medicinal-cannabis-products.pdf" target="_blank" rel="noopener">tga.gov.au (PDF)</a></li>
+      <li>United States Pharmacopeia. (2015). &lt;711&gt; Dissolution. <i>USP 38–NF 33</i>. <a href="https://www.drugfuture.com/Pharmacopoeia/usp38/data/v38332/usp38nf33s2_c711.html" target="_blank" rel="noopener">drugfuture.com</a></li>
+      <li>United States Pharmacopeia. (2015). &lt;905&gt; Uniformity of dosage units; &lt;1216&gt; Tablet friability. <i>USP 38–NF 33</i>. <a href="https://drugfuture.com/Pharmacopoeia/usp38/data/v38332/usp38nf33s2_c905.html" target="_blank" rel="noopener">&lt;905&gt;</a> · <a href="https://www.drugfuture.com/Pharmacopoeia/usp38/data/v38332/usp38nf33s2_c1216.html" target="_blank" rel="noopener">&lt;1216&gt;</a></li>
+      <li>United States Pharmacopeia. (2015). &lt;2040&gt; Disintegration and dissolution of dietary supplements. <i>USP 38–NF 33</i>. <a href="https://drugfuture.com/Pharmacopoeia/usp38/data/v38332/usp38nf33s2_c2040.html" target="_blank" rel="noopener">drugfuture.com</a></li>
+    </ol>
+  </div>
+</div>
+
+<div class="overlay" id="ph-overlay" role="dialog" aria-modal="true" aria-label="Explainer: what is a pharmacopoeia">
+  <div class="ph-panel">
+    <div class="ph-head"><span class="ph-title">Explainer · Pharmacopoeia</span><button class="icon-btn close-ov">Close</button></div>
+    <div class="ph-body">
+      <div class="ph-step active" data-n="1"><div class="ph-in">
+        <figure class="ph-fig"><img src="media/bp-2020-volumes.jpg" alt="The British Pharmacopoeia 2020 as a boxed set of volumes" loading="lazy"><figcaption>Image: British Pharmacopoeia 2020 (MHRA).</figcaption></figure>
+        <div class="ph-txt"><div class="eyebrow">Explainer · 1 of 7</div><h2>What is a <span class="ac">pharmacopoeia?</span></h2><p>A pharmacopoeia is an official book of <b>quality standards for medicines</b>. It says what a medicine must contain, how pure it must be, and exactly how to test it.</p><p>It holds two kinds of text: <b>monographs</b>, one for each drug substance or product, and <b>general methods</b>, the shared test procedures that monographs refer to.</p><p>Major examples are the British Pharmacopoeia (BP), European Pharmacopoeia (Ph. Eur.), United States Pharmacopeia (USP), Japanese Pharmacopoeia (JP) and the WHO's International Pharmacopoeia (Ph. Int.). For product registration, NPRA accepts specifications set according to the BP, Ph. Eur., Ph. Int., USP or JP. <span class="cite">(<a href="https://www.npra.gov.my/images/2019/12/NCE/ScreeningPackage/GUIDANCE_FOR_REGISTRATION_APPLICATION_FOR_NEW_DRUG_PRODUCTS_AND_BIOLOGICS.pdf" target="_blank" rel="noopener">NPRA</a>)</span></p></div>
+      </div></div>
+      <div class="ph-step" data-n="2"><div class="ph-in">
+        <figure class="ph-fig"><img src="media/pheur-paracetamol.jpg" alt="Opening of the European Pharmacopoeia monograph for paracetamol" loading="lazy"><figcaption>Excerpt: European Pharmacopoeia 6.0, Paracetamol monograph (EDQM).</figcaption></figure>
+        <div class="ph-txt"><div class="eyebrow">Explainer · 2 of 7</div><h2>Anatomy of a <span class="ac">monograph.</span></h2><p>Every monograph follows the same order. This one is for <b>paracetamol</b>, the raw drug substance:</p><ul class="ph-list"><li><b>Definition:</b> what it is, and how much drug it must contain (here 99.0–101.0%, on the dried substance).</li><li><b>Characters:</b> appearance and solubility, e.g. a white crystalline powder.</li><li><b>Identification:</b> tests that prove it is really paracetamol, such as infrared spectroscopy or melting point.</li><li><b>Tests:</b> purity checks, such as related substances (impurities) and loss on drying.</li><li><b>Assay:</b> the method that measures exactly how much drug is present.</li></ul></div>
+      </div></div>
+      <div class="ph-step" data-n="3"><div class="ph-in">
+        <figure class="ph-fig"><img src="media/usp-tablets-monograph.jpg" alt="Opening of the USP monograph for Acetaminophen Tablets" loading="lazy"><figcaption>Excerpt: USP 39, Acetaminophen Tablets monograph (USP).</figcaption></figure>
+        <div class="ph-txt"><div class="eyebrow">Explainer · 3 of 7</div><h2>The tablet gets <span class="ac">its own monograph.</span></h2><p>Acetaminophen is the US name for paracetamol. The USP has one monograph for the <b>substance</b> and a separate one for the finished <b>tablets</b>.</p><p>Notice the definition: the tablets must contain <b>not less than 90.0% and not more than 110.0%</b> of the labelled amount. For the pure substance, the USP limit is much tighter: 98.0–102.0%.</p><p>Why wider for tablets? A finished product passes through blending, compression and storage, so small, controlled variation is expected. That is exactly why the tablet tests in this course exist.</p></div>
+      </div></div>
+      <div class="ph-step" data-n="4"><div class="ph-in">
+        <figure class="ph-fig"><img src="media/usp-tablets-dissolution.jpg" alt="Dissolution section of the USP Acetaminophen Tablets monograph" loading="lazy"><figcaption>Excerpt: USP 39, Acetaminophen Tablets, Dissolution (USP).</figcaption></figure>
+        <div class="ph-txt"><div class="eyebrow">Explainer · 4 of 7</div><h2>Where the course's <span class="ac">tests come from.</span></h2><p>This is the dissolution test written into the same monograph. Read it and you will recognise everything from the dissolution pages:</p><ul class="ph-list"><li><b>Apparatus 2</b> (paddle) at <b>50 rpm</b>, in 900 mL of pH 5.8 phosphate buffer.</li><li>Time: <b>30 minutes</b>.</li><li>Tolerance: <b>not less than 80% (Q)</b> dissolved. So S1 needs every tablet at 85% or more.</li></ul><p>The monograph sets the conditions and Q; the general chapter &lt;711&gt; supplies the S1–S3 rules.</p></div>
+      </div></div>
+      <div class="ph-step" data-n="5"><div class="ph-in">
+        <figure class="ph-fig"><img src="media/bp-appendix-method.jpg" alt="A page from the British Pharmacopoeia appendix on atomic spectrophotometry" loading="lazy"><figcaption>Excerpt: British Pharmacopoeia, Appendix II D (MHRA).</figcaption></figure>
+        <div class="ph-txt"><div class="eyebrow">Explainer · 5 of 7</div><h2>General methods: <span class="ac">written once, used everywhere.</span></h2><p>Monographs do not repeat full procedures. They point to <b>general methods</b> by number, so the same procedure is used for every product.</p><ul class="ph-list"><li><b>USP</b> numbers its general chapters in angle brackets, e.g. &lt;711&gt; Dissolution, &lt;905&gt; Uniformity of dosage units.</li><li><b>Ph. Eur.</b> uses numbered sections, e.g. 2.9.5 Uniformity of mass.</li><li><b>BP</b> calls them appendices, e.g. Appendix II D, which here also cites the matching Ph. Eur. method 2.2.22.</li></ul><p>When you see a code like these in a specification, it tells you exactly which procedure to follow.</p></div>
+      </div></div>
+      <div class="ph-step" data-n="6"><div class="ph-in">
+        <figure class="ph-fig"><img src="media/usp-revision.jpg" alt="A USP Interim Revision Announcement page for acetaminophen marked Change to read" loading="lazy"><figcaption>Excerpt: USP Interim Revision Announcement, Acetaminophen, official May 1, 2014 (USP).</figcaption></figure>
+        <div class="ph-txt"><div class="eyebrow">Explainer · 6 of 7</div><h2>A pharmacopoeia <span class="ac">keeps changing.</span></h2><p>Standards are revised as methods improve and new impurities are found. This USP page announces changes marked <b>"Change to read"</b>, each with the date it becomes official.</p><p>So a laboratory must always work to the <b>current, official text</b>, not an old printout. It is also why NPRA does not accept a specification that just says "as per pharmacopoeia": the exact method must be stated. <span class="cite">(<a href="https://www.npra.gov.my/images/2019/12/NCE/ScreeningPackage/GUIDANCE_FOR_REGISTRATION_APPLICATION_FOR_NEW_DRUG_PRODUCTS_AND_BIOLOGICS.pdf" target="_blank" rel="noopener">NPRA</a>)</span></p></div>
+      </div></div>
+      <div class="ph-step" data-n="7"><div class="ph-in">
+        <figure class="ph-fig"><img src="media/halo-chromatogram.jpg" alt="Chromatogram separating paracetamol from fourteen impurities" loading="lazy"><figcaption>Excerpt: HALO Application Note 211-EP, Paracetamol Impurities: European Pharmacopoeia 9.4 Method (Advanced Materials Technology).</figcaption></figure>
+        <div class="ph-txt"><div class="eyebrow">Explainer · 7 of 7</div><h2>From the page <span class="ac">to the laboratory.</span></h2><p>This is what a monograph test looks like when it is run. A laboratory followed the <b>Ph. Eur. 9.4</b> related-substances method for paracetamol, using liquid chromatography.</p><p>Peak 2 is <b>paracetamol</b>; the other 14 peaks are individual <b>impurities</b>, each named with a letter in the monograph. Each impurity peak is compared with its limit, exactly like the chromatogram page in this course.</p><p class="small">Same drug, same standard, same method: that is how a tablet made in one country can be judged by the same rules everywhere.</p></div>
+      </div></div>
+    </div>
+    <div class="ph-foot">
+      <button class="nav-btn" id="ph-back">← Back</button>
+      <div class="ph-dots" id="ph-dots"></div>
+      <button class="nav-btn" id="ph-next" style="background:var(--ink);color:#fff">Next →</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="vid-overlay" role="dialog" aria-modal="true" aria-label="Video">
+  <div class="vid-panel">
+    <div class="vid-frame" id="vid-frame"></div>
+    <div class="vid-meta" id="vid-meta"></div>
+    <button class="vid-close close-ov">Close video</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const slides   = document.querySelectorAll('.slide');
+  const TOTAL    = slides.length;
+  let current = 1;
+  const btnBack  = document.getElementById('btn-back');
+  const btnNext  = document.getElementById('btn-next');
+  const progFill = document.getElementById('progress-fill');
+  const progLbl  = document.getElementById('progress-label');
+  const hint     = document.getElementById('gate-hint');
+  const NS = 'http://www.w3.org/2000/svg';
+
+  document.querySelectorAll('.stagger').forEach(c=>{
+    [...c.children].forEach((e,i)=>e.style.setProperty('--d',(0.1 + i*0.11).toFixed(2)+'s'));
+  });
+
+  /* ---------- CHARTS (built once, when first shown) ---------- */
+  function el(tag, attrs, text){
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  function tip(node, text){ node.appendChild(el('title',{},text)); return node; }
+
+  function hbar(id, data, opts){
+    const svg=document.getElementById(id); if(!svg||svg.dataset.built) return; svg.dataset.built='1';
+    const W=400, L=opts.labelW, R=50, top=10, bh=opts.bh, gap=opts.gap, plotW=W-L-R;
+    data.forEach((d,i)=>{
+      const y=top+i*(bh+gap), w=Math.max(3,d.v/opts.max*plotW);
+      svg.appendChild(el('text',{class:'tx end',x:L-8,y:y+bh*0.68},d.label));
+      svg.appendChild(tip(el('rect',{class:'bar grow-x'+(d.hl?' hl':''),x:L,y:y,width:w,height:bh,rx:4,style:'--d:'+(0.1+i*0.08)+'s'}), d.label+': '+d.disp));
+      svg.appendChild(el('text',{class:'tx b fade',x:L+w+6,y:y+bh*0.68,style:'--d:'+(0.5+i*0.08)+'s'},d.disp));
+    });
+    const y=top+data.length*(bh+gap);
+    svg.appendChild(el('text',{class:'tx s',x:L,y:y+10},opts.axisLabel));
+  }
+
+  function buildCaps(){
+    const svg=document.getElementById('chart-caps'); if(!svg||svg.dataset.built) return; svg.dataset.built='1';
+    const data=[['000',1.36],['00',0.95],['0',0.67],['1',0.48],['2',0.37],['3',0.27],['4',0.20],['5',0.13]];
+    const L=44, B=190, H=160, bw=30, gap=13, max=1.5;
+    [0,0.5,1.0,1.5].forEach(t=>{
+      const y=B-t/max*H;
+      svg.appendChild(el('line',{class:'grid',x1:L,x2:392,y1:y,y2:y}));
+      svg.appendChild(el('text',{class:'tx s end',x:L-6,y:y+4},t.toFixed(1)));
+    });
+    svg.appendChild(el('text',{class:'tx s',x:6,y:14},'mL'));
+    data.forEach((d,i)=>{
+      const x=L+12+i*(bw+gap), h=d[1]/max*H;
+      svg.appendChild(tip(el('rect',{class:'bar grow-y',x:x,y:B-h,width:bw,height:h,rx:4,style:'--d:'+(0.1+i*0.07)+'s'}),'Size '+d[0]+': '+d[1]+' mL'));
+      svg.appendChild(el('text',{class:'tx b mid fade',x:x+bw/2,y:B-h-6,style:'--d:'+(0.5+i*0.07)+'s;font-size:10.5px'},d[1].toFixed(2)));
+      svg.appendChild(el('text',{class:'tx mid',x:x+bw/2,y:B+16},d[0]));
+    });
+    svg.appendChild(el('line',{class:'axis',x1:L,x2:392,y1:B,y2:B}));
+    svg.appendChild(el('text',{class:'tx s mid',x:218,y:B+34},'capsule size'));
+  }
+
+  function buildGran(){
+    const svg=document.getElementById('chart-gran'); if(!svg||svg.dataset.built) return; svg.dataset.built='1';
+    const fine=[231,262,244,270,236,255,228,266,249,241,274,233,258,247,265,238,252,229,268,243];
+    const gran=[249,252,247,251,254,248,250,246,253,251,249,255,247,250,252,248,251,249,253,250];
+    const x=v=>40+(v-220)/(280-220)*340;
+    svg.appendChild(el('line',{class:'ln o dash',x1:x(250),x2:x(250),y1:26,y2:196}));
+    svg.appendChild(el('text',{class:'tx o mid',x:x(250),y:16},'target 250 mg'));
+    function row(vals,y,label,cls){
+      svg.appendChild(el('text',{class:'tx b',x:40,y:y-24},label));
+      svg.appendChild(el('line',{class:'axis',x1:40,x2:380,y1:y+14,y2:y+14}));
+      vals.forEach((v,i)=>{
+        svg.appendChild(tip(el('circle',{class:cls+' fade',cx:x(v),cy:y+(i%3-1)*6,r:5,style:'--d:'+(0.1+i*0.03)+'s;stroke:#fff;stroke-width:1.5'}),v+' mg'));
+      });
+    }
+    row(fine,74,'Fine powder: wide spread','frs');
+    row(gran,154,'Granules: tight cluster','fgs');
+    [220,235,250,265,280].forEach(v=>svg.appendChild(el('text',{class:'tx s mid',x:x(v),y:212},v)));
+    svg.appendChild(el('text',{class:'tx s end',x:380,y:228},'tablet weight (mg)'));
+  }
+
+  function buildDiss(){
+    const svg=document.getElementById('chart-diss'); if(!svg||svg.dataset.built) return; svg.dataset.built='1';
+    const L=44, B=196, W=340, H=170, tmax=60;
+    const X=t=>L+t/tmax*W, Y=p=>B-p/100*H;
+    [0,25,50,75,100].forEach(p=>{
+      svg.appendChild(el('line',{class:'grid',x1:L,x2:L+W,y1:Y(p),y2:Y(p)}));
+      svg.appendChild(el('text',{class:'tx s end',x:L-6,y:Y(p)+4},p+'%'));
+    });
+    [0,15,30,45,60].forEach(t=>svg.appendChild(el('text',{class:'tx s mid',x:X(t),y:B+16},t)));
+    svg.appendChild(el('text',{class:'tx s end',x:L+W,y:B+32},'time (min)'));
+    svg.appendChild(el('text',{class:'tx s',x:L,y:12},'% of dose dissolved'));
+    svg.appendChild(el('line',{class:'ln o dash',x1:L,x2:L+W,y1:Y(85),y2:Y(85)}));
+    svg.appendChild(el('text',{class:'tx o',x:L+6,y:Y(85)-6},'Q + 5% = 85%'));
+    svg.appendChild(el('line',{class:'ln m dash',x1:X(30),x2:X(30),y1:Y(100),y2:B}));
+    function curve(k,cls,label,lx,ly){
+      let d=''; for(let t=0;t<=60;t+=2){ const p=100*(1-Math.exp(-k*t)); d+=(t?'L':'M')+X(t).toFixed(1)+' '+Y(p).toFixed(1)+' '; }
+      svg.appendChild(el('path',{class:'ln draw '+cls,d:d,pathLength:1,style:'stroke-width:2.6'}));
+      const p30=100*(1-Math.exp(-k*30));
+      svg.appendChild(tip(el('circle',{class:'fade '+(cls==='g'?'fgs':'fos'),cx:X(30),cy:Y(p30),r:5,style:'--d:1.1s;stroke:#fff;stroke-width:2'}),label+': '+p30.toFixed(0)+'% at 30 min'));
+      svg.appendChild(el('circle',{class:(cls==='g'?'fgs':'fos'),cx:lx,cy:ly-4,r:4.5}));
+      svg.appendChild(el('text',{class:'tx fade '+(cls==='g'?'g':'o'),x:lx+9,y:ly,style:'--d:1.2s'},label+': '+p30.toFixed(0)+'% at 30 min'));
+    }
+    curve(0.1,'g','Batch A',L+4,B+44);
+    curve(0.038,'o','Batch B',L+164,B+44);
+    svg.appendChild(el('line',{class:'axis',x1:L,x2:L+W,y1:B,y2:B}));
+  }
+
+  function buildSolv(){
+    const svg=document.getElementById('chart-solv'); if(!svg||svg.dataset.built) return; svg.dataset.built='1';
+    const L=140, W=196, top=16, bh=30, gap=20;
+    const X=v=>L+Math.log10(v)/4*W;
+    const bottom=top+3*(bh+gap)-gap;
+    [1,10,100,1000,10000].forEach(v=>{
+      svg.appendChild(el('line',{class:'grid',x1:X(v),x2:X(v),y1:8,y2:bottom+4}));
+      svg.appendChild(el('text',{class:'tx s mid',x:X(v),y:bottom+18},v.toLocaleString('en')));
+    });
+    [['Benzene (Class 1)',2,true],['Methanol (Class 2)',3000,false],['Class 3 default',5000,false]].forEach((d,i)=>{
+      const y=top+i*(bh+gap), w=Math.max(4,X(d[1])-L);
+      svg.appendChild(el('text',{class:'tx end',x:L-8,y:y+bh*0.65},d[0]));
+      svg.appendChild(tip(el('rect',{class:'bar grow-x'+(d[2]?' hl':''),x:L,y:y,width:w,height:bh,rx:4,style:'--d:'+(0.1+i*0.12)+'s'}),d[0]+': '+d[1]+' ppm'));
+      svg.appendChild(el('text',{class:'tx b fade',x:L+w+6,y:y+bh*0.65,style:'--d:'+(0.6+i*0.12)+'s'},d[1].toLocaleString('en')+' ppm'));
+    });
+    svg.appendChild(el('text',{class:'tx s',x:L,y:bottom+34},'limit (ppm)'));
+  }
+
+  /* uniformity of mass simulator */
+  let uomScenario=0;
+  function gauss(){ let u=0,v=0; while(!u)u=Math.random(); while(!v)v=Math.random(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+  function buildUom(){
+    const svg=document.getElementById('chart-uom'); if(!svg) return;
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    const mean=250, L=46, R=388, T=14, B=196;
+    const Y=w=>B-(w-215)/(285-215)*(B-T);
+    const sd=[3,5.5,7.5][uomScenario%3];
+    const ws=[]; for(let i=0;i<20;i++) ws.push(mean+gauss()*sd);
+    if(uomScenario%3===2) ws[Math.floor(Math.random()*20)] = mean+(Math.random()<.5?-1:1)*(27+Math.random()*4);
+    const avg=ws.reduce((a,b)=>a+b,0)/20, lim=avg*0.05, lim2=avg*0.10;
+    svg.appendChild(el('rect',{class:'fg',x:L,y:Y(avg+lim),width:R-L,height:Y(avg-lim)-Y(avg+lim)}));
+    svg.appendChild(el('line',{class:'ln r dash',x1:L,x2:R,y1:Y(avg+lim2),y2:Y(avg+lim2)}));
+    svg.appendChild(el('line',{class:'ln r dash',x1:L,x2:R,y1:Y(avg-lim2),y2:Y(avg-lim2)}));
+    svg.appendChild(el('line',{class:'ln g',x1:L,x2:R,y1:Y(avg),y2:Y(avg)}));
+    [220,235,250,265,280].forEach(w=>svg.appendChild(el('text',{class:'tx s end',x:L-6,y:Y(w)+4},w)));
+    svg.appendChild(el('text',{class:'tx s',x:6,y:10},'mg'));
+    svg.appendChild(el('text',{class:'tx g',x:L+4,y:Y(avg+lim)+13},'within 5%'));
+    svg.appendChild(el('text',{class:'tx r end',x:R,y:Y(avg+lim2)-4},'10% = twice the limit'));
+    let o5=0,o10=0;
+    ws.forEach((w,i)=>{
+      const dev=Math.abs(w-avg); let cls='fgs';
+      if(dev>lim2){cls='frs';o10++;o5++;} else if(dev>lim){cls='fos';o5++;}
+      const x=L+12+i*((R-L-24)/19);
+      svg.appendChild(tip(el('circle',{class:cls+' fade',cx:x,cy:Y(Math.max(216,Math.min(284,w))),r:5.5,style:'--d:'+(0.05+i*0.04)+'s;stroke:#fff;stroke-width:1.5'}),'Tablet '+(i+1)+': '+w.toFixed(1)+' mg'));
+    });
+    svg.appendChild(el('text',{class:'tx s',x:L,y:B+20},'tablets 1 to 20'));
+    svg.appendChild(el('text',{class:'tx s end',x:R,y:B+20},'average '+avg.toFixed(1)+' mg'));
+    const pass=o5<=2&&o10===0;
+    document.getElementById('uom-verdict').innerHTML=o5+' outside 5%, '+o10+' outside 10%: <span style="color:'+(pass?'var(--accent)':'var(--red)')+'">'+(pass?'PASS':'FAIL')+'</span>';
+  }
+  document.getElementById('uom-sim').addEventListener('click',()=>{ uomScenario++; buildUom(); fit(slides[current-1]); });
+
+  function buildCharts(n){
+    const s=slides[n-1];
+    if(s.querySelector('#chart-gran')) buildGran();
+    if(s.querySelector('#chart-caps')) buildCaps();
+    if(s.querySelector('#chart-dis')) hbar('chart-dis',[
+      {label:'Dispersible tablet',v:3,disp:'3 min'},{label:'Effervescent tablet',v:5,disp:'5 min'},
+      {label:'Uncoated tablet',v:15,disp:'15 min'},{label:'Film-coated tablet',v:30,disp:'30 min'},
+      {label:'Hard or soft capsule',v:30,disp:'30 min'},{label:'Other coated tablet',v:60,disp:'60 min'}],
+      {max:60,labelW:136,bh:22,gap:10,axisLabel:'maximum time allowed to disintegrate'});
+    if(s.querySelector('#chart-diss')) buildDiss();
+    if(s.querySelector('#chart-solv')) buildSolv();
+    if(s.querySelector('#chart-npra')) hbar('chart-npra',[
+      {label:'Quality',v:374,disp:'374'},{label:'Packaging',v:289,disp:'289'},{label:'Efficacy',v:132,disp:'132'},
+      {label:'Labelling',v:70,disp:'70'},{label:'Other (e.g. adverse events)',v:23,disp:'23'}],
+      {max:400,labelW:156,bh:24,gap:10,axisLabel:'number of complaints (total 888)'});
+    if(s.querySelector('#chart-uom') && !document.getElementById('chart-uom').firstChild) buildUom();
+  }
+
+  /* ---------- AUTO-FIT: shrink a page until it fits without scrolling ---------- */
+  function fit(slide){
+    if(!slide) return;
+    const si=slide.querySelector('.si');
+    let k=1; slide.style.setProperty('--k',k);
+    let g=0;
+    while(g++<16 && (si.scrollHeight>slide.clientHeight+1 || si.scrollWidth>slide.clientWidth+1) && k>0.62){
+      k=+(k-0.03).toFixed(2); slide.style.setProperty('--k',k);
+    }
+  }
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>fit(slides[current-1]),120); });
+
+  /* ---------- GATING ---------- */
+  function pending(slide){
+    let n=0;
+    slide.querySelectorAll('.toggle-wrap').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
+    slide.querySelectorAll('.rcard').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
+    slide.querySelectorAll('.coa-row').forEach(r=>{ if(!r.dataset.done) n++; });
+    slide.querySelectorAll('.choice-set').forEach(s=>{ if(!s.dataset.done) n++; });
+    return n;
+  }
+  function updateGate(alert){
+    const s=slides[current-1], n=pending(s);
+    btnNext.classList.toggle('locked', n>0);
+    if(n===0){ hint.className=''; hint.textContent=''; return; }
+    hint.className=alert?'alert':'';
+    const what=n===1?'1 item':n+' items';
+    hint.innerHTML=alert
+      ? 'Please finish the questions or open the sections on this page first ('+what+' left). Or skip ahead using <button type="button" id="hint-toc">Contents</button>.'
+      : 'Finish '+what+' on this page to continue, or use <button type="button" id="hint-toc">Contents</button>';
+    document.getElementById('hint-toc').addEventListener('click',()=>openOv('toc-overlay'));
+  }
+  function flagPending(slide){
+    [...slide.querySelectorAll('.toggle-wrap:not(.seen), .rcard:not(.seen), .coa-row:not([data-done]), .choice-set:not([data-done])')]
+      .filter(e=>e.offsetParent!==null)
+      .forEach(e=>{ e.classList.remove('pulse'); void e.offsetWidth; e.classList.add('pulse'); });
+  }
+
+  function show(n){
+    slides.forEach((s,i)=>s.classList.toggle('active',i+1===n));
+    progFill.style.width=((n/TOTAL)*100)+'%';
+    progLbl.textContent=n+' / '+TOTAL;
+    btnBack.disabled=n===1;
+    btnNext.textContent=n===TOTAL?'Done':'Next →';
+    btnNext.setAttribute('data-umami-event',n===TOTAL?'carousel-selesai':'nav-next');
+    buildCharts(n);
+    fit(slides[n-1]);
+    requestAnimationFrame(()=>fit(slides[n-1]));
+    updateGate(false);
+    if(window.umami) umami.track('slide-view',{slide:n});
+  }
+
+  /* NAV BUTTONS ONLY — no swipe, no keyboard */
+  btnNext.addEventListener('click',()=>{
+    const s=slides[current-1];
+    if(pending(s)>0){ updateGate(true); flagPending(s); if(window.umami) umami.track('gate-blocked',{slide:current}); return; }
+    if(current<TOTAL){ current++; show(current); } else openOv('refs-overlay');
+  });
+  btnBack.addEventListener('click',()=>{ if(current>1){ current--; show(current); } });
+
+  document.querySelectorAll('.toggle-btn').forEach(b=>b.addEventListener('click',()=>{
+    const w=b.parentElement; w.classList.toggle('open'); w.classList.add('seen'); fit(slides[current-1]); updateGate(false);
+    if(window.umami) umami.track('toggle',{label:b.textContent.trim().slice(0,40)});
+  }));
+  document.querySelectorAll('.rcard').forEach(c=>c.addEventListener('click',()=>{ c.classList.add('seen'); fit(slides[current-1]); updateGate(false); }));
+
+  document.querySelectorAll('.choice-set').forEach(set=>{
+    const ans=set.dataset.answer;
+    set.querySelectorAll('.choice').forEach(c=>c.addEventListener('click',()=>{
+      if(set.dataset.done) return;
+      set.dataset.done='1'; set.classList.add('done');
+      const ok=c.dataset.v===ans; set.dataset.correct=ok?'1':'0';
+      set.querySelectorAll('.choice').forEach(x=>{ if(x.dataset.v===ans) x.classList.add('right'); });
+      if(!ok) c.classList.add('wrong');
+      set.querySelector('.feedback').classList.add('show');
+      if(window.umami) umami.track('choice',{correct:ok});
+      updateScore(); fit(slides[current-1]); updateGate(false);
+    }));
+    const nx=set.querySelector('.next-q');
+    if(nx) nx.addEventListener('click',()=>{
+      const nxt=set.nextElementSibling;
+      if(nxt&&nxt.classList.contains('choice-set')){ set.classList.remove('cur'); nxt.classList.add('cur'); fit(slides[current-1]); }
+    });
+  });
+  function updateScore(){
+    const q=document.querySelectorAll('.quiz .choice-set'), done=[...q].filter(s=>s.dataset.done);
+    if(done.length<q.length) return;
+    document.getElementById('quiz-score').textContent='Your score: '+done.filter(s=>s.dataset.correct==='1').length+' / '+q.length;
+  }
+
+  const verdict={pass:'Pass',fail:'Fail',next:'Go to S2'};
+  const coaExp=document.getElementById('coa-exp');
+  document.querySelectorAll('.coa-row').forEach(r=>r.addEventListener('click',()=>{
+    r.dataset.done='1'; r.classList.add(r.dataset.res); r.querySelector('.v').textContent=verdict[r.dataset.res];
+    coaExp.innerHTML=r.dataset.exp;
+    if([...document.querySelectorAll('.coa-row')].every(x=>x.dataset.done)) document.querySelector('.coa-decision').classList.add('show');
+    fit(slides[current-1]); updateGate(false);
+  }));
+
+  const uf=document.getElementById('uom-form'), um=document.getElementById('uom-mass'), uo=document.getElementById('uom-out');
+  const f1=x=>(Math.round(x*10)/10).toString();
+  function calcUom(){
+    const m=parseFloat(um.value);
+    if(!(m>0)){ uo.textContent='Enter the average mass.'; return; }
+    const p=uf.value==='tab'?(m<=80?10:(m<250?7.5:5)):(m<300?10:7.5);
+    uo.innerHTML='Limit <b>±'+p+'%</b>, so units should weigh <b>'+f1(m*(1-p/100))+'–'+f1(m*(1+p/100))+' mg</b>. At most 2 of 20 may fall outside this range, and none outside <b>'+f1(m*(1-2*p/100))+'–'+f1(m*(1+2*p/100))+' mg</b>.';
+  }
+  uf.addEventListener('change',calcUom); um.addEventListener('input',calcUom); calcUom();
+
+  const cd=document.getElementById('cu-drug'), cun=document.getElementById('cu-unit'), co=document.getElementById('cu-out');
+  function calcCu(){
+    const d=parseFloat(cd.value), u=parseFloat(cun.value);
+    if(!(d>0)||!(u>0)||d>u){ co.className='calc-out'; co.textContent='Enter the drug content and the unit mass (the drug cannot weigh more than the unit).'; return; }
+    const pct=d/u*100, wv=d>=25&&pct>=25;
+    co.className='calc-out'+(wv?'':' fail');
+    co.innerHTML='The drug is <b>'+d+' mg</b>, which is <b>'+pct.toFixed(1)+'%</b> of the unit. '+(wv
+      ?'Both figures are 25 or more, so <b>weight variation</b> can be used to show the dose is uniform.'
+      :'That is below 25 mg or below 25%, so <b>content uniformity</b> testing is required.');
+  }
+  cd.addEventListener('input',calcCu); cun.addEventListener('input',calcCu); calcCu();
+
+  const hr=document.getElementById('hard-r'), ho=document.getElementById('hard-out');
+  const hardText={
+    1:[0,'<b>Far too soft.</b> Tablets chip and crumble during packing and transport, and would probably fail the friability test.'],
+    2:[0,'<b>A little soft.</b> Edges may wear down in the bottle, and friability results may be borderline.'],
+    3:[1,'<b>Within the target range.</b> Strong enough to survive handling, yet it still breaks up and dissolves on time.'],
+    4:[0,'<b>A little hard.</b> Water gets in more slowly, so disintegration and dissolution may be delayed.'],
+    5:[0,'<b>Far too hard.</b> The tablet may fail disintegration or dissolution, so less drug may be absorbed.']};
+  function calcHard(){ const t=hardText[hr.value]; ho.className='calc-out'+(t[0]?'':' fail'); ho.innerHTML=t[1]; }
+  hr.addEventListener('input',calcHard); calcHard();
+
+  const fa=document.getElementById('fr-a'), fb=document.getElementById('fr-b'), fo=document.getElementById('fr-out');
+  function calcFr(){
+    const a=parseFloat(fa.value), b=parseFloat(fb.value);
+    if(!(a>0)||!(b>=0)||b>a){ fo.className='calc-out'; fo.textContent='Enter the initial and final weights (the final weight cannot be larger).'; return; }
+    const loss=(a-b)/a*100, ok=loss<=1.0;
+    fo.className='calc-out'+(ok?'':' fail');
+    fo.innerHTML='Weight lost: <b>'+(a-b).toFixed(3)+' g</b>, which is <b>'+loss.toFixed(2)+'%</b>. '+(ok
+      ?'<b>Pass</b>, provided no tablets are cracked or broken.'
+      :'<b>Above 1.0%.</b> Repeat the test twice more and judge the mean of all three runs.');
+  }
+  fa.addEventListener('input',calcFr); fb.addEventListener('input',calcFr); calcFr();
+
+  function openOv(id){ if(id==='toc-overlay') buildToc(); document.getElementById(id).classList.add('open'); }
+  document.querySelectorAll('.overlay').forEach(o=>{
+    o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
+    o.querySelector('.close-ov').addEventListener('click',()=>o.classList.remove('open'));
+  });
+  document.getElementById('btn-toc').addEventListener('click',()=>openOv('toc-overlay'));
+  document.getElementById('btn-refs').addEventListener('click',()=>openOv('refs-overlay'));
+
+  /* contents — bypasses gating */
+  const secNames={intro:'1 · Introduction',dev:'2 · Origins and development',mfg:'3 · Modern OSD manufacturing',caps:'4 · Hard capsules and softgels',qc:'5 · Quality control testing',future:'6 · Future of OSDs',end:'Wrap-up'};
+  function buildToc(){
+    const ul=document.getElementById('toc-list'); ul.innerHTML=''; let last='';
+    slides.forEach((s,i)=>{
+      if(s.dataset.sec!==last){ const h=document.createElement('li'); h.className='sec'; h.textContent=secNames[s.dataset.sec]; ul.appendChild(h); last=s.dataset.sec; }
+      const li=document.createElement('li'), b=document.createElement('button');
+      b.innerHTML='<span>'+(i+1)+'</span>'+s.dataset.title;
+      if(i+1===current) b.className='cur';
+      b.addEventListener('click',()=>{ current=i+1; show(current); document.getElementById('toc-overlay').classList.remove('open'); if(window.umami) umami.track('toc-jump',{slide:current}); });
+      li.appendChild(b); ul.appendChild(li);
+    });
+  }
+
+  /* ---------- PHARMACOPOEIA EXPLAINER ---------- */
+  const phOv=document.getElementById('ph-overlay'), phSteps=phOv.querySelectorAll('.ph-step'), phDots=document.getElementById('ph-dots');
+  const phBack=document.getElementById('ph-back'), phNext=document.getElementById('ph-next');
+  let phCur=1;
+  phSteps.forEach(()=>phDots.appendChild(document.createElement('span')));
+  function phFit(st){
+    const inner=st.querySelector('.ph-in'); let k=1; st.style.setProperty('--k',k); let g=0;
+    while(g++<16 && (inner.scrollHeight>st.clientHeight+1 || inner.scrollWidth>st.clientWidth+1) && k>0.62){ k=+(k-0.03).toFixed(2); st.style.setProperty('--k',k); }
+  }
+  function phShow(n){
+    phCur=n;
+    phSteps.forEach((s,i)=>s.classList.toggle('active',i+1===n));
+    [...phDots.children].forEach((d,i)=>d.classList.toggle('on',i+1===n));
+    phBack.disabled=n===1;
+    phNext.textContent=n===phSteps.length?'Close':'Next →';
+    const st=phSteps[n-1]; phFit(st);
+    const img=st.querySelector('img'); if(img && !img.complete) img.addEventListener('load',()=>phFit(st),{once:true});
+    if(window.umami) umami.track('pharmacopoeia-step',{step:n});
+  }
+  phBack.addEventListener('click',()=>{ if(phCur>1) phShow(phCur-1); });
+  phNext.addEventListener('click',()=>{ if(phCur<phSteps.length) phShow(phCur+1); else phOv.classList.remove('open'); });
+  document.querySelectorAll('.ph-open').forEach(b=>b.addEventListener('click',()=>{
+    document.getElementById('toc-overlay').classList.remove('open');
+    phOv.classList.add('open'); phShow(parseInt(b.dataset.step||'1',10));
+  }));
+  window.addEventListener('resize',()=>{ if(phOv.classList.contains('open')) phFit(phSteps[phCur-1]); });
+
+  /* ---------- VIDEOS: original creators' YouTube embeds ----------
+     Paste a YouTube video ID into "id" to switch a button on. Empty id = button hidden. */
+  const VIDEOS = {
+    press:       {id:'-XAdgM7essA', vertical:false, title:'The Tableting Process', credit:'Romaco Kilian (YouTube)'},
+    friability:  {id:'', vertical:true,  title:'Friability Test, Evaluation of tablet', credit:'@Pharmacytech1 (YouTube)'},
+    disiCoated:  {id:'', vertical:true,  title:'Coated vs Uncoated Tablet Disintegration Test', credit:'Charles Ischi AG, @tablettestingtech (YouTube)'},
+    disiDemo:    {id:'', vertical:true,  title:'Automated disintegration tester (Sotax DT50) demonstration', credit:''},
+    dissolution: {id:'', vertical:true,  title:'Dissolution testing explained', credit:''}
+  };
+  const vidOv=document.getElementById('vid-overlay'), vidFrame=document.getElementById('vid-frame'), vidMeta=document.getElementById('vid-meta');
+  document.querySelectorAll('.vbtn').forEach(b=>{
+    const v=VIDEOS[b.dataset.video];
+    if(!v || !v.id){ b.hidden=true; return; }
+    b.addEventListener('click',()=>{
+      vidFrame.className='vid-frame'+(v.vertical?' vertical':'');
+      vidFrame.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1&rel=0&modestbranding=1&playsinline=1" title="'+v.title.replace(/"/g,'&quot;')+'" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+      vidMeta.innerHTML='<b style="color:#fff">'+v.title+'</b>'+(v.credit?'<br>Video: '+v.credit+' · <a href="https://www.youtube.com/watch?v='+encodeURIComponent(v.id)+'" target="_blank" rel="noopener">Watch on YouTube</a>':'');
+      vidOv.classList.add('open');
+    });
+  });
+  vidOv.querySelector('.close-ov').addEventListener('click',()=>{ vidFrame.innerHTML=''; });
+  vidOv.addEventListener('click',e=>{ if(e.target===vidOv || e.target.classList.contains('vid-panel')){ vidOv.classList.remove('open'); vidFrame.innerHTML=''; } });
+
+  buildToc();
+  show(1);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fit(slides[current-1]));
+})();
+</script>
+</body>
+</html>
