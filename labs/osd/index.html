@@ -41,6 +41,8 @@ nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
 .logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
 .logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
 .nav-right{display:flex;align-items:center;gap:10px}
+.back-kompas{text-decoration:none;color:var(--accent-dark);border-color:var(--g-line);background:var(--g-bg)}
+@media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
 .icon-btn{background:#fff;border:1px solid var(--rule);color:var(--body);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;cursor:pointer}
 #progress-label{font-size:.78rem;color:var(--muted);min-width:44px;text-align:right}
 #progress-track{flex:0 0 3px;background:var(--rule);border-radius:3px}
@@ -314,6 +316,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <nav>
     <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
     <div class="nav-right">
+      <a class="icon-btn back-kompas" id="btn-kompas" href="../../index.html" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
       <button class="icon-btn" id="btn-toc" data-umami-event="open-contents">Contents</button>
       <span id="progress-label">1 / 44</span>
     </div>
@@ -818,6 +821,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <p>Take <b>20 units at random</b>, weigh each one, and calculate the <b>average (mean) mass</b>. Then compare every unit with that average. <span class="cite">(<a href="https://www.drugfuture.com/Pharmacopoeia/EP7/DATA/20905E.PDF" target="_blank" rel="noopener">Ph. Eur. 2.9.5</a>)</span></p>
    <div class="callout"><b>Pass rule:</b> no more than <b>2</b> of the 20 units may differ from the average by more than the limit, and <b>none</b> may differ by more than <b>twice</b> the limit.</div>
    <p class="small">The chart shows tablets averaging about 250 mg, where the limit is 5%. Green band: within 5%. Dashed red lines: twice the limit (10%). Press the button to simulate new batches; the data are made up.</p>
+   <button class="vbtn" data-video="uniformity" data-umami-event="video-uniformity"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 6.5 L14 10 L8 13.5 Z" fill="currentColor"/></svg>Watch: uniformity of dosage units (Mettler Toledo)</button>
   </div>
  </div>
 </section>
@@ -997,7 +1001,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <p>Six units are placed one per tube in a basket with a mesh floor. The basket moves steadily up and down in a liquid <b>medium</b> (usually water) kept at body temperature, <b>37 °C</b>.</p>
    <p>A unit counts as disintegrated when no firm core is left on the mesh; only soft remains or bits of shell or coating may stay behind. The test passes when <b>all six</b> units have disintegrated within the time limit for that dosage form.</p>
    <p class="small">Passing shows the unit breaks up in time. It does not prove the drug dissolves; that needs the dissolution test.</p>
-   <button class="vbtn" data-video="disiCoated" data-umami-event="video-disintegration-coated"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 6.5 L14 10 L8 13.5 Z" fill="currentColor"/></svg>Watch: coated vs uncoated</button><button class="vbtn" data-video="disiDemo" data-umami-event="video-disintegration-demo"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 6.5 L14 10 L8 13.5 Z" fill="currentColor"/></svg>Watch: automated tester</button>
+   <button class="vbtn" data-video="disiCoated" data-umami-event="video-disintegration-coated"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 6.5 L14 10 L8 13.5 Z" fill="currentColor"/></svg>Watch: coated vs uncoated</button><button class="vbtn" data-video="disiDemo" data-umami-event="video-disintegration"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 6.5 L14 10 L8 13.5 Z" fill="currentColor"/></svg>Watch disintegration testing (JRS)</button>
   </div>
  </div>
 </section>
@@ -1062,7 +1066,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <p>A tablet can pass disintegration while its drug still dissolves too slowly. The <b>dissolution test</b> measures how much of the drug has dissolved after a set time. <span class="cite">(<a href="https://www.drugfuture.com/Pharmacopoeia/usp38/data/v38332/usp38nf33s2_c711.html" target="_blank" rel="noopener">USP &lt;711&gt;</a>)</span></p>
    <p>Each unit sits in its own vessel of medium at 37 °C, stirred by a rotating <b>basket</b> (Apparatus 1) or <b>paddle</b> (Apparatus 2). Samples of the medium are taken at set times and analysed for drug.</p>
    <p>The product's monograph sets <b>Q</b>: the percentage of the labelled dose that must be dissolved by the test time (see a real example in the <button class="ph-open" data-step="3" style="padding:.1em .6em;margin:0;font-size:.85em">USP monograph</button>). In the chart, batch A clears the S1 line at 30 minutes; batch B dissolves too slowly.</p>
-   <button class="vbtn" data-video="dissolution" data-umami-event="video-dissolution"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 6.5 L14 10 L8 13.5 Z" fill="currentColor"/></svg>Watch a dissolution test explained</button>
+   <button class="vbtn" data-video="dissolution" data-umami-event="video-dissolution"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 6.5 L14 10 L8 13.5 Z" fill="currentColor"/></svg>Watch dissolution testing explained (JRS)</button>
   </div>
  </div>
 </section>
@@ -1830,10 +1834,11 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
      Paste a YouTube video ID into "id" to switch a button on. Empty id = button hidden. */
   const VIDEOS = {
     press:       {id:'-XAdgM7essA', vertical:false, title:'The Tableting Process', credit:'Romaco Kilian (YouTube)'},
-    friability:  {id:'', vertical:true,  title:'Friability Test, Evaluation of tablet', credit:'@Pharmacytech1 (YouTube)'},
+    friability:  {id:'hhNWlplCjJU', vertical:false, title:'Friability & Abrasion Tester AE-2', credit:'Charles Ischi AG (YouTube)'},
     disiCoated:  {id:'', vertical:true,  title:'Coated vs Uncoated Tablet Disintegration Test', credit:'Charles Ischi AG, @tablettestingtech (YouTube)'},
-    disiDemo:    {id:'', vertical:true,  title:'Automated disintegration tester (Sotax DT50) demonstration', credit:''},
-    dissolution: {id:'', vertical:true,  title:'Dissolution testing explained', credit:''}
+    disiDemo:    {id:'KAKRl_2S6hY', vertical:false, title:'Tabletting Studio, Episode 10: Disintegration & Dissolution Testing', credit:'Tableting Studio by JRS (YouTube)'},
+    dissolution: {id:'KAKRl_2S6hY', vertical:false, title:'Tabletting Studio, Episode 10: Disintegration & Dissolution Testing', credit:'Tableting Studio by JRS (YouTube)'},
+    uniformity:  {id:'LL7Aayae52M', vertical:false, title:'Uniformity of Dosage Units: Statistical Quality Control', credit:'METTLER TOLEDO (YouTube)'}
   };
   const vidOv=document.getElementById('vid-overlay'), vidFrame=document.getElementById('vid-frame'), vidMeta=document.getElementById('vid-meta');
   document.querySelectorAll('.vbtn').forEach(b=>{
@@ -1848,6 +1853,16 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   });
   vidOv.querySelector('.close-ov').addEventListener('click',()=>{ vidFrame.innerHTML=''; });
   vidOv.addEventListener('click',e=>{ if(e.target===vidOv || e.target.classList.contains('vid-panel')){ vidOv.classList.remove('open'); vidFrame.innerHTML=''; } });
+
+  /* Back to Kompas: return to the exact course view the student came from
+     (history.back keeps Kompas's state); otherwise open the Kompas home page. */
+  document.getElementById('btn-kompas').addEventListener('click',e=>{
+    try{
+      if (document.referrer && new URL(document.referrer).origin===location.origin && history.length>1){
+        e.preventDefault(); history.back();
+      }
+    }catch(_){}
+  });
 
   buildToc();
   show(1);
