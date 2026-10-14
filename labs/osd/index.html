@@ -107,6 +107,18 @@ p{margin-bottom:.6em;font-size:.97em}
 .node.r{border-color:var(--red);background:var(--r-bg)}
 .node.ghost{border-style:dashed;color:var(--muted)}
 .arr{color:var(--orange);font-weight:800;font-size:1em}
+.node-group{display:flex;align-items:center;gap:.35em}
+.node-group .or{color:var(--muted);font-size:.84em}
+/* flows: one straight row when it fits, otherwise a snake (→ row, turn down, ← row, turn down …) */
+.flow.row{flex-wrap:nowrap}
+.flow.row > *{flex:0 0 auto}
+.flow.snake{display:grid;align-items:stretch;gap:0}
+.flow.snake .cell{display:flex;min-width:0}
+.flow.snake .cell > .node{flex:1;display:flex;flex-direction:column;justify-content:center}
+.flow.snake .cell > .node-group{flex:1}
+.flow.snake .cell > .node-group > .node{flex:1}
+.flow.snake .arr{align-self:center;text-align:center;line-height:1}
+.flow.snake .arr.down{padding:.2em 0}
 .lane{display:grid;grid-template-columns:8.5em 1fr;gap:.6em;align-items:center;padding:.45em 0;border-bottom:1px solid var(--rule)}
 .lane:last-of-type{border-bottom:none}
 .lane .lname{font-weight:800;color:var(--ink);font-size:.9em;line-height:1.2}
@@ -913,14 +925,10 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <h2>One number decides: <span class="ac">the acceptance value.</span></h2>
    <div class="flow stagger">
      <div class="node">Assay 10 units one by one<small>usually by HPLC</small></div><span class="arr">→</span>
-     <div class="node o">Is AV ≤ 15.0?</div><span class="arr">→</span>
-     <div class="node g">Yes: pass</div>
-   </div>
-   <div class="flow stagger">
-     <div class="node o">No</div><span class="arr">→</span>
+     <div class="node o">Is AV ≤ 15.0?<small>yes: pass · no: continue</small></div><span class="arr">→</span>
      <div class="node">Assay 20 more units</div><span class="arr">→</span>
-     <div class="node">All 30: AV ≤ 15.0, and every unit within 75–125%?</div><span class="arr">→</span>
-     <div class="node g">Pass</div><span style="color:var(--muted)">or</span><div class="node r">Fail</div>
+     <div class="node">All 30 units: AV ≤ 15.0, and every unit within 75–125%?</div><span class="arr">→</span>
+     <div class="node-group"><div class="node g">Pass</div><span class="or">or</span><div class="node r">Fail</div></div>
    </div>
    <p>The <b>acceptance value (AV)</b> is calculated from the results and combines two things: how far the <b>average</b> is from the target amount, and how <b>spread out</b> the individual units are. A batch with a perfect average can still fail if some units are very high and others very low, because each patient takes one unit, not the average. <span class="cite">(<a href="https://drugfuture.com/Pharmacopoeia/usp38/data/v38332/usp38nf33s2_c905.html" target="_blank" rel="noopener">USP &lt;905&gt;</a>)</span></p>
   </div>
@@ -1667,15 +1675,52 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     const more = s && s.classList.contains('scrolly') && (s.scrollTop + s.clientHeight < s.scrollHeight - 4);
     stageEl.classList.toggle('more', !!more);
   }
+  /* ---------- FLOW CHARTS: straight row if it fits, otherwise snake ---------- */
+  document.querySelectorAll('.flow').forEach(f=>{
+    f._items=[...f.children].filter(c=>!c.classList.contains('arr')).map(c=>c.outerHTML);
+    f._sig=''; f._nat=0;
+  });
+  function flowDelays(f){ [...f.children].forEach((e,i)=>e.style.setProperty('--d',(0.1+i*0.08).toFixed(2)+'s')); }
+  function renderRow(f){
+    f.classList.remove('snake'); f.classList.add('row'); f.style.gridTemplateColumns='';
+    f.innerHTML=f._items.join('<span class="arr" aria-hidden="true">→</span>'); flowDelays(f);
+  }
+  function renderSnake(f,cols){
+    const it=f._items, n=it.length; let h='';
+    f.classList.remove('row'); f.classList.add('snake');
+    f.style.gridTemplateColumns=Array(cols).fill('minmax(0,1fr)').join(' 1.5em ');
+    for(let i=0;i<n;i++){
+      const r=Math.floor(i/cols), p=i%cols, rev=r%2===1;
+      const c=rev?cols-1-p:p, gr=2*r+1, gc=2*c+1;
+      h+='<div class="cell" style="grid-row:'+gr+';grid-column:'+gc+'">'+it[i]+'</div>';
+      if(i<n-1){
+        if(p<cols-1) h+='<span class="arr" aria-hidden="true" style="grid-row:'+gr+';grid-column:'+(rev?gc-1:gc+1)+'">'+(rev?'←':'→')+'</span>';
+        else h+='<span class="arr down" aria-hidden="true" style="grid-row:'+(gr+1)+';grid-column:'+gc+'">↓</span>';
+      }
+    }
+    f.innerHTML=h; flowDelays(f);
+  }
+  function layoutFlow(f,k){
+    const w=f.clientWidth; if(!w) return;
+    if(!f._nat){ renderRow(f); f._sig='row'; f._nat=f.scrollWidth/k; }
+    const fs=parseFloat(getComputedStyle(f).fontSize)||16;
+    const fitsRow=f._nat*k<=w+1;
+    const cols=Math.min(f._items.length,Math.max(2,Math.min(3,Math.floor(w/(9*fs)))));
+    const sig=fitsRow?'row':'s'+cols;
+    if(sig===f._sig) return;      /* unchanged: don't rebuild (avoids replaying animations) */
+    f._sig=sig; fitsRow?renderRow(f):renderSnake(f,cols);
+  }
+
   function fit(slide){
     if(!slide) return;
     const si=slide.querySelector('.si');
+    const flows=[...slide.querySelectorAll('.flow')];
     slide.classList.remove('scrolly'); slide.scrollTop = 0;
-    let k=1; slide.style.setProperty('--k',k);
+    let k=1; slide.style.setProperty('--k',k); flows.forEach(f=>layoutFlow(f,k));
     let g=0;
     const over = () => si.scrollHeight>slide.clientHeight+1 || si.scrollWidth>slide.clientWidth+1;
     while(g++<16 && over() && k>MIN_K){
-      k=+(k-0.03).toFixed(2); slide.style.setProperty('--k',k);
+      k=+(k-0.03).toFixed(2); slide.style.setProperty('--k',k); flows.forEach(f=>layoutFlow(f,k));
     }
     if (over()) slide.classList.add('scrolly');
     updateMore();
