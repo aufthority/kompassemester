@@ -1,0 +1,1429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Periodic Trends, Explained — Aufthority</title>
+<script defer src="https://cloud.umami.is/script.js"
+  data-website-id="f79c60f1-f9e7-4170-a979-f357ba756a18"></script>
+<meta name="description" content="Effective nuclear charge, atomic and ionic size, ionisation energy, electron affinity and electronegativity, and how they decide bonds, polarity and reactivity.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="article">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="Periodic Trends, Explained">
+<meta property="og:description"  content="One tug-of-war inside every atom explains size, ionisation energy, electron affinity, electronegativity, bonding and reactivity.">
+<meta property="og:url"          content="https://kompassemester.aufthority.com/labs/periodic-trends/">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale"       content="en_MY">
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:site"        content="@theaufthority">
+<meta name="twitter:title"       content="Periodic Trends, Explained">
+<meta name="twitter:description" content="One tug-of-war inside every atom explains the periodic trends.">
+<meta name="twitter:image"       content="https://www.aufthority.com/preview_v2.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#6f7771;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#9a6a1c;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;--k:1;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;overflow:hidden;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+b,strong{color:var(--ink);font-weight:700}
+
+#shell{height:100vh;height:100dvh;height:var(--app-h,100dvh);max-width:1120px;margin:0 auto;padding:0 16px;display:flex;flex-direction:column}
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 8px}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.icon-btn{background:#fff;border:1px solid var(--rule);color:var(--body);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;cursor:pointer}
+#progress-label{font-size:.78rem;color:var(--muted);min-width:44px;text-align:right}
+#progress-track{flex:0 0 3px;background:var(--rule);border-radius:3px}
+#progress-fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.slide{position:absolute;inset:0;display:none;overflow:hidden;font-size:calc(var(--k) * 16px)}
+.slide.active{display:block}
+.si{height:100%;display:flex;flex-direction:column;justify-content:center;gap:.7em;padding:.8em 0 .4em;max-width:720px;margin:0 auto}
+.si.has-ill{max-width:none}
+.ill{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;align-items:stretch;min-height:0}
+.ill svg{width:100%;height:calc(var(--k) * 29vh);height:calc(var(--k) * 29dvh);display:block}
+.ill figcaption{font-size:.72em;color:var(--muted);text-align:center;margin-top:.25em}
+.txt{flex:0 0 auto;min-width:0}
+@media (min-width:760px) and (orientation:landscape){
+  .slide{font-size:calc(var(--k) * 17px)}
+  .si.has-ill{flex-direction:row;align-items:center;gap:2.4em;padding:1em 0}
+  .si.has-ill .ill{flex:0 0 46%}
+  .si.has-ill .ill svg{height:auto;max-height:calc(var(--k) * 64vh);max-height:calc(var(--k) * 64dvh)}
+  .si.has-ill .txt{flex:1 1 auto}
+}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.45em}
+h1,h2{color:var(--ink);font-weight:800;line-height:1.08;letter-spacing:-.025em;margin-bottom:.45em}
+h1{font-size:2.05em}
+h2{font-size:1.65em}
+@media (min-width:760px){h1{font-size:2.4em}h2{font-size:1.9em}}
+h1 .ac,h2 .ac{color:var(--accent)}
+p{margin-bottom:.6em;font-size:.97em}
+.small{font-size:.82em;color:var(--muted)}
+.cite{font-size:.78em;color:var(--muted);white-space:nowrap}
+.cite a{color:var(--muted)}
+.callout{border-left:3px solid var(--accent);background:var(--g-bg);padding:.5em .85em;margin:.55em 0;font-size:.92em;border-radius:0 8px 8px 0}
+.callout.warn{border-color:var(--red);background:var(--r-bg)}
+.callout.note{border-color:var(--orange);background:var(--o-bg)}
+.pill-list{display:flex;flex-wrap:wrap;gap:.4em;margin:.55em 0}
+.pill{background:var(--g-bg);color:var(--accent-dark);padding:.3em .8em;font-size:.82em;font-weight:500;border-radius:100px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:.5em;margin:.55em 0}
+.tile{border:1px solid var(--rule);border-radius:var(--radius);padding:.55em .75em}
+.tile .n{font-size:1.3em;font-weight:800;color:var(--accent);line-height:1.15;letter-spacing:-.02em;margin-bottom:.15em}
+.tile .l{font-size:.84em;color:var(--body)}
+.steps{list-style:none;margin:.55em 0;display:flex;flex-direction:column;gap:.45em}
+.steps li{display:flex;gap:.65em;align-items:flex-start;font-size:.92em}
+.steps .n{flex:0 0 1.65em;height:1.65em;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82em;margin-top:.05em}
+.data-table{width:100%;border-collapse:collapse;font-size:.84em;margin:.45em 0}
+.data-table th,.data-table td{border-bottom:1px solid var(--rule);padding:.4em .55em;text-align:left;vertical-align:top}
+.data-table th{font-weight:700;color:var(--muted);font-size:.8em;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid var(--rule)}
+.data-table td:first-child{color:var(--ink);font-weight:500}
+.data-table tr.hl td{background:var(--g-bg)}
+.map3{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.55em 0}
+.box{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .75em;font-size:.86em}
+.box h3{font-size:1.1em;font-weight:800;color:var(--accent);margin-bottom:.15em}
+.box .q{font-size:.9em;color:var(--muted);margin-bottom:.3em}
+.box ul{padding-left:1.1em}
+
+/* HTML diagrams */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.4em;margin:.6em 0}
+.node{border:1.5px solid var(--ink);border-radius:8px;padding:.35em .65em;font-size:.84em;font-weight:500;color:var(--ink);background:#fff;text-align:center}
+.node small{display:block;font-weight:400;color:var(--muted);font-size:.85em}
+.node.g{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.node.o{border-color:var(--orange);background:var(--o-bg)}
+.node.r{border-color:var(--red);background:var(--r-bg)}
+.node.ghost{border-style:dashed;color:var(--muted)}
+.arr{color:var(--orange);font-weight:800;font-size:1em}
+.lane{display:grid;grid-template-columns:8.5em 1fr;gap:.6em;align-items:center;padding:.45em 0;border-bottom:1px solid var(--rule)}
+.lane:last-of-type{border-bottom:none}
+.lane .lname{font-weight:800;color:var(--ink);font-size:.9em;line-height:1.2}
+.lane .lname small{display:block;font-weight:500;color:var(--muted);font-size:.8em}
+.lane .flow{margin:0}
+.stack{display:flex;flex-direction:column;gap:.4em;margin:.6em 0}
+.layer{display:grid;grid-template-columns:2.2em 1fr;gap:.6em;align-items:center;border:1px solid var(--g-line);background:var(--g-bg);border-radius:var(--radius);padding:.5em .7em;font-size:.88em}
+.layer .ln{width:2.2em;height:2.2em;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+.layer > div > b:first-child{display:block;margin-bottom:.1em}
+.htl{display:grid;grid-template-columns:repeat(4,1fr);gap:.6em;margin:.6em 0}
+.htl .ev{border-top:3px solid var(--accent);padding-top:.4em;font-size:.86em}
+.htl .yr{font-weight:800;color:var(--accent);font-size:1.25em;letter-spacing:-.02em;display:block}
+@media (max-width:520px){.htl{grid-template-columns:1fr 1fr}.map3{grid-template-columns:1fr}.lane{grid-template-columns:1fr;gap:.25em}}
+.eq{display:flex;align-items:center;justify-content:center;gap:.6em;flex-wrap:wrap;margin:.6em 0}
+.eq .term{text-align:center;font-size:.82em;color:var(--ink);font-weight:500}
+.eq .term svg{width:5.2em;height:auto;display:block;margin:0 auto .25em}
+.eq .op{font-size:1.6em;font-weight:800;color:var(--orange)}
+.forms{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.6em 0}
+.form{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .7em;font-size:.86em}
+.form svg{width:100%;height:3.4em;display:block;margin-bottom:.3em}
+.form h3{font-size:1.05em;font-weight:800;color:var(--ink);margin-bottom:.1em}
+@media (max-width:520px){.forms{grid-template-columns:1fr}.form{display:grid;grid-template-columns:4.5em 1fr;gap:.6em;align-items:center}.form svg{height:2.6em;margin:0}}
+
+/* interactions */
+.toggle-wrap{border:1px solid var(--rule);border-radius:var(--radius);margin:.45em 0;overflow:hidden}
+.toggle-btn{width:100%;background:#fff;border:none;color:var(--ink);font:600 .92em 'DM Sans',sans-serif;text-align:left;padding:.6em .85em;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:.6em}
+.toggle-btn .hint{font-weight:600;color:var(--accent);font-size:.8em;white-space:nowrap}
+.toggle-btn .hint::after{content:" +"}
+.toggle-wrap.open .toggle-btn .hint::after{content:" −"}
+.toggle-wrap.seen{border-color:var(--g-line)}
+.toggle-body{display:none;padding:0 .85em .7em;font-size:.9em}
+.toggle-wrap.open .toggle-body{display:block}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5em,1fr));gap:.45em;margin:.55em 0}
+.rcard{border:1px solid var(--rule);border-radius:var(--radius);background:#fff;text-align:left;padding:.55em .7em;cursor:pointer;font:400 .84em 'DM Sans',sans-serif;color:var(--body);display:block}
+.rcard .rt{font-weight:800;color:var(--ink);display:flex;justify-content:space-between;gap:.4em}
+.rcard .rt::after{content:"Tap";font-weight:600;font-size:.8em;color:var(--accent)}
+.rcard .rb{display:none;margin-top:.3em}
+.rcard.seen{border-color:var(--accent);background:var(--g-bg)}
+.rcard.seen .rt::after{content:""}
+.rcard.seen .rb{display:block}
+.rcard svg{width:100%;height:3.2em;display:block;margin:.2em 0}
+.choice-q{font-weight:700;color:var(--ink);font-size:.95em;margin-bottom:.45em}
+.choices{display:flex;flex-wrap:wrap;gap:.4em}
+.choice{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:500 .88em 'DM Sans',sans-serif;padding:.45em .85em;border-radius:100px;cursor:pointer}
+.choice:hover{border-color:var(--ink)}
+.choice.right{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.choice.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red);text-decoration:line-through}
+.feedback{display:none;font-size:.88em;margin-top:.5em;padding:.45em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.feedback.show{display:block}
+.stepper .choice-set{display:none}
+.stepper .choice-set.cur{display:block}
+.step-count{font-size:.75em;font-weight:700;color:var(--eyebrow);letter-spacing:.08em;margin-bottom:.3em}
+.next-q{margin-top:.55em;background:#fff;border:1.5px solid var(--ink);border-radius:100px;font:600 .84em 'DM Sans',sans-serif;padding:.38em .9em;cursor:pointer;display:none}
+.choice-set.done .next-q{display:inline-block}
+.calc{border:1px solid var(--rule);border-radius:var(--radius);padding:.65em .75em;margin:.55em 0}
+.calc-row{display:flex;gap:.6em;margin-bottom:.5em;flex-wrap:wrap}
+.calc label{font-size:.76em;font-weight:600;color:var(--muted);display:flex;flex-direction:column;gap:.2em;flex:1;min-width:8em}
+.calc input,.calc select{font:500 1.05em 'DM Sans',sans-serif;padding:.32em .45em;border:1px solid var(--rule);border-radius:6px;background:#fff;color:var(--ink);width:100%}
+.calc-out{font-size:.9em;padding:.45em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.calc-out.fail{border-color:var(--red);background:var(--r-bg)}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:600 .84em 'DM Sans',sans-serif;padding:.4em .95em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.range{width:100%;accent-color:var(--accent);margin:.4em 0}
+.scale-lbl{display:flex;justify-content:space-between;font-size:.74em;color:var(--muted);font-weight:600}
+.coa{display:flex;flex-direction:column;gap:.3em;margin:.45em 0}
+.coa-row{display:grid;grid-template-columns:1fr 1.3fr 4.8em;gap:.5em;align-items:center;background:#fff;border:1px solid var(--rule);border-radius:8px;color:var(--ink);font:400 .82em 'DM Sans',sans-serif;text-align:left;padding:.42em .65em;cursor:pointer}
+.coa-row b{font-weight:700}
+.coa-row .v{text-align:right;font-weight:700;color:var(--muted)}
+.coa-row.pass{border-color:var(--accent)}.coa-row.pass .v{color:var(--accent)}
+.coa-row.fail{border-color:var(--red);background:var(--r-bg)}.coa-row.fail .v{color:var(--red)}
+.coa-row.next{border-color:var(--orange);background:var(--o-bg)}.coa-row.next .v{color:var(--orange)}
+#coa-exp{min-height:2.7em;font-size:.86em;border-left:3px solid var(--rule);padding:.35em .65em}
+.coa-decision{display:none;margin-top:.5em}
+.coa-decision.show{display:block}
+.cards{display:flex;flex-direction:column;gap:.4em;margin:.55em 0}
+.card{display:flex;gap:.75em;border:1px solid var(--rule);border-radius:var(--radius);padding:.5em .75em;font-size:.88em}
+.card .cn{font-size:1.35em;font-weight:800;color:var(--accent);line-height:1}
+.madeby{border-top:1px solid var(--rule);padding-top:.6em;margin-top:.3em}
+.madeby p{font-size:.82em;color:var(--muted);margin-bottom:.45em}
+.madeby p b,.madeby p b a{color:var(--ink)}
+.socials{display:flex;flex-wrap:wrap;gap:.35em}
+.socials a{font-size:.8em;font-weight:600;color:var(--accent-dark);background:var(--g-bg);padding:.28em .75em;border-radius:100px;text-decoration:none}
+.socials a:hover{background:var(--g-line)}
+.score{font-size:1.25em;font-weight:800;color:var(--accent);margin-top:.5em}
+.pulse{animation:pulse 1s ease 2}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,130,31,0)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.45)}}
+
+#bottom{flex:0 0 auto;padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+#gate-hint{font-size:.78rem;color:var(--muted);text-align:center;min-height:1.2em;margin-bottom:5px}
+#gate-hint.alert{color:var(--orange);font-weight:600}
+#gate-hint button{background:none;border:none;color:var(--accent);text-decoration:underline;font:inherit;font-weight:600;cursor:pointer;padding:0}
+#nav-wrap{display:flex;justify-content:space-between;gap:10px}
+.nav-btn{flex:1;max-width:200px;background:#fff;border:1.5px solid var(--ink);color:var(--ink);font:700 .92rem 'DM Sans',sans-serif;padding:10px 14px;border-radius:100px;cursor:pointer}
+#btn-next{background:var(--ink);color:#fff;margin-left:auto}
+#btn-next.locked{background:#fff;color:var(--muted);border-color:var(--rule)}
+.nav-btn:disabled{opacity:.3;cursor:default}
+footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
+
+.overlay{display:none;position:fixed;inset:0;z-index:50;background:rgba(20,30,25,.35);padding:16px;overflow-y:auto}
+.overlay.open{display:block}
+.panel{max-width:620px;margin:16px auto;background:#fff;border-radius:14px;padding:18px 20px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.panel-head h3{font-weight:800;color:var(--ink);font-size:1.3rem;letter-spacing:-.02em}
+.toc-note{font-size:.82rem;color:var(--muted);margin-bottom:8px}
+.toc{list-style:none}
+.toc li{border-bottom:1px solid var(--rule)}
+.toc button{background:none;border:none;color:var(--ink);font:400 .9rem 'DM Sans',sans-serif;padding:7px 0;width:100%;text-align:left;cursor:pointer;display:flex;gap:10px}
+.toc button span{color:var(--muted);min-width:22px}
+.toc button.cur{color:var(--accent);font-weight:700}
+.toc .sec{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;padding:12px 0 3px;border:none}
+.refs{padding-left:20px;font-size:.82rem;color:var(--body)}
+.refs li{margin-bottom:7px;word-break:break-word}
+
+/* ---------- SVG diagram + chart styling ---------- */
+.ln{fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ln.thin{stroke-width:1.2}
+.ln.g{stroke:var(--accent)}.ln.r{stroke:var(--red)}.ln.o{stroke:var(--orange)}.ln.b{stroke:var(--blue)}.ln.m{stroke:#a3aaa5}
+.dash{stroke-dasharray:4 4}
+.fg{fill:var(--g-bg)}.fgs{fill:var(--accent)}.fb{fill:var(--b-bg)}.fr{fill:var(--r-bg)}.frs{fill:var(--red)}.fo{fill:var(--o-bg)}.fos{fill:var(--orange)}.fw{fill:#fff}.fk{fill:var(--ink)}.fgr{fill:#eef0ee}.fpow{fill:#d9d4c7}
+.tx{font-family:'DM Sans',sans-serif;font-size:12px;fill:var(--body)}
+.tx.s{font-size:10.5px;fill:var(--muted)}
+.tx.b{font-weight:700;fill:var(--ink)}
+.tx.g{fill:var(--accent-dark);font-weight:700}.tx.r{fill:var(--red);font-weight:700}.tx.o{fill:#a85f10;font-weight:700}.tx.bl{fill:var(--blue);font-weight:700}
+.tx.mid{text-anchor:middle}.tx.end{text-anchor:end}
+.bar{fill:var(--accent)}.bar.hl{fill:var(--red)}
+.axis{stroke:#c9cdca;stroke-width:1;fill:none}
+.grid{stroke:#eceeec;stroke-width:1}
+
+/* animations run only on the active slide, restart on every visit */
+.slide.active .draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.1s ease-out forwards;animation-delay:var(--d,0s)}
+.slide.active .fade{opacity:0;animation:fadeup .5s ease-out forwards;animation-delay:var(--d,.3s)}
+.slide.active .stagger > *{opacity:0;animation:fadeup .45s ease-out forwards;animation-delay:var(--d,0s)}
+.slide.active .grow-x{transform-box:fill-box;transform-origin:left center;animation:growx .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
+.slide.active .grow-y{transform-box:fill-box;transform-origin:center bottom;animation:growy .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
+.slide.active .updown{animation:updown 2s ease-in-out infinite}
+.slide.active .spin{transform-box:view-box;animation:spin 6s linear infinite}
+.slide.active .spin-r{transform-box:view-box;animation:spin 6s linear infinite reverse}
+.slide.active .drop{animation:drop 2.4s ease-in infinite}
+.slide.active .bounce{animation:bounce 1.2s ease-in-out infinite}
+.slide.active .cyc{animation:cyc 6s infinite;animation-delay:var(--d,0s)}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeup{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes growx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes growy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes updown{0%,100%{transform:translateY(0)}50%{transform:translateY(22px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes drop{0%{transform:translateY(0);opacity:0}10%{opacity:1}80%{opacity:1}100%{transform:translateY(46px);opacity:0}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes cyc{0%,22%{opacity:1}26%,100%{opacity:.28}}
+
+/* ---------- pharmacopoeia explainer modal ---------- */
+.ph-open{display:inline-flex;align-items:center;gap:.45em;background:#fff;border:1.5px solid var(--accent);color:var(--accent-dark);font:700 .84em 'DM Sans',sans-serif;padding:.42em .95em;border-radius:100px;cursor:pointer;margin:.3em 0}
+.ph-open .bk{width:1.05em;height:1.05em}
+#ph-overlay{overflow:hidden}
+.ph-panel{max-width:960px;margin:0 auto;background:#fff;border-radius:14px;height:100%;display:flex;flex-direction:column;padding:14px 18px 12px}
+.ph-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex:0 0 auto;margin-bottom:6px}
+.ph-head .ph-title{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700}
+.ph-body{flex:1 1 auto;min-height:0;position:relative}
+.ph-step{position:absolute;inset:0;display:none;overflow:hidden;font-size:calc(var(--k) * 16px)}
+.ph-step.active{display:block}
+.ph-in{height:100%;display:flex;flex-direction:column;justify-content:center;gap:.8em}
+.ph-fig{flex:0 0 auto;margin:0;text-align:center}
+.ph-fig img{max-width:100%;height:auto;max-height:calc(var(--k) * 30vh);max-height:calc(var(--k) * 30dvh);border:1px solid var(--rule);border-radius:8px;background:#fff;display:inline-block}
+.ph-fig figcaption{font-size:.7em;color:var(--muted);margin-top:.3em}
+.ph-txt{flex:0 0 auto;min-width:0}
+.ph-txt h2{font-size:1.5em}
+.ph-txt p,.ph-txt li{font-size:.93em}
+.ph-list{list-style:none;display:flex;flex-direction:column;gap:.3em;margin:.4em 0}
+.ph-list li{padding-left:.9em;border-left:3px solid var(--g-line)}
+.ph-foot{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:8px;border-top:1px solid var(--rule)}
+.ph-dots{display:flex;gap:6px}
+.ph-dots span{width:8px;height:8px;border-radius:50%;background:var(--rule)}
+.ph-dots span.on{background:var(--accent)}
+.ph-foot .nav-btn{max-width:150px;padding:8px 12px;font-size:.86rem}
+@media (min-width:760px) and (orientation:landscape){
+  .ph-in{flex-direction:row;align-items:center;gap:2em}
+  .ph-fig{flex:0 0 46%}
+  .ph-fig img{max-height:calc(var(--k) * 60vh);max-height:calc(var(--k) * 60dvh)}
+  .ph-txt{flex:1 1 auto}
+  .ph-step{font-size:calc(var(--k) * 17px)}
+}
+/* ---------- video buttons + player ---------- */
+.vbtn{display:inline-flex;align-items:center;gap:.5em;background:var(--ink);color:#fff;border:none;font:600 .82em 'DM Sans',sans-serif;padding:.45em .95em .45em .7em;border-radius:100px;cursor:pointer;margin:.25em .35em .25em 0}
+.vbtn svg{width:1.1em;height:1.1em}
+.vbtn[hidden]{display:none}
+#vid-overlay{overflow:hidden;background:rgba(10,15,12,.8)}
+.vid-panel{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.vid-frame{background:#000;border-radius:12px;overflow:hidden;width:min(100%, calc((100dvh - 170px) * 16 / 9));aspect-ratio:16/9}
+.vid-frame.vertical{width:min(100%, calc((100dvh - 170px) * 9 / 16));aspect-ratio:9/16}
+.vid-frame iframe{width:100%;height:100%;border:0;display:block}
+.vid-meta{color:#fff;text-align:center;font-size:.86rem;max-width:640px}
+.vid-meta a{color:#cfe6d9}
+.vid-close{background:#fff;color:var(--ink);border:none;border-radius:100px;font:700 .86rem 'DM Sans',sans-serif;padding:8px 18px;cursor:pointer}
+@media (prefers-reduced-motion: reduce){
+  .slide.active *{animation:none!important;opacity:1!important;stroke-dashoffset:0!important;transform:none!important}
+}
+
+/* ---------- additions for this explainer ---------- */
+.back-pill{display:inline-flex;align-items:center;background:var(--g-bg);color:var(--accent-dark);border:1px solid var(--g-line);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;text-decoration:none;white-space:nowrap}
+.back-pill .s{display:none}
+@media (max-width:420px){.back-pill .l{display:none}.back-pill .s{display:inline}.logo span{display:none}}
+.slide.scroll{overflow-y:auto;-webkit-mask-image:linear-gradient(#000 calc(100% - 22px),transparent);mask-image:linear-gradient(#000 calc(100% - 22px),transparent)}
+.toggle-wrap.opt .toggle-btn .tag{font-size:.7em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--eyebrow);margin-right:.5em}
+/* mini periodic table */
+.pt{margin:.2em 0;width:100%;max-width:30em;margin-left:auto;margin-right:auto}
+.pt-grid{display:grid;grid-template-columns:1.3em repeat(8,minmax(0,1fr));gap:.2em}
+.pt-h{font-size:.62em;color:var(--muted);text-align:center;font-weight:700;align-self:end}
+.pt-r{font-size:.62em;color:var(--muted);font-weight:700;display:flex;align-items:center;justify-content:center}
+.pt-c{border:1px solid var(--rule);border-radius:5px;background:#fff;padding:.2em 0 .16em;text-align:center;cursor:pointer;font:inherit;color:var(--ink);line-height:1.08;min-width:0}
+.pt-c b{display:block;font-size:.88em;font-weight:800;color:inherit}
+.pt-c i{display:block;font-style:normal;font-size:.56em;opacity:.9;white-space:nowrap;overflow:hidden}
+.pt-c.dark{color:#fff;border-color:transparent}
+.pt-c.na,.pt-c.est{background-image:repeating-linear-gradient(45deg,rgba(0,0,0,0) 0 3px,rgba(0,0,0,.08) 3px 6px)}
+.pt-c.na{background-color:#fff;color:var(--muted)}
+.pt-c.hl{outline:2px solid var(--orange);outline-offset:1px}
+.pt-c.sel{box-shadow:0 0 0 2px var(--ink)}
+.pt-gap{visibility:hidden}
+.pt-out{font-size:.8em;margin-top:.4em;min-height:1.3em;color:var(--body);text-align:center}
+.pt-key{display:flex;align-items:center;justify-content:center;gap:.45em;font-size:.68em;color:var(--muted);margin-top:.3em}
+.pt-key .bar{flex:0 0 6em;height:.55em;border-radius:3px;background:linear-gradient(90deg,#eef5f1,#2d6a4f)}
+.trend-tags{display:flex;flex-wrap:wrap;gap:.4em;margin:.5em 0}
+.trend-tags span{font-size:.8em;font-weight:600;background:var(--o-bg);color:#8a5410;padding:.25em .75em;border-radius:100px}
+.next-lab{display:block;border:1px solid var(--g-line);background:var(--g-bg);border-radius:var(--radius);padding:.5em .8em;text-decoration:none;font-size:.86em;color:var(--body);margin:.5em 0}
+.next-lab b{color:var(--accent-dark)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ar-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#c0392b"/></marker>
+    <marker id="ar-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#d9821f"/></marker>
+    <marker id="ar-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#2d6a4f"/></marker>
+    <marker id="ar-m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#8f9691"/></marker>
+    <marker id="ar-y" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#9a6a1c"/></marker>
+    <linearGradient id="g-spec" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#e9f4ee"/><stop offset=".5" stop-color="#fdf3e6"/><stop offset="1" stop-color="#fbecea"/></linearGradient>
+  </defs>
+</svg>
+<div id="shell">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <a class="back-pill" id="btn-kompas" href="../../index.html" data-umami-event="back-to-kompas"><span class="l">← Back to Kompas</span><span class="s">← Kompas</span></a>
+      <button class="icon-btn" id="btn-toc" data-umami-event="open-contents">Contents</button>
+      <span id="progress-label">1 / 29</span>
+    </div>
+  </nav>
+  <div id="progress-track"><div id="progress-fill"></div></div>
+
+  <div id="stage">
+
+<!-- ================= START HERE ================= -->
+
+<section class="slide active" data-sec="intro" data-title="Same particles, opposite behaviour">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="A small fluorine atom pulling in an electron and a large potassium atom losing its outer electron">
+    <circle class="fg" cx="100" cy="92" r="20"/><circle class="ln g draw" pathLength="1" cx="100" cy="92" r="20"/>
+    <circle class="fgs" cx="100" cy="92" r="6"/>
+    <circle class="fk fade" cx="40" cy="32" r="4" style="--d:.6s"/>
+    <path class="ln g fade" d="M47 39 L84 76" marker-end="url(#ar-g)" style="--d:.6s"/>
+    <text class="tx b mid" x="100" y="186">Fluorine</text>
+    <text class="tx s mid" x="100" y="202">small, grabs an electron</text>
+    <circle class="fo" cx="280" cy="92" r="72"/><circle class="ln o draw" pathLength="1" cx="280" cy="92" r="72" style="--d:.3s"/>
+    <circle class="fos" cx="280" cy="92" r="6"/>
+    <g class="fade" style="--d:1s"><circle class="fk" cx="352" cy="92" r="4"/><path class="ln o" d="M358 92 L392 92" marker-end="url(#ar-o)"/></g>
+    <text class="tx b mid" x="280" y="186">Potassium</text>
+    <text class="tx s mid" x="280" y="202">large, gives its outer electron away</text>
+   </svg>
+   <figcaption>Drawn to scale: radii 57 pm and 203 pm.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Start here</div>
+   <h1>Same particles, <span class="ac">opposite behaviour.</span></h1>
+   <p>Fluorine and potassium are made of the same three particles: protons, neutrons and electrons. Yet fluorine pulls electrons away from almost anything, and potassium hands its outer electron to almost anything.</p>
+   <p>The difference comes from one <b>tug-of-war inside every atom</b>. Once you see it, five trends follow: atomic size, ion size, ionisation energy, electron affinity and electronegativity. From those come bonds, polarity and reactivity.</p>
+   <p class="small">For Diploma in Pharmacy students. Use Next to move through the pages, or Contents to jump around. "Go deeper" sections are optional.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="intro" data-title="Your map: the periodic table">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="pt" data-prop="none" data-sel="Na"></div>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Start here</div>
+   <h2>Rows, columns <span class="ac">and the two directions.</span></h2>
+   <p>This explainer uses the <b>main-group elements</b> of the first four rows. The transition metals sit between groups 2 and 13 and are left out to keep the pattern clear.</p>
+   <ul class="steps">
+     <li><span class="n">→</span><span><b>Across a period</b> (a row): each element has one more proton, and the new electron goes into the <b>same shell</b>.</span></li>
+     <li><span class="n">↓</span><span><b>Down a group</b> (a column): each row adds a <b>whole new shell</b> of electrons.</span></li>
+   </ul>
+   <p>Every trend on the following pages is described in these two directions. Tap any element to see where it sits.</p>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 1 · ZEFF ================= -->
+
+<section class="slide" data-sec="zeff" data-title="The tug-of-war">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 220" role="img" aria-label="Lithium and fluorine compared: lithium's outer electron is far away and weakly pulled, fluorine's are close and strongly pulled">
+    <circle class="ln m dash" cx="110" cy="100" r="70"/>
+    <circle class="ln thin" cx="110" cy="100" r="22"/>
+    <circle class="fgs" cx="110" cy="100" r="11"/><text class="tx mid" x="110" y="104" style="fill:#fff;font-size:10px;font-weight:700">+3</text>
+    <circle class="fk" cx="110" cy="78" r="3"/><circle class="fk" cx="110" cy="122" r="3"/>
+    <circle class="frs" cx="180" cy="100" r="4.5"/>
+    <path class="ln o draw" pathLength="1" d="M173 100 L128 100" marker-end="url(#ar-o)" style="stroke-width:1.2;--d:.4s"/>
+    <circle class="ln m dash" cx="300" cy="100" r="31"/>
+    <circle class="ln thin" cx="300" cy="100" r="16"/>
+    <circle class="fgs" cx="300" cy="100" r="11"/><text class="tx mid" x="300" y="104" style="fill:#fff;font-size:10px;font-weight:700">+9</text>
+    <g class="fk"><circle cx="331" cy="100" r="3"/><circle cx="319.3" cy="75.8" r="3"/><circle cx="293.1" cy="69.8" r="3"/><circle cx="272.1" cy="86.5" r="3"/><circle cx="272.1" cy="113.5" r="3"/><circle cx="293.1" cy="130.2" r="3"/><circle cx="319.3" cy="124.2" r="3"/></g>
+    <path class="ln o draw" pathLength="1" d="M348 100 L320 100" marker-end="url(#ar-o)" style="stroke-width:4;--d:.6s"/>
+    <text class="tx b mid" x="110" y="192">Lithium</text>
+    <text class="tx s mid" x="110" y="208">Zeff 1.30 · radius 128 pm · pull 5</text>
+    <text class="tx b mid" x="300" y="192">Fluorine</text>
+    <text class="tx s mid" x="300" y="208">Zeff 5.20 · radius 57 pm · pull 100</text>
+   </svg>
+   <figcaption>A sketch. Pull index = Zeff ÷ r², with fluorine set to 100.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">1 · The root cause</div>
+   <h2>The tug-of-war: <span class="ac">effective nuclear charge.</span></h2>
+   <p>The nucleus pulls on the outer electrons. The inner electrons sit in between and block part of that pull; this is called <b>shielding</b>. The pull that is left over is the <b>effective nuclear charge, Zeff</b>.</p>
+   <p>Two rules carry the rest of this explainer:</p>
+   <ol class="steps">
+     <li><span class="n">1</span><span>A <b>bigger Zeff</b> pulls harder.</span></li>
+     <li><span class="n">2</span><span>A <b>farther electron</b> feels the pull less.</span></li>
+   </ol>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="zeff" data-title="Zeff across and down">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="pt" data-prop="zeff" data-sel="Cl"></div>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">1 · Effective nuclear charge</div>
+   <h2>Zeff climbs across, <span class="ac">and the shell count climbs down.</span></h2>
+   <p><b>Across a period</b>, each element adds a proton, but the new electron joins the same shell. Electrons in the same shell shield each other poorly, so Zeff climbs: lithium 1.30, fluorine 5.20.</p>
+   <p><b>Down a group</b>, each row adds a new shell. Zeff stays about the same in groups 1 and 2 (sodium and potassium are both 2.20) and rises slowly further right, but the outer electron is now much farther from the nucleus.</p>
+   <div class="trend-tags"><span>Across → Zeff rises, atom shrinks</span><span>Down ↓ Zeff similar, atom grows</span></div>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>How are these Zeff values worked out?</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p><b>Slater's rules</b> estimate shielding for an s or p electron: each other electron in the same shell shields 0.35, each electron one shell in shields 0.85, and each deeper electron shields 1.00. Then Zeff = Z − shielding.</p><p>Chlorine (Z = 17, 1s² 2s² 2p⁶ 3s² 3p⁵): shielding = (6 × 0.35) + (8 × 0.85) + (2 × 1.00) = 10.90, so Zeff = 6.10. It is a model, not a measurement.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="zeff" data-title="Check: Zeff">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check · effective nuclear charge</div>
+   <h2>Three quick questions <span class="ac">before moving on.</span></h2>
+   <p class="small">Answer all three to continue. Go back if you need a reminder.</p>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="up">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">Going across period 3 from sodium to chlorine, what happens to Zeff?</div>
+      <div class="choices"><button class="choice" data-v="up">It rises</button><button class="choice" data-v="down">It falls</button><button class="choice" data-v="same">It stays the same</button></div>
+      <div class="feedback">It rises (2.20 to 6.10). Each step adds a proton, but the new electron joins the same shell, and same-shell electrons shield each other poorly.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="far">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">Sodium and potassium both have a Zeff of 2.20, yet potassium holds its outer electron less tightly. Why?</div>
+      <div class="choices"><button class="choice" data-v="far">Its outer electron is farther away</button><button class="choice" data-v="prot">It has fewer protons</button><button class="choice" data-v="none">It has no inner electrons</button></div>
+      <div class="feedback">Potassium's outer electron is in the fourth shell, much farther from the nucleus. Same pull, longer distance, weaker hold (rule 2).</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="f">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">Whose outer electrons feel the strongest pull?</div>
+      <div class="choices"><button class="choice" data-v="li">Lithium</button><button class="choice" data-v="c">Carbon</button><button class="choice" data-v="f">Fluorine</button></div>
+      <div class="feedback">Fluorine: the highest Zeff in period 2 (5.20) and the smallest radius, so both rules point the same way.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 2 · SIZE ================= -->
+
+<section class="slide" data-sec="size" data-title="Atomic radius">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="pt" data-prop="rad" data-sel="F"></div>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">2 · Size</div>
+   <h2>Smaller across, <span class="ac">bigger down.</span></h2>
+   <p><b>Across a period</b>, atoms get smaller: the same shell is pulled in by a stronger Zeff (lithium 128 pm, fluorine 57 pm).</p>
+   <p><b>Down a group</b>, atoms get bigger: each row adds a shell, like adding a layer to an onion (fluorine 57, chlorine 102, bromine 120 pm).</p>
+   <p class="small">1 pm (picometre) = 10⁻¹² m. Values are covalent radii: half the distance between two identical atoms bonded together. Noble gases are hatched because they rarely bond, so their radii are estimates.</p>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>Why is gallium barely bigger than aluminium?</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Gallium (122 pm) is almost the same size as aluminium (121 pm). The ten 3d electrons added between calcium and gallium shield poorly, so gallium's outer electrons feel a stronger pull than expected. This is the <b>d-block contraction</b>.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="size" data-title="Atoms versus ions">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 200" role="img" aria-label="Sodium shrinks from 166 to 102 picometres when it becomes Na plus; chlorine swells from 102 to 181 picometres when it becomes Cl minus">
+    <circle class="fg grow-y" cx="90" cy="92" r="29" style="transform-origin:center;--d:.5s"/>
+    <circle class="ln m dash" cx="90" cy="92" r="46"/>
+    <text class="tx g mid" x="90" y="96">Na⁺</text>
+    <text class="tx b mid" x="90" y="166">Na → Na⁺</text>
+    <text class="tx s mid" x="90" y="182">166 → 102 pm · shrinks</text>
+    <circle class="fo fade" cx="290" cy="92" r="51" style="--d:.5s"/>
+    <circle class="ln m dash" cx="290" cy="92" r="29"/>
+    <text class="tx o mid" x="290" y="96">Cl⁻</text>
+    <text class="tx b mid" x="290" y="166">Cl → Cl⁻</text>
+    <text class="tx s mid" x="290" y="182">102 → 181 pm · swells</text>
+    <text class="tx s" x="10" y="16">dashed = atom · filled = ion (to scale)</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">2 · Size after a change</div>
+   <h2>Lose electrons and shrink. <span class="ac">Gain them and swell.</span></h2>
+   <ul class="steps">
+     <li><span class="n">−</span><span><b>Sodium</b> (166 pm) becomes Na⁺ (102 pm): it loses its whole outer shell.</span></li>
+     <li><span class="n">+</span><span><b>Chlorine</b> (102 pm) becomes Cl⁻ (181 pm): one extra electron, the same 17 protons, so more repulsion between electrons and a looser cloud.</span></li>
+   </ul>
+   <p>So positive ions (<b>cations</b>) are always smaller than their atoms, and negative ions (<b>anions</b>) are always larger.</p>
+   <p class="small">Compare an ion with its own atom only. Covalent and ionic radii come from different methods, so cross-scale comparisons are rough.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="size" data-title="Ions on the table">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="pt" data-prop="ion" data-sel="Cl"></div>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">2 · Ionic radius</div>
+   <h2>The same trends, <span class="ac">in two families.</span></h2>
+   <p>The table now shows each element's common ion. Groups 1, 2 and 13 form small cations; groups 16 and 17 form large anions. Hatched elements have no common simple ion.</p>
+   <p><b>Down a group</b>, ions grow, for the same reason atoms do: an extra shell each row (Li⁺ 76, Na⁺ 102, K⁺ 138 pm).</p>
+   <p><b>Across the cations</b> (Na⁺, Mg²⁺, Al³⁺), size falls sharply, because they have the same electrons but more protons. The next page explains why.</p>
+   <p class="small">Ionic radii for six-fold coordination (Shannon, 1976).</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="size" data-title="Same electrons, different size">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 190" role="img" aria-label="Five ions with ten electrons each, shrinking from oxide 140 pm to aluminium 53.5 pm as proton number rises">
+    <text class="tx b" x="10" y="22">All have 10 electrons</text>
+    <g class="stagger">
+     <circle class="fo" cx="50" cy="95" r="28"/><circle class="fo" cx="125" cy="95" r="26.6"/><circle class="fg" cx="200" cy="95" r="20.4"/><circle class="fg" cx="275" cy="95" r="14.4"/><circle class="fg" cx="350" cy="95" r="10.7"/>
+    </g>
+    <g class="tx b mid"><text class="tx b mid" x="50" y="146">O²⁻</text><text class="tx b mid" x="125" y="146">F⁻</text><text class="tx b mid" x="200" y="146">Na⁺</text><text class="tx b mid" x="275" y="146">Mg²⁺</text><text class="tx b mid" x="350" y="146">Al³⁺</text></g>
+    <text class="tx s mid" x="50" y="162">140 pm</text><text class="tx s mid" x="125" y="162">133</text><text class="tx s mid" x="200" y="162">102</text><text class="tx s mid" x="275" y="162">72</text><text class="tx s mid" x="350" y="162">53.5</text>
+    <text class="tx g mid" x="50" y="180">8 p⁺</text><text class="tx g mid" x="125" y="180">9 p⁺</text><text class="tx g mid" x="200" y="180">11 p⁺</text><text class="tx g mid" x="275" y="180">12 p⁺</text><text class="tx g mid" x="350" y="180">13 p⁺</text>
+   </svg>
+   <figcaption>Circles drawn to scale (Shannon ionic radii).</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">2 · Ionic radius</div>
+   <h2>Same number of electrons, <span class="ac">more protons, smaller ion.</span></h2>
+   <p>Ions with the same number of electrons are called <b>isoelectronic</b>. All five above have 10 electrons, the same arrangement as neon. The only difference is the number of protons in the nucleus.</p>
+   <p>More protons pull the same electron cloud in tighter, so the size falls steadily from O²⁻ to Al³⁺.</p>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>Why does aluminium chloride behave partly like a covalent compound?</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Small, highly charged cations distort (polarise) large anions, pulling their electron cloud towards themselves. This gives an ionic bond some covalent character (<b>Fajans' rules</b>). Polarising power tracks charge ÷ radius: Na⁺ 1 ÷ 102 = 0.0098, Al³⁺ 3 ÷ 53.5 = 0.056, about 5.7 times stronger.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="size" data-title="Check: size">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check · atomic and ionic size</div>
+   <h2>Three quick questions <span class="ac">on size.</span></h2>
+   <p class="small">Answer all three to continue.</p>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="na">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">Which of these atoms is the largest?</div>
+      <div class="choices"><button class="choice" data-v="na">Sodium</button><button class="choice" data-v="mg">Magnesium</button><button class="choice" data-v="cl">Chlorine</button></div>
+      <div class="feedback">Sodium (166 pm). All three are in period 3, so the one furthest left has the lowest Zeff and the largest size.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="up">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">A chlorine atom (102 pm) gains one electron to become Cl⁻. Its radius:</div>
+      <div class="choices"><button class="choice" data-v="up">Increases</button><button class="choice" data-v="down">Decreases</button><button class="choice" data-v="same">Stays the same</button></div>
+      <div class="feedback">Increases, to 181 pm. Same 17 protons, one more electron, more repulsion between electrons.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="p">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">Na⁺ (102 pm) and Mg²⁺ (72 pm) both have 10 electrons. Why is Mg²⁺ smaller?</div>
+      <div class="choices"><button class="choice" data-v="p">More protons pull the same cloud tighter</button><button class="choice" data-v="sh">It has one fewer shell</button><button class="choice" data-v="e">It has more electrons</button></div>
+      <div class="feedback">They are isoelectronic, with the same shells and electrons. Magnesium has 12 protons to sodium's 11, so its cloud is pulled in tighter.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 3 · IONISATION ENERGY ================= -->
+
+<section class="slide" data-sec="ie" data-title="Ionisation energy">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="pt" data-prop="ie" data-sel="Ne" data-hl="B,O"></div>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">3 · Holding on</div>
+   <h2>How hard is it <span class="ac">to remove an electron?</span></h2>
+   <p><b>First ionisation energy</b> is the energy needed to remove one electron from each atom in a mole of gaseous atoms:</p>
+   <div class="callout note" style="font-weight:600;color:var(--ink)">X(g) → X⁺(g) + e⁻ &nbsp; ΔH is positive</div>
+   <p>A high value means the atom holds on tightly. Across a period it <b>rises</b> (lithium 520, neon 2081 kJ/mol); down a group it <b>falls</b> (lithium 520, sodium 496, potassium 419 kJ/mol).</p>
+   <p class="small">Two elements break the pattern. They are outlined in orange on the table; the next page explains them.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="ie" data-title="The two dips">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">3 · Ionisation energy</div>
+   <h2>Two dips <span class="ac">that prove subshells exist.</span></h2>
+   <p>If electrons simply sat in shells, ionisation energy would rise smoothly across a period. It does not. Tap both cards to see why.</p>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Beryllium 900 → boron 801</span><span class="rb">Boron's outer electron is the first in a <b>2p</b> orbital. A 2p electron is slightly higher in energy than a 2s electron, and it is partly shielded by the filled 2s pair, so it is easier to remove.</span></button>
+     <button class="rcard"><span class="rt">Nitrogen 1402 → oxygen 1314</span><span class="rb">Nitrogen's three 2p electrons each have their own orbital. Oxygen's fourth 2p electron must <b>share an orbital</b>, and the two electrons in that orbital repel each other, so one is easier to remove.</span></button>
+   </div>
+   <div class="callout">The same two dips repeat in period 3: magnesium 738 → aluminium 578, and phosphorus 1012 → sulfur 1000.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="ie" data-title="Successive ionisation energies">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 220" role="img" aria-label="Successive ionisation energies of element X: 738, 1451, 7733 and 10543 kilojoules per mole, with a large jump at the third">
+    <line class="grid" x1="44" x2="392" y1="180" y2="180"/>
+    <line class="grid" x1="44" x2="392" y1="111.8" y2="111.8"/>
+    <line class="grid" x1="44" x2="392" y1="43.6" y2="43.6"/>
+    <text class="tx s end" x="40" y="184">0</text><text class="tx s end" x="40" y="115.8">5000</text><text class="tx s end" x="40" y="47.6">10000</text>
+    <text class="tx s" x="6" y="18">kJ/mol</text>
+    <rect class="bar grow-y" x="70" y="169.9" width="50" height="10.1" rx="3" style="--d:.1s"/>
+    <rect class="bar grow-y" x="150" y="160.2" width="50" height="19.8" rx="3" style="--d:.2s"/>
+    <rect class="grow-y" x="230" y="74.5" width="50" height="105.5" rx="3" style="fill:var(--eyebrow);--d:.3s"/>
+    <rect class="grow-y" x="310" y="36.2" width="50" height="143.8" rx="3" style="fill:var(--eyebrow);--d:.4s"/>
+    <text class="tx b mid fade" x="95" y="163">738</text><text class="tx b mid fade" x="175" y="153">1451</text><text class="tx b mid fade" x="255" y="68">7733</text><text class="tx b mid fade" x="335" y="30">10543</text>
+    <text class="tx mid" x="95" y="198">1st</text><text class="tx mid" x="175" y="198">2nd</text><text class="tx mid" x="255" y="198">3rd</text><text class="tx mid" x="335" y="198">4th</text>
+    <path class="ln o fade" d="M182 140 Q210 100 238 96" marker-end="url(#ar-o)" style="--d:.8s"/>
+    <text class="tx o fade" x="112" y="112" style="--d:.8s">big jump</text>
+    <text class="tx s end" x="392" y="216">electron removed (element X)</text>
+   </svg>
+   <figcaption>Gold bars: electrons taken from an inner shell.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">3 · Ionisation energy · try it</div>
+   <h2>Removing electrons one by one <span class="ac">reveals the shells.</span></h2>
+   <p>Each electron removed is harder to take than the last, because the ion left behind is more positive. But when the next electron must come from an <b>inner shell</b>, much closer to the nucleus, the energy jumps sharply. Exam questions use this jump to find an element's group.</p>
+   <div class="choice-set" data-answer="g2">
+     <div class="choice-q">Element X has the successive ionisation energies in the chart. Which group is it in?</div>
+     <div class="choices"><button class="choice" data-v="g1">Group 1</button><button class="choice" data-v="g2">Group 2</button><button class="choice" data-v="g13">Group 13</button></div>
+     <div class="feedback">Group 2. The jump comes after the 2nd electron, so X has two outer electrons; the 3rd comes from an inner shell. X is magnesium.</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 4 · ELECTRON AFFINITY ================= -->
+
+<section class="slide" data-sec="ea" data-title="Electron affinity">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="pt" data-prop="ea" data-sel="Cl"></div>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">4 · Welcoming one more</div>
+   <h2>How much does an atom <span class="ac">welcome an electron?</span></h2>
+   <p><b>Electron affinity</b> is the energy change when each atom in a mole of gaseous atoms gains one electron:</p>
+   <div class="callout note" style="font-weight:600;color:var(--ink)">X(g) + e⁻ → X⁻(g)</div>
+   <p>A <b>negative</b> value means energy is released: the atom welcomes the electron. Chlorine releases the most (−349 kJ/mol). In general it becomes <b>more negative across</b> a period and <b>less negative down</b> a group, but with more exceptions than any other trend.</p>
+   <p class="small">Darker cells release more energy. Some textbooks drop the minus sign (writing 349); it is the same fact.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="ea" data-title="Three exceptions">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">4 · Electron affinity</div>
+   <h2>Three exceptions <span class="ac">worth knowing.</span></h2>
+   <p>Tap all three cards to continue.</p>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">No stable negative ion</span><span class="rb">Noble gases, beryllium and magnesium (hatched on the table). The new electron would have to start a new shell or subshell, farther out and well shielded, so it is not held.</span></button>
+     <button class="rcard"><span class="rt">Nitrogen ≈ 0</span><span class="rb">Nitrogen's half-filled 2p subshell is stable. An extra electron would have to pair up in an occupied orbital, and the repulsion cancels most of the attraction.</span></button>
+     <button class="rcard"><span class="rt">Fluorine −328, chlorine −349</span><span class="rb">Fluorine is so small that its outer shell is crowded. The incoming electron is repelled by the electrons already there, so fluorine releases slightly less energy than chlorine.</span></button>
+   </div>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>If O → O²⁻ costs energy, why does O²⁻ exist?</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>The <b>second</b> electron affinity is always positive: adding an electron to an ion that is already negative costs energy (O⁻ + e⁻ → O²⁻, about +800 kJ/mol). O²⁻ still exists in compounds because the <b>lattice energy</b> released when the solid forms pays that cost. Section 7 does the same accounting for salt.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 5 · ELECTRONEGATIVITY ================= -->
+
+<section class="slide" data-sec="en" data-title="Electronegativity">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="pt" data-prop="en" data-sel="F"></div>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">5 · Pull inside a bond</div>
+   <h2>Who pulls harder <span class="ac">on shared electrons?</span></h2>
+   <p><b>Electronegativity</b> is how strongly an atom pulls the <b>shared</b> electrons in a bond towards itself. The Pauling scale runs from about 0.8 to 4.0: fluorine is highest (3.98), potassium lowest here (0.82).</p>
+   <p>It rises across a period and falls down a group, for the same two reasons as before.</p>
+   <div class="trend-tags"><span>Across → rises to F 3.98</span><span>Down ↓ falls: F 3.98 → Br 2.96</span></div>
+   <p class="small">Helium, neon and argon have no value: they form no ordinary bonds.</p>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>How is electronegativity linked to IE and EA?</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Mulliken defined electronegativity as roughly the <b>average</b> of how hard an atom holds its own electrons (ionisation energy) and how much it welcomes a new one (electron affinity). Pauling built his scale from bond energies instead. The two scales agree closely.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="en" data-title="Check: IE, EA or EN?">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check · three easily confused terms</div>
+   <h2>Ionisation energy, electron affinity <span class="ac">or electronegativity?</span></h2>
+   <table class="data-table">
+     <tr><th>Term</th><th>What it describes</th><th>Measured for</th></tr>
+     <tr><td>Ionisation energy</td><td>Energy to <b>remove</b> an electron</td><td>A gaseous atom</td></tr>
+     <tr><td>Electron affinity</td><td>Energy change on <b>gaining</b> an electron</td><td>A gaseous atom</td></tr>
+     <tr><td>Electronegativity</td><td>Pull on <b>shared</b> electrons</td><td>An atom in a bond (a scale, no unit)</td></tr>
+   </table>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="ea">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">The energy change when a gaseous atom gains one electron is its:</div>
+      <div class="choices"><button class="choice" data-v="ie">Ionisation energy</button><button class="choice" data-v="ea">Electron affinity</button><button class="choice" data-v="en">Electronegativity</button></div>
+      <div class="feedback">Electron affinity. X(g) + e⁻ → X⁻(g).</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="en">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">Which property has no unit and only applies to atoms in a bond?</div>
+      <div class="choices"><button class="choice" data-v="ie">Ionisation energy</button><button class="choice" data-v="ea">Electron affinity</button><button class="choice" data-v="en">Electronegativity</button></div>
+      <div class="feedback">Electronegativity: a relative scale for the pull on shared electrons.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="pair">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">Oxygen's first ionisation energy (1314) is lower than nitrogen's (1402) because:</div>
+      <div class="choices"><button class="choice" data-v="pair">Oxygen's 4th p electron is paired and repelled</button><button class="choice" data-v="prot">Oxygen has fewer protons</button><button class="choice" data-v="shell">Oxygen's electron is in a new shell</button></div>
+      <div class="feedback">The paired electrons in one 2p orbital repel each other, so one is easier to remove. Oxygen actually has more protons than nitrogen.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 6 · BONDS AND MOLECULES ================= -->
+
+<section class="slide" data-sec="bond" data-title="The bond spectrum">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 180" role="img" aria-label="Bond spectrum from electronegativity difference 0 to 3.3: H-H at 0, H-Cl at 0.96, H-F at 1.78, Na-Cl at 2.23">
+    <rect x="30" y="86" width="340" height="18" rx="9" fill="url(#g-spec)" class="grow-x"/>
+    <rect x="30" y="86" width="340" height="18" rx="9" class="ln thin" style="stroke:#c9cdca"/>
+    <path class="ln m dash" d="M71.2 82 V116 M205.2 82 V116"/>
+    <g class="stagger">
+     <g><circle class="fgs" cx="30" cy="95" r="6"/><text class="tx b mid" x="34" y="60">H–H</text><text class="tx s mid" x="34" y="74">0</text></g>
+     <g><circle class="fgs" cx="128.9" cy="95" r="6"/><text class="tx b mid" x="128.9" y="40">H–Cl</text><text class="tx s mid" x="128.9" y="54">0.96</text><path class="ln m thin" d="M128.9 58 V86"/></g>
+     <g><circle class="fos" cx="213.5" cy="95" r="6"/><text class="tx b mid" x="213.5" y="60">H–F</text><text class="tx s mid" x="213.5" y="74">1.78</text></g>
+     <g><circle class="frs" cx="259.9" cy="95" r="6"/><text class="tx b mid" x="259.9" y="40">Na–Cl</text><text class="tx s mid" x="259.9" y="54">2.23</text><path class="ln m thin" d="M259.9 58 V86"/></g>
+    </g>
+    <text class="tx g mid" x="50" y="130" style="font-size:10.5px">non-polar</text>
+    <text class="tx o mid" x="138" y="130">polar covalent</text>
+    <text class="tx r mid" x="288" y="130">ionic</text>
+    <text class="tx s mid" x="71.2" y="150">0.4</text><text class="tx s mid" x="205.2" y="150">1.7</text><text class="tx s end" x="370" y="150">3.3</text>
+    <text class="tx s end" x="370" y="172">electronegativity difference, ΔEN</text>
+   </svg>
+   <figcaption>One continuous scale. The 0.4 and 1.7 boundaries are rules of thumb.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">6 · Bonds</div>
+   <h2>From sharing to giving: <span class="ac">one scale.</span></h2>
+   <p>When two atoms bond, how fairly they share the electrons depends on the <b>electronegativity difference, ΔEN</b>.</p>
+   <ul class="steps">
+     <li><span class="n">=</span><span><b>Equal pull</b> (H–H, Cl–Cl, ΔEN 0): equal sharing, a <b>non-polar covalent</b> bond.</span></li>
+     <li><span class="n">≠</span><span><b>Unequal pull</b> (H–Cl, ΔEN 0.96): the shared electrons lean towards chlorine. A <b>polar covalent</b> bond.</span></li>
+     <li><span class="n">→</span><span><b>Very unequal pull</b> (Na–Cl, ΔEN 2.23): the electron is effectively handed over. An <b>ionic</b> bond.</span></li>
+   </ul>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="bond" data-title="Partial charges">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="Electron cloud shared evenly in H-H, leaning towards chlorine in H-Cl with partial charges, and fully transferred in Na plus Cl minus">
+    <ellipse class="fg" cx="130" cy="40" rx="52" ry="18"/>
+    <circle class="fk" cx="105" cy="40" r="4"/><circle class="fk" cx="155" cy="40" r="4"/>
+    <text class="tx b mid" x="105" y="70">H</text><text class="tx b mid" x="155" y="70">H</text>
+    <text class="tx" x="238" y="44">shared equally</text>
+    <path class="fo" d="M92 112 C 92 98, 118 96, 140 92 C 170 84, 198 92, 198 112 C 198 132, 170 140, 140 132 C 118 128, 92 126, 92 112 Z"/>
+    <circle class="fk" cx="105" cy="112" r="4"/><circle class="fk" cx="168" cy="112" r="5.5"/>
+    <text class="tx b mid" x="105" y="150">H</text><text class="tx b mid" x="168" y="150">Cl</text>
+    <text class="tx bl mid" x="80" y="116">δ+</text><text class="tx r mid" x="214" y="116">δ−</text>
+    <text class="tx" x="238" y="116">leans towards Cl</text>
+    <circle class="fg ln g" cx="105" cy="180" r="11"/><text class="tx g mid" x="105" y="184" style="font-size:9px">Na⁺</text>
+    <circle class="fo ln o" cx="165" cy="180" r="21"/><text class="tx o mid" x="165" y="184">Cl⁻</text>
+    <text class="tx" x="238" y="184">electron handed over</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">6 · Bonds</div>
+   <h2>A lopsided bond <span class="ac">has partial charges.</span></h2>
+   <p>In H–Cl, the shared electrons spend more time near chlorine. Chlorine becomes slightly negative, written <b>δ−</b> ("delta minus"), and hydrogen slightly positive, <b>δ+</b>. The bond is a <b>dipole</b>: it has a positive end and a negative end.</p>
+   <div class="callout note"><b>Rules of thumb, not laws.</b> Hydrogen fluoride (ΔEN 1.78) sits past the 1.7 line, yet it is still a covalent molecule. Treat the cut-offs as a guide.</div>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>How ionic is a bond, in per cent?</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Pauling estimated a bond's ionic character from ΔEN: % ionic = 100 × (1 − e<sup>−(ΔEN)²/4</sup>). H–Cl about 21%, H–F about 55%, Na–Cl about 71%. Even "ionic" sodium chloride keeps some sharing. The calculator on the next page uses this formula.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="bond" data-title="Calculator: bond type">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">6 · Bonds · try it</div>
+   <h2>Pick two atoms. <span class="ac">What bond do they make?</span></h2>
+   <p>The calculator finds ΔEN from the Pauling values, estimates the ionic character, and applies the 0.4 and 1.7 rules of thumb.</p>
+   <div class="calc">
+     <div class="calc-row">
+       <label>Atom 1<select id="den-a"></select></label>
+       <label>Atom 2<select id="den-b"></select></label>
+     </div>
+     <div class="calc-out" id="den-out"></div>
+   </div>
+   <p class="small">Try: H and Cl, then Na and Cl, then C and H. Carbon and hydrogen differ by only 0.35, which is why hydrocarbons are non-polar and do not mix with water.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="bond" data-title="Polar bonds, polar molecules?">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 200" role="img" aria-label="Carbon dioxide: two bond dipoles point in opposite directions and cancel. Water: two bond dipoles at an angle add to a net dipole">
+    <text class="tx b mid" x="40" y="94">O</text><text class="tx b mid" x="110" y="94">C</text><text class="tx b mid" x="180" y="94">O</text>
+    <path class="ln" d="M52 86 H98 M52 92 H98 M122 86 H168 M122 92 H168"/>
+    <path class="ln m fade" d="M104 64 H54" marker-end="url(#ar-m)" style="stroke-width:2;--d:.4s"/>
+    <path class="ln m fade" d="M116 64 H166" marker-end="url(#ar-m)" style="stroke-width:2;--d:.4s"/>
+    <text class="tx b mid" x="110" y="134">CO₂ · linear</text>
+    <text class="tx g mid" x="110" y="152">arrows cancel · 0 D</text>
+    <text class="tx s mid" x="110" y="168">non-polar</text>
+    <text class="tx b mid" x="300" y="64">O</text>
+    <text class="tx b mid" x="252" y="128">H</text><text class="tx b mid" x="348" y="128">H</text>
+    <path class="ln" d="M292 70 L258 114 M308 70 L342 114"/>
+    <path class="ln m fade" d="M246 106 L280 62" marker-end="url(#ar-m)" style="stroke-width:2;--d:.4s"/>
+    <path class="ln m fade" d="M354 106 L320 62" marker-end="url(#ar-m)" style="stroke-width:2;--d:.4s"/>
+    <path class="ln fade" d="M300 128 V84" marker-end="url(#ar-y)" style="stroke:var(--eyebrow);stroke-width:3;--d:1s"/>
+    <text class="tx b mid" x="300" y="152">H₂O · bent, 104.5°</text>
+    <text class="tx o mid" x="300" y="168">arrows add · 1.85 D</text>
+    <text class="tx s mid" x="300" y="184">polar</text>
+   </svg>
+   <figcaption>Grey: bond dipoles. Gold: their sum. D = debye, the unit of dipole moment.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">6 · Molecules</div>
+   <h2>Polar bonds don't always make <span class="ac">a polar molecule.</span></h2>
+   <p>Picture each polar bond as an arrow pointing towards the more electronegative atom. A molecule is polar only if its arrows <b>do not cancel out</b>. Shape decides.</p>
+   <p>Carbon dioxide has two polar C=O bonds, but the molecule is straight, so the arrows pull equally in opposite directions. Water is bent, so its two arrows add up to a net dipole pointing towards oxygen.</p>
+   <p class="small">Lone pairs on oxygen bend water (VSEPR). Without them, water would be straight and non-polar.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="bond" data-title="Six molecules">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">6 · Molecules</div>
+   <h2>Polar or non-polar? <span class="ac">Predict, then tap.</span></h2>
+   <p>For each molecule, decide whether the bond arrows cancel before you tap. Open all six to continue.</p>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">CO₂</span><span class="rb"><b>Linear.</b> Two equal C=O dipoles in opposite directions cancel. <b>Non-polar</b>, 0 D.</span></button>
+     <button class="rcard"><span class="rt">H₂O</span><span class="rb"><b>Bent.</b> Two O–H dipoles at 104.5° add up. <b>Polar</b>, 1.85 D.</span></button>
+     <button class="rcard"><span class="rt">BF₃</span><span class="rb"><b>Trigonal planar.</b> Three equal B–F dipoles at 120° cancel. <b>Non-polar</b>, 0 D.</span></button>
+     <button class="rcard"><span class="rt">NH₃</span><span class="rb"><b>Pyramidal</b>, because of a lone pair on N. The N–H dipoles add up. <b>Polar</b>, 1.47 D.</span></button>
+     <button class="rcard"><span class="rt">CCl₄</span><span class="rb"><b>Tetrahedral</b> with four identical C–Cl bonds. The dipoles cancel. <b>Non-polar</b>, 0 D.</span></button>
+     <button class="rcard"><span class="rt">CHCl₃</span><span class="rb"><b>Tetrahedral</b>, but one bond is C–H, not C–Cl. The dipoles no longer balance. <b>Polar</b>, 1.04 D.</span></button>
+   </div>
+   <p class="small">Compare BF₃ with NH₃, and CCl₄ with CHCl₃: same idea, one change, opposite result.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="bond" data-title="Check: bonds and molecules">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check · bonds and molecules</div>
+   <h2>Three quick questions <span class="ac">on bonding.</span></h2>
+   <p class="small">Answer all three to continue. Electronegativities: H 2.20, C 2.55, Cl 3.16.</p>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="np">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">Using the rules of thumb, a C–H bond is:</div>
+      <div class="choices"><button class="choice" data-v="np">Non-polar covalent</button><button class="choice" data-v="p">Polar covalent</button><button class="choice" data-v="i">Ionic</button></div>
+      <div class="feedback">ΔEN = 2.55 − 2.20 = 0.35, below 0.4, so non-polar covalent.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="cancel">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">CO₂ has polar bonds but no overall dipole because:</div>
+      <div class="choices"><button class="choice" data-v="cancel">It is linear, so the dipoles cancel</button><button class="choice" data-v="same">C and O have the same electronegativity</button><button class="choice" data-v="ionic">Its bonds are ionic</button></div>
+      <div class="feedback">The two C=O dipoles point in exactly opposite directions and cancel. Shape decides.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="cl">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">In H–Cl, which atom carries the δ− charge?</div>
+      <div class="choices"><button class="choice" data-v="h">Hydrogen</button><button class="choice" data-v="cl">Chlorine</button><button class="choice" data-v="none">Neither</button></div>
+      <div class="feedback">Chlorine (3.16) is more electronegative than hydrogen (2.20), so the shared electrons lean towards it.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 7 · REACTIONS ================= -->
+
+<section class="slide" data-sec="rx" data-title="Why atoms react">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">7 · Reactions, the bridge</div>
+   <h2>A loose hold meets <span class="ac">a strong pull.</span></h2>
+   <p>Atoms on the left of the table hold their outer electrons loosely (low ionisation energy). Atoms on the right, except the noble gases, pull electrons strongly (high electronegativity). Put one of each together and an electron moves.</p>
+   <div class="flow stagger">
+     <div class="node g">Sodium<small>IE only 496 kJ/mol</small></div><span class="arr">→</span>
+     <div class="node ghost">one electron moves</div><span class="arr">→</span>
+     <div class="node o">Chlorine<small>EN 3.16, EA −349</small></div><span class="arr">→</span>
+     <div class="node r">Na⁺ Cl⁻<small>sodium chloride</small></div>
+   </div>
+   <p>Every trend so far contributes: sodium is large with a low Zeff, so its outer electron is easy to remove; chlorine is small with a high Zeff, so it pulls hard; the resulting ions attract each other strongly.</p>
+   <div class="callout">The noble gases barely react at all: full shells, very high ionisation energy and no stable negative ion. Nothing to give, and nowhere to put an extra electron.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="rx" data-title="Reactivity down the groups">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">7 · Reactions</div>
+   <h2>Group 1 and group 17 <span class="ac">go opposite ways.</span></h2>
+   <div class="tiles stagger">
+     <div class="tile"><div class="n">Group 1: more reactive ↓</div><div class="l">Li &lt; Na &lt; K. The outer electron is farther away and easier to lose: 520 → 496 → 419 kJ/mol.</div></div>
+     <div class="tile"><div class="n">Group 17: less reactive ↓</div><div class="l">F &gt; Cl &gt; Br. The incoming electron is pulled less strongly: 3.98 → 3.16 → 2.96.</div></div>
+   </div>
+   <div class="callout note"><b>Seen in the lab:</b> chlorine water turns potassium bromide solution orange. Chlorine, the stronger electron-puller, takes the electron from bromide and releases bromine: Cl₂ + 2Br⁻ → 2Cl⁻ + Br₂.</div>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>Moving the electron costs energy. So why does salt form?</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Moving an electron from a gaseous sodium atom to a gaseous chlorine atom actually costs energy: +496 (IE of Na) − 349 (EA of Cl) = <b>+147 kJ/mol</b>. Salt still forms because the ions pack into a crystal and release <b>lattice energy</b> (about −787 kJ/mol). The full accounting is the <b>Born–Haber cycle</b>.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="rx" data-title="Why it matters in pharmacy">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">7 · Why it matters in pharmacy</div>
+   <h2>Polarity decides <span class="ac">what dissolves in what.</span></h2>
+   <p>"Like dissolves like." Water is polar, so it dissolves salts and polar molecules. Oils and fats are non-polar, so they dissolve non-polar molecules.</p>
+   <p>A medicine taken by mouth must <b>dissolve in water</b> in the gut and blood, yet also <b>cross the fatty membranes</b> of cells to be absorbed. So its polarity is a design choice: too polar and it cannot cross membranes; too non-polar and it will not dissolve.</p>
+   <p>This is also why many drugs with an amine group are supplied as <b>salts</b>, such as hydrochlorides. The ionic salt form dissolves in water far better than the neutral drug.</p>
+   <div class="choice-set" data-answer="b">
+     <div class="choice-q">A drug molecule is almost entirely non-polar. What would you expect?</div>
+     <div class="choices"><button class="choice" data-v="a">Dissolves easily in water</button><button class="choice" data-v="b">Dissolves poorly in water, crosses membranes easily</button><button class="choice" data-v="c">Cannot cross any membrane</button></div>
+     <div class="feedback">Non-polar molecules mix poorly with water but pass easily through fatty membranes. Poor water solubility is one of the commonest hurdles in drug formulation.</div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= WRAP-UP ================= -->
+
+<section class="slide" data-sec="end" data-title="All trends on one page">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Wrap-up</div>
+   <h2>All the trends, <span class="ac">on one page.</span></h2>
+   <table class="data-table">
+     <tr><th>Property</th><th>Across →</th><th>Down ↓</th><th>Because</th></tr>
+     <tr><td>Zeff</td><td>Rises</td><td>Similar or rises slowly</td><td>Same-shell electrons shield poorly</td></tr>
+     <tr><td>Atomic size</td><td>Shrinks</td><td>Grows</td><td>Stronger pull; then extra shells</td></tr>
+     <tr><td>Ion size</td><td>Shrinks</td><td>Grows</td><td>Cations lose a shell; anions gain repulsion</td></tr>
+     <tr><td>Ionisation energy</td><td>Rises</td><td>Falls</td><td>Tighter hold; then a farther electron</td></tr>
+     <tr><td>Electron affinity</td><td>More negative</td><td>Less negative</td><td>Same, with many exceptions</td></tr>
+     <tr class="hl"><td>Electronegativity</td><td>Rises</td><td>Falls</td><td>Same two rules, inside a bond</td></tr>
+   </table>
+   <p class="small">One pattern to remember: the top right of the table (except the noble gases) holds and pulls electrons hardest; the bottom left lets them go most easily.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="end" data-title="Quick quiz">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check your understanding</div>
+   <h2>Five questions, <span class="ac">no marks recorded.</span></h2>
+   <div class="stepper quiz">
+    <div class="choice-set cur" data-answer="a">
+      <div class="step-count">QUESTION 1 OF 5</div>
+      <div class="choice-q">Across a period, atomic radius:</div>
+      <div class="choices"><button class="choice" data-v="a">Decreases</button><button class="choice" data-v="b">Increases</button><button class="choice" data-v="c">Stays the same</button></div>
+      <div class="feedback">Decreases: the same shell is pulled in by a rising Zeff.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 2 OF 5</div>
+      <div class="choice-q">Down group 1 (Li, Na, K), the first ionisation energy:</div>
+      <div class="choices"><button class="choice" data-v="a">Rises</button><button class="choice" data-v="b">Falls</button><button class="choice" data-v="c">Stays the same</button></div>
+      <div class="feedback">Falls (520 → 496 → 419 kJ/mol): the outer electron is farther away.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 3 OF 5</div>
+      <div class="choice-q">Which element releases the most energy when it gains an electron?</div>
+      <div class="choices"><button class="choice" data-v="a">Fluorine</button><button class="choice" data-v="b">Chlorine</button><button class="choice" data-v="c">Bromine</button></div>
+      <div class="feedback">Chlorine (−349 kJ/mol). Fluorine (−328) is so small that the new electron is crowded.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 4 OF 5</div>
+      <div class="choice-q">Potassium (0.82) bonds with fluorine (3.98). The bond is best described as:</div>
+      <div class="choices"><button class="choice" data-v="a">Non-polar covalent</button><button class="choice" data-v="b">Polar covalent</button><button class="choice" data-v="c">Ionic</button></div>
+      <div class="feedback">ΔEN = 3.16, far above 1.7: ionic.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 5 OF 5</div>
+      <div class="choice-q">Which of these molecules is polar?</div>
+      <div class="choices"><button class="choice" data-v="a">CO₂</button><button class="choice" data-v="b">CCl₄</button><button class="choice" data-v="c">NH₃</button></div>
+      <div class="feedback">NH₃ is pyramidal, so its N–H dipoles do not cancel (1.47 D). CO₂ and CCl₄ are symmetrical.</div>
+    </div>
+    <div class="score" id="quiz-score"></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="end" data-title="Summary">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Take home</div>
+   <h2>One tug-of-war, <span class="ac">every trend.</span></h2>
+   <div class="cards stagger">
+     <div class="card"><div class="cn">1</div><div>Zeff is the nuclear pull left after shielding. A bigger Zeff pulls harder; a farther electron feels it less.</div></div>
+     <div class="card"><div class="cn">2</div><div>Across a period atoms shrink and hold electrons harder; down a group they grow and hold them more loosely.</div></div>
+     <div class="card"><div class="cn">3</div><div>ΔEN places a bond on one scale from non-polar to ionic. Shape decides whether polar bonds make a polar molecule.</div></div>
+     <div class="card"><div class="cn">4</div><div>Polarity decides solubility, which is why a drug's polarity is a design choice in pharmacy.</div></div>
+   </div>
+   <a class="next-lab" href="../trends.html" data-umami-event="open-trends-lab"><b>Explore the full Periodic Trends Lab →</b> A scrolling version with a live, recolouring periodic table and degree-level maths.</a>
+   <div style="margin:.5em 0"><button class="btn solid" id="btn-refs" data-umami-event="open-sources">Sources and further reading (7) →</button></div>
+   <div class="madeby">
+     <p><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Sketches marked as not to scale are simplified. Not a substitute for your course textbook or data booklet.</p>
+     <div class="socials">
+       <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Website</a>
+       <a href="https://www.linkedin.com/in/aufbinali/" target="_blank" rel="noopener" data-umami-event="link-linkedin">LinkedIn</a>
+       <a href="https://aufthority.substack.com/" target="_blank" rel="noopener" data-umami-event="link-substack">Substack</a>
+       <a href="https://www.instagram.com/aufthority/" target="_blank" rel="noopener" data-umami-event="link-instagram">Instagram</a>
+       <a href="https://www.tiktok.com/@aufthority" target="_blank" rel="noopener" data-umami-event="link-tiktok">TikTok</a>
+       <a href="https://www.threads.com/@aufthority" target="_blank" rel="noopener" data-umami-event="link-threads">Threads</a>
+       <a href="mailto:the.aufthority@gmail.com" data-umami-event="link-email">the.aufthority@gmail.com</a>
+     </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+  </div><!-- /stage -->
+
+  <div id="bottom">
+    <div id="gate-hint"></div>
+    <div id="nav-wrap">
+      <button id="btn-back" class="nav-btn" disabled data-umami-event="nav-back">← Back</button>
+      <button id="btn-next" class="nav-btn" data-umami-event="nav-next">Next →</button>
+    </div>
+    <footer>Informed decisions, better health.</footer>
+  </div>
+</div>
+
+<div class="overlay" id="toc-overlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <div class="panel-head"><h3>Contents</h3><button class="icon-btn close-ov">Close</button></div>
+    <p class="toc-note">You can jump to any page from here, even if a page's questions are not finished.</p>
+    <ul class="toc" id="toc-list"></ul>
+  </div>
+</div>
+
+<div class="overlay" id="refs-overlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <div class="panel-head"><h3>Sources and further reading</h3><button class="icon-btn close-ov">Close</button></div>
+    <ol class="refs">
+      <li>Allred, A. L. (1961). Electronegativity values from thermochemical data. <i>Journal of Inorganic and Nuclear Chemistry, 17</i>(3–4), 215–221. <a href="https://doi.org/10.1016/0022-1902(61)80142-5" target="_blank" rel="noopener">doi.org/10.1016/0022-1902(61)80142-5</a></li>
+      <li>Aufthority. (n.d.). <i>Periodic Trends Lab</i>. Kompas Semester. <a href="../trends.html" data-umami-event="open-trends-lab">kompassemester.aufthority.com/labs/trends.html</a></li>
+      <li>Cordero, B., Gómez, V., Platero-Prats, A. E., Revés, M., Echeverría, J., Cremades, E., Barragán, F., &amp; Alvarez, S. (2008). Covalent radii revisited. <i>Dalton Transactions</i>, (21), 2832–2838. <a href="https://doi.org/10.1039/b801115j" target="_blank" rel="noopener">doi.org/10.1039/b801115j</a></li>
+      <li>Haynes, W. M. (Ed.). <i>CRC Handbook of Chemistry and Physics</i>. CRC Press. Electron affinities and dipole moments. <a href="https://hbcp.chemnetbase.com/" target="_blank" rel="noopener">hbcp.chemnetbase.com</a></li>
+      <li>National Institute of Standards and Technology. (n.d.). <i>NIST Atomic Spectra Database: Ionization energies</i>. <a href="https://physics.nist.gov/PhysRefData/ASD/ionEnergy.html" target="_blank" rel="noopener">physics.nist.gov</a></li>
+      <li>Shannon, R. D. (1976). Revised effective ionic radii and systematic studies of interatomic distances in halides and chalcogenides. <i>Acta Crystallographica A, 32</i>(5), 751–767. <a href="https://doi.org/10.1107/S0567739476001551" target="_blank" rel="noopener">doi.org/10.1107/S0567739476001551</a></li>
+      <li>Slater, J. C. (1930). Atomic shielding constants. <i>Physical Review, 36</i>(1), 57–64. <a href="https://doi.org/10.1103/PhysRev.36.57" target="_blank" rel="noopener">doi.org/10.1103/PhysRev.36.57</a></li>
+    </ol>
+  </div>
+</div>
+
+<div class="overlay" id="vid-overlay" role="dialog" aria-modal="true" aria-label="Video">
+  <div class="vid-panel">
+    <div class="vid-frame" id="vid-frame"></div>
+    <div class="vid-meta" id="vid-meta"></div>
+    <button class="vid-close close-ov">Close video</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  const slides   = document.querySelectorAll('.slide');
+  const TOTAL    = slides.length;
+  let current = 1;
+  const btnBack  = document.getElementById('btn-back');
+  const btnNext  = document.getElementById('btn-next');
+  const progFill = document.getElementById('progress-fill');
+  const progLbl  = document.getElementById('progress-label');
+  const hint     = document.getElementById('gate-hint');
+
+  /* ---------- VIEWPORT: real visible height (Android / in-app browsers) ---------- */
+  function setAppH(){ document.documentElement.style.setProperty('--app-h', window.innerHeight+'px'); }
+  setAppH();
+
+  /* ---------- BACK TO KOMPAS: return to the exact course view when possible ---------- */
+  document.getElementById('btn-kompas').addEventListener('click',e=>{
+    let same=false; try{ same=!!document.referrer && new URL(document.referrer).origin===location.origin; }catch(_){}
+    if(same && history.length>1){ e.preventDefault(); history.back(); }
+  });
+
+  document.querySelectorAll('.stagger').forEach(c=>{
+    [...c.children].forEach((e,i)=>e.style.setProperty('--d',(0.1 + i*0.11).toFixed(2)+'s'));
+  });
+
+  /* ---------- MINI PERIODIC TABLE ----------
+     [symbol, name, period, column(0-7), Zeff (Slater), covalent radius pm (Cordero 2008),
+      1st IE kJ/mol (NIST), EA kJ/mol (CRC; null = no stable anion), EN Pauling (Allred),
+      common ion, ionic radius pm (Shannon 1976, CN 6)] */
+  const EL=[
+    ['H','Hydrogen',1,0,1.00,31,1312,-73,2.20,null,null],
+    ['He','Helium',1,7,1.70,28,2372,null,null,null,null],
+    ['Li','Lithium',2,0,1.30,128,520,-60,0.98,'Li⁺',76],
+    ['Be','Beryllium',2,1,1.95,96,900,null,1.57,'Be²⁺',45],
+    ['B','Boron',2,2,2.60,84,801,-27,2.04,null,null],
+    ['C','Carbon',2,3,3.25,76,1086,-122,2.55,null,null],
+    ['N','Nitrogen',2,4,3.90,71,1402,0,3.04,null,null],
+    ['O','Oxygen',2,5,4.55,66,1314,-141,3.44,'O²⁻',140],
+    ['F','Fluorine',2,6,5.20,57,1681,-328,3.98,'F⁻',133],
+    ['Ne','Neon',2,7,5.85,58,2081,null,null,null,null],
+    ['Na','Sodium',3,0,2.20,166,496,-53,0.93,'Na⁺',102],
+    ['Mg','Magnesium',3,1,2.85,141,738,null,1.31,'Mg²⁺',72],
+    ['Al','Aluminium',3,2,3.50,121,578,-42,1.61,'Al³⁺',53.5],
+    ['Si','Silicon',3,3,4.15,111,787,-134,1.90,null,null],
+    ['P','Phosphorus',3,4,4.80,107,1012,-72,2.19,null,null],
+    ['S','Sulfur',3,5,5.45,105,1000,-200,2.58,'S²⁻',184],
+    ['Cl','Chlorine',3,6,6.10,102,1251,-349,3.16,'Cl⁻',181],
+    ['Ar','Argon',3,7,6.75,106,1521,null,null,null,null],
+    ['K','Potassium',4,0,2.20,203,419,-48,0.82,'K⁺',138],
+    ['Ca','Calcium',4,1,2.85,176,590,-2,1.00,'Ca²⁺',100],
+    ['Ga','Gallium',4,2,5.00,122,579,-41,1.81,'Ga³⁺',62],
+    ['Ge','Germanium',4,3,5.65,120,762,-119,2.01,null,null],
+    ['As','Arsenic',4,4,6.30,119,947,-78,2.18,null,null],
+    ['Se','Selenium',4,5,6.95,120,941,-195,2.55,'Se²⁻',198],
+    ['Br','Bromine',4,6,7.60,120,1140,-325,2.96,'Br⁻',196],
+    ['Kr','Krypton',4,7,8.25,116,1351,null,3.00,null,null]
+  ];
+  const GROUPS=[1,2,13,14,15,16,17,18];
+  const minus=v=>(v<0?'−':'')+Math.abs(v);
+  const PROPS={
+    none:{name:''},
+    zeff:{name:'Zeff',get:e=>e[4],fmt:v=>v.toFixed(2),unit:'',key:'Zeff: low → high'},
+    rad: {name:'Covalent radius',get:e=>e[5],fmt:v=>''+v,unit:' pm',est:['He','Ne','Ar','Kr'],key:'Radius: small → large'},
+    ion: {name:'Ionic radius',get:e=>e[10],fmt:v=>''+v,unit:' pm',key:'Ion size: small → large'},
+    ie:  {name:'First ionisation energy',get:e=>e[6],fmt:v=>''+v,unit:' kJ/mol',key:'IE: low → high'},
+    ea:  {name:'Electron affinity',get:e=>e[7],fmt:v=>v===0?'≈ 0':minus(v),unit:' kJ/mol',scale:v=>-v,key:'Energy released: little → most'},
+    en:  {name:'Electronegativity',get:e=>e[8],fmt:v=>v.toFixed(2),unit:'',key:'EN: low → high'}
+  };
+  function mix(t){
+    const a=[238,245,241], b=[45,106,79];
+    return 'rgb('+a.map((x,i)=>Math.round(x+(b[i]-x)*t)).join(',')+')';
+  }
+  function readout(prop,e){
+    const P=PROPS[prop];
+    if(prop==='none') return '<b>'+e[1]+' ('+e[0]+')</b>: period '+e[2]+', group '+GROUPS[e[3]];
+    const v=P.get(e);
+    if(prop==='ion') return v===null?'<b>'+e[1]+'</b>: no common simple ion':'<b>'+e[1]+' → '+e[9]+'</b>: '+e[5]+' pm → '+v+' pm';
+    if(v===null) return '<b>'+e[1]+' ('+e[0]+')</b>: '+(prop==='ea'?'no stable negative ion':'no value');
+    let s='<b>'+e[1]+' ('+e[0]+')</b>: '+P.name+' '+P.fmt(v)+P.unit;
+    if(P.est&&P.est.includes(e[0])) s+=' (estimate)';
+    return s;
+  }
+  function buildTable(box){
+    const prop=box.dataset.prop, P=PROPS[prop], hl=(box.dataset.hl||'').split(',');
+    const grid=document.createElement('div'); grid.className='pt-grid';
+    const out=document.createElement('div'); out.className='pt-out';
+    grid.appendChild(document.createElement('span'));
+    GROUPS.forEach(g=>{ const h=document.createElement('span'); h.className='pt-h'; h.textContent=g; grid.appendChild(h); });
+    let lo=Infinity, hi=-Infinity;
+    if(P.get) EL.forEach(e=>{ const v=P.get(e); if(v!==null){ const s=P.scale?P.scale(v):v; lo=Math.min(lo,s); hi=Math.max(hi,s); } });
+    for(let r=1;r<=4;r++){
+      const rl=document.createElement('span'); rl.className='pt-r'; rl.textContent=r; grid.appendChild(rl);
+      for(let c=0;c<8;c++){
+        const e=EL.find(x=>x[2]===r&&x[3]===c);
+        if(!e){ const g=document.createElement('span'); g.className='pt-gap'; grid.appendChild(g); continue; }
+        const b=document.createElement('button'); b.className='pt-c'; b.type='button'; b.dataset.sym=e[0];
+        let val='';
+        if(P.get){
+          const v=P.get(e);
+          if(v===null){ b.classList.add('na'); val='–'; }
+          else{
+            const s=P.scale?P.scale(v):v, t=hi>lo?(s-lo)/(hi-lo):0;
+            b.style.backgroundColor=mix(0.06+t*0.94); if(t>0.5) b.classList.add('dark');
+            val=prop==='ion'?e[9]:P.fmt(v);
+            if(P.est&&P.est.includes(e[0])) b.classList.add('est');
+          }
+        }
+        if(hl.includes(e[0])) b.classList.add('hl');
+        b.innerHTML='<b>'+e[0]+'</b>'+(P.get?'<i>'+val+'</i>':'');
+        b.addEventListener('click',()=>{
+          grid.querySelectorAll('.sel').forEach(x=>x.classList.remove('sel'));
+          b.classList.add('sel'); out.innerHTML=readout(prop,e);
+        });
+        grid.appendChild(b);
+      }
+    }
+    box.appendChild(grid); box.appendChild(out);
+    if(P.key){ const k=document.createElement('div'); k.className='pt-key'; k.innerHTML='<span>'+P.key.split(':')[0]+'</span><span class="bar"></span><span>'+P.key.split(': ')[1]+'</span>'; box.appendChild(k); }
+    const sel=box.dataset.sel && grid.querySelector('[data-sym="'+box.dataset.sel+'"]');
+    if(sel) sel.click(); else out.textContent='Tap any element to see its value.';
+  }
+  document.querySelectorAll('.pt').forEach(buildTable);
+
+  /* ---------- ΔEN CALCULATOR ---------- */
+  const da=document.getElementById('den-a'), db=document.getElementById('den-b'), dout=document.getElementById('den-out');
+  EL.filter(e=>e[8]!==null).forEach(e=>{
+    [da,db].forEach(s=>{ const o=document.createElement('option'); o.value=e[0]; o.textContent=e[1]+' ('+e[8].toFixed(2)+')'; s.appendChild(o); });
+  });
+  da.value='H'; db.value='Cl';
+  function calcDen(){
+    const a=EL.find(e=>e[0]===da.value), b=EL.find(e=>e[0]===db.value);
+    const d=Math.abs(a[8]-b[8]), pct=100*(1-Math.exp(-d*d/4));
+    let type, cls='calc-out';
+    if(d<0.4) type='<b>non-polar covalent</b> (ΔEN below 0.4)';
+    else if(d<=1.7) type='<b>polar covalent</b> (ΔEN 0.4 to 1.7)';
+    else { type='<b>ionic</b> by the rule of thumb (ΔEN above 1.7)'; cls+=' fail'; }
+    let more='';
+    if(d>=0.4){ const hiEl=a[8]>b[8]?a:b; more=' '+hiEl[1]+' is more electronegative, so it carries the '+(d>1.7?'negative charge.':'δ− end.'); }
+    if(a[0]===b[0]) more=' Two identical atoms share perfectly equally.';
+    dout.className=cls;
+    dout.innerHTML='ΔEN = |'+a[8].toFixed(2)+' − '+b[8].toFixed(2)+'| = <b>'+d.toFixed(2)+'</b>. Ionic character about <b>'+Math.round(pct)+'%</b>. Bond type: '+type+'.'+more;
+  }
+  [da,db].forEach(s=>s.addEventListener('change',()=>{ calcDen(); fit(slides[current-1]); if(window.umami) umami.track('den-calc',{pair:da.value+'-'+db.value}); }));
+  calcDen();
+
+  /* ---------- AUTO-FIT: shrink a page until it fits; below the floor, scroll only the page ---------- */
+  const FLOOR=0.8;
+  function fit(slide){
+    if(!slide) return;
+    const si=slide.querySelector('.si');
+    slide.classList.remove('scroll');
+    let k=1; slide.style.setProperty('--k',k);
+    let g=0;
+    while(g++<16 && (si.scrollHeight>slide.clientHeight+1 || si.scrollWidth>slide.clientWidth+1) && k>FLOOR){
+      k=+(k-0.03).toFixed(2); slide.style.setProperty('--k',k);
+    }
+    if(si.scrollHeight>slide.clientHeight+1) slide.classList.add('scroll');
+  }
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ setAppH(); fit(slides[current-1]); },120); });
+
+  /* ---------- GATING ("Go deeper" toggles are optional) ---------- */
+  function pending(slide){
+    let n=0;
+    slide.querySelectorAll('.toggle-wrap:not(.opt)').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
+    slide.querySelectorAll('.rcard').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
+    slide.querySelectorAll('.choice-set').forEach(s=>{ if(!s.dataset.done) n++; });
+    return n;
+  }
+  function updateGate(alert){
+    const s=slides[current-1], n=pending(s);
+    btnNext.classList.toggle('locked', n>0);
+    if(n===0){ hint.className=''; hint.textContent=''; return; }
+    hint.className=alert?'alert':'';
+    const what=n===1?'1 item':n+' items';
+    hint.innerHTML=alert
+      ? 'Please finish the questions or open the cards on this page first ('+what+' left). Or skip ahead using <button type="button" id="hint-toc">Contents</button>.'
+      : 'Finish '+what+' on this page to continue, or use <button type="button" id="hint-toc">Contents</button>';
+    document.getElementById('hint-toc').addEventListener('click',()=>openOv('toc-overlay'));
+  }
+  function flagPending(slide){
+    [...slide.querySelectorAll('.toggle-wrap:not(.seen):not(.opt), .rcard:not(.seen), .choice-set:not([data-done])')]
+      .filter(e=>e.offsetParent!==null)
+      .forEach(e=>{ e.classList.remove('pulse'); void e.offsetWidth; e.classList.add('pulse'); });
+  }
+
+  function show(n){
+    slides.forEach((s,i)=>s.classList.toggle('active',i+1===n));
+    progFill.style.width=((n/TOTAL)*100)+'%';
+    progLbl.textContent=n+' / '+TOTAL;
+    btnBack.disabled=n===1;
+    btnNext.textContent=n===TOTAL?'Done':'Next →';
+    btnNext.setAttribute('data-umami-event',n===TOTAL?'carousel-selesai':'nav-next');
+    slides[n-1].scrollTop=0;
+    fit(slides[n-1]);
+    requestAnimationFrame(()=>fit(slides[n-1]));
+    updateGate(false);
+    if(window.umami) umami.track('slide-view',{slide:n});
+  }
+
+  /* NAV BUTTONS ONLY — no swipe, no keyboard */
+  btnNext.addEventListener('click',()=>{
+    const s=slides[current-1];
+    if(pending(s)>0){ updateGate(true); flagPending(s); if(window.umami) umami.track('gate-blocked',{slide:current}); return; }
+    if(current<TOTAL){ current++; show(current); } else openOv('refs-overlay');
+  });
+  btnBack.addEventListener('click',()=>{ if(current>1){ current--; show(current); } });
+
+  document.querySelectorAll('.toggle-btn').forEach(b=>b.addEventListener('click',()=>{
+    const w=b.parentElement; w.classList.toggle('open'); w.classList.add('seen'); fit(slides[current-1]); updateGate(false);
+    if(window.umami) umami.track('toggle',{label:b.textContent.trim().slice(0,40)});
+  }));
+  document.querySelectorAll('.rcard').forEach(c=>c.addEventListener('click',()=>{ c.classList.add('seen'); fit(slides[current-1]); updateGate(false); }));
+
+  document.querySelectorAll('.choice-set').forEach(set=>{
+    const ans=set.dataset.answer;
+    set.querySelectorAll('.choice').forEach(c=>c.addEventListener('click',()=>{
+      if(set.dataset.done) return;
+      set.dataset.done='1'; set.classList.add('done');
+      const ok=c.dataset.v===ans; set.dataset.correct=ok?'1':'0';
+      set.querySelectorAll('.choice').forEach(x=>{ if(x.dataset.v===ans) x.classList.add('right'); });
+      if(!ok) c.classList.add('wrong');
+      set.querySelector('.feedback').classList.add('show');
+      if(window.umami) umami.track('choice',{correct:ok});
+      updateScore(); fit(slides[current-1]); updateGate(false);
+    }));
+    const nx=set.querySelector('.next-q');
+    if(nx) nx.addEventListener('click',()=>{
+      const nxt=set.nextElementSibling;
+      if(nxt&&nxt.classList.contains('choice-set')){ set.classList.remove('cur'); nxt.classList.add('cur'); fit(slides[current-1]); }
+    });
+  });
+  function updateScore(){
+    const q=document.querySelectorAll('.quiz .choice-set'), done=[...q].filter(s=>s.dataset.done);
+    if(done.length<q.length) return;
+    document.getElementById('quiz-score').textContent='Your score: '+done.filter(s=>s.dataset.correct==='1').length+' / '+q.length;
+  }
+
+  function openOv(id){ if(id==='toc-overlay') buildToc(); document.getElementById(id).classList.add('open'); }
+  document.querySelectorAll('.overlay').forEach(o=>{
+    o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
+    o.querySelector('.close-ov').addEventListener('click',()=>o.classList.remove('open'));
+  });
+  document.getElementById('btn-toc').addEventListener('click',()=>openOv('toc-overlay'));
+  document.getElementById('btn-refs').addEventListener('click',()=>openOv('refs-overlay'));
+
+  /* contents — bypasses gating */
+  const secNames={intro:'Start here',zeff:'1 · Effective nuclear charge',size:'2 · Atomic and ionic size',ie:'3 · Ionisation energy',ea:'4 · Electron affinity',en:'5 · Electronegativity',bond:'6 · Bonds and molecules',rx:'7 · Why atoms react',end:'Wrap-up'};
+  function buildToc(){
+    const ul=document.getElementById('toc-list'); ul.innerHTML=''; let last='';
+    slides.forEach((s,i)=>{
+      if(s.dataset.sec!==last){ const h=document.createElement('li'); h.className='sec'; h.textContent=secNames[s.dataset.sec]; ul.appendChild(h); last=s.dataset.sec; }
+      const li=document.createElement('li'), b=document.createElement('button');
+      b.innerHTML='<span>'+(i+1)+'</span>'+s.dataset.title;
+      if(i+1===current) b.className='cur';
+      b.addEventListener('click',()=>{ current=i+1; show(current); document.getElementById('toc-overlay').classList.remove('open'); if(window.umami) umami.track('toc-jump',{slide:current}); });
+      li.appendChild(b); ul.appendChild(li);
+    });
+  }
+
+  /* ---------- VIDEOS: original creators' YouTube embeds ----------
+     Add a button <button class="vbtn" data-video="key">…</button> on a page,
+     then paste the YouTube video ID into "id" below. Empty id = button hidden. */
+  const VIDEOS = {};
+  const vidOv=document.getElementById('vid-overlay'), vidFrame=document.getElementById('vid-frame'), vidMeta=document.getElementById('vid-meta');
+  document.querySelectorAll('.vbtn').forEach(b=>{
+    const v=VIDEOS[b.dataset.video];
+    if(!v || !v.id){ b.hidden=true; return; }
+    b.addEventListener('click',()=>{
+      vidFrame.className='vid-frame'+(v.vertical?' vertical':'');
+      vidFrame.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1&rel=0&modestbranding=1&playsinline=1" title="'+v.title.replace(/"/g,'&quot;')+'" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+      vidMeta.innerHTML='<b style="color:#fff">'+v.title+'</b>'+(v.credit?'<br>Video: '+v.credit+' · <a href="https://www.youtube.com/watch?v='+encodeURIComponent(v.id)+'" target="_blank" rel="noopener">Watch on YouTube</a>':'');
+      vidOv.classList.add('open');
+    });
+  });
+  vidOv.querySelector('.close-ov').addEventListener('click',()=>{ vidFrame.innerHTML=''; });
+  vidOv.addEventListener('click',e=>{ if(e.target===vidOv || e.target.classList.contains('vid-panel')){ vidOv.classList.remove('open'); vidFrame.innerHTML=''; } });
+
+  buildToc();
+  show(1);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fit(slides[current-1]));
+})();
+</script>
+</body>
+</html>
