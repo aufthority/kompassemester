@@ -106,6 +106,7 @@ table.wk td:last-child{text-align:right;font-weight:700;color:var(--ink);white-s
 .chart{display:none;margin:.5em 0}
 .chart.show{display:block}
 .chart svg{width:100%;height:auto;display:block}
+.skill{display:inline-block;font-size:.72rem;font-weight:700;color:#8a5410;background:var(--o-bg);border-radius:100px;padding:.12em .6em;margin-left:auto}
 .done-bar{display:none;border:1px solid var(--g-line);background:var(--g-bg);border-radius:12px;padding:12px 14px;margin:12px 0}
 .done-bar.show{display:block}
 .done-bar b{color:var(--accent-dark)}
@@ -136,7 +137,7 @@ html.embedded .card{margin:8px 0;padding:12px 12px 10px}
   <header class="page-head">
     <div class="eyebrow">Practice lab · chemical bonding</div>
     <h1>Molecule <span class="ac">Bench</span></h1>
-    <p>Pick a scenario. For each molecule, work through four steps: count the electrons, predict the shape, classify each bond, then decide its polarity, its strongest intermolecular force and how its boiling point compares.</p>
+    <p>Pick a scenario. For each molecule, work through five steps: count the electrons, predict the shape, classify each bond, decide its polarity, intermolecular forces and boiling point, then apply it to a pharmacy question.</p>
     <p class="small">Uses Chang's electronegativity values (one decimal). Bond type: ΔEN below 0.5 non-polar covalent, 0.5 up to 2.0 polar covalent, 2.0 or more ionic. Boiling points are rounded literature values (PubChem).</p>
   </header>
 
@@ -210,6 +211,16 @@ html.embedded .card{margin:8px 0;padding:12px 12px 10px}
     <div class="chart" id="s4-chart"><svg id="s4-svg" viewBox="0 0 400 150" role="img" aria-label="Measured boiling points"></svg></div>
   </section>
 
+  <!-- STEP 5 · apply it -->
+  <section class="card locked" id="c5">
+    <h2><span class="num">5</span>Apply it<span class="skill" id="s5-skill"></span></h2>
+    <div class="lock-note">Finish step 4 to unlock.</div>
+    <p id="s5-q"></p>
+    <div class="chips" data-g="ap" style="flex-direction:column;align-items:flex-start"></div>
+    <div class="btn-row"><button class="btn solid" id="s5-check">Check</button><button class="btn" id="s5-show">Show the answer</button></div>
+    <div class="msg" id="s5-msg"></div>
+  </section>
+
   <div class="done-bar" id="done">
     <p><b>Round complete.</b> <span id="done-txt"></span></p>
     <div class="btn-row"><button class="btn solid" id="again">New molecule</button><button class="btn" id="next-scen">Next scenario</button></div>
@@ -259,6 +270,49 @@ html.embedded .card{margin:8px 0;padding:12px 12px 10px}
     chcl3:{f:'CHCl₃',name:'chloroform',bp:61.2,imf:1,atoms:{C:1,H:1,Cl:3}},
     sf6:{f:'SF₆',name:'sulfur hexafluoride',bp:-63.8,sub:true,imf:0,atoms:{S:1,F:6}},
     pcl3:{f:'PCl₃',name:'phosphorus trichloride',bp:76.1,imf:1,atoms:{P:1,Cl:3}}
+  };
+  /* step 5: one pharmacy question per molecule. ans = index of the correct option; why = feedback per wrong option */
+  const APPLY={
+    h2o:{skill:'Applying chemistry to formulation',q:'Water is the vehicle for an injection. Which of these will dissolve best in it?',
+      opts:['Sodium chloride','Liquid paraffin','Carbon tetrachloride'],ans:0,
+      ok:'Sodium chloride is ionic: water\'s δ− oxygens and δ+ hydrogens surround Na⁺ and Cl⁻ through ion–dipole forces. That is how 0.9% saline is made.',
+      why:{1:'Liquid paraffin is a non-polar oil with only London forces; it cannot compete with water\'s hydrogen bonds, so the two do not mix.',2:'CCl₄ is non-polar, so it does not mix with water (and it is a Class 1 solvent to be avoided).'}},
+    ch2cl2:{skill:'Analytical reasoning',q:'A residual-solvent test runs CH₂Cl₂ (bp 39.6 °C), CHCl₃ (61.2 °C) and CCl₄ (76.7 °C) on a non-polar GC column. Which peak appears first?',
+      opts:['CH₂Cl₂','CHCl₃','CCl₄'],ans:0,
+      ok:'On a non-polar column, separation follows volatility. Dichloromethane has the weakest intermolecular forces and the lowest boiling point, so it elutes first.',
+      why:{1:'Chloroform boils higher (61.2 °C) than dichloromethane, so it is held longer.',2:'CCl₄ is non-polar but large: its London forces give it the highest boiling point, so it comes off last, not first.'}},
+    ccl4:{skill:'Analytical reasoning',q:'On the same non-polar GC column, why does CCl₄ elute after CH₂Cl₂ even though CH₂Cl₂ is polar and CCl₄ is not?',
+      opts:['CCl₄ has many more electrons, so stronger London forces and a higher boiling point','CCl₄ hydrogen bonds to the column','The C–Cl bonds in CCl₄ are stronger'],ans:0,
+      ok:'With 74 electrons against 42, CCl₄ is far more polarisable. Its London forces outweigh the small dipole of CH₂Cl₂, so it is less volatile and elutes later.',
+      why:{1:'CCl₄ has no hydrogen at all, so it cannot hydrogen bond.',2:'GC separates molecules by intermolecular attractions; no covalent bonds are broken in the column.'}},
+    nh3:{skill:'Problem solving',q:'Ammonia is extremely soluble in water, far more than methane. What explains this?',
+      opts:['NH₃ hydrogen bonds with water, both donating and accepting','NH₃ is heavier than CH₄','NH₃ is ionic'],ans:0,
+      ok:'Ammonia\'s N–H hydrogens donate to water\'s oxygen, and its lone pair accepts from water\'s hydrogens. Methane can do neither.',
+      why:{1:'17 versus 16 g/mol is no real difference; the type of intermolecular force decides.',2:'N–H has ΔEN 0.9: polar covalent, not ionic. Ammonia is a molecule.'}},
+    co2:{skill:'Applying chemistry to formulation',q:'When an effervescent tablet dissolves, most of the CO₂ bubbles out instead of staying dissolved. Why?',
+      opts:['CO₂ is non-polar, so it attracts water only weakly','CO₂ hydrogen bonds too strongly to itself','CO₂ is ionic'],ans:0,
+      ok:'Linear CO₂ has no net dipole and cannot hydrogen bond to itself, so its attraction to water is weak and most of it escapes as gas: the fizz.',
+      why:{1:'CO₂ has no hydrogen, so it cannot hydrogen bond; between its own molecules there are only London forces.',2:'C=O has ΔEN 1.0: polar covalent bonds in a non-polar molecule, not ionic.'}},
+    so2:{skill:'Analytical reasoning',q:'Sodium metabisulfite releases SO₂ in solution. Compared with CO₂, is SO₂ more or less soluble in water?',
+      opts:['More soluble, because bent SO₂ is polar','Less soluble, because SO₂ is heavier','The same, because both have polar bonds'],ans:0,
+      ok:'Both have polar bonds, but bent SO₂ has a net dipole (1.63 D) that attracts water, while linear CO₂ cancels to zero. SO₂ is far more soluble (it also reacts with water).',
+      why:{1:'Mass is not the deciding factor here; polarity is.',2:'Polar bonds alone do not decide. CO₂\'s dipoles cancel; SO₂\'s do not.'}},
+    hcho:{skill:'Applying chemistry to formulation',q:'Formalin is a concentrated solution of formaldehyde in water. How can so much dissolve when formaldehyde molecules cannot hydrogen bond to each other?',
+      opts:['Water donates hydrogen bonds to formaldehyde\'s oxygen','Formaldehyde is ionic','London forces between them are very strong'],ans:0,
+      ok:'Formaldehyde has no H on O, so it cannot donate. But its oxygen carries lone pairs, so water molecules can hydrogen bond to it: a donor from water, an acceptor on formaldehyde.',
+      why:{1:'C=O and C–H bonds are covalent; formaldehyde is a polar molecule, not ionic.',2:'Formaldehyde is small; London forces are weak. The key is hydrogen bonding with water.'}},
+    bcl3:{skill:'Problem solving',q:'BCl₃ is supplied for synthesis as a solution. Which solvent suits a non-polar molecule like BCl₃?',
+      opts:['Dichloromethane','Water','0.9% saline'],ans:0,
+      ok:'Like dissolves like: an organic solvent such as dichloromethane suits BCl₃, and BCl₃ is commonly sold this way. Water is ruled out twice over: BCl₃ also reacts violently with it.',
+      why:{1:'Water is strongly hydrogen bonded and would not suit a non-polar molecule; BCl₃ also reacts violently with water.',2:'Saline is water with ions: even less suitable, and BCl₃ reacts with the water.'}},
+    pcl5:{skill:'Problem solving',q:'PCl₅ is a non-polar molecule. Which would dissolve it best?',
+      opts:['A non-polar solvent such as carbon tetrachloride','Water','Ethanol and water mixture'],ans:0,
+      ok:'Non-polar dissolves in non-polar: PCl₅ dissolves in CCl₄. In a real drug synthesis, a Class 1 solvent like CCl₄ would then have to be removed and tested by GC, which links back to residual solvents.',
+      why:{1:'Water cannot accommodate a non-polar solute, and PCl₅ reacts with water in any case.',2:'Ethanol–water is still strongly polar and hydrogen bonded, and the water would react with PCl₅.'}},
+    sf6:{skill:'Applying chemistry to formulation',q:'SonoVue microbubbles must last long enough in the blood to image the heart. Which property of SF₆ makes that possible?',
+      opts:['It is non-polar, so it barely dissolves in blood','It hydrogen bonds strongly to water','It is ionic and stays charged'],ans:0,
+      ok:'Six polar S–F bonds cancel in the octahedron, so SF₆ is non-polar and hardly dissolves in water or blood. The gas stays inside the microbubbles that reflect ultrasound.',
+      why:{1:'SF₆ has no H and no lone pairs on S; it cannot hydrogen bond, and its non-polarity is exactly why it does not dissolve.',2:'S–F has ΔEN 1.5: polar covalent bonds, and the molecule as a whole is non-polar.'}}
   };
   const SCEN=[
     {id:'solv',name:'Pharmacy solvents',mols:['h2o','ch2cl2','ccl4']},
@@ -366,7 +420,7 @@ html.embedded .card{margin:8px 0;padding:12px 12px 10px}
   function chipGroup(card,g,opts){
     const box=$(card).querySelector('[data-g="'+g+'"]'); box.innerHTML='';
     opts.forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.dataset.v=o; b.textContent=o;
-      b.addEventListener('click',()=>{ box.querySelectorAll('.chip').forEach(c=>c.classList.remove('on','right','wrong')); b.classList.add('on'); onEdit(+card.slice(1)); }); box.appendChild(b); });
+      b.addEventListener('click',()=>{ if(card==='c5'&&solved[5]) return; box.querySelectorAll('.chip').forEach(c=>c.classList.remove('on','right','wrong')); b.classList.add('on'); onEdit(+card.slice(1)); }); box.appendChild(b); });
   }
   const picked=(card,g)=>{ const c=$(card).querySelector('[data-g="'+g+'"] .chip.on'); return c?c.dataset.v:null; };
 
@@ -391,7 +445,7 @@ html.embedded .card{margin:8px 0;padding:12px 12px 10px}
     $('m-f').textContent=m.f; $('m-n').textContent=m.name; $('m-ctx').textContent=m.ctx;
     const s=SCEN[scen], done=s.mols.filter(id=>solvedMols.has(id)).length;
     $('m-prog').textContent=done+' of '+s.mols.length+' molecules in this scenario completed';
-    for(let i=1;i<=4;i++) solved[i]=false;
+    for(let i=1;i<=5;i++) solved[i]=false;
     /* step 1 */
     $('s1-c').textContent=m.c;
     const els=[...new Set([m.c].concat(m.t))];
@@ -417,12 +471,14 @@ html.embedded .card{margin:8px 0;padding:12px 12px 10px}
     ['s1','s2','s3','s4'].forEach(k=>{ $(k+'-msg').className='msg'; $(k+'-work').className='working'; });
     $('s1-viz').classList.remove('show'); $('s2-viz').classList.remove('show'); $('s4-chart').classList.remove('show');
     $('s4-check').textContent='Check'; s4step='answer';
+    const A=APPLY[molId]; $('s5-skill').textContent=A.skill; $('s5-q').textContent=A.q;
+    chipGroup('c5','ap',A.opts); $('s5-msg').className='msg';
     $('done').classList.remove('show');
     ['c1','c2','c3','c4'].forEach(c=>{ delete $(c).dataset.frozen; });
     setLocks();
   }
   function setLocks(){
-    for(let i=1;i<=4;i++){
+    for(let i=1;i<=5;i++){
       $('c'+i).classList.toggle('locked', i>1 && !solved[i-1]);
       $('c'+i).classList.toggle('solved', solved[i]);
     }
@@ -433,7 +489,7 @@ html.embedded .card{margin:8px 0;padding:12px 12px 10px}
     if(solved[step]){
       $('s4-check').disabled=false;
       solved[step]=false; delete $('c'+step).dataset.frozen;
-      for(let j=step+1;j<=4;j++){ solved[j]=false; }
+      for(let j=step+1;j<=5;j++){ solved[j]=false; }
       $('s'+step+'-msg').className='msg';
       if(step===1) $('s1-viz').classList.remove('show');
       if(step===2) $('s2-viz').classList.remove('show');
@@ -445,8 +501,8 @@ html.embedded .card{margin:8px 0;padding:12px 12px 10px}
   function solve(step,revealed){
     solved[step]=true; setLocks();
     track('lab-solved',{step:step,molecule:molId,revealed:!!revealed});
-    const nx=$('c'+(step+1)); if(nx && embedded===false && step<4) nx.scrollIntoView({behavior:'smooth',block:'nearest'});
-    else if(nx && step<4){ nx.classList.remove('pulse'); void nx.offsetWidth; nx.classList.add('pulse'); }
+    const nx=$('c'+(step+1)); if(nx && embedded===false && step<5) nx.scrollIntoView({behavior:'smooth',block:'nearest'});
+    else if(nx && step<5){ nx.classList.remove('pulse'); void nx.offsetWidth; nx.classList.add('pulse'); }
   }
 
   /* steppers */
@@ -624,7 +680,7 @@ html.embedded .card{margin:8px 0;padding:12px 12px 10px}
       '<tr><td>Higher bp</td><td>'+bpReason()+'</td><td>'+bpAnswer()+'</td></tr></table>';
   }
   function finishRound(){
-    $('c4').dataset.frozen='1'; solved[4]=true; setLocks();
+    solved[5]=true; setLocks();
     if(!solvedMols.has(molId)){ solvedMols.add(molId); }
     rounds++;
     const s=SCEN[scen], left=s.mols.filter(id=>!solvedMols.has(id)).length;
@@ -638,7 +694,7 @@ html.embedded .card{margin:8px 0;padding:12px 12px 10px}
   }
   $('s4-check').addEventListener('click',()=>{
     if(s4step==='run'){ drawChart(); $('s4-chart').classList.add('show'); track('lab-run',{molecule:molId});
-      msg('s4','','<b>Measured.</b> '+bpReason()); $('s4-check').textContent='Check'; s4step='done'; $('s4-check').disabled=true; finishRound(); return; }
+      msg('s4','','<b>Measured.</b> '+bpReason()+' Now apply it in step 5.'); $('s4-check').textContent='Check'; s4step='done'; $('s4-check').disabled=true; $('c4').dataset.frozen='1'; solve(4); return; }
     const po=picked('c4','po'), im=picked('c4','im'), bp=picked('c4','bp');
     if(!po||!im||!bp){ msg('s4','near','Answer all three questions.'); return; }
     const ok=[(po==='polar')===D.polar, im===IMF_NAMES[D.imf], bp===bpAnswer()];
@@ -669,6 +725,23 @@ html.embedded .card{margin:8px 0;padding:12px 12px 10px}
     }
   });
 
+  /* ---------- STEP 5 ---------- */
+  $('s5-check').addEventListener('click',()=>{
+    if(solved[5]) return;
+    const A=APPLY[molId], v=picked('c5','ap');
+    if(v===null){ msg('s5','near','Choose one answer.'); return; }
+    const i=A.opts.indexOf(v), chip=$('c5').querySelector('[data-g="ap"] .chip.on');
+    if(i===A.ans){ chip.classList.add('right'); msg('s5','','<b>Correct.</b> '+A.ok); track('lab-apply',{molecule:molId,correct:true}); finishRound(); return; }
+    chip.classList.add('wrong'); msg('s5','bad','<b>Not quite.</b> '+A.why[i]+' Tap another answer to try again.');
+    track('lab-apply',{molecule:molId,correct:false});
+  });
+  $('s5-show').addEventListener('click',()=>{
+    if(solved[5]) return;
+    const A=APPLY[molId];
+    $('c5').querySelectorAll('[data-g="ap"] .chip').forEach(c=>{ c.classList.remove('on','right','wrong'); if(c.dataset.v===A.opts[A.ans]) c.classList.add('on','right'); });
+    msg('s5','near','<b>Answer:</b> '+A.ok); track('lab-reveal',{step:5,molecule:molId}); finishRound();
+  });
+
   $('new-mol').addEventListener('click',()=>{ $('s4-check').disabled=false; pickMol(); track('lab-new',{scenario:SCEN[scen].id}); });
   $('again').addEventListener('click',()=>{ $('s4-check').disabled=false; pickMol(); track('lab-new',{scenario:SCEN[scen].id}); $('c0').scrollIntoView({behavior:'smooth',block:'start'}); });
   $('next-scen').addEventListener('click',()=>{ $('s4-check').disabled=false; scen=(scen+1)%SCEN.length; pickMol(); track('lab-pick',{scenario:SCEN[scen].id}); $('c0').scrollIntoView({behavior:'smooth',block:'start'}); });
@@ -679,7 +752,7 @@ html.embedded .card{margin:8px 0;padding:12px 12px 10px}
   });
 
   /* expose for testing */
-  window.__bench={derive:id=>derive(id),current:()=>({molId,D,scen}),PARTNERS,MOLS};
+  window.__bench={derive:id=>derive(id),current:()=>({molId,D,scen}),PARTNERS,MOLS,APPLY};
   pickMol();
 })();
 </script>
