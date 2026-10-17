@@ -336,6 +336,32 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .skill{display:inline-block;font-size:.92em;font-weight:700;letter-spacing:.02em;text-transform:none;color:#8a5410;background:var(--o-bg);border-radius:100px;padding:.12em .65em;margin-left:.6em;vertical-align:.05em}
 .skill-key{font-size:.82em;margin:.4em 0}
 .skill-key .skill{margin:0 .25em .25em 0}
+/* periodic table (opened from Contents) */
+.pt-open{display:inline-flex;align-items:center;gap:.45em;background:#fff;border:1.5px solid var(--accent);color:var(--accent-dark);font:700 .84rem 'DM Sans',sans-serif;padding:.42em .95em;border-radius:100px;cursor:pointer;margin:.1em 0 .5em}
+.pt-open svg{width:1.05em;height:1.05em}
+.pt-panel{max-width:1020px}
+.pt-detail{position:sticky;top:-18px;z-index:2;background:#fff;border:1px solid var(--g-line);border-radius:10px;padding:.55em .8em;font-size:.86rem;min-height:3.3em;margin-bottom:.5em}
+.pt-detail .big{font-size:1.5rem;font-weight:800;color:var(--ink);margin-right:.35em;letter-spacing:-.02em}
+.pt-detail .nm{font-weight:700;color:var(--ink)}
+.pt-tools{display:flex;align-items:center;gap:.4em;flex-wrap:wrap;margin-bottom:.45em;font-size:.78rem;color:var(--muted);font-weight:600}
+.pt-tools button{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .78rem 'DM Sans',sans-serif;padding:.28em .75em;border-radius:100px;cursor:pointer}
+.pt-tools button.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.pt-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.ptg{display:grid;grid-template-columns:repeat(18,minmax(2.55rem,1fr));gap:3px;min-width:47rem}
+.ptc{border:1px solid rgba(0,0,0,.08);border-radius:5px;padding:.14rem .1rem .12rem;text-align:center;cursor:pointer;font:inherit;line-height:1.05;color:var(--ink);min-width:0;background:#fff}
+.ptc i{display:block;font-style:normal;font-size:.56rem;color:var(--muted);text-align:left;padding-left:.12rem}
+.ptc b{display:block;font-size:.92rem;font-weight:800}
+.ptc s{display:block;text-decoration:none;font-size:.5rem;color:var(--muted);white-space:nowrap;overflow:hidden}
+.ptc.sel{outline:2.5px solid var(--ink);outline-offset:1px}
+.ptc.ph{background:repeating-linear-gradient(45deg,#fff 0 3px,#f1f2f0 3px 6px);cursor:default;font-size:.55rem;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.ptc.dim{opacity:.32}
+.ptc.dark,.ptc.dark i,.ptc.dark s,.ptc.dark b{color:#fff}
+.pt-gh{font-size:.58rem;color:var(--muted);text-align:center;font-weight:700;align-self:end}
+.pt-legend{display:flex;flex-wrap:wrap;gap:.3em .8em;font-size:.72rem;color:var(--muted);margin:.5em 0}
+.pt-legend span{display:inline-flex;align-items:center;gap:.3em}
+.pt-legend span::before{content:"";width:.8em;height:.8em;border-radius:3px;background:var(--sw);border:1px solid rgba(0,0,0,.08)}
+.pt-scrollhint{display:none;font-size:.72rem;color:var(--muted);margin-bottom:.3em}
+@media (max-width:820px){.pt-scrollhint{display:block}}
 .lewis{font-family:'DM Sans',sans-serif}
 </style>
 </head>
@@ -1630,7 +1656,20 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="panel">
     <div class="panel-head"><h3>Contents</h3><button class="icon-btn close-ov">Close</button></div>
     <p class="toc-note">You can jump to any page from here, even if a page's questions are not finished.</p>
+    <button class="pt-open" id="btn-pt" data-umami-event="open-periodic-table"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="3" width="4" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="3" width="4" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="9" width="16" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="15" width="12" height="3" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Periodic table of the elements</button>
     <ul class="toc" id="toc-list"></ul>
+  </div>
+</div>
+
+<div class="overlay" id="pt-overlay" role="dialog" aria-modal="true" aria-label="Periodic table of the elements">
+  <div class="panel pt-panel">
+    <div class="panel-head"><h3>Periodic table</h3><button class="icon-btn close-ov">Close</button></div>
+    <div class="pt-detail" id="pt-detail">Tap an element to see its atomic number, mass, group, valence electrons and electronegativity.</div>
+    <div class="pt-tools">Colour by <button type="button" class="on" data-mode="cat">Element type</button><button type="button" data-mode="en">Electronegativity</button></div>
+    <div class="pt-scrollhint">Scroll sideways to see the whole table.</div>
+    <div class="pt-scroll"><div class="ptg" id="pt-grid"></div></div>
+    <div class="pt-legend" id="pt-legend"></div>
+    <p class="small">Masses: standard atomic weights to 2 decimal places; a value in brackets is the mass number of the longest-lived isotope. Electronegativity: Chang's one-decimal values, shown for the main-group elements you need in this course. Valence electrons are given for main-group (s- and p-block) elements.</p>
   </div>
 </div>
 
@@ -2045,6 +2084,61 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   });
   document.getElementById('btn-toc').addEventListener('click',()=>openOv('toc-overlay'));
   document.getElementById('btn-refs').addEventListener('click',()=>openOv('refs-overlay'));
+
+  /* ---------- PERIODIC TABLE (Contents → Periodic table) ----------
+     [Z, symbol, name, mass, group (0 = f block), period, type, Chang EN or null] */
+  const PT=[[1,"H","Hydrogen","1.008",1,1,"nm",2.1],[2,"He","Helium","4.00",18,1,"nob",null],[3,"Li","Lithium","6.94",1,2,"alk",1.0],[4,"Be","Beryllium","9.01",2,2,"ae",1.5],[5,"B","Boron","10.81",13,2,"mtd",2.0],[6,"C","Carbon","12.01",14,2,"nm",2.5],[7,"N","Nitrogen","14.01",15,2,"nm",3.0],[8,"O","Oxygen","16.00",16,2,"nm",3.5],[9,"F","Fluorine","19.00",17,2,"hal",4.0],[10,"Ne","Neon","20.18",18,2,"nob",null],[11,"Na","Sodium","22.99",1,3,"alk",0.9],[12,"Mg","Magnesium","24.31",2,3,"ae",1.2],[13,"Al","Aluminium","26.98",13,3,"post",1.5],[14,"Si","Silicon","28.09",14,3,"mtd",1.8],[15,"P","Phosphorus","30.97",15,3,"nm",2.1],[16,"S","Sulfur","32.06",16,3,"nm",2.5],[17,"Cl","Chlorine","35.45",17,3,"hal",3.0],[18,"Ar","Argon","39.95",18,3,"nob",null],[19,"K","Potassium","39.10",1,4,"alk",0.8],[20,"Ca","Calcium","40.08",2,4,"ae",1.0],[21,"Sc","Scandium","44.96",3,4,"tm",null],[22,"Ti","Titanium","47.87",4,4,"tm",null],[23,"V","Vanadium","50.94",5,4,"tm",null],[24,"Cr","Chromium","52.00",6,4,"tm",null],[25,"Mn","Manganese","54.94",7,4,"tm",null],[26,"Fe","Iron","55.85",8,4,"tm",null],[27,"Co","Cobalt","58.93",9,4,"tm",null],[28,"Ni","Nickel","58.69",10,4,"tm",null],[29,"Cu","Copper","63.55",11,4,"tm",null],[30,"Zn","Zinc","65.38",12,4,"tm",null],[31,"Ga","Gallium","69.72",13,4,"post",1.6],[32,"Ge","Germanium","72.63",14,4,"mtd",1.8],[33,"As","Arsenic","74.92",15,4,"mtd",2.0],[34,"Se","Selenium","78.97",16,4,"nm",2.4],[35,"Br","Bromine","79.90",17,4,"hal",2.8],[36,"Kr","Krypton","83.80",18,4,"nob",null],[37,"Rb","Rubidium","85.47",1,5,"alk",0.8],[38,"Sr","Strontium","87.62",2,5,"ae",1.0],[39,"Y","Yttrium","88.91",3,5,"tm",null],[40,"Zr","Zirconium","91.22",4,5,"tm",null],[41,"Nb","Niobium","92.91",5,5,"tm",null],[42,"Mo","Molybdenum","95.95",6,5,"tm",null],[43,"Tc","Technetium","(98)",7,5,"tm",null],[44,"Ru","Ruthenium","101.07",8,5,"tm",null],[45,"Rh","Rhodium","102.91",9,5,"tm",null],[46,"Pd","Palladium","106.42",10,5,"tm",null],[47,"Ag","Silver","107.87",11,5,"tm",null],[48,"Cd","Cadmium","112.41",12,5,"tm",null],[49,"In","Indium","114.82",13,5,"post",1.7],[50,"Sn","Tin","118.71",14,5,"post",1.8],[51,"Sb","Antimony","121.76",15,5,"mtd",1.9],[52,"Te","Tellurium","127.60",16,5,"mtd",2.1],[53,"I","Iodine","126.90",17,5,"hal",2.5],[54,"Xe","Xenon","131.29",18,5,"nob",null],[55,"Cs","Caesium","132.91",1,6,"alk",0.7],[56,"Ba","Barium","137.33",2,6,"ae",0.9],[57,"La","Lanthanum","138.91",0,6,"lan",null],[58,"Ce","Cerium","140.12",0,6,"lan",null],[59,"Pr","Praseodymium","140.91",0,6,"lan",null],[60,"Nd","Neodymium","144.24",0,6,"lan",null],[61,"Pm","Promethium","(145)",0,6,"lan",null],[62,"Sm","Samarium","150.36",0,6,"lan",null],[63,"Eu","Europium","151.96",0,6,"lan",null],[64,"Gd","Gadolinium","157.25",0,6,"lan",null],[65,"Tb","Terbium","158.93",0,6,"lan",null],[66,"Dy","Dysprosium","162.50",0,6,"lan",null],[67,"Ho","Holmium","164.93",0,6,"lan",null],[68,"Er","Erbium","167.26",0,6,"lan",null],[69,"Tm","Thulium","168.93",0,6,"lan",null],[70,"Yb","Ytterbium","173.05",0,6,"lan",null],[71,"Lu","Lutetium","174.97",0,6,"lan",null],[72,"Hf","Hafnium","178.49",4,6,"tm",null],[73,"Ta","Tantalum","180.95",5,6,"tm",null],[74,"W","Tungsten","183.84",6,6,"tm",null],[75,"Re","Rhenium","186.21",7,6,"tm",null],[76,"Os","Osmium","190.23",8,6,"tm",null],[77,"Ir","Iridium","192.22",9,6,"tm",null],[78,"Pt","Platinum","195.08",10,6,"tm",null],[79,"Au","Gold","196.97",11,6,"tm",null],[80,"Hg","Mercury","200.59",12,6,"tm",null],[81,"Tl","Thallium","204.38",13,6,"post",1.8],[82,"Pb","Lead","207.20",14,6,"post",1.9],[83,"Bi","Bismuth","208.98",15,6,"post",1.9],[84,"Po","Polonium","(209)",16,6,"post",null],[85,"At","Astatine","(210)",17,6,"hal",null],[86,"Rn","Radon","(222)",18,6,"nob",null],[87,"Fr","Francium","(223)",1,7,"alk",null],[88,"Ra","Radium","(226)",2,7,"ae",null],[89,"Ac","Actinium","(227)",0,7,"act",null],[90,"Th","Thorium","232.04",0,7,"act",null],[91,"Pa","Protactinium","231.04",0,7,"act",null],[92,"U","Uranium","238.03",0,7,"act",null],[93,"Np","Neptunium","(237)",0,7,"act",null],[94,"Pu","Plutonium","(244)",0,7,"act",null],[95,"Am","Americium","(243)",0,7,"act",null],[96,"Cm","Curium","(247)",0,7,"act",null],[97,"Bk","Berkelium","(247)",0,7,"act",null],[98,"Cf","Californium","(251)",0,7,"act",null],[99,"Es","Einsteinium","(252)",0,7,"act",null],[100,"Fm","Fermium","(257)",0,7,"act",null],[101,"Md","Mendelevium","(258)",0,7,"act",null],[102,"No","Nobelium","(259)",0,7,"act",null],[103,"Lr","Lawrencium","(262)",0,7,"act",null],[104,"Rf","Rutherfordium","(261)",4,7,"tm",null],[105,"Db","Dubnium","(262)",5,7,"tm",null],[106,"Sg","Seaborgium","(266)",6,7,"tm",null],[107,"Bh","Bohrium","(264)",7,7,"tm",null],[108,"Hs","Hassium","(277)",8,7,"tm",null],[109,"Mt","Meitnerium","(268)",9,7,"tm",null],[110,"Ds","Darmstadtium","(281)",10,7,"tm",null],[111,"Rg","Roentgenium","(272)",11,7,"tm",null],[112,"Cn","Copernicium","(285)",12,7,"tm",null],[113,"Nh","Nihonium","(286)",13,7,"post",null],[114,"Fl","Flerovium","(289)",14,7,"post",null],[115,"Mc","Moscovium","(289)",15,7,"post",null],[116,"Lv","Livermorium","(293)",16,7,"post",null],[117,"Ts","Tennessine","(294)",17,7,"hal",null],[118,"Og","Oganesson","(294)",18,7,"nob",null]];
+  const PT_CAT={alk:['Alkali metal','#f6d7c3'],ae:['Alkaline earth metal','#fbe8c8'],tm:['Transition metal','#e3e8f3'],post:['Post-transition metal','#dfe7e1'],mtd:['Metalloid','#e6e1f0'],nm:['Non-metal','#cfe6d9'],hal:['Halogen','#bfe0e2'],nob:['Noble gas','#f0dbe6'],lan:['Lanthanide','#efe9d4'],act:['Actinide','#ebe1d8']};
+  let ptMode='cat', ptBuilt=false;
+  const ptGrid=document.getElementById('pt-grid'), ptDet=document.getElementById('pt-detail'), ptLeg=document.getElementById('pt-legend');
+  function enColour(v){ const t=Math.max(0,Math.min(1,(v-0.7)/3.3)); const a=[238,245,241], b=[31,77,57]; return 'rgb('+a.map((x,i)=>Math.round(x+(b[i]-x)*t)).join(',')+')'; }
+  function ptPaint(){
+    ptGrid.querySelectorAll('.ptc[data-z]').forEach(c=>{
+      const e=PT[+c.dataset.z-1];
+      c.classList.remove('dim','dark');
+      if(ptMode==='cat'){ c.style.background=PT_CAT[e[6]][1]; }
+      else if(e[7]!=null){ c.style.background=enColour(e[7]); if(e[7]>=2.2) c.classList.add('dark'); }
+      else { c.style.background='#fff'; c.classList.add('dim'); }
+      c.querySelector('s').textContent=ptMode==='en'?(e[7]!=null?'EN '+e[7].toFixed(1):''):e[3];
+    });
+    ptLeg.innerHTML=ptMode==='cat'
+      ? Object.keys(PT_CAT).map(k=>'<span style="--sw:'+PT_CAT[k][1]+'">'+PT_CAT[k][0]+'</span>').join('')
+      : '<span style="--sw:'+enColour(0.8)+'">low EN</span><span style="--sw:'+enColour(2.5)+'">medium</span><span style="--sw:'+enColour(4.0)+'">high EN (F 4.0)</span><span style="--sw:#fff">not needed here</span>';
+  }
+  function ptBuild(){
+    if(ptBuilt) return; ptBuilt=true;
+    const add=(node,r,c)=>{ node.style.gridRow=r; node.style.gridColumn=c; ptGrid.appendChild(node); };
+    for(let g=1;g<=18;g++){ const h=document.createElement('div'); h.className='pt-gh'; h.textContent=g; add(h,1,g); }
+    let fi={6:0,7:0};
+    PT.forEach(e=>{
+      const b=document.createElement('button'); b.type='button'; b.className='ptc'; b.dataset.z=e[0];
+      b.innerHTML='<i>'+e[0]+'</i><b>'+e[1]+'</b><s></s>'; b.setAttribute('aria-label',e[2]+', atomic number '+e[0]);
+      if(e[4]===0){ add(b, e[5]===6?10:11, 3+fi[e[5]]); fi[e[5]]++; }
+      else add(b, e[5]+1, e[4]);
+      b.addEventListener('click',()=>ptSelect(e,b));
+    });
+    [['57–71',7],['89–103',8]].forEach(x=>{ const ph=document.createElement('div'); ph.className='ptc ph'; ph.textContent=x[0]; add(ph,x[1],3); });
+    const gap=document.createElement('div'); gap.style.height='.45rem'; add(gap,9,1);
+    ptPaint();
+  }
+  function ptSelect(e,btn){
+    ptGrid.querySelectorAll('.ptc.sel').forEach(c=>c.classList.remove('sel')); btn.classList.add('sel');
+    const g=e[4], block=g===0?'f':(g<=2||e[0]===2?'s':(g>=13?'p':'d'));
+    const val=block==='s'?(e[0]===2?2:g):(block==='p'?g-10:null);
+    const grp=g===0?(e[6]==='lan'?'lanthanide':'actinide')+' series':'group '+g;
+    ptDet.innerHTML='<span class="big">'+e[1]+'</span><span class="nm">'+e[2]+'</span> · atomic number <b>'+e[0]+'</b> · relative atomic mass <b>'+e[3]+'</b><br>'+
+      grp.charAt(0).toUpperCase()+grp.slice(1)+', period '+e[5]+' · '+block+' block · '+PT_CAT[e[6]][0].toLowerCase()+
+      (val!=null?' · valence electrons <b>'+val+'</b>':'')+
+      (e[7]!=null?' · electronegativity (Chang) <b>'+e[7].toFixed(1)+'</b>':'');
+    track('periodic-element',{symbol:e[1]});
+  }
+  document.querySelectorAll('.pt-tools button').forEach(b=>b.addEventListener('click',()=>{
+    ptMode=b.dataset.mode; document.querySelectorAll('.pt-tools button').forEach(x=>x.classList.toggle('on',x===b)); ptPaint(); track('periodic-mode',{mode:ptMode});
+  }));
+  document.getElementById('btn-pt').addEventListener('click',()=>{
+    document.getElementById('toc-overlay').classList.remove('open');
+    ptBuild(); document.getElementById('pt-overlay').classList.add('open');
+  });
 
   /* contents — bypasses gating */
   const secNames={intro:'1 · Introduction',why:'2 · Why bonds form',lewis:'3 · Lewis structures',vb:'4 · Valence bond theory',vsepr:'5 · VSEPR: molecular shape',en:'6 · Electronegativity and bond type',pol:'7 · Polarity and dipole moment',imf:'8 · Intermolecular forces',lab:'Practice lab',end:'Wrap-up'};
