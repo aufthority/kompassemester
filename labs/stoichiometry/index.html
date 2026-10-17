@@ -23,6 +23,7 @@
 <meta name="twitter:description" content="Moles, equations, limiting reagents and percentage yield.">
 <meta name="twitter:image"       content="https://www.aufthority.com/preview_v2.png">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<script src="../shared/periodic-table.js" defer></script>
 <style>
 :root{
   --ink:#1c2620;--body:#3f4742;--muted:#6f7771;--accent:#2d6a4f;--accent-dark:#1f4d39;
@@ -283,6 +284,8 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 }
 
 /* ---------- additions for this explainer ---------- */
+.pt-open{display:inline-flex;align-items:center;gap:.45em;background:#fff;border:1.5px solid var(--accent);color:var(--accent-dark);font:700 .84rem 'DM Sans',sans-serif;padding:.42em .95em;border-radius:100px;cursor:pointer;margin:.1em 0 .5em}
+.pt-open svg{width:1.05em;height:1.05em}
 .toggle-wrap.opt .toggle-btn .tag{font-size:.7em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--eyebrow);margin-right:.5em}
 .chem{font-weight:600;color:var(--ink);white-space:nowrap}
 .eqn{font-size:1.02em;font-weight:600;color:var(--ink);background:#f6f7f6;border:1px solid var(--rule);border-radius:8px;padding:.45em .75em;margin:.45em 0;text-align:center;line-height:1.5}
@@ -382,7 +385,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <h1>One tablet, <span class="ac">two thousand billion billion molecules.</span></h1>
    <p>A single 500 mg paracetamol tablet contains about <b>2.0 × 10²¹</b> molecules of the drug. No balance can count particles that small, yet pharmacists, formulators and chemists need to know how many react, how much product forms, and how much is wasted.</p>
    <p>The tool that turns <b>grams into particles</b> is the <b>mole</b>. This explainer builds from the mole to balanced equations, then to the two calculations every synthesis depends on: the <b>limiting reagent</b> and the <b>percentage yield</b>.</p>
-   <p class="small">For Diploma in Pharmacy students. Use Next to move through the pages, or Contents to jump around. "Go deeper" sections are optional. The Reaction Bench lab is near the end.</p>
+   <p class="small">For Diploma in Pharmacy students. Use Next to move through the pages, or Contents to jump around. "Go deeper" sections are optional. A periodic table is in Contents. The Reaction Bench lab is near the end.</p>
   </div>
  </div>
 </section>
@@ -1245,6 +1248,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="panel">
     <div class="panel-head"><h3>Contents</h3><button class="icon-btn close-ov">Close</button></div>
     <p class="toc-note">You can jump to any page from here, even if a page's questions are not finished.</p>
+    <button type="button" class="pt-open" id="btn-pt" data-umami-event="open-periodic-table"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3h4v4H2zM14 3h4v4h-4zM2 8h4v4H2zM7 8h3v4H7zM11 8h3v4h-3zM14 8h4v4h-4zM2 13h4v4H2zM7 13h3v4H7zM11 13h3v4h-3zM14 13h4v4h-4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Periodic table</button>
     <ul class="toc" id="toc-list"></ul>
   </div>
 </div>
@@ -1569,6 +1573,11 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   });
   document.getElementById('btn-toc').addEventListener('click',()=>openOv('toc-overlay'));
   document.getElementById('btn-refs').addEventListener('click',()=>openOv('refs-overlay'));
+  /* periodic table (shared file ../shared/periodic-table.js) opens from Contents */
+  document.getElementById('btn-pt').addEventListener('click',()=>{
+    document.getElementById('toc-overlay').classList.remove('open');
+    if(window.KompasPT) KompasPT.open();
+  });
 
   /* contents — bypasses gating */
   const secNames={intro:'Start here',mole:'1 · The mole',types:'2 · Types of reaction',balance:'3 · Writing and balancing equations',stoich:'4 · Reaction stoichiometry',limit:'5 · Limiting reagent',yield:'6 · Percentage yield',lab:'Interactive lab',end:'Wrap-up'};

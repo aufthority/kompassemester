@@ -26,6 +26,7 @@
   }
 })();
 </script>
+<script src="../shared/periodic-table.js" defer></script>
 <style>
 :root{
   --ink:#1c2620;--body:#3f4742;--muted:#6f7771;--accent:#2d6a4f;--accent-dark:#1f4d39;
@@ -47,8 +48,11 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:8px;paddin
 .logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
 .logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
 .nav-right{display:flex;gap:8px}
-.pillbtn{text-decoration:none;color:var(--accent-dark);border:1px solid var(--g-line);background:var(--g-bg);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;white-space:nowrap}
+.pillbtn{cursor:pointer;text-decoration:none;color:var(--accent-dark);border:1px solid var(--g-line);background:var(--g-bg);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;white-space:nowrap}
 @media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
+.pts{display:none}
+@media (max-width:340px){.logo{font-size:.92rem}.nav-right{gap:4px}.pillbtn{padding:4px 7px!important;font-size:.74rem}}
+@media (max-width:400px){.ptl{display:none}.pts{display:inline}.nav-right{gap:6px}.pillbtn{padding:5px 9px}}
 
 .eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.3em}
 h1{color:var(--ink);font-weight:800;line-height:1.1;letter-spacing:-.025em;font-size:1.8em;margin-bottom:.3em}
@@ -146,6 +150,7 @@ table.w tr.hl td{background:var(--g-bg)}
   <nav>
     <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
     <div class="nav-right">
+      <button type="button" class="pillbtn" id="btn-pt" data-umami-event="open-periodic-table"><span class="ptl">Periodic table</span><span class="pts">Table</span></button>
       <a class="pillbtn" href="index.html" data-umami-event="lab-to-explainer">Explainer</a>
       <a class="pillbtn" id="btn-kompas" href="../../index.html" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
     </div>
@@ -462,6 +467,7 @@ table.w tr.hl td{background:var(--g-bg)}
   $('btn-again').addEventListener('click',()=>{ $('c3').classList.remove('done'); newRound(); $('c2').scrollIntoView({behavior:'smooth',block:'start'}); });
   $('btn-nextrx').addEventListener('click',()=>{ $('c3').classList.remove('done'); pick((ri+1)%RX.length); $('c0').scrollIntoView({behavior:'smooth',block:'start'}); });
 
+  $('btn-pt').addEventListener('click',()=>{ if(window.KompasPT) KompasPT.open(); });
   $('btn-kompas').addEventListener('click',e=>{
     try{ if(document.referrer && new URL(document.referrer).origin===location.origin && history.length>1){ e.preventDefault(); history.back(); } }catch(_){}
   });
