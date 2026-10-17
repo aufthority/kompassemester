@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Molecule Bench: Chemical Bonding Lab — Aufthority</title>
+<script>
+/* Embedded inside the explainer? Hide the page chrome and skip analytics (the parent page counts the visit). */
+(function(){
+  var emb=/[?&]embed=1/.test(location.search); try{ if(window.self!==window.top) emb=true; }catch(e){ emb=true; }
+  if(emb){ document.documentElement.className+=' embedded'; }
+  else{ var s=document.createElement('script'); s.defer=true; s.src='https://cloud.umami.is/script.js'; s.setAttribute('data-website-id','f79c60f1-f9e7-4170-a979-f357ba756a18'); document.head.appendChild(s); }
+})();
+</script>
+<meta name="description" content="Practice lab: count valence electrons, predict VSEPR shapes, classify bonds by electronegativity difference, then decide polarity, intermolecular forces and boiling points for real molecules.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="website">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="Molecule Bench: Chemical Bonding Lab">
+<meta property="og:description"  content="From Lewis count to boiling point, one molecule at a time.">
+<meta property="og:url"          content="https://kompassemester.aufthority.com/labs/chemical-bonding/lab.html">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:locale"       content="en_MY">
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:site"        content="@theaufthority">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#6f7771;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#9a6a1c;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%;overflow-x:hidden}
+a{color:var(--accent)}
+b,strong{color:var(--ink);font-weight:700}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 28px}
+nav{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 8px}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;align-items:center;gap:8px}
+.pill-link{display:inline-flex;align-items:center;text-decoration:none;font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;white-space:nowrap;border:1px solid var(--rule);color:var(--body);background:#fff}
+.pill-link.kompas{color:var(--accent-dark);border-color:var(--g-line);background:var(--g-bg)}
+@media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
+.page-head{padding:8px 0 4px}
+.eyebrow{font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.35em}
+h1{color:var(--ink);font-weight:800;line-height:1.08;letter-spacing:-.025em;font-size:2rem;margin-bottom:.35em}
+h1 .ac{color:var(--accent)}
+.page-head p{font-size:.92rem;margin-bottom:.4em}
+.small{font-size:.8rem;color:var(--muted)}
+.card{border:1px solid var(--rule);border-radius:12px;padding:14px 14px 12px;margin:12px 0;background:#fff;position:relative}
+.card h2{display:flex;align-items:center;gap:.5em;color:var(--ink);font-size:1.08rem;font-weight:800;letter-spacing:-.01em;margin-bottom:.45em}
+.num{flex:0 0 1.7em;height:1.7em;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.82em;font-weight:800}
+.card.locked{opacity:.42;pointer-events:none;filter:grayscale(.4)}
+.card.locked .lock-note{display:block}
+.lock-note{display:none;font-size:.78rem;color:var(--muted);font-weight:600;margin:-.2em 0 .4em}
+.card.solved h2 .num{background:var(--accent-dark)}
+.card.solved h2::after{content:"✓ done";margin-left:auto;font-size:.72rem;font-weight:700;color:var(--accent);letter-spacing:.04em}
+.card p{font-size:.9rem;margin-bottom:.5em}
+.chips{display:flex;flex-wrap:wrap;gap:.4em;margin:.35em 0 .5em}
+.chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .86rem 'DM Sans',sans-serif;padding:.42em .85em;border-radius:100px;cursor:pointer}
+.chip:hover{border-color:var(--ink)}
+.chip.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.chip .tick{color:var(--accent);margin-left:.3em}
+.chip.right{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.chip.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red)}
+.mol{display:flex;align-items:baseline;gap:.6em;flex-wrap:wrap;margin:.2em 0 .3em}
+.mol .f{font-size:2.1rem;font-weight:800;color:var(--ink);letter-spacing:-.02em;line-height:1}
+.mol .n{font-size:.95rem;color:var(--muted);font-weight:600}
+.ctx{font-size:.88rem;border-left:3px solid var(--orange);background:var(--o-bg);padding:.4em .7em;border-radius:0 8px 8px 0;margin:.3em 0}
+.meta-row{display:flex;justify-content:space-between;align-items:center;gap:.6em;flex-wrap:wrap;margin-top:.5em}
+.counter{font-size:.8rem;color:var(--muted);font-weight:600}
+.row{display:flex;gap:.8em;flex-wrap:wrap;align-items:flex-start;margin:.35em 0}
+.field{display:flex;flex-direction:column;gap:.25em;font-size:.78rem;font-weight:600;color:var(--muted);min-width:9em;flex:1}
+.field input[type=number]{font:600 1.1rem 'DM Sans',sans-serif;padding:.32em .5em;border:1px solid var(--rule);border-radius:8px;color:var(--ink);width:100%;max-width:10em}
+.stepper-num{display:flex;align-items:center;gap:.4em}
+.stepper-num button{width:2.1em;height:2.1em;border-radius:50%;border:1.5px solid var(--ink);background:#fff;color:var(--ink);font:700 1rem 'DM Sans',sans-serif;cursor:pointer;line-height:1}
+.stepper-num output{min-width:1.6em;text-align:center;font-size:1.3rem;font-weight:800;color:var(--ink)}
+.q{font-weight:700;color:var(--ink);font-size:.9rem;margin:.55em 0 .1em}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:600 .86rem 'DM Sans',sans-serif;padding:.45em 1em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn:disabled{opacity:.35;cursor:default}
+.btn-row{display:flex;gap:.45em;flex-wrap:wrap;margin-top:.5em}
+.msg{display:none;font-size:.88rem;margin-top:.55em;padding:.5em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.msg.show{display:block}
+.msg.near{border-color:var(--orange);background:var(--o-bg)}
+.msg.bad{border-color:var(--red);background:var(--r-bg)}
+.hintline{font-size:.8rem;color:var(--muted);margin:.2em 0 .4em}
+.working{display:none;margin-top:.5em}
+.working.show{display:block}
+table.wk{width:100%;border-collapse:collapse;font-size:.84rem}
+table.wk th,table.wk td{border-bottom:1px solid var(--rule);padding:.38em .5em;text-align:left;vertical-align:top}
+table.wk th{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+table.wk td:last-child{text-align:right;font-weight:700;color:var(--ink);white-space:nowrap}
+.viz{margin:.5em 0;display:none}
+.viz.show{display:block}
+.viz svg{width:100%;max-width:360px;height:auto;display:block;margin:0 auto}
+.viz figcaption{text-align:center;font-size:.76rem;color:var(--muted)}
+.ens{display:flex;flex-wrap:wrap;gap:.35em;margin:.3em 0 .5em}
+.ens span{font-size:.8rem;font-weight:700;color:var(--accent-dark);background:var(--g-bg);border-radius:6px;padding:.18em .5em}
+.bond-row{border:1px solid var(--rule);border-radius:10px;padding:.5em .65em;margin:.45em 0}
+.bond-row .bt{font-weight:800;color:var(--ink);font-size:.95rem;margin-bottom:.2em}
+.bond-row .row{align-items:flex-end}
+.chart{display:none;margin:.5em 0}
+.chart.show{display:block}
+.chart svg{width:100%;height:auto;display:block}
+.done-bar{display:none;border:1px solid var(--g-line);background:var(--g-bg);border-radius:12px;padding:12px 14px;margin:12px 0}
+.done-bar.show{display:block}
+.done-bar b{color:var(--accent-dark)}
+footer{font-size:.78rem;color:var(--muted);border-top:1px solid var(--rule);padding-top:10px;margin-top:16px}
+footer b,footer b a{color:var(--ink)}
+.tx{font-family:'DM Sans',sans-serif;font-size:12px;fill:var(--body)}
+.tx.s{font-size:10.5px;fill:var(--muted)}.tx.b{font-weight:700;fill:var(--ink)}.tx.g{fill:var(--accent-dark);font-weight:700}.tx.o{fill:#a85f10;font-weight:700}
+.tx.mid{text-anchor:middle}.tx.end{text-anchor:end}
+.ln{fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round}
+.fg{fill:var(--g-bg)}.fgs{fill:var(--accent)}.fo{fill:var(--o-bg)}.fos{fill:var(--orange)}.fw{fill:#fff}.fk{fill:var(--ink)}
+.axis{stroke:#c9cdca;stroke-width:1;fill:none}.grid{stroke:#eceeec;stroke-width:1}
+.pulse{animation:pulse 1s ease 2}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,130,31,0)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.45)}}
+html.embedded nav,html.embedded .page-head,html.embedded footer{display:none}
+html.embedded .wrap{padding:4px 10px 18px}
+html.embedded .card{margin:8px 0;padding:12px 12px 10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <a class="pill-link" href="index.html" data-umami-event="lab-to-explainer">Explainer</a>
+      <a class="pill-link kompas" id="btn-kompas" href="../../index.html" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+    </div>
+  </nav>
+  <header class="page-head">
+    <div class="eyebrow">Practice lab · chemical bonding</div>
+    <h1>Molecule <span class="ac">Bench</span></h1>
+    <p>Pick a scenario. For each molecule, work through four steps: count the electrons, predict the shape, classify each bond, then decide its polarity, its strongest intermolecular force and how its boiling point compares.</p>
+    <p class="small">Uses Chang's electronegativity values (one decimal). Bond type: ΔEN below 0.5 non-polar covalent, 0.5 up to 2.0 polar covalent, 2.0 or more ionic. Boiling points are rounded literature values (PubChem).</p>
+  </header>
+
+  <!-- CARD 0 · scenario -->
+  <section class="card" id="c0">
+    <h2>Choose a scenario</h2>
+    <div class="chips" id="scen"></div>
+    <div class="mol"><span class="f" id="m-f"></span><span class="n" id="m-n"></span></div>
+    <div class="ctx" id="m-ctx"></div>
+    <div class="meta-row"><span class="counter" id="m-prog"></span><button class="btn" id="new-mol">New molecule</button></div>
+  </section>
+
+  <!-- STEP 1 · Lewis count -->
+  <section class="card" id="c1">
+    <h2><span class="num">1</span>Count for the Lewis structure</h2>
+    <p>Work out the total valence electrons, then how the central atom <b id="s1-c"></b> uses them.</p>
+    <div class="hintline" id="s1-groups"></div>
+    <div class="row">
+      <label class="field">Total valence electrons<input type="number" id="s1-v" inputmode="numeric" min="0" step="1"></label>
+      <div class="field">Atoms bonded to the central atom<div class="stepper-num"><button type="button" data-t="s1-x" data-d="-1" aria-label="Decrease">−</button><output id="s1-x">0</output><button type="button" data-t="s1-x" data-d="1" aria-label="Increase">+</button></div></div>
+      <div class="field">Lone pairs on the central atom<div class="stepper-num"><button type="button" data-t="s1-e" data-d="-1" aria-label="Decrease">−</button><output id="s1-e">0</output><button type="button" data-t="s1-e" data-d="1" aria-label="Increase">+</button></div></div>
+    </div>
+    <div class="btn-row"><button class="btn solid" id="s1-check">Check</button><button class="btn" id="s1-show">Show the working</button></div>
+    <div class="msg" id="s1-msg"></div>
+    <div class="working" id="s1-work"></div>
+    <figure class="viz" id="s1-viz"><svg id="s1-svg" viewBox="0 0 300 200" role="img" aria-label="Lewis structure"></svg><figcaption id="s1-cap"></figcaption></figure>
+  </section>
+
+  <!-- STEP 2 · VSEPR -->
+  <section class="card locked" id="c2">
+    <h2><span class="num">2</span>Predict the shape (VSEPR)</h2>
+    <div class="lock-note">Finish step 1 to unlock.</div>
+    <p>Use your domain count from step 1.</p>
+    <div class="q">Electron-domain geometry</div>
+    <div class="chips" data-g="eg"></div>
+    <div class="q">Molecular shape</div>
+    <div class="chips" data-g="sh"></div>
+    <div class="q">Bond angle</div>
+    <div class="chips" data-g="an"></div>
+    <div class="btn-row"><button class="btn solid" id="s2-check">Check</button><button class="btn" id="s2-show">Show the working</button></div>
+    <div class="msg" id="s2-msg"></div>
+    <div class="working" id="s2-work"></div>
+    <figure class="viz" id="s2-viz"><svg id="s2-svg" viewBox="0 0 200 150" role="img" aria-label="Shape sketch"></svg><figcaption>Solid: in the page · wedge: towards you · dashes: away · orange: lone pair</figcaption></figure>
+  </section>
+
+  <!-- STEP 3 · bonds -->
+  <section class="card locked" id="c3">
+    <h2><span class="num">3</span>Classify each bond (ΔEN)</h2>
+    <div class="lock-note">Finish step 2 to unlock.</div>
+    <p>Electronegativity values you need:</p>
+    <div class="ens" id="s3-ens"></div>
+    <div id="s3-bonds"></div>
+    <div class="btn-row"><button class="btn solid" id="s3-check">Check</button><button class="btn" id="s3-show">Show the working</button></div>
+    <div class="msg" id="s3-msg"></div>
+    <div class="working" id="s3-work"></div>
+  </section>
+
+  <!-- STEP 4 · polarity, IMF, boiling point -->
+  <section class="card locked" id="c4">
+    <h2><span class="num">4</span>Polarity, forces and boiling point</h2>
+    <div class="lock-note">Finish step 3 to unlock.</div>
+    <div class="q">Is the molecule polar?</div>
+    <div class="chips" data-g="po"></div>
+    <div class="q">Strongest force between its molecules</div>
+    <div class="chips" data-g="im"></div>
+    <div class="q" id="s4-bpq"></div>
+    <div class="chips" data-g="bp"></div>
+    <div class="btn-row"><button class="btn solid" id="s4-check">Check</button><button class="btn" id="s4-show">Show the working</button></div>
+    <div class="msg" id="s4-msg"></div>
+    <div class="working" id="s4-work"></div>
+    <div class="chart" id="s4-chart"><svg id="s4-svg" viewBox="0 0 400 150" role="img" aria-label="Measured boiling points"></svg></div>
+  </section>
+
+  <div class="done-bar" id="done">
+    <p><b>Round complete.</b> <span id="done-txt"></span></p>
+    <div class="btn-row"><button class="btn solid" id="again">New molecule</button><button class="btn" id="next-scen">Next scenario</button></div>
+    <p class="small" id="rounds" style="margin-top:.4em"></p>
+  </div>
+
+  <footer><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Practice lab for Diploma in Pharmacy students, part of <a href="index.html">Chemical Bonding, Explained</a>. Electronegativity values from Chang's <i>Chemistry</i>; physical data rounded from PubChem.</footer>
+</div>
+
+<script>
+(function(){
+  const NS='http://www.w3.org/2000/svg';
+  const $=id=>document.getElementById(id);
+  const track=(ev,d)=>{ try{ if(window.umami) umami.track(ev,d); }catch(e){} };
+  const embedded=document.documentElement.classList.contains('embedded');
+  function post(event,extra){
+    if(window.parent===window) return;
+    const target=location.origin==='null'?'*':location.origin;
+    try{ window.parent.postMessage(Object.assign({type:'bond-lab',event:event},extra||{}),target); }catch(e){}
+  }
+  function el(tag,attrs,text){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(text!==undefined) e.textContent=text; return e; }
+  const sub=s=>s.replace(/\d/g,d=>'₀₁₂₃₄₅₆₇₈₉'[d]);
+
+  /* ---------- DATA (everything else is derived) ---------- */
+  const VAL={H:1,B:3,C:4,N:5,O:6,F:7,P:5,S:6,Cl:7};
+  const GROUP={H:1,B:13,C:14,N:15,O:16,F:17,P:15,S:16,Cl:17};
+  const Z={H:1,B:5,C:6,N:7,O:8,F:9,P:15,S:16,Cl:17};
+  const EN={H:2.1,B:2.0,C:2.5,N:3.0,O:3.5,F:4.0,P:2.1,S:2.5,Cl:3.0};   /* Chang, one decimal */
+  const MOLS={
+    h2o:{f:'H₂O',name:'water',c:'O',t:['H','H'],bo:[1,1],bp:100.0,dip:1.85,partner:'ch4',ctx:'Purified water: the most used solvent and vehicle in pharmacy.'},
+    ch2cl2:{f:'CH₂Cl₂',name:'dichloromethane',c:'C',t:['H','H','Cl','Cl'],bo:[1,1,1,1],bp:39.6,dip:1.60,partner:'ch4',ctx:'Dichloromethane: an extraction and manufacturing solvent, limited to 600 ppm as an ICH Q3C Class 2 residual solvent.'},
+    ccl4:{f:'CCl₄',name:'carbon tetrachloride',c:'C',t:['Cl','Cl','Cl','Cl'],bo:[1,1,1,1],bp:76.7,dip:0,partner:'ch4',ctx:'Carbon tetrachloride: an ICH Q3C Class 1 solvent to be avoided in manufacture (limit 4 ppm).'},
+    nh3:{f:'NH₃',name:'ammonia',c:'N',t:['H','H','H'],bo:[1,1,1],bp:-33.3,dip:1.47,partner:'ch4',ctx:'Ammonia: the basis of aromatic ammonia spirit, and the model for the basic nitrogen found in many drugs.'},
+    co2:{f:'CO₂',name:'carbon dioxide',c:'C',t:['O','O'],bo:[2,2],bp:-78.5,sub:true,dip:0,partner:'h2o',ctx:'Carbon dioxide: the gas released when an effervescent tablet dissolves.'},
+    so2:{f:'SO₂',name:'sulfur dioxide',c:'S',t:['O','O'],bo:[2,1],bp:-10.0,dip:1.63,partner:'co2',res:true,ctx:'Sulfur dioxide: released by sodium metabisulfite, an antioxidant used in some injections.'},
+    hcho:{f:'H₂CO',name:'formaldehyde',c:'C',t:['H','H','O'],bo:[1,1,2],bp:-19.0,dip:2.33,partner:'c2h6',ctx:'Formaldehyde: sold as formalin solution, a disinfectant and tissue preservative.'},
+    bcl3:{f:'BCl₃',name:'boron trichloride',c:'B',t:['Cl','Cl','Cl'],bo:[1,1,1],bp:12.6,dip:0,partner:'chcl3',ctx:'Boron trichloride: a reagent in organic synthesis, and a classic incomplete octet.'},
+    pcl5:{f:'PCl₅',name:'phosphorus pentachloride',c:'P',t:['Cl','Cl','Cl','Cl','Cl'],bo:[1,1,1,1,1],bp:160,sub:true,approx:true,dip:0,partner:'sf6',ctx:'Phosphorus pentachloride: a chlorinating reagent used in drug synthesis.'},
+    sf6:{f:'SF₆',name:'sulfur hexafluoride',c:'S',t:['F','F','F','F','F','F'],bo:[1,1,1,1,1,1],bp:-63.8,sub:true,dip:0,partner:'pcl3',ctx:'Sulfur hexafluoride: the gas inside the ultrasound contrast agent SonoVue.'}
+  };
+  /* comparison molecules for step 4 (atoms listed to count electrons) */
+  const PARTNERS={
+    ch4:{f:'CH₄',name:'methane',bp:-161.5,imf:0,atoms:{C:1,H:4}},
+    h2o:{f:'H₂O',name:'water',bp:100.0,imf:2,atoms:{O:1,H:2}},
+    co2:{f:'CO₂',name:'carbon dioxide',bp:-78.5,sub:true,imf:0,atoms:{C:1,O:2}},
+    c2h6:{f:'C₂H₆',name:'ethane',bp:-88.6,imf:0,atoms:{C:2,H:6}},
+    chcl3:{f:'CHCl₃',name:'chloroform',bp:61.2,imf:1,atoms:{C:1,H:1,Cl:3}},
+    sf6:{f:'SF₆',name:'sulfur hexafluoride',bp:-63.8,sub:true,imf:0,atoms:{S:1,F:6}},
+    pcl3:{f:'PCl₃',name:'phosphorus trichloride',bp:76.1,imf:1,atoms:{P:1,Cl:3}}
+  };
+  const SCEN=[
+    {id:'solv',name:'Pharmacy solvents',mols:['h2o','ch2cl2','ccl4']},
+    {id:'gas',name:'Gases in pharmacy',mols:['nh3','co2','so2','hcho']},
+    {id:'oct',name:'Beyond the octet',mols:['bcl3','pcl5','sf6']}
+  ];
+  const SHAPES={
+    '2,0':['linear','linear','180°'],'3,0':['trigonal planar','trigonal planar','120°'],'2,1':['trigonal planar','bent','slightly under 120°'],
+    '4,0':['tetrahedral','tetrahedral','109.5°'],'3,1':['tetrahedral','trigonal pyramidal','about 107°'],'2,2':['tetrahedral','bent','about 104.5°'],
+    '5,0':['trigonal bipyramidal','trigonal bipyramidal','90° and 120°'],'6,0':['octahedral','octahedral','90°']
+  };
+  const EG_OPTS=['linear','trigonal planar','tetrahedral','trigonal bipyramidal','octahedral'];
+  const SH_OPTS=['linear','bent','trigonal planar','trigonal pyramidal','tetrahedral','trigonal bipyramidal','octahedral','square planar'];
+  const AN_OPTS=['180°','120°','slightly under 120°','109.5°','about 107°','about 104.5°','90° and 120°','90°'];
+  const IMF_NAMES=['London forces only','dipole–dipole','hydrogen bonding'];
+  const btype=d=>d<0.5?'non-polar covalent':(d<2.0?'polar covalent':'ionic');
+
+  function derive(id){
+    const m=MOLS[id];
+    const atoms=[m.c].concat(m.t);
+    const v=atoms.reduce((s,a)=>s+VAL[a],0);
+    const X=m.t.length;
+    const E=(v-8*m.t.filter(a=>a!=='H').length-2*m.t.filter(a=>a==='H').length)/2;
+    const kinds=[...new Set(m.t)];
+    const bonds=kinds.map(a=>{ const d=Math.round(Math.abs(EN[m.c]-EN[a])*10)/10; return {a:a,d:d,type:btype(d)}; });
+    const anyPolar=bonds.some(b=>b.type!=='non-polar covalent');
+    const polar=anyPolar&&(E>0||kinds.length>1);
+    const hb=['N','O','F'].includes(m.c)&&m.t.includes('H');
+    const imf=hb?2:(polar?1:0);
+    const elec=atoms.reduce((s,a)=>s+Z[a],0);
+    const sh=SHAPES[X+','+E];
+    return {m,v,X,E,bonds,polar,imf,elec,eg:sh[0],sh:sh[1],an:sh[2],zsum:elec,distinctV:kinds.concat([m.c]).reduce((s,a)=>s+VAL[a],0)};
+  }
+
+  /* ---------- STATE ---------- */
+  let scen=0, molId=null, D=null, rounds=0, s4step='answer';
+  const solvedMols=new Set();
+  const solved=[false,false,false,false,false];
+  let s1x=0, s1e=0;
+
+  /* ---------- SHAPE SKETCH (same drawing rules as the explainer) ---------- */
+  const DIRS={2:[[-1,0,'p'],[1,0,'p']],3:[[0,-1,'p'],[-0.866,0.5,'p'],[0.866,0.5,'p']],4:[[0,-1,'p'],[0.86,0.30,'d'],[-0.94,0.34,'p'],[0.40,0.80,'w']],5:[[-1,0,'p'],[0.62,0.46,'w'],[0.70,-0.34,'d'],[0,-1,'p'],[0,1,'p']],6:[[0,-1,'p'],[0,1,'p'],[-1,0,'p'],[1,0,'p'],[-0.52,0.46,'w'],[0.52,-0.46,'d']]};
+  function drawShape(g,X,E,o){
+    o=Object.assign({cx:100,cy:75,R:58,central:'A',terms:[]},o||{});
+    const dirs=DIRS[X+E]; if(!dirs) return;
+    const lps=dirs.slice(0,E), atoms=dirs.slice(E), back=[], front=[], ends=[];
+    lps.forEach(d=>{
+      const len=Math.hypot(d[0],d[1]), ux=d[0]/len, uy=d[1]/len, lx=o.cx+ux*o.R*0.5, ly=o.cy+uy*o.R*0.5, ang=Math.atan2(uy,ux)*180/Math.PI;
+      const lg=el('g',{transform:'rotate('+ang.toFixed(1)+' '+lx.toFixed(1)+' '+ly.toFixed(1)+')'});
+      lg.appendChild(el('ellipse',{class:'fo',cx:lx,cy:ly,rx:o.R*0.36,ry:o.R*0.19,style:'stroke:var(--orange);stroke-width:1.2'}));
+      lg.appendChild(el('circle',{class:'fos',cx:lx+o.R*0.06,cy:ly-o.R*0.07,r:o.R*0.04}));
+      lg.appendChild(el('circle',{class:'fos',cx:lx+o.R*0.06,cy:ly+o.R*0.07,r:o.R*0.04}));
+      (d[2]==='d'?back:front).push(lg);
+    });
+    atoms.forEach((d,i)=>{
+      const f=d[2]==='p'?1:0.92, ex=o.cx+d[0]*o.R*f, ey=o.cy+d[1]*o.R*f;
+      ends.push([ex,ey,d[2],o.terms[i]||'X']);
+      if(d[2]==='p') front.unshift(el('line',{class:'ln',x1:o.cx,y1:o.cy,x2:ex,y2:ey,style:'stroke-width:2.2'}));
+      else if(d[2]==='d') back.push(el('line',{class:'ln',x1:o.cx,y1:o.cy,x2:ex,y2:ey,style:'stroke-width:2.2;stroke-dasharray:3 3'}));
+      else { const len=Math.hypot(ex-o.cx,ey-o.cy), px=-(ey-o.cy)/len*o.R*0.09, py=(ex-o.cx)/len*o.R*0.09;
+        front.push(el('polygon',{class:'fk',points:o.cx+','+o.cy+' '+(ex+px)+','+(ey+py)+' '+(ex-px)+','+(ey-py)})); }
+    });
+    back.forEach(n=>g.appendChild(n)); front.forEach(n=>g.appendChild(n));
+    ends.forEach(e=>{
+      g.appendChild(el('circle',{class:'fw',cx:e[0],cy:e[1],r:o.R*0.18,style:'stroke:var(--ink);stroke-width:1.4'}));
+      g.appendChild(el('text',{class:'tx b mid',x:e[0],y:e[1]+o.R*0.07,style:'font-size:'+(o.R*(e[3].length>1?0.17:0.2)).toFixed(1)+'px'},e[3]));
+    });
+    g.appendChild(el('circle',{class:'fg',cx:o.cx,cy:o.cy,r:o.R*0.22,style:'stroke:var(--accent);stroke-width:1.6'}));
+    g.appendChild(el('text',{class:'tx g mid',x:o.cx,y:o.cy+o.R*0.08,style:'font-size:'+(o.R*0.22).toFixed(1)+'px'},o.central));
+  }
+
+  /* ---------- LEWIS SKETCH (2D schematic: positions spread evenly) ---------- */
+  function drawLewis(svg){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    const m=D.m, cx=150, cy=100, R=70;
+    /* conventional flat Lewis layouts (angles in degrees, 0 = right, 90 = down) */
+    const LAY={'2,0':[[180,0],[]],'2,2':[[180,0],[-90,90]],'3,0':[[-90,150,30],[]],'2,1':[[150,30],[-90]],
+      '4,0':[[-90,0,90,180],[]],'3,1':[[180,0,90],[-90]],'5,0':[[-90,-18,54,126,198],[]],'6,0':[[-90,-30,30,90,150,210],[]]};
+    const lay=LAY[D.X+','+D.E], toV=a=>[Math.cos(a*Math.PI/180),Math.sin(a*Math.PI/180)];
+    const atomSlots=lay[0].map(toV), lpSlots=lay[1].map(toV);
+    /* draw the multiply bonded / heavier outer atom in the first (top) position */
+    const order=m.t.map((a,i)=>i).sort((i,j)=>(m.bo[j]-m.bo[i])||((m.t[j]!=='H')-(m.t[i]!=='H')));
+    const tt=order.map(i=>m.t[i]), bb=order.map(i=>m.bo[i]);
+    function dots(x,y,ux,uy){ const px=-uy, py=ux; [[1],[-1]].forEach(s=>svg.appendChild(el('circle',{class:'fos',cx:x+px*4.5*s[0],cy:y+py*4.5*s[0],r:2.6}))); }
+    atomSlots.forEach((s,i)=>{
+      const a=tt[i], bo=bb[i], ex=cx+s[0]*R, ey=cy+s[1]*R;
+      const px=-s[1], py=s[0];
+      for(let k=0;k<bo;k++){
+        const off=(k-(bo-1)/2)*5;
+        svg.appendChild(el('line',{class:'ln',x1:cx+s[0]*16+px*off,y1:cy+s[1]*16+py*off,x2:ex-s[0]*13+px*off,y2:ey-s[1]*13+py*off}));
+      }
+      svg.appendChild(el('text',{class:'tx b mid',x:ex,y:ey+6,style:'font-size:17px'},a));
+      if(a!=='H'){
+        const lp=(8-2*bo)/2, base=Math.atan2(s[1],s[0]);
+        const angs=lp===3?[0,Math.PI/2,-Math.PI/2]:(lp===2?[Math.PI/3,-Math.PI/3]:[0]);
+        angs.forEach(da=>{ const ux=Math.cos(base+da), uy=Math.sin(base+da); dots(ex+ux*17,ey+uy*17,ux,uy); });
+      }
+    });
+    lpSlots.forEach(s=>dots(cx+s[0]*20,cy+s[1]*20,s[0],s[1]));
+    svg.appendChild(el('text',{class:'tx g mid',x:cx,y:cy+7,style:'font-size:20px'},m.c));
+    $('s1-cap').textContent=(m.res?'One of two resonance structures (the double bond can sit on either O). ':'')+'Lines: bonding pairs. Orange dots: lone pairs. '+D.v+' valence electrons in total.';
+  }
+
+  /* ---------- UI BUILD ---------- */
+  function chipGroup(card,g,opts){
+    const box=$(card).querySelector('[data-g="'+g+'"]'); box.innerHTML='';
+    opts.forEach(o=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'; b.dataset.v=o; b.textContent=o;
+      b.addEventListener('click',()=>{ box.querySelectorAll('.chip').forEach(c=>c.classList.remove('on','right','wrong')); b.classList.add('on'); onEdit(+card.slice(1)); }); box.appendChild(b); });
+  }
+  const picked=(card,g)=>{ const c=$(card).querySelector('[data-g="'+g+'"] .chip.on'); return c?c.dataset.v:null; };
+
+  function renderScen(){
+    const box=$('scen'); box.innerHTML='';
+    SCEN.forEach((s,i)=>{ const b=document.createElement('button'); b.className='chip'+(i===scen?' on':''); b.type='button';
+      const all=s.mols.every(id=>solvedMols.has(id));
+      b.innerHTML=s.name+(all?'<span class="tick">✓</span>':'');
+      b.addEventListener('click',()=>{ if(i===scen) return; scen=i; track('lab-pick',{scenario:s.id}); pickMol(); }); box.appendChild(b); });
+  }
+  function pickMol(){
+    const pool=SCEN[scen].mols.filter(id=>id!==molId);
+    const fresh=pool.filter(id=>!solvedMols.has(id));
+    const list=fresh.length?fresh:pool;
+    molId=list[Math.floor(Math.random()*list.length)];
+    D=derive(molId);
+    reset();
+  }
+  function reset(){
+    renderScen();
+    const m=D.m;
+    $('m-f').textContent=m.f; $('m-n').textContent=m.name; $('m-ctx').textContent=m.ctx;
+    const s=SCEN[scen], done=s.mols.filter(id=>solvedMols.has(id)).length;
+    $('m-prog').textContent=done+' of '+s.mols.length+' molecules in this scenario completed';
+    for(let i=1;i<=4;i++) solved[i]=false;
+    /* step 1 */
+    $('s1-c').textContent=m.c;
+    const els=[...new Set([m.c].concat(m.t))];
+    $('s1-groups').textContent='Groups: '+els.map(a=>a+' '+GROUP[a]).join(' · ')+'. The central atom is '+m.c+'.';
+    $('s1-v').value=''; s1x=0; s1e=0; $('s1-x').textContent=0; $('s1-e').textContent=0;
+    /* step 2 */
+    chipGroup('c2','eg',EG_OPTS); chipGroup('c2','sh',SH_OPTS); chipGroup('c2','an',AN_OPTS);
+    /* step 3 */
+    $('s3-ens').innerHTML=els.map(a=>'<span>'+a+' '+EN[a].toFixed(1)+'</span>').join('');
+    const bb=$('s3-bonds'); bb.innerHTML='';
+    D.bonds.forEach((b,i)=>{
+      const r=document.createElement('div'); r.className='bond-row';
+      r.innerHTML='<div class="bt">'+m.c+'–'+b.a+' bond</div><div class="row"><label class="field">ΔEN<input type="number" step="0.1" inputmode="decimal" data-b="'+i+'"></label></div><div class="chips" data-g="bt'+i+'"></div>';
+      bb.appendChild(r);
+      r.querySelector('input').addEventListener('input',()=>onEdit(3));
+    });
+    D.bonds.forEach((b,i)=>chipGroup('c3','bt'+i,['non-polar covalent','polar covalent','ionic']));
+    /* step 4 */
+    chipGroup('c4','po',['polar','non-polar']); chipGroup('c4','im',IMF_NAMES);
+    const P=PARTNERS[m.partner];
+    $('s4-bpq').textContent='Which has the higher boiling point: '+m.f+' or '+P.f+' ('+P.name+')?';
+    chipGroup('c4','bp',[m.f,P.f]);
+    ['s1','s2','s3','s4'].forEach(k=>{ $(k+'-msg').className='msg'; $(k+'-work').className='working'; });
+    $('s1-viz').classList.remove('show'); $('s2-viz').classList.remove('show'); $('s4-chart').classList.remove('show');
+    $('s4-check').textContent='Check'; s4step='answer';
+    $('done').classList.remove('show');
+    ['c1','c2','c3','c4'].forEach(c=>{ delete $(c).dataset.frozen; });
+    setLocks();
+  }
+  function setLocks(){
+    for(let i=1;i<=4;i++){
+      $('c'+i).classList.toggle('locked', i>1 && !solved[i-1]);
+      $('c'+i).classList.toggle('solved', solved[i]);
+    }
+  }
+  /* changing an earlier answer re-locks the later steps */
+  function onEdit(step){
+    if(step===4 && !solved[4] && s4step==='run'){ s4step='answer'; $('s4-check').textContent='Check'; $('s4-msg').className='msg'; }
+    if(solved[step]){
+      $('s4-check').disabled=false;
+      solved[step]=false; delete $('c'+step).dataset.frozen;
+      for(let j=step+1;j<=4;j++){ solved[j]=false; }
+      $('s'+step+'-msg').className='msg';
+      if(step===1) $('s1-viz').classList.remove('show');
+      if(step===2) $('s2-viz').classList.remove('show');
+      $('done').classList.remove('show'); $('s4-chart').classList.remove('show'); $('s4-check').textContent='Check'; s4step='answer';
+      setLocks();
+    }
+  }
+  function msg(k,cls,html){ const m=$(k+'-msg'); m.className='msg show'+(cls?' '+cls:''); m.innerHTML=html; }
+  function solve(step,revealed){
+    solved[step]=true; setLocks();
+    track('lab-solved',{step:step,molecule:molId,revealed:!!revealed});
+    const nx=$('c'+(step+1)); if(nx && embedded===false && step<4) nx.scrollIntoView({behavior:'smooth',block:'nearest'});
+    else if(nx && step<4){ nx.classList.remove('pulse'); void nx.offsetWidth; nx.classList.add('pulse'); }
+  }
+
+  /* steppers */
+  document.querySelectorAll('.stepper-num button').forEach(b=>b.addEventListener('click',()=>{
+    const t=b.dataset.t, d=+b.dataset.d;
+    if(t==='s1-x'){ s1x=Math.max(0,Math.min(6,s1x+d)); $('s1-x').textContent=s1x; }
+    else { s1e=Math.max(0,Math.min(4,s1e+d)); $('s1-e').textContent=s1e; }
+    onEdit(1);
+  }));
+  $('s1-v').addEventListener('input',()=>onEdit(1));
+
+  /* ---------- STEP 1 ---------- */
+  function work1(){
+    const m=D.m, rows=[[m.c]].concat(m.t.map(a=>[a]));
+    const counts={}; [m.c].concat(m.t).forEach(a=>counts[a]=(counts[a]||0)+1);
+    const heavy=m.t.filter(a=>a!=='H').length, h=m.t.length-heavy;
+    let html='<table class="wk"><tr><th>Atom</th><th>Count × valence electrons</th><th>Electrons</th></tr>';
+    Object.keys(counts).forEach(a=>{ html+='<tr><td>'+a+'</td><td>'+counts[a]+' × '+VAL[a]+'</td><td>'+counts[a]*VAL[a]+'</td></tr>'; });
+    html+='<tr><td colspan="2"><b>Total valence electrons</b></td><td>'+D.v+'</td></tr>';
+    html+='<tr><td colspan="2">Outer atoms need: '+(heavy?heavy+' × 8 (full octet, bond included)':'')+(heavy&&h?' + ':'')+(h?h+' × 2 (H)':'')+'</td><td>'+(8*heavy+2*h)+'</td></tr>';
+    html+='<tr><td colspan="2">Left for the central atom: '+D.v+' − '+(8*heavy+2*h)+', then ÷ 2</td><td>'+D.E+' lone pair'+(D.E===1?'':'s')+'</td></tr>';
+    html+='<tr><td colspan="2">Atoms bonded to '+m.c+' (a double bond still counts as one atom)</td><td>'+D.X+'</td></tr></table>';
+    return html;
+  }
+  $('s1-check').addEventListener('click',()=>{
+    const v=parseInt($('s1-v').value,10);
+    if(isNaN(v)){ msg('s1','near','Enter the total number of valence electrons first.'); return; }
+    const okV=v===D.v, okX=s1x===D.X, okE=s1e===D.E;
+    if(okV&&okX&&okE){
+      msg('s1','','<b>Correct.</b> '+D.v+' valence electrons; '+D.m.c+' has '+D.X+' bonded atom'+(D.X>1?'s':'')+' and '+D.E+' lone pair'+(D.E===1?'':'s')+', so it is AX'+sub(String(D.X))+(D.E?'E'+(D.E>1?sub(String(D.E)):''):'')+' with '+(D.X+D.E)+' electron domains.'+(D.X+D.E>4?' That is more than four pairs around '+D.m.c+': an expanded octet.':'')+(D.m.c==='B'?' Boron ends with only 6 electrons: an incomplete octet.':''));
+      $('c1').dataset.frozen='1'; drawLewis($('s1-svg')); $('s1-viz').classList.add('show'); solve(1); return;
+    }
+    const tips=[];
+    if(!okV){
+      if(v===D.zsum) tips.push('You added the atomic numbers. Count only valence (outer) electrons: the last digit of the group number.');
+      else if(v===D.distinctV) tips.push('Count every atom, not each element once: there are '+D.m.t.length+' outer atoms.');
+      else tips.push('Recount the valence electrons: add the valence electrons of every atom.');
+    }
+    if(!okX) tips.push(s1x===D.m.bo.reduce((a,b)=>a+b,0)&&D.m.bo.some(b=>b>1)?'You counted bond lines. Count the <b>atoms</b> joined to '+D.m.c+'; a double bond is still one atom.':'Count the atoms joined to the central atom '+D.m.c+'.');
+    if(!okE){
+      if(okV&&s1e===D.E*2&&D.E>0) tips.push('That is the number of leftover <b>electrons</b>. Lone pairs are electrons ÷ 2.');
+      else tips.push('Lone pairs on '+D.m.c+': give the outer atoms full shells first, then halve what is left.');
+    }
+    const near=[okV,okX,okE].filter(Boolean).length>=2;
+    msg('s1',near?'near':'bad','<b>'+(near?'Nearly.':'Not yet.')+'</b> '+tips.join(' '));
+    track('lab-wrong',{step:1,molecule:molId});
+  });
+  $('s1-show').addEventListener('click',()=>{
+    const w=$('s1-work'); w.innerHTML=work1(); w.className='working show';
+    if(!solved[1]){ $('s1-v').value=D.v; s1x=D.X; s1e=D.E; $('s1-x').textContent=s1x; $('s1-e').textContent=s1e;
+      msg('s1','near','Working shown and filled in for you. Read it, then carry on with step 2.'); $('c1').dataset.frozen='1';
+      drawLewis($('s1-svg')); $('s1-viz').classList.add('show'); track('lab-reveal',{step:1,molecule:molId}); solve(1,true); }
+  });
+
+  /* ---------- STEP 2 ---------- */
+  function work2(){
+    return '<table class="wk"><tr><th>Step</th><th>Reasoning</th><th>Result</th></tr>'+
+      '<tr><td>Domains</td><td>'+D.X+' bonded atoms + '+D.E+' lone pairs</td><td>'+(D.X+D.E)+'</td></tr>'+
+      '<tr><td>Electron geometry</td><td>'+(D.X+D.E)+' domains as far apart as possible</td><td>'+D.eg+'</td></tr>'+
+      '<tr><td>Shape</td><td>'+(D.E?'name it from the atoms only; the lone pair'+(D.E>1?'s are':' is')+' invisible in the name':'no lone pairs, so shape = electron geometry')+'</td><td>'+D.sh+'</td></tr>'+
+      '<tr><td>Angle</td><td>'+(D.E?'lone pairs repel more and squeeze the bonds':'ideal angle for this geometry')+'</td><td>'+D.an+'</td></tr></table>';
+  }
+  function showShape(){
+    const s=$('s2-svg'); while(s.firstChild) s.removeChild(s.firstChild);
+    drawShape(s,D.X,D.E,{cx:100,cy:75,R:58,central:D.m.c,terms:D.m.t});
+    $('s2-viz').classList.add('show');
+  }
+  $('s2-check').addEventListener('click',()=>{
+    const eg=picked('c2','eg'), sh=picked('c2','sh'), an=picked('c2','an');
+    if(!eg||!sh||!an){ msg('s2','near','Pick one option in each of the three rows.'); return; }
+    const ok=[eg===D.eg,sh===D.sh,an===D.an];
+    [['eg',eg,D.eg],['sh',sh,D.sh],['an',an,D.an]].forEach(r=>{ const c=$('c2').querySelector('[data-g="'+r[0]+'"] .chip.on'); c.classList.add(r[1]===r[2]?'right':'wrong'); });
+    if(ok.every(Boolean)){ msg('s2','','<b>Correct.</b> '+(D.X+D.E)+' domains: '+D.eg+'. '+(D.E?'With '+D.E+' lone pair'+(D.E>1?'s':'')+', the atoms form a '+D.sh+' shape, '+D.an+'.':'No lone pairs, so the shape is also '+D.sh+', '+D.an+'.')); $('c2').dataset.frozen='1'; showShape(); solve(2); return; }
+    const tips=[];
+    if(!ok[0]) tips.push('Electron geometry comes from the total domains ('+(D.X+D.E)+'), lone pairs included.');
+    if(!ok[1]){
+      if(sh===D.eg&&D.E>0) tips.push('"'+sh+'" is the electron geometry. The shape is named from the atoms only.');
+      else if(D.E>0&&((D.X===3&&sh==='trigonal planar')||(D.X===2&&sh==='linear'))) tips.push('That shape ignores the lone pair on '+D.m.c+'. It still takes up a position and pushes the bonds away.');
+      else tips.push('For the shape, look only at where the '+D.X+' atoms sit.');
+    }
+    if(!ok[2]){
+      if(D.E>0&&(an==='109.5°'||an==='120°')) tips.push('That is the ideal angle. Lone pairs repel more strongly and squeeze it smaller.');
+      else tips.push('Match the angle to the geometry: '+D.eg+'.');
+    }
+    msg('s2',ok.filter(Boolean).length===2?'near':'bad','<b>Not yet.</b> '+tips.join(' ')+' Tap a new option to try again.');
+    track('lab-wrong',{step:2,molecule:molId});
+  });
+  $('s2-show').addEventListener('click',()=>{
+    const w=$('s2-work'); w.innerHTML=work2(); w.className='working show';
+    if(!solved[2]){
+      [['eg',D.eg],['sh',D.sh],['an',D.an]].forEach(r=>{ $('c2').querySelectorAll('[data-g="'+r[0]+'"] .chip').forEach(c=>{ c.classList.remove('on','wrong','right'); if(c.dataset.v===r[1]) c.classList.add('on','right'); }); });
+      msg('s2','near','Working shown and answers selected. Carry on with step 3.'); $('c2').dataset.frozen='1'; showShape(); track('lab-reveal',{step:2,molecule:molId}); solve(2,true);
+    }
+  });
+
+  /* ---------- STEP 3 ---------- */
+  function work3(){
+    let h='<table class="wk"><tr><th>Bond</th><th>ΔEN = larger − smaller</th><th>Type</th></tr>';
+    D.bonds.forEach(b=>{ const hi=EN[D.m.c]>=EN[b.a]?D.m.c:b.a, lo=hi===D.m.c?b.a:D.m.c;
+      h+='<tr><td>'+D.m.c+'–'+b.a+'</td><td>'+EN[hi].toFixed(1)+' − '+EN[lo].toFixed(1)+' = '+b.d.toFixed(1)+'</td><td>'+b.type+'</td></tr>'; });
+    return h+'</table><p class="small" style="margin-top:.3em">Below 0.5 non-polar · 0.5 up to 2.0 polar covalent · 2.0 or more ionic.</p>';
+  }
+  $('s3-check').addEventListener('click',()=>{
+    const tips=[]; let allOk=true, anyMissing=false, okCount=0;
+    D.bonds.forEach((b,i)=>{
+      const inp=$('c3').querySelector('input[data-b="'+i+'"]'), raw=parseFloat(inp.value), t=picked('c3','bt'+i);
+      if(isNaN(raw)||!t){ anyMissing=true; return; }
+      const name=D.m.c+'–'+b.a;
+      const dOk=Math.abs(raw-b.d)<0.051, tOk=t===b.type;
+      const chip=$('c3').querySelector('[data-g="bt'+i+'"] .chip.on'); chip.classList.remove('right','wrong'); chip.classList.add(tOk&&dOk?'right':(tOk?'right':'wrong'));
+      if(dOk) okCount++; if(tOk) okCount++;
+      if(!dOk){ allOk=false;
+        if(Math.abs(raw+b.d)<0.051&&b.d>0) tips.push(name+': ΔEN is never negative. Subtract the smaller value from the larger.');
+        else if(Math.abs(raw-(EN[D.m.c]+EN[b.a]))<0.051) tips.push(name+': you added the two values. ΔEN is the <b>difference</b>.');
+        else tips.push(name+': recheck the subtraction with the values above.');
+      }
+      if(!tOk){ allOk=false;
+        const own=btype(Math.round(Math.abs(raw)*10)/10);
+        if(dOk) tips.push(name+': with ΔEN '+b.d.toFixed(1)+', the rule says <b>'+b.type+'</b>'+(b.d<0.5&&b.d>0?' (any difference below 0.5 counts as non-polar)':'')+'.');
+        else if(t!==own) tips.push(name+': your type does not match your own ΔEN.');
+      }
+    });
+    if(anyMissing){ msg('s3','near','Enter a ΔEN and choose a type for every bond.'); return; }
+    if(allOk){
+      msg('s3','','<b>Correct.</b> '+D.bonds.map(b=>D.m.c+'–'+b.a+': '+b.d.toFixed(1)+', '+b.type).join('; ')+'.'+(D.bonds.some(b=>b.type!=='non-polar covalent')?' Polar bonds exist, but step 4 asks whether they cancel.':''));
+      $('c3').dataset.frozen='1'; solve(3); return;
+    }
+    msg('s3',okCount>=D.bonds.length*2-1?'near':'bad','<b>Not yet.</b> '+tips.join(' '));
+    track('lab-wrong',{step:3,molecule:molId});
+  });
+  $('s3-show').addEventListener('click',()=>{
+    const w=$('s3-work'); w.innerHTML=work3(); w.className='working show';
+    if(!solved[3]){
+      D.bonds.forEach((b,i)=>{ $('c3').querySelector('input[data-b="'+i+'"]').value=b.d.toFixed(1);
+        $('c3').querySelectorAll('[data-g="bt'+i+'"] .chip').forEach(c=>{ c.classList.remove('on','right','wrong'); if(c.dataset.v===b.type) c.classList.add('on','right'); }); });
+      msg('s3','near','Working shown and filled in. Carry on with step 4.'); $('c3').dataset.frozen='1'; track('lab-reveal',{step:3,molecule:molId}); solve(3,true);
+    }
+  });
+
+  /* ---------- STEP 4 ---------- */
+  function partnerElectrons(P){ return Object.keys(P.atoms).reduce((s,a)=>s+Z[a]*P.atoms[a],0); }
+  function bpAnswer(){
+    const P=PARTNERS[D.m.partner]; return D.m.bp>P.bp?D.m.f:P.f;
+  }
+  function bpReason(){
+    const P=PARTNERS[D.m.partner], pe=partnerElectrons(P);
+    if(D.imf!==P.imf){
+      const hi=D.imf>P.imf?[D.m.f,D.imf]:[P.f,P.imf], lo=D.imf>P.imf?[P.f,P.imf]:[D.m.f,D.imf];
+      return hi[0]+' has '+IMF_NAMES[hi[1]].replace(' only','')+(hi[1]===0?'':' between its molecules')+', while '+lo[0]+' has '+(lo[1]===0?'only London forces':IMF_NAMES[lo[1]])+'. The stronger force wins'+(Math.abs(D.elec-pe)>20?', even though the two differ in size':'')+'.';
+    }
+    const big=D.elec>pe?[D.m.f,D.elec]:[P.f,pe], small=D.elec>pe?[P.f,pe]:[D.m.f,D.elec];
+    return 'Both have the same strongest force ('+IMF_NAMES[D.imf]+'), so size decides: '+big[0]+' has '+big[1]+' electrons against '+small[1]+' for '+small[0]+', giving stronger London forces.';
+  }
+  const fmtBp=(bp,subl,approx)=>(approx?'about ':'')+String(bp).replace('-','−')+' °C'+(subl?' (sublimes)':'');
+  function drawChart(){
+    const P=PARTNERS[D.m.partner], svg=$('s4-svg'); while(svg.firstChild) svg.removeChild(svg.firstChild);
+    const rows=[[D.m.f,D.m.bp,D.m.sub,D.m.approx,true],[P.f,P.bp,P.sub,false,false]];
+    const lo=-180, hi=180, L=70, W=300, X=t=>L+(t-lo)/(hi-lo)*W;
+    svg.appendChild(el('line',{class:'grid',x1:X(0),x2:X(0),y1:8,y2:112}));
+    [-150,-100,-50,0,50,100,150].forEach(t=>svg.appendChild(el('text',{class:'tx s mid',x:X(t),y:128},String(t).replace('-','−'))));
+    svg.appendChild(el('text',{class:'tx s end',x:L+W,y:144},'boiling point (°C)'));
+    rows.forEach((r,i)=>{
+      const y=18+i*48, x0=X(lo), x1=X(r[1]);
+      svg.appendChild(el('text',{class:'tx b end',x:L-8,y:y+18},r[0]));
+      svg.appendChild(el('rect',{x:x0,y:y,width:Math.max(4,x1-x0),height:28,rx:5,style:'fill:'+(r[4]?'var(--accent)':'#a3aaa5')}));
+      const lbl=fmtBp(r[1],r[2],r[3]), inside=x1-x0>150;
+      svg.appendChild(el('text',{class:'tx b'+(inside?' end':''),x:inside?x1-6:x1+6,y:y+18,style:inside?'fill:#fff':''},lbl));
+    });
+  }
+  function work4(){
+    const P=PARTNERS[D.m.partner];
+    return '<table class="wk"><tr><th>Question</th><th>Reasoning</th><th>Answer</th></tr>'+
+      '<tr><td>Polar?</td><td>'+(D.bonds.every(b=>b.type==='non-polar covalent')?'no polar bonds':(D.polar?(D.E>0?'polar bonds, and lone pairs on '+D.m.c+' break the symmetry':'polar bonds, and the outer atoms differ, so the dipoles do not balance'):'polar bonds, but the '+D.sh+' shape is symmetric: the dipoles cancel'))+'</td><td>'+(D.polar?'polar':'non-polar')+'</td></tr>'+
+      '<tr><td>Strongest IMF</td><td>'+(D.imf===2?'H is bonded to '+D.m.c+' (N, O or F)':(D.imf===1?'polar molecule'+(D.m.t.includes('H')?'; its H atoms are on '+D.m.c+', so no hydrogen bonding':''):'non-polar molecule'))+'</td><td>'+IMF_NAMES[D.imf]+'</td></tr>'+
+      '<tr><td>Higher bp</td><td>'+bpReason()+'</td><td>'+bpAnswer()+'</td></tr></table>';
+  }
+  function finishRound(){
+    $('c4').dataset.frozen='1'; solved[4]=true; setLocks();
+    if(!solvedMols.has(molId)){ solvedMols.add(molId); }
+    rounds++;
+    const s=SCEN[scen], left=s.mols.filter(id=>!solvedMols.has(id)).length;
+    $('done-txt').textContent='You took '+D.m.name+' from electron count to boiling point. '+(left?left+' more molecule'+(left>1?'s':'')+' in this scenario.':'Every molecule in "'+s.name+'" is done.');
+    $('rounds').textContent='Rounds completed: '+rounds;
+    $('m-prog').textContent=(s.mols.length-left)+' of '+s.mols.length+' molecules in this scenario completed';
+    renderScen();
+    $('done').classList.add('show');
+    track('lab-round-complete',{molecule:molId,scenario:s.id});
+    post('round-complete',{molecule:molId});
+  }
+  $('s4-check').addEventListener('click',()=>{
+    if(s4step==='run'){ drawChart(); $('s4-chart').classList.add('show'); track('lab-run',{molecule:molId});
+      msg('s4','','<b>Measured.</b> '+bpReason()); $('s4-check').textContent='Check'; s4step='done'; $('s4-check').disabled=true; finishRound(); return; }
+    const po=picked('c4','po'), im=picked('c4','im'), bp=picked('c4','bp');
+    if(!po||!im||!bp){ msg('s4','near','Answer all three questions.'); return; }
+    const ok=[(po==='polar')===D.polar, im===IMF_NAMES[D.imf], bp===bpAnswer()];
+    [['po',ok[0]],['im',ok[1]],['bp',ok[2]]].forEach(r=>{ const c=$('c4').querySelector('[data-g="'+r[0]+'"] .chip.on'); c.classList.add(r[1]?'right':'wrong'); });
+    track('lab-prediction',{molecule:molId,correct:ok[2]});
+    if(ok.every(Boolean)){ msg('s4','','<b>All three correct.</b> Now run the measurement to see the real boiling points.'); $('c4').dataset.frozen='1'; $('s4-check').textContent='Run measurement'; s4step='run'; return; }
+    const tips=[];
+    if(!ok[0]){
+      if(D.polar) tips.push(D.E>0?'The lone pair'+(D.E>1?'s':'')+' on '+D.m.c+' make the shape lopsided, so the bond dipoles add up.':'The outer atoms are not all the same, so the dipoles do not balance.');
+      else if(D.bonds.some(b=>b.type!=='non-polar covalent')) tips.push('It has polar bonds, but the '+D.sh+' shape is symmetric with identical outer atoms, so the dipoles cancel.');
+      else tips.push('None of its bonds is polar.');
+    }
+    if(!ok[1]){
+      if(im===IMF_NAMES[2]&&D.m.t.includes('H')&&D.imf<2) tips.push('Its H atoms are bonded to '+D.m.c+', not to N, O or F, so these molecules cannot hydrogen bond to each other.');
+      else if(im===IMF_NAMES[1]&&!D.polar) tips.push('Dipole–dipole forces need a polar molecule. This one is non-polar, so only London forces act.');
+      else if(D.imf===2) tips.push('H bonded directly to '+D.m.c+' plus lone pairs: that allows hydrogen bonding.');
+      else tips.push('Match the force to your polarity answer.');
+    }
+    if(!ok[2]) tips.push('Compare the strongest force in each first; if they are the same type, the molecule with more electrons wins.');
+    msg('s4',ok.filter(Boolean).length===2?'near':'bad','<b>Not yet.</b> '+tips.join(' ')+' Tap a new option to try again.');
+  });
+  $('s4-show').addEventListener('click',()=>{
+    const w=$('s4-work'); w.innerHTML=work4(); w.className='working show';
+    if(!solved[4]&&s4step==='answer'){
+      [['po',D.polar?'polar':'non-polar'],['im',IMF_NAMES[D.imf]],['bp',bpAnswer()]].forEach(r=>{ $('c4').querySelectorAll('[data-g="'+r[0]+'"] .chip').forEach(c=>{ c.classList.remove('on','right','wrong'); if(c.dataset.v===r[1]) c.classList.add('on','right'); }); });
+      msg('s4','near','Working shown and answers selected. Run the measurement to finish the round.'); $('c4').dataset.frozen='1';
+      $('s4-check').textContent='Run measurement'; s4step='run'; track('lab-reveal',{step:4,molecule:molId});
+    }
+  });
+
+  $('new-mol').addEventListener('click',()=>{ $('s4-check').disabled=false; pickMol(); track('lab-new',{scenario:SCEN[scen].id}); });
+  $('again').addEventListener('click',()=>{ $('s4-check').disabled=false; pickMol(); track('lab-new',{scenario:SCEN[scen].id}); $('c0').scrollIntoView({behavior:'smooth',block:'start'}); });
+  $('next-scen').addEventListener('click',()=>{ $('s4-check').disabled=false; scen=(scen+1)%SCEN.length; pickMol(); track('lab-pick',{scenario:SCEN[scen].id}); $('c0').scrollIntoView({behavior:'smooth',block:'start'}); });
+
+  /* Back to Kompas keeps the course view when possible */
+  $('btn-kompas').addEventListener('click',e=>{
+    try{ if(document.referrer && new URL(document.referrer).origin===location.origin && history.length>1){ e.preventDefault(); history.back(); } }catch(_){}
+  });
+
+  /* expose for testing */
+  window.__bench={derive:id=>derive(id),current:()=>({molId,D,scen}),PARTNERS,MOLS};
+  pickMol();
+})();
+</script>
+</body>
+</html>
