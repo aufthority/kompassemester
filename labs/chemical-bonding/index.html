@@ -431,6 +431,15 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .pb-prog b{color:var(--ink)}
 .pb .seg button{padding:.42em .8em}
 @media (max-width:420px){.pb .seg button{font-size:.74em;padding:.4em .6em}}
+/* 2D / 3D switch on the dipole page */
+.dq-top{display:flex;justify-content:center;margin-bottom:.35em}
+.dq-2d[hidden],.dq-3d[hidden]{display:none}
+.dq-3d .vz-stage canvas{display:block;width:100%;height:calc(var(--k) * 27vh);height:calc(var(--k) * 27dvh);touch-action:none;cursor:grab}
+.si.has-ill .ill.dq .vz-reset svg,.ill.dq .vz-reset svg{width:1.05em;height:1.05em;max-height:none}
+.dq-3d .vz-legend{margin-top:.35em;justify-content:center}
+.dq figcaption{text-align:left}
+.dq-3d .pb-field.on{background:#f6ecdc;border-color:#d9a85a;color:#8a5410}
+@media (min-width:760px) and (orientation:landscape){ .dq-3d .vz-stage canvas{height:calc(var(--k) * 46vh);height:calc(var(--k) * 46dvh)} }
 .lewis{font-family:'DM Sans',sans-serif}
 </style>
 </head>
@@ -1306,7 +1315,9 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 
 <section class="slide" data-sec="pol" data-title="Bond dipoles add as arrows">
  <div class="si has-ill">
-  <figure class="ill">
+  <figure class="ill dq">
+   <div class="dq-top"><div class="seg seg-sm" role="group" aria-label="Choose a view"><button type="button" data-view="2d" class="on" aria-pressed="true">2D diagram</button><button type="button" data-view="3d" aria-pressed="false">3D quantum model</button></div></div>
+   <div class="dq-2d">
    <svg viewBox="0 0 400 200" role="img" aria-label="Carbon dioxide: two bond dipoles point in opposite directions and cancel. Water: two bond dipoles at an angle add to a net dipole of 1.85 debye">
     <text class="tx b mid" x="40" y="94">O</text><text class="tx b mid" x="110" y="94">C</text><text class="tx b mid" x="180" y="94">O</text>
     <path class="ln" d="M52 86 H98 M52 92 H98 M122 86 H168 M122 92 H168"/>
@@ -1326,6 +1337,12 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <text class="tx o mid" x="300" y="168">arrows add · 1.85 D</text>
     <text class="tx s mid" x="300" y="184">polar molecule</text>
    </svg>
+   </div>
+   <div class="dq-3d" hidden>
+    <div class="vz-stage"><canvas role="img" aria-label="Valence electron clouds of carbon dioxide and water, denser around the oxygen atoms"></canvas><span class="vz-tag q">Quantum model · valence electrons</span><span class="vz-hint">Drag to rotate</span>
+     <button type="button" class="pb-field dq-arrows on" aria-pressed="true">Dipole arrows</button><button type="button" class="vz-reset" aria-label="Reset the view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 10a5.5 5.5 0 1 0 1.8-4.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4.2 2.8v4.4h4.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    <div class="vz-legend"><span style="--c:#c0392b">δ− region (electron-rich)</span><span style="--c:#3a6bd1">δ+ region (electron-poor)</span></div>
+   </div>
    <figcaption>Grey: bond dipoles, pointing to the δ− end. Gold: their sum, the molecular dipole.</figcaption>
   </figure>
   <div class="txt">
@@ -2631,6 +2648,108 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     };
   })();
 
+  /* ---------- 2D / 3D QUANTUM VIEW OF BOND DIPOLES (CO₂ and H₂O) ----------
+     Dots are sampled valence-electron positions. In each bond, more of the pair's
+     density sits near the more electronegative atom (fraction rises with ΔEN), and
+     oxygen's lone pairs add more density there. Dot colour shows the partial charge
+     of the nearest atom: red δ−, blue δ+. Charges are illustrative, not computed. */
+  const DQ=(function(){
+    const fig=document.querySelector('.dq'); if(!fig) return {show(){},resize(){}};
+    const RM=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const cv=fig.querySelector('canvas'), ctx=cv.getContext('2d'), cap=fig.querySelector('figcaption');
+    const clamp=(v,a,b)=>v<a?a:(v>b?b:v);
+    const add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]], sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]], mul=(a,k)=>[a[0]*k,a[1]*k,a[2]*k];
+    const len=a=>Math.hypot(a[0],a[1],a[2]), nrm=a=>{ const l=len(a)||1; return [a[0]/l,a[1]/l,a[2]/l]; };
+    const EN={H:2.1,C:2.5,O:3.5};
+    function gam3(a){ return -a*Math.log(Math.random()*Math.random()*Math.random()+1e-12)/2; }
+    function dir(){ const z=2*Math.random()-1, f=2*Math.PI*Math.random(), s=Math.sqrt(1-z*z); return [s*Math.cos(f),z,s*Math.sin(f)]; }
+    /* molecules in their own frame (Å), with illustrative partial charges */
+    const S=0.866, LPd=0.62;
+    const MOLS=[
+      {f:'CO₂',x:-2.35,mu:'0 D · non-polar',atoms:[['C',[0,0,0],0.9],['O',[-1.16,0,0],-0.45],['O',[1.16,0,0],-0.45]],
+       bonds:[[0,1,4],[0,2,4]], lps:[[1,[-0.5,S,0]],[1,[-0.5,-S,0]],[2,[0.5,0,S]],[2,[0.5,0,-S]]], net:null},
+      {f:'H₂O',x:2.25,mu:'1.85 D · polar',atoms:[['O',[0,0.25,0],-0.7],['H',[-0.759,-0.338,0],0.35],['H',[0.759,-0.338,0],0.35]],
+       bonds:[[0,1,2],[0,2,2]], lps:[[0,[0,0.58,0.81]],[0,[0,0.58,-0.81]]], net:[0,1,0]}
+    ];
+    const PER_E=62;
+    MOLS.forEach(m=>{
+      m.src=[];
+      m.bonds.forEach(b=>{ const A=m.atoms[b[0]], B=m.atoms[b[1]], hi=EN[A[0]]>=EN[B[0]]?b[0]:b[1], lo=hi===b[0]?b[1]:b[0], d=Math.abs(EN[A[0]]-EN[B[0]]);
+        const f=0.5+0.22*d; for(let k=0;k<b[2]*PER_E;k++) m.src.push({t:'b',hi,lo,f}); });
+      m.lps.forEach(l=>{ for(let k=0;k<2*PER_E;k++) m.src.push({t:'l',at:l[0],d:nrm(l[1])}); });
+      m.n=m.src.length; m.pts=new Float32Array(m.n*3); m.col=new Array(m.n);
+      for(let i=0;i<m.n;i++) samp(m,i);
+      m.bd=m.bonds.map(b=>{ const A=m.atoms[b[0]], B=m.atoms[b[1]], hi=EN[A[0]]>=EN[B[0]]?b[0]:b[1], lo=hi===b[0]?b[1]:b[0]; return {hi,lo,ord:b[2]/2}; });
+    });
+    function samp(m,i){
+      const s=m.src[i]; let c, o, squash=null;
+      if(s.t==='b'){ const H=m.atoms[s.hi][1], L=m.atoms[s.lo][1], u=nrm(sub(L,H)), bl=len(sub(L,H));
+        const nearHi=Math.random()<s.f, base=nearHi?H:L, toward=nearHi?u:mul(u,-1);
+        c=add(base,mul(toward,bl*0.28)); o=mul(dir(),gam3(nearHi?0.32:0.26)); squash=u; }
+      else { const A=m.atoms[s.at][1]; c=add(A,mul(s.d,LPd)); o=mul(dir(),gam3(0.3)); }
+      if(squash){ const along=o[0]*squash[0]+o[1]*squash[1]+o[2]*squash[2]; const perp=sub(o,mul(squash,along)); o=add(mul(squash,along*1.15),mul(perp,0.7)); }
+      const p=add(c,o); m.pts[i*3]=p[0]; m.pts[i*3+1]=p[1]; m.pts[i*3+2]=p[2];
+      let best=0,bd=1e9; m.atoms.forEach((a,k)=>{ const d=len(sub(p,a[1])); if(d<bd){ bd=d; best=k; } });
+      m.col[i]=m.atoms[best][2]<0?'#c0392b':'#3a6bd1';
+    }
+    const st={on:false,yaw:-0.45,pitch:0.3,drag:false,arrows:true,clock:0};
+    const btn2=fig.querySelector('[data-view="2d"]'), btn3=fig.querySelector('[data-view="3d"]'), box2=fig.querySelector('.dq-2d'), box3=fig.querySelector('.dq-3d'), arB=fig.querySelector('.dq-arrows'), hint=fig.querySelector('.vz-hint');
+    const CAP2='Grey: bond dipoles, pointing to the δ− end. Gold: their sum, the molecular dipole.';
+    const CAP3='Quantum view: dots are likely positions of the <b>valence electrons</b>. They crowd around oxygen, the more electronegative atom, so those regions are δ− (red) and the H and C regions δ+ (blue). In CO₂ the two oxygens pull equally in opposite directions; in bent H₂O both pulls point up, towards O. Charges are illustrative.';
+    function setView(v){ st.on=v==='3d'; box2.hidden=st.on; box3.hidden=!st.on;
+      [btn2,btn3].forEach(b=>{ const on=b.dataset.view===v; b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); });
+      cap.innerHTML=st.on?CAP3:CAP2; fit(slides[current-1]); if(st.on){ resize(); if(!raf) raf=requestAnimationFrame(loop); setTimeout(()=>hint.classList.add('gone'),5000); }
+      track('dipole-view',{view:v}); }
+    btn2.addEventListener('click',()=>setView('2d')); btn3.addEventListener('click',()=>setView('3d'));
+    arB.addEventListener('click',()=>{ st.arrows=!st.arrows; arB.classList.toggle('on',st.arrows); arB.setAttribute('aria-pressed',st.arrows); });
+    fig.querySelector('.vz-reset').addEventListener('click',()=>{ st.yaw=-0.45; st.pitch=0.3; });
+    let lx=0,ly=0;
+    cv.addEventListener('pointerdown',e=>{ st.drag=true; lx=e.clientX; ly=e.clientY; try{ cv.setPointerCapture(e.pointerId); }catch(_){} hint.classList.add('gone'); });
+    cv.addEventListener('pointermove',e=>{ if(!st.drag) return; st.yaw+=(e.clientX-lx)*0.011; st.pitch=clamp(st.pitch+(e.clientY-ly)*0.011,-1.35,1.35); lx=e.clientX; ly=e.clientY; });
+    const end=()=>{ st.drag=false; }; cv.addEventListener('pointerup',end); cv.addEventListener('pointercancel',end);
+    let W=0,H=0,dpr=1;
+    function resize(){ dpr=Math.min(2,window.devicePixelRatio||1); const w=Math.max(1,Math.round(cv.clientWidth*dpr)), h=Math.max(1,Math.round(cv.clientHeight*dpr)); if(w!==W||h!==H){ W=w; H=h; cv.width=W; cv.height=H; } }
+    function arrow(p,q,col,wd){ const dx=q[0]-p[0], dy=q[1]-p[1], L=Math.hypot(dx,dy); if(L<3*dpr) return; const ux=dx/L, uy=dy/L, hl=Math.min(10*dpr,L*0.4), hw=hl*0.55;
+      ctx.strokeStyle=col; ctx.fillStyle=col; ctx.lineWidth=wd*dpr; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(p[0],p[1]); ctx.lineTo(q[0]-ux*hl*0.8,q[1]-uy*hl*0.8); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(q[0],q[1]); ctx.lineTo(q[0]-ux*hl-uy*hw,q[1]-uy*hl+ux*hw); ctx.lineTo(q[0]-ux*hl+uy*hw,q[1]-uy*hl-ux*hw); ctx.closePath(); ctx.fill(); }
+    function render(dt){
+      resize(); st.clock+=dt; if(!st.drag&&!RM) st.yaw+=dt*0.18;
+      const VRx=4.5, VRy=1.9, K=Math.min(W/(2*VRx),H/(2*VRy))*0.95, cx=W/2, cy=H/2-8*dpr, F=12;
+      const cY=Math.cos(st.yaw), sY=Math.sin(st.yaw), cP=Math.cos(st.pitch), sP=Math.sin(st.pitch);
+      ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,W,H);
+      MOLS.forEach(m=>{
+        if(!RM) for(let j=0;j<Math.round(m.n*0.05);j++) samp(m,(Math.random()*m.n)|0);
+        /* each molecule turns about its own centre */
+        const P=(x,y,z)=>{ const x1=x*cY+z*sY, z1=-x*sY+z*cY, y1=y*cP-z1*sP, z2=y*sP+z1*cP, s=F/(F+z2); return [cx+(m.x+x1*s)*K,cy-y1*s*K,z2,s]; };
+        const pp=new Array(m.n); for(let i=0;i<m.n;i++) pp[i]=P(m.pts[i*3],m.pts[i*3+1],m.pts[i*3+2]);
+        const dots=back=>{ let last=''; for(let i=0;i<m.n;i++){ const p=pp[i]; if((p[2]>0)!==back) continue; if(m.col[i]!==last){ last=m.col[i]; ctx.fillStyle=last; }
+          ctx.globalAlpha=clamp(0.6-0.3*p[2]/1.6,0.18,0.85); const d=Math.max(1.4,2.0*p[3])*dpr; ctx.fillRect(p[0]-d/2,p[1]-d/2,d,d); } ctx.globalAlpha=1; };
+        dots(true);
+        const A=m.atoms.map(a=>P(...a[1]));
+        m.bd.forEach(b=>{ const p=A[b.lo], q=A[b.hi]; ctx.strokeStyle='rgba(28,38,32,.55)'; ctx.lineWidth=2*dpr; const n=b.ord>1?2:1, dx=q[0]-p[0], dy=q[1]-p[1], L=Math.hypot(dx,dy)||1;
+          for(let k=0;k<n;k++){ const off=(k-(n-1)/2)*4*dpr; ctx.beginPath(); ctx.moveTo(p[0]-dy/L*off,p[1]+dx/L*off); ctx.lineTo(q[0]-dy/L*off,q[1]+dx/L*off); ctx.stroke(); } });
+        m.atoms.map((a,i)=>[a,A[i]]).sort((u,v)=>v[1][2]-u[1][2]).forEach(([a,p])=>{ const r=Math.max(7*dpr,(a[0]==='H'?0.14:0.19)*K*p[3]);
+          const g=ctx.createRadialGradient(p[0]-r*.35,p[1]-r*.35,r*.1,p[0],p[1],r); g.addColorStop(0,'#5d6b62'); g.addColorStop(1,'#1c2620'); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(p[0],p[1],r,0,7); ctx.fill();
+          ctx.fillStyle='#fff'; ctx.font='800 '+Math.round(Math.max(9*dpr,r*0.95))+'px "DM Sans",system-ui,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(a[0],p[0],p[1]+0.5*dpr); ctx.textBaseline='alphabetic'; });
+        dots(false);
+        if(st.arrows){
+          m.bd.forEach(b=>{ const lo=m.atoms[b.lo][1], hi=m.atoms[b.hi][1], u=nrm(sub(hi,lo)), mid=mul(add(lo,hi),0.5), half=Math.min(0.42,len(sub(hi,lo))*0.4);
+            const p=P(...sub(mid,mul(u,half))), q=P(...add(mid,mul(u,half))), dx=q[0]-p[0], dy=q[1]-p[1], L=Math.hypot(dx,dy)||1, c=P(0,0,0), pm=P(...mid);
+            let nx=-dy/L, ny=dx/L; if((pm[0]-c[0])*nx+(pm[1]-c[1])*ny<0){ nx=-nx; ny=-ny; } const o=14*dpr;
+            arrow([p[0]+nx*o,p[1]+ny*o],[q[0]+nx*o,q[1]+ny*o],'rgba(80,88,83,.9)',2.4); });
+          if(m.net){ const o=P(0,-0.35,0), t=P(0,0.95,0); arrow(o,t,'#9a6a1c',3.6); }
+        }
+        const lb=P(0,-1.75,0); ctx.textAlign='center'; ctx.lineWidth=3.5*dpr; ctx.strokeStyle='rgba(255,255,255,.95)';
+        ctx.font='800 '+(12.5*dpr)+'px "DM Sans",system-ui,sans-serif'; ctx.strokeText(m.f,lb[0],lb[1]); ctx.fillStyle='#1c2620'; ctx.fillText(m.f,lb[0],lb[1]);
+        ctx.font='700 '+(11*dpr)+'px "DM Sans",system-ui,sans-serif'; ctx.strokeText(m.mu,lb[0],lb[1]+15*dpr); ctx.fillStyle=m.net?'#a85f10':'#2d6a4f'; ctx.fillText(m.mu,lb[0],lb[1]+15*dpr);
+      });
+    }
+    let active=false, raf=0, last=0;
+    function loop(ts){ const dt=last?Math.min(0.05,(ts-last)/1000):0; last=ts; if(active&&st.on){ render(dt); raf=requestAnimationFrame(loop); } else { raf=0; last=0; } }
+    window.__dq=st;
+    return { show(slide){ active=!!slide.querySelector('.dq'); if(active&&st.on){ requestAnimationFrame(resize); if(!raf) raf=requestAnimationFrame(loop); } }, resize(){ if(active&&st.on) resize(); } };
+  })();
+
   /* ---------- AUTO-FIT: shrink a page until it fits without scrolling ---------- */
   const MIN_K = 0.8;   /* never shrink text below 80% of normal */
   const stageEl = document.getElementById('stage');
@@ -2691,7 +2810,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     updateMore();
   }
   slides.forEach(s=>s.addEventListener('scroll', updateMore, {passive:true}));
-  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ fit(slides[current-1]); VIZ.resize(); POL.resize(); },120); });
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ fit(slides[current-1]); VIZ.resize(); POL.resize(); DQ.resize(); },120); });
 
   /* ---------- GATING ("Go deeper" toggles are optional; .task items must be completed) ---------- */
   function pending(slide){
@@ -2728,7 +2847,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     btnNext.setAttribute('data-umami-event',n===TOTAL?'carousel-selesai':'nav-next');
     const fr=slides[n-1].querySelector('iframe[data-src]');
     if(fr && !fr.getAttribute('src')){ fr.setAttribute('src',fr.dataset.src); track('lab-embed-load'); }
-    VIZ.show(slides[n-1]); POL.show(slides[n-1]);
+    VIZ.show(slides[n-1]); POL.show(slides[n-1]); DQ.show(slides[n-1]);
     buildCharts(n);
     fit(slides[n-1]);
     requestAnimationFrame(()=>fit(slides[n-1]));
