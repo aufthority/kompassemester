@@ -328,6 +328,18 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .lab-head p{margin-bottom:.2em}
 .lab-frame{flex:1 1 auto;min-height:300px;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#fff}
 .lab-frame iframe{width:100%;height:100%;border:0;display:block}
+/* ---------- video buttons + player ---------- */
+.vbtn{display:inline-flex;align-items:center;gap:.5em;background:var(--ink);color:#fff;border:none;font:600 .82em 'DM Sans',sans-serif;padding:.45em .95em .45em .7em;border-radius:100px;cursor:pointer;margin:.25em .35em .25em 0}
+.vbtn svg{width:1.1em;height:1.1em}
+.vbtn[hidden]{display:none}
+#vid-overlay{overflow:hidden;background:rgba(10,15,12,.8)}
+.vid-panel{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.vid-frame{background:#000;border-radius:12px;overflow:hidden;width:min(100%, calc((100dvh - 170px) * 16 / 9));aspect-ratio:16/9}
+.vid-frame.vertical{width:min(100%, calc((100dvh - 170px) * 9 / 16));aspect-ratio:9/16}
+.vid-frame iframe{width:100%;height:100%;border:0;display:block}
+.vid-meta{color:#fff;text-align:center;font-size:.86rem;max-width:640px}
+.vid-meta a{color:#cfe6d9}
+.vid-close{background:#fff;color:var(--ink);border:none;border-radius:100px;font:700 .86rem 'DM Sans',sans-serif;padding:8px 18px;cursor:pointer}
 /* ---------- Luna's case: story thread ---------- */
 .story{border-left:3px solid var(--eyebrow);background:#faf5ea;border-radius:0 8px 8px 0;padding:.4em .8em;margin:.45em 0 .55em;font-size:.9em}
 .story-tag{display:block;font-size:.72em;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--eyebrow);margin-bottom:.15em}
@@ -764,8 +776,9 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <h2>No atom is created <span class="ac">or destroyed.</span></h2>
    <p>The <b>law of conservation of mass</b>: in a chemical reaction, the total mass of the products equals the total mass of the reactants, because the same atoms are only rearranged.</p>
    <p>An equation must show this. A <b>balanced equation</b> has the same number of each kind of atom on both sides of the arrow.</p>
-   <div class="story"><span class="story-tag">Luna's case · Day 3</span>Luna writes up the batch record. If no atom is created or destroyed, her 5.30 g cannot have vanished. It must still be accounted for somewhere.</div>
-   <div class="callout">Balancing is not decoration. The numbers in front of each formula, the <b>coefficients</b>, are what every stoichiometry calculation uses.</div>
+   <div class="story"><span class="story-tag">Luna's case · Day 3</span>Luna writes up the batch record. If no atom is created or destroyed, her missing 5.30 g cannot simply have vanished.</div>
+   <button class="vbtn" data-video="conservation" data-umami-event="video-conservation"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 6.5 L14 10 L8 13.5 Z" fill="currentColor"/></svg>Watch: conservation of mass at home (Chem mania)</button>
+   <div class="callout">The numbers in front of each formula, the <b>coefficients</b>, are what every stoichiometry calculation uses.</div>
   </div>
  </div>
 </section>
@@ -1329,6 +1342,14 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   </div>
 </div>
 
+<div class="overlay" id="vid-overlay" role="dialog" aria-modal="true" aria-label="Video">
+  <div class="vid-panel">
+    <div class="vid-frame" id="vid-frame"></div>
+    <div class="vid-meta" id="vid-meta"></div>
+    <button class="vid-close close-ov">Close video</button>
+  </div>
+</div>
+
 <div class="overlay" id="refs-overlay" role="dialog" aria-modal="true">
   <div class="panel">
     <div class="panel-head"><h3>Sources and further reading</h3><button class="icon-btn close-ov">Close</button></div>
@@ -1840,6 +1861,25 @@ const RX_DATA=[
     const d=e.data||{};
     if(d.type==='stoich-lab' && window.umami) umami.track('lab-'+d.event,{reaction:d.reaction||''});
   });
+
+  /* ---------- VIDEOS: original creators' YouTube embeds ----------
+     Paste a YouTube video ID into "id" to switch a button on. Empty id = button hidden. */
+  const VIDEOS = {
+    conservation: {id:'9x1LxX7oOww', vertical:true, title:'Law of Conservation of mass - DIY in home - Acetic acid with Baking soda', credit:'Chem mania (YouTube)'}
+  };
+  const vidOv=document.getElementById('vid-overlay'), vidFrame=document.getElementById('vid-frame'), vidMeta=document.getElementById('vid-meta');
+  document.querySelectorAll('.vbtn').forEach(b=>{
+    const v=VIDEOS[b.dataset.video];
+    if(!v || !v.id){ b.hidden=true; return; }
+    b.addEventListener('click',()=>{
+      vidFrame.className='vid-frame'+(v.vertical?' vertical':'');
+      vidFrame.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+encodeURIComponent(v.id)+'?autoplay=1&rel=0&modestbranding=1&playsinline=1" title="'+v.title.replace(/"/g,'&quot;')+'" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+      vidMeta.innerHTML='<b style="color:#fff">'+v.title+'</b>'+(v.credit?'<br>Video: '+v.credit+' · <a href="https://www.youtube.com/watch?v='+encodeURIComponent(v.id)+'" target="_blank" rel="noopener">Watch on YouTube</a>':'');
+      vidOv.classList.add('open');
+    });
+  });
+  vidOv.querySelector('.close-ov').addEventListener('click',()=>{ vidFrame.innerHTML=''; });
+  vidOv.addEventListener('click',e=>{ if(e.target===vidOv || e.target.classList.contains('vid-panel')){ vidOv.classList.remove('open'); vidFrame.innerHTML=''; } });
 
   function openOv(id){ if(id==='toc-overlay') buildToc(); document.getElementById(id).classList.add('open'); }
   document.querySelectorAll('.overlay').forEach(o=>{
