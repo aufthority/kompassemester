@@ -328,6 +328,27 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .lab-head p{margin-bottom:.2em}
 .lab-frame{flex:1 1 auto;min-height:300px;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#fff}
 .lab-frame iframe{width:100%;height:100%;border:0;display:block}
+/* ---------- reaction viewer: particles rearranging ---------- */
+.rxv{margin:.35em 0}
+.rxv-chips{display:flex;flex-wrap:wrap;gap:.35em;margin-bottom:.45em}
+.rxv-chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .8em 'DM Sans',sans-serif;padding:.32em .75em;border-radius:100px;cursor:pointer}
+.rxv-chip.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.rxv-chip.done::after{content:" ✓";color:var(--accent)}
+.rxv-fig{margin:0;border:1px solid var(--rule);border-radius:10px;background:#fafbfa;padding:.2em .3em}
+.rxv-fig svg{width:100%;height:auto;max-height:calc(var(--k) * 31vh);max-height:calc(var(--k) * 31dvh);display:block}
+@media (min-width:760px) and (orientation:landscape){.rxv-fig svg{max-height:calc(var(--k) * 36vh);max-height:calc(var(--k) * 36dvh)}}
+.rxv-ctrl{display:flex;align-items:center;gap:.6em;margin:.45em 0 .25em}
+.rxv-play{flex:0 0 auto;background:var(--accent);border:none;color:#fff;font:700 .82em 'DM Sans',sans-serif;padding:.4em .95em;border-radius:100px;cursor:pointer;min-width:6.4em}
+.rxv-scrub{flex:1 1 auto;accent-color:var(--accent);min-width:0}
+.rxv-cap{font-size:.88em;min-height:2.6em;border-left:3px solid var(--accent);background:var(--g-bg);padding:.35em .7em;border-radius:0 8px 8px 0;margin:.2em 0 .35em}
+.rxv-info{font-size:.86em}
+.rxv-info .eq{font-weight:700;color:var(--ink);margin-right:.5em}
+.rxv-count{display:flex;flex-wrap:wrap;gap:.3em;margin-top:.3em;align-items:center}
+.rxv-count span{border:1px solid var(--g-line);background:var(--g-bg);border-radius:6px;padding:.05em .45em;font-size:.74em;color:var(--accent-dark);font-weight:600}
+.rxv-count .lbl{border:none;background:none;color:var(--muted);padding-left:0}
+.rxv .bd-lbl{font:700 10px 'DM Sans',sans-serif;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.rxv .sp-lbl{font:700 12px 'DM Sans',sans-serif;text-anchor:middle;fill:var(--ink)}
+.rxv .row-lbl{font:700 9.5px 'DM Sans',sans-serif;letter-spacing:.12em;fill:var(--eyebrow)}
 </style>
 </head>
 <body>
@@ -623,16 +644,9 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
  <div class="si">
   <div class="txt">
    <div class="eyebrow">Examples</div>
-   <h2>Where you will <span class="ac">meet each one.</span></h2>
-   <p>Tap every card to see a balanced example and where it matters.</p>
-   <div class="rgrid">
-     <button class="rcard"><span class="rt">Combination</span><span class="rb">2Mg + O₂ → 2MgO. Magnesium oxide is itself used as an antacid and laxative.</span></button>
-     <button class="rcard"><span class="rt">Decomposition</span><span class="rb">2H₂O₂ → 2H₂O + O₂. Hydrogen peroxide antiseptic slowly breaks down, which is why it is stored in dark, cool conditions.</span></button>
-     <button class="rcard"><span class="rt">Single displacement</span><span class="rb">Zn + CuSO₄ → ZnSO₄ + Cu. A more reactive metal pushes a less reactive one out of its compound.</span></button>
-     <button class="rcard"><span class="rt">Double displacement</span><span class="rb">AgNO₃ + NaCl → AgCl + NaNO₃. The white AgCl precipitate is the basis of pharmacopoeial limit tests for chloride.</span></button>
-     <button class="rcard"><span class="rt">Neutralisation</span><span class="rb">Mg(OH)₂ + 2HCl → MgCl₂ + 2H₂O. This is how an antacid tablet relieves heartburn.</span></button>
-     <button class="rcard"><span class="rt">Combustion</span><span class="rb">CH₄ + 2O₂ → CO₂ + 2H₂O. Fuel burning in the gas burners used in teaching and quality control labs.</span></button>
-   </div>
+   <h2>Watch the atoms <span class="ac">rearrange.</span></h2>
+   <p>Choose each reaction and press Play, or drag the slider to step through it. Watch all six to continue.</p>
+   <div class="rxv" id="rxv"></div>
   </div>
  </div>
 </section>
@@ -1269,6 +1283,204 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 </div>
 
 <script>
+/* ---------- REACTION VIEWER: particles rearranging (a model, not a simulation) ----------
+   Reactants sit on the top row exactly as the balanced equation writes them; on Play, bonds
+   break, the same beads move down and join up as the products. Each bead is an atom, or a
+   group (NO₃, SO₄, OH) that stays together. Layout is computed from the data. */
+function ReactionViewer(root, RX, hooks){
+  hooks=hooks||{};
+  const NS='http://www.w3.org/2000/svg';
+  const el=(tag,a,txt)=>{ const e=document.createElementNS(NS,tag); for(const k in a) if(a[k]!=null) e.setAttribute(k,a[k]); if(txt!==undefined) e.textContent=txt; return e; };
+  const ease=x=>x<0?0:x>1?1:x*x*(3-2*x);
+  const lerp=(a,b,u)=>a+(b-a)*u;
+  const span=(t,a,b)=>ease((t-a)/(b-a));
+  const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const DUR=6500;
+
+  /* bead look: [radius, fill, stroke, ink, dashed?] */
+  const BEAD={
+    H:[8,'#ffffff','#8d969c'], C:[12,'#4a4f4c','#2a2e2b','#ffffff'], O:[12,'#f6c1bd','#c0392b'], N:[11,'#d3e0f8','#3a6bd1'],
+    Mg:[14,'#f8e1bf','#d9821f'], Cl:[13.5,'#c3e8cf','#2d6a4f'], Na:[14,'#e4d9f4','#7b5ea7'], Ag:[15,'#dde1e4','#6f777e'],
+    Zn:[15,'#d6dcea','#55627f'], Cu:[15,'#f2c9a6','#b0602b'],
+    'NO₃':[16,'#d3e0f8','#3a6bd1','#1c2620',1], 'SO₄':[17,'#fbefb5','#9a7d0a','#1c2620',1], 'OH':[13.5,'#fbe0de','#c0392b','#1c2620',1]
+  };
+
+  function parseF(f){ let i=0; function g(){ const d={}; while(i<f.length){ if(f[i]==='('){ i++; const s=g(); const m=/^\d*/.exec(f.slice(i))[0]; i+=m.length; for(const e in s) d[e]=(d[e]||0)+s[e]*(+(m||1)); } else if(f[i]===')'){ i++; return d; } else { const m=/^([A-Z][a-z]?)(\d*)/.exec(f.slice(i)); d[m[1]]=(d[m[1]]||0)+(+(m[2]||1)); i+=m[0].length; } } return d; } return g(); }
+  function tally(side){ const t={}; side.forEach(([c,f])=>{ const p=parseF(f); for(const e in p) t[e]=(t[e]||0)+p[e]*c; }); return t; }
+
+  /* offsets of the beads in one unit (molecule or formula unit), touching */
+  function shape(ids,kind,R){
+    const r=ids.map(id=>R[id]);
+    if(kind==='star'){ const o=[[0,0]], d=k=>r[0]+r[k]-3; [45,135,225,315].forEach((a,k)=>{ const q=a*Math.PI/180; o.push([Math.cos(q)*d(k+1),Math.sin(q)*d(k+1)]); }); return o; }
+    if(kind==='bent'){ const d=k=>r[0]+r[k]-3, q=52*Math.PI/180; return [[0,-4],[-Math.sin(q)*d(1),Math.cos(q)*d(1)-4],[Math.sin(q)*d(2),Math.cos(q)*d(2)-4]]; }
+    const o=[[0,0]]; for(let k=1;k<ids.length;k++) o.push([o[k-1][0]+r[k-1]+r[k]-3,0]);
+    const mid=(o[o.length-1][0])/2; return o.map(p=>[p[0]-mid,0]);
+  }
+  function unitBox(ids,kind,R){ const o=shape(ids,kind,R); let x0=1e9,x1=-1e9; o.forEach((p,k)=>{ x0=Math.min(x0,p[0]-R[ids[k]]); x1=Math.max(x1,p[0]+R[ids[k]]); }); return {o,x0,x1,w:x1-x0}; }
+  /* place a row of species: returns {pos:{id:[x,y]}, centres:{id:[cx,cy]}, labels:[[x,text]], plus:[x], width} */
+  function layoutRow(species,R,y){
+    const UG=20, PG=30; let x=0; const items=[];
+    species.forEach((sp,si)=>{
+      if(si>0){ items.push({plus:x+PG/2}); x+=PG; }
+      const x0=x;
+      sp.units.forEach((u,ui)=>{ if(ui>0) x+=UG; const ids=u.ids||u, kind=u.shape||'line', b=unitBox(ids,kind,R); items.push({ids,kind,o:b.o,cx:x-b.x0}); x+=b.w; });
+      items.push({label:sp.lbl,x:(x0+x)/2});
+    });
+    return {items,width:x,y};
+  }
+
+  root.innerHTML=
+    '<div class="rxv-chips"></div>'+
+    '<figure class="rxv-fig"><svg role="img"></svg></figure>'+
+    '<div class="rxv-ctrl"><button type="button" class="rxv-play">▶ Play</button><input class="rxv-scrub" type="range" min="0" max="1000" value="0" aria-label="Step through the reaction"></div>'+
+    '<p class="rxv-cap" aria-live="polite"></p>'+
+    '<div class="rxv-info"><span class="eq"></span><span class="where"></span></div><div class="rxv-count"></div>';
+  const chipsEl=root.querySelector('.rxv-chips'), svg=root.querySelector('svg');
+  const playBtn=root.querySelector('.rxv-play'), scrub=root.querySelector('.rxv-scrub'), capEl=root.querySelector('.rxv-cap');
+
+  let cur=null, t=0, playing=false, last=0, beads=[], fades=[];
+  const chips=RX.map((rx,i)=>{
+    const c=document.createElement('button'); c.type='button'; c.className='rxv-chip task'; c.textContent=rx.name;
+    c.addEventListener('click',()=>select(i)); chipsEl.appendChild(c); return c;
+  });
+
+  function build(rx){
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    svg.setAttribute('aria-label','Particle model: '+rx.eqText);
+    const R={}; Object.entries(rx.beads).forEach(([id,kind])=>R[id]=BEAD[kind][0]);
+    const top=layoutRow(rx.L,R,48), bot=layoutRow(rx.R,R,150);
+    const W=Math.max(280,Math.max(top.width,bot.width)+30), H=194;
+    svg.setAttribute('viewBox','0 0 '+W+' '+H);
+    const g0=el('g',{}), g1=el('g',{}), g2=el('g',{}); svg.append(g0,g1,g2);
+    g0.append(el('text',{x:8,y:13,class:'row-lbl'},'REACTANTS'), el('text',{x:8,y:113,class:'row-lbl'},'PRODUCTS'));
+    const arrow=el('g',{}); arrow.append(el('line',{x1:W/2,y1:92,x2:W/2,y2:108,stroke:'#d9821f','stroke-width':2.2}), el('path',{d:'M'+(W/2-6)+' 106 L'+(W/2)+' 115 L'+(W/2+6)+' 106 Z',fill:'#d9821f'}));
+    g0.append(arrow);
+    if(rx.simplified) g0.append(el('text',{x:W-8,y:13,class:'row-lbl','text-anchor':'end',fill:'#6f777e'},'SIMPLIFIED MODEL'));
+    const start={}, end={}, sx=(W-top.width)/2, ex=(W-bot.width)/2;
+    fades=[];
+    function place(row,off,store,isTop){
+      row.items.forEach(it=>{
+        if(it.plus!==undefined){ const p=el('text',{x:off+it.plus,y:row.y+5,class:'sp-lbl',fill:'#d9821f'},'+'); (isTop?g0:g2).append(p); if(!isTop) fades.push(p); }
+        else if(it.label!==undefined){ const l=el('text',{x:off+it.x,y:row.y+34,class:'sp-lbl'},it.label); (isTop?g0:g2).append(l); if(!isTop) fades.push(l); }
+        else it.ids.forEach((id,k)=>{ store[id]={x:off+it.cx+it.o[k][0], y:row.y+it.o[k][1], cx:off+it.cx, cy:row.y}; });
+      });
+    }
+    place(top,sx,start,true); place(bot,ex,end,false);
+    beads=Object.entries(rx.beads).map(([id,kind])=>{
+      const B=BEAD[kind], g=el('g',{});
+      const gh=el('g',{transform:'translate('+start[id].x+' '+start[id].y+')',opacity:0});   /* faint copy left behind */
+      gh.append(el('circle',{r:B[0],fill:B[1],stroke:B[2],'stroke-width':1.2,'stroke-dasharray':B[4]?'3 2':null}), el('text',{class:'bd-lbl',fill:B[3]||'#1c2620'},kind)); g0.append(gh);
+      g.append(el('circle',{r:B[0],fill:B[1],stroke:B[2],'stroke-width':1.5,'stroke-dasharray':B[4]?'3 2':null}), el('text',{class:'bd-lbl',fill:B[3]||'#1c2620'},kind));
+      g1.append(g); return {id,g,gh,s:start[id],e:end[id]};
+    });
+  }
+  function render(){
+    const rx=RX[cur], X=1.32;           /* X: how far bonded beads spread when bonds break */
+    const brk=span(t,.14,.3), mv=span(t,.3,.74), join=span(t,.74,.88);
+    beads.forEach(b=>{
+      const sx=b.s.cx+(b.s.x-b.s.cx)*lerp(1,X,brk), sy=b.s.cy+(b.s.y-b.s.cy)*lerp(1,X,brk)-8*brk;
+      const ex=b.e.cx+(b.e.x-b.e.cx)*lerp(X,1,join), ey=b.e.cy+(b.e.y-b.e.cy)*lerp(X,1,join);
+      const x=lerp(sx,ex,mv), y=lerp(sy,ey,mv)-Math.sin(mv*Math.PI)*10;
+      b.g.setAttribute('transform','translate('+x.toFixed(1)+' '+y.toFixed(1)+')');
+    });
+    const f=span(t,.84,.94); fades.forEach(n=>n.setAttribute('opacity',f.toFixed(2)));
+    const gho=(0.3*span(t,.32,.55)).toFixed(2); beads.forEach(b=>b.gh.setAttribute('opacity',gho));
+    let cap=rx.steps[0].cap; rx.steps.forEach(s=>{ if(t>=s.t) cap=s.cap; });
+    if(capEl.innerHTML!==cap) capEl.innerHTML=cap;
+    scrub.value=Math.round(t*1000);
+    if(t>=0.999) markDone();
+  }
+  function markDone(){ const c=chips[cur]; if(c.dataset.done) return; c.dataset.done='1'; c.classList.add('done'); hooks.done&&hooks.done(RX[cur].id); }
+  function select(i){
+    stop(); cur=i; t=0; chips.forEach((c,k)=>c.classList.toggle('on',k===i));
+    const rx=RX[i]; build(rx);
+    root.querySelector('.rxv-info .eq').innerHTML=rx.eqHtml;
+    root.querySelector('.rxv-info .where').innerHTML=rx.where;
+    const L=tally(rx.l), Rt=tally(rx.r);
+    root.querySelector('.rxv-count').innerHTML='<span class="lbl">Atoms before | after:</span>'+Object.keys(L).map(e=>'<span>'+e+' '+L[e]+' | '+(Rt[e]||0)+'</span>').join('');
+    render(); playBtn.textContent='▶ Play'; hooks.refit&&hooks.refit(); hooks.pick&&hooks.pick(rx.id);
+  }
+  function frame(now){ if(!playing) return; t=Math.min(1,t+(now-last)/DUR); last=now; render(); if(t>=1){ stop(); return; } requestAnimationFrame(frame); }
+  function stop(){ playing=false; if(cur!==null) playBtn.textContent=t>=1?'↺ Replay':'▶ Play'; }
+  playBtn.addEventListener('click',()=>{
+    if(playing){ stop(); return; }
+    if(t>=1) t=0;
+    if(reduce){ t=1; render(); stop(); return; }
+    playing=true; last=performance.now(); playBtn.textContent='❚❚ Pause'; requestAnimationFrame(frame);
+    hooks.play&&hooks.play(RX[cur].id);
+  });
+  scrub.addEventListener('input',()=>{ t=scrub.value/1000; stop(); render(); });
+  select(0);
+  return {select,stop,chips};
+}
+
+/* ================= THE SIX REACTIONS =================
+   L / R: species in equation order; each species has units (one per coefficient),
+   each unit lists its bead ids. The same ids appear on both sides, so every atom is accounted for. */
+const RX_DATA=[
+  {id:'combination', name:'Combination', eqText:'2Mg + O₂ → 2MgO',
+   eqHtml:'2Mg + O₂ → 2MgO', l:[[2,'Mg'],[1,'O2']], r:[[2,'MgO']],
+   where:'Magnesium oxide is itself used as an antacid and laxative.',
+   beads:{m1:'Mg',m2:'Mg',o1:'O',o2:'O'},
+   L:[{lbl:'2Mg',units:[['m1'],['m2']]},{lbl:'O₂',units:[['o1','o2']]}],
+   R:[{lbl:'2MgO',units:[['m1','o1'],['m2','o2']]}],
+   steps:[{t:0,cap:'Two magnesium atoms and one oxygen molecule (O₂). Press Play.'},
+          {t:.14,cap:'The bond holding the two oxygen atoms together breaks.'},
+          {t:.3,cap:'Each oxygen atom moves to a magnesium atom.'},
+          {t:.8,cap:'Two reactants have joined into one product, magnesium oxide: <b>combination</b> (A + B → AB).'}]},
+  {id:'decomposition', name:'Decomposition', eqText:'2H₂O₂ → 2H₂O + O₂',
+   eqHtml:'2H₂O₂ → 2H₂O + O₂', l:[[2,'H2O2']], r:[[2,'H2O'],[1,'O2']],
+   where:'Hydrogen peroxide antiseptic slowly breaks down, which is why it is stored in dark, cool conditions.',
+   beads:{h1:'H',a1:'O',a2:'O',h2:'H',h3:'H',b1:'O',b2:'O',h4:'H'},
+   L:[{lbl:'2H₂O₂',units:[['h1','a1','a2','h2'],['h3','b1','b2','h4']]}],
+   R:[{lbl:'2H₂O',units:[{ids:['a1','h1','h2'],shape:'bent'},{ids:['b1','h3','h4'],shape:'bent'}]},{lbl:'O₂',units:[['a2','b2']]}],
+   steps:[{t:0,cap:'Two hydrogen peroxide molecules, H₂O₂. Press Play.'},
+          {t:.14,cap:'Bonds inside each molecule break.'},
+          {t:.3,cap:'The atoms regroup: each oxygen keeps two hydrogens, and the two spare oxygens pair up.'},
+          {t:.8,cap:'One reactant has broken down into two simpler products, water and oxygen: <b>decomposition</b> (AB → A + B).'}]},
+  {id:'single', name:'Single displacement', eqText:'Zn + CuSO₄ → ZnSO₄ + Cu', simplified:true,
+   eqHtml:'Zn + CuSO₄ → ZnSO₄ + Cu', l:[[1,'Zn'],[1,'CuSO4']], r:[[1,'ZnSO4'],[1,'Cu']],
+   where:'A more reactive metal pushes a less reactive one out of its compound.',
+   beads:{zn:'Zn',cu:'Cu',so4:'SO₄'},
+   L:[{lbl:'Zn',units:[['zn']]},{lbl:'CuSO₄',units:[['cu','so4']]}],
+   R:[{lbl:'ZnSO₄',units:[['zn','so4']]},{lbl:'Cu',units:[['cu']]}],
+   steps:[{t:0,cap:'A zinc atom, and copper sulfate: copper joined to a sulfate group (SO₄, shown as one bead). Press Play.'},
+          {t:.14,cap:'Copper separates from the sulfate group.'},
+          {t:.3,cap:'Zinc moves in to take copper\'s place.'},
+          {t:.8,cap:'One element has replaced another in a compound, and copper is left on its own: <b>single displacement</b> (A + BC → AC + B).'}]},
+  {id:'double', name:'Double displacement', eqText:'AgNO₃ + NaCl → AgCl + NaNO₃', simplified:true,
+   eqHtml:'AgNO₃ + NaCl → AgCl + NaNO₃', l:[[1,'AgNO3'],[1,'NaCl']], r:[[1,'AgCl'],[1,'NaNO3']],
+   where:'The white AgCl precipitate is the basis of pharmacopoeial limit tests for chloride.',
+   beads:{ag:'Ag',no3:'NO₃',na:'Na',cl:'Cl'},
+   L:[{lbl:'AgNO₃',units:[['ag','no3']]},{lbl:'NaCl',units:[['na','cl']]}],
+   R:[{lbl:'AgCl',units:[['ag','cl']]},{lbl:'NaNO₃',units:[['na','no3']]}],
+   steps:[{t:0,cap:'Silver nitrate and sodium chloride. The nitrate group (NO₃) is shown as one bead. Press Play.'},
+          {t:.14,cap:'Each compound separates into its two parts.'},
+          {t:.3,cap:'The parts swap partners: silver goes with chloride, sodium goes with nitrate.'},
+          {t:.8,cap:'Two compounds have swapped partners: <b>double displacement</b> (AB + CD → AD + CB). Silver chloride is the white precipitate.'}]},
+  {id:'neutralisation', name:'Neutralisation', eqText:'Mg(OH)₂ + 2HCl → MgCl₂ + 2H₂O', simplified:true,
+   eqHtml:'Mg(OH)₂ + 2HCl → MgCl₂ + 2H₂O', l:[[1,'Mg(OH)2'],[2,'HCl']], r:[[1,'MgCl2'],[2,'H2O']],
+   where:'This is how an antacid tablet relieves heartburn.',
+   beads:{oh1:'OH',mg:'Mg',oh2:'OH',h1:'H',c1:'Cl',h2:'H',c2:'Cl'},
+   L:[{lbl:'Mg(OH)₂',units:[['oh1','mg','oh2']]},{lbl:'2HCl',units:[['h1','c1'],['h2','c2']]}],
+   R:[{lbl:'MgCl₂',units:[['c1','mg','c2']]},{lbl:'2H₂O',units:[['oh1','h1'],['oh2','h2']]}],
+   steps:[{t:0,cap:'A base, magnesium hydroxide (each OH group is one bead), and an acid, hydrochloric acid. Press Play.'},
+          {t:.14,cap:'The OH groups leave magnesium, and each H leaves its chlorine.'},
+          {t:.3,cap:'Each H joins an OH to make water; the two chlorines join magnesium.'},
+          {t:.8,cap:'Acid + base → salt + water: <b>neutralisation</b>. The salt here is magnesium chloride.'}]},
+  {id:'combustion', name:'Combustion', eqText:'CH₄ + 2O₂ → CO₂ + 2H₂O',
+   eqHtml:'CH₄ + 2O₂ → CO₂ + 2H₂O', l:[[1,'CH4'],[2,'O2']], r:[[1,'CO2'],[2,'H2O']],
+   where:'Fuel burning in the gas burners used in teaching and quality control labs.',
+   beads:{c:'C',h1:'H',h2:'H',h3:'H',h4:'H',o1:'O',o2:'O',o3:'O',o4:'O'},
+   L:[{lbl:'CH₄',units:[{ids:['c','h1','h2','h3','h4'],shape:'star'}]},{lbl:'2O₂',units:[['o1','o2'],['o3','o4']]}],
+   R:[{lbl:'CO₂',units:[['o1','c','o3']]},{lbl:'2H₂O',units:[{ids:['o2','h1','h2'],shape:'bent'},{ids:['o4','h3','h4'],shape:'bent'}]}],
+   steps:[{t:0,cap:'One methane molecule and two oxygen molecules. Press Play.'},
+          {t:.14,cap:'All the bonds break.'},
+          {t:.3,cap:'Carbon joins two oxygen atoms; the hydrogens join the other two oxygens.'},
+          {t:.8,cap:'A fuel burning in oxygen gives carbon dioxide and water: <b>combustion</b>.'}]}
+];
+</script>
+<script>
 (function(){
   const slides   = document.querySelectorAll('.slide');
   const TOTAL    = slides.length;
@@ -1513,6 +1725,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     btnBack.disabled=n===1;
     btnNext.textContent=n===TOTAL?'Done':'Next →';
     btnNext.setAttribute('data-umami-event',n===TOTAL?'carousel-selesai':'nav-next');
+    rxv.stop();
     const fr=slides[n-1].querySelector('iframe[data-src]');
     if(fr && !fr.src){ fr.src=fr.dataset.src; if(window.umami) umami.track('lab-embed-open'); }
     fit(slides[n-1]);
@@ -1601,6 +1814,13 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
         e.preventDefault(); history.back();
       }
     }catch(_){}
+  });
+
+  /* reaction viewer on "Each type in practice": each of the six chips is a gating .task */
+  const rxv=ReactionViewer(document.getElementById('rxv'), RX_DATA, {
+    refit:()=>fit(slides[current-1]),
+    done:id=>{ updateGate(false); if(window.umami) umami.track('rxv-watched',{type:id}); },
+    play:id=>{ if(window.umami) umami.track('rxv-play',{type:id}); }
   });
 
   renderBal();
