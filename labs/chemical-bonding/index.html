@@ -413,6 +413,24 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   .si.viz-si .txt{flex:1 1 auto}
   .vz-stage canvas{height:calc(var(--k) * 44vh);height:calc(var(--k) * 44dvh)}
 }
+/* ---------- 3D polarity bench ---------- */
+.pb-field{position:absolute;left:.45em;bottom:.45em;display:inline-flex;align-items:center;gap:.35em;border:1px solid var(--rule);background:rgba(255,255,255,.94);border-radius:100px;padding:.3em .75em;font:700 .72em 'DM Sans',sans-serif;color:var(--body);cursor:pointer}
+.pb-field svg{width:1.1em;height:1.1em}
+.pb-field.on{background:var(--b-bg);border-color:var(--blue);color:var(--blue)}
+.pb-mols{display:flex;flex-wrap:wrap;gap:.3em}
+.pb-mols button{border:1.5px solid var(--rule);background:#fff;border-radius:100px;padding:.3em .7em;font:700 .8em 'DM Sans',sans-serif;color:var(--ink);cursor:pointer;display:inline-flex;align-items:center;gap:.3em}
+.pb-mols button.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.pb-mols .ok{color:var(--accent);font-size:.9em}
+.pb-mols .gd{font-size:.72em;font-weight:700;color:#8a5410;background:var(--o-bg);border-radius:100px;padding:.05em .45em}
+.pb-mols button.deep{border-style:dashed}
+.pb-pred{display:flex;align-items:center;gap:.4em;flex-wrap:wrap;font-size:.84em;font-weight:700;color:var(--ink)}
+.pb-pred[hidden]{display:none}
+.pb-pred button{border:1.5px solid var(--ink);background:#fff;border-radius:100px;padding:.38em 1em;font:700 1em 'DM Sans',sans-serif;cursor:pointer;color:var(--ink)}
+.pb-pred button:hover{background:var(--g-bg)}
+.pb-prog{font-size:.74em;color:var(--muted)}
+.pb-prog b{color:var(--ink)}
+.pb .seg button{padding:.42em .8em}
+@media (max-width:420px){.pb .seg button{font-size:.74em;padding:.4em .6em}}
 .lewis{font-family:'DM Sans',sans-serif}
 </style>
 </head>
@@ -443,7 +461,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="nav-right">
       <a class="icon-btn back-kompas" id="btn-kompas" href="../../index.html" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
       <button class="icon-btn" id="btn-toc" data-umami-event="open-contents">Contents</button>
-      <span id="progress-label">1 / 48</span>
+      <span id="progress-label">1 / 49</span>
     </div>
   </nav>
   <div id="progress-track"><div id="progress-fill"></div></div>
@@ -1316,6 +1334,27 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <p>A polar bond has a positive end and a negative end: a <b>dipole</b>. Its size is the <b>dipole moment</b>, μ = Q × r (charge × distance), measured in <b>debye (D)</b>.</p>
    <p>Treat each bond dipole as an arrow pointing to the more electronegative atom, then add the arrows like forces. The molecule is polar only if they <b>do not cancel</b>. So the answer depends on the <b>shape</b> from VSEPR.</p>
    <p>CO₂ has two polar C=O bonds, but it is linear: the arrows pull equally in opposite directions, so μ = 0. Water is bent by its two lone pairs, so its arrows add up to 1.85 D.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="pol" data-title="3D: decide polarity in three steps">
+ <div class="si viz-si">
+  <div class="vz pb task">
+    <div class="vz-top"><div class="seg" role="group" aria-label="Choose a step"><button type="button" data-step="1" class="on" aria-pressed="true">1 · Bond polarity</button><button type="button" data-step="2" aria-pressed="false">2 · Bond dipoles</button><button type="button" data-step="3" aria-pressed="false">3 · Add them</button></div></div>
+    <div class="vz-stage"><canvas role="img" aria-label="Molecule showing bond polarity and dipoles"></canvas><span class="vz-tag q pb-tag"></span><span class="vz-read pb-read"></span><span class="vz-hint">Drag to rotate</span>
+      <button type="button" class="pb-field" aria-pressed="false"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 4v12M17 4v12" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M6 8h8M6 12h8" stroke="currentColor" stroke-width="1.4" stroke-dasharray="2 2"/></svg>Electric field</button>
+      <button type="button" class="vz-reset" aria-label="Reset the view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 10a5.5 5.5 0 1 0 1.8-4.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4.2 2.8v4.4h4.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    <div class="pb-mols" role="group" aria-label="Choose a molecule"></div>
+    <div class="pb-pred" hidden><span>Your prediction:</span><button type="button" data-p="polar">Polar</button><button type="button" data-p="non">Non-polar</button></div>
+    <div class="vz-cap pb-cap" aria-live="polite"></div>
+    <div class="pb-prog"></div>
+  </div>
+  <div class="txt">
+   <div class="eyebrow">7 · Polarity · see it in 3D<span class="skill">Problem solving</span></div>
+   <h2>Decide polarity <span class="ac">in three steps.</span></h2>
+   <p>Pick a molecule and work through it: which bonds are polar, which way each dipole points, and whether the dipoles cancel. At step 3, predict first, then watch the arrows add tip to tail.</p>
+   <p>Then switch on the <b>electric field</b>: only polar molecules turn to line up with it.</p>
   </div>
  </div>
 </section>
@@ -2391,14 +2430,204 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
       return {prepare,show,resize,render,st,root};
     }
 
-    const list=[...document.querySelectorAll('.vz')].map(r=>Viz(r));
+    const list=[...document.querySelectorAll('.vz:not(.pb)')].map(r=>Viz(r));
     let active=null, rafId=0, last=0;
     function loop(ts){ const dt=last?Math.min(0.05,(ts-last)/1000):0; last=ts; if(active){ active.render(dt); rafId=requestAnimationFrame(loop); } else { rafId=0; last=0; } }
     window.__viz=list;
     return {
-      show(slide){ const r=slide.querySelector('.vz'); active=r?list.find(v=>v.root===r)||null:null;
+      show(slide){ const r=slide.querySelector('.vz:not(.pb)'); active=r?list.find(v=>v.root===r)||null:null;
         if(active){ active.prepare(); requestAnimationFrame(()=>{ active&&active.show(); }); if(!rafId) rafId=requestAnimationFrame(loop); } },
       resize(){ if(active) active.resize(); }
+    };
+  })();
+
+  /* ---------- 3D POLARITY BENCH ----------
+     Step 1 bond polarity (density leans to the more electronegative atom),
+     step 2 bond dipoles (arrow to the δ− end, length ∝ ΔEN),
+     step 3 predict, then add the arrows tip to tail in 3D.
+     Electric field: a polar molecule turns its δ− end to the + plate. */
+  const POL=(function(){
+    const root=document.querySelector('.pb'); if(!root) return {show(){},resize(){}};
+    const RM=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const cv=root.querySelector('canvas'), ctx=cv.getContext('2d');
+    const ENV={H:2.1,B:2.0,C:2.5,N:3.0,O:3.5,F:4.0,Cl:3.0};
+    const RAD={H:0.26,B:0.4,C:0.4,N:0.38,O:0.38,F:0.34,Cl:0.5};
+    const clamp=(v,a,b)=>v<a?a:(v>b?b:v), smooth=v=>{ v=clamp(v,0,1); return v*v*(3-2*v); }, lerp=(a,b,u)=>a+(b-a)*u;
+    const add=(a,b)=>[a[0]+b[0],a[1]+b[1],a[2]+b[2]], sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]], mul=(a,k)=>[a[0]*k,a[1]*k,a[2]*k];
+    const len=a=>Math.hypot(a[0],a[1],a[2]), nrm=a=>{ const l=len(a)||1; return [a[0]/l,a[1]/l,a[2]/l]; };
+    const cross=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]], dot=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+    function enCol(v){ const t=clamp((v-1.8)/2.2,0,1), a=[214,232,221], b=[24,64,46]; return 'rgb('+a.map((x,i)=>Math.round(x+(b[i]-x)*t)).join(',')+')'; }
+    /* geometry helpers (Å) */
+    function cone(bond,phiDeg,az0){ const c2=(Math.cos(phiDeg*Math.PI/180)+0.5)/1.5, th=Math.acos(Math.sqrt(clamp(c2,0,1)));
+      return [0,1,2].map(k=>{ const az=(az0||0)+k*2*Math.PI/3; return [bond*Math.sin(th)*Math.cos(az),-bond*Math.cos(th),bond*Math.sin(th)*Math.sin(az)]; }); }
+    const TET=109.47;
+    function M(id,f,name,atoms,bonds,mu,extra){ return Object.assign({id,f,name,atoms,bonds,mu},extra||{}); }
+    const MOLS=[
+      M('hcl','HCl','hydrogen chloride',[['H',[-0.64,0,0]],['Cl',[0.64,0,0]]],[[0,1]],1.11),
+      M('co2','CO₂','carbon dioxide',[['C',[0,0,0]],['O',[-1.16,0,0]],['O',[1.16,0,0]]],[[0,1,2],[0,2,2]],0),
+      M('h2o','H₂O','water',[['O',[0,0.2,0]],['H',[-0.759,-0.388,0]],['H',[0.759,-0.388,0]]],[[0,1],[0,2]],1.85),
+      M('nh3','NH₃','ammonia',[['N',[0,0.25,0]]].concat(cone(1.01,107,Math.PI/2).map(p=>['H',add(p,[0,0.25,0])])),[[0,1],[0,2],[0,3]],1.47),
+      M('bcl3','BCl₃','boron trichloride',[['B',[0,0,0]]].concat([0,1,2].map(k=>['Cl',[1.74*Math.cos(Math.PI/2+k*2*Math.PI/3),1.74*Math.sin(Math.PI/2+k*2*Math.PI/3),0]])),[[0,1],[0,2],[0,3]],0),
+      M('ch4','CH₄','methane',[['C',[0,0,0]],['H',[0,1.09,0]]].concat(cone(1.09,TET,Math.PI/2).map(p=>['H',p])),[[0,1],[0,2],[0,3],[0,4]],0),
+      M('ccl4','CCl₄','carbon tetrachloride',[['C',[0,0,0]],['Cl',[0,1.77,0]]].concat(cone(1.77,TET,Math.PI/2).map(p=>['Cl',p])),[[0,1],[0,2],[0,3],[0,4]],0),
+      M('chcl3','CHCl₃','chloroform',[['C',[0,0,0]],['H',[0,1.07,0]]].concat(cone(1.76,TET,Math.PI/2).map(p=>['Cl',p])),[[0,1],[0,2],[0,3],[0,4]],1.04),
+      M('nf3','NF₃','nitrogen trifluoride',[['N',[0,0.3,0]]].concat(cone(1.37,102,Math.PI/2).map(p=>['F',add(p,[0,0.3,0])])),[[0,1],[0,2],[0,3]],0.23,{lp:1.1,deeper:1})
+    ];
+    /* derived: bond dipole vectors (from the less to the more electronegative atom, length = ΔEN) */
+    MOLS.forEach(m=>{
+      m.vec=m.bonds.map(b=>{ const A=m.atoms[b[0]], B=m.atoms[b[1]], d=Math.round(Math.abs(ENV[A[0]]-ENV[B[0]])*10)/10;
+        const hi=ENV[A[0]]>=ENV[B[0]]?b[0]:b[1], lo=hi===b[0]?b[1]:b[0];
+        return {d, hi, lo, v:mul(nrm(sub(m.atoms[hi][1],m.atoms[lo][1])),d*0.62), ord:b[2]||1}; });
+      if(m.lp) m.lpv=[0,m.lp*0.62,0];
+      m.ext=Math.max(...m.atoms.map(a=>len(a[1])+RAD[a[0]]));
+      m.sum=m.vec.reduce((s,b)=>add(s,b.v),[0,0,0]); if(m.lpv) m.sum=add(m.sum,m.lpv);
+      m.polar=len(m.sum)>0.05;
+    });
+    window.__pol=MOLS;
+
+    const st={mol:MOLS[2],step:1,yaw:-0.5,pitch:0.32,drag:false,u:0,field:false,R:[[1,0,0],[0,1,0],[0,0,1]],clock:0,pred:{},anim:0};
+    const els={steps:root.querySelectorAll('[data-step]'),chips:root.querySelector('.pb-mols'),pred:root.querySelector('.pb-pred'),cap:root.querySelector('.pb-cap'),read:root.querySelector('.pb-read'),
+      tag:root.querySelector('.pb-tag'),prog:root.querySelector('.pb-prog'),field:root.querySelector('.pb-field'),hint:root.querySelector('.vz-hint')};
+    const NEED=4, MUST=['ccl4','chcl3'];
+
+    /* rotate the molecule itself (used by the electric field) */
+    const Rv=v=>[st.R[0][0]*v[0]+st.R[0][1]*v[1]+st.R[0][2]*v[2],st.R[1][0]*v[0]+st.R[1][1]*v[1]+st.R[1][2]*v[2],st.R[2][0]*v[0]+st.R[2][1]*v[1]+st.R[2][2]*v[2]];
+    function rotR(axis,ang){ const [x,y,z]=nrm(axis), c=Math.cos(ang), s=Math.sin(ang), t=1-c;
+      const Q=[[t*x*x+c,t*x*y-s*z,t*x*z+s*y],[t*x*y+s*z,t*y*y+c,t*y*z-s*x],[t*x*z-s*y,t*y*z+s*x,t*z*z+c]];
+      st.R=Q.map(r=>[0,1,2].map(j=>r[0]*st.R[0][j]+r[1]*st.R[1][j]+r[2]*st.R[2][j])); }
+
+    function chips(){
+      els.chips.innerHTML=MOLS.map(m=>'<button type="button" class="'+(m===st.mol?'on':'')+(m.deeper?' deep':'')+'" data-id="'+m.id+'">'+m.f+(st.pred[m.id]?'<span class="ok">✓</span>':'')+(m.deeper?'<span class="gd">Go deeper</span>':'')+'</button>').join('');
+      els.chips.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{ st.mol=MOLS.find(m=>m.id===b.dataset.id); st.R=[[1,0,0],[0,1,0],[0,0,1]]; st.u=st.pred[st.mol.id]&&st.step===3?1:0; ui(); track('pol-mol',{mol:st.mol.id}); }));
+    }
+    function progress(){
+      const ids=Object.keys(st.pred).filter(k=>MOLS.find(m=>m.id===k&&!m.deeper)), n=ids.length, must=MUST.every(k=>st.pred[k]);
+      els.prog.innerHTML='Predictions: <b>'+Math.min(n,NEED)+' / '+NEED+'</b>'+(must?'':' · include <b>CCl₄</b> and <b>CHCl₃</b>');
+      if(n>=NEED&&must&&!root.dataset.done){ root.dataset.done='1'; root.classList.add('done'); updateGate(false); track('pol-done'); }
+    }
+    function bondText(m){ return m.vec.map(b=>m.atoms[b.lo][0]+'–'+m.atoms[b.hi][0]).filter((x,i,a)=>a.indexOf(x)===i).map(n=>{ const b=m.vec.find(v=>m.atoms[v.lo][0]+'–'+m.atoms[v.hi][0]===n);
+      return n+' ΔEN '+b.d.toFixed(1)+(b.d<0.5?' (non-polar)':' (polar)'); }).join(', '); }
+    const WHY={
+      hcl:'One polar bond and nothing to cancel it: <b>polar</b>, μ = 1.11 D. Every diatomic molecule with a polar bond is polar.',
+      co2:'Two equal arrows in a straight line point in opposite directions. Tip to tail, they return to the start: <b>0 D, non-polar</b>, even though both bonds are polar.',
+      h2o:'The two O–H arrows meet at 104.5°, so they cannot cancel. The resultant points to the oxygen: <b>polar</b>, μ = 1.85 D.',
+      nh3:'The three N–H arrows all tilt up towards nitrogen. Their sum points up through the lone pair: <b>polar</b>, μ = 1.47 D.',
+      bcl3:'Three equal arrows 120° apart in one plane. Tip to tail they make a closed triangle: <b>0 D, non-polar</b>.',
+      ch4:'C–H differs by only 0.4, below 0.5, so the bonds count as non-polar. Even the tiny arrows close into a loop: <b>0 D</b>.',
+      ccl4:'Four polar C–Cl arrows point to the corners of a tetrahedron. Rotate it: tip to tail they close up in 3D, so <b>0 D, non-polar</b>.',
+      chcl3:'Same shape as CCl₄, but one Cl is now H. The arrows no longer balance, so a resultant is left: <b>polar</b>, μ = 1.04 D.',
+      nf3:'The N–F arrows point down to the fluorines, but nitrogen\'s lone pair (orange) points up. They nearly cancel: only <b>0.23 D</b>, against 1.47 D for NH₃, where bonds and lone pair point the same way.'
+    };
+    function ui(){
+      const m=st.mol;
+      els.steps.forEach(b=>{ const on=+b.dataset.step===st.step; b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); });
+      chips(); progress();
+      els.tag.textContent=m.f+' · '+m.name;
+      const predicted=st.pred[m.id];
+      els.pred.hidden=!(st.step===3&&!predicted);
+      let cap;
+      if(st.field) cap=m.polar?'<b>Electric field on.</b> The molecule turns until its δ− end faces the + plate. A permanent dipole is exactly what lets the field grip and turn it.':'<b>Electric field on.</b> With no net dipole, the field has nothing to grip: '+m.f+' only jiggles. Polar bonds alone are not enough.';
+      else if(st.step===1) cap='<b>Step 1 · Bond polarity.</b> '+bondText(m)+'. Shared electrons lean towards the more electronegative atom (darker green), which becomes δ−.';
+      else if(st.step===2) cap='<b>Step 2 · Bond dipoles.</b> Each polar bond gets an arrow pointing to its δ− end; the longer the arrow, the bigger the ΔEN.'+(m.lp?' The orange arrow is the lone pair on nitrogen, which also contributes.':'')+' Do the arrows cancel? Rotate to check.';
+      else cap=predicted?'<b>'+(predicted.ok?'Correct.':'Not quite.')+'</b> '+WHY[m.id]:'<b>Step 3 · Predict.</b> Will the arrows cancel? Choose polar or non-polar, then watch them add tip to tail.';
+      els.cap.innerHTML=cap;
+      els.read.textContent=st.step===3&&predicted?'μ = '+m.mu.toFixed(2)+' D (measured)':(st.step===1?'ΔEN · Chang values':'arrow length ∝ ΔEN');
+      els.field.classList.toggle('on',st.field); els.field.setAttribute('aria-pressed',st.field);
+      cv.setAttribute('aria-label',els.cap.textContent);
+    }
+    els.steps.forEach(b=>b.addEventListener('click',()=>{ st.step=+b.dataset.step; st.u=st.step===3&&st.pred[st.mol.id]?1:0; ui(); track('pol-step',{step:st.step}); }));
+    els.pred.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+      const m=st.mol, guess=b.dataset.p==='polar', ok=guess===m.polar;
+      st.pred[m.id]={ok}; st.u=0; st.anim=1; ui(); track('pol-predict',{mol:m.id,correct:ok});
+    }));
+    els.field.addEventListener('click',()=>{ st.field=!st.field; if(st.field){ st.yaw=0; st.pitch=0.12; } ui(); track('pol-field',{on:st.field}); });
+    root.querySelector('.vz-reset').addEventListener('click',()=>{ st.yaw=-0.5; st.pitch=0.32; st.R=[[1,0,0],[0,1,0],[0,0,1]]; });
+    let lx=0,ly=0;
+    cv.addEventListener('pointerdown',e=>{ st.drag=true; lx=e.clientX; ly=e.clientY; try{ cv.setPointerCapture(e.pointerId); }catch(_){} els.hint.classList.add('gone'); });
+    cv.addEventListener('pointermove',e=>{ if(!st.drag) return; st.yaw+=(e.clientX-lx)*0.011; st.pitch=clamp(st.pitch+(e.clientY-ly)*0.011,-1.35,1.35); lx=e.clientX; ly=e.clientY; });
+    const end=()=>{ st.drag=false; }; cv.addEventListener('pointerup',end); cv.addEventListener('pointercancel',end);
+
+    let W=0,H=0,dpr=1;
+    function resize(){ dpr=Math.min(2,window.devicePixelRatio||1); const w=Math.max(1,Math.round(cv.clientWidth*dpr)), h=Math.max(1,Math.round(cv.clientHeight*dpr)); if(w!==W||h!==H){ W=w; H=h; cv.width=W; cv.height=H; } }
+    function arrow(P,a,b,col,wd,cross,off){ const p=P(a[0],a[1],a[2]).slice(), q=P(b[0],b[1],b[2]).slice();
+      if(off){ p[0]+=off[0]; p[1]+=off[1]; q[0]+=off[0]; q[1]+=off[1]; }
+      const dx=q[0]-p[0], dy=q[1]-p[1], L=Math.hypot(dx,dy); if(L<2*dpr) return;
+      const ux=dx/L, uy=dy/L, hl=Math.min(11*dpr,L*0.45), hw=hl*0.55;
+      ctx.strokeStyle=col; ctx.fillStyle=col; ctx.lineWidth=wd*dpr; ctx.lineCap='round';
+      ctx.beginPath(); ctx.moveTo(p[0],p[1]); ctx.lineTo(q[0]-ux*hl*0.8,q[1]-uy*hl*0.8); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(q[0],q[1]); ctx.lineTo(q[0]-ux*hl-uy*hw,q[1]-uy*hl+ux*hw); ctx.lineTo(q[0]-ux*hl+uy*hw,q[1]-uy*hl-ux*hw); ctx.closePath(); ctx.fill();
+      if(cross){ const cx=p[0]+ux*Math.min(7*dpr,L*0.2), cy=p[1]+uy*Math.min(7*dpr,L*0.2), c=4*dpr; ctx.beginPath(); ctx.moveTo(cx-uy*c,cy+ux*c); ctx.lineTo(cx+uy*c,cy-ux*c); ctx.stroke(); } }
+    function render(dt){
+      resize(); const m=st.mol; st.clock+=dt;
+      if(!st.drag&&!st.field&&!RM) st.yaw+=dt*0.15;
+      if(st.anim){ st.u=Math.min(1,st.u+dt/1.8); if(st.u>=1) st.anim=0; }
+      if(RM&&st.anim){ st.u=1; st.anim=0; }
+      /* electric field: torque turns the dipole towards −x (the + plate is on the left) */
+      if(st.field){ if(m.polar){ const d=nrm(Rv(m.sum)), t=[-1,0,0], ax=cross(d,t), s=len(ax), ang=Math.atan2(s,dot(d,t)); if(ang>0.002){ rotR(s>1e-6?ax:[0,0,1],Math.min(ang,dt*1.6)); } }
+        if(!RM){ rotR([0.3,1,0.2],Math.sin(st.clock*7)*0.004); } }
+      const VR=st.field?m.ext+1.15:Math.max(1.55,m.ext+0.5), K=Math.min(W,H)/(2*VR)*0.95, cx=W/2, cy=H/2, F=VR*3.4;
+      const cY=Math.cos(st.yaw), sY=Math.sin(st.yaw), cP=Math.cos(st.pitch), sP=Math.sin(st.pitch);
+      const P=(x,y,z)=>{ const x1=x*cY+z*sY, z1=-x*sY+z*cY, y1=y*cP-z1*sP, z2=y*sP+z1*cP, s=F/(F+z2); return [cx+x1*s*K,cy-y1*s*K,z2,s]; };
+      ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,W,H);
+      if(st.field){ /* plates and field lines */
+        const X=m.ext+0.75; ctx.globalAlpha=0.9;
+        [[-X,'+','#3a6bd1'],[X,'−','#c0392b']].forEach(pl=>{ const a=P(pl[0],-m.ext-0.3,0), b=P(pl[0],m.ext+0.3,0); ctx.strokeStyle=pl[2]; ctx.lineWidth=5*dpr; ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke();
+          const c=P(pl[0],0,0); ctx.fillStyle=pl[2]; ctx.font='800 '+(18*dpr)+'px "DM Sans",system-ui,sans-serif'; ctx.textAlign='center'; ctx.fillText(pl[1],c[0]+(pl[0]<0?-14:14)*dpr,c[1]+6*dpr); });
+        ctx.globalAlpha=0.22; ctx.strokeStyle='#3a6bd1'; ctx.lineWidth=1*dpr; ctx.setLineDash([3*dpr,5*dpr]);
+        [-0.9,-0.45,0,0.45,0.9].map(y=>y*m.ext).forEach(y=>{ const a=P(-X+0.1,y,0), b=P(X-0.1,y,0); ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke(); });
+        ctx.setLineDash([]); ctx.globalAlpha=1; }
+      const A=m.atoms.map(a=>({el:a[0],p:Rv(a[1])}));
+      /* bonds with a δ+ → δ− colour gradient (step 1) */
+      const order=m.bonds.map((b,i)=>({b,i,z:(P(...A[b[0]].p)[2]+P(...A[b[1]].p)[2])/2})).sort((x,y)=>y.z-x.z);
+      const atomsSorted=A.map((a,i)=>({a,i,pp:P(a.p[0],a.p[1],a.p[2])})).sort((x,y)=>y.pp[2]-x.pp[2]);
+      const drawBond=o=>{ const v=m.vec[o.i], p=P(...A[v.lo].p), q=P(...A[v.hi].p);
+        let col=st.step===1&&v.d>=0.5?null:'#9aa29d';
+        const g=ctx.createLinearGradient(p[0],p[1],q[0],q[1]);
+        if(!col){ const k=clamp(v.d/1.6,0.25,1); g.addColorStop(0,'rgba(58,107,209,'+(0.35+0.5*k)+')'); g.addColorStop(0.5,'rgba(150,150,150,.6)'); g.addColorStop(1,'rgba(192,57,43,'+(0.35+0.6*k)+')'); }
+        ctx.strokeStyle=col||g; ctx.lineCap='round';
+        const n=o.b[2]||1, dx=q[0]-p[0], dy=q[1]-p[1], L=Math.hypot(dx,dy)||1, nx=-dy/L, ny=dx/L;
+        for(let k=0;k<n;k++){ const off=(k-(n-1)/2)*5*dpr; ctx.lineWidth=(n>1?3.2:5)*dpr; ctx.beginPath(); ctx.moveTo(p[0]+nx*off,p[1]+ny*off); ctx.lineTo(q[0]+nx*off,q[1]+ny*off); ctx.stroke(); } };
+      const drawAtom=o=>{ const r=Math.max(9*dpr,RAD[o.a.el]*K*o.pp[3]*0.9), g=ctx.createRadialGradient(o.pp[0]-r*.35,o.pp[1]-r*.35,r*.1,o.pp[0],o.pp[1],r), c=enCol(ENV[o.a.el]);
+        g.addColorStop(0,'#fff'); g.addColorStop(0.25,c); g.addColorStop(1,c); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(o.pp[0],o.pp[1],r,0,7); ctx.fill();
+        ctx.strokeStyle='rgba(28,38,32,.35)'; ctx.lineWidth=1*dpr; ctx.stroke();
+        ctx.fillStyle=ENV[o.a.el]>=2.9?'#fff':'#1c2620'; ctx.font='800 '+Math.round(Math.max(10*dpr,r*0.8))+'px "DM Sans",system-ui,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(o.a.el,o.pp[0],o.pp[1]+0.5*dpr); ctx.textBaseline='alphabetic'; };
+      const dim=st.step===3&&st.pred[m.id]&&!st.field?1-0.75*smooth(st.u*1.4):1;
+      ctx.globalAlpha=dim; order.forEach(drawBond); atomsSorted.forEach(drawAtom); ctx.globalAlpha=1;
+      /* δ labels (step 1, and in the field) */
+      if(st.step===1||st.field){
+        const q={}; m.vec.forEach(v=>{ if(v.d<0.5) return; q[v.hi]=(q[v.hi]||0)-1; q[v.lo]=(q[v.lo]||0)+1; });
+        ctx.font='800 '+(12*dpr)+'px "DM Sans",system-ui,sans-serif'; ctx.textAlign='center'; ctx.lineWidth=3*dpr; ctx.strokeStyle='rgba(255,255,255,.95)';
+        A.forEach((a,i)=>{ if(!q[i]) return; const pp=P(...a.p), r=Math.max(9*dpr,RAD[a.el]*K*pp[3]*0.9), t=q[i]>0?'δ+':'δ−';
+          const out=nrm(sub(a.p,[0,0,0])), o2=len(a.p)<0.35?[0.62,0.42,0.3]:mul(out,RAD[a.el]+0.32), lp=P(...add(a.p,o2));
+          ctx.strokeText(t,lp[0],lp[1]+4*dpr); ctx.fillStyle=q[i]>0?'#3a6bd1':'#c0392b'; ctx.fillText(t,lp[0],lp[1]+4*dpr); });
+      }
+      /* bond dipole arrows: on the bonds (step 2), then sliding tip to tail (step 3) */
+      if(st.step>=2&&!st.field){
+        const u=st.step===3&&st.pred[m.id]?smooth(st.u):0, origin=A[0].p; let acc=origin.slice();
+        const list=m.vec.map(v=>({v:Rv(v.v),mid:mul(add(A[v.lo].p,A[v.hi].p),0.5),col:'rgba(70,78,73,.9)',small:v.d<0.5}));
+        if(m.lpv) list.push({v:Rv(m.lpv),mid:add(A[0].p,mul(Rv([0,1,0]),0.9)),col:'#d9821f',lp:1});
+        const C0=P(0,0,0), G=lerp(1,clamp(0.95/Math.max(...list.map(it=>len(it.v))),1,3.6),u);   /* enlarge the chain so the loop is readable */
+        list.forEach(it=>{ const a0=sub(it.mid,mul(it.v,0.5)), b0=add(it.mid,mul(it.v,0.5)), a1=acc, b1=add(acc,mul(it.v,G));
+          const a=[lerp(a0[0],a1[0],u),lerp(a0[1],a1[1],u),lerp(a0[2],a1[2],u)], b=[lerp(b0[0],b1[0],u),lerp(b0[1],b1[1],u),lerp(b0[2],b1[2],u)];
+          /* beside the bond: shift sideways on screen, away from the molecule's centre */
+          const pm=P(...it.mid), pa=P(...a0), pb=P(...b0), dx=pb[0]-pa[0], dy=pb[1]-pa[1], L=Math.hypot(dx,dy)||1; let nx=-dy/L, ny=dx/L;
+          if((pm[0]-C0[0])*nx+(pm[1]-C0[1])*ny<0){ nx=-nx; ny=-ny; }
+          const k=(1-u)*(it.lp?0:13*dpr);
+          arrow(P,a,b,it.col,it.small?1.8:3,!it.lp,[nx*k,ny*k]); acc=b1; });
+        if(u>0.98){ const S=mul(Rv(m.sum),G);
+          if(m.polar){ ctx.globalAlpha=smooth((st.u-0.98)*50); arrow(P,origin,add(origin,mul(S,Math.max(1,0.7/len(S)))),'#9a6a1c',4.2,true); ctx.globalAlpha=1;
+            const tip=P(...add(origin,mul(S,Math.max(1,0.7/len(S))*1.25))); ctx.font='800 '+(12*dpr)+'px "DM Sans",system-ui,sans-serif'; ctx.textAlign='center'; ctx.lineWidth=3*dpr; ctx.strokeStyle='rgba(255,255,255,.95)'; ctx.strokeText('net dipole',tip[0],tip[1]+4*dpr); ctx.fillStyle='#9a6a1c'; ctx.fillText('net dipole',tip[0],tip[1]+4*dpr); }
+          else { const o=P(...origin); ctx.font='800 '+(13*dpr)+'px "DM Sans",system-ui,sans-serif'; ctx.textAlign='center'; ctx.lineWidth=3.5*dpr; ctx.strokeStyle='rgba(255,255,255,.95)'; ctx.strokeText('arrows close: 0 D',o[0],o[1]+30*dpr); ctx.fillStyle='#2d6a4f'; ctx.fillText('arrows close: 0 D',o[0],o[1]+30*dpr); }
+        }
+      }
+    }
+    let active=false, raf=0, last=0;
+    function loop(ts){ const dt=last?Math.min(0.05,(ts-last)/1000):0; last=ts; if(active){ render(dt); raf=requestAnimationFrame(loop); } else { raf=0; last=0; } }
+    ui();
+    window.__polst=st;
+    return {
+      show(slide){ active=!!slide.querySelector('.pb'); if(active){ ui(); requestAnimationFrame(resize); if(!raf) raf=requestAnimationFrame(loop); setTimeout(()=>els.hint.classList.add('gone'),5000); } },
+      resize(){ if(active) resize(); }
     };
   })();
 
@@ -2462,7 +2691,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     updateMore();
   }
   slides.forEach(s=>s.addEventListener('scroll', updateMore, {passive:true}));
-  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ fit(slides[current-1]); VIZ.resize(); },120); });
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ fit(slides[current-1]); VIZ.resize(); POL.resize(); },120); });
 
   /* ---------- GATING ("Go deeper" toggles are optional; .task items must be completed) ---------- */
   function pending(slide){
@@ -2499,7 +2728,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     btnNext.setAttribute('data-umami-event',n===TOTAL?'carousel-selesai':'nav-next');
     const fr=slides[n-1].querySelector('iframe[data-src]');
     if(fr && !fr.getAttribute('src')){ fr.setAttribute('src',fr.dataset.src); track('lab-embed-load'); }
-    VIZ.show(slides[n-1]);
+    VIZ.show(slides[n-1]); POL.show(slides[n-1]);
     buildCharts(n);
     fit(slides[n-1]);
     requestAnimationFrame(()=>fit(slides[n-1]));
