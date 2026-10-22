@@ -328,6 +328,13 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .lab-head p{margin-bottom:.2em}
 .lab-frame{flex:1 1 auto;min-height:300px;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#fff}
 .lab-frame iframe{width:100%;height:100%;border:0;display:block}
+/* ---------- Luna's case: story thread ---------- */
+.story{border-left:3px solid var(--eyebrow);background:#faf5ea;border-radius:0 8px 8px 0;padding:.4em .8em;margin:.45em 0 .55em;font-size:.9em}
+.story-tag{display:block;font-size:.72em;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--eyebrow);margin-bottom:.15em}
+.mass-row{display:grid;grid-template-columns:4.2em 1fr;gap:.5em;align-items:baseline;font-size:.88em;padding:.2em 0;border-bottom:1px solid var(--rule)}
+.mass-row b{text-align:right}
+.htl.htl5{grid-template-columns:repeat(5,1fr)}
+@media (max-width:760px),(orientation:portrait){.htl.htl5{grid-template-columns:1fr 1fr}}
 /* ---------- reaction viewer: particles rearranging ---------- */
 .rxv{margin:.35em 0}
 .rxv-chips{display:flex;flex-wrap:wrap;gap:.35em;margin-bottom:.45em}
@@ -387,26 +394,25 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 <section class="slide active" data-sec="intro" data-title="Start here">
  <div class="si has-ill">
   <figure class="ill">
-   <svg viewBox="0 0 400 210" role="img" aria-label="One 500 mg paracetamol tablet holds about 2.0 times 10 to the 21 molecules">
-    <ellipse class="fg" cx="82" cy="98" rx="54" ry="25"/>
-    <ellipse class="ln g draw" cx="82" cy="94" rx="54" ry="25" pathLength="1"/>
-    <path class="ln g fade" d="M82 70 L82 118" style="--d:.5s"/>
-    <text class="tx b mid fade" x="82" y="148" style="--d:.4s">500 mg paracetamol</text>
-    <text class="tx s mid fade" x="82" y="166" style="--d:.5s">C₈H₉NO₂, M = 151 g/mol</text>
-    <path class="ln o fade" d="M146 96 L190 96" marker-end="url(#ar-o)" style="--d:.8s"/>
-    <text class="tx g fade" x="204" y="90" style="--d:1s;font-size:27px">≈ 2.0 × 10²¹</text>
-    <text class="tx b fade" x="204" y="114" style="--d:1.1s;font-size:14px">molecules</text>
-    <text class="tx s fade" x="204" y="140" style="--d:1.3s">more than 200 billion for every</text>
-    <text class="tx s fade" x="204" y="155" style="--d:1.3s">person on Earth</text>
-    <text class="tx s fade" x="20" y="200" style="--d:1.5s">Nobody counts them. Chemists weigh them, then use the mole.</text>
+   <svg viewBox="0 0 400 210" role="img" aria-label="7.40 g of starting materials went in, 2.10 g of aspirin came out, 5.30 g seems to be missing">
+    <text class="tx b" x="14" y="44" style="font-size:16px">7.40 g in</text>
+    <text class="tx s" x="14" y="64">2.00 g salicylic acid</text>
+    <text class="tx s" x="14" y="80">+ 5.40 g acetic anhydride</text>
+    <path class="ln o fade" d="M150 58 L176 58" marker-end="url(#ar-o)" style="--d:.4s"/>
+    <g class="fade" style="--d:.2s"><path d="M193 22 H209 M195 22 V44 L178 88 Q177 92 182 92 H220 Q225 92 224 88 L207 44 V22" fill="none" stroke="#1c2620" stroke-width="2" stroke-linejoin="round"/><path class="fg" d="M184 76 H218 L222 87 Q223 89 220 89 H182 Q179 89 180 87 Z"/></g>
+    <path class="ln o fade" d="M230 58 L256 58" marker-end="url(#ar-o)" style="--d:.7s"/>
+    <text class="tx g fade" x="266" y="56" style="--d:.8s;font-size:20px">2.10 g</text>
+    <text class="tx s fade" x="266" y="74" style="--d:.8s">aspirin collected</text>
+    <text class="tx r mid fade" x="200" y="150" style="--d:1.2s;font-size:24px">5.30 g missing?</text>
+    <text class="tx s mid fade" x="200" y="176" style="--d:1.4s">Luna's job: find out where it went.</text>
    </svg>
   </figure>
   <div class="txt">
    <div class="eyebrow">Start here</div>
-   <h1>One tablet, <span class="ac">two thousand billion billion molecules.</span></h1>
-   <p>A single 500 mg paracetamol tablet contains about <b>2.0 × 10²¹</b> molecules of the drug. No balance can count particles that small, yet pharmacists, formulators and chemists need to know how many react, how much product forms, and how much is wasted.</p>
-   <p>The tool that turns <b>grams into particles</b> is the <b>mole</b>. This explainer builds from the mole to balanced equations, then to the two calculations every synthesis depends on: the <b>limiting reagent</b> and the <b>percentage yield</b>.</p>
-   <p class="small">For Diploma in Pharmacy students. Use Next to move through the pages, or Contents to jump around. "Go deeper" sections are optional. A periodic table is in Contents. The Reaction Bench lab is near the end.</p>
+   <h1>7.40 g went in. <span class="ac">2.10 g came out.</span></h1>
+   <p>Meet <b>Luna</b>, a pharmacy trainee in her first week at a medicine factory. Her supervisor hands her the result of a small aspirin trial batch: 7.40 g of starting materials went into the flask, but only <b>2.10 g of aspirin</b> came out. "Find out where the other 5.30 g went," he says, "before we scale up."</p>
+   <p>To solve it, Luna needs the tools in this explainer: the <b>mole</b>, <b>balanced equations</b>, the <b>limiting reagent</b> and <b>percentage yield</b>. Follow her case section by section; it is closed in Section 6.</p>
+   <p class="small">For Diploma in Pharmacy students. Use Next to move through the pages, or Contents to jump around. "Go deeper" sections are optional. A periodic table is in Contents. The Reaction Bench lab is near the end. Luna and her factory are fictional.</p>
   </div>
  </div>
 </section>
@@ -440,6 +446,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="txt">
    <div class="eyebrow">The mole · C1</div>
    <h2>A mole is a <span class="ac">counting unit.</span></h2>
+   <div class="story"><span class="story-tag">Luna's case</span>Luna's first thought: the two chemicals don't react gram for gram. To compare them, she has to count their <b>particles</b>.</div>
    <p>We already count in groups: a <b>dozen</b> is 12 eggs, a <b>ream</b> is 500 sheets. Chemists count atoms and molecules in a much bigger group, the <b>mole</b> (symbol mol).</p>
    <div class="tiles stagger">
      <div class="tile"><div class="n">6.022 × 10²³</div><div class="l">particles in one mole. This is the <b>Avogadro constant</b>, N<sub>A</sub>, in mol⁻¹.</div></div>
@@ -450,6 +457,24 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
      <button class="toggle-btn"><span><span class="tag">Go deeper</span>Why this exact number?</span><span class="hint">Open</span></button>
      <div class="toggle-body"><p>Until 2019 the mole was defined as the number of atoms in exactly 12 g of carbon-12. Since the 2019 revision of the SI, the Avogadro constant is <b>fixed</b> at exactly 6.022 140 76 × 10²³ mol⁻¹, and the mole is defined from it. For calculations, 6.022 × 10²³ is enough. <span class="cite">(<a href="https://www.bipm.org/en/publications/si-brochure" target="_blank" rel="noopener">BIPM, 2019</a>)</span></p></div>
    </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="mole" data-title="The story behind the number">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">The story behind the number</div>
+   <h2>Avogadro never <span class="ac">knew his number.</span></h2>
+   <p>Luna assumes Avogadro measured 6.022 × 10²³. He didn't. The idea and the number came from a relay of chemists across nearly a century:</p>
+   <div class="htl htl5 stagger">
+     <div class="ev"><span class="yr">1811</span><b>Avogadro</b> proposes that equal volumes of gases hold equal numbers of particles. Almost nobody listens.</div>
+     <div class="ev"><span class="yr">1860</span><b>Cannizzaro</b> revives the idea at the Karlsruhe Congress and uses it to fix atomic masses.</div>
+     <div class="ev"><span class="yr">1865</span><b>Loschmidt</b> makes the first estimate of how many particles are in a volume of gas.</div>
+     <div class="ev"><span class="yr">1894</span><b>Ostwald</b> coins the word <i>Mol</i>, from the German <i>Molekül</i>.</div>
+     <div class="ev"><span class="yr">1909</span><b>Perrin</b> measures the number, names it after Avogadro, and wins the 1926 Nobel Prize for the work.</div>
+   </div>
+   <p class="small">The constant honours Avogadro's idea, not his measurement. <span class="cite"><a href="https://en.wikipedia.org/wiki/Avogadro_constant" target="_blank" rel="noopener">Avogadro constant</a>; <a href="https://en.wikipedia.org/wiki/Mole_(unit)" target="_blank" rel="noopener">Mole (unit)</a></span></p>
   </div>
  </div>
 </section>
@@ -557,6 +582,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="txt">
    <div class="eyebrow">In the pharmacy</div>
    <h2>Some labels speak <span class="ac">in millimoles.</span></h2>
+   <div class="story"><span class="story-tag">Luna's case · Day 1</span>Between tasks, Luna is asked to check a carton of potassium chloride tablets made at the factory. Is the second number on the label right?</div>
    <p>Potassium chloride tablets for low blood potassium are sold as <b>"600 mg (8 mmol)"</b>. The second number is the mole concept at work. <span class="cite">(<a href="https://mca.sps.nhs.uk/mca/potachlor-600mg-8mmol-modified-release-tablets-trion-pharma-ltd" target="_blank" rel="noopener">NHS dm+d</a>)</span></p>
    <div class="eqn">n(KCl) = 600 mg ÷ 74.5 g/mol = <span class="co">8.05 mmol</span><small>one K⁺ ion per KCl, so each tablet supplies about 8 mmol of potassium</small></div>
    <p>Doctors prescribe electrolytes by the amount of ion the patient needs, not by the mass of salt. Two salts of the same ion can have very different masses per mmol.</p>
@@ -606,6 +632,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="txt">
    <div class="eyebrow">Types of reaction · C1</div>
    <h2>Bonds break, <span class="ac">new substances form.</span></h2>
+   <div class="story"><span class="story-tag">Luna's case · Day 2</span>While the trial batch is analysed, Luna helps in the quality control (QC) lab. Every test there is a chemical reaction, and each one belongs to a type.</div>
    <p>In a chemical reaction, the <b>reactants</b> are turned into <b>products</b> with different properties. The atoms are not destroyed; they are rearranged into new combinations.</p>
    <p>You can often tell a reaction has happened from what you see:</p>
    <div class="pill-list stagger">
@@ -737,6 +764,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <h2>No atom is created <span class="ac">or destroyed.</span></h2>
    <p>The <b>law of conservation of mass</b>: in a chemical reaction, the total mass of the products equals the total mass of the reactants, because the same atoms are only rearranged.</p>
    <p>An equation must show this. A <b>balanced equation</b> has the same number of each kind of atom on both sides of the arrow.</p>
+   <div class="story"><span class="story-tag">Luna's case · Day 3</span>Luna writes up the batch record. If no atom is created or destroyed, her 5.30 g cannot have vanished. It must still be accounted for somewhere.</div>
    <div class="callout">Balancing is not decoration. The numbers in front of each formula, the <b>coefficients</b>, are what every stoichiometry calculation uses.</div>
   </div>
  </div>
@@ -868,6 +896,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="txt">
    <div class="eyebrow">Stoichiometry · C3</div>
    <h2>Grams of one substance <span class="ac">to grams of another.</span></h2>
+   <div class="story"><span class="story-tag">Luna's case · Day 4</span>To track the missing mass, Luna has to turn grams of one substance into grams of another.</div>
    <p><b>Stoichiometry</b> is the calculation of how much of each substance reacts or forms, using a balanced equation. Every problem follows the same road, and the mole ratio is the only bridge between two substances.</p>
    <div class="flow stagger">
      <div class="node">Mass of A<small>g</small></div>
@@ -988,19 +1017,20 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
  </div>
 </section>
 
-<section class="slide" data-sec="limit" data-title="Worked example: aspirin">
+<section class="slide" data-sec="limit" data-title="Luna's batch: which runs out?">
  <div class="si">
   <div class="txt">
-   <div class="eyebrow">Worked example</div>
-   <h2>Making aspirin: <span class="ac">which runs out?</span></h2>
-   <p>A student reacts <b>2.00 g of salicylic acid</b> with <b>5.40 g of acetic anhydride</b> (5.0 mL; density 1.08 g/mL).</p>
+   <div class="eyebrow">Luna's case · worked example</div>
+   <h2>Luna's batch: <span class="ac">which runs out?</span></h2>
+   <p>The trial batch reacted <b>2.00 g of salicylic acid</b> with <b>5.40 g of acetic anhydride</b> (5.0 mL; density 1.08 g/mL).</p>
    <div class="eqn">C₇H₆O₃ + C₄H₆O₃ → C₉H₈O₄ + C₂H₄O₂<small>salicylic acid (138) + acetic anhydride (102) → aspirin (180) + acetic acid (60)</small></div>
    <table class="data-table">
     <tr><th></th><th>Moles</th><th>÷ coefficient</th></tr>
     <tr class="hl"><td>Salicylic acid</td><td>2.00 ÷ 138 = 0.0145 mol</td><td>0.0145 → limiting</td></tr>
     <tr><td>Acetic anhydride</td><td>5.40 ÷ 102 = 0.0529 mol</td><td>0.0529 → excess</td></tr>
    </table>
-   <p>Ratio aspirin : salicylic acid is 1 : 1, so the most aspirin possible is 0.0145 mol × 180 g/mol = <b>2.61 g</b>. Acetic anhydride left over: 0.0529 − 0.0145 = 0.0384 mol.</p>
+   <p>Ratio aspirin : salicylic acid is 1 : 1, so the most aspirin possible is 0.0145 mol × 180 g/mol = <b>2.61 g</b>. Acetic anhydride left over: 0.0529 − 0.0145 = 0.0384 mol, which is <b>3.92 g</b>.</p>
+   <div class="story"><span class="story-tag">Luna's case · Clue</span>Most of the "missing" mass was never going to become aspirin: 3.92 g of acetic anhydride was in excess and never reacted.</div>
   </div>
  </div>
 </section>
@@ -1044,7 +1074,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 3 OF 3</div>
-      <div class="choice-q">Why is salicylic acid made the limiting reagent in aspirin synthesis?</div>
+      <div class="choice-q">Why did Luna's factory make salicylic acid the limiting reagent?</div>
       <div class="choices"><button class="choice" data-v="a">It is the more valuable starting material</button><button class="choice" data-v="b">It has the smaller mass</button><button class="choice" data-v="c">It is a gas</button></div>
       <div class="feedback">The more valuable material is made limiting so that as much of it as possible ends up as product. Mass alone never decides it.</div>
     </div>
@@ -1067,7 +1097,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <text class="tx b fade" x="303" y="106" style="--d:.9s">2.10 g</text>
     <path class="ln m dash" d="M297 80 L297 122"/>
     <text class="tx g mid fade" x="200" y="150" style="--d:1.1s;font-size:13px">Percentage yield = 2.10 ÷ 2.61 × 100 = 80.5%</text>
-    <text class="tx s mid fade" x="200" y="170" style="--d:1.2s">Aspirin example, actual mass illustrative</text>
+    <text class="tx s mid fade" x="200" y="170" style="--d:1.2s">Luna's trial batch</text>
    </svg>
   </figure>
   <div class="txt">
@@ -1075,7 +1105,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <h2>What you could make <span class="ac">vs what you made.</span></h2>
    <p>The <b>theoretical yield</b> is the maximum mass of product, calculated from the limiting reagent. The <b>actual yield</b> is the mass you weigh at the end.</p>
    <div class="eqn">Percentage yield = (actual yield ÷ theoretical yield) × 100%</div>
-   <p>If the aspirin student recovers 2.10 g of dry product, the percentage yield is 2.10 ÷ 2.61 × 100 = <b>80.5%</b>.</p>
+   <p>Luna's batch gave 2.10 g of dry aspirin, so its percentage yield is 2.10 ÷ 2.61 × 100 = <b>80.5%</b>.</p>
   </div>
  </div>
 </section>
@@ -1093,6 +1123,38 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
      <button class="rcard"><span class="rt">Purification losses</span><span class="rb">Recrystallisation removes impurities but some product stays dissolved in the solvent.</span></button>
    </div>
    <div class="callout warn"><b>Over 100%?</b> That is a warning sign, not a success. The product is probably still wet or contains impurities. Dry it to constant mass and check purity.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="yield" data-title="Case closed">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 200" role="img" aria-label="The 7.40 g that went in: 2.10 g aspirin collected, 0.51 g aspirin lost in purification, 0.87 g acetic acid, 3.92 g unused acetic anhydride">
+    <text class="tx b" x="20" y="22">Where Luna's 7.40 g went</text>
+    <rect class="grow-x" x="20" y="34" width="105.4" height="34" rx="3" style="--d:.1s;fill:var(--accent)"/>
+    <rect class="grow-x" x="125.4" y="34" width="25.6" height="34" style="--d:.3s;fill:var(--orange)"/>
+    <rect class="grow-x" x="151" y="34" width="43.7" height="34" style="--d:.5s;fill:var(--blue)"/>
+    <rect class="grow-x" x="194.7" y="34" width="196.8" height="34" rx="3" style="--d:.7s;fill:#a3aaa5"/>
+    <g class="stagger">
+     <g><rect x="20" y="90" width="12" height="12" rx="2" style="fill:var(--accent)"/><text class="tx" x="40" y="100"><tspan font-weight="700">2.10 g</tspan> aspirin collected</text></g>
+     <g><rect x="20" y="114" width="12" height="12" rx="2" style="fill:var(--orange)"/><text class="tx" x="40" y="124"><tspan font-weight="700">0.51 g</tspan> aspirin lost in purification</text></g>
+     <g><rect x="20" y="138" width="12" height="12" rx="2" style="fill:var(--blue)"/><text class="tx" x="40" y="148"><tspan font-weight="700">0.87 g</tspan> acetic acid (by-product)</text></g>
+     <g><rect x="20" y="162" width="12" height="12" rx="2" style="fill:#a3aaa5"/><text class="tx" x="40" y="172"><tspan font-weight="700">3.92 g</tspan> acetic anhydride, never used</text></g>
+    </g>
+    <text class="tx g fade" x="20" y="194" style="--d:1.2s">Total: 7.40 g. Nothing went missing.</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Luna's case · solved</div>
+   <h2>Case closed: <span class="ac">nothing went missing.</span></h2>
+   <p>Mass is conserved, so Luna accounts for every gram:</p>
+   <div class="cards stagger">
+     <div class="card"><div class="cn">1</div><div><b>3.92 g</b> of acetic anhydride was in excess and never reacted.</div></div>
+     <div class="card"><div class="cn">2</div><div><b>0.87 g</b> became acetic acid, the by-product the balanced equation predicts.</div></div>
+     <div class="card"><div class="cn">3</div><div>The limiting reagent allowed at most <b>2.61 g</b> of aspirin. Luna collected 2.10 g (80.5%); <b>0.51 g</b> was lost during purification.</div></div>
+   </div>
+   <div class="story"><span class="story-tag">Luna's case · Her report</span>"The batch worked. To raise the yield, cut purification losses. Adding more acetic anhydride won't help, because salicylic acid is the limiting reagent."</div>
   </div>
  </div>
 </section>
@@ -1231,7 +1293,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    </div>
    <div style="margin:.6em 0"><button class="btn solid" id="btn-refs" data-umami-event="open-sources">Sources and further reading (7) →</button></div>
    <div class="madeby">
-     <p><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Relative atomic masses are rounded for teaching; experimental masses marked as illustrative are made up.</p>
+     <p><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Relative atomic masses are rounded for teaching. Luna, her factory and the trial batch are fictional.</p>
      <div class="socials">
        <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Website</a>
        <a href="https://www.linkedin.com/in/aufbinali/" target="_blank" rel="noopener" data-umami-event="link-linkedin">LinkedIn</a>
