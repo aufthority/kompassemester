@@ -362,6 +362,57 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .pt-legend span::before{content:"";width:.8em;height:.8em;border-radius:3px;background:var(--sw);border:1px solid rgba(0,0,0,.08)}
 .pt-scrollhint{display:none;font-size:.72rem;color:var(--muted);margin-bottom:.3em}
 @media (max-width:820px){.pt-scrollhint{display:block}}
+/* ---------- 3D Bohr / quantum visualiser ---------- */
+.si.viz-si{max-width:none}
+.vz{border:1px solid var(--rule);border-radius:14px;background:#fbfcfb;padding:.5em;display:flex;flex-direction:column;gap:.42em;min-width:0}
+.vz.done{border-color:var(--g-line)}
+.vz-top{display:flex;justify-content:center}
+.seg{display:inline-flex;background:#eceeec;border-radius:100px;padding:3px;gap:2px}
+.seg button{border:none;background:transparent;font:700 .84em 'DM Sans',sans-serif;color:var(--muted);padding:.44em 1em;border-radius:100px;cursor:pointer;display:inline-flex;align-items:center;gap:.4em;white-space:nowrap}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(20,30,25,.14)}
+.seg .tk{width:1.05em;height:1.05em;border-radius:50%;border:1.6px solid currentColor;display:inline-flex;align-items:center;justify-content:center;font-size:.72em;line-height:1;opacity:.5}
+.seg button[data-seen] .tk{background:var(--accent);border-color:var(--accent);color:#fff;opacity:1}
+.seg button[data-seen] .tk::after{content:"✓"}
+.seg-sm button{font-size:.78em;padding:.36em .85em}
+.vz-stage{position:relative;border-radius:10px;overflow:hidden;background:radial-gradient(ellipse at 50% 42%,#ffffff 0%,#f1f5f2 70%,#e9efeb 100%)}
+.vz-stage canvas{display:block;width:100%;height:calc(var(--k) * 28vh);height:calc(var(--k) * 28dvh);touch-action:none;cursor:grab}
+.vz-stage canvas.grab{cursor:grabbing}
+.vz-tag{position:absolute;left:.55em;top:.5em;font-size:.66em;white-space:nowrap;font-weight:700;letter-spacing:.03em;padding:.22em .65em;border-radius:100px;background:rgba(255,255,255,.9);border:1px solid var(--rule);pointer-events:none}
+.vz-tag.bohr{color:#8a5410;border-color:#f1d6ae}
+.vz-tag.q{color:var(--accent-dark);border-color:var(--g-line)}
+.vz-read{position:absolute;right:.55em;top:.5em;font-size:.66em;font-weight:700;color:var(--ink);background:rgba(255,255,255,.9);padding:.22em .6em;border-radius:6px;font-variant-numeric:tabular-nums;pointer-events:none;max-width:55%;text-align:right}
+.vz-hint{position:absolute;left:50%;bottom:.5em;transform:translateX(-50%);font-size:.66em;font-weight:600;color:var(--muted);background:rgba(255,255,255,.92);padding:.2em .75em;border-radius:100px;pointer-events:none;transition:opacity .5s}
+.vz-hint.gone{opacity:0}
+.vz-reset{position:absolute;right:.45em;bottom:.45em;width:2em;height:2em;border-radius:50%;border:1px solid var(--rule);background:rgba(255,255,255,.92);color:var(--body);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.vz-reset svg{width:1.05em;height:1.05em}
+.vz-ctrl{display:flex;align-items:center;gap:.6em;min-width:0}
+.vz-play{flex:0 0 2.35em;width:2.35em;height:2.35em;border-radius:50%;background:var(--ink);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0}
+.vz-play svg{width:1.05em;height:1.05em}
+.vz-note{font-size:.72em;color:var(--muted)}
+.vz-scrub{flex:1 1 auto;min-width:0;padding:0 .5em}
+.vz-scrub input{width:100%;accent-color:var(--accent);margin:.15em 0 0;display:block}
+.vz-ticks{position:relative;height:1.15em;font-size:.64em;font-weight:700;color:var(--muted)}
+.vz-ticks span{position:absolute;top:0;transform:translateX(-50%);white-space:nowrap}
+.vz-ticks span.on{color:var(--accent-dark)}
+.vz-ticks span.l{transform:none}
+.vz-ticks span.r{transform:none;left:auto}
+.vz-legend{display:flex;flex-wrap:wrap;gap:.15em .9em;font-size:.72em;color:var(--body);padding:0 .2em}
+.vz-legend span{display:inline-flex;align-items:center;gap:.35em}
+.vz-legend span::before,.vz-legend button::before{content:"";width:.62em;height:.62em;border-radius:50%;background:var(--c)}
+.vz-legend button{display:inline-flex;align-items:center;gap:.35em;border:1px solid var(--rule);background:#fff;border-radius:100px;padding:.18em .6em;font:600 1em 'DM Sans',sans-serif;color:var(--ink);cursor:pointer}
+.vz-legend button.off{color:var(--muted);text-decoration:line-through;background:#f3f4f3}
+.vz-legend button.off::before{background:#fff;border:1.5px solid var(--c)}
+.vz-legend sub{font-size:.75em;vertical-align:-.15em}
+.vz-cap sub{font-size:.75em}
+.vz-legend em{font-style:normal;color:var(--muted);align-self:center}
+.vz-cap{font-size:.84em;line-height:1.45;border-left:3px solid var(--accent);background:var(--g-bg);padding:.42em .7em;border-radius:0 8px 8px 0;min-height:3.1em}
+.vz-cap .lim{display:block;margin-top:.3em;padding-top:.3em;border-top:1px dashed #e6c99a;color:#8a5410;font-size:.94em}
+@media (min-width:760px) and (orientation:landscape){
+  .si.viz-si{flex-direction:row;align-items:center;gap:2em}
+  .si.viz-si .vz{flex:0 0 57%}
+  .si.viz-si .txt{flex:1 1 auto}
+  .vz-stage canvas{height:calc(var(--k) * 44vh);height:calc(var(--k) * 44dvh)}
+}
 .lewis{font-family:'DM Sans',sans-serif}
 </style>
 </head>
@@ -392,7 +443,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="nav-right">
       <a class="icon-btn back-kompas" id="btn-kompas" href="../../index.html" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
       <button class="icon-btn" id="btn-toc" data-umami-event="open-contents">Contents</button>
-      <span id="progress-label">1 / 45</span>
+      <span id="progress-label">1 / 48</span>
     </div>
   </nav>
   <div id="progress-track"><div id="progress-fill"></div></div>
@@ -530,6 +581,24 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
  </div>
 </section>
 
+<section class="slide" data-sec="why" data-title="3D: an atom, two models">
+ <div class="si viz-si">
+  <div class="vz task" data-scene="atom">
+    <div class="vz-top"><div class="seg" role="group" aria-label="Choose a model"><button type="button" data-model="bohr" class="on" aria-pressed="true"><span class="tk" aria-hidden="true"></span>Bohr model</button><button type="button" data-model="quantum" aria-pressed="false"><span class="tk" aria-hidden="true"></span>Quantum model</button></div></div>
+    <div class="vz-stage"><canvas role="img" aria-label="An atom drawn with the Bohr model or the quantum model"></canvas><span class="vz-tag"></span><span class="vz-read"></span><span class="vz-hint">Drag to rotate</span><button type="button" class="vz-reset" aria-label="Reset the view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 10a5.5 5.5 0 1 0 1.8-4.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4.2 2.8v4.4h4.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    <div class="vz-ctrl"><button type="button" class="vz-play" aria-label="Pause"></button><div class="seg seg-sm" role="group" aria-label="Choose an atom"><button type="button" data-atom="H" class="on" aria-pressed="true">Hydrogen</button><button type="button" data-atom="C" aria-pressed="false">Carbon</button></div></div>
+    <div class="vz-legend"></div>
+    <div class="vz-cap" aria-live="polite"></div>
+  </div>
+  <div class="txt">
+   <div class="eyebrow">2 · Why bonds form · see it in 3D</div>
+   <h2>Where are the electrons? <span class="ac">Two models.</span></h2>
+   <p>Bohr's 1913 model puts each electron on a fixed orbit. The quantum model replaces the orbit with an <b>orbital</b>, a region where the electron is likely to be found. <span class="cite">(<a href="https://doi.org/10.1080/14786441308634955" target="_blank" rel="noopener">Bohr, 1913</a>)</span></p>
+   <p>Try hydrogen, then carbon. View both models (✓) to continue.</p>
+  </div>
+ </div>
+</section>
+
 <section class="slide" data-sec="why" data-title="Transfer or share">
  <div class="si">
   <div class="txt">
@@ -541,6 +610,24 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="box"><h3>Polar covalent</h3><div class="q">sharing, but unequal</div>The pair is shared, but one atom pulls it harder. That atom becomes slightly negative (δ−). Most real bonds lie somewhere between pure covalent and ionic; section 6 shows how to decide where.</div>
    </div>
    <p class="small">A third type, <b>metallic bonding</b>, holds metals together: metal ions sit in a "sea" of shared, mobile electrons. It is outside the scope of this explainer.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="why" data-title="3D: an electron is transferred">
+ <div class="si viz-si">
+  <div class="vz task" data-scene="ionic">
+    <div class="vz-top"><div class="seg" role="group" aria-label="Choose a model"><button type="button" data-model="bohr" class="on" aria-pressed="true"><span class="tk" aria-hidden="true"></span>Bohr model</button><button type="button" data-model="quantum" aria-pressed="false"><span class="tk" aria-hidden="true"></span>Quantum model</button></div></div>
+    <div class="vz-stage"><canvas role="img" aria-label="Sodium transfers its outer electron to chlorine, drawn with the Bohr model or the quantum model"></canvas><span class="vz-tag"></span><span class="vz-read"></span><span class="vz-hint">Drag to rotate</span><button type="button" class="vz-reset" aria-label="Reset the view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 10a5.5 5.5 0 1 0 1.8-4.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4.2 2.8v4.4h4.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    <div class="vz-ctrl"><button type="button" class="vz-play" aria-label="Pause"></button><div class="vz-scrub"><input type="range" min="0" max="1000" value="0" aria-label="Animation progress"><div class="vz-ticks"></div></div></div>
+    <div class="vz-legend"></div>
+    <div class="vz-cap" aria-live="polite"></div>
+  </div>
+  <div class="txt">
+   <div class="eyebrow">2 · Why bonds form · see it in 3D</div>
+   <h2>Watch sodium <span class="ac">give an electron to chlorine.</span></h2>
+   <p>Orange is sodium's outer electron. Follow it to chlorine, then watch the ions pull together. Drag the slider to pause at any stage.</p>
+   <p>In the quantum view, watch the sizes: Na is bigger than Cl, but Na⁺ ends up smaller than Cl⁻. <span class="cite">(<a href="https://doi.org/10.1107/S0567739476001551" target="_blank" rel="noopener">Shannon, 1976</a>)</span></p>
   </div>
  </div>
 </section>
@@ -786,6 +873,23 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
      <li><span class="n">2</span><span>The two electrons, with <b>opposite spins</b>, are shared in the overlap region between the nuclei.</span></li>
      <li><span class="n">3</span><span>More overlap generally means a <b>stronger bond</b>. Both nuclei attract the shared pair, which is what lowers the energy.</span></li>
    </ul>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="vb" data-title="3D: two atoms share a pair">
+ <div class="si viz-si">
+  <div class="vz task" data-scene="bond">
+    <div class="vz-top"><div class="seg" role="group" aria-label="Choose a model"><button type="button" data-model="bohr" class="on" aria-pressed="true"><span class="tk" aria-hidden="true"></span>Bohr model</button><button type="button" data-model="quantum" aria-pressed="false"><span class="tk" aria-hidden="true"></span>Quantum model</button></div></div>
+    <div class="vz-stage"><canvas role="img" aria-label="Two hydrogen atoms form a bond, drawn with the Bohr model or the quantum model"></canvas><span class="vz-tag"></span><span class="vz-read"></span><span class="vz-hint">Drag to rotate</span><button type="button" class="vz-reset" aria-label="Reset the view"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4.5 10a5.5 5.5 0 1 0 1.8-4.1" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/><path d="M4.2 2.8v4.4h4.4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div>
+    <div class="vz-ctrl"><button type="button" class="vz-play" aria-label="Pause"></button><div class="vz-scrub"><input type="range" min="0" max="1000" value="0" aria-label="Animation progress"><div class="vz-ticks"></div></div></div>
+    <div class="vz-legend"></div>
+    <div class="vz-cap" aria-live="polite"></div>
+  </div>
+  <div class="txt">
+   <div class="eyebrow">4 · Valence bond theory · see it in 3D</div>
+   <h2>Watch two atoms <span class="ac">share a pair.</span></h2>
+   <p>Two hydrogen atoms move together. In the quantum view, the 1s clouds overlap and electron density piles up <b>between</b> the nuclei: the overlap of valence bond theory. The readout follows the energy curve from section 2.</p>
   </div>
  </div>
 </section>
@@ -1623,7 +1727,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
      <div class="card"><div class="cn">3</div><div>ΔEN classifies a bond (Chang): below 0.5 non-polar, 0.5 up to 2.0 polar covalent, 2.0 or more ionic. These are rules of thumb.</div></div>
      <div class="card"><div class="cn">4</div><div>A molecule is polar only if its bond dipoles do not cancel. Polarity and hydrogen bonding set the intermolecular forces, which control boiling point, solubility and how solvents behave in GC. Pharmacists use this to choose vehicles and salt forms and to design analytical methods.</div></div>
    </div>
-   <div style="margin:.6em 0"><button class="btn solid" id="btn-refs" data-umami-event="open-sources">Sources and further reading (10) →</button></div>
+   <div style="margin:.6em 0"><button class="btn solid" id="btn-refs" data-umami-event="open-sources">Sources and further reading (12) →</button></div>
    <div class="madeby">
      <p><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Electronegativity values and bond-type boundaries follow Chang's <i>Chemistry</i>; physical data are rounded literature values.</p>
      <div class="socials">
@@ -1677,6 +1781,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="panel">
     <div class="panel-head"><h3>Sources and further reading</h3><button class="icon-btn close-ov">Close</button></div>
     <ol class="refs">
+      <li>Bohr, N. (1913). On the constitution of atoms and molecules. <i>Philosophical Magazine, 26</i>(151), 1–25. <a href="https://doi.org/10.1080/14786441308634955" target="_blank" rel="noopener">https://doi.org/10.1080/14786441308634955</a></li>
       <li>Chang, R., &amp; Overby, J. (2022). <i>Chemistry</i> (14th ed.). McGraw Hill. [Electronegativity values and bond-type rule of thumb used throughout.]</li>
       <li>European Medicines Agency. (n.d.). <i>SonoVue: EPAR</i>. Retrieved October 17, 2026, from <a href="https://www.ema.europa.eu/en/medicines/human/EPAR/sonovue" target="_blank" rel="noopener">ema.europa.eu</a></li>
       <li>Gillespie, R. J., &amp; Nyholm, R. S. (1957). Inorganic stereochemistry. <i>Quarterly Reviews, Chemical Society, 11</i>(4), 339–380. <a href="https://doi.org/10.1039/QR9571100339" target="_blank" rel="noopener">https://doi.org/10.1039/QR9571100339</a></li>
@@ -1685,6 +1790,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
       <li>LibreTexts. (n.d.). 4.03: Polarity of bonds and molecules. In <i>CHM 115: Fundamentals of Chemistry</i> (McHenry County College). Retrieved October 17, 2026, from <a href="https://chem.libretexts.org/Courses/McHenry_County_College/CHM_115%3A_Fundamentals_of_Chemistry/04%3A_Water/4.03%3A_Polarity_of_Bonds_and_Molecules" target="_blank" rel="noopener">chem.libretexts.org</a></li>
       <li>National Center for Biotechnology Information. (n.d.). <i>PubChem</i> [boiling points and dipole moments]. Retrieved October 17, 2026, from <a href="https://pubchem.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">pubchem.ncbi.nlm.nih.gov</a></li>
       <li>Pauling, L. (1932). The nature of the chemical bond. IV. The energy of single bonds and the relative electronegativity of atoms. <i>Journal of the American Chemical Society, 54</i>(9), 3570–3582. <a href="https://doi.org/10.1021/ja01348a011" target="_blank" rel="noopener">https://doi.org/10.1021/ja01348a011</a></li>
+      <li>Shannon, R. D. (1976). Revised effective ionic radii and systematic studies of interatomic distances in halides and chalcogenides. <i>Acta Crystallographica Section A, 32</i>(5), 751–767. <a href="https://doi.org/10.1107/S0567739476001551" target="_blank" rel="noopener">https://doi.org/10.1107/S0567739476001551</a></li>
       <li>Shimadzu. (n.d.). <i>Measurement of residual solvents in pharmaceuticals by headspace GC: USP &lt;467&gt; Residual Solvents, Procedure A</i>. Retrieved October 17, 2026, from <a href="https://www.shimadzu.com/an/industries/small-molecule-pharmaceutical/development/residual-solvents/index.html" target="_blank" rel="noopener">shimadzu.com</a></li>
       <li>U.S. Food and Drug Administration. (2018). <i>Q3C — Tables and list: Guidance for industry</i> (Rev. 4). <a href="https://www.hhs.gov/guidance/sites/default/files/hhs-guidance-documents/FDA/24587685fnl_ICH-Q3C_Tables-and-List-Rev-4.pdf" target="_blank" rel="noopener">hhs.gov (PDF)</a></li>
     </ol>
@@ -1935,6 +2041,367 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   });
   rDraw();
 
+  /* ---------- 3D MODELS: Bohr versus quantum ----------
+     Plain canvas 2D with a small 3D projection, so there is no library to load.
+     Quantum clouds are random samples from the real hydrogen-like probability
+     distributions (radial x = r/a, angular cos² for p orbitals): each dot is one
+     possible position, denser = more likely. They are resampled a little every
+     frame, so the cloud shimmers without any dot following a path. */
+  const VIZ=(function(){
+    const RM=!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    const C={purple:'#8a4fb8',ink:'#1c2620',core:'#8f9691',green:'#2d6a4f',orange:'#d9821f',blue:'#3a6bd1',ring:'rgba(28,38,32,.20)',ringG:'rgba(45,106,79,.40)',ringO:'rgba(217,130,31,.45)'};
+    const clamp=(v,a,b)=>v<a?a:(v>b?b:v), smooth=v=>{ v=clamp(v,0,1); return v*v*(3-2*v); }, lerp=(a,b,u)=>a+(b-a)*u;
+
+    function table(pdf,xmax){ const N=1600, c=new Float64Array(N+1); let s=0; for(let i=1;i<=N;i++){ s+=pdf(i/N*xmax); c[i]=s; } for(let i=1;i<=N;i++) c[i]/=s; return {c,N,xmax}; }
+    const T={
+      s1:table(x=>x*x*Math.exp(-2*x),9),
+      s2:table(x=>x*x*(2-x)*(2-x)*Math.exp(-x),26),
+      p2:table(x=>Math.pow(x,4)*Math.exp(-x),26),
+      s3:table(x=>{ const q=27-18*x+2*x*x; return x*x*q*q*Math.exp(-2*x/3); },48),
+      p3:table(x=>{ const q=6-x; return Math.pow(x,4)*q*q*Math.exp(-2*x/3); },48)
+    };
+    function rad(t){ const u=Math.random(), c=t.c; let lo=0, hi=t.N; while(hi-lo>1){ const m=(lo+hi)>>1; if(c[m]<u) lo=m; else hi=m; } return (hi-Math.random())/t.N*t.xmax; }
+    function dir(){ const z=2*Math.random()-1, f=2*Math.PI*Math.random(), s=Math.sqrt(1-z*z); return [s*Math.cos(f),z,s*Math.sin(f)]; }
+    function dirP(ax){ for(;;){ const d=dir(); if(Math.random()<d[ax]*d[ax]) return d; } }
+    function sample(o,arr,i){ const r=o.a*rad(T[o.t]), d=(o.t[0]==='p'&&!o.sph)?dirP(o.ax):dir(); arr[i*3]=r*d[0]; arr[i*3+1]=r*d[1]; arr[i*3+2]=r*d[2]; }
+    function Cloud(specs){
+      let n=0; specs.forEach(s=>n+=s.n);
+      const cl={n,specs,rel:new Float32Array(n*3),w:new Float32Array(n*3),sp:new Uint8Array(n),col:new Array(n)};
+      let k=0; specs.forEach((s,si)=>{ s.sc=s.sc||1; for(let j=0;j<s.n;j++,k++){ cl.sp[k]=si; cl.col[k]=s.col; sample(s.o,cl.rel,k); } });
+      return cl;
+    }
+    function flicker(cl,frac,skip){ if(RM) return; const m=Math.max(1,Math.round(cl.n*frac)); for(let j=0;j<m;j++){ const i=(Math.random()*cl.n)|0; if(skip&&skip(i)) continue; sample(cl.specs[cl.sp[i]].o,cl.rel,i); } }
+    function place(cl,cen){ for(let i=0;i<cl.n;i++){ const s=cl.specs[cl.sp[i]], c=cen[s.cen||0], k=s.sc; cl.w[i*3]=c[0]+cl.rel[i*3]*k; cl.w[i*3+1]=c[1]+cl.rel[i*3+1]*k; cl.w[i*3+2]=c[2]+cl.rel[i*3+2]*k; } }
+    const ringE=(c,r,a)=>[c[0]+r*Math.cos(a),c[1],c[2]+r*Math.sin(a)];
+
+    /* ================= SCENES ================= */
+    const SCENES={};
+
+    /* 1 · one atom: hydrogen or carbon */
+    SCENES.atom=function(st){
+      let cloud=null, key='';
+      function build(){ key=st.model+st.atom; cloud=null;
+        if(st.model!=='quantum') return;
+        cloud=st.atom==='H'
+          ? Cloud([{o:{t:'s1',a:1},n:1300,col:C.green}])
+          : Cloud([{o:{t:'s1',a:0.176},n:320,col:C.core},{o:{t:'s2',a:0.32},n:460,col:C.orange},{o:{t:'p2',a:0.32,ax:0},n:420,col:C.blue},{o:{t:'p2',a:0.32,ax:1},n:420,col:C.purple}]);
+      }
+      return {VRx:2.55,VRy:2.55,timeline:false,
+        frame(){
+          if(key!==st.model+st.atom) build();
+          const D={items:[{p:[0,0,0],r:0.14,type:'nuc',text:st.atom}],rings:[],labels:[]};
+          if(cloud){ flicker(cloud,0.06); place(cloud,[[0,0,0]]); D.cloud=cloud; D.axes=st.atom==='C'?2.3:0; if(st.atom==='C') D.lobes=[{ax:[1,0,0],L:2.3,col:C.blue,sp:2},{ax:[0,1,0],L:2.3,col:C.purple,sp:3}]; return D; }
+          const k=st.clock;
+          if(st.atom==='H'){
+            D.rings.push({c:[0,0,0],r:1,col:C.ringG});
+            D.items.push({p:ringE([0,0,0],1,k*1.6),r:0.1,type:'e',col:C.green});
+            D.labels.push({p:[1.08,0,0],text:'n = 1',col:C.green,al:'left'});
+          } else {
+            D.rings.push({c:[0,0,0],r:0.55,col:C.ring},{c:[0,0,0],r:1.5,col:C.ringO});
+            for(let j=0;j<2;j++) D.items.push({p:ringE([0,0,0],0.55,k*2.4+j*Math.PI),r:0.09,type:'e',col:C.core});
+            for(let j=0;j<4;j++) D.items.push({p:ringE([0,0,0],1.5,k*1.1+j*Math.PI/2),r:0.1,type:'e',col:C.orange});
+            D.labels.push({p:[0.62,0,0],text:'n = 1',col:'#6f7771',al:'left',small:1},{p:[1.58,0,0],text:'n = 2',col:'#a85f10',al:'left'});
+          }
+          return D;
+        },
+        legend(){ return st.model==='quantum'
+          ? (st.atom==='H'?[[C.green,'1s orbital (1 electron)']]:[[C.core,'1s (2 e⁻)',[0]],[C.orange,'2s (2 e⁻)',[1]],[C.blue,'2p<sub>x</sub> (1 e⁻)',[2]],[C.purple,'2p<sub>y</sub> (1 e⁻)',[3]]])
+          : (st.atom==='H'?[[C.green,'electron on the n = 1 orbit']]:[[C.core,'inner electrons (n = 1)'],[C.orange,'valence electrons (n = 2)']]); },
+        read(){ return st.atom==='H'?'H · 1 electron':'C · '+(st.model==='quantum'?'1s² 2s² 2p²':'2,4'); },
+        caption(){
+          if(st.model==='bohr') return st.atom==='H'
+            ? ['Bohr (1913): the electron circles the nucleus on a fixed orbit, the n = 1 shell, 52.9 pm from the centre. Only certain orbits are allowed, which explains why atoms absorb and emit only certain energies.','Limit: real electrons do not follow a path, and the model fails for every atom with more than one electron.']
+            : ['Carbon in the Bohr picture: 2 electrons on shell 1 and 4 on shell 2, written 2,4. Counting shells this way gives the 4 valence electrons that let carbon form 4 bonds.','Limit: all shells sit flat in one plane, so this picture cannot explain the 3D shapes of molecules.'];
+          return st.atom==='H'
+            ? ['Quantum model: the 1s orbital is a cloud of probability. Each dot is a place the electron could be found; denser means more likely. The cloud is densest at 52.9 pm, exactly where Bohr drew his orbit, but it has no edge and no path.']
+            : ['Carbon is 1s² 2s² 2p². The 2s orbital is a bigger sphere with a faint gap inside it (a node). Each 2p orbital is a dumbbell along one axis. Carbon\'s two 2p electrons sit in separate 2p orbitals, 2p<sub>x</sub> (blue) and 2p<sub>y</sub> (purple); 2p<sub>z</sub> is empty. Tap 1s and 2s in the key to hide them and see the two dumbbells.'];
+        }
+      };
+    };
+
+    /* 2 · covalent: two hydrogen atoms share a pair */
+    SCENES.bond=function(st){
+      let cloud=null, key='', lastD=0;
+      const Dist=t=>lerp(5.67,1.4,smooth(t/0.85));
+      function sH2(w,i,D){ for(;;){ const A=Math.random()<0.5?-D/2:D/2, r=rad(T.s1), d=dir(); const x=A+r*d[0], y=r*d[1], z=r*d[2];
+        const pa=Math.exp(-Math.hypot(x+D/2,y,z)), pb=Math.exp(-Math.hypot(x-D/2,y,z));
+        if(Math.random()<(pa+pb)*(pa+pb)/(2*(pa*pa+pb*pb))){ w[i*3]=x; w[i*3+1]=y; w[i*3+2]=z; return; } } }
+      return {VRx:3.9,VRy:2.5,timeline:true,dur:7,
+        ticks:[[0,'Apart'],[0.3,'Overlap'],[0.8,'Bond']],
+        frame(){
+          const D=Dist(st.t), out={items:[{p:[-D/2,0,0],r:0.13,type:'nuc',text:'H'},{p:[D/2,0,0],r:0.13,type:'nuc',text:'H'}],rings:[],paths:[],labels:[]};
+          const bonded=st.t>=0.8;
+          if(st.model==='quantum'){
+            if(key!=='q'){ key='q'; cloud={n:2200,w:new Float32Array(2200*3),col:new Array(2200).fill(C.green)}; for(let i=0;i<cloud.n;i++) sH2(cloud.w,i,D); lastD=D; }
+            const moved=Math.abs(D-lastD)>1e-4; lastD=D;
+            const m=moved?Math.round(cloud.n*0.35):(RM?0:Math.round(cloud.n*0.06));
+            for(let j=0;j<m;j++) sH2(cloud.w,(Math.random()*cloud.n)|0,D);
+            out.cloud=cloud;
+            if(bonded) out.labels.push({p:[0,1.75,0],text:'shared pair ↑↓',col:C.green});
+            return out;
+          }
+          key='b';
+          const m=smooth((2.6-D)/(2.6-1.45)), L=D/2+1.0, k=st.clock*1.5;
+          out.rings.push({c:[-D/2,0,0],r:1,col:C.ringG,a:1-0.6*m},{c:[D/2,0,0],r:1,col:C.ringO,a:1-0.6*m});
+          const fig=s=>{ const q=1+Math.sin(s)*Math.sin(s); return [L*Math.cos(s)/q,0,L*Math.sin(s)*Math.cos(s)/q]; };
+          if(m>0.02){ const pts=[]; for(let j=0;j<=96;j++) pts.push(fig(j/96*2*Math.PI)); out.paths.push({pts,col:'rgba(28,38,32,.45)',a:m}); }
+          [[0,-1,C.green],[Math.PI,1,C.orange]].forEach(e=>{
+            const own=ringE([e[1]*D/2,0,0],1,k+e[0]), f=fig(k+e[0]);
+            out.items.push({p:[lerp(own[0],f[0],m),0,lerp(own[2],f[2],m)],r:0.1,type:'e',col:e[2]});
+          });
+          if(bonded) out.labels.push({p:[0,1.5,0],text:'shared pair',col:C.ink});
+          return out;
+        },
+        legend(){ return st.model==='quantum'?[[C.green,'electron density of the pair (2 e⁻, opposite spins)']]:[[C.green,'electron from atom A'],[C.orange,'electron from atom B']]; },
+        read(){ const r=Dist(st.t)*52.9, E=436*(Math.pow(1-Math.exp(-0.0194*(r-74)),2)-1); return Math.round(r)+' pm · '+(Math.round(E)<0?'−':'')+Math.abs(Math.round(E))+' kJ/mol'; },
+        caption(){
+          const t=st.t;
+          if(st.model==='bohr'){
+            const lim='Limit: the Bohr picture cannot explain why sharing lowers the energy, or why bonds point in fixed directions.';
+            if(t<0.3) return ['Two hydrogen atoms, each with one electron circling its own nucleus.',lim];
+            if(t<0.8) return ['As the atoms move closer, their shells overlap.',lim];
+            return ['In the bond, the two electrons, one from each atom, travel around both nuclei. Each hydrogen now counts 2 electrons, a full shell. This is the shared pair drawn as a line, H–H.',lim];
+          }
+          if(t<0.3) return ['Two separate 1s clouds. Far apart, the atoms do not affect each other, so the energy is close to zero.'];
+          if(t<0.8) return ['The clouds start to overlap, and electron density begins to build up between the two nuclei. The energy falls.'];
+          return ['At 74 pm the pair is most likely to be found between the nuclei, where both protons attract it. That is the σ bond. It is 436 kJ/mol lower in energy than two separate atoms. The two electrons have opposite spins (↑↓).'];
+        }
+      };
+    };
+
+    /* 3 · ionic: sodium gives its outer electron to chlorine */
+    SCENES.ionic=function(st){
+      let cloud=null, key='', to=null, stag=null;
+      const phases=t=>({uT:smooth((t-0.15)/0.4), uI:smooth((t-0.55)/0.1), uA:smooth((t-0.68)/0.27)});
+      function buildQ(){ key='q';
+        cloud=Cloud([
+          {o:{t:'p2',a:0.33,sph:1},n:130,col:C.core,cen:0},
+          {o:{t:'s3',a:0.247},n:320,col:C.orange,cen:0},
+          {o:{t:'p2',a:0.2,sph:1},n:120,col:C.core,cen:1},
+          {o:{t:'s3',a:0.12},n:140,col:C.green,cen:1},
+          {o:{t:'p3',a:0.14,ax:0},n:140,col:C.green,cen:1},
+          {o:{t:'p3',a:0.14,ax:1},n:140,col:C.green,cen:1},
+          {o:{t:'p3',a:0.14,ax:2},n:70,col:C.green,cen:1}]);
+        cloud.al=new Float32Array(cloud.n).fill(1);
+        const n3=cloud.specs[1].n; to=new Float32Array(n3*3); stag=new Float32Array(n3);
+        for(let j=0;j<n3;j++){ sample({t:'p3',a:0.14,ax:2},to,j); stag[j]=Math.random(); }
+      }
+      return {VRx:10.4,VRy:5.4,timeline:true,dur:10,
+        ticks:[[0,'Atoms'],[0.15,'Transfer'],[0.55,'Ions'],[0.68,'Attract']],
+        frame(){
+          const ph=phases(st.t), q=st.model==='quantum';
+          const S=lerp(11,q?7.1:6.0,ph.uA), off=q?lerp(-1.0,0,ph.uA):0, na=[-S/2+off,0,0], cl=[S/2+off,0,0];
+          const out={items:[{p:na,r:0.26,type:'nuc',text:'Na'},{p:cl,r:0.26,type:'nuc',text:'Cl'}],rings:[],labels:[]};
+          const ionsNow=ph.uI>0.5;
+          if(ph.uI>0.02){ out.labels.push({p:[na[0]+(q?1.9:1.6),q?2.2:1.6,0],text:'+',col:C.blue,big:1,a:ph.uI},{p:[cl[0]+(q?3.3:2.2),q?3.3:1.8,0],text:'−',col:'#c0392b',big:1,a:ph.uI}); }
+          if(q){
+            if(key!=='q') buildQ();
+            const s1=cloud.specs[1], first=cloud.specs[0].n, n3=s1.n;
+            for(let si=3;si<=6;si++) cloud.specs[si].sc=1+0.7*ph.uI;
+            const uD=j=>clamp((ph.uT-stag[j]*0.35)/0.65,0,1);
+            flicker(cloud,0.05,i=>i>=first&&i<first+n3);
+            if(!RM) for(let r=0;r<10;r++){ const j=(Math.random()*n3)|0, u=uD(j); if(u===0) sample(s1.o,cloud.rel,first+j); else if(u===1) sample({t:'p3',a:0.14,ax:2},to,j); }
+            place(cloud,[na,cl]);
+            const scl=1+0.7*ph.uI;
+            for(let j=0;j<n3;j++){ const u=smooth(uD(j)), i=first+j, lift=Math.sin(Math.PI*u)*(1.2+stag[j]*2.2);
+              cloud.w[i*3]=lerp(na[0]+cloud.rel[i*3],cl[0]+to[j*3]*scl,u);
+              cloud.w[i*3+1]=lerp(cloud.rel[i*3+1],to[j*3+1]*scl,u)+lift;
+              cloud.w[i*3+2]=lerp(cloud.rel[i*3+2],to[j*3+2]*scl,u);
+              cloud.al[i]=j<70?1:1-smooth((u-0.6)/0.4); }   /* one electron's worth of dots stays, matching chlorine's density */
+            out.cloud=cloud;
+            const rNa=lerp(4.65,2.55,ph.uI), rCl=lerp(2.48,4.53,ph.uI);
+            out.bounds=[{c:na,r:rNa,col:'rgba(217,130,31,.6)'},{c:cl,r:rCl,col:'rgba(45,106,79,.6)'}];
+            out.labels.push({p:[na[0],-3.9,0],text:ionsNow?'Na⁺ · [Ne]':'Na · [Ne] 3s¹',col:C.ink},{p:[cl[0],-3.9,0],text:ionsNow?'Cl⁻ · [Ne] 3s² 3p⁶':'Cl · [Ne] 3s² 3p⁵',col:C.ink});
+            return out;
+          }
+          key='b';
+          const k=st.clock, w=[2.0,1.2,0.7];
+          [[na,[0.7,1.6,3.4],[2,8,1]],[cl,[0.6,1.3,2.2],[2,8,8]]].forEach((A,ai)=>{
+            A[1].forEach((r,si)=>{
+              const outer=si===2, alpha=(ai===0&&outer)?1-ph.uI:1;
+              out.rings.push({c:A[0],r,col:outer?(ai===0?C.ringO:C.ringG):C.ring,a:alpha});
+              const n=A[2][si];
+              for(let j=0;j<n;j++){
+                if(outer&&ai===0) continue;                 /* sodium's 3s electron is drawn separately */
+                if(outer&&ai===1&&j===7) continue;          /* the empty slot it will fill */
+                out.items.push({p:ringE(A[0],r,k*w[si]+j*2*Math.PI/n),r:outer?0.17:0.13,type:'e',col:outer?C.green:C.core});
+              }
+            });
+          });
+          const src=ringE(na,3.4,k*w[2]), dst=ringE(cl,2.2,k*w[2]+7*2*Math.PI/8), u=ph.uT;
+          out.items.push({p:[lerp(src[0],dst[0],u),Math.sin(Math.PI*u)*3.0,lerp(src[2],dst[2],u)],r:0.2,type:'e',col:C.orange});
+          out.labels.push({p:[na[0],-3.4,0],text:ionsNow?'Na⁺ · 2,8':'Na · 2,8,1',col:C.ink},{p:[cl[0],-3.4,0],text:ionsNow?'Cl⁻ · 2,8,8':'Cl · 2,8,7',col:C.ink});
+          return out;
+        },
+        legend(){ return st.model==='quantum'
+          ? [[C.orange,'sodium\'s outer electron (3s)'],[C.green,'chlorine\'s outer electrons (3s, 3p)'],[C.core,'inner electrons ([Ne] core)']]
+          : [[C.orange,'sodium\'s outer electron'],[C.green,'chlorine\'s outer electrons'],[C.core,'inner electrons']]; },
+        read(){ const t=st.t;
+          if(st.model==='quantum') return t<0.6?'Atoms: Na 186 · Cl 99 pm':'Ions: Na⁺ 102 · Cl⁻ 181 pm';
+          return t<0.15?'Two atoms':(t<0.55?'Electron moving':(t<0.68?'Two ions':'Ions attract')); },
+        caption(){
+          const t=st.t;
+          if(st.model==='bohr'){
+            const lim='Limit: shells are not drawn to scale, and electrons are not tiny planets. The counting (2,8,1 → 2,8) is still correct and useful.';
+            if(t<0.15) return ['Sodium (2,8,1) has a single electron in its outer shell. Chlorine (2,8,7) is one electron short of a full outer shell.',lim];
+            if(t<0.55) return ['Sodium\'s outer electron moves across and fills the gap in chlorine\'s outer shell.',lim];
+            if(t<0.68) return ['Now Na⁺ (2,8) and Cl⁻ (2,8,8). Both have full outer shells, and they carry opposite charges.',lim];
+            return ['The oppositely charged ions attract each other: this attraction is the ionic bond. In solid sodium chloride, each ion is surrounded by six of the other.',lim];
+          }
+          if(t<0.15) return ['Sodium\'s single 3s electron is spread through a large, faint cloud far from the nucleus. The dashed circles show each atom\'s measured radius: sodium (186 pm) is bigger than chlorine (99 pm).'];
+          if(t<0.55) return ['The 3s cloud drains away from sodium and flows into chlorine\'s half-filled 3p orbital, completing 3s² 3p⁶.'];
+          if(t<0.68) return ['Having lost its outer shell, Na⁺ shrinks to 102 pm. Having gained an electron, Cl⁻ grows to 181 pm. The cation is now the smaller of the two.'];
+          return ['Opposite charges attract until the ions are about 280 pm apart, the Na⁺–Cl⁻ spacing in a sodium chloride crystal (102 + 181 pm).'];
+        }
+      };
+    };
+
+    /* ================= RENDERER + CONTROLS ================= */
+    function Viz(root){
+      const cv=root.querySelector('canvas'), ctx=cv.getContext&&cv.getContext('2d');
+      const tagEl=root.querySelector('.vz-tag'), readEl=root.querySelector('.vz-read'), capEl=root.querySelector('.vz-cap'), legEl=root.querySelector('.vz-legend'), hintEl=root.querySelector('.vz-hint');
+      const playB=root.querySelector('.vz-play'), scrub=root.querySelector('.vz-scrub input'), ticksEl=root.querySelector('.vz-ticks');
+      const st={model:'bohr',atom:'H',t:0,clock:0,playing:!RM,yaw:-0.55,pitch:0.42,drag:false};
+      const S=SCENES[root.dataset.scene](st), seen={}, hidden={};
+      let W=0,H=0,dpr=1,capKey='',bufN=0,sx,sy,sz,ss,shown=false;
+      if(!ctx){ root.dataset.done='1'; capEl.textContent='Your browser cannot draw this animation.'; return {prepare(){},show(){},resize(){},render(){},root}; }
+
+      function resize(){ dpr=Math.min(2,window.devicePixelRatio||1); const w=Math.max(1,Math.round(cv.clientWidth*dpr)), h=Math.max(1,Math.round(cv.clientHeight*dpr)); if(w!==W||h!==H){ W=w; H=h; cv.width=W; cv.height=H; } }
+      function setIcon(){ if(!playB) return; const end=S.timeline&&st.t>=1&&!st.playing;
+        playB.innerHTML=st.playing?'<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="5" y="4" width="3.4" height="12" rx="1" fill="#fff"/><rect x="11.6" y="4" width="3.4" height="12" rx="1" fill="#fff"/></svg>'
+          :(end?'<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M15.5 10a5.5 5.5 0 1 1-1.8-4.1" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><path d="M15.8 2.8v4.4h-4.4" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+          :'<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6.5 4.2 L16 10 L6.5 15.8 Z" fill="#fff"/></svg>');
+        playB.setAttribute('aria-label',st.playing?'Pause':(end?'Replay':'Play')); }
+      function texts(){
+        tagEl.textContent=st.model==='bohr'?'Bohr model · simplified':'Quantum model';
+        tagEl.className='vz-tag '+(st.model==='bohr'?'bohr':'q');
+        const L=S.legend(), tog=L.some(l=>l[2]);
+        legEl.innerHTML=L.map((l,i)=>l[2]?'<button type="button" class="'+(hidden[l[1]]?'off':'')+'" style="--c:'+l[0]+'" data-i="'+i+'" aria-pressed="'+(!hidden[l[1]])+'">'+l[1]+'</button>':'<span style="--c:'+l[0]+'">'+l[1]+'</span>').join('')+(tog?'<em>Tap a colour to hide or show it</em>':'');
+        legEl.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{ const k=L[+b.dataset.i][1]; hidden[k]=!hidden[k]; texts(); track('viz-legend',{key:k.replace(/<[^>]+>/g,''),hidden:hidden[k]}); }));
+      }
+      function hiddenSpecs(){ const h={}; S.legend().forEach(l=>{ if(l[2]&&hidden[l[1]]) l[2].forEach(i=>h[i]=1); }); return h; }
+      function liveText(){
+        readEl.textContent=S.read();
+        const c=S.caption(), key=st.model+'|'+c.join('|');
+        if(key!==capKey){ capKey=key; capEl.innerHTML=c[0]+(c[1]?'<span class="lim">'+c[1]+'</span>':''); cv.setAttribute('aria-label',c[0].replace(/<[^>]+>/g,'')); }
+        if(scrub){ scrub.value=Math.round(st.t*1000); [...ticksEl.children].forEach((sp,i)=>{ const a=S.ticks[i][0], b=i+1<S.ticks.length?S.ticks[i+1][0]:1.01; sp.classList.toggle('on',st.t>=a&&(st.t<b||(i===S.ticks.length-1))); }); }
+      }
+      function markSeen(){
+        seen[st.model]=1; root.querySelector('[data-model="'+st.model+'"]').dataset.seen='1';
+        if(seen.bohr&&seen.quantum&&!root.dataset.done){ root.dataset.done='1'; root.classList.add('done'); updateGate(false); track('viz-both-seen',{scene:root.dataset.scene}); }
+      }
+      function setModel(m){
+        st.model=m; st.t=0; st.playing=!RM;
+        root.querySelectorAll('[data-model]').forEach(b=>{ const on=b.dataset.model===m; b.classList.toggle('on',on); b.setAttribute('aria-pressed',on); });
+        texts(); markSeen(); setIcon(); liveText();
+        track('viz-model',{scene:root.dataset.scene,model:m});
+      }
+      root.querySelectorAll('[data-model]').forEach(b=>b.addEventListener('click',()=>{ if(b.dataset.model!==st.model) setModel(b.dataset.model); }));
+      root.querySelectorAll('[data-atom]').forEach(b=>b.addEventListener('click',()=>{
+        st.atom=b.dataset.atom; root.querySelectorAll('[data-atom]').forEach(x=>{ const on=x===b; x.classList.toggle('on',on); x.setAttribute('aria-pressed',on); });
+        texts(); liveText(); track('viz-atom',{atom:st.atom});
+      }));
+      if(playB) playB.addEventListener('click',()=>{
+        if(st.playing){ st.playing=false; }
+        else { if(S.timeline&&st.t>=1) st.t=0; st.playing=true; }
+        setIcon(); track('viz-play',{scene:root.dataset.scene,playing:st.playing});
+      });
+      if(scrub){
+        /* each label sits in the middle of its stage of the timeline */
+        ticksEl.innerHTML=S.ticks.map((tk,i)=>{ const b=i+1<S.ticks.length?S.ticks[i+1][0]:1, mid=(tk[0]+b)/2;
+          return mid<0.12?'<span class="l" style="left:0">'+tk[1]+'</span>':(mid>0.9?'<span class="r" style="right:0">'+tk[1]+'</span>':'<span style="left:'+(mid*100).toFixed(1)+'%">'+tk[1]+'</span>'); }).join('');
+        scrub.addEventListener('input',()=>{ st.t=scrub.value/1000; st.playing=false; setIcon(); liveText(); });
+      }
+      root.querySelector('.vz-reset').addEventListener('click',()=>{ st.yaw=-0.55; st.pitch=0.42; });
+      let lx=0, ly=0;
+      cv.addEventListener('pointerdown',e=>{ st.drag=true; lx=e.clientX; ly=e.clientY; try{ cv.setPointerCapture(e.pointerId); }catch(_){} hintEl.classList.add('gone'); cv.classList.add('grab'); });
+      cv.addEventListener('pointermove',e=>{ if(!st.drag) return; st.yaw+=(e.clientX-lx)*0.011; st.pitch=clamp(st.pitch+(e.clientY-ly)*0.011,-1.35,1.35); lx=e.clientX; ly=e.clientY; });
+      const end=()=>{ if(st.drag) track('viz-rotate',{scene:root.dataset.scene}); st.drag=false; cv.classList.remove('grab'); };
+      cv.addEventListener('pointerup',end); cv.addEventListener('pointercancel',end);
+
+      function render(dt){
+        resize();
+        if(st.playing){ st.clock+=dt; if(S.timeline&&st.t<1){ st.t=Math.min(1,st.t+dt/S.dur); } if(!st.drag&&!RM) st.yaw+=dt*0.12; }
+        const Dl=S.frame();
+        const VRx=S.VRx, VRy=S.VRy, VR=Math.max(VRx,VRy), K=Math.min(W/(2*VRx),H/(2*VRy))*0.96, cx=W/2, cy=H/2, F=VR*3.2;
+        const cY=Math.cos(st.yaw), sY=Math.sin(st.yaw), cP=Math.cos(st.pitch), sP=Math.sin(st.pitch);
+        const P=(x,y,z)=>{ const x1=x*cY+z*sY, z1=-x*sY+z*cY, y1=y*cP-z1*sP, z2=y*sP+z1*cP, s=F/(F+z2); return [cx+x1*s*K, cy-y1*s*K, z2, s]; };
+        ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,W,H);
+        /* faint axes */
+        if(Dl.axes){ const L=Dl.axes; [[[L,0,0],'x'],[[0,L,0],'y'],[[0,0,L],'z']].forEach(a=>{ const p1=P(-a[0][0],-a[0][1],-a[0][2]), p2=P(a[0][0],a[0][1],a[0][2]);
+          ctx.strokeStyle='rgba(28,38,32,.13)'; ctx.lineWidth=1*dpr; ctx.setLineDash([4*dpr,4*dpr]); ctx.beginPath(); ctx.moveTo(p1[0],p1[1]); ctx.lineTo(p2[0],p2[1]); ctx.stroke(); ctx.setLineDash([]);
+          ctx.fillStyle='rgba(28,38,32,.4)'; ctx.font='600 '+(10*dpr)+'px "DM Sans",system-ui,sans-serif'; ctx.textAlign='center'; ctx.fillText(a[1],p2[0],p2[1]-4*dpr); }); }
+        /* cloud: project once, then back half, solid objects, front half */
+        const cl=Dl.cloud;
+        if(cl){ if(bufN!==cl.n){ bufN=cl.n; sx=new Float32Array(bufN); sy=new Float32Array(bufN); sz=new Float32Array(bufN); ss=new Float32Array(bufN); }
+          for(let i=0;i<cl.n;i++){ const p=P(cl.w[i*3],cl.w[i*3+1],cl.w[i*3+2]); sx[i]=p[0]; sy[i]=p[1]; sz[i]=p[2]; ss[i]=p[3]; } }
+        const hid=cl&&cl.specs?hiddenSpecs():{};
+        const dots=back=>{ if(!cl) return; let last=''; for(let i=0;i<cl.n;i++){ const z=sz[i]; if((z>0)!==back) continue;
+          if(cl.sp&&hid[cl.sp[i]]) continue;
+          const al=cl.al?cl.al[i]:1; if(al<=0.01) continue;
+          if(cl.col[i]!==last){ last=cl.col[i]; ctx.fillStyle=last; }
+          ctx.globalAlpha=clamp(0.62-0.32*z/VR,0.16,0.85)*al; const d=Math.max(1.4,2.0*ss[i])*dpr; ctx.fillRect(sx[i]-d/2,sy[i]-d/2,d,d); }
+          ctx.globalAlpha=1; };
+        dots(true);
+        /* boundary outlines for p orbitals: two lobes along the orbital's axis */
+        (Dl.lobes||[]).forEach(lb=>{ if(hid[lb.sp]) return;
+          const O=P(0,0,0), w=0.62*lb.L*K*O[3];
+          [1,-1].forEach(sg=>{ const T=P(sg*lb.ax[0]*lb.L,sg*lb.ax[1]*lb.L,sg*lb.ax[2]*lb.L), dx=T[0]-O[0], dy=T[1]-O[1], len=Math.hypot(dx,dy);
+            ctx.strokeStyle=lb.col; ctx.globalAlpha=0.55; ctx.lineWidth=1.4*dpr; ctx.setLineDash([4*dpr,3*dpr]); ctx.beginPath();
+            if(len<w*0.55){ ctx.arc(O[0]+dx/2,O[1]+dy/2,w*0.5,0,7); }
+            else { const ux=dx/len, uy=dy/len, nx=-uy, ny=ux; for(let j=0;j<=40;j++){ const u=j/40, h=w*0.5*Math.sin(Math.PI*u)*(0.55+0.45*u); const x=O[0]+dx*u+nx*h, y=O[1]+dy*u+ny*h; j?ctx.lineTo(x,y):ctx.moveTo(x,y); }
+              for(let j=40;j>=0;j--){ const u=j/40, h=w*0.5*Math.sin(Math.PI*u)*(0.55+0.45*u); ctx.lineTo(O[0]+dx*u-nx*h,O[1]+dy*u-ny*h); } }
+            ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=1; });
+        });
+        (Dl.bounds||[]).forEach(bd=>{ const p=P(bd.c[0],bd.c[1],bd.c[2]), rr=bd.r*K*p[3];
+          ctx.strokeStyle=bd.col; ctx.lineWidth=1.3*dpr; ctx.setLineDash([5*dpr,4*dpr]); ctx.beginPath(); ctx.arc(p[0],p[1],rr,0,7); ctx.stroke(); ctx.setLineDash([]);
+        });
+        (Dl.rings||[]).forEach(r=>{ ctx.globalAlpha=r.a==null?1:r.a; ctx.strokeStyle=r.col; ctx.lineWidth=1.4*dpr; ctx.beginPath();
+          for(let j=0;j<=72;j++){ const a=j/72*2*Math.PI, p=P(r.c[0]+r.r*Math.cos(a),r.c[1],r.c[2]+r.r*Math.sin(a)); j?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]); } ctx.stroke(); ctx.globalAlpha=1; });
+        (Dl.paths||[]).forEach(pa=>{ ctx.globalAlpha=pa.a; ctx.strokeStyle=pa.col; ctx.lineWidth=1.2*dpr; ctx.setLineDash([3*dpr,3*dpr]); ctx.beginPath();
+          pa.pts.forEach((q,j)=>{ const p=P(q[0],q[1],q[2]); j?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]); }); ctx.stroke(); ctx.setLineDash([]); ctx.globalAlpha=1; });
+        const items=(Dl.items||[]).map(it=>{ const p=P(it.p[0],it.p[1],it.p[2]); return [p,it]; }).sort((a,b)=>b[0][2]-a[0][2]);
+        items.forEach(([p,it])=>{
+          if(it.type==='nuc'){ const r=Math.max(7*dpr,it.r*K*p[3]*1.0), g=ctx.createRadialGradient(p[0]-r*.35,p[1]-r*.35,r*.1,p[0],p[1],r);
+            g.addColorStop(0,'#5d6b62'); g.addColorStop(1,'#1c2620'); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(p[0],p[1],r,0,7); ctx.fill();
+            ctx.fillStyle='#fff'; ctx.font='800 '+Math.round(Math.max(9*dpr,r*0.95))+'px "DM Sans",system-ui,sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(it.text,p[0],p[1]+0.5*dpr); ctx.textBaseline='alphabetic'; }
+          else { const r=Math.max(4.2*dpr,it.r*K*p[3]), g=ctx.createRadialGradient(p[0]-r*.35,p[1]-r*.35,r*.1,p[0],p[1],r);
+            g.addColorStop(0,'#fff'); g.addColorStop(0.35,it.col); g.addColorStop(1,it.col); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(p[0],p[1],r,0,7); ctx.fill(); }
+        });
+        dots(false);
+        (Dl.labels||[]).forEach(l=>{ const p=P(l.p[0],l.p[1],l.p[2]); ctx.globalAlpha=l.a==null?1:l.a;
+          ctx.font=(l.big?'800 '+(22*dpr):(l.small?'600 '+(10.5*dpr):'700 '+(12*dpr)))+'px "DM Sans",system-ui,sans-serif'; ctx.textAlign=l.al||'center';
+          ctx.lineWidth=3.5*dpr; ctx.strokeStyle='rgba(255,255,255,.92)'; ctx.lineJoin='round'; ctx.strokeText(l.text,p[0],p[1]); ctx.fillStyle=l.col; ctx.fillText(l.text,p[0],p[1]); ctx.globalAlpha=1; });
+        liveText();
+      }
+      /* reserve the height of the longest caption and legend, so the page does not jump between phases */
+      function measure(){
+        const keep={model:st.model,atom:st.atom,t:st.t}; let hc=0, hl=0;
+        const models=['bohr','quantum'], atoms=root.dataset.scene==='atom'?['H','C']:[st.atom], ts=S.timeline?S.ticks.map(x=>x[0]+0.01):[0];
+        capEl.style.minHeight=''; legEl.style.minHeight='';
+        models.forEach(m=>atoms.forEach(a=>ts.forEach(t=>{ st.model=m; st.atom=a; st.t=t; const c=S.caption();
+          capEl.innerHTML=c[0]+(c[1]?'<span class="lim">'+c[1]+'</span>':''); hc=Math.max(hc,capEl.offsetHeight);
+          legEl.innerHTML=S.legend().map(l=>'<span style="--c:'+l[0]+'">'+l[1]+'</span>').join(''); hl=Math.max(hl,legEl.offsetHeight); })));
+        Object.assign(st,keep); capKey='';
+        const fc=parseFloat(getComputedStyle(capEl).fontSize)||14, fl=parseFloat(getComputedStyle(legEl).fontSize)||12;
+        capEl.style.minHeight=(hc/fc).toFixed(2)+'em'; legEl.style.minHeight=(hl/fl).toFixed(2)+'em';
+      }
+      function prepare(){ if(!shown){ shown=true; measure(); texts(); markSeen(); setIcon(); } liveText(); }
+      function show(){ resize(); if(!hintEl.dataset.t){ hintEl.dataset.t='1'; setTimeout(()=>hintEl.classList.add('gone'),5000); } }
+      return {prepare,show,resize,render,st,root};
+    }
+
+    const list=[...document.querySelectorAll('.vz')].map(r=>Viz(r));
+    let active=null, rafId=0, last=0;
+    function loop(ts){ const dt=last?Math.min(0.05,(ts-last)/1000):0; last=ts; if(active){ active.render(dt); rafId=requestAnimationFrame(loop); } else { rafId=0; last=0; } }
+    window.__viz=list;
+    return {
+      show(slide){ const r=slide.querySelector('.vz'); active=r?list.find(v=>v.root===r)||null:null;
+        if(active){ active.prepare(); requestAnimationFrame(()=>{ active&&active.show(); }); if(!rafId) rafId=requestAnimationFrame(loop); } },
+      resize(){ if(active) active.resize(); }
+    };
+  })();
+
   /* ---------- AUTO-FIT: shrink a page until it fits without scrolling ---------- */
   const MIN_K = 0.8;   /* never shrink text below 80% of normal */
   const stageEl = document.getElementById('stage');
@@ -1995,7 +2462,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     updateMore();
   }
   slides.forEach(s=>s.addEventListener('scroll', updateMore, {passive:true}));
-  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>fit(slides[current-1]),120); });
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ fit(slides[current-1]); VIZ.resize(); },120); });
 
   /* ---------- GATING ("Go deeper" toggles are optional; .task items must be completed) ---------- */
   function pending(slide){
@@ -2032,6 +2499,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     btnNext.setAttribute('data-umami-event',n===TOTAL?'carousel-selesai':'nav-next');
     const fr=slides[n-1].querySelector('iframe[data-src]');
     if(fr && !fr.getAttribute('src')){ fr.setAttribute('src',fr.dataset.src); track('lab-embed-load'); }
+    VIZ.show(slides[n-1]);
     buildCharts(n);
     fit(slides[n-1]);
     requestAnimationFrame(()=>fit(slides[n-1]));
