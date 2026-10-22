@@ -1576,50 +1576,54 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
  </div>
 </section>
 
-<section class="slide" data-sec="imf" data-title="Solvents, solubility and GC">
+<section class="slide" data-sec="imf" data-title="Solvents and solubility">
  <div class="si">
   <div class="txt">
    <div class="eyebrow">8 · In pharmacy<span class="skill">Analytical reasoning</span></div>
-   <h2>Like dissolves like, <span class="ac">and volatility can be measured.</span></h2>
+   <h2>Like dissolves like, <span class="ac">and weak forces evaporate first.</span></h2>
    <p><b>Solubility.</b> A substance dissolves well when its intermolecular forces resemble the solvent's. Water, polar and hydrogen bonding, dissolves salts and polar molecules. Non-polar oils dissolve non-polar substances. Choosing a vehicle for a formulation starts here.</p>
-   <p><b>Residual solvents.</b> Organic solvents used in manufacture must be removed to tight limits. ICH Q3C groups them by risk: <span class="cite">(<a href="https://www.hhs.gov/guidance/sites/default/files/hhs-guidance-documents/FDA/24587685fnl_ICH-Q3C_Tables-and-List-Rev-4.pdf" target="_blank" rel="noopener">FDA, 2018</a>)</span></p>
+   <p><b>Leftover solvent.</b> Many drugs are made in organic solvents, which are then dried off. Solvents with weaker forces between their molecules evaporate more easily. Whatever remains must stay below strict limits, because some solvents are toxic: <span class="cite">(<a href="https://www.hhs.gov/guidance/sites/default/files/hhs-guidance-documents/FDA/24587685fnl_ICH-Q3C_Tables-and-List-Rev-4.pdf" target="_blank" rel="noopener">FDA, 2018</a>)</span></p>
    <table class="data-table">
-     <tr><th>Solvent</th><th>Polarity</th><th>Boiling point</th><th>ICH Q3C</th></tr>
-     <tr><td>Carbon tetrachloride, CCl₄</td><td>non-polar</td><td>76.7 °C</td><td>Class 1, 4 ppm</td></tr>
-     <tr><td>Dichloromethane, CH₂Cl₂</td><td>polar</td><td>39.6 °C</td><td>Class 2, 600 ppm</td></tr>
-     <tr><td>Chloroform, CHCl₃</td><td>polar</td><td>61.2 °C</td><td>Class 2, 60 ppm</td></tr>
+     <tr><th>Solvent</th><th>Polarity</th><th>Boiling point</th><th>Limit in the medicine</th></tr>
+     <tr><td>Carbon tetrachloride, CCl₄</td><td>non-polar</td><td>76.7 °C</td><td>4 ppm (avoid)</td></tr>
+     <tr><td>Dichloromethane, CH₂Cl₂</td><td>polar</td><td>39.6 °C</td><td>600 ppm</td></tr>
+     <tr><td>Chloroform, CHCl₃</td><td>polar</td><td>61.2 °C</td><td>60 ppm</td></tr>
    </table>
-   <p><b>Gas chromatography.</b> Residual solvents are measured by headspace GC, as in USP &lt;467&gt;. <span class="cite">(<a href="https://www.shimadzu.com/an/industries/small-molecule-pharmaceutical/development/residual-solvents/index.html" target="_blank" rel="noopener">Shimadzu</a>)</span> Volatility and polarity, both set by intermolecular forces, decide how long each solvent stays on the column: on a non-polar column, compounds come off roughly in order of boiling point.</p>
+   <p class="small">ppm means parts per million: 4 ppm is 4 mg of solvent in 1 kg of medicine.</p>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>Later in your course: how labs measure this</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Laboratories measure leftover solvent by <b>gas chromatography (GC)</b>. The sample is warmed in a sealed vial, and the vapour above it is carried through a long, thin tube. Solvents that evaporate easily, with the weakest forces between their molecules, come out first. You will study GC properly in a later course. <span class="cite">(<a href="https://www.shimadzu.com/an/industries/small-molecule-pharmaceutical/development/residual-solvents/index.html" target="_blank" rel="noopener">Shimadzu</a>)</span></p></div>
+   </div>
   </div>
  </div>
 </section>
 
-<section class="slide" data-sec="imf" data-title="Activity: residual solvents by GC">
+<section class="slide" data-sec="imf" data-title="Activity: drying off solvents">
  <div class="si">
   <div class="txt">
    <div class="eyebrow">8 · In pharmacy · try it<span class="skill">Analytical reasoning</span></div>
-   <h2>Yusha runs the residual-solvent test. <span class="ac">Predict his chromatogram.</span></h2>
-   <p>Friday's QC sample, a drug substance, may contain traces of dichloromethane (bp 39.6 °C), chloroform (61.2 °C) and carbon tetrachloride (76.7 °C). Use what you know about their intermolecular forces.</p>
+   <h2>Yusha dries the drug. <span class="ac">Which solvent leaves first?</span></h2>
+   <p>Friday's QC sample, a drug substance, may still contain traces of dichloromethane (bp 39.6 °C), chloroform (61.2 °C) and carbon tetrachloride (76.7 °C). Use what you know about their intermolecular forces.</p>
    <div class="stepper">
     <div class="choice-set cur" data-answer="a">
       <div class="step-count">QUESTION 1 OF 3</div>
-      <div class="choice-q">On a non-polar GC column, in what order do the three solvents come off (first to last)?</div>
+      <div class="choice-q">In the drying oven, in what order do the three solvents evaporate off (first to last)?</div>
       <div class="choices"><button class="choice" data-v="a">CH₂Cl₂, CHCl₃, CCl₄</button><button class="choice" data-v="b">CCl₄, CHCl₃, CH₂Cl₂</button><button class="choice" data-v="c">CHCl₃, CH₂Cl₂, CCl₄</button></div>
-      <div class="feedback">On a non-polar column, separation follows volatility, so the lowest boiling point elutes first: CH₂Cl₂, then CHCl₃, then CCl₄. Putting CCl₄ first because it is non-polar overlooks its large size: its London forces give it the highest boiling point of the three.</div>
+      <div class="feedback">The weaker the forces between molecules, the lower the boiling point and the faster a solvent evaporates: CH₂Cl₂ first, then CHCl₃, then CCl₄. Putting CCl₄ first because it is non-polar overlooks its large size: its London forces give it the highest boiling point of the three.</div>
       <button class="next-q">Next question →</button>
     </div>
-    <div class="choice-set" data-answer="b">
+    <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 2 OF 3</div>
-      <div class="choice-q">You switch to a polar column (a polyethylene glycol, "wax" phase). Which solvent is now held back more, relative to the others?</div>
-      <div class="choices"><button class="choice" data-v="a">CCl₄</button><button class="choice" data-v="b">CHCl₃</button><button class="choice" data-v="c">Neither; the order cannot change</button></div>
-      <div class="feedback">Chloroform is polar (1.04 D), so it also attracts the polar stationary phase through dipole forces and is retained relatively longer. Non-polar CCl₄ gains nothing. Changing column polarity is how analysts pull apart peaks that overlap on one column.</div>
+      <div class="choice-q">Chloroform is polar and carbon tetrachloride is not. Yet CCl₄ boils higher (76.7 °C against 61.2 °C). Why?</div>
+      <div class="choices"><button class="choice" data-v="a">CCl₄ has more electrons (74 against 58), so its London forces are stronger</button><button class="choice" data-v="b">CCl₄ hydrogen bonds</button><button class="choice" data-v="c">Its C–Cl bonds are stronger</button></div>
+      <div class="feedback">Chloroform's dipole–dipole forces are real, but CCl₄ is larger and has more electrons, so its London forces outweigh them. "Polar always boils higher" only holds for molecules of similar size. CCl₄ has no hydrogen, and boiling never breaks C–Cl bonds.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="c">
       <div class="step-count">QUESTION 3 OF 3</div>
-      <div class="choice-q">Headspace GC heats the sealed sample vial and injects only the vapour above it. Why does that suit residual solvents?</div>
+      <div class="choice-q">To test for leftover solvent, Yusha warms a sealed vial of the drug and samples only the air above it. Why is there solvent in the air but no drug?</div>
       <div class="choices"><button class="choice" data-v="a">Heating breaks the C–Cl bonds</button><button class="choice" data-v="b">The solvents are ionic</button><button class="choice" data-v="c">Weak intermolecular forces let the solvents escape into the vapour while the drug stays behind</button></div>
-      <div class="feedback">Small solvent molecules held by weak intermolecular forces are volatile, so they move into the vapour; the drug substance and excipients, with much stronger forces between their particles, stay in the vial. No covalent bonds are broken.</div>
+      <div class="feedback">Small solvent molecules held by weak intermolecular forces are volatile, so they move into the vapour; the drug, with much stronger forces between its particles, stays in the solid. No covalent bonds are broken.</div>
     </div>
    </div>
   </div>
@@ -1658,7 +1662,11 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="txt">
    <div class="eyebrow">8 · In pharmacy · try it<span class="skill">Applying chemistry to formulation</span></div>
    <h2>Read a drug's structure <span class="ac">like a formulator.</span></h2>
-   <p>Hydrogen-bond <b>donors</b> (H on N or O) and <b>acceptors</b> (N and O atoms) decide how a drug interacts with water and with its target. Medicinal chemists count them; Lipinski's "rule of five" warns that poor oral absorption becomes more likely with more than 5 donors or more than 10 acceptors (alongside size and lipophilicity limits). <span class="cite">(<a href="https://doi.org/10.1016/S0169-409X(96)00423-1" target="_blank" rel="noopener">Lipinski et al., 1997</a>)</span></p>
+   <p>Hydrogen-bond <b>donors</b> (H on N or O) and <b>acceptors</b> (N and O atoms) decide how a drug interacts with water and with its target.</p>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>Why medicinal chemists count them</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Lipinski's "rule of five" warns that poor oral absorption becomes more likely when a drug has more than 5 donors or more than 10 acceptors, alongside limits on size and on how oily it is. Paracetamol, with 2 donors and 3 acceptors, sits comfortably inside. <span class="cite">(<a href="https://doi.org/10.1016/S0169-409X(96)00423-1" target="_blank" rel="noopener">Lipinski et al., 1997</a>)</span></p></div>
+   </div>
    <div class="stepper">
     <div class="choice-set cur" data-answer="b">
       <div class="step-count">QUESTION 1 OF 3</div>
@@ -1669,9 +1677,9 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     </div>
     <div class="choice-set" data-answer="b">
       <div class="step-count">QUESTION 2 OF 3</div>
-      <div class="choice-q">Using Lipinski's count (every N and O atom), how many acceptors does it have?</div>
+      <div class="choice-q">Count every N and O atom as an acceptor. How many acceptors does paracetamol have?</div>
       <div class="choices"><button class="choice" data-v="a">2</button><button class="choice" data-v="b">3</button><button class="choice" data-v="c">5</button></div>
-      <div class="feedback">Three: one N and two O (C₈H₉NO₂). With 2 donors and 3 acceptors, paracetamol sits comfortably within the rule of five, consistent with its good oral absorption.</div>
+      <div class="feedback">Three: one N and two O (C₈H₉NO₂). Each can accept a hydrogen bond from a water molecule. Counting the 7 H atoms on carbon, or missing the C=O oxygen, are the usual slips.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
@@ -1794,7 +1802,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
      <div class="card"><div class="cn">1</div><div>Atoms bond because the bonded arrangement has lower energy. Lewis theory counts the shared and lone pairs; valence bond theory places them in overlapping (often hybrid) orbitals, as σ and π bonds.</div></div>
      <div class="card"><div class="cn">2</div><div>VSEPR: count bonded atoms and lone pairs on the central atom. Domains set the electron geometry; the atoms alone name the shape. Lone pairs squeeze bond angles.</div></div>
      <div class="card"><div class="cn">3</div><div>ΔEN classifies a bond (Chang): below 0.5 non-polar, 0.5 up to 2.0 polar covalent, 2.0 or more ionic. These are rules of thumb.</div></div>
-     <div class="card"><div class="cn">4</div><div>A molecule is polar only if its bond dipoles do not cancel. Polarity and hydrogen bonding set the intermolecular forces, which control boiling point, solubility and how solvents behave in GC. Pharmacists use this to choose vehicles and salt forms and to design analytical methods.</div></div>
+     <div class="card"><div class="cn">4</div><div>A molecule is polar only if its bond dipoles do not cancel. Polarity and hydrogen bonding set the intermolecular forces, which control boiling point, solubility and how easily solvents evaporate. Pharmacists use this to choose vehicles and salt forms, and to check medicines for leftover solvent.</div></div>
    </div>
    <div style="margin:.6em 0"><button class="btn solid" id="btn-refs" data-umami-event="open-sources">Sources and further reading (12) →</button></div>
    <div class="madeby">
