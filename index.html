@@ -834,6 +834,20 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
           </div>
           <span class="lab-card-go">Open</span>
         </a>
+        <a class="card glass fade-up lab-card" id="lab-chemical-bonding-link" href="labs/chemical-bonding/index.html">
+          <div>
+            <h3>Chemical Bonding Explainer</h3>
+            <div class="meta">Why atoms bond, Lewis structures, hybridisation and VSEPR shapes, electronegativity and bond type, polarity and intermolecular forces, with the Molecule Bench practice lab.</div>
+          </div>
+          <span class="lab-card-go">Open</span>
+        </a>
+        <a class="card glass fade-up lab-card" id="lab-stoichiometry-link" href="labs/stoichiometry/index.html">
+          <div>
+            <h3>Mole and Stoichiometry Explainer</h3>
+            <div class="meta">The mole, types of reaction and balancing equations, then limiting reagent and percentage yield, with the Reaction Bench lab and a periodic table to calculate with.</div>
+          </div>
+          <span class="lab-card-go">Open</span>
+        </a>
         <a class="card glass fade-up lab-card" id="lab-acidbase-link" href="labs/acidbase.html">
           <div>
             <h3>Acid–Base Lab</h3>
@@ -1984,7 +1998,7 @@ async function logEngagementEvent(eventType, { topicId = null, metadata = {} } =
 /* Interactive labs: log the open, then go. Waits at most 700 ms for the
    insert so leaving the page doesn't cancel it; a slow or failed log never
    blocks the student. */
-['orbitals', 'atomic-structure', 'trends', 'periodic-trends', 'acidbase', 'titration', 'osd', 'hydrocarbons'].forEach(lab => {
+['orbitals', 'atomic-structure', 'trends', 'periodic-trends', 'acidbase', 'titration', 'osd', 'hydrocarbons', 'chemical-bonding', 'stoichiometry'].forEach(lab => {
   document.getElementById('lab-' + lab + '-link').addEventListener('click', async e => {
     e.preventDefault();
     const href = e.currentTarget.getAttribute('href');
