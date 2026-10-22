@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Chemical Bonding, Explained — Aufthority</title>
+<script defer src="https://cloud.umami.is/script.js"
+  data-website-id="f79c60f1-f9e7-4170-a979-f357ba756a18"></script>
+<meta name="description" content="Why atoms bond, how to draw Lewis structures, valence bond theory and hybridisation, VSEPR shapes, electronegativity and bond type, polarity and intermolecular forces, for Diploma in Pharmacy students.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="article">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="Chemical Bonding, Explained">
+<meta property="og:description"  content="From Lewis structures to molecular shape, polarity and intermolecular forces: why water boils at 100 °C.">
+<meta property="og:url"          content="https://kompassemester.aufthority.com/labs/chemical-bonding/">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale"       content="en_MY">
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:site"        content="@theaufthority">
+<meta name="twitter:title"       content="Chemical Bonding, Explained">
+<meta name="twitter:description" content="Lewis, valence bond and VSEPR theory, polarity and intermolecular forces.">
+<meta name="twitter:image"       content="https://www.aufthority.com/preview_v2.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#6f7771;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#9a6a1c;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;--k:1;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;overflow:hidden;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+b,strong{color:var(--ink);font-weight:700}
+
+#shell{height:100vh;height:var(--app-h,100dvh);max-width:1120px;margin:0 auto;padding:0 16px;display:flex;flex-direction:column}
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 8px}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-kompas{text-decoration:none;color:var(--accent-dark);border-color:var(--g-line);background:var(--g-bg)}
+@media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
+.icon-btn{background:#fff;border:1px solid var(--rule);color:var(--body);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;cursor:pointer}
+#progress-label{font-size:.78rem;color:var(--muted);min-width:44px;text-align:right}
+#progress-track{flex:0 0 3px;background:var(--rule);border-radius:3px}
+#progress-fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.slide{position:absolute;inset:0;display:none;overflow:hidden;font-size:calc(var(--k) * 16px)}
+.slide.active{display:block}
+.si{height:100%;display:flex;flex-direction:column;justify-content:center;gap:.7em;padding:.8em 0 .4em;max-width:720px;margin:0 auto}
+.si.has-ill{max-width:none}
+.ill{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;align-items:stretch;min-height:0}
+.ill svg{width:100%;height:calc(var(--k) * 29vh);height:calc(var(--k) * 29dvh);display:block}
+.ill figcaption{font-size:.72em;color:var(--muted);text-align:center;margin-top:.25em}
+.txt{flex:0 0 auto;min-width:0}
+@media (min-width:760px) and (orientation:landscape){
+  .slide{font-size:calc(var(--k) * 17px)}
+  .si.has-ill{flex-direction:row;align-items:center;gap:2.4em;padding:1em 0}
+  .si.has-ill .ill{flex:0 0 46%}
+  .si.has-ill .ill svg{height:auto;max-height:calc(var(--k) * 64vh);max-height:calc(var(--k) * 64dvh)}
+  .si.has-ill .txt{flex:1 1 auto}
+}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.45em}
+h1,h2{color:var(--ink);font-weight:800;line-height:1.08;letter-spacing:-.025em;margin-bottom:.45em}
+h1{font-size:2.05em}
+h2{font-size:1.65em}
+@media (min-width:760px){h1{font-size:2.4em}h2{font-size:1.9em}}
+h1 .ac,h2 .ac{color:var(--accent)}
+p{margin-bottom:.6em;font-size:.97em}
+.small{font-size:.82em;color:var(--muted)}
+.cite{font-size:.78em;color:var(--muted);white-space:nowrap}
+.cite a{color:var(--muted)}
+.callout{border-left:3px solid var(--accent);background:var(--g-bg);padding:.5em .85em;margin:.55em 0;font-size:.92em;border-radius:0 8px 8px 0}
+.callout.warn{border-color:var(--red);background:var(--r-bg)}
+.callout.note{border-color:var(--orange);background:var(--o-bg)}
+.pill-list{display:flex;flex-wrap:wrap;gap:.4em;margin:.55em 0}
+.pill{background:var(--g-bg);color:var(--accent-dark);padding:.3em .8em;font-size:.82em;font-weight:500;border-radius:100px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:.5em;margin:.55em 0}
+.tile{border:1px solid var(--rule);border-radius:var(--radius);padding:.55em .75em}
+.tile .n{font-size:1.3em;font-weight:800;color:var(--accent);line-height:1.15;letter-spacing:-.02em;margin-bottom:.15em}
+.tile .l{font-size:.84em;color:var(--body)}
+.steps{list-style:none;margin:.55em 0;display:flex;flex-direction:column;gap:.45em}
+.steps li{display:flex;gap:.65em;align-items:flex-start;font-size:.92em}
+.steps .n{flex:0 0 1.65em;height:1.65em;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82em;margin-top:.05em}
+.data-table{width:100%;border-collapse:collapse;font-size:.84em;margin:.45em 0}
+.data-table th,.data-table td{border-bottom:1px solid var(--rule);padding:.4em .55em;text-align:left;vertical-align:top}
+.data-table th{font-weight:700;color:var(--muted);font-size:.8em;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid var(--rule)}
+.data-table td:first-child{color:var(--ink);font-weight:500}
+.data-table tr.hl td{background:var(--g-bg)}
+.map3{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.55em 0}
+.box{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .75em;font-size:.86em}
+.box h3{font-size:1.1em;font-weight:800;color:var(--accent);margin-bottom:.15em}
+.box .q{font-size:.9em;color:var(--muted);margin-bottom:.3em}
+.box ul{padding-left:1.1em}
+
+/* HTML diagrams */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.4em;margin:.6em 0}
+.node{border:1.5px solid var(--ink);border-radius:8px;padding:.35em .65em;font-size:.84em;font-weight:500;color:var(--ink);background:#fff;text-align:center}
+.node small{display:block;font-weight:400;color:var(--muted);font-size:.85em}
+.node.g{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.node.o{border-color:var(--orange);background:var(--o-bg)}
+.node.r{border-color:var(--red);background:var(--r-bg)}
+.node.ghost{border-style:dashed;color:var(--muted)}
+.arr{color:var(--orange);font-weight:800;font-size:1em}
+.node-group{display:flex;align-items:center;gap:.35em}
+.node-group .or{color:var(--muted);font-size:.84em}
+/* flows: one straight row when it fits, otherwise a snake (→ row, turn down, ← row, turn down …) */
+.flow.row{flex-wrap:nowrap}
+.flow.row > *{flex:0 0 auto}
+.flow.snake{display:grid;align-items:stretch;gap:0}
+.flow.snake .cell{display:flex;min-width:0}
+.flow.snake .cell > .node{flex:1;display:flex;flex-direction:column;justify-content:center}
+.flow.snake .cell > .node-group{flex:1}
+.flow.snake .cell > .node-group > .node{flex:1}
+.flow.snake .arr{align-self:center;text-align:center;line-height:1}
+.flow.snake .arr.down{padding:.2em 0}
+.lane{display:grid;grid-template-columns:8.5em 1fr;gap:.6em;align-items:center;padding:.45em 0;border-bottom:1px solid var(--rule)}
+.lane:last-of-type{border-bottom:none}
+.lane .lname{font-weight:800;color:var(--ink);font-size:.9em;line-height:1.2}
+.lane .lname small{display:block;font-weight:500;color:var(--muted);font-size:.8em}
+.lane .flow{margin:0}
+.stack{display:flex;flex-direction:column;gap:.4em;margin:.6em 0}
+.layer{display:grid;grid-template-columns:2.2em 1fr;gap:.6em;align-items:center;border:1px solid var(--g-line);background:var(--g-bg);border-radius:var(--radius);padding:.5em .7em;font-size:.88em}
+.layer .ln{width:2.2em;height:2.2em;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+.layer > div > b:first-child{display:block;margin-bottom:.1em}
+.htl{display:grid;grid-template-columns:repeat(4,1fr);gap:.6em;margin:.6em 0}
+.htl .ev{border-top:3px solid var(--accent);padding-top:.4em;font-size:.86em}
+.htl .yr{font-weight:800;color:var(--accent);font-size:1.25em;letter-spacing:-.02em;display:block}
+@media (max-width:520px){.htl{grid-template-columns:1fr 1fr}.map3{grid-template-columns:1fr}.lane{grid-template-columns:1fr;gap:.25em}}
+.eq{display:flex;align-items:center;justify-content:center;gap:.6em;flex-wrap:wrap;margin:.6em 0}
+.eq .term{text-align:center;font-size:.82em;color:var(--ink);font-weight:500}
+.eq .term svg{width:5.2em;height:auto;display:block;margin:0 auto .25em}
+.eq .op{font-size:1.6em;font-weight:800;color:var(--orange)}
+.forms{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.6em 0}
+.form{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .7em;font-size:.86em}
+.form svg{width:100%;height:3.4em;display:block;margin-bottom:.3em}
+.form h3{font-size:1.05em;font-weight:800;color:var(--ink);margin-bottom:.1em}
+@media (max-width:520px){.forms{grid-template-columns:1fr}.form{display:grid;grid-template-columns:4.5em 1fr;gap:.6em;align-items:center}.form svg{height:2.6em;margin:0}}
+
+/* interactions */
+.toggle-wrap{border:1px solid var(--rule);border-radius:var(--radius);margin:.45em 0;overflow:hidden}
+.toggle-btn{width:100%;background:#fff;border:none;color:var(--ink);font:600 .92em 'DM Sans',sans-serif;text-align:left;padding:.6em .85em;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:.6em}
+.toggle-btn .hint{font-weight:600;color:var(--accent);font-size:.8em;white-space:nowrap}
+.toggle-btn .hint::after{content:" +"}
+.toggle-wrap.open .toggle-btn .hint::after{content:" −"}
+.toggle-wrap.seen{border-color:var(--g-line)}
+.toggle-body{display:none;padding:0 .85em .7em;font-size:.9em}
+.toggle-wrap.open .toggle-body{display:block}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5em,1fr));gap:.45em;margin:.55em 0}
+.rcard{border:1px solid var(--rule);border-radius:var(--radius);background:#fff;text-align:left;padding:.55em .7em;cursor:pointer;font:400 .84em 'DM Sans',sans-serif;color:var(--body);display:block}
+.rcard .rt{font-weight:800;color:var(--ink);display:flex;justify-content:space-between;gap:.4em}
+.rcard .rt::after{content:"Tap";font-weight:600;font-size:.8em;color:var(--accent)}
+.rcard .rb{display:none;margin-top:.3em}
+.rcard.seen{border-color:var(--accent);background:var(--g-bg)}
+.rcard.seen .rt::after{content:""}
+.rcard.seen .rb{display:block}
+.rcard svg{width:100%;height:3.2em;display:block;margin:.2em 0}
+.choice-q{font-weight:700;color:var(--ink);font-size:.95em;margin-bottom:.45em}
+.choices{display:flex;flex-wrap:wrap;gap:.4em}
+.choice{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:500 .88em 'DM Sans',sans-serif;padding:.45em .85em;border-radius:100px;cursor:pointer}
+.choice:hover{border-color:var(--ink)}
+.choice.right{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.choice.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red);text-decoration:line-through}
+.feedback{display:none;font-size:.88em;margin-top:.5em;padding:.45em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.feedback.show{display:block}
+.stepper .choice-set{display:none}
+.stepper .choice-set.cur{display:block}
+.step-count{font-size:.75em;font-weight:700;color:var(--eyebrow);letter-spacing:.08em;margin-bottom:.3em}
+.next-q{margin-top:.55em;background:#fff;border:1.5px solid var(--ink);border-radius:100px;font:600 .84em 'DM Sans',sans-serif;padding:.38em .9em;cursor:pointer;display:none}
+.choice-set.done .next-q{display:inline-block}
+.calc{border:1px solid var(--rule);border-radius:var(--radius);padding:.65em .75em;margin:.55em 0}
+.calc-row{display:flex;gap:.6em;margin-bottom:.5em;flex-wrap:wrap}
+.calc label{font-size:.76em;font-weight:600;color:var(--muted);display:flex;flex-direction:column;gap:.2em;flex:1;min-width:8em}
+.calc input,.calc select{font:500 1.05em 'DM Sans',sans-serif;padding:.32em .45em;border:1px solid var(--rule);border-radius:6px;background:#fff;color:var(--ink);width:100%}
+.calc-out{font-size:.9em;padding:.45em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.calc-out.fail{border-color:var(--red);background:var(--r-bg)}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:600 .84em 'DM Sans',sans-serif;padding:.4em .95em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.range{width:100%;accent-color:var(--accent);margin:.4em 0}
+.scale-lbl{display:flex;justify-content:space-between;font-size:.74em;color:var(--muted);font-weight:600}
+.coa{display:flex;flex-direction:column;gap:.3em;margin:.45em 0}
+.coa-row{display:grid;grid-template-columns:1fr 1.3fr 4.8em;gap:.5em;align-items:center;background:#fff;border:1px solid var(--rule);border-radius:8px;color:var(--ink);font:400 .82em 'DM Sans',sans-serif;text-align:left;padding:.42em .65em;cursor:pointer}
+.coa-row b{font-weight:700}
+.coa-row .v{text-align:right;font-weight:700;color:var(--muted)}
+.coa-row.pass{border-color:var(--accent)}.coa-row.pass .v{color:var(--accent)}
+.coa-row.fail{border-color:var(--red);background:var(--r-bg)}.coa-row.fail .v{color:var(--red)}
+.coa-row.next{border-color:var(--orange);background:var(--o-bg)}.coa-row.next .v{color:var(--orange)}
+#coa-exp{min-height:2.7em;font-size:.86em;border-left:3px solid var(--rule);padding:.35em .65em}
+.coa-decision{display:none;margin-top:.5em}
+.coa-decision.show{display:block}
+.cards{display:flex;flex-direction:column;gap:.4em;margin:.55em 0}
+.card{display:flex;gap:.75em;border:1px solid var(--rule);border-radius:var(--radius);padding:.5em .75em;font-size:.88em}
+.card .cn{font-size:1.35em;font-weight:800;color:var(--accent);line-height:1}
+.madeby{border-top:1px solid var(--rule);padding-top:.6em;margin-top:.3em}
+.madeby p{font-size:.82em;color:var(--muted);margin-bottom:.45em}
+.madeby p b,.madeby p b a{color:var(--ink)}
+.socials{display:flex;flex-wrap:wrap;gap:.35em}
+.socials a{font-size:.8em;font-weight:600;color:var(--accent-dark);background:var(--g-bg);padding:.28em .75em;border-radius:100px;text-decoration:none}
+.socials a:hover{background:var(--g-line)}
+.score{font-size:1.25em;font-weight:800;color:var(--accent);margin-top:.5em}
+.pulse{animation:pulse 1s ease 2}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,130,31,0)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.45)}}
+
+#bottom{flex:0 0 auto;padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+#gate-hint{font-size:.78rem;color:var(--muted);text-align:center;min-height:1.2em;margin-bottom:5px}
+#gate-hint.alert{color:var(--orange);font-weight:600}
+#gate-hint button{background:none;border:none;color:var(--accent);text-decoration:underline;font:inherit;font-weight:600;cursor:pointer;padding:0}
+#nav-wrap{display:flex;justify-content:space-between;gap:10px}
+.nav-btn{flex:1;max-width:200px;background:#fff;border:1.5px solid var(--ink);color:var(--ink);font:700 .92rem 'DM Sans',sans-serif;padding:10px 14px;border-radius:100px;cursor:pointer}
+#btn-next{background:var(--ink);color:#fff;margin-left:auto}
+#btn-next.locked{background:#fff;color:var(--muted);border-color:var(--rule)}
+.nav-btn:disabled{opacity:.3;cursor:default}
+footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
+
+.overlay{display:none;position:fixed;inset:0;z-index:50;background:rgba(20,30,25,.35);padding:16px;overflow-y:auto}
+.overlay.open{display:block}
+.panel{max-width:620px;margin:16px auto;background:#fff;border-radius:14px;padding:18px 20px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.panel-head h3{font-weight:800;color:var(--ink);font-size:1.3rem;letter-spacing:-.02em}
+.toc-note{font-size:.82rem;color:var(--muted);margin-bottom:8px}
+.toc{list-style:none}
+.toc li{border-bottom:1px solid var(--rule)}
+.toc button{background:none;border:none;color:var(--ink);font:400 .9rem 'DM Sans',sans-serif;padding:7px 0;width:100%;text-align:left;cursor:pointer;display:flex;gap:10px}
+.toc button span{color:var(--muted);min-width:22px}
+.toc button.cur{color:var(--accent);font-weight:700}
+.toc .sec{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;padding:12px 0 3px;border:none}
+.refs{padding-left:20px;font-size:.82rem;color:var(--body)}
+.refs li{margin-bottom:7px;word-break:break-word}
+
+/* ---------- SVG diagram + chart styling ---------- */
+.ln{fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ln.thin{stroke-width:1.2}
+.ln.g{stroke:var(--accent)}.ln.r{stroke:var(--red)}.ln.o{stroke:var(--orange)}.ln.b{stroke:var(--blue)}.ln.m{stroke:#a3aaa5}
+.dash{stroke-dasharray:4 4}
+.fg{fill:var(--g-bg)}.fgs{fill:var(--accent)}.fb{fill:var(--b-bg)}.fr{fill:var(--r-bg)}.frs{fill:var(--red)}.fo{fill:var(--o-bg)}.fos{fill:var(--orange)}.fw{fill:#fff}.fk{fill:var(--ink)}.fgr{fill:#eef0ee}.fpow{fill:#d9d4c7}
+.tx{font-family:'DM Sans',sans-serif;font-size:12px;fill:var(--body)}
+.tx.s{font-size:10.5px;fill:var(--muted)}
+.tx.b{font-weight:700;fill:var(--ink)}
+.tx.g{fill:var(--accent-dark);font-weight:700}.tx.r{fill:var(--red);font-weight:700}.tx.o{fill:#a85f10;font-weight:700}.tx.bl{fill:var(--blue);font-weight:700}
+.tx.mid{text-anchor:middle}.tx.end{text-anchor:end}
+.bar{fill:var(--accent)}.bar.hl{fill:var(--red)}
+.axis{stroke:#c9cdca;stroke-width:1;fill:none}
+.grid{stroke:#eceeec;stroke-width:1}
+
+/* animations run only on the active slide, restart on every visit */
+.slide.active .draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.1s ease-out forwards;animation-delay:var(--d,0s)}
+.slide.active .fade{opacity:0;animation:fadeup .5s ease-out forwards;animation-delay:var(--d,.3s)}
+.slide.active .stagger > *{opacity:0;animation:fadeup .45s ease-out forwards;animation-delay:var(--d,0s)}
+.slide.active .grow-x{transform-box:fill-box;transform-origin:left center;animation:growx .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
+.slide.active .grow-y{transform-box:fill-box;transform-origin:center bottom;animation:growy .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
+.slide.active .updown{animation:updown 2s ease-in-out infinite}
+.slide.active .spin{transform-box:view-box;animation:spin 6s linear infinite}
+.slide.active .spin-r{transform-box:view-box;animation:spin 6s linear infinite reverse}
+.slide.active .drop{animation:drop 2.4s ease-in infinite}
+.slide.active .bounce{animation:bounce 1.2s ease-in-out infinite}
+.slide.active .cyc{animation:cyc 6s infinite;animation-delay:var(--d,0s)}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeup{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes growx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes growy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes updown{0%,100%{transform:translateY(0)}50%{transform:translateY(22px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes drop{0%{transform:translateY(0);opacity:0}10%{opacity:1}80%{opacity:1}100%{transform:translateY(46px);opacity:0}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes cyc{0%,22%{opacity:1}26%,100%{opacity:.28}}
+
+/* last resort when a page cannot fit at a readable size: the page body scrolls,
+   the Back/Next bar stays pinned, and a fade hints at more below */
+.slide.scrolly{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.slide.scrolly .si{height:auto;min-height:100%;justify-content:flex-start}
+#stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;pointer-events:none;background:linear-gradient(rgba(255,255,255,0),#fff);opacity:0;transition:opacity .2s}
+#stage.more::after{opacity:1}
+.ph-step.scrolly{overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ph-step.scrolly .ph-in{height:auto;min-height:100%;justify-content:flex-start}
+@media (max-height:700px){footer{display:none}}
+@media (prefers-reduced-motion: reduce){
+  .slide.active *{animation:none!important;opacity:1!important;stroke-dashoffset:0!important;transform:none!important}
+}
+
+
+/* ---------- additions for this explainer ---------- */
+.toggle-wrap.opt .toggle-btn .tag{font-size:.7em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--eyebrow);margin-right:.5em}
+.toggle-wrap.opt{border-style:dashed}
+.next-lab{display:block;border:1px solid var(--g-line);background:var(--g-bg);border-radius:var(--radius);padding:.5em .8em;text-decoration:none;font-size:.86em;color:var(--body);margin:.5em 0}
+.next-lab b{color:var(--accent-dark)}
+.lo{display:inline-block;font-size:.72em;font-weight:800;letter-spacing:.04em;color:#fff;background:var(--accent);border-radius:5px;padding:.08em .4em;margin-right:.35em;vertical-align:.1em}
+.lo.c2{background:var(--blue)}.lo.c3{background:var(--orange)}
+.mono{font-variant-numeric:tabular-nums}
+.formula{font-weight:700;color:var(--ink)}
+/* electronegativity mini table */
+.eng{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.22em;margin:.45em 0;max-width:24em}
+.eng div{border:1px solid var(--rule);border-radius:5px;text-align:center;padding:.18em 0;line-height:1.1;font-size:.86em}
+.eng div b{display:block;font-size:.95em}
+.eng div i{display:block;font-style:normal;font-size:.78em;color:var(--muted)}
+.eng .x{visibility:hidden}
+.eng .h1{background:#eef5f1}.eng .h2{background:#d6ebdf}.eng .h3{background:#b4d9c3}.eng .h4{background:#6fae8b;color:#fff}.eng .h4 i{color:#eef5f1}.eng .h5{background:#2d6a4f;color:#fff}.eng .h5 b{color:#fff}.eng .h5 i{color:#d6ebdf}
+.eng .h4 b{color:#fff}
+/* shape explorer */
+.explorer{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .75em;margin:.5em 0}
+.ex-row{display:flex;gap:.8em;flex-wrap:wrap;align-items:flex-end;margin-bottom:.4em}
+.ex-ctl{display:flex;flex-direction:column;gap:.2em;font-size:.76em;font-weight:600;color:var(--muted)}
+.stepper-num{display:flex;align-items:center;gap:.35em}
+.stepper-num button{width:2em;height:2em;border-radius:50%;border:1.5px solid var(--ink);background:#fff;color:var(--ink);font:700 1em 'DM Sans',sans-serif;cursor:pointer;line-height:1}
+.stepper-num button:disabled{opacity:.3;cursor:default}
+.stepper-num output{min-width:1.6em;text-align:center;font-size:1.25em;font-weight:800;color:var(--ink)}
+.ex-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:.6em;align-items:center}
+.ex-body svg{width:100%;height:auto;max-height:calc(var(--k) * 26vh);max-height:calc(var(--k) * 26dvh);display:block}
+.ex-out{font-size:.86em}
+.ex-out .nm{font-size:1.2em;font-weight:800;color:var(--accent);line-height:1.15;margin-bottom:.15em}
+.ex-out .axe{font-weight:800;color:var(--ink)}
+@media (max-width:520px){.ex-body{grid-template-columns:1fr}}
+.shape-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(8.4em,1fr));gap:.45em;margin:.55em 0}
+.shape-grid .rcard svg{height:6.2em}
+/* ranking task */
+.rank{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .75em;margin:.5em 0}
+.rank-pool,.rank-slots{display:flex;flex-wrap:wrap;gap:.4em;margin:.35em 0}
+.rank-chip{background:#fff;border:1.5px solid var(--ink);color:var(--ink);font:600 .88em 'DM Sans',sans-serif;padding:.4em .8em;border-radius:100px;cursor:pointer}
+.rank-chip:disabled{opacity:.25;cursor:default}
+.rank-slot{min-width:5.2em;border:1.5px dashed var(--rule);border-radius:100px;padding:.38em .7em;font-size:.86em;font-weight:700;color:var(--ink);text-align:center}
+.rank-slot.fill{border-style:solid;border-color:var(--accent);background:var(--g-bg)}
+.rank-slot.bad{border-color:var(--red);background:var(--r-bg)}
+.rank-lbl{display:flex;justify-content:space-between;font-size:.72em;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.rank-actions{display:flex;gap:.4em;flex-wrap:wrap;margin-top:.4em}
+.task.done{border-color:var(--accent)}
+/* embedded lab */
+.si.lab-si{max-width:none;justify-content:flex-start;gap:.4em;padding:.5em 0 .3em}
+.lab-head h2{margin-bottom:.15em}
+.lab-head p{margin-bottom:.2em}
+.lab-frame{flex:1 1 auto;min-height:0;border:1px solid var(--rule);border-radius:var(--radius);overflow:hidden;background:#fff}
+.lab-frame iframe{width:100%;height:100%;border:0;display:block}
+.skill{display:inline-block;font-size:.92em;font-weight:700;letter-spacing:.02em;text-transform:none;color:#8a5410;background:var(--o-bg);border-radius:100px;padding:.12em .65em;margin-left:.6em;vertical-align:.05em}
+.skill-key{font-size:.82em;margin:.4em 0}
+.skill-key .skill{margin:0 .25em .25em 0}
+/* periodic table (opened from Contents) */
+.pt-open{display:inline-flex;align-items:center;gap:.45em;background:#fff;border:1.5px solid var(--accent);color:var(--accent-dark);font:700 .84rem 'DM Sans',sans-serif;padding:.42em .95em;border-radius:100px;cursor:pointer;margin:.1em 0 .5em}
+.pt-open svg{width:1.05em;height:1.05em}
+.pt-panel{max-width:1020px}
+.pt-detail{position:sticky;top:-18px;z-index:2;background:#fff;border:1px solid var(--g-line);border-radius:10px;padding:.55em .8em;font-size:.86rem;min-height:3.3em;margin-bottom:.5em}
+.pt-detail .big{font-size:1.5rem;font-weight:800;color:var(--ink);margin-right:.35em;letter-spacing:-.02em}
+.pt-detail .nm{font-weight:700;color:var(--ink)}
+.pt-tools{display:flex;align-items:center;gap:.4em;flex-wrap:wrap;margin-bottom:.45em;font-size:.78rem;color:var(--muted);font-weight:600}
+.pt-tools button{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .78rem 'DM Sans',sans-serif;padding:.28em .75em;border-radius:100px;cursor:pointer}
+.pt-tools button.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.pt-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.ptg{display:grid;grid-template-columns:repeat(18,minmax(2.55rem,1fr));gap:3px;min-width:47rem}
+.ptc{border:1px solid rgba(0,0,0,.08);border-radius:5px;padding:.14rem .1rem .12rem;text-align:center;cursor:pointer;font:inherit;line-height:1.05;color:var(--ink);min-width:0;background:#fff}
+.ptc i{display:block;font-style:normal;font-size:.56rem;color:var(--muted);text-align:left;padding-left:.12rem}
+.ptc b{display:block;font-size:.92rem;font-weight:800}
+.ptc s{display:block;text-decoration:none;font-size:.5rem;color:var(--muted);white-space:nowrap;overflow:hidden}
+.ptc.sel{outline:2.5px solid var(--ink);outline-offset:1px}
+.ptc.ph{background:repeating-linear-gradient(45deg,#fff 0 3px,#f1f2f0 3px 6px);cursor:default;font-size:.55rem;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.ptc.dim{opacity:.32}
+.ptc.dark,.ptc.dark i,.ptc.dark s,.ptc.dark b{color:#fff}
+.pt-gh{font-size:.58rem;color:var(--muted);text-align:center;font-weight:700;align-self:end}
+.pt-legend{display:flex;flex-wrap:wrap;gap:.3em .8em;font-size:.72rem;color:var(--muted);margin:.5em 0}
+.pt-legend span{display:inline-flex;align-items:center;gap:.3em}
+.pt-legend span::before{content:"";width:.8em;height:.8em;border-radius:3px;background:var(--sw);border:1px solid rgba(0,0,0,.08)}
+.pt-scrollhint{display:none;font-size:.72rem;color:var(--muted);margin-bottom:.3em}
+@media (max-width:820px){.pt-scrollhint{display:block}}
+.lewis{font-family:'DM Sans',sans-serif}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ar-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#c0392b"/></marker>
+    <marker id="ar-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#d9821f"/></marker>
+    <marker id="ar-g" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#2d6a4f"/></marker>
+    <marker id="ar-m" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#8f9691"/></marker>
+    <marker id="ar-y" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#9a6a1c"/></marker>
+  </defs>
+</svg>
+<script>
+/* Size the page to the visible screen. 100vh/100dvh are unreliable on many
+   Android and in-app browsers (they include the area behind the toolbar). */
+(function(){
+  function setH(){ document.documentElement.style.setProperty('--app-h', window.innerHeight + 'px'); }
+  setH();
+  window.addEventListener('resize', setH);
+  window.addEventListener('orientationchange', function(){ setTimeout(setH, 250); });
+  window.addEventListener('pageshow', setH);
+})();
+</script>
+<div id="shell">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <a class="icon-btn back-kompas" id="btn-kompas" href="../../index.html" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+      <button class="icon-btn" id="btn-toc" data-umami-event="open-contents">Contents</button>
+      <span id="progress-label">1 / 45</span>
+    </div>
+  </nav>
+  <div id="progress-track"><div id="progress-fill"></div></div>
+
+  <div id="stage">
+
+<!-- ================= 1 · INTRODUCTION ================= -->
+
+<section class="slide active" data-sec="intro" data-title="Start here">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 214" role="img" aria-label="Boiling points: water, molar mass 18, boils at 100 degrees Celsius; hydrogen sulfide, molar mass 34, boils at minus 60 degrees Celsius">
+    <line class="axis" x1="70" y1="20" x2="70" y2="190"/>
+    <text class="tx s end" x="62" y="33">100 °C</text>
+    <text class="tx s end" x="62" y="122">0 °C</text>
+    <text class="tx s end" x="62" y="176">−60 °C</text>
+    <line class="grid" x1="70" x2="390" y1="118" y2="118"/>
+    <line class="ln m dash" x1="70" x2="390" y1="96" y2="96"/>
+    <text class="tx s end" x="390" y="90">room temperature, 25 °C</text>
+    <rect class="fgs grow-y" x="128" y="29" width="54" height="161" rx="5" style="--d:.15s"/>
+    <rect class="fos grow-y" x="268" y="172" width="54" height="18" rx="5" style="--d:.5s"/>
+    <text class="tx g mid fade" x="155" y="22" style="--d:.9s;font-size:14px">100 °C</text>
+    <text class="tx o mid fade" x="295" y="164" style="--d:1.1s;font-size:14px">−60 °C</text>
+    <text class="tx b mid" x="155" y="206">H₂O · 18 g/mol</text>
+    <text class="tx b mid" x="295" y="206">H₂S · 34 g/mol</text>
+   </svg>
+   <figcaption>Normal boiling points. Hydrogen sulfide is heavier, yet it is a gas at room temperature.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Start here</div>
+   <h1>Lighter, yet it boils <span class="ac">160 degrees higher.</span></h1>
+   <p>Water and hydrogen sulfide look like twins: each is one central atom from group 16 with two hydrogens. Hydrogen sulfide is almost twice as heavy, so you might expect it to boil at the higher temperature. It does the opposite. Water boils at <b>100 °C</b>; hydrogen sulfide boils at about <b>−60 °C</b>. <span class="cite">(<a href="https://pubchem.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">PubChem</a>)</span></p>
+   <p>If mass alone decided, water would be a gas in your dispensary, and there would be no injections, syrups or eye drops made with it. The difference comes from <b>how the atoms are bonded, what shape the molecule takes, and how the molecules attract each other</b>. That is this explainer.</p>
+   <p class="small">Written for Diploma in Pharmacy students. Use Next to move through the pages, or Contents to jump around. "Go deeper" sections are optional.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="intro" data-title="Your map">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Your map</div>
+   <h2>Four questions, <span class="ac">asked in order.</span></h2>
+   <p>Each section answers one question, and each answer feeds the next.</p>
+   <table class="data-table">
+     <tr><th>Question</th><th>Sections and what you will be able to do</th></tr>
+     <tr><td>Why do atoms bond at all?</td><td><span class="lo">C1</span>State the basis of bond formation, and describe the Lewis, valence bond and VSEPR theories (sections 2–5).</td></tr>
+     <tr><td>What shape is the molecule?</td><td><span class="lo c2">C2</span>Apply Lewis and VSEPR theory to predict the shapes of simple molecules (sections 3 and 5).</td></tr>
+     <tr><td>How evenly are electrons shared?</td><td><span class="lo c2">C2</span>Use electronegativity differences to classify bonds as ionic, covalent or polar covalent (section 6).</td></tr>
+     <tr><td>How do the molecules attract each other?</td><td><span class="lo c3">C3</span>Analyse geometry and dipole moment to explain intermolecular forces and their effect on physical properties (sections 7–8).</td></tr>
+   </table>
+   <p class="skill-key">Pharmacy skills you will practise, marked on the pages where they appear: <span class="skill">Problem solving</span><span class="skill">Applying chemistry to formulation</span><span class="skill">Analytical reasoning</span></p>
+   <p class="small">Electronegativity values and bond-type rules follow Raymond Chang's <i>Chemistry</i>, your course textbook. A practice lab near the end lets you run all four steps on real molecules.</p>
+   <a class="next-lab" href="../periodic-trends/index.html" data-umami-event="link-periodic-trends">Need a refresher on electronegativity and the periodic table first? <b>Open Periodic Trends, Explained →</b></a>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 2 · WHY BONDS FORM ================= -->
+
+<section class="slide" data-sec="why" data-title="Bonds lower the energy">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 220" role="img" aria-label="Potential energy of two hydrogen atoms against the distance between them. The energy falls to a minimum of minus 436 kilojoules per mole at 74 picometres, then rises steeply when the atoms are pushed closer">
+    <line class="axis" x1="50" y1="20" x2="50" y2="190"/>
+    <line class="axis" x1="50" y1="80" x2="390" y2="80"/>
+    <text class="tx s" x="56" y="16">energy</text>
+    <text class="tx s end" x="390" y="74">distance between nuclei →</text>
+    <text class="tx s end" x="44" y="84">0</text>
+    <path class="ln g draw" pathLength="1" style="stroke-width:2.6" d="M70 20 C 80 120, 96 182, 112 183 C 130 184, 150 140, 190 110 C 240 88, 300 82, 385 81"/>
+    <line class="ln o dash fade" x1="112" y1="183" x2="112" y2="80" style="--d:1s"/>
+    <circle class="fos fade" cx="112" cy="183" r="5" style="--d:1s"/>
+    <text class="tx o fade" x="150" y="204" style="--d:1.1s">74 pm: the bond length</text>
+    <text class="tx o fade" x="150" y="190" style="--d:1.1s">−436 kJ/mol</text>
+    <text class="tx s fade" x="76" y="40" style="--d:1.3s">too close:</text>
+    <text class="tx s fade" x="76" y="53" style="--d:1.3s">nuclei repel</text>
+    <text class="tx s fade" x="280" y="100" style="--d:1.3s">far apart:</text>
+    <text class="tx s fade" x="280" y="113" style="--d:1.3s">no attraction yet</text>
+   </svg>
+   <figcaption>Two hydrogen atoms approaching each other (H–H bond length 74 pm, bond enthalpy 436 kJ/mol).</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">2 · Why bonds form</div>
+   <h2>A bond forms because <span class="ac">it lowers the energy.</span></h2>
+   <p>As two atoms approach, each nucleus starts to attract the other atom's electrons. The energy of the pair falls. Push them too close, though, and the two positive nuclei repel, so the energy shoots back up.</p>
+   <p>The bond sits at the <b>bottom of the curve</b>, where attraction and repulsion balance. That distance is the <b>bond length</b>. The depth of the dip is the energy released when the bond forms, and the energy you must supply to break it again: the <b>bond enthalpy</b>.</p>
+   <div class="callout"><b>The basis of every bond:</b> a bonded arrangement has lower energy than the separate atoms, so bonding is favoured.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="why" data-title="Explore the energy curve">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">2 · Why bonds form · try it</div>
+   <h2>Slide the atoms <span class="ac">closer together.</span></h2>
+   <p>Move the slider to change the distance between two hydrogen nuclei. Watch what happens to the energy.</p>
+   <div class="calc">
+     <svg id="pe-svg" viewBox="0 0 400 170" role="img" aria-label="Energy curve with a marker that moves with the slider" style="width:100%;height:auto;max-height:calc(var(--k) * 24vh);display:block"></svg>
+     <input class="range" id="pe-r" type="range" min="40" max="300" step="2" value="200" aria-label="Distance between nuclei in picometres">
+     <div class="scale-lbl"><span>40 pm</span><span>300 pm</span></div>
+     <div class="calc-out" id="pe-out"></div>
+   </div>
+   <p class="small">The curve is a simple model (a Morse curve) fitted to the real H–H bond: minimum at 74 pm, depth 436 kJ/mol.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="why" data-title="Valence electrons and the octet">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 200" role="img" aria-label="Lewis dot symbols for period 2: lithium has 1 valence electron, beryllium 2, boron 3, carbon 4, nitrogen 5, oxygen 6, fluorine 7 and neon 8">
+    <g class="stagger">
+     <g><text class="tx s mid" x="28" y="44">1</text><text class="tx b mid" x="28" y="104" style="font-size:17px">Li</text><circle class="fos" cx="23" cy="78" r="2.6"/><text class="tx s mid" x="28" y="150">group 1</text></g>
+     <g><text class="tx s mid" x="77" y="44">2</text><text class="tx b mid" x="77" y="104" style="font-size:17px">Be</text><circle class="fos" cx="72" cy="78" r="2.6"/><circle class="fos" cx="82" cy="78" r="2.6"/><text class="tx s mid" x="77" y="150">2</text></g>
+     <g><text class="tx s mid" x="126" y="44">3</text><text class="tx b mid" x="126" y="104" style="font-size:17px">B</text><circle class="fos" cx="121" cy="78" r="2.6"/><circle class="fos" cx="131" cy="78" r="2.6"/><circle class="fos" cx="141" cy="98" r="2.6"/><text class="tx s mid" x="126" y="150">13</text></g>
+     <g><text class="tx s mid" x="175" y="44">4</text><text class="tx b mid" x="175" y="104" style="font-size:17px">C</text><circle class="fos" cx="170" cy="78" r="2.6"/><circle class="fos" cx="180" cy="78" r="2.6"/><circle class="fos" cx="190" cy="98" r="2.6"/><circle class="fos" cx="160" cy="98" r="2.6"/><text class="tx s mid" x="175" y="150">14</text></g>
+     <g><text class="tx s mid" x="224" y="44">5</text><text class="tx b mid" x="224" y="104" style="font-size:17px">N</text><circle class="fos" cx="219" cy="78" r="2.6"/><circle class="fos" cx="229" cy="78" r="2.6"/><circle class="fos" cx="239" cy="98" r="2.6"/><circle class="fos" cx="209" cy="98" r="2.6"/><circle class="fos" cx="224" cy="120" r="2.6"/><text class="tx s mid" x="224" y="150">15</text></g>
+     <g><text class="tx s mid" x="273" y="44">6</text><text class="tx b mid" x="273" y="104" style="font-size:17px">O</text><circle class="fos" cx="268" cy="78" r="2.6"/><circle class="fos" cx="278" cy="78" r="2.6"/><circle class="fos" cx="288" cy="93" r="2.6"/><circle class="fos" cx="258" cy="98" r="2.6"/><circle class="fos" cx="273" cy="120" r="2.6"/><circle class="fos" cx="288" cy="103" r="2.6"/><text class="tx s mid" x="273" y="150">16</text></g>
+     <g><text class="tx s mid" x="322" y="44">7</text><text class="tx b mid" x="322" y="104" style="font-size:17px">F</text><circle class="fos" cx="317" cy="78" r="2.6"/><circle class="fos" cx="327" cy="78" r="2.6"/><circle class="fos" cx="337" cy="93" r="2.6"/><circle class="fos" cx="307" cy="93" r="2.6"/><circle class="fos" cx="322" cy="120" r="2.6"/><circle class="fos" cx="337" cy="103" r="2.6"/><circle class="fos" cx="307" cy="103" r="2.6"/><text class="tx s mid" x="322" y="150">17</text></g>
+     <g><text class="tx s mid" x="371" y="44">8</text><text class="tx g mid" x="371" y="104" style="font-size:17px">Ne</text><circle class="fgs" cx="366" cy="78" r="2.6"/><circle class="fgs" cx="376" cy="78" r="2.6"/><circle class="fgs" cx="389" cy="93" r="2.6"/><circle class="fgs" cx="353" cy="93" r="2.6"/><circle class="fgs" cx="366" cy="120" r="2.6"/><circle class="fgs" cx="389" cy="103" r="2.6"/><circle class="fgs" cx="353" cy="103" r="2.6"/><circle class="fgs" cx="376" cy="120" r="2.6"/><text class="tx s mid" x="371" y="150">18</text></g>
+    </g>
+    <text class="tx s" x="6" y="22">valence electrons</text>
+    <text class="tx g end fade" x="398" y="182" style="--d:1.2s">neon: a full octet, no need to bond</text>
+   </svg>
+   <figcaption>Lewis dot symbols: one dot per valence electron.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">2 · Why bonds form</div>
+   <h2>Bonding uses only <span class="ac">the outer electrons.</span></h2>
+   <p>Only the electrons in the outermost shell, the <b>valence electrons</b>, take part in bonding. For main-group elements, the number of valence electrons equals the last digit of the group number: carbon (group 14) has 4, oxygen (group 16) has 6, chlorine (group 17) has 7.</p>
+   <p>The noble gases are unreactive because their outer shell is full, usually with eight electrons. This gives a useful shorthand, the <b>octet rule</b>: atoms tend to gain, lose or share electrons until each has eight in its outer shell. Hydrogen is the exception: it is complete with two.</p>
+   <p class="small">The octet rule is a guide, not a law. You will meet molecules that break it in section 3.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="why" data-title="Transfer or share">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">2 · Why bonds form</div>
+   <h2>Two main routes: <span class="ac">transfer or share.</span></h2>
+   <div class="map3 stagger">
+    <div class="box"><h3>Ionic</h3><div class="q">usually metal + non-metal</div>One atom <b>transfers</b> electrons to the other. Sodium gives its one valence electron to chlorine, forming Na⁺ and Cl⁻ ions held together by electrostatic attraction in a crystal lattice. Example: sodium chloride, the solute in 0.9% saline infusion.</div>
+    <div class="box"><h3>Covalent</h3><div class="q">usually non-metal + non-metal</div>Atoms <b>share</b> pairs of electrons. Each shared pair is one covalent bond, and both atoms count it towards their octet. Examples: water, ammonia, and almost every drug molecule.</div>
+    <div class="box"><h3>Polar covalent</h3><div class="q">sharing, but unequal</div>The pair is shared, but one atom pulls it harder. That atom becomes slightly negative (δ−). Most real bonds lie somewhere between pure covalent and ionic; section 6 shows how to decide where.</div>
+   </div>
+   <p class="small">A third type, <b>metallic bonding</b>, holds metals together: metal ions sit in a "sea" of shared, mobile electrons. It is outside the scope of this explainer.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="why" data-title="Check: why bonds form">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check · section 2</div>
+   <h2>Quick check: <span class="ac">why bonds form.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">Why does a covalent bond form between two atoms?</div>
+      <div class="choices"><button class="choice" data-v="a">The atoms collide hard enough</button><button class="choice" data-v="b">The bonded pair has lower energy than the separate atoms</button><button class="choice" data-v="c">Electrons always pair up</button></div>
+      <div class="feedback">Bonding is favoured because it lowers the energy. The energy released is the bond enthalpy, and the same amount is needed to break the bond.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">On the energy curve, what does the distance at the lowest point represent?</div>
+      <div class="choices"><button class="choice" data-v="a">The atomic radius</button><button class="choice" data-v="b">The point where the atoms repel most</button><button class="choice" data-v="c">The bond length</button></div>
+      <div class="feedback">At the minimum, attraction and repulsion balance. That distance is the bond length: 74 pm for H–H. Repulsion is strongest further left, where the curve rises steeply.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">Magnesium (group 2) reacts with oxygen (group 16). What is most likely to happen to the electrons?</div>
+      <div class="choices"><button class="choice" data-v="a">Mg transfers 2 electrons to O</button><button class="choice" data-v="b">They share 6 pairs</button><button class="choice" data-v="c">O transfers 2 electrons to Mg</button></div>
+      <div class="feedback">Magnesium loses its 2 valence electrons and oxygen gains them, giving Mg²⁺ and O²⁻, each with a full octet. A metal with a non-metal usually means transfer, an ionic bond.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 3 · LEWIS STRUCTURES ================= -->
+
+<section class="slide" data-sec="lewis" data-title="Lewis structures">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 200" role="img" aria-label="Lewis structures of water and carbon dioxide, with bonding pairs drawn as lines and lone pairs as pairs of dots">
+    <g class="lewis">
+     <text class="tx b mid" x="40" y="104" style="font-size:22px">H</text>
+     <line class="ln" x1="54" y1="97" x2="84" y2="97"/>
+     <text class="tx b mid" x="100" y="104" style="font-size:22px">O</text>
+     <line class="ln" x1="116" y1="97" x2="146" y2="97"/>
+     <text class="tx b mid" x="160" y="104" style="font-size:22px">H</text>
+     <circle class="fos" cx="94" cy="74" r="3"/><circle class="fos" cx="106" cy="74" r="3"/>
+     <circle class="fos" cx="94" cy="118" r="3"/><circle class="fos" cx="106" cy="118" r="3"/>
+     <text class="tx b mid" x="100" y="160">H₂O</text>
+     <text class="tx s mid" x="100" y="176">2 bonding pairs, 2 lone pairs</text>
+     <text class="tx b mid" x="240" y="104" style="font-size:22px">O</text>
+     <line class="ln" x1="256" y1="93" x2="282" y2="93"/><line class="ln" x1="256" y1="101" x2="282" y2="101"/>
+     <text class="tx b mid" x="298" y="104" style="font-size:22px">C</text>
+     <line class="ln" x1="314" y1="93" x2="340" y2="93"/><line class="ln" x1="314" y1="101" x2="340" y2="101"/>
+     <text class="tx b mid" x="356" y="104" style="font-size:22px">O</text>
+     <circle class="fos" cx="234" cy="74" r="3"/><circle class="fos" cx="246" cy="74" r="3"/>
+     <circle class="fos" cx="234" cy="118" r="3"/><circle class="fos" cx="246" cy="118" r="3"/>
+     <circle class="fos" cx="350" cy="74" r="3"/><circle class="fos" cx="362" cy="74" r="3"/>
+     <circle class="fos" cx="350" cy="118" r="3"/><circle class="fos" cx="362" cy="118" r="3"/>
+     <text class="tx b mid" x="298" y="160">CO₂</text>
+     <text class="tx s mid" x="298" y="176">two double bonds</text>
+    </g>
+    <text class="tx s" x="20" y="30">line = shared pair</text>
+    <circle class="fos" cx="150" cy="26" r="3"/><circle class="fos" cx="160" cy="26" r="3"/>
+    <text class="tx s" x="170" y="30">= lone pair (not shared)</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">3 · Lewis theory</div>
+   <h2>Lewis: bonds are <span class="ac">shared electron pairs.</span></h2>
+   <p>In 1916, Gilbert N. Lewis proposed that a covalent bond is a <b>pair of electrons shared</b> between two atoms. <span class="cite">(<a href="https://doi.org/10.1021/ja02261a002" target="_blank" rel="noopener">Lewis, 1916</a>)</span> A <b>Lewis structure</b> shows every valence electron in a molecule:</p>
+   <ul class="steps">
+     <li><span class="n">—</span><span>a <b>bonding pair</b> is drawn as a line. Two lines make a double bond (2 pairs), three a triple bond (3 pairs).</span></li>
+     <li><span class="n">··</span><span>a <b>lone pair</b> belongs to one atom only and is drawn as two dots.</span></li>
+   </ul>
+   <p>Lone pairs matter more than they look. They take up space around an atom and decide the shape of a molecule, as you will see in VSEPR.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="lewis" data-title="Five steps to a Lewis structure">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">3 · Lewis theory · method</div>
+   <h2>Five steps, <span class="ac">worked for ammonia (NH₃).</span></h2>
+   <ul class="steps stagger">
+     <li><span class="n">1</span><span><b>Skeleton.</b> Put the least electronegative atom in the centre. Hydrogen is never central. Here: N in the middle, three H around it.</span></li>
+     <li><span class="n">2</span><span><b>Count all valence electrons.</b> N has 5, each H has 1: 5 + 3 × 1 = <b>8 electrons</b>. (For an anion add one per negative charge; for a cation subtract.)</span></li>
+     <li><span class="n">3</span><span><b>Join each outer atom with a single bond.</b> Three N–H bonds use 3 × 2 = 6 electrons. 2 are left.</span></li>
+     <li><span class="n">4</span><span><b>Complete the outer atoms' octets, then put leftovers on the central atom.</b> H is full with 2. The 2 leftover electrons go on N as <b>one lone pair</b>.</span></li>
+     <li><span class="n">5</span><span><b>Check the central atom.</b> N now has 3 bonding pairs + 1 lone pair = 8. If it had fewer than 8, you would turn lone pairs on outer atoms into double or triple bonds.</span></li>
+   </ul>
+   <div class="callout note"><b>Quick check:</b> the electrons in your final drawing must add up to the count from step 2. If they do not, something is missing or doubled.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="lewis" data-title="Activity: build Lewis structures">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">3 · Lewis theory · try it</div>
+   <h2>Build them <span class="ac">one step at a time.</span></h2>
+   <p class="small">Answer all four questions to continue. Go back one page if you need the five steps.</p>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 4 · CO₂</div>
+      <div class="choice-q">How many valence electrons does carbon dioxide have in total?</div>
+      <div class="choices"><button class="choice" data-v="a">12</button><button class="choice" data-v="b">16</button><button class="choice" data-v="c">22</button></div>
+      <div class="feedback">C has 4 and each O has 6: 4 + 2 × 6 = 16. If you got 22 you used the atomic numbers (6 + 8 + 8); only valence electrons count.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 4 · CO₂</div>
+      <div class="choice-q">You draw O–C–O with single bonds and give each O three lone pairs. All 16 electrons are used. How many electrons does carbon have around it?</div>
+      <div class="choices"><button class="choice" data-v="a">4, so it needs double bonds</button><button class="choice" data-v="b">8, so it is finished</button><button class="choice" data-v="c">16</button></div>
+      <div class="feedback">Carbon only has its two single bonds, 4 electrons. Step 5: move one lone pair from each O into the bond, giving O=C=O. Now every atom has an octet.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 3 OF 4 · HCN</div>
+      <div class="choice-q">Hydrogen cyanide, HCN, has 10 valence electrons. Which structure gives every atom a full shell?</div>
+      <div class="choices"><button class="choice" data-v="a">H–C–N with lone pairs</button><button class="choice" data-v="b">H=C=N</button><button class="choice" data-v="c">H–C≡N with one lone pair on N</button></div>
+      <div class="feedback">H–C≡N: H has 2, C has 2 + 6 = 8, N has 6 + 2 = 8. Total: 2 + 6 + 2 = 10 electrons. H=C=N fails because hydrogen can only form one bond.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 4 OF 4 · H₂O</div>
+      <div class="choice-q">How many lone pairs sit on the oxygen atom in water?</div>
+      <div class="choices"><button class="choice" data-v="a">1</button><button class="choice" data-v="b">2</button><button class="choice" data-v="c">3</button></div>
+      <div class="feedback">8 valence electrons: two O–H bonds use 4, and the remaining 4 sit on O as 2 lone pairs. Those two lone pairs bend the molecule.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="lewis" data-title="Breaking the octet rule">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">3 · Lewis theory · exceptions</div>
+   <h2>When the octet rule <span class="ac">does not hold.</span></h2>
+   <p>Tap each card. You will meet the first three molecules again in the VSEPR section and in the lab.</p>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Fewer than eight</span>
+       <svg viewBox="0 0 120 50" aria-hidden="true"><text class="tx b mid" x="60" y="30" style="font-size:16px">B</text><line class="ln" x1="52" y1="24" x2="32" y2="24"/><line class="ln" x1="68" y1="24" x2="88" y2="24"/><line class="ln" x1="60" y1="32" x2="60" y2="44"/><text class="tx mid" x="22" y="29">Cl</text><text class="tx mid" x="98" y="29">Cl</text><text class="tx mid" x="60" y="10" style="dominant-baseline:hanging">Cl</text></svg>
+       <span class="rb"><b>BCl₃</b>: boron has only 3 valence electrons, so after three bonds it has just <b>6</b> around it. Boron and beryllium compounds often have an <b>incomplete octet</b>.</span></button>
+     <button class="rcard"><span class="rt">Ten around P</span>
+       <svg viewBox="0 0 120 50" aria-hidden="true"><text class="tx b mid" x="60" y="30" style="font-size:16px">P</text><g class="ln thin"><line x1="52" y1="25" x2="34" y2="25"/><line x1="68" y1="25" x2="86" y2="25"/><line x1="60" y1="17" x2="60" y2="6"/><line x1="60" y1="33" x2="60" y2="44"/><line x1="66" y1="31" x2="78" y2="42"/></g></svg>
+       <span class="rb"><b>PCl₅</b>: five P–Cl bonds put <b>10</b> electrons around phosphorus. This is an <b>expanded octet</b>.</span></button>
+     <button class="rcard"><span class="rt">Twelve around S</span>
+       <svg viewBox="0 0 120 50" aria-hidden="true"><text class="tx b mid" x="60" y="30" style="font-size:16px">S</text><g class="ln thin"><line x1="52" y1="25" x2="34" y2="25"/><line x1="68" y1="25" x2="86" y2="25"/><line x1="60" y1="17" x2="60" y2="6"/><line x1="60" y1="33" x2="60" y2="44"/><line x1="54" y1="19" x2="44" y2="10"/><line x1="66" y1="31" x2="76" y2="40"/></g></svg>
+       <span class="rb"><b>SF₆</b>: six S–F bonds put <b>12</b> electrons around sulfur. Expanded octets occur only for central atoms in <b>period 3 or below</b> (P, S, Cl and heavier), which have room for more electron pairs.</span></button>
+     <button class="rcard"><span class="rt">An odd number</span>
+       <svg viewBox="0 0 120 50" aria-hidden="true"><text class="tx b mid" x="44" y="30" style="font-size:16px">N</text><line class="ln" x1="54" y1="21" x2="66" y2="21"/><line class="ln" x1="54" y1="28" x2="66" y2="28"/><text class="tx b mid" x="76" y="30" style="font-size:16px">O</text><circle class="fos" cx="44" cy="10" r="2.5"/></svg>
+       <span class="rb"><b>NO</b>, nitric oxide, has 5 + 6 = <b>11</b> valence electrons. An odd number cannot all be paired, so one atom keeps a single unpaired electron. Such molecules are called <b>free radicals</b>. Nitric oxide is also a signalling molecule in the body that relaxes blood vessels.</span></button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="lewis" data-title="Formal charge and resonance">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">3 · Lewis theory · refinements</div>
+   <h2>When more than one <span class="ac">drawing works.</span></h2>
+   <p>Sometimes you can draw several valid Lewis structures for one molecule. Sulfur dioxide, SO₂ (18 valence electrons), is an example: the double bond can go to either oxygen.</p>
+   <div class="flow">
+     <div class="node">O=S–O<small>double bond on the left</small></div>
+     <div class="node">O–S=O<small>double bond on the right</small></div>
+   </div>
+   <p>Neither drawing alone is right. Measurements show the two S–O bonds are <b>identical</b> in length. The real molecule is a blend of both drawings, called a <b>resonance hybrid</b>. Resonance structures are linked by a double-headed arrow (↔).</p>
+   <p>For shape, this does not matter: in both drawings, sulfur has two bonded atoms and one lone pair.</p>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>Formal charge: choosing the best drawing</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p><b>Formal charge = valence electrons − lone-pair electrons − ½ × bonding electrons.</b> Work it out for every atom. The best structure has formal charges as close to zero as possible, with any negative charge on the more electronegative atom.</p><p>In O=C=O every atom has a formal charge of 0 (for O: 6 − 4 − ½ × 4 = 0). In the alternative ⁻O–C≡O⁺, the single-bonded O is −1 and the triple-bonded O is +1, so O=C=O is preferred.</p></div>
+   </div>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>Resonance in drug molecules</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>The benzene ring found in paracetamol, aspirin and many other drugs is the classic resonance hybrid: its six C–C bonds are all the same length, between a single and a double bond. Its π electrons are spread over the whole ring, which is one reason aromatic drugs absorb ultraviolet light and can be measured by UV spectrophotometry.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="lewis" data-title="Check: Lewis structures">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check · section 3</div>
+   <h2>Quick check: <span class="ac">Lewis structures.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">How many valence electrons does sulfur dioxide, SO₂, have?</div>
+      <div class="choices"><button class="choice" data-v="a">16</button><button class="choice" data-v="b">18</button><button class="choice" data-v="c">32</button></div>
+      <div class="feedback">S and O are both in group 16, so 6 + 6 + 6 = 18. If you got 32 you added atomic numbers (16 + 8 + 8).</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">In formaldehyde, H₂CO, which atom goes in the centre?</div>
+      <div class="choices"><button class="choice" data-v="a">H</button><button class="choice" data-v="b">O</button><button class="choice" data-v="c">C</button></div>
+      <div class="feedback">Hydrogen can form only one bond, so it is never central. Between C and O, carbon is less electronegative (2.5 versus 3.5), so C is central: two H and one O (double bond) around it.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">Which molecule has an <b>incomplete</b> octet on its central atom?</div>
+      <div class="choices"><button class="choice" data-v="a">BCl₃</button><button class="choice" data-v="b">PCl₅</button><button class="choice" data-v="c">CCl₄</button></div>
+      <div class="feedback">Boron in BCl₃ has only 6 electrons around it. PCl₅ is the opposite case, an expanded octet (10). CCl₄ follows the octet rule exactly.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 4 · VALENCE BOND THEORY ================= -->
+
+<section class="slide" data-sec="vb" data-title="Bonds as overlapping orbitals">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 200" role="img" aria-label="Two hydrogen 1s orbitals, each with one electron, approach and overlap to form a sigma bond with a shared pair of opposite spin">
+    <circle class="fb" cx="70" cy="70" r="34"/><circle class="ln b" cx="70" cy="70" r="34"/><circle class="fk" cx="70" cy="70" r="3"/>
+    <text class="tx bl mid" x="70" y="122">H 1s ↑</text>
+    <circle class="fb" cx="190" cy="70" r="34"/><circle class="ln b" cx="190" cy="70" r="34"/><circle class="fk" cx="190" cy="70" r="3"/>
+    <text class="tx bl mid" x="190" y="122">H 1s ↓</text>
+    <path class="ln o" d="M240 70 H272" marker-end="url(#ar-o)"/>
+    <ellipse class="fb fade" cx="335" cy="70" rx="58" ry="32" style="--d:.5s"/>
+    <ellipse class="ln b fade" cx="335" cy="70" rx="58" ry="32" style="--d:.5s"/>
+    <ellipse class="fo fade" cx="335" cy="70" rx="14" ry="22" style="--d:.9s"/>
+    <circle class="fk fade" cx="316" cy="70" r="3" style="--d:.5s"/><circle class="fk fade" cx="354" cy="70" r="3" style="--d:.5s"/>
+    <text class="tx b mid fade" x="335" y="122" style="--d:.9s">H–H σ bond ↑↓</text>
+    <text class="tx s mid" x="130" y="168">each orbital holds one electron</text>
+    <text class="tx o mid fade" x="330" y="168" style="--d:1.1s">overlap = shared pair</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">4 · Valence bond theory</div>
+   <h2>Where is the shared pair? <span class="ac">In the overlap.</span></h2>
+   <p>Lewis structures say <i>that</i> electrons are shared, but not <i>where</i> they are or <i>why</i> sharing lowers the energy. <b>Valence bond (VB) theory</b>, developed by Heitler, London and Pauling, answers this with atomic orbitals.</p>
+   <ul class="steps">
+     <li><span class="n">1</span><span>A covalent bond forms when a <b>half-filled orbital</b> on one atom <b>overlaps</b> a half-filled orbital on another.</span></li>
+     <li><span class="n">2</span><span>The two electrons, with <b>opposite spins</b>, are shared in the overlap region between the nuclei.</span></li>
+     <li><span class="n">3</span><span>More overlap generally means a <b>stronger bond</b>. Both nuclei attract the shared pair, which is what lowers the energy.</span></li>
+   </ul>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="vb" data-title="Sigma and pi bonds">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="Sigma bond from head-on overlap along the axis between the nuclei; pi bond from side-on overlap of two parallel p orbitals above and below the axis">
+    <text class="tx b" x="10" y="22">σ (sigma): head-on overlap</text>
+    <line class="ln m dash" x1="40" y1="66" x2="246" y2="66"/>
+    <ellipse class="fb" cx="120" cy="66" rx="44" ry="18"/><ellipse class="ln b" cx="120" cy="66" rx="44" ry="18"/>
+    <ellipse class="fb" cx="196" cy="66" rx="44" ry="18"/><ellipse class="ln b" cx="196" cy="66" rx="44" ry="18"/>
+    <ellipse class="fo fade" cx="158" cy="66" rx="12" ry="12" style="--d:.5s"/>
+    <circle class="fk" cx="90" cy="66" r="3"/><circle class="fk" cx="226" cy="66" r="3"/>
+    <text class="tx s" x="252" y="62">electron density</text>
+    <text class="tx s" x="252" y="75">on the axis</text>
+    <text class="tx b" x="10" y="122">π (pi): side-on overlap</text>
+    <line class="ln m dash" x1="70" y1="168" x2="194" y2="168"/>
+    <ellipse class="fb" cx="120" cy="146" rx="13" ry="20"/><ellipse class="fb" cx="120" cy="190" rx="13" ry="20"/>
+    <ellipse class="fb" cx="170" cy="146" rx="13" ry="20"/><ellipse class="fb" cx="170" cy="190" rx="13" ry="20"/>
+    <ellipse class="ln b" cx="120" cy="146" rx="13" ry="20"/><ellipse class="ln b" cx="120" cy="190" rx="13" ry="20"/>
+    <ellipse class="ln b" cx="170" cy="146" rx="13" ry="20"/><ellipse class="ln b" cx="170" cy="190" rx="13" ry="20"/>
+    <path class="fo fade" d="M120 136 Q145 126 170 136 L170 150 Q145 142 120 150 Z" style="--d:.8s"/>
+    <path class="fo fade" d="M120 186 Q145 194 170 186 L170 200 Q145 208 120 200 Z" style="--d:.8s"/>
+    <circle class="fk" cx="120" cy="168" r="3"/><circle class="fk" cx="170" cy="168" r="3"/>
+    <text class="tx s" x="200" y="160">density above and</text>
+    <text class="tx s" x="200" y="173">below the axis</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">4 · Valence bond theory</div>
+   <h2>Two ways to overlap: <span class="ac">σ and π.</span></h2>
+   <p>A <b>sigma (σ) bond</b> comes from head-on overlap along the line joining the nuclei. It can form from s–s, s–p or p–p (end-on) overlap. Every single bond is a σ bond.</p>
+   <p>A <b>pi (π) bond</b> comes from side-on overlap of two parallel p orbitals, above and below that line. A π bond only forms alongside a σ bond.</p>
+   <table class="data-table">
+     <tr><th>Bond</th><th>Made of</th><th>Example</th></tr>
+     <tr><td>Single</td><td>1 σ</td><td>C–H in methane</td></tr>
+     <tr><td>Double</td><td>1 σ + 1 π</td><td>C=O in carbon dioxide</td></tr>
+     <tr><td>Triple</td><td>1 σ + 2 π</td><td>N≡N in nitrogen gas</td></tr>
+   </table>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="vb" data-title="Hybridisation">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 200" role="img" aria-label="Carbon ground state has a full 2s orbital and two half-filled 2p orbitals. After mixing, carbon has four equivalent half-filled sp3 orbitals">
+    <text class="tx b" x="10" y="20">Carbon, ground state</text>
+    <rect class="fw ln" x="20" y="100" width="30" height="30"/><text class="tx b mid" x="35" y="121">↑↓</text>
+    <text class="tx s mid" x="35" y="146">2s</text>
+    <rect class="fw ln" x="70" y="60" width="30" height="30"/><rect class="fw ln" x="100" y="60" width="30" height="30"/><rect class="fw ln" x="130" y="60" width="30" height="30"/>
+    <text class="tx b mid" x="85" y="81">↑</text><text class="tx b mid" x="115" y="81">↑</text>
+    <text class="tx s mid" x="115" y="106">2p</text>
+    <text class="tx r" x="10" y="180">only 2 unpaired electrons: 2 bonds?</text>
+    <path class="ln o" d="M182 95 H222" marker-end="url(#ar-o)"/>
+    <text class="tx o mid" x="202" y="86">mix</text>
+    <text class="tx b" x="240" y="20">Hybridised</text>
+    <rect class="fg ln g" x="244" y="80" width="30" height="30"/><rect class="fg ln g" x="274" y="80" width="30" height="30"/><rect class="fg ln g" x="304" y="80" width="30" height="30"/><rect class="fg ln g" x="334" y="80" width="30" height="30"/>
+    <text class="tx g mid" x="259" y="101">↑</text><text class="tx g mid" x="289" y="101">↑</text><text class="tx g mid" x="319" y="101">↑</text><text class="tx g mid" x="349" y="101">↑</text>
+    <text class="tx s mid" x="304" y="126">four sp³ orbitals</text>
+    <text class="tx g" x="240" y="180">4 equal bonds at 109.5°</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">4 · Valence bond theory</div>
+   <h2>Methane breaks the simple picture. <span class="ac">Hybrids fix it.</span></h2>
+   <p>Carbon's ground state has only <b>two</b> half-filled orbitals, so simple overlap predicts two bonds at 90°. Yet methane, CH₄, has <b>four identical C–H bonds</b> pointing to the corners of a tetrahedron, 109.5° apart.</p>
+   <p>Pauling's answer was <b>hybridisation</b>: the 2s and the three 2p orbitals mix to form four new, equal orbitals called <b>sp³ hybrids</b>, each with one electron. Each overlaps a hydrogen 1s orbital to make a σ bond.</p>
+   <div class="callout"><b>Rule:</b> the number of hybrid orbitals equals the number of orbitals mixed, and equals the number of electron domains around the atom (bonds plus lone pairs). Lone pairs sit in hybrid orbitals too.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="vb" data-title="sp, sp² and sp³">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">4 · Valence bond theory · tap to compare</div>
+   <h2>Three hybrid sets <span class="ac">you must know.</span></h2>
+   <p>Count the electron domains around the atom (each bonded atom and each lone pair counts once), then read off the hybridisation. Tap all three cards.</p>
+   <div class="shape-grid">
+     <button class="rcard"><span class="rt">sp</span><svg class="shape-svg" data-x="2" data-e="0" viewBox="0 0 200 150" aria-hidden="true"></svg>
+       <span class="rb"><b>2 domains</b>, 180°, linear. One s + one p mix; two p orbitals are left over for π bonds. Examples: the C in CO₂ and in HCN.</span></button>
+     <button class="rcard"><span class="rt">sp²</span><svg class="shape-svg" data-x="3" data-e="0" viewBox="0 0 200 150" aria-hidden="true"></svg>
+       <span class="rb"><b>3 domains</b>, 120°, trigonal planar. One s + two p; one p is left for a π bond. Examples: B in BCl₃, C in formaldehyde (H₂C=O) and in benzene rings.</span></button>
+     <button class="rcard"><span class="rt">sp³</span><svg class="shape-svg" data-x="4" data-e="0" viewBox="0 0 200 150" aria-hidden="true"></svg>
+       <span class="rb"><b>4 domains</b>, 109.5°, tetrahedral. One s + three p, no p left. Examples: C in CH₄, and also N in NH₃ and O in H₂O, where some hybrids hold lone pairs.</span></button>
+   </div>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>Five and six domains: sp³d and sp³d²</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>For expanded octets, textbooks describe d orbitals joining the mix. <b>sp³d</b>: 5 hybrids, trigonal bipyramidal, e.g. P in PCl₅. <b>sp³d²</b>: 6 hybrids, octahedral, e.g. S in SF₆. Modern calculations show the d orbitals contribute little, but these labels remain a convenient way to match hybridisation to shape.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="vb" data-title="Check: valence bond theory">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check · section 4</div>
+   <h2>Quick check: <span class="ac">overlap and hybrids.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">The triple bond in nitrogen gas, N≡N, consists of:</div>
+      <div class="choices"><button class="choice" data-v="a">3 σ bonds</button><button class="choice" data-v="b">1 σ and 2 π bonds</button><button class="choice" data-v="c">2 σ and 1 π bond</button></div>
+      <div class="feedback">Only one head-on (σ) overlap is possible between two atoms. The second and third bonds come from side-on overlap of p orbitals, so they are π bonds.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">What is the hybridisation of carbon in CO₂ (O=C=O)?</div>
+      <div class="choices"><button class="choice" data-v="a">sp</button><button class="choice" data-v="b">sp²</button><button class="choice" data-v="c">sp³</button></div>
+      <div class="feedback">Carbon has two electron domains (two double bonds, each counted once) and no lone pairs, so it is sp. Its two unhybridised p orbitals form the two π bonds.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">What is the hybridisation of oxygen in water?</div>
+      <div class="choices"><button class="choice" data-v="a">sp, because it bonds to two atoms</button><button class="choice" data-v="b">sp²</button><button class="choice" data-v="c">sp³</button></div>
+      <div class="feedback">Oxygen has 2 bonding pairs and 2 lone pairs: 4 domains, so sp³. Counting only the bonded atoms (and answering sp) is the most common mistake; lone pairs count too.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 5 · VSEPR ================= -->
+
+<section class="slide" data-sec="vsepr" data-title="VSEPR: domains repel">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">5 · VSEPR theory</div>
+   <h2>Electron pairs push apart <span class="ac">as far as they can.</span></h2>
+   <p><b>Valence shell electron pair repulsion (VSEPR)</b> theory, developed by Gillespie and Nyholm, predicts shape from one idea: the electron domains around a central atom repel each other, so they arrange themselves <b>as far apart as possible</b>. <span class="cite">(<a href="https://doi.org/10.1039/QR9571100339" target="_blank" rel="noopener">Gillespie &amp; Nyholm, 1957</a>)</span></p>
+   <p>An <b>electron domain</b> is any region of electrons around the central atom: a lone pair, or a bond to another atom. <b>A double or triple bond counts as one domain</b>, because all its electrons point the same way.</p>
+   <p>Chemists write the count as <b>AXₘEₙ</b>: A is the central atom, X a bonded atom, E a lone pair on A.</p>
+   <ul class="steps">
+     <li><span class="n">1</span><span>Draw the Lewis structure.</span></li>
+     <li><span class="n">2</span><span>Count X (bonded atoms) and E (lone pairs) on the central atom. Domains = X + E.</span></li>
+     <li><span class="n">3</span><span>Domains give the <b>electron-domain geometry</b>, how all the pairs are arranged.</span></li>
+     <li><span class="n">4</span><span>The <b>molecular shape</b> is named from the atoms only, ignoring where the lone pairs are.</span></li>
+   </ul>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="vsepr" data-title="Five parent shapes">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">5 · VSEPR theory · tap all five</div>
+   <h2>Two to six domains: <span class="ac">five parent shapes.</span></h2>
+   <p class="small">Solid line: in the plane of the page. Wedge: towards you. Dashes: away from you.</p>
+   <div class="shape-grid">
+     <button class="rcard"><span class="rt">2 · linear</span><svg class="shape-svg" data-x="2" data-e="0" viewBox="0 0 200 150" aria-hidden="true"></svg><span class="rb"><b>180°</b>. CO₂, HCN.</span></button>
+     <button class="rcard"><span class="rt">3 · trigonal planar</span><svg class="shape-svg" data-x="3" data-e="0" viewBox="0 0 200 150" aria-hidden="true"></svg><span class="rb"><b>120°</b>, flat. BCl₃, H₂CO.</span></button>
+     <button class="rcard"><span class="rt">4 · tetrahedral</span><svg class="shape-svg" data-x="4" data-e="0" viewBox="0 0 200 150" aria-hidden="true"></svg><span class="rb"><b>109.5°</b>. CH₄, CCl₄.</span></button>
+     <button class="rcard"><span class="rt">5 · trigonal bipyramidal</span><svg class="shape-svg" data-x="5" data-e="0" viewBox="0 0 200 150" aria-hidden="true"></svg><span class="rb"><b>90° and 120°</b>: 3 equatorial, 2 axial. PCl₅.</span></button>
+     <button class="rcard"><span class="rt">6 · octahedral</span><svg class="shape-svg" data-x="6" data-e="0" viewBox="0 0 200 150" aria-hidden="true"></svg><span class="rb"><b>90°</b> between neighbours. SF₆.</span></button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="vsepr" data-title="Lone pairs squeeze bonds">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="squeeze-svg" viewBox="0 0 400 200" role="img" aria-label="Methane 109.5 degrees, ammonia 107 degrees, water 104.5 degrees: each lone pair squeezes the bond angle smaller">
+    <g id="sq1" transform="translate(0,0)"></g><g id="sq2" transform="translate(133,0)"></g><g id="sq3" transform="translate(266,0)"></g>
+    <text class="tx b mid" x="66" y="170">CH₄ · AX₄</text><text class="tx b mid" x="199" y="170">NH₃ · AX₃E</text><text class="tx b mid" x="332" y="170">H₂O · AX₂E₂</text>
+    <text class="tx g mid fade" x="66" y="190" style="--d:.6s">109.5°</text><text class="tx o mid fade" x="199" y="190" style="--d:.9s">about 107°</text><text class="tx r mid fade" x="332" y="190" style="--d:1.2s">about 104.5°</text>
+   </svg>
+   <figcaption>All three have 4 domains, so a tetrahedral electron geometry. Orange lobes are lone pairs.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">5 · VSEPR theory</div>
+   <h2>Lone pairs take more room <span class="ac">and squeeze the bonds.</span></h2>
+   <p>A lone pair is held by only one nucleus, so it spreads out closer to the central atom and repels more strongly than a bonding pair. The order of repulsion is:</p>
+   <p class="formula" style="text-align:center">lone–lone &gt; lone–bond &gt; bond–bond</p>
+   <p>So the same tetrahedral arrangement of four domains gives three different <b>molecular shapes</b>: tetrahedral (CH₄), <b>trigonal pyramidal</b> (NH₃) and <b>bent</b> (H₂O), with the bond angle shrinking each time a lone pair replaces a bond.</p>
+   <div class="callout note"><b>Common mistake:</b> calling ammonia "trigonal planar" because it has three hydrogens. The lone pair still occupies a corner, pushing the three N–H bonds down into a pyramid.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="vsepr" data-title="Shape explorer">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">5 · VSEPR theory · try it</div>
+   <h2>Set the domains. <span class="ac">See the shape.</span></h2>
+   <p>Choose how many atoms are bonded to the central atom and how many lone pairs it has. Try AX₄, then swap bonds for lone pairs one at a time.</p>
+   <div class="explorer" id="explorer">
+     <div class="ex-row">
+       <div class="ex-ctl">Bonded atoms (X)<div class="stepper-num"><button type="button" id="ex-x-m" aria-label="Fewer bonded atoms">−</button><output id="ex-x">4</output><button type="button" id="ex-x-p" aria-label="More bonded atoms">+</button></div></div>
+       <div class="ex-ctl">Lone pairs (E)<div class="stepper-num"><button type="button" id="ex-e-m" aria-label="Fewer lone pairs">−</button><output id="ex-e">0</output><button type="button" id="ex-e-p" aria-label="More lone pairs">+</button></div></div>
+     </div>
+     <div class="ex-body">
+       <svg id="ex-svg" viewBox="0 0 200 150" role="img" aria-label="Sketch of the selected shape"></svg>
+       <div class="ex-out" id="ex-out"></div>
+     </div>
+   </div>
+   <p class="small">Domains are limited to 2–6, the range covered by VSEPR in your course.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="vsepr" data-title="All the shapes in one table">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">5 · VSEPR theory · reference</div>
+   <h2>The shapes you need, <span class="ac">in one table.</span></h2>
+   <table class="data-table">
+     <tr><th>Domains</th><th>Type</th><th>Shape</th><th>Angle</th><th>Example</th></tr>
+     <tr><td>2</td><td>AX₂</td><td>linear</td><td>180°</td><td>CO₂</td></tr>
+     <tr><td>3</td><td>AX₃</td><td>trigonal planar</td><td>120°</td><td>BCl₃</td></tr>
+     <tr class="hl"><td>3</td><td>AX₂E</td><td>bent</td><td>&lt;120°</td><td>SO₂</td></tr>
+     <tr><td>4</td><td>AX₄</td><td>tetrahedral</td><td>109.5°</td><td>CH₄</td></tr>
+     <tr class="hl"><td>4</td><td>AX₃E</td><td>trigonal pyramidal</td><td>≈107°</td><td>NH₃</td></tr>
+     <tr class="hl"><td>4</td><td>AX₂E₂</td><td>bent</td><td>≈104.5°</td><td>H₂O</td></tr>
+     <tr><td>5</td><td>AX₅</td><td>trigonal bipyramidal</td><td>90°, 120°</td><td>PCl₅</td></tr>
+     <tr><td>6</td><td>AX₆</td><td>octahedral</td><td>90°</td><td>SF₆</td></tr>
+   </table>
+   <p class="small">Shaded rows have lone pairs: the shape name differs from the electron-domain geometry.</p>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>Lone pairs with five or six domains</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>With 5 domains, lone pairs take the roomier <b>equatorial</b> positions: AX₄E is a <b>seesaw</b> (SF₄), AX₃E₂ is <b>T-shaped</b> (ClF₃), AX₂E₃ is <b>linear</b> (XeF₂). With 6 domains: AX₅E is <b>square pyramidal</b> (BrF₅) and AX₄E₂ is <b>square planar</b> (XeF₄), with the two lone pairs opposite each other. Try them in the shape explorer.</p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="vsepr" data-title="Check: VSEPR">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check · section 5</div>
+   <h2>Quick check: <span class="ac">predict the shape.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="c">
+      <div class="step-count">QUESTION 1 OF 4</div>
+      <div class="choice-q">What is the molecular shape of ammonia, NH₃?</div>
+      <div class="choices"><button class="choice" data-v="a">Trigonal planar</button><button class="choice" data-v="b">Tetrahedral</button><button class="choice" data-v="c">Trigonal pyramidal</button></div>
+      <div class="feedback">AX₃E: four domains (tetrahedral electron geometry), but one is a lone pair, so the shape is trigonal pyramidal. "Tetrahedral" names the electron geometry, not the shape; "trigonal planar" ignores the lone pair.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 4</div>
+      <div class="choice-q">Carbon dioxide has two C=O double bonds and no lone pairs on carbon. How many electron domains does carbon have?</div>
+      <div class="choices"><button class="choice" data-v="a">2</button><button class="choice" data-v="b">4</button><button class="choice" data-v="c">8</button></div>
+      <div class="feedback">Each double bond counts as one domain, so CO₂ is AX₂: linear, 180°. Counting 4 (one per bond line) is the classic mistake.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 3 OF 4</div>
+      <div class="choice-q">Sulfur dioxide is AX₂E. What is its shape?</div>
+      <div class="choices"><button class="choice" data-v="a">Linear</button><button class="choice" data-v="b">Bent</button><button class="choice" data-v="c">Trigonal planar</button></div>
+      <div class="feedback">Three domains give a trigonal planar arrangement, but one is a lone pair. The two O atoms and S form a bent shape, with an angle just under 120°.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 4 OF 4</div>
+      <div class="choice-q">Sulfur hexafluoride, SF₆, has six S–F bonds and no lone pairs on S. What are its shape and bond angle?</div>
+      <div class="choices"><button class="choice" data-v="a">Hexagonal, 60°</button><button class="choice" data-v="b">Trigonal bipyramidal, 90° and 120°</button><button class="choice" data-v="c">Octahedral, 90°</button></div>
+      <div class="feedback">AX₆ is octahedral, with 90° between neighbouring bonds. A flat hexagon would put the bonds only 60° apart, far closer than they need to be.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 6 · ELECTRONEGATIVITY AND BOND TYPE ================= -->
+
+<section class="slide" data-sec="en" data-title="Electronegativity">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">6 · Electronegativity</div>
+   <h2>Who pulls the shared pair <span class="ac">harder?</span></h2>
+   <p><b>Electronegativity (EN)</b> is the ability of an atom in a bond to attract the shared electrons towards itself. Linus Pauling set up the scale in 1932; fluorine, the most electronegative element, sits at the top with 4.0. <span class="cite">(<a href="https://doi.org/10.1021/ja01348a011" target="_blank" rel="noopener">Pauling, 1932</a>)</span></p>
+   <div class="eng" aria-label="Electronegativity values used in Chang's Chemistry">
+     <div class="h3"><b>H</b><i>2.1</i></div><div class="x"></div><div class="x"></div><div class="x"></div><div class="x"></div><div class="x"></div><div class="x"></div>
+     <div class="h1"><b>Li</b><i>1.0</i></div><div class="h2"><b>Be</b><i>1.5</i></div><div class="h2"><b>B</b><i>2.0</i></div><div class="h3"><b>C</b><i>2.5</i></div><div class="h4"><b>N</b><i>3.0</i></div><div class="h5"><b>O</b><i>3.5</i></div><div class="h5"><b>F</b><i>4.0</i></div>
+     <div class="h1"><b>Na</b><i>0.9</i></div><div class="h1"><b>Mg</b><i>1.2</i></div><div class="h2"><b>Al</b><i>1.5</i></div><div class="h2"><b>Si</b><i>1.8</i></div><div class="h3"><b>P</b><i>2.1</i></div><div class="h3"><b>S</b><i>2.5</i></div><div class="h4"><b>Cl</b><i>3.0</i></div>
+     <div class="h1"><b>K</b><i>0.8</i></div><div class="h1"><b>Ca</b><i>1.0</i></div><div class="x"></div><div class="x"></div><div class="x"></div><div class="x"></div><div class="h4"><b>Br</b><i>2.8</i></div>
+     <div class="x"></div><div class="x"></div><div class="x"></div><div class="x"></div><div class="x"></div><div class="x"></div><div class="h3"><b>I</b><i>2.5</i></div>
+   </div>
+   <p>EN <b>increases across a period</b> (left to right) and <b>decreases down a group</b>. The most electronegative elements, F, O, N and Cl, sit in the top right.</p>
+   <p class="small">These are the one-decimal values from Chang's <i>Chemistry</i>, used throughout this explainer and the lab so your answers match your textbook. Other sources give two decimals (e.g. H 2.20, F 3.98).</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="en" data-title="ΔEN decides the bond type">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 200" role="img" aria-label="A scale of electronegativity difference from 0 to 3.2. Below 0.5 non-polar covalent, 0.5 up to 2.0 polar covalent, 2.0 or more ionic. Examples placed on the scale">
+    <rect class="fg grow-x" x="20" y="80" width="55" height="26" style="--d:.1s"/>
+    <rect class="fo grow-x" x="75" y="80" width="165" height="26" style="--d:.3s"/>
+    <rect class="fr grow-x" x="240" y="80" width="140" height="26" style="--d:.5s"/>
+    <text class="tx g mid" x="47" y="70">non-polar</text>
+    <text class="tx o mid" x="180" y="70">polar covalent</text>
+    <text class="tx r mid" x="310" y="70">ionic</text>
+    <text class="tx s" x="25" y="97">0</text><text class="tx s" x="79" y="97">0.5</text><text class="tx s" x="244" y="97">2.0</text><text class="tx s end" x="368" y="97">3.2</text>
+    <g class="stagger">
+     <g><line class="ln thin" x1="20" y1="106" x2="20" y2="140"/><text class="tx" x="22" y="152">H–H 0</text></g>
+     <g><line class="ln thin" x1="64" y1="106" x2="64" y2="164"/><text class="tx" x="66" y="176">C–H 0.4</text></g>
+     <g><line class="ln thin" x1="119" y1="80" x2="119" y2="40"/><text class="tx" x="104" y="32">H–Cl 0.9</text></g>
+     <g><line class="ln thin" x1="174" y1="106" x2="174" y2="140"/><text class="tx" x="150" y="152">O–H 1.4</text></g>
+     <g><line class="ln thin" x1="229" y1="80" x2="229" y2="20"/><text class="tx" x="200" y="14">H–F 1.9</text></g>
+     <g><line class="ln thin" x1="251" y1="106" x2="251" y2="164"/><text class="tx" x="236" y="176">Na–Cl 2.1</text></g>
+     <g><line class="ln thin" x1="372" y1="106" x2="372" y2="140"/><text class="tx end" x="388" y="152">K–F 3.2</text></g>
+    </g>
+    <text class="tx s end" x="388" y="196">electronegativity difference, ΔEN (Chang's values)</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">6 · Bond type</div>
+   <h2>Subtract, then <span class="ac">read the scale.</span></h2>
+   <p>The bond type depends on the <b>difference</b> in electronegativity, ΔEN = larger EN − smaller EN. ΔEN is never negative.</p>
+   <ul class="steps">
+     <li><span class="n">1</span><span>ΔEN <b>below 0.5</b>: electrons shared almost equally, a <b>non-polar covalent</b> bond.</span></li>
+     <li><span class="n">2</span><span>ΔEN <b>from 0.5 up to 2.0</b>: shared unequally, a <b>polar covalent</b> bond.</span></li>
+     <li><span class="n">3</span><span>ΔEN <b>2.0 or more</b>: electrons effectively transferred, an <b>ionic</b> bond (Chang's rule of thumb).</span></li>
+   </ul>
+   <div class="callout note"><b>Rules of thumb, not laws.</b> The boundaries are arbitrary; a compound's properties are the final test. <span class="cite">(<a href="https://chem.libretexts.org/Courses/McHenry_County_College/CHM_115%3A_Fundamentals_of_Chemistry/04%3A_Water/4.03%3A_Polarity_of_Bonds_and_Molecules" target="_blank" rel="noopener">LibreTexts</a>)</span> B–F scores exactly 2.0, yet BF₃ is a covalent gas. Other books, and the Periodic Trends page on Kompas, use 0.4 and 1.7 instead; follow Chang for your exams.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="en" data-title="Calculator: bond type">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">6 · Bond type · try it</div>
+   <h2>Pick two atoms. <span class="ac">What bond do they make?</span></h2>
+   <p>The calculator uses Chang's electronegativity values and the 0.5 and 2.0 boundaries from the previous page.</p>
+   <div class="calc">
+     <div class="calc-row">
+       <label>Atom 1<select id="den-a"></select></label>
+       <label>Atom 2<select id="den-b"></select></label>
+     </div>
+     <div class="calc-out" id="den-out"></div>
+   </div>
+   <p class="small">Try O and H, then C and H, then Na and Cl, then Al and Cl. Aluminium is a metal, yet Al–Cl comes out polar covalent: "metal plus non-metal means ionic" is only a first guess.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="en" data-title="Why pharmacists care">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">6 · In pharmacy<span class="skill">Applying chemistry to formulation</span></div>
+   <h2>Ionic or covalent changes <span class="ac">how a drug behaves.</span></h2>
+   <p>Most drug molecules are covalent, built from C, H, N and O. Many contain a basic nitrogen with a lone pair, shaped like the nitrogen in ammonia. That lone pair can accept a proton from an acid:</p>
+   <div class="flow">
+     <div class="node">Drug base<small>covalent, neutral R₃N:</small></div>
+     <div class="node o">+ HCl</div>
+     <div class="node g">Hydrochloride salt<small>ionic: R₃NH⁺ Cl⁻</small></div>
+   </div>
+   <p>The salt is made of ions, so it usually dissolves far better in water. This is why so many products are supplied as a salt, for example <b>lidocaine hydrochloride</b> injection. The neutral covalent form, in turn, crosses lipid cell membranes more easily. The same drug, bonded two ways, behaves two ways.</p>
+   <p class="small">Sodium chloride, the classic ionic solid (ΔEN 2.1), is the solute in 0.9% saline. Section 8 explains why ions dissolve so readily in water.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="en" data-title="Check: bond type">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check · section 6</div>
+   <h2>Quick check: <span class="ac">classify the bond.</span></h2>
+   <p class="small">Use Chang's values: H 2.1, C 2.5, O 3.5, F 4.0, K 0.8, Cl 3.0.</p>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">The O–H bond in water is:</div>
+      <div class="choices"><button class="choice" data-v="a">Non-polar covalent</button><button class="choice" data-v="b">Polar covalent</button><button class="choice" data-v="c">Ionic</button></div>
+      <div class="feedback">ΔEN = 3.5 − 2.1 = 1.4: between 0.5 and 2.0, so polar covalent. O is δ−, H is δ+.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">Potassium fluoride, K–F, is:</div>
+      <div class="choices"><button class="choice" data-v="a">Non-polar covalent</button><button class="choice" data-v="b">Polar covalent</button><button class="choice" data-v="c">Ionic</button></div>
+      <div class="feedback">ΔEN = 4.0 − 0.8 = 3.2, well above 2.0: ionic (K⁺ F⁻). It is the largest difference on the scale page.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">The C–H bond, found in every drug molecule, is:</div>
+      <div class="choices"><button class="choice" data-v="a">Non-polar covalent</button><button class="choice" data-v="b">Polar covalent</button><button class="choice" data-v="c">Ionic</button></div>
+      <div class="feedback">ΔEN = 2.5 − 2.1 = 0.4, below 0.5: non-polar. That is why hydrocarbon parts of a molecule repel water. Picking "polar" because the two atoms differ is a common slip; any non-zero difference below 0.5 still counts as non-polar.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 7 · POLARITY ================= -->
+
+<section class="slide" data-sec="pol" data-title="Bond dipoles add as arrows">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 200" role="img" aria-label="Carbon dioxide: two bond dipoles point in opposite directions and cancel. Water: two bond dipoles at an angle add to a net dipole of 1.85 debye">
+    <text class="tx b mid" x="40" y="94">O</text><text class="tx b mid" x="110" y="94">C</text><text class="tx b mid" x="180" y="94">O</text>
+    <path class="ln" d="M52 86 H98 M52 92 H98 M122 86 H168 M122 92 H168"/>
+    <text class="tx r mid" x="40" y="118">δ−</text><text class="tx bl mid" x="110" y="118">δ+</text><text class="tx r mid" x="180" y="118">δ−</text>
+    <path class="ln m fade" d="M104 64 H54" marker-end="url(#ar-m)" style="stroke-width:2;--d:.4s"/>
+    <path class="ln m fade" d="M116 64 H166" marker-end="url(#ar-m)" style="stroke-width:2;--d:.4s"/>
+    <text class="tx b mid" x="110" y="144">CO₂ · linear</text>
+    <text class="tx g mid" x="110" y="162">arrows cancel · 0 D</text>
+    <text class="tx s mid" x="110" y="178">non-polar molecule</text>
+    <text class="tx b mid" x="300" y="64">O</text>
+    <text class="tx b mid" x="252" y="128">H</text><text class="tx b mid" x="348" y="128">H</text>
+    <path class="ln" d="M292 70 L258 114 M308 70 L342 114"/>
+    <path class="ln m fade" d="M246 106 L280 62" marker-end="url(#ar-m)" style="stroke-width:2;--d:.4s"/>
+    <path class="ln m fade" d="M354 106 L320 62" marker-end="url(#ar-m)" style="stroke-width:2;--d:.4s"/>
+    <path class="ln fade" d="M300 128 V84" marker-end="url(#ar-y)" style="stroke:var(--eyebrow);stroke-width:3;--d:1s"/>
+    <text class="tx b mid" x="300" y="152">H₂O · bent, 104.5°</text>
+    <text class="tx o mid" x="300" y="168">arrows add · 1.85 D</text>
+    <text class="tx s mid" x="300" y="184">polar molecule</text>
+   </svg>
+   <figcaption>Grey: bond dipoles, pointing to the δ− end. Gold: their sum, the molecular dipole.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">7 · Polarity and dipole moment</div>
+   <h2>Polar bonds do not always make <span class="ac">a polar molecule.</span></h2>
+   <p>A polar bond has a positive end and a negative end: a <b>dipole</b>. Its size is the <b>dipole moment</b>, μ = Q × r (charge × distance), measured in <b>debye (D)</b>.</p>
+   <p>Treat each bond dipole as an arrow pointing to the more electronegative atom, then add the arrows like forces. The molecule is polar only if they <b>do not cancel</b>. So the answer depends on the <b>shape</b> from VSEPR.</p>
+   <p>CO₂ has two polar C=O bonds, but it is linear: the arrows pull equally in opposite directions, so μ = 0. Water is bent by its two lone pairs, so its arrows add up to 1.85 D.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="pol" data-title="Symmetry decides">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">7 · Polarity · tap all six</div>
+   <h2>Same bonds, different symmetry, <span class="ac">different answer.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">CCl₄</span><span class="rb">Tetrahedral, four identical polar C–Cl bonds (ΔEN 0.5). The arrows cancel in 3D: <b>non-polar, 0 D</b>.</span></button>
+     <button class="rcard"><span class="rt">CHCl₃</span><span class="rb">Chloroform: still tetrahedral, but one Cl is swapped for H. The arrows no longer balance: <b>polar, 1.04 D</b>.</span></button>
+     <button class="rcard"><span class="rt">BCl₃</span><span class="rb">Trigonal planar, three identical B–Cl bonds at 120°. They cancel: <b>non-polar, 0 D</b>.</span></button>
+     <button class="rcard"><span class="rt">NH₃</span><span class="rb">Trigonal pyramidal. The lone pair breaks the symmetry and the three N–H dipoles add: <b>polar, 1.47 D</b>.</span></button>
+     <button class="rcard"><span class="rt">H₂CO</span><span class="rb">Formaldehyde: trigonal planar, but C=O is far more polar than C–H. Nothing balances the C=O: <b>polar, 2.33 D</b>.</span></button>
+     <button class="rcard"><span class="rt">SF₆</span><span class="rb">Octahedral, six polar S–F bonds (ΔEN 1.5) in opposite pairs. All cancel: <b>non-polar, 0 D</b>.</span></button>
+   </div>
+   <p class="small">Dipole moments are measured values for the gas phase.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="pol" data-title="A quick polarity test">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">7 · Polarity · method</div>
+   <h2>Two questions <span class="ac">settle most molecules.</span></h2>
+   <div class="flow">
+     <div class="node">Any polar bonds?<small>ΔEN 0.5 or more</small></div>
+     <div class="node">Lone pairs on the central atom, or different outer atoms?<small>symmetry broken</small></div>
+     <div class="node g">Polar molecule<small>H₂O, NH₃, CHCl₃, SO₂</small></div>
+   </div>
+   <p>Answer "no" to the first question and the molecule is <b>non-polar</b> (CH₄). Answer "yes" then "no", meaning a symmetric shape with identical outer atoms, and it is also <b>non-polar</b> (CO₂, BCl₃, CCl₄, SF₆).</p>
+   <div class="callout"><b>In practice: SF₆ in ultrasound.</b> Sulfur hexafluoride is the gas inside SonoVue, an ultrasound contrast agent. Being non-polar, it does not dissolve in water or body fluids, so it stays as tiny gas microbubbles that reflect ultrasound and brighten the image. <span class="cite">(<a href="https://www.ema.europa.eu/en/medicines/human/EPAR/sonovue" target="_blank" rel="noopener">EMA</a>)</span></div>
+   <p class="small">The test works for the molecules in your course. Some symmetric shapes with lone pairs, such as square planar XeF₄, are non-polar; the lone pairs cancel too.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="pol" data-title="Check: polarity">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check · section 7</div>
+   <h2>Quick check: <span class="ac">polar or not?</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">Carbon dioxide contains two polar C=O bonds. Is the molecule polar?</div>
+      <div class="choices"><button class="choice" data-v="a">Yes, it has polar bonds</button><button class="choice" data-v="b">No, the linear shape cancels the dipoles</button><button class="choice" data-v="c">Only when dissolved</button></div>
+      <div class="feedback">Polar bonds are necessary but not enough. In a linear O=C=O the two equal dipoles point in opposite directions and cancel, so μ = 0.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">Which of these is a polar molecule?</div>
+      <div class="choices"><button class="choice" data-v="a">CH₂Cl₂</button><button class="choice" data-v="b">CCl₄</button><button class="choice" data-v="c">CH₄</button></div>
+      <div class="feedback">Dichloromethane has two different outer atoms (H and Cl) on a tetrahedral carbon, so its C–Cl dipoles are not balanced: polar (1.60 D). CCl₄ is symmetric
