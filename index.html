@@ -479,6 +479,14 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
 .grp-action-btn.disabled{background:rgba(27,67,50,0.05);color:var(--ink-soft);}
 .grp-create-card{border:1.5px dashed var(--forest-300);border-radius:var(--radius-md);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:18px;cursor:pointer;color:var(--forest-500);font-weight:600;font-size:12px;background:rgba(255,255,255,0.3);text-align:center;}
 .grp-create-card:hover{background:rgba(45,106,79,0.06);}
+.grp-my-card{padding:18px 20px;margin-bottom:16px;border-left:3px solid var(--forest-500);}
+.grp-my-card.none{border-left-color:var(--gold-500);}
+.grp-my-label{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-600);margin-bottom:4px;}
+.grp-my-name{font-family:var(--font-display);font-size:19px;font-weight:600;color:var(--forest-900);margin-bottom:10px;}
+.grp-my-row{display:flex;gap:12px;align-items:flex-start;padding:7px 0;border-top:1px solid rgba(27,67,50,0.08);font-size:13px;color:var(--ink);}
+.grp-my-row > span:last-child{display:flex;flex-wrap:wrap;gap:5px;min-width:0;}
+.grp-my-key{flex-shrink:0;width:68px;font-size:11.5px;font-weight:600;color:var(--ink-soft);padding-top:3px;}
+.grp-my-muted{font-size:12.5px;color:var(--ink-soft);font-style:italic;}
 .grp-create-plus{width:28px;height:28px;border-radius:50%;background:rgba(45,106,79,0.08);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--forest-700);}
 .grp-control-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
 .grp-control-left{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
@@ -1025,6 +1033,7 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
 
         <!-- STUDENT PANEL -->
         <div id="groups-student">
+          <div id="grp-my-card"></div>
           <div class="grp-grid" id="grp-student-grid"></div>
         </div>
 
@@ -3450,8 +3459,21 @@ function escapeHtml(s) {
 let groupsList = [];
 let courseRoster = []; // [{id, full_name}] — everyone enrolled in the current course
 
+let groupMemberNames = new Map(); // student_id -> full_name, via course_group_member_names RPC
+
 async function loadGroupsView() {
-  if (!currentCourse || !myProfile) return;
+  if (!myProfile) return;
+  if (!currentCourse) {
+    // Groups is in the nav before a course is opened; say so instead of a blank page.
+    document.getElementById('groups-section-label').textContent = '';
+    document.getElementById('grp-status-banner').style.display = 'none';
+    document.getElementById('groups-educator').style.display = 'none';
+    document.getElementById('groups-student').style.display = '';
+    document.getElementById('grp-my-card').innerHTML = '';
+    document.getElementById('grp-student-grid').innerHTML = '<div class="empty-state">Open a course from My Courses first to see its groups.</div>';
+    return;
+  }
+  document.getElementById('grp-status-banner').style.display = '';
   document.getElementById('groups-section-label').textContent = currentCourse.code;
 
   // Re-fetch lock/max-size fresh — these can change between visits to this tab.
@@ -3467,6 +3489,12 @@ async function loadGroupsView() {
     .eq('course_id', currentCourse.id)
     .order('group_number');
   groupsList = groups || [];
+
+  // Students can only read their own profile row, so the join above returns no
+  // names for classmates. This RPC returns id + full_name only, for members of
+  // groups in a course the caller is enrolled in (or any course, for educators).
+  const { data: names } = await sb.rpc('course_group_member_names', { p_course_id: currentCourse.id });
+  groupMemberNames = new Map((names || []).map(n => [n.student_id, n.full_name]));
 
   renderGroupsStatusBanner();
 
@@ -3504,6 +3532,30 @@ function renderStudentGroups() {
   const maxSize = currentCourse.group_max_size || 5;
   const myGroup = groupsList.find(g => (g.project_group_members || []).some(m => m.student_id === myProfile.id));
 
+  const memberName = (m) => groupMemberNames.get(m.student_id) || (m.profiles && m.profiles.full_name) || 'Student';
+
+  // "Your group" summary card above the grid
+  const myCard = document.getElementById('grp-my-card');
+  if (myGroup) {
+    const mates = (myGroup.project_group_members || []).filter(m => m.student_id !== myProfile.id);
+    const topic = locked
+      ? (myGroup.topic_text ? escapeHtml(myGroup.topic_text) : '<span class="grp-my-muted">Topic pending</span>')
+      : '<span class="grp-my-muted">Assigned once your educator locks the groups</span>';
+    myCard.innerHTML = `
+      <div class="grp-my-card glass">
+        <div class="grp-my-label">Your group</div>
+        <div class="grp-my-name">${escapeHtml(myGroup.name)}</div>
+        <div class="grp-my-row"><span class="grp-my-key">Members</span><span>${[ 'You', ...mates.map(memberName) ].map(n => `<span class="grp-member-pill">${escapeHtml(n)}</span>`).join(' ')}</span></div>
+        <div class="grp-my-row"><span class="grp-my-key">Topic</span><span>${topic}</span></div>
+      </div>`;
+  } else {
+    myCard.innerHTML = `
+      <div class="grp-my-card glass none">
+        <div class="grp-my-label">Your group</div>
+        <div class="grp-my-muted">${locked ? "You're not in a group. Contact your educator to be placed in one." : "You haven't joined a group yet. Pick one below or start a new one."}</div>
+      </div>`;
+  }
+
   if (!groupsList.length && locked) {
     grid.innerHTML = `<div class="empty-state">No groups have been created for this course yet.</div>`;
     return;
@@ -3514,7 +3566,7 @@ function renderStudentGroups() {
     const isMine = members.some(m => m.student_id === myProfile.id);
     const isFull = members.length >= maxSize;
     const memberHTML = members.map(m =>
-      `<span class="grp-member-pill">${escapeHtml(m.student_id === myProfile.id ? 'You' : (m.profiles && m.profiles.full_name ? m.profiles.full_name.split(' ')[0] : 'Student'))}</span>`
+      `<span class="grp-member-pill">${escapeHtml(m.student_id === myProfile.id ? 'You' : memberName(m))}</span>`
     ).join('');
     const openSlots = Math.max(0, maxSize - members.length);
     const slotsHTML = (!locked && openSlots > 0) ? Array(openSlots).fill('<span class="grp-slot-empty">open slot</span>').join('') : '';
