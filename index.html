@@ -325,6 +325,20 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
 .tier-bar button{border:none;padding:0;height:100%;cursor:pointer;}
 .tier-bar button.active{outline:2px solid var(--forest-900);outline-offset:-2px;}
 .filter-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 14px;margin-bottom:12px;border-radius:var(--radius-sm);background:var(--forest-700);color:#eef2e6;font-size:13px;}
+/* NAME CALLER (educator, Students view) */
+.caller-card{padding:16px 20px;margin-bottom:16px;}
+.caller-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.caller-head h3{font-size:14px;font-weight:600;color:var(--forest-900);}
+.caller-meta{font-size:11.5px;color:var(--ink-soft);}
+.caller-name{font-family:var(--font-display);font-size:26px;font-weight:600;color:var(--forest-900);line-height:1.25;margin:12px 0 4px;min-height:33px;overflow-wrap:anywhere;}
+.caller-name.spinning{color:var(--ink-soft);}
+.caller-name.empty{font-family:var(--font-body);font-size:13px;font-weight:400;color:var(--ink-soft);min-height:0;}
+.caller-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
+.caller-btn{font-size:12.5px;font-weight:600;border-radius:99px;padding:8px 16px;border:1px solid transparent;}
+.caller-btn.primary{background:linear-gradient(135deg, var(--forest-700), var(--forest-500));color:#fff;}
+.caller-btn.ghost{background:rgba(255,255,255,0.55);border-color:rgba(27,67,50,0.18);color:var(--forest-700);}
+.caller-btn[disabled]{opacity:.55;cursor:default;}
+.caller-err{font-size:11.5px;color:#a9491f;margin-top:8px;}
 .filter-actions{display:flex;gap:8px;flex-wrap:wrap;}
 .filter-clear,.btn-nudge{font-size:11.5px;font-weight:600;border-radius:99px;padding:6px 12px;border:none;cursor:pointer;}
 .filter-clear{background:#eef2e6;color:var(--forest-900);}
@@ -479,14 +493,6 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
 .grp-action-btn.disabled{background:rgba(27,67,50,0.05);color:var(--ink-soft);}
 .grp-create-card{border:1.5px dashed var(--forest-300);border-radius:var(--radius-md);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;padding:18px;cursor:pointer;color:var(--forest-500);font-weight:600;font-size:12px;background:rgba(255,255,255,0.3);text-align:center;}
 .grp-create-card:hover{background:rgba(45,106,79,0.06);}
-.grp-my-card{padding:18px 20px;margin-bottom:16px;border-left:3px solid var(--forest-500);}
-.grp-my-card.none{border-left-color:var(--gold-500);}
-.grp-my-label{font-size:10.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-600);margin-bottom:4px;}
-.grp-my-name{font-family:var(--font-display);font-size:19px;font-weight:600;color:var(--forest-900);margin-bottom:10px;}
-.grp-my-row{display:flex;gap:12px;align-items:flex-start;padding:7px 0;border-top:1px solid rgba(27,67,50,0.08);font-size:13px;color:var(--ink);}
-.grp-my-row > span:last-child{display:flex;flex-wrap:wrap;gap:5px;min-width:0;}
-.grp-my-key{flex-shrink:0;width:68px;font-size:11.5px;font-weight:600;color:var(--ink-soft);padding-top:3px;}
-.grp-my-muted{font-size:12.5px;color:var(--ink-soft);font-style:italic;}
 .grp-create-plus{width:28px;height:28px;border-radius:50%;background:rgba(45,106,79,0.08);display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--forest-700);}
 .grp-control-row{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
 .grp-control-left{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
@@ -923,6 +929,20 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
           <a href="#" target="_blank" rel="noopener" class="btn-inova" id="inova-roster-link">Open Grader report →</a>
         </div>
 
+        <div class="caller-card glass fade-up" id="caller-card">
+          <div class="caller-head">
+            <h3>Call on a student</h3>
+            <span class="caller-meta" id="caller-meta"></span>
+          </div>
+          <div class="caller-name empty" id="caller-name" aria-live="polite">Picks favour students with fewer points and no activity. Each student comes up once per session.</div>
+          <div class="caller-actions">
+            <button class="caller-btn primary" id="caller-pick-btn" type="button">Pick a name</button>
+            <button class="caller-btn ghost" id="caller-absent-btn" type="button" style="display:none">Absent, skip</button>
+            <button class="caller-btn ghost" id="caller-new-btn" type="button">New session</button>
+          </div>
+          <div class="caller-err" id="caller-err" style="display:none"></div>
+        </div>
+
         <div class="search-wrap has-sort">
           <input type="text" id="roster-search" placeholder="Search by name or matric number…">
           <div class="sort-toggle" role="group" aria-label="Sort students">
@@ -1033,7 +1053,6 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
 
         <!-- STUDENT PANEL -->
         <div id="groups-student">
-          <div id="grp-my-card"></div>
           <div class="grp-grid" id="grp-student-grid"></div>
         </div>
 
@@ -2778,6 +2797,7 @@ async function loadEducatorRoster() {
     };
   });
   assignRosterRanks();
+  await loadCallerState();
   renderRosterStats();
   applyRosterView();
 }
@@ -2936,6 +2956,147 @@ document.getElementById('nudge-btn').addEventListener('click', async () => {
   if (out.failed) msg += ` ${out.failed} failed to send; try again shortly.`;
   res.className = 'nudge-result show' + (out.failed ? ' err' : '');
   res.textContent = msg;
+});
+
+/* ---------- EDUCATOR: NAME CALLER ----------
+   Weighted pick from the whole course roster. Weight per student:
+     no activity at all            5.0
+     otherwise  0.3 + 2.7 × (1 − points ÷ class top points)   (0.3 to 3.0)
+     called in an earlier session in the last 7 days → weight halved
+   Each pick is saved to student_calls. A session is one class: anyone
+   called or marked absent in it is out of the pool until "New session".
+   A session also ends on its own after 3 hours, so the next class starts
+   fresh. Only the name is shown, never points or tier. */
+const CALLER_SESSION_MS = 3 * 60 * 60 * 1000;
+const CALLER_RECENT_MS = 7 * 24 * 60 * 60 * 1000;
+let callerSession = null;          // { id, startedAt }
+let callerUsed = new Set();        // student ids called or absent this session
+let callerRecent = new Set();      // called in an earlier session, last 7 days
+let callerCurrent = null;          // { studentId, rowId }
+let callerBusy = false;
+
+const callerKey = () => 'kompas_call_session_' + currentCourse.id;
+
+function newCallerSession() {
+  callerSession = { id: crypto.randomUUID(), startedAt: Date.now() };
+  try { localStorage.setItem(callerKey(), JSON.stringify(callerSession)); } catch (_) {}
+  callerUsed = new Set();
+  callerCurrent = null;
+}
+
+async function loadCallerState() {
+  callerCurrent = null;
+  callerSession = null;
+  try { callerSession = JSON.parse(localStorage.getItem(callerKey()) || 'null'); } catch (_) {}
+  if (!callerSession || !callerSession.id || Date.now() - callerSession.startedAt > CALLER_SESSION_MS) newCallerSession();
+  const since = new Date(Date.now() - CALLER_RECENT_MS).toISOString();
+  const { data, error } = await sb.from('student_calls').select('student_id, session_id, outcome, called_at')
+    .eq('course_id', currentCourse.id).gte('called_at', since);
+  callerUsed = new Set();
+  callerRecent = new Set();
+  (data || []).forEach(r => {
+    if (r.session_id === callerSession.id) callerUsed.add(r.student_id);
+    else if (r.outcome === 'called') callerRecent.add(r.student_id);
+  });
+  renderCaller(error ? 'Could not load past picks: ' + error.message : null);
+}
+
+function callerPool() {
+  return allStudents.filter(s => !callerUsed.has(s.id));
+}
+
+function callerWeight(s, topPoints) {
+  let w = !s.hasEngaged ? 5 : 0.3 + 2.7 * (1 - Math.min(1, s.points / topPoints));
+  if (callerRecent.has(s.id)) w *= 0.5;
+  return w;
+}
+
+function weightedPick(pool) {
+  const top = Math.max(1, ...allStudents.map(s => s.points));
+  const weights = pool.map(s => callerWeight(s, top));
+  let r = Math.random() * weights.reduce((a, b) => a + b, 0);
+  for (let i = 0; i < pool.length; i++) { r -= weights[i]; if (r <= 0) return pool[i]; }
+  return pool[pool.length - 1];
+}
+
+function renderCaller(err) {
+  const total = allStudents.length;
+  const left = callerPool().length;
+  const nameEl = document.getElementById('caller-name');
+  const pickBtn = document.getElementById('caller-pick-btn');
+  document.getElementById('caller-meta').textContent = total ? `${left} of ${total} left this session` : '';
+  document.getElementById('caller-absent-btn').style.display = callerCurrent ? '' : 'none';
+  pickBtn.textContent = callerCurrent ? 'Next name' : 'Pick a name';
+  pickBtn.disabled = callerBusy || !left;
+  if (callerCurrent) {
+    const s = allStudents.find(x => x.id === callerCurrent.studentId);
+    nameEl.className = 'caller-name';
+    nameEl.textContent = s ? (s.full_name || s.email) : 'Student';
+  } else if (!total) {
+    nameEl.className = 'caller-name empty';
+    nameEl.textContent = 'No students enrolled in this course yet.';
+  } else if (!left) {
+    nameEl.className = 'caller-name empty';
+    nameEl.textContent = 'Everyone has been called this session. Start a new session to pick again.';
+  } else {
+    nameEl.className = 'caller-name empty';
+    nameEl.textContent = 'Picks favour students with fewer points and no activity. Each student comes up once per session.';
+  }
+  const errEl = document.getElementById('caller-err');
+  errEl.style.display = err ? '' : 'none';
+  errEl.textContent = err || '';
+}
+
+async function callerSpin(pool) {
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || pool.length < 2) return;
+  const nameEl = document.getElementById('caller-name');
+  nameEl.className = 'caller-name spinning';
+  for (let i = 0; i < 10; i++) {
+    const s = pool[Math.floor(Math.random() * pool.length)];
+    nameEl.textContent = s.full_name || s.email;
+    await new Promise(r => setTimeout(r, 45 + i * 12));
+  }
+}
+
+async function callerPick() {
+  if (callerBusy) return;
+  if (callerSession && Date.now() - callerSession.startedAt > CALLER_SESSION_MS) newCallerSession();
+  const pool = callerPool();
+  if (!pool.length) { renderCaller(); return; }
+  callerBusy = true;
+  document.getElementById('caller-pick-btn').disabled = true;
+  document.getElementById('caller-absent-btn').style.display = 'none';
+  const chosen = weightedPick(pool);
+  await callerSpin(pool);
+  callerUsed.add(chosen.id);
+  callerCurrent = { studentId: chosen.id, rowId: null };
+  const { data, error } = await sb.from('student_calls').insert({
+    course_id: currentCourse.id, student_id: chosen.id, session_id: callerSession.id, outcome: 'called',
+  }).select('id').single();
+  if (data) callerCurrent.rowId = data.id;
+  callerBusy = false;
+  renderCaller(error ? 'Picked, but not saved: ' + error.message : null);
+}
+
+async function callerAbsent() {
+  if (!callerCurrent || callerBusy) return;
+  const { rowId } = callerCurrent;
+  let err = null;
+  if (rowId) {
+    const { error } = await sb.from('student_calls').update({ outcome: 'absent' }).eq('id', rowId);
+    if (error) err = 'Could not mark absent: ' + error.message;
+  }
+  callerCurrent = null;
+  if (err) { renderCaller(err); return; }
+  await callerPick();
+}
+
+document.getElementById('caller-pick-btn').addEventListener('click', callerPick);
+document.getElementById('caller-absent-btn').addEventListener('click', callerAbsent);
+document.getElementById('caller-new-btn').addEventListener('click', () => {
+  if (callerUsed.size && !confirm('Start a new session? Everyone goes back into the pool.')) return;
+  newCallerSession();
+  renderCaller();
 });
 
 function renderRoster(list) {
@@ -3459,21 +3620,8 @@ function escapeHtml(s) {
 let groupsList = [];
 let courseRoster = []; // [{id, full_name}] — everyone enrolled in the current course
 
-let groupMemberNames = new Map(); // student_id -> full_name, via course_group_member_names RPC
-
 async function loadGroupsView() {
-  if (!myProfile) return;
-  if (!currentCourse) {
-    // Groups is in the nav before a course is opened; say so instead of a blank page.
-    document.getElementById('groups-section-label').textContent = '';
-    document.getElementById('grp-status-banner').style.display = 'none';
-    document.getElementById('groups-educator').style.display = 'none';
-    document.getElementById('groups-student').style.display = '';
-    document.getElementById('grp-my-card').innerHTML = '';
-    document.getElementById('grp-student-grid').innerHTML = '<div class="empty-state">Open a course from My Courses first to see its groups.</div>';
-    return;
-  }
-  document.getElementById('grp-status-banner').style.display = '';
+  if (!currentCourse || !myProfile) return;
   document.getElementById('groups-section-label').textContent = currentCourse.code;
 
   // Re-fetch lock/max-size fresh — these can change between visits to this tab.
@@ -3489,12 +3637,6 @@ async function loadGroupsView() {
     .eq('course_id', currentCourse.id)
     .order('group_number');
   groupsList = groups || [];
-
-  // Students can only read their own profile row, so the join above returns no
-  // names for classmates. This RPC returns id + full_name only, for members of
-  // groups in a course the caller is enrolled in (or any course, for educators).
-  const { data: names } = await sb.rpc('course_group_member_names', { p_course_id: currentCourse.id });
-  groupMemberNames = new Map((names || []).map(n => [n.student_id, n.full_name]));
 
   renderGroupsStatusBanner();
 
@@ -3532,30 +3674,6 @@ function renderStudentGroups() {
   const maxSize = currentCourse.group_max_size || 5;
   const myGroup = groupsList.find(g => (g.project_group_members || []).some(m => m.student_id === myProfile.id));
 
-  const memberName = (m) => groupMemberNames.get(m.student_id) || (m.profiles && m.profiles.full_name) || 'Student';
-
-  // "Your group" summary card above the grid
-  const myCard = document.getElementById('grp-my-card');
-  if (myGroup) {
-    const mates = (myGroup.project_group_members || []).filter(m => m.student_id !== myProfile.id);
-    const topic = locked
-      ? (myGroup.topic_text ? escapeHtml(myGroup.topic_text) : '<span class="grp-my-muted">Topic pending</span>')
-      : '<span class="grp-my-muted">Assigned once your educator locks the groups</span>';
-    myCard.innerHTML = `
-      <div class="grp-my-card glass">
-        <div class="grp-my-label">Your group</div>
-        <div class="grp-my-name">${escapeHtml(myGroup.name)}</div>
-        <div class="grp-my-row"><span class="grp-my-key">Members</span><span>${[ 'You', ...mates.map(memberName) ].map(n => `<span class="grp-member-pill">${escapeHtml(n)}</span>`).join(' ')}</span></div>
-        <div class="grp-my-row"><span class="grp-my-key">Topic</span><span>${topic}</span></div>
-      </div>`;
-  } else {
-    myCard.innerHTML = `
-      <div class="grp-my-card glass none">
-        <div class="grp-my-label">Your group</div>
-        <div class="grp-my-muted">${locked ? "You're not in a group. Contact your educator to be placed in one." : "You haven't joined a group yet. Pick one below or start a new one."}</div>
-      </div>`;
-  }
-
   if (!groupsList.length && locked) {
     grid.innerHTML = `<div class="empty-state">No groups have been created for this course yet.</div>`;
     return;
@@ -3566,7 +3684,7 @@ function renderStudentGroups() {
     const isMine = members.some(m => m.student_id === myProfile.id);
     const isFull = members.length >= maxSize;
     const memberHTML = members.map(m =>
-      `<span class="grp-member-pill">${escapeHtml(m.student_id === myProfile.id ? 'You' : memberName(m))}</span>`
+      `<span class="grp-member-pill">${escapeHtml(m.student_id === myProfile.id ? 'You' : (m.profiles && m.profiles.full_name ? m.profiles.full_name.split(' ')[0] : 'Student'))}</span>`
     ).join('');
     const openSlots = Math.max(0, maxSize - members.length);
     const slotsHTML = (!locked && openSlots > 0) ? Array(openSlots).fill('<span class="grp-slot-empty">open slot</span>').join('') : '';
