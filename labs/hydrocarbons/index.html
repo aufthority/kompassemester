@@ -340,6 +340,32 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .choice.wrong svg .bd{stroke:var(--red)}
 .eqn{font-weight:600;color:var(--ink);font-size:1em;text-align:center;padding:.45em .6em;background:#f4f6f3;border-radius:8px;margin:.45em 0;line-height:1.6}
 #alk-mol{height:3.6em}
+
+/* ---------- reaction player ---------- */
+.rx{margin:.45em 0}
+.rx-svg{width:100%;height:auto;aspect-ratio:400/170;margin:0 auto;max-height:calc(var(--k) * 26vh);max-height:calc(var(--k) * 26dvh);display:block;background:#fafbf9;border:1px solid var(--rule);border-radius:var(--radius)}
+@media (min-width:760px) and (orientation:landscape){.rx-svg{max-height:calc(var(--k) * 36vh);max-height:calc(var(--k) * 36dvh)}}
+.rx .eqn{margin:.4em 0 .3em}
+.rx-cap{font-size:.88em;margin-bottom:.3em}
+.rx-key{font-size:.74em;color:var(--muted);margin:-.1em 0 .4em}
+.kdot{display:inline-block;width:.55em;height:.55em;border-radius:50%;background:var(--blue);vertical-align:.05em}
+.rx-ctl{display:flex;align-items:center;gap:.5em}
+.rx-count{flex:1;text-align:center;font-size:.72em;font-weight:700;color:var(--eyebrow);letter-spacing:.08em}
+.rx-ctl .btn:disabled{opacity:.35;cursor:default}
+.at circle{stroke:var(--ink);stroke-width:1.4}
+.at text{font:700 10.5px 'DM Sans',sans-serif;text-anchor:middle;fill:#fff;pointer-events:none}
+.at-c circle{fill:#2b332e}
+.at-h circle{fill:#fff}.at-h text{fill:var(--ink)}
+.at-cl circle{fill:#3f9a62}
+.at-br circle{fill:#a8431f}
+.at-o circle{fill:var(--red)}
+.at-r circle{fill:#7a5cc4}
+.bnd line{stroke:var(--ink);stroke-width:2.2;stroke-linecap:round}
+.edot{fill:var(--blue)}
+.rx-ar{fill:none;stroke:var(--orange);stroke-width:1.8;stroke-linecap:round}
+.rx-uv{fill:none;stroke:#7a5cc4;stroke-width:1.8;stroke-linecap:round}
+.bw{fill:#e2852b;transition:fill 1.2s ease}
+.bw.clear{fill:#eef3f4}
 @keyframes rise{0%{transform:translateY(0);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translateY(-190px);opacity:0}}
 .slide.active .rise{animation:rise 4s linear infinite;animation-delay:var(--d,0s)}
 </style>
@@ -348,6 +374,8 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <defs>
     <marker id="ar-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#c0392b"/></marker>
+    <marker id="ar-fh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M9.5 5 L1 1 L3 5 Z" fill="#d9821f"/></marker>
+    <marker id="ar-full" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M9.5 5 L1 1 L2.5 5 L1 9 Z" fill="#d9821f"/></marker>
     <marker id="ar-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#d9821f"/></marker>
   </defs>
 </svg>
@@ -1012,7 +1040,9 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="txt">
    <div class="eyebrow">Reactions of alkanes · combustion</div>
    <h2>Burn it: <span class="ac">balance the equation.</span></h2>
-   <p>With plenty of oxygen, an alkane burns completely to <b>carbon dioxide and water</b>, releasing a lot of heat. That heat is why alkanes are our main fuels. Pick an alkane and see the balanced equation.</p>
+   <p>With plenty of oxygen, an alkane burns completely to <b>carbon dioxide and water</b>, releasing a lot of heat. That heat is why alkanes are our main fuels. Watch methane burn:</p>
+   <div class="rx" data-rx="comb" data-label="Animation of methane burning completely to carbon dioxide and water"></div>
+   <p class="small">Now pick any alkane and see its balanced equation.</p>
    <div class="calc">
      <div class="calc-row">
        <label>Alkane<select id="cb-n"></select></label>
@@ -1041,8 +1071,8 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="txt">
    <div class="eyebrow">Reactions of alkanes · combustion</div>
    <h2>Too little oxygen: <span class="ac">a silent poison.</span></h2>
-   <p>When oxygen is limited, carbon is only partly oxidised. The products include <b>carbon monoxide (CO)</b> and <b>soot</b> (carbon), as well as water. For pentane:</p>
-   <div class="eqn">2C<sub>5</sub>H<sub>12</sub> + 11O<sub>2</sub> → 2C + 6CO + 2CO<sub>2</sub> + 12H<sub>2</sub>O</div>
+   <p>When oxygen is limited, carbon is only partly oxidised. The products include <b>carbon monoxide (CO)</b> and <b>soot</b> (carbon), as well as water. Step through methane burning in limited oxygen:</p>
+   <div class="rx" data-rx="incomp" data-label="Animation of methane burning in limited oxygen to carbon monoxide and water"></div>
    <p>CO has no colour or smell. It binds to haemoglobin far more strongly than oxygen does, so the blood carries less oxygen. Early symptoms (headache, dizziness, nausea) are easily mistaken for flu.</p>
    <div class="callout warn">Running a generator, a charcoal stove or a gas heater in a closed room can kill. A yellow, sooty flame instead of a blue one is a sign of incomplete combustion.</div>
   </div>
@@ -1054,19 +1084,8 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="txt">
    <div class="eyebrow">Reactions of alkanes · halogenation</div>
    <h2>A chain reaction, <span class="ac">powered by radicals.</span></h2>
-   <p>In UV light, an alkane swaps a hydrogen for a halogen: <b>CH<sub>4</sub> + Cl<sub>2</sub> → CH<sub>3</sub>Cl + HCl</b>. This is a <b>substitution</b> reaction, and it runs through <b>free radicals</b>: atoms with an unpaired electron, shown as a dot. Open all three stages.</p>
-   <div class="toggle-wrap">
-     <button class="toggle-btn"><span>1 · Initiation: making radicals</span><span class="hint">Open</span></button>
-     <div class="toggle-body"><div class="eqn">Cl<sub>2</sub> → 2 Cl•</div><p>UV light splits the Cl–Cl bond evenly (<b>homolytic fission</b>): each chlorine atom keeps one electron.</p></div>
-   </div>
-   <div class="toggle-wrap">
-     <button class="toggle-btn"><span>2 · Propagation: the chain keeps itself going</span><span class="hint">Open</span></button>
-     <div class="toggle-body"><div class="eqn">CH<sub>4</sub> + Cl• → CH<sub>3</sub>• + HCl<br>CH<sub>3</sub>• + Cl<sub>2</sub> → CH<sub>3</sub>Cl + Cl•</div><p>Each step uses one radical and makes another. The Cl• made in the second step starts the cycle again, thousands of times.</p></div>
-   </div>
-   <div class="toggle-wrap">
-     <button class="toggle-btn"><span>3 · Termination: radicals meet</span><span class="hint">Open</span></button>
-     <div class="toggle-body"><div class="eqn">Cl• + Cl• → Cl<sub>2</sub> &nbsp;·&nbsp; CH<sub>3</sub>• + Cl• → CH<sub>3</sub>Cl &nbsp;·&nbsp; CH<sub>3</sub>• + CH<sub>3</sub>• → C<sub>2</sub>H<sub>6</sub></div><p>Two radicals pair their electrons into a bond. No new radical is made, so the chain stops.</p></div>
-   </div>
+   <p>In UV light, an alkane swaps a hydrogen for a halogen: <b>CH<sub>4</sub> + Cl<sub>2</sub> → CH<sub>3</sub>Cl + HCl</b>. This is a <b>substitution</b> reaction, and it runs through <b>free radicals</b>: atoms with an unpaired electron, shown as a dot. Step through all three stages.</p>
+   <div class="rx" data-rx="halo" data-label="Animated mechanism of free-radical chlorination of methane"></div>
    <button class="vbtn" data-video="short4" data-umami-event="video-short4"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 6.5 L14 10 L8 13.5 Z" fill="currentColor"/></svg>Watch a short video</button>
   </div>
  </div>
@@ -1113,13 +1132,8 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="txt">
    <div class="eyebrow">Reactions of alkanes · real world</div>
    <h2>Keep adding chlorine <span class="ac">and you get a mixture.</span></h2>
-   <p>The chain reaction does not stop at CH<sub>3</sub>Cl: radicals attack the product too. With excess chlorine, methane gives a mixture:</p>
-   <div class="flow stagger">
-     <div class="node">CH<sub>3</sub>Cl<small>chloromethane</small></div><span class="arr">→</span>
-     <div class="node">CH<sub>2</sub>Cl<sub>2</sub><small>dichloromethane</small></div><span class="arr">→</span>
-     <div class="node">CHCl<sub>3</sub><small>chloroform</small></div><span class="arr">→</span>
-     <div class="node r">CCl<sub>4</sub><small>tetrachloromethane</small></div>
-   </div>
+   <p>The chain reaction does not stop at CH<sub>3</sub>Cl: radicals attack the product too. With excess chlorine, methane gives a mixture. Step through it:</p>
+   <div class="rx" data-rx="chloro" data-label="Animation of methane being chlorinated step by step to tetrachloromethane"></div>
    <p>Dichloromethane and chloroform are useful solvents in drug manufacture, and chloroform was an early anaesthetic. But they are toxic, so traces left in a medicine are strictly limited. Carbon tetrachloride is a Class 1 solvent to avoid. <span class="cite">(<a href="https://www.tga.gov.au/sites/default/files/ichq3cr5.pdf" target="_blank" rel="noopener">ICH Q3C(R5)</a>)</span></p>
   </div>
  </div>
@@ -1130,9 +1144,9 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <figure class="ill">
    <svg viewBox="0 0 400 200" role="img" aria-label="Bromine water stays orange with an alkane and turns colourless with an alkene">
     <path class="ln" d="M90 40 V160 Q90 176 106 176 H154 Q170 176 170 160 V40"/>
-    <rect class="fo" x="92" y="88" width="76" height="86" rx="6"/>
+    <rect class="bw" x="92" y="88" width="76" height="86" rx="6"/>
     <path class="ln" d="M230 40 V160 Q230 176 246 176 H294 Q310 176 310 160 V40"/>
-    <rect class="fgr" x="232" y="88" width="76" height="86" rx="6"/>
+    <rect class="bw" id="bw-ene" x="232" y="88" width="76" height="86" rx="6"/>
     <text class="tx b mid" x="130" y="30">+ hexane</text>
     <text class="tx b mid" x="270" y="30">+ hexene</text>
     <text class="tx o mid" x="130" y="194">stays orange</text>
@@ -1143,7 +1157,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <div class="eyebrow">Alkanes vs alkenes</div>
    <h2>Alkenes react <span class="ac">without being asked twice.</span></h2>
    <p>Alkenes undergo <b>addition</b>: the π bond opens and two new atoms attach, one to each carbon. No UV light is needed.</p>
-   <div class="eqn">CH<sub>2</sub>=CH<sub>2</sub> + Br<sub>2</sub> → CH<sub>2</sub>Br–CH<sub>2</sub>Br</div>
+   <div class="rx" data-rx="add" data-label="Animated mechanism of bromine adding to ethene"></div>
    <p>This gives a simple test. Orange <b>bromine water</b> turns colourless with an alkene but stays orange with an alkane (in the dark).</p>
    <div class="toggle-wrap">
      <button class="toggle-btn"><span>Other additions you will meet</span><span class="hint">Open</span></button>
@@ -1237,7 +1251,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <div class="eyebrow">Industry · cracking</div>
    <h2>Too much heavy oil, <span class="ac">so break it up.</span></h2>
    <p>Distillation produces more heavy fractions than people buy, and less petrol and ethene than industry needs. <b>Cracking</b> fixes this: long alkanes are heated, often over a catalyst (a zeolite at about 500 °C), so C–C bonds break. The products are a <b>shorter alkane</b> and an <b>alkene</b>.</p>
-   <div class="eqn">C<sub>16</sub>H<sub>34</sub> → C<sub>8</sub>H<sub>18</sub> + C<sub>8</sub>H<sub>16</sub></div>
+   <div class="rx" data-rx="crack" data-label="Animated radical mechanism of hexadecane cracking into octane and octene"></div>
    <div class="choice-set" data-answer="b">
      <div class="choice-q">Balance it: C<sub>10</sub>H<sub>22</sub> → C<sub>8</sub>H<sub>18</sub> + ?</div>
      <div class="choices"><button class="choice" data-v="a">C<sub>2</sub>H<sub>6</sub></button><button class="choice" data-v="b">C<sub>2</sub>H<sub>4</sub></button><button class="choice" data-v="c">C<sub>2</sub>H<sub>2</sub></button></div>
@@ -1253,7 +1267,9 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="txt">
    <div class="eyebrow">Industry · polymers</div>
    <h2>From alkenes <span class="ac">to the blister pack.</span></h2>
-   <p>In <b>addition polymerisation</b>, thousands of alkene molecules open their double bonds and link into one long chain: <b>n CH<sub>2</sub>=CH<sub>2</sub> → –[CH<sub>2</sub>–CH<sub>2</sub>]<sub>n</sub>–</b>. The recycling code on a plastic tells you which polymer it is. Tap each code.</p>
+   <p>In <b>addition polymerisation</b>, thousands of alkene molecules open their double bonds and link into one long chain. Step through how a radical starts the chain and grows it:</p>
+   <div class="rx" data-rx="poly" data-label="Animated mechanism of radical addition polymerisation of ethene"></div>
+   <p>The recycling code on a plastic tells you which polymer it is. Tap each code.</p>
    <div class="rgrid">
      <button class="rcard"><span class="rt">1 · PET</span><span class="rb">Polyethylene terephthalate. Drink bottles and some liquid medicine bottles.</span></button>
      <button class="rcard"><span class="rt">2 · HDPE</span><span class="rb">High-density polyethylene. Rigid, moisture-resistant <b>tablet bottles</b>.</span></button>
@@ -1660,6 +1676,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     slide.querySelectorAll('.toggle-wrap').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
     slide.querySelectorAll('.rcard').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
     slide.querySelectorAll('.choice-set').forEach(s=>{ if(!s.dataset.done) n++; });
+    slide.querySelectorAll('.rx').forEach(r=>{ if(!r.dataset.done) n++; });
     return n;
   }
   function updateGate(alert){
@@ -1674,7 +1691,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     document.getElementById('hint-toc').addEventListener('click',()=>openOv('toc-overlay'));
   }
   function flagPending(slide){
-    [...slide.querySelectorAll('.toggle-wrap:not(.seen), .rcard:not(.seen), .choice-set:not([data-done])')]
+    [...slide.querySelectorAll('.toggle-wrap:not(.seen), .rcard:not(.seen), .choice-set:not([data-done]), .rx:not([data-done])')]
       .filter(e=>e.offsetParent!==null)
       .forEach(e=>{ e.classList.remove('pulse'); void e.offsetWidth; e.classList.add('pulse'); });
   }
@@ -1730,6 +1747,319 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     if(done.length<q.length) return;
     document.getElementById('quiz-score').textContent='Your score: '+done.filter(s=>s.dataset.correct==='1').length+' / '+q.length;
   }
+
+
+  /* ---------- REACTION PLAYER: step-by-step animated mechanisms ----------
+     Each .rx[data-rx] gets a stage, an equation box, a caption and step controls.
+     A step lists atom positions (at), bonds (b, [a,b,order]), electron dots (d),
+     arrows (ar, fishhook by default, full when def.full), labels (lb) and paths (ph).
+     Atoms and dots glide between steps; bonds fade; arrows draw after the move. */
+  const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const ELM = {C:[13,'at-c','C'], c:[6,'at-c',''], H:[8,'at-h','H'], Cl:[13,'at-cl','Cl'], Br:[14,'at-br','Br'], O:[12,'at-o','O'], R:[13,'at-r','R']};
+  function wave(x1,y1,x2,y2,n){
+    const dx=(x2-x1)/n, dy=(y2-y1)/n, L=Math.hypot(dx,dy), nx=-dy/L*6, ny=dx/L*6; let d='M'+x1+' '+y1;
+    for(let k=0;k<n;k++){ const s=k%2?-1:1; d+=' Q'+(x1+dx*(k+.5)+nx*s).toFixed(1)+' '+(y1+dy*(k+.5)+ny*s).toFixed(1)+' '+(x1+dx*(k+1)).toFixed(1)+' '+(y1+dy*(k+1)).toFixed(1); }
+    return d;
+  }
+  function rxPlayer(host, def){
+    host.innerHTML='<svg class="rx-svg" role="img"></svg><div class="eqn rx-eq"></div><p class="rx-cap"></p>'+(def.key?'<p class="rx-key">'+def.key+'</p>':'')+
+      '<div class="rx-ctl"><button type="button" class="btn rx-prev">← Step back</button><span class="rx-count"></span><button type="button" class="btn solid rx-next">Next step →</button></div>';
+    const svg=host.querySelector('svg'), eq=host.querySelector('.rx-eq'), cap=host.querySelector('.rx-cap'),
+          prev=host.querySelector('.rx-prev'), next=host.querySelector('.rx-next'), cnt=host.querySelector('.rx-count');
+    (function(){ /* crop the stage to what this reaction actually uses, so phones get bigger molecules */
+      let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9; const grow=(x,y,r)=>{ x0=Math.min(x0,x-r); x1=Math.max(x1,x+r); y0=Math.min(y0,y-r); y1=Math.max(y1,y+r); };
+      def.steps.forEach(st=>{
+        for(const id in st.at) grow(st.at[id][0], st.at[id][1], ELM[def.atoms[id]][0]+8);
+        (st.lb||[]).forEach(l=>{ const w=l[2].length*3.3+4, m=/mid/.test(l[3]||'tx b mid'), xa=m?l[0]-w:l[0]-2, xb=m?l[0]+w:l[0]+2*w;
+          x0=Math.min(x0,xa); x1=Math.max(x1,xb); y0=Math.min(y0,l[1]-14); y1=Math.max(y1,l[1]+6); });
+        (st.ph||[]).forEach(d=>{ const m=d.match(/-?[\d.]+/g).map(Number); for(let j=0;j<m.length;j+=2) grow(m[j],m[j+1],6); });
+      });
+      let w=x1-x0, h=y1-y0; if(w/h>3.2){ const nh=w/3.2; y0-=(nh-h)/2; h=nh; } if(w/h<1.6){ const nw=h*1.6; x0-=(nw-w)/2; w=nw; }
+      svg.setAttribute('viewBox', x0.toFixed(0)+' '+y0.toFixed(0)+' '+w.toFixed(0)+' '+h.toFixed(0));
+      svg.style.aspectRatio=(w/h).toFixed(3);
+    })();
+    if(host.dataset.label) svg.setAttribute('aria-label', host.dataset.label);
+    const gB=el('g',{}), gA=el('g',{}), gD=el('g',{}), gX=el('g',{});
+    svg.appendChild(gB); svg.appendChild(gA); svg.appendChild(gD); svg.appendChild(gX);
+    const S={}, BD={}, N=def.steps.length; let i=0, raf=0, first=true;
+    Object.keys(def.atoms).forEach(id=>{
+      const e=ELM[def.atoms[id]], g=el('g',{class:'at '+e[1]});
+      g.appendChild(el('circle',{r:e[0]})); if(e[2]) g.appendChild(el('text',{},e[2]));
+      gA.appendChild(g); S[id]={x:200,y:85,o:0,n:g};
+    });
+    (def.dots||[]).forEach(id=>{ const c=el('circle',{r:2.8,class:'edot'}); gD.appendChild(c); S[id]={x:200,y:85,o:0,n:c,dot:1}; });
+    function P(s,T){
+      if(typeof s[0]==='number') return {x:s[0],y:s[1]};
+      if(typeof s[1]==='string'){ const a=T[s[0]], b=T[s[1]]; return {x:(a.x+b.x)/2+(s[2]||0), y:(a.y+b.y)/2+(s[3]||0)}; }
+      const a=T[s[0]]; return {x:a.x+(s[1]||0), y:a.y+(s[2]||0)};
+    }
+    const bk=b=>[b[0],b[1]].sort().join('|')+':'+(b[2]||1);
+    function mkBond(b){ const g=el('g',{class:'bnd'}), ord=b[2]||1; for(let j=0;j<ord;j++) g.appendChild(el('line',{})); gB.appendChild(g); return {a:b[0],b:b[1],ord:ord,o:0,n:g}; }
+    function drawBond(B){
+      const A=S[B.a], C=S[B.b], dx=C.x-A.x, dy=C.y-A.y, L=Math.hypot(dx,dy)||1, nx=-dy/L, ny=dx/L;
+      const off=B.ord===1?[0]:B.ord===2?[-2.8,2.8]:[-4,0,4];
+      [...B.n.children].forEach((ln,j)=>{ const o=off[j];
+        ln.setAttribute('x1',(A.x+nx*o).toFixed(1)); ln.setAttribute('y1',(A.y+ny*o).toFixed(1));
+        ln.setAttribute('x2',(C.x+nx*o).toFixed(1)); ln.setAttribute('y2',(C.y+ny*o).toFixed(1)); });
+      B.n.style.opacity=B.o.toFixed(3);
+    }
+    function place(s){
+      if(s.dot){ s.n.setAttribute('cx',s.x.toFixed(1)); s.n.setAttribute('cy',s.y.toFixed(1)); }
+      else { const c=s.n.firstChild, t=c.nextSibling; c.setAttribute('cx',s.x.toFixed(1)); c.setAttribute('cy',s.y.toFixed(1));
+             if(t){ t.setAttribute('x',s.x.toFixed(1)); t.setAttribute('y',(s.y+3.8).toFixed(1)); } }
+      s.n.style.opacity=s.o.toFixed(3);
+    }
+    function overlay(st,T){
+      let k=0;
+      (st.ph||[]).forEach(d=>gX.appendChild(el('path',{class:'rx-uv draw',d:d,pathLength:1})));
+      (st.ar||[]).forEach(a=>{
+        const p=P(a[0],T), q=P(a[1],T), bend=a[2]||0, dx=q.x-p.x, dy=q.y-p.y, L=Math.hypot(dx,dy)||1;
+        const cx=(p.x+q.x)/2-dy/L*bend, cy=(p.y+q.y)/2+dx/L*bend;
+        gX.appendChild(el('path',{class:'rx-ar draw',pathLength:1,'marker-end':'url(#'+(def.full?'ar-full':'ar-fh')+')',
+          d:'M'+p.x.toFixed(1)+' '+p.y.toFixed(1)+' Q'+cx.toFixed(1)+' '+cy.toFixed(1)+' '+q.x.toFixed(1)+' '+q.y.toFixed(1),
+          style:'--d:'+(0.05+k++*0.3).toFixed(2)+'s'}));
+      });
+      (st.lb||[]).forEach(l=>gX.appendChild(el('text',{class:(l[3]||'tx b mid')+' fade',x:l[0],y:l[1],style:'--d:.05s'},l[2])));
+    }
+    function go(n){
+      i=n; const st=def.steps[n], T={};
+      for(const id in S) if(!S[id].dot){ const p=st.at[id]; T[id]=p?{x:p[0],y:p[1],o:1}:{x:S[id].x,y:S[id].y,o:0}; }
+      for(const id in S) if(S[id].dot){ const p=st.d&&st.d[id]; if(p){ const q=P(p,T); T[id]={x:q.x,y:q.y,o:1}; } else T[id]={x:S[id].x,y:S[id].y,o:0}; }
+      const bt={}; (st.b||[]).forEach(b=>{ const k=bk(b); bt[k]=1; if(!BD[k]) BD[k]=mkBond(b); });
+      const F={}; for(const id in S){ const s=S[id], hid=s.o<0.02; F[id]={x:hid?T[id].x:s.x, y:hid?T[id].y:s.y, o:s.o}; }
+      const BF={}; for(const k in BD) BF[k]=BD[k].o;
+      while(gX.firstChild) gX.removeChild(gX.firstChild);
+      eq.innerHTML=st.eq||''; cap.innerHTML=st.cap||'';
+      cnt.textContent='STEP '+(n+1)+' / '+N;
+      prev.disabled=n===0; next.textContent=n===N-1?'Replay ↺':'Next step →';
+      if(def.onStep) def.onStep(n, n===N-1);
+      if(n===N-1 && !host.dataset.done){ host.dataset.done='1'; updateGate(false); if(window.umami) umami.track('rx-done',{rx:host.dataset.rx}); }
+      const dur=(RM||first)?0:800, t0=performance.now(); first=false; cancelAnimationFrame(raf);
+      function frame(now){
+        const t=dur?Math.min(1,(now-t0)/dur):1, e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+        for(const id in S){ const s=S[id], f=F[id], g=T[id]; s.x=f.x+(g.x-f.x)*e; s.y=f.y+(g.y-f.y)*e; s.o=f.o+(g.o-f.o)*e; place(s); }
+        for(const k in BD){ const b=BD[k]; b.o=BF[k]+((bt[k]?1:0)-BF[k])*e; drawBond(b); }
+        if(t<1) raf=requestAnimationFrame(frame); else overlay(st,T);
+      }
+      if(dur) raf=requestAnimationFrame(frame); else frame(t0);
+      const sl=host.closest('.slide'); if(sl && sl.classList.contains('active')) fit(sl);
+    }
+    prev.addEventListener('click',()=>{ if(i>0) go(i-1); });
+    next.addEventListener('click',()=>go(i===N-1?0:i+1));
+    go(0);
+  }
+
+  const KEY_FH='<span class="kdot"></span> one electron &nbsp;·&nbsp; half-headed (fishhook) arrow: <b>one</b> electron moves';
+  const KEY_FULL='<span class="kdot"></span> electrons &nbsp;·&nbsp; full arrow: a <b>pair</b> of electrons moves';
+  const RX={};
+
+  /* 1 · free-radical chlorination of methane */
+  RX.halo={key:KEY_FH,
+    atoms:{C:'C',Ha:'H',Hb:'H',Hc:'H',Hd:'H',Cl1:'Cl',Cl2:'Cl',Cl3:'Cl',Cl4:'Cl'},
+    dots:['e1','e2','e3','e4','h1','h2'],
+    steps:[
+     {at:{Cl1:[180,85],Cl2:[220,85]}, b:[['Cl1','Cl2']],
+      d:{e1:['Cl1','Cl2',-4,-8], e2:['Cl1','Cl2',4,-8]},
+      ar:[[['Cl1','Cl2',-5,-11],['Cl1',3,-17],10],[['Cl1','Cl2',5,-11],['Cl2',-3,-17],-10]],
+      ph:[wave(40,26,166,70,8)], lb:[[40,18,'UV light','tx bl']],
+      eq:'Cl<sub>2</sub> → 2 Cl• &nbsp;(UV light)',
+      cap:'<b>1 · Initiation.</b> A Cl–Cl bond is a shared pair of electrons (the two dots). UV light gives it enough energy to break. Each fishhook arrow sends <b>one</b> electron to one chlorine.'},
+     {at:{Cl1:[120,85],Cl2:[280,85]},
+      d:{e1:['Cl1',0,-19], e2:['Cl2',0,-19]},
+      lb:[[120,125,'Cl•'],[280,125,'Cl•']],
+      eq:'Cl<sub>2</sub> → 2 Cl• &nbsp;(homolytic fission)',
+      cap:'The bond splits evenly: each chlorine keeps one electron. An atom with an unpaired electron is a <b>free radical</b>, and radicals are very reactive.'},
+     {at:{Cl1:[150,90],C:[250,90],Ha:[250,58],Hb:[282,90],Hc:[250,122],Hd:[218,90]},
+      b:[['C','Ha'],['C','Hb'],['C','Hc'],['C','Hd']],
+      d:{e1:['Cl1',17,0], h1:['Hd','C',-4,-9], h2:['Hd','C',3,-10]},
+      ar:[[['Cl1',19,-4],['Cl1','Hd',0,-6],-8],[['Hd','C',-4,-12],['Cl1','Hd',5,-9],10],[['Hd','C',3,-13],['C',-4,-16],-6]],
+      eq:'CH<sub>4</sub> + Cl• → CH<sub>3</sub>• + HCl',
+      cap:'<b>2 · Propagation, step 1.</b> Cl• attacks a C–H bond. One electron from that bond pairs with chlorine’s unpaired electron; the other stays on carbon.'},
+     {at:{Cl1:[90,130],Hd:[121,130],C:[260,85],Ha:[260,53],Hb:[292,85],Hc:[260,117]},
+      b:[['Cl1','Hd'],['C','Ha'],['C','Hb'],['C','Hc']],
+      d:{e1:['Cl1','Hd',-3,-8], h1:['Cl1','Hd',4,-8], h2:['C',-19,0]},
+      lb:[[105,160,'HCl'],[260,152,'CH₃•']],
+      eq:'CH<sub>4</sub> + Cl• → CH<sub>3</sub>• + HCl',
+      cap:'Products: hydrogen chloride and a <b>methyl radical</b>, CH<sub>3</sub>•. One radical was used up and a new one was made, so the chain carries on.'},
+     {at:{Cl3:[130,85],Cl4:[170,85],C:[260,85],Ha:[260,53],Hb:[292,85],Hc:[260,117]},
+      b:[['Cl3','Cl4'],['C','Ha'],['C','Hb'],['C','Hc']],
+      d:{e3:['Cl3','Cl4',-4,-8], e4:['Cl3','Cl4',4,-8], h2:['C',-19,0]},
+      ar:[[['C',-19,-4],['Cl4','C',4,-6],8],[['Cl3','Cl4',4,-11],['Cl4','C',-4,-8],-12],[['Cl3','Cl4',-4,-11],['Cl3',0,-17],6]],
+      eq:'CH<sub>3</sub>• + Cl<sub>2</sub> → CH<sub>3</sub>Cl + Cl•',
+      cap:'<b>2 · Propagation, step 2.</b> The methyl radical attacks a Cl<sub>2</sub> molecule. The Cl–Cl pair splits: one electron pairs with carbon’s, the other leaves on a new Cl•.'},
+     {at:{Cl3:[100,85],Cl4:[234,85],C:[270,85],Ha:[270,53],Hb:[302,85],Hc:[270,117]},
+      b:[['Cl4','C'],['C','Ha'],['C','Hb'],['C','Hc']],
+      d:{e3:['Cl3',0,-19], e4:['Cl4','C',4,-8], h2:['Cl4','C',-3,-8]},
+      lb:[[270,152,'CH₃Cl'],[100,125,'Cl•'],[100,146,'goes back to step 1','tx s mid']],
+      eq:'CH<sub>3</sub>• + Cl<sub>2</sub> → CH<sub>3</sub>Cl + Cl•',
+      cap:'Products: chloromethane and a new Cl•. That Cl• starts propagation step 1 again, so one UV photon can lead to thousands of CH<sub>3</sub>Cl molecules.'},
+     {at:{Cl1:[140,85],Cl2:[260,85]},
+      d:{e1:['Cl1',19,0], e2:['Cl2',-19,0]},
+      ar:[[['Cl1',21,-4],['Cl1','Cl2',-4,-6],-10],[['Cl2',-21,-4],['Cl1','Cl2',4,-6],10]],
+      eq:'Cl• + Cl• → Cl<sub>2</sub>',
+      cap:'<b>3 · Termination.</b> When two radicals meet, each gives its unpaired electron to make a new shared pair.'},
+     {at:{Cl1:[180,85],Cl2:[220,85]}, b:[['Cl1','Cl2']],
+      d:{e1:['Cl1','Cl2',-4,-8], e2:['Cl1','Cl2',4,-8]},
+      lb:[[200,125,'Cl₂']],
+      eq:'Cl• + Cl• → Cl<sub>2</sub> &nbsp;·&nbsp; CH<sub>3</sub>• + Cl• → CH<sub>3</sub>Cl &nbsp;·&nbsp; CH<sub>3</sub>• + CH<sub>3</sub>• → C<sub>2</sub>H<sub>6</sub>',
+      cap:'No new radical is made, so the chain stops. Any two radicals can do this, which is why a little ethane turns up among the products.'}
+    ]};
+
+  /* 2 · repeated substitution: CH4 → CCl4 */
+  RX.chloro=(function(){
+    const sub={1:[238,85],2:[200,47],3:[162,85],4:[200,123]}, hp={1:[232,85],2:[200,53],3:[168,85],4:[200,117]}, qy=[0,30,65,100,135];
+    const names=['methane','chloromethane','dichloromethane','chloroform','tetrachloromethane'];
+    const eqs=['CH<sub>4</sub> + Cl<sub>2</sub> (excess), UV light',
+      'CH<sub>4</sub> + Cl<sub>2</sub> → CH<sub>3</sub>Cl + HCl',
+      'CH<sub>3</sub>Cl + Cl<sub>2</sub> → CH<sub>2</sub>Cl<sub>2</sub> + HCl',
+      'CH<sub>2</sub>Cl<sub>2</sub> + Cl<sub>2</sub> → CHCl<sub>3</sub> + HCl',
+      'CHCl<sub>3</sub> + Cl<sub>2</sub> → CCl<sub>4</sub> + HCl'];
+    const caps=['Start: methane with plenty of chlorine. Each swap below runs through the two propagation steps from the last page.',
+      'One H is swapped for Cl. One chlorine atom of Cl<sub>2</sub> ends up on carbon, the other leaves with the H as HCl.',
+      'Radicals attack the product too. A second swap gives dichloromethane.',
+      'A third swap gives chloroform, CHCl<sub>3</sub>.',
+      'All four H replaced: CCl<sub>4</sub>. In a real flask all five compounds end up mixed together, and must be separated.'];
+    const atoms={C:'C'}; for(let j=1;j<=4;j++){ atoms['H'+j]='H'; atoms['A'+j]='Cl'; atoms['X'+j]='Cl'; }
+    return {atoms:atoms, steps:names.map((nm,k)=>{
+      const at={C:[200,85]}, b=[];
+      for(let j=1;j<=4;j++){
+        if(j<=k){ at['A'+j]=sub[j]; b.push(['C','A'+j]); at['X'+j]=[35,qy[j]]; at['H'+j]=[66,qy[j]]; b.push(['X'+j,'H'+j]); }
+        else { at['H'+j]=hp[j]; b.push(['C','H'+j]); at['A'+j]=[330,qy[j]]; at['X'+j]=[366,qy[j]]; b.push(['A'+j,'X'+j]); }
+      }
+      const lb=[[200,162,nm]]; if(k) lb.push([50,162,k+' HCl','tx s mid']); if(k<4) lb.push([348,162,(4-k)+' Cl₂','tx s mid']);
+      return {at:at,b:b,lb:lb,eq:eqs[k],cap:caps[k]};
+    })};
+  })();
+
+  /* 3 · electrophilic addition of bromine to ethene (full arrows) */
+  RX.add={full:true, key:KEY_FULL, vb:'0 0 400 176',
+    atoms:{C1:'C',C2:'C',H1:'H',H2:'H',H3:'H',H4:'H',Br1:'Br',Br2:'Br'},
+    dots:['p1','p2','b1','b2'],
+    onStep:(n,last)=>{ const r=document.getElementById('bw-ene'); if(r) r.classList.toggle('clear', last); },
+    steps:[
+     {at:{C1:[175,118],C2:[225,118],H1:[148,102],H2:[148,134],H3:[252,102],H4:[252,134],Br1:[200,60],Br2:[200,22]},
+      b:[['C1','C2',2],['C1','H1'],['C1','H2'],['C2','H3'],['C2','H4'],['Br1','Br2']],
+      d:{p1:['C1','C2',-4,-9], p2:['C1','C2',4,-9], b1:['Br1','Br2',8,-3], b2:['Br1','Br2',8,3]},
+      ar:[[['C1','C2',0,-13],['Br1',0,19],-12],[['Br1','Br2',11,0],['Br2',16,-6],8]],
+      lb:[[222,66,'δ+','tx bl'],[222,28,'δ−','tx bl']],
+      eq:'CH<sub>2</sub>=CH<sub>2</sub> + Br<sub>2</sub> → ?',
+      cap:'<b>Approach.</b> The exposed π electrons repel the electrons in Br<sub>2</sub>, so the nearer Br becomes slightly positive (δ+). Its electron pair is pulled toward the far Br.'},
+     {at:{C1:[175,118],C2:[225,118],H1:[148,102],H2:[148,134],H3:[252,102],H4:[252,134],Br1:[172,78],Br2:[310,140]},
+      b:[['C1','C2'],['C1','H1'],['C1','H2'],['C2','H3'],['C2','H4'],['C1','Br1']],
+      d:{p1:['C1','Br1',8,-3], p2:['C1','Br1',8,3], b1:['Br2',-20,-4], b2:['Br2',-20,4]},
+      ar:[[['Br2',-23,0],['C2',12,13],8]],
+      lb:[[216,101,'+','tx r'],[328,128,'−','tx r']],
+      eq:'CH<sub>2</sub>Br–CH<sub>2</sub><sup>+</sup> + Br<sup>−</sup>',
+      cap:'<b>Intermediate.</b> The π pair forms a C–Br bond and the Br–Br pair leaves as Br<sup>−</sup>. The other carbon is left positive (a carbocation). Textbooks may draw a bromonium ring here instead.'},
+     {at:{C1:[175,118],C2:[225,118],H1:[148,102],H2:[148,134],H3:[252,102],H4:[252,134],Br1:[172,78],Br2:[228,158]},
+      b:[['C1','C2'],['C1','H1'],['C1','H2'],['C2','H3'],['C2','H4'],['C1','Br1'],['C2','Br2']],
+      d:{p1:['C1','Br1',8,-3], p2:['C1','Br1',8,3], b1:['C2','Br2',8,-3], b2:['C2','Br2',8,3]},
+      lb:[[320,70,'1,2-dibromoethane','tx g mid']],
+      eq:'CH<sub>2</sub>=CH<sub>2</sub> + Br<sub>2</sub> → CH<sub>2</sub>Br–CH<sub>2</sub>Br',
+      cap:'<b>Product.</b> Br<sup>−</sup> bonds to the positive carbon. The orange Br<sub>2</sub> has been used up, so the hexene tube turns colourless.'}
+    ]};
+
+  /* 4 · complete combustion of methane */
+  RX.comb={
+    atoms:{C:'C',H1:'H',H2:'H',H3:'H',H4:'H',O1:'O',O2:'O',O3:'O',O4:'O'},
+    steps:[
+     {at:{C:[90,85],H1:[90,53],H2:[122,85],H3:[90,117],H4:[58,85],O1:[205,55],O2:[237,55],O3:[205,115],O4:[237,115]},
+      b:[['C','H1'],['C','H2'],['C','H3'],['C','H4'],['O1','O2',2],['O3','O4',2]],
+      lb:[[90,158,'CH₄'],[221,158,'2 O₂'],[160,90,'+']],
+      eq:'CH<sub>4</sub> + 2O<sub>2</sub>',
+      cap:'Reactants: one methane and two oxygen molecules. Count the atoms: 1 C, 4 H, 4 O.'},
+     {at:{C:[200,85],H1:[110,40],H2:[290,40],H3:[110,130],H4:[290,130],O1:[160,55],O2:[240,55],O3:[160,115],O4:[240,115]},
+      lb:[[200,162,'bonds break: energy taken in','tx o mid']],
+      eq:'CH<sub>4</sub> + 2O<sub>2</sub> → ?',
+      cap:'Picture every bond breaking. This needs energy, which is why fuel needs a spark or flame to get started.'},
+     {at:{O1:[158,45],C:[200,45],O2:[242,45],O3:[120,115],H1:[96,135],H3:[144,135],O4:[280,115],H2:[256,135],H4:[304,135]},
+      b:[['C','O1',2],['C','O2',2],['O3','H1'],['O3','H3'],['O4','H2'],['O4','H4']],
+      lb:[[200,82,'CO₂'],[120,162,'H₂O'],[280,162,'H₂O'],[200,122,'energy released','tx g mid']],
+      eq:'CH<sub>4</sub> + 2O<sub>2</sub> → CO<sub>2</sub> + 2H<sub>2</sub>O',
+      cap:'The atoms regroup into CO<sub>2</sub> and water. Forming these strong bonds releases more energy than breaking the old ones took, so overall the reaction gives out heat. Atoms in = atoms out.'}
+    ]};
+
+  /* 5 · incomplete combustion of methane */
+  RX.incomp={
+    atoms:{C1:'C',C2:'C',H1:'H',H2:'H',H3:'H',H4:'H',H5:'H',H6:'H',H7:'H',H8:'H',O1:'O',O2:'O',O3:'O',O4:'O',O5:'O',O6:'O'},
+    steps:[
+     {at:{C1:[60,50],H1:[60,22],H2:[88,50],H3:[60,78],H4:[32,50],C2:[60,128],H5:[60,100],H6:[88,128],H7:[60,156],H8:[32,128],
+          O1:[180,35],O2:[212,35],O3:[180,85],O4:[212,85],O5:[180,135],O6:[212,135]},
+      b:[['C1','H1'],['C1','H2'],['C1','H3'],['C1','H4'],['C2','H5'],['C2','H6'],['C2','H7'],['C2','H8'],['O1','O2',2],['O3','O4',2],['O5','O6',2]],
+      lb:[[310,75,'2 CH₄ + 3 O₂'],[310,96,'complete burning would need 4 O₂','tx s mid']],
+      eq:'2CH<sub>4</sub> + 3O<sub>2</sub> → ?',
+      cap:'Limited oxygen: only three O<sub>2</sub> molecules for two methane, instead of the four needed to burn completely.'},
+     {at:{C1:[150,40],O1:[182,40],C2:[230,40],O2:[262,40],O3:[70,112],H1:[48,130],H2:[92,130],O4:[160,112],H3:[138,130],H4:[182,130],
+          O5:[250,112],H5:[228,130],H6:[272,130],O6:[340,112],H7:[318,130],H8:[362,130]},
+      b:[['C1','O1',3],['C2','O2',3],['O3','H1'],['O3','H2'],['O4','H3'],['O4','H4'],['O5','H5'],['O5','H6'],['O6','H7'],['O6','H8']],
+      lb:[[166,72,'CO','tx r mid'],[246,72,'CO','tx r mid'],[205,162,'4 H₂O']],
+      eq:'2CH<sub>4</sub> + 3O<sub>2</sub> → 2CO + 4H<sub>2</sub>O',
+      cap:'Hydrogen still becomes water, but each carbon gets only one O: <b>carbon monoxide</b>. With even less oxygen, some carbon is left as soot. Pentane does the same: 2C<sub>5</sub>H<sub>12</sub> + 11O<sub>2</sub> → 2C + 6CO + 2CO<sub>2</sub> + 12H<sub>2</sub>O.'}
+    ]};
+
+  /* 6 · thermal cracking of hexadecane (radical) */
+  RX.crack=(function(){
+    const kx=i=>26+(i-1)*23, ky=i=>i%2?80:98, atoms={Hx:'H'};
+    for(let i=1;i<=16;i++) atoms['k'+i]='c';
+    function chain(shiftL,shiftR){ const at={}; for(let i=1;i<=16;i++) at['k'+i]=[kx(i)+(i<=8?shiftL:shiftR), ky(i)]; return at; }
+    function bonds(skip, dbl){ const b=[]; for(let i=1;i<16;i++){ if(i===skip) continue; b.push(['k'+i,'k'+(i+1),(dbl===i?2:1)]); } return b; }
+    const s0=chain(0,0); s0.Hx=[kx(10),124];
+    const s1=chain(-14,14); s1.Hx=[kx(10)+14,124];
+    const s2=chain(-20,24); s2.Hx=[kx(8)-20,124];
+    return {key:KEY_FH, atoms:atoms, dots:['e1','e2','h1','h2'], steps:[
+     {at:s0, b:bonds(0).concat([['k10','Hx']]),
+      d:{e1:['k8','k9',-5,-9], e2:['k8','k9',3,-12]},
+      ar:[[['k8','k9',-5,-12],['k8',-3,-10],10],[['k8','k9',3,-15],['k9',2,-10],-8]],
+      lb:[[200,24,'heat, about 500 °C','tx o mid'],[200,158,'C₁₆H₃₄ (hexadecane)']],
+      eq:'C<sub>16</sub>H<sub>34</sub> → ?',
+      cap:'Only the carbons are drawn; each carries enough H to make four bonds. Strong heating makes the chain vibrate until a C–C bond breaks <b>evenly</b>, one electron to each side.'},
+     {at:s1, b:bonds(8).concat([['k10','Hx']]),
+      d:{e1:['k8',9,-7], e2:['k9',-9,-7], h1:['k10','Hx',-7,0], h2:['k10','Hx',7,0]},
+      ar:[[['k8',10,-3],['Hx',-28,-10],-10],[['k10','Hx',-9,2],['Hx',-22,-6],6],[['k10','Hx',10,0],['k9','k10',8,2],6],[['k9',-8,-10],['k9','k10',-3,-6],-6]],
+      lb:[[100,142,'C₈H₁₇•'],[310,142,'•C₈H₁₇']],
+      eq:'C<sub>16</sub>H<sub>34</sub> → C<sub>8</sub>H<sub>17</sub>• + •C<sub>8</sub>H<sub>17</sub>',
+      cap:'Two radicals. The right-hand one passes a hydrogen to the left-hand one: one electron of that C–H bond goes with the H, the other pairs with the neighbouring dot to make a C=C double bond.'},
+     {at:s2, b:bonds(8,9).concat([['k8','Hx']]),
+      d:{e1:['k8','Hx',7,-3], h1:['k8','Hx',7,3]},
+      lb:[[96,148,'octane, C₈H₁₈'],[300,148,'oct-1-ene, C₈H₁₆','tx g mid']],
+      eq:'C<sub>16</sub>H<sub>34</sub> → C<sub>8</sub>H<sub>18</sub> + C<sub>8</sub>H<sub>16</sub>',
+      cap:'An alkane and an alkene. The alkene is the valuable part. Industry often uses a zeolite catalyst, which lowers the temperature needed, but the products are the same kind: shorter alkanes plus alkenes.'}
+    ]};
+  })();
+
+  /* 7 · radical addition polymerisation of ethene */
+  RX.poly={key:KEY_FH,
+    atoms:{R:'R',k1:'c',k2:'c',k3:'c',k4:'c',k5:'c',k6:'c'},
+    dots:['r','p1','p2','p3','p4','p5','p6'],
+    steps:[
+     {at:{R:[50,85],k1:[110,85],k2:[138,85],k3:[230,45],k4:[258,45],k5:[300,125],k6:[328,125]},
+      b:[['k1','k2',2],['k3','k4',2],['k5','k6',2]],
+      d:{r:['R',18,0], p1:['k1','k2',-4,-7], p2:['k1','k2',4,-7]},
+      ar:[[['R',19,-4],['R','k1',4,-6],-8],[['k1','k2',-4,-10],['R','k1',10,-8],8],[['k1','k2',4,-10],['k2',5,-10],-6]],
+      lb:[[50,122,'R•'],[124,122,'ethene','tx s mid']],
+      eq:'R• + CH<sub>2</sub>=CH<sub>2</sub>',
+      cap:'<b>Start.</b> An initiator radical, R•, attacks the π bond of an ethene molecule. Only carbons are drawn; each carries two H.'},
+     {at:{R:[50,85],k1:[78,100],k2:[106,85],k3:[140,52],k4:[168,52],k5:[300,125],k6:[328,125]},
+      b:[['R','k1'],['k1','k2'],['k3','k4',2],['k5','k6',2]],
+      d:{r:['R','k1',3,-8], p1:['R','k1',9,-5], p2:['k2',10,-6], p3:['k3','k4',-4,-7], p4:['k3','k4',4,-7]},
+      ar:[[['k2',12,-9],['k2','k3',3,-4],-6],[['k3','k4',-4,-10],['k2','k3',9,-8],6],[['k3','k4',4,-10],['k4',5,-10],-6]],
+      eq:'R• + CH<sub>2</sub>=CH<sub>2</sub> → R–CH<sub>2</sub>–CH<sub>2</sub>•',
+      cap:'One π electron pairs with R•; the other is left on the far carbon. The product is a <b>new, bigger radical</b>, which attacks the next ethene.'},
+     {at:{R:[50,85],k1:[78,100],k2:[106,85],k3:[134,100],k4:[162,85],k5:[196,52],k6:[224,52]},
+      b:[['R','k1'],['k1','k2'],['k2','k3'],['k3','k4'],['k5','k6',2]],
+      d:{p2:['k2','k3',3,-8], p3:['k2','k3',9,-5], p4:['k4',10,-6], p5:['k5','k6',-4,-7], p6:['k5','k6',4,-7]},
+      ar:[[['k4',12,-9],['k4','k5',3,-4],-6],[['k5','k6',-4,-10],['k4','k5',9,-8],6],[['k5','k6',4,-10],['k6',5,-10],-6]],
+      eq:'R–CH<sub>2</sub>CH<sub>2</sub>• + CH<sub>2</sub>=CH<sub>2</sub> → R–(CH<sub>2</sub>)<sub>4</sub>•',
+      cap:'Each time the radical end adds another ethene, the chain grows by two carbons and the radical moves to the new end.'},
+     {at:{R:[50,85],k1:[78,100],k2:[106,85],k3:[134,100],k4:[162,85],k5:[190,100],k6:[218,85]},
+      b:[['R','k1'],['k1','k2'],['k2','k3'],['k3','k4'],['k4','k5'],['k5','k6']],
+      d:{p4:['k4','k5',3,-8], p5:['k4','k5',9,-5], p6:['k6',10,-6]},
+      lb:[[300,90,'… thousands more','tx s mid']],
+      eq:'n CH<sub>2</sub>=CH<sub>2</sub> → –[CH<sub>2</sub>–CH<sub>2</sub>]<sub>n</sub>–',
+      cap:'Repeated thousands of times, this gives polyethylene. The chain stops when two radicals meet (termination), just as in halogenation.'}
+    ]};
+
+  document.querySelectorAll('.rx[data-rx]').forEach(h=>{ if(RX[h.dataset.rx]) rxPlayer(h, RX[h.dataset.rx]); });
 
   /* ---------- ALKANE SERIES EXPLORER ---------- */
   const an=document.getElementById('alk-n'), ao=document.getElementById('alk-out'), am=document.getElementById('alk-mol');
