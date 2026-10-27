@@ -325,20 +325,6 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
 .tier-bar button{border:none;padding:0;height:100%;cursor:pointer;}
 .tier-bar button.active{outline:2px solid var(--forest-900);outline-offset:-2px;}
 .filter-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;padding:10px 14px;margin-bottom:12px;border-radius:var(--radius-sm);background:var(--forest-700);color:#eef2e6;font-size:13px;}
-/* NAME CALLER (educator, Students view) */
-.caller-card{padding:16px 20px;margin-bottom:16px;}
-.caller-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;}
-.caller-head h3{font-size:14px;font-weight:600;color:var(--forest-900);}
-.caller-meta{font-size:11.5px;color:var(--ink-soft);}
-.caller-name{font-family:var(--font-display);font-size:26px;font-weight:600;color:var(--forest-900);line-height:1.25;margin:12px 0 4px;min-height:33px;overflow-wrap:anywhere;}
-.caller-name.spinning{color:var(--ink-soft);}
-.caller-name.empty{font-family:var(--font-body);font-size:13px;font-weight:400;color:var(--ink-soft);min-height:0;}
-.caller-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px;}
-.caller-btn{font-size:12.5px;font-weight:600;border-radius:99px;padding:8px 16px;border:1px solid transparent;}
-.caller-btn.primary{background:linear-gradient(135deg, var(--forest-700), var(--forest-500));color:#fff;}
-.caller-btn.ghost{background:rgba(255,255,255,0.55);border-color:rgba(27,67,50,0.18);color:var(--forest-700);}
-.caller-btn[disabled]{opacity:.55;cursor:default;}
-.caller-err{font-size:11.5px;color:#a9491f;margin-top:8px;}
 .filter-actions{display:flex;gap:8px;flex-wrap:wrap;}
 .filter-clear,.btn-nudge{font-size:11.5px;font-weight:600;border-radius:99px;padding:6px 12px;border:none;cursor:pointer;}
 .filter-clear{background:#eef2e6;color:var(--forest-900);}
@@ -819,7 +805,7 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
         </div>
         <div id="learning-detail"></div>
 
-        <div class="section-label" style="margin-top:22px">Interactive labs</div>
+        <div class="section-label" style="margin-top:22px" id="interactive-labs">Interactive labs</div>
         <a class="card glass fade-up lab-card" id="lab-orbitals-link" href="labs/orbitals.html">
           <div>
             <h3>Atomic Orbital Lab</h3>
@@ -886,7 +872,7 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
         <a class="card glass fade-up lab-card" id="lab-hydrocarbons-link" href="labs/hydrocarbons/index.html">
           <div>
             <h3>Hydrocarbons Lab</h3>
-            <div class="meta">Alkanes, cycloalkanes, alkenes and cycloalkenes: name and draw structures by the IUPAC rules, follow combustion and free-radical halogenation, and see fractional distillation and cracking at work.</div>
+            <div class="meta">Alkanes, cycloalkanes, alkenes and cycloalkenes: name and draw structures by the IUPAC rules, follow combustion and free-radical halogenation, and see fractional distillation and cracking at work, with the Bromine Water Bench lab.</div>
           </div>
           <span class="lab-card-go">Open</span>
         </a>
@@ -927,20 +913,6 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
             <p>Enter and view test, presentation &amp; assignment scores in INOVA's Grader report.</p>
           </div>
           <a href="#" target="_blank" rel="noopener" class="btn-inova" id="inova-roster-link">Open Grader report →</a>
-        </div>
-
-        <div class="caller-card glass fade-up" id="caller-card">
-          <div class="caller-head">
-            <h3>Call on a student</h3>
-            <span class="caller-meta" id="caller-meta"></span>
-          </div>
-          <div class="caller-name empty" id="caller-name" aria-live="polite">Picks favour students with fewer points and no activity. Each student comes up once per session.</div>
-          <div class="caller-actions">
-            <button class="caller-btn primary" id="caller-pick-btn" type="button">Pick a name</button>
-            <button class="caller-btn ghost" id="caller-absent-btn" type="button" style="display:none">Absent, skip</button>
-            <button class="caller-btn ghost" id="caller-new-btn" type="button">New session</button>
-          </div>
-          <div class="caller-err" id="caller-err" style="display:none"></div>
         </div>
 
         <div class="search-wrap has-sort">
@@ -1545,13 +1517,20 @@ async function boot(opts = {}) {
   } else {
     document.getElementById('enroll-more-row').style.display = '';
     await loadStudentCourses();
-    showView('courses');
+    if (location.hash === '#labs') showLabs(); else showView('courses');
     maybeShowDailyUpdate();
   }
 }
 
 document.querySelectorAll('.sidenav button, .bottomnav button').forEach(btn => btn.addEventListener('click', () => showView(btn.dataset.view)));
+/* Back from a lab: open the Learning view at the Interactive labs list. */
+function showLabs() {
+  showView('learning');
+  const go = () => document.getElementById('interactive-labs').scrollIntoView({ block: 'start' });
+  requestAnimationFrame(go); setTimeout(go, 800);
+}
 function showView(view) {
+  if (view !== 'learning' && location.hash === '#labs') history.replaceState(null, '', location.pathname + location.search);
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-' + view).classList.add('active');
   document.querySelectorAll('.sidenav button, .bottomnav button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
@@ -2030,6 +2009,7 @@ async function logEngagementEvent(eventType, { topicId = null, metadata = {} } =
   document.getElementById('lab-' + lab + '-link').addEventListener('click', async e => {
     e.preventDefault();
     const href = e.currentTarget.getAttribute('href');
+    history.replaceState(null, '', '#labs');
     await Promise.race([
       logEngagementEvent('lab_open', { metadata: { lab } }),
       new Promise(r => setTimeout(r, 700))
@@ -2797,7 +2777,6 @@ async function loadEducatorRoster() {
     };
   });
   assignRosterRanks();
-  await loadCallerState();
   renderRosterStats();
   applyRosterView();
 }
@@ -2956,147 +2935,6 @@ document.getElementById('nudge-btn').addEventListener('click', async () => {
   if (out.failed) msg += ` ${out.failed} failed to send; try again shortly.`;
   res.className = 'nudge-result show' + (out.failed ? ' err' : '');
   res.textContent = msg;
-});
-
-/* ---------- EDUCATOR: NAME CALLER ----------
-   Weighted pick from the whole course roster. Weight per student:
-     no activity at all            5.0
-     otherwise  0.3 + 2.7 × (1 − points ÷ class top points)   (0.3 to 3.0)
-     called in an earlier session in the last 7 days → weight halved
-   Each pick is saved to student_calls. A session is one class: anyone
-   called or marked absent in it is out of the pool until "New session".
-   A session also ends on its own after 3 hours, so the next class starts
-   fresh. Only the name is shown, never points or tier. */
-const CALLER_SESSION_MS = 3 * 60 * 60 * 1000;
-const CALLER_RECENT_MS = 7 * 24 * 60 * 60 * 1000;
-let callerSession = null;          // { id, startedAt }
-let callerUsed = new Set();        // student ids called or absent this session
-let callerRecent = new Set();      // called in an earlier session, last 7 days
-let callerCurrent = null;          // { studentId, rowId }
-let callerBusy = false;
-
-const callerKey = () => 'kompas_call_session_' + currentCourse.id;
-
-function newCallerSession() {
-  callerSession = { id: crypto.randomUUID(), startedAt: Date.now() };
-  try { localStorage.setItem(callerKey(), JSON.stringify(callerSession)); } catch (_) {}
-  callerUsed = new Set();
-  callerCurrent = null;
-}
-
-async function loadCallerState() {
-  callerCurrent = null;
-  callerSession = null;
-  try { callerSession = JSON.parse(localStorage.getItem(callerKey()) || 'null'); } catch (_) {}
-  if (!callerSession || !callerSession.id || Date.now() - callerSession.startedAt > CALLER_SESSION_MS) newCallerSession();
-  const since = new Date(Date.now() - CALLER_RECENT_MS).toISOString();
-  const { data, error } = await sb.from('student_calls').select('student_id, session_id, outcome, called_at')
-    .eq('course_id', currentCourse.id).gte('called_at', since);
-  callerUsed = new Set();
-  callerRecent = new Set();
-  (data || []).forEach(r => {
-    if (r.session_id === callerSession.id) callerUsed.add(r.student_id);
-    else if (r.outcome === 'called') callerRecent.add(r.student_id);
-  });
-  renderCaller(error ? 'Could not load past picks: ' + error.message : null);
-}
-
-function callerPool() {
-  return allStudents.filter(s => !callerUsed.has(s.id));
-}
-
-function callerWeight(s, topPoints) {
-  let w = !s.hasEngaged ? 5 : 0.3 + 2.7 * (1 - Math.min(1, s.points / topPoints));
-  if (callerRecent.has(s.id)) w *= 0.5;
-  return w;
-}
-
-function weightedPick(pool) {
-  const top = Math.max(1, ...allStudents.map(s => s.points));
-  const weights = pool.map(s => callerWeight(s, top));
-  let r = Math.random() * weights.reduce((a, b) => a + b, 0);
-  for (let i = 0; i < pool.length; i++) { r -= weights[i]; if (r <= 0) return pool[i]; }
-  return pool[pool.length - 1];
-}
-
-function renderCaller(err) {
-  const total = allStudents.length;
-  const left = callerPool().length;
-  const nameEl = document.getElementById('caller-name');
-  const pickBtn = document.getElementById('caller-pick-btn');
-  document.getElementById('caller-meta').textContent = total ? `${left} of ${total} left this session` : '';
-  document.getElementById('caller-absent-btn').style.display = callerCurrent ? '' : 'none';
-  pickBtn.textContent = callerCurrent ? 'Next name' : 'Pick a name';
-  pickBtn.disabled = callerBusy || !left;
-  if (callerCurrent) {
-    const s = allStudents.find(x => x.id === callerCurrent.studentId);
-    nameEl.className = 'caller-name';
-    nameEl.textContent = s ? (s.full_name || s.email) : 'Student';
-  } else if (!total) {
-    nameEl.className = 'caller-name empty';
-    nameEl.textContent = 'No students enrolled in this course yet.';
-  } else if (!left) {
-    nameEl.className = 'caller-name empty';
-    nameEl.textContent = 'Everyone has been called this session. Start a new session to pick again.';
-  } else {
-    nameEl.className = 'caller-name empty';
-    nameEl.textContent = 'Picks favour students with fewer points and no activity. Each student comes up once per session.';
-  }
-  const errEl = document.getElementById('caller-err');
-  errEl.style.display = err ? '' : 'none';
-  errEl.textContent = err || '';
-}
-
-async function callerSpin(pool) {
-  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches || pool.length < 2) return;
-  const nameEl = document.getElementById('caller-name');
-  nameEl.className = 'caller-name spinning';
-  for (let i = 0; i < 10; i++) {
-    const s = pool[Math.floor(Math.random() * pool.length)];
-    nameEl.textContent = s.full_name || s.email;
-    await new Promise(r => setTimeout(r, 45 + i * 12));
-  }
-}
-
-async function callerPick() {
-  if (callerBusy) return;
-  if (callerSession && Date.now() - callerSession.startedAt > CALLER_SESSION_MS) newCallerSession();
-  const pool = callerPool();
-  if (!pool.length) { renderCaller(); return; }
-  callerBusy = true;
-  document.getElementById('caller-pick-btn').disabled = true;
-  document.getElementById('caller-absent-btn').style.display = 'none';
-  const chosen = weightedPick(pool);
-  await callerSpin(pool);
-  callerUsed.add(chosen.id);
-  callerCurrent = { studentId: chosen.id, rowId: null };
-  const { data, error } = await sb.from('student_calls').insert({
-    course_id: currentCourse.id, student_id: chosen.id, session_id: callerSession.id, outcome: 'called',
-  }).select('id').single();
-  if (data) callerCurrent.rowId = data.id;
-  callerBusy = false;
-  renderCaller(error ? 'Picked, but not saved: ' + error.message : null);
-}
-
-async function callerAbsent() {
-  if (!callerCurrent || callerBusy) return;
-  const { rowId } = callerCurrent;
-  let err = null;
-  if (rowId) {
-    const { error } = await sb.from('student_calls').update({ outcome: 'absent' }).eq('id', rowId);
-    if (error) err = 'Could not mark absent: ' + error.message;
-  }
-  callerCurrent = null;
-  if (err) { renderCaller(err); return; }
-  await callerPick();
-}
-
-document.getElementById('caller-pick-btn').addEventListener('click', callerPick);
-document.getElementById('caller-absent-btn').addEventListener('click', callerAbsent);
-document.getElementById('caller-new-btn').addEventListener('click', () => {
-  if (callerUsed.size && !confirm('Start a new session? Everyone goes back into the pool.')) return;
-  newCallerSession();
-  renderCaller();
 });
 
 function renderRoster(list) {
