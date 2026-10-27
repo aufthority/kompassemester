@@ -43,7 +43,7 @@ b,strong{color:var(--ink);font-weight:700}
 a{color:var(--accent)}
 
 /* one screen, no page scroll: top bar, stage, footer */
-#app{height:100vh;height:var(--app-h,100dvh);max-width:900px;margin:0 auto;padding:0 14px;display:flex;flex-direction:column}
+#app{height:100vh;height:var(--app-h,100dvh);max-width:1040px;margin:0 auto;padding:0 14px;display:flex;flex-direction:column}
 .embedded #app{padding:0 10px}
 
 nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0 6px;border-bottom:1px solid var(--rule)}
@@ -70,6 +70,11 @@ nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;
 .scr.scrolly{overflow-y:auto}
 .scr.half-l{right:calc(50% + 8px)}
 .scr.half-r{left:calc(50% + 8px)}
+/* wider screens: every pane is a card; two panes share the width equally, a single pane is one centred card */
+#stage.roomy .scr.on{border:1px solid var(--rule);border-radius:14px;padding:14px 18px;background:#fff}
+#stage.roomy .scr.single{left:max(0px,calc(50% - 340px));right:max(0px,calc(50% - 340px));top:50%;bottom:auto;transform:translateY(-50%);max-height:100%}
+#stage.roomy .scr.single .madeby{margin-top:.8em}
+@media (max-height:600px){#stage.roomy .scr.on{padding:8px 12px}}
 .grow{flex:1 1 auto;min-height:0}
 
 #foot{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 0 10px;border-top:1px solid var(--rule)}
@@ -279,6 +284,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       <div class="chips" id="cond" style="margin-top:0">
         <button type="button" class="chip on" data-c="dark">Dark cupboard</button>
         <button type="button" class="chip" data-c="light">Bright light</button>
+        <button type="button" class="btn ghost" id="reset" style="margin-left:auto;font-size:.78em;padding:.3em .8em">Reset tubes ↺</button>
       </div>
       <div class="bench dark" id="bench"></div>
       <label class="wordsw"><input type="checkbox" id="words"> Describe tubes in words</label>
@@ -320,7 +326,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     <div class="ideas">
       <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><circle class="mc" cx="14" cy="26" r="5"/><circle class="mc" cx="34" cy="16" r="5"/><circle class="mc" cx="54" cy="26" r="5"/><line class="mb" x1="14" y1="26" x2="34" y2="16"/><line class="mb" x1="34" y1="16" x2="54" y2="26"/><circle class="mc" cx="76" cy="26" r="5"/><circle class="mc" cx="100" cy="16" r="5"/><line class="mb" x1="75" y1="23" x2="99" y2="13"/><line class="mb" x1="77" y1="29" x2="101" y2="19"/><text class="mtx" x="34" y="42" text-anchor="middle">saturated</text><text class="mtx hl" x="88" y="42" text-anchor="middle">C=C</text></svg><b>Saturated:</b> single bonds only. <b>Unsaturated:</b> has a C=C.</div>
       <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><rect x="46" y="2" width="28" height="40" rx="5" fill="#eef3f4" stroke="#5c665f"/><rect x="47" y="22" width="26" height="19" rx="4" fill="#e2852b"/><rect x="47" y="22" width="26" height="19" rx="4" fill="url(#hatch)"/><text class="mtx" x="80" y="16">oil</text><text class="mtx" x="80" y="36">water</text></svg>Oil floats on water as a separate layer.</div>
-      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><circle cx="48" cy="22" r="11" fill="#a8431f" stroke="#1c2620"/><circle cx="70" cy="22" r="11" fill="#a8431f" stroke="#1c2620"/><text x="48" y="26" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Br</text><text x="70" y="26" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Br</text></svg>Br₂ is orange. The colour goes only when Br₂ reacts.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><circle cx="48" cy="22" r="11" fill="#a8431f" stroke="#1c2620"/><circle cx="70" cy="22" r="11" fill="#a8431f" stroke="#1c2620"/><text x="48" y="26" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Br</text><text x="70" y="26" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Br</text></svg>Br₂ is orange. The orange colour disappears only when Br₂ reacts.</div>
       <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><circle class="mc" cx="14" cy="28" r="5"/><circle class="mc" cx="36" cy="28" r="5"/><line class="mb" x1="14" y1="25" x2="36" y2="25"/><line class="mb" x1="14" y1="31" x2="36" y2="31"/><text class="mtx" x="44" y="31">+Br₂→</text><circle class="mc" cx="84" cy="30" r="5"/><circle class="mc" cx="106" cy="30" r="5"/><line class="mb" x1="84" y1="30" x2="106" y2="30"/><circle cx="84" cy="11" r="7" fill="#a8431f"/><circle cx="106" cy="11" r="7" fill="#a8431f"/><line class="mb" x1="84" y1="18" x2="84" y2="25"/><line class="mb" x1="106" y1="18" x2="106" y2="25"/></svg>A C=C reacts at once, even in the dark. Alkanes need light.</div>
     </div>
   </div>
@@ -529,7 +535,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       d:{p1:['C1','Br1',8,-3], p2:['C1','Br1',8,3], b1:['C2','Br2',8,-3], b2:['C2','Br2',8,3]},
       lb:[[320,70,'1,2-dibromoethane','tx g mid']],
       eq:'CH<sub>2</sub>=CH<sub>2</sub> + Br<sub>2</sub> → CH<sub>2</sub>Br–CH<sub>2</sub>Br',
-      cap:'<b>Product.</b> Br<sup>−</sup> bonds to the positive carbon. The orange Br<sub>2</sub> has been used up, so the hexene tube turns colourless.'}
+      cap:'<b>Product.</b> Br<sup>−</sup> bonds to the positive carbon. The orange Br<sub>2</sub> has been used up, so the orange colour in the hexene tube disappears.'}
     ]};
 
   /* ===== end of explainer copy ===== */
@@ -594,8 +600,8 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 
   const OBS=[
     {id:'extract', t:'Orange moves into the top layer'},
-    {id:'quick',   t:'Colour goes at once'},
-    {id:'slow',    t:CHEM.hbrFumes?'Fades slowly; fumes turn litmus red':'Fades slowly in the light'},
+    {id:'quick',   t:'Orange colour disappears at once'},
+    {id:'slow',    t:CHEM.hbrFumes?'Orange colour disappears slowly; fumes turn litmus red':'Orange colour disappears slowly'},
     {id:'bottom',  t:'Orange stays in the bottom layer'}
   ];
   const outcome=(sub,cond)=> !SUB[sub].sat ? 'quick' : (cond==='light' ? 'slow' : 'extract');
@@ -613,9 +619,9 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 
   /* ---------- scenarios ---------- */
   const Q_COND={p:'Where do the tubes stand?', o:[
-    ['In the dark',1,'Only a C=C removes the colour in the dark.'],
-    ['In bright light',0,'In light, alkanes lose the colour too.','M2'],
-    ['It does not matter',0,'It does: in light, alkanes lose the colour too.','M2']]};
+    ['In the dark',1,'In the dark, only a C=C makes the orange colour disappear.'],
+    ['In bright light',0,'In light, alkanes also make the orange colour disappear.','M2'],
+    ['It does not matter',0,'It does. In light, alkanes also make the orange colour disappear.','M2']]};
 
   const SCEN=[
    {id:'excipient', chip:'1 · Excipient check', cands:['paraffin','olive'],
@@ -626,7 +632,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     explain(r){ const b=this.keyBottle(r); return {p:'Equation for bottle '+b.L+':', o:[
       [EQ.olive,1,'Br<sub>2</sub> adds across each C=C.'+ADDNOTE],
       ['C<sub>18</sub>H<sub>38</sub> + Br<sub>2</sub> → C<sub>18</sub>H<sub>37</sub>Br + HBr',0,'That is substitution, which needs light. The oil has a C=C.','M4'],
-      ['No reaction',0,'The colour vanished, so Br<sub>2</sub> was used up.','M1']]}; }},
+      ['No reaction',0,'The orange colour disappeared, so Br<sub>2</sub> was used up.','M1']]}; }},
    {id:'isomers', chip:'2 · Same formula', cands:['cyclo','hexene'],
     setup(){ const s=shuffle(['cyclo','hexene']); return {bottles:s.map(k=>({sub:k, sub2:'C<sub>6</sub>H<sub>12</sub>'})), idOpts:['Cyclohexane','Hex-1-ene'], idOf:k=>SUB[k].name}; },
     context:r=>'Both bottles say <b>C<sub>6</sub>H<sub>12</sub></b>: cyclohexane and hex-1-ene ('+term('iso','isomers')+'). Which is which?',
@@ -653,21 +659,21 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       if(r.contam) return {p:'Equation for bottle '+b.L+':', o:[
         [EQ.hexene,1,'The hexene adds Br<sub>2</sub>. The hexane does nothing in the dark.'+ADDNOTE],
         [EQ.subst6,0,'Hexane needs light for that. Your test was dark.','M2'],
-        ['No reaction',0,'The colour vanished, so Br<sub>2</sub> was used up.','M1']]};
+        ['No reaction',0,'The orange colour disappeared, so Br<sub>2</sub> was used up.','M1']]};
       return {p:'Why did bottle '+b.L+' stay orange?', o:[
         ['No C=C and no light: Br<sub>2</sub> only dissolved',1,'The orange is Br<sub>2</sub> itself, dissolved in hexane.'],
-        [EQ.subst6,0,'That needs light and removes the colour.','M2'],
+        [EQ.subst6,0,'That needs light, and then the orange colour would disappear.','M2'],
         ['The orange is a new brominated product',0,'The orange is Br<sub>2</sub> itself. Nothing reacted.','M1']]}; }},
    {id:'window', chip:'4 · Sunny windowsill', cands:['hexane','hexene'],
     setup(){ const k=coin()?'hexane':'hexene'; return {bottles:[{sub:k, sub2:'solvent X', startLight:true}], idOpts:['Hexane','Hex-1-ene'], idOf:x=>SUB[x].name}; },
-    context:r=>'Solvent X went colourless on a sunny windowsill. A trainee wrote "X is an alkene". X is hexane or hex-1-ene. Check.',
+    context:r=>'A tube of solvent X and bromine water stood on a sunny windowsill. The orange colour disappeared. A trainee wrote "X is an alkene". X is hexane or hex-1-ene. Check.',
     extra:r=>[
      {p:'Does the windowsill tube prove a C=C?', o:[
-       ['No: in light, alkanes lose the colour too',1,'In light, Br<sub>2</sub> substitutes alkanes slowly.'],
-       ['Yes: only alkenes do that',0,'In light, alkanes lose the colour too.','M2'],
-       ['No: bromine water fades within an hour',0,'In the dark it stays orange. Br<sub>2</sub> must react to lose colour.','M7']]},
+       ['No: in light, alkanes also make the colour disappear',1,'In light, Br<sub>2</sub> reacts slowly with alkanes (substitution).'],
+       ['Yes: only alkenes do that',0,'In light, alkanes also make the orange colour disappear.','M2'],
+       ['No: the colour of bromine water disappears by itself',0,'In the dark, it stays orange. The colour disappears only when Br<sub>2</sub> reacts.','M7']]},
      {p:'The fair test?', o:[
-       ['Repeat in the dark',1,'In the dark, only a C=C removes the colour.'],
+       ['Repeat in the dark',1,'In the dark, only a C=C makes the orange colour disappear.'],
        ['Repeat in brighter light',0,'More light speeds up alkane substitution.','M2'],
        ['Add more bromine water',0,'That tube was in light. Start again in the dark.','M2']]}],
     keyBottle:r=>r.bottles[0], other:r=>null,
@@ -675,16 +681,16 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       if(b.sub==='hexane') return {p:'What explains both tubes?', o:[
         ['Light: '+EQ.subst6+' (slow). Dark: no reaction.',1,'X is hexane.'],
         ['X is an alkene that needs light',0,'An alkene reacts at once in the dark.','M5'],
-        ['The bromine evaporated',0,'Your dark tube kept its colour. Br<sub>2</sub> must react to lose colour.','M7']]};
+        ['The bromine evaporated',0,'Your dark tube stayed orange. The colour disappears only when Br<sub>2</sub> reacts.','M7']]};
       return {p:'Equation for solvent X:', o:[
         [EQ.hexene,1,'X is hex-1-ene. Only the dark test proves it.'+ADDNOTE],
-        [EQ.subst6,0,'That is substitution of hexane. X lost its colour at once in the dark.','M4'],
-        ['No reaction: light bleached it',0,'It lost its colour in the dark too.','M7']]}; }}
+        [EQ.subst6,0,'That is substitution of hexane. With X, the orange colour disappeared at once, in the dark.','M4'],
+        ['No reaction: light destroyed the colour',0,'The colour also disappeared in the dark.','M7']]}; }}
   ];
 
   /* ---------- mechanisms (reused from the explainer) ---------- */
   const ADD_DIB = JSON.parse(JSON.stringify({full:RX.add.full,key:RX.add.key,atoms:RX.add.atoms,dots:RX.add.dots,steps:RX.add.steps}));
-  ADD_DIB.steps[2].cap='<b>Product.</b> Br<sup>−</sup> bonds to the positive carbon. Br<sub>2</sub> is used up, so the colour goes.'+ADDNOTE;
+  ADD_DIB.steps[2].cap='<b>Product.</b> Br<sup>−</sup> bonds to the positive carbon. Br<sub>2</sub> is used up, so the orange colour disappears.'+ADDNOTE;
   const ADD_OH={full:true, key:KEY_FULL,
     atoms:{C1:'C',C2:'C',H1:'H',H2:'H',H3:'H',H4:'H',Br1:'Br',Br2:'Br',O:'O',Hw1:'H',Hw2:'H'},
     dots:['p1','p2','b1','b2','o1','o2'],
@@ -702,7 +708,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       d:{p1:['C1','Br1',8,-3], p2:['C1','Br1',8,3], o1:['C2','O',-8,-2], o2:['C2','O',-8,4], b1:['Br2',-20,-4], b2:['Br2',-20,4]},
       lb:[[316,170,'H⁺','tx r'],[348,48,'−','tx r'],[330,110,'2-bromoethanol','tx g mid']],
       eq:'CH<sub>2</sub>=CH<sub>2</sub> + Br<sub>2</sub> + H<sub>2</sub>O → CH<sub>2</sub>Br–CH<sub>2</sub>OH + HBr',
-      cap:'<b>Product.</b> A bromohydrin. Br<sub>2</sub> is used up, so the colour goes.'}
+      cap:'<b>Product.</b> A bromohydrin. Br<sub>2</sub> is used up, so the orange colour disappears.'}
     ]};
   function DISSOLVE(name){ return {
     atoms:{k1:'c',k2:'c',k3:'c',k4:'c',m1:'c',m2:'c',m3:'c',m4:'c',Br1:'Br',Br2:'Br',Br3:'Br',Br4:'Br'},
@@ -789,7 +795,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     qa.appendChild(grid);
     qa.insertAdjacentHTML('beforeend','<div class="q" style="margin-top:.5em">In the dark, bromine water will:</div>');
     c.forEach(k=>{ const r=document.createElement('div'); r.className='prow'; r.innerHTML='<span>'+nm(k)+'</span>';
-      r.appendChild(chipGroup(['Stay orange','Turn colourless'], R.pred[k], i=>{ R.pred[k]=i; unsolveFrom(1); track('lab-prediction',{scenario:R.S.id, sub:k, pick:i}); })); qa.appendChild(r); });
+      r.appendChild(chipGroup(['Stays orange','Colour disappears'], R.pred[k], i=>{ R.pred[k]=i; unsolveFrom(1); track('lab-prediction',{scenario:R.S.id, sub:k, pick:i}); })); qa.appendChild(r); });
     if(!R.qs) R.qs=R.S.extra(R).map(q=>({p:q.p, o:shuffle(q.o)}));
     R.qs.forEach((q,qi)=>{ const d=document.createElement('div'); d.innerHTML='<div class="q">'+q.p+'</div>';
       d.appendChild(chipGroup(q.o.map(o=>o[0]), R.ans1[qi], i=>{ R.ans1[qi]=i; unsolveFrom(1); }, true)); qb.appendChild(d); });
@@ -801,7 +807,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       if(!picked && !s.sat) lines.push(k==='olive'?mixLine('M9','Look again: olive oil has a double line.',1):mixLine('M6','Look again: hex-1-ene has a double line.',1));
       const pr=R.pred[k]; if(pr==null){ miss++; return; }
       if(s.sat && pr===1) lines.push(mixLine('M2',nm(k)+' has no C=C, so it stays orange in the dark.',1));
-      if(!s.sat && pr===0) lines.push(mixLine('M5',nm(k)+' has a C=C, so it turns colourless.',1));
+      if(!s.sat && pr===0) lines.push(mixLine('M5',nm(k)+' has a C=C, so the orange colour disappears.',1));
     });
     R.qs.forEach((q,qi)=>{ const a=R.ans1[qi]; if(a==null){ miss++; return; } const o=q.o[a]; if(!o[1]) lines.push(mixLine(o[3],o[2],1)); });
     if(lines.length) return msg(1,'bad',lines.join(''));
@@ -814,7 +820,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     R.mols=new Set(R.S.cands.filter(k=>!SUB[k].sat)); R.S.cands.forEach(k=>{ R.pred[k]=SUB[k].sat?0:1; });
     R.qs.forEach((q,qi)=>{ R.ans1[qi]=q.o.findIndex(o=>o[1]); });
     renderQ1(true);
-    msg(1,'near','All answers filled in. Only a C=C removes the colour in the dark.');
+    msg(1,'near','All answers filled in. In the dark, only a C=C makes the orange colour disappear.');
     track('lab-step1-reveal',{scenario:R.S.id}); solve(1);
   });
 
@@ -853,6 +859,14 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     $('#cond').querySelectorAll('.chip').forEach(x=>{ x.classList.toggle('on',x.dataset.c===c); x.setAttribute('aria-pressed',x.dataset.c===c?'true':'false'); });
   }
   $('#cond').querySelectorAll('.chip').forEach(x=>x.addEventListener('click',()=>setCond(x.dataset.c)));
+  /* Reset: empty every tube and clear the records; later steps must be done again */
+  $('#reset').addEventListener('click',()=>{
+    if(busy) return;
+    R.bottles.forEach(b=>{ b.tests=0; b.cond=null; b.res=null; b.rec=null; b.lit=false; });
+    renderBench(); renderRecs(); unsolveFrom(2); clearMsg(2);
+    if(R.S.id==='window') simulateWindowsill();
+    track('lab-reset',{scenario:R.S.id}); fitPage();
+  });
   $('#words').addEventListener('change',()=>{ $('#bench').classList.toggle('words',$('#words').checked); track('lab-words',{on:$('#words').checked}); });
 
   const WORDS={
@@ -860,8 +874,8 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     added:b=>'Bottom: orange. Top: sample.',
     extract:b=>'Top: orange. Bottom: pale.',
     quick:b=>'Top: '+(b.sub==='olive'?'pale yellow (oil)':'colourless')+'. Bottom: colourless.',
-    fading:b=>'Top: orange, fading.',
-    fade:b=>'Both layers colourless. Faded slowly.'
+    fading:b=>'Top: orange, slowly disappearing.',
+    fade:b=>'Both layers colourless. The colour disappeared slowly.'
   };
   function paint(i,state){
     const t=$('#tube'+i), b=R.bottles[i], svg=t.querySelector('svg'), og=t.querySelector('.orgG'), org=t.querySelector('.org'), aq=t.querySelector('.aq'),
@@ -932,10 +946,10 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   }
   function recMix(b){
     if(b.rec==='bottom') return ['M8','Shaking mixes Br<sub>2</sub> into the top layer of bottle '+b.L+'.'];
-    if(b.res==='extract' && b.rec==='quick') return ['M1','Bottle '+b.L+': the colour moved up; it did not go.'];
+    if(b.res==='extract' && b.rec==='quick') return ['M1','Bottle '+b.L+': the orange colour moved up. It did not disappear.'];
     if(b.res==='quick' && b.rec==='extract') return ['M8','Bottle '+b.L+': is the top layer hatched (orange)?'];
-    if(b.res==='slow') return ['M2','Bottle '+b.L+' faded slowly, in light.'];
-    if(b.rec==='slow') return ['M2','Bottle '+b.L+' did not fade slowly.'];
+    if(b.res==='slow') return ['M2','Bottle '+b.L+' was in light: the colour disappeared slowly.'];
+    if(b.rec==='slow') return ['M2','Bottle '+b.L+': the colour did not disappear slowly.'];
     return ['M8','Look again at bottle '+b.L+'.'];
   }
   $('#chk2').addEventListener('click',()=>{
@@ -981,7 +995,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       if((a.sat===0)!==sat){
         if(b.sub==='cyclo') lines.push(mixLine('M3','Bottle '+b.L+' stayed orange: no C=C.',3));
         else if(sat) lines.push(mixLine('M1','Bottle '+b.L+' stayed orange: no C=C.',3));
-        else lines.push(mixLine('M7','Bottle '+b.L+' lost its colour: Br<sub>2</sub> added to a C=C.',3));
+        else lines.push(mixLine('M7','Bottle '+b.L+': the orange colour disappeared. Br<sub>2</sub> added to the C=C.',3));
         return; }
       const want=R.idOpts.indexOf(R.idOf(b.sub));
       if(a.id!==want) lines.push(mixLine(b.sub==='olive'||b.sub==='paraffin'?'M9':'M6','Bottle '+b.L+': '+(sat?'saturated':'unsaturated')+' means '+R.idOpts[want]+'.',3));
@@ -994,7 +1008,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   $('#rev3').addEventListener('click',()=>{
     R.concl.forEach(i=>{ const b=R.bottles[i]; R.ans3[i]={sat:SUB[b.sub].sat?0:1, id:R.idOpts.indexOf(R.idOf(b.sub))}; });
     renderConcl();
-    msg(3,'near','Stayed orange = saturated. Lost colour = unsaturated. '+conclSummary());
+    msg(3,'near','Stays orange = saturated. Colour disappears = unsaturated. '+conclSummary());
     track('lab-step3-reveal',{scenario:R.S.id}); solve(3);
   });
 
@@ -1056,7 +1070,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 
   function solve(k){
     solved[k-1]=true; track('lab-step'+k+'-solved',{scenario:R.S.id}); /* one event name per step: Umami funnels match names */
-    if(k===3 && !$('#tri4a').children.length) renderTri();
+    if(k===3) renderTri();
     if(k===4){ roundComplete(); $('#endrow').hidden=false; }
     setLocks(); fitPage();
   }
@@ -1098,8 +1112,9 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   function canLeave(p){ const k=stepOf(p); if(k===0) return true; if(!lastPaneOfStep(p)) return true; return solved[k-1]; }
   function goPage(n){
     page=Math.max(0,Math.min(pages.length-1,n));
-    SCR.forEach(s=>{ s.classList.remove('on','half-l','half-r','scrolly'); s.style.setProperty('--k',1); });
-    const P=pages[page]; P.forEach((s,i)=>{ s.classList.add('on'); if(P.length===2) s.classList.add(i?'half-r':'half-l'); });
+    SCR.forEach(s=>{ s.classList.remove('on','half-l','half-r','single','scrolly'); s.style.setProperty('--k',1); });
+    $('#stage').classList.toggle('roomy', innerWidth>=640);
+    const P=pages[page]; P.forEach((s,i)=>{ s.classList.add('on'); if(P.length===2) s.classList.add(i?'half-r':'half-l'); else s.classList.add('single'); });
     updatePager(); fitPage();
     track('lab-page',{page:STEP_NAMES[stepOf(page)]+(P.length===1&&P[0].dataset.pane?' '+P[0].dataset.pane:'')});
   }
@@ -1131,7 +1146,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     });
   }
   function setAppH(){ document.documentElement.style.setProperty('--app-h', innerHeight+'px'); }
-  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ setAppH(); const before=wide; buildPages(); if(before!==wide) goPage(page); else fitPage(); },120); });
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ setAppH(); const before=wide; buildPages(); goPage(page); },120); });
 
   setAppH(); newRound(); buildPages(); goPage(0);
 })();
