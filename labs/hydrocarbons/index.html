@@ -375,6 +375,10 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .lab-head p{margin-bottom:.2em}
 .lab-frame{flex:1 1 auto;min-height:300px;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#fff}
 .lab-frame iframe{width:100%;height:100%;border:0;display:block}
+.lab-launch{display:none;height:100%;flex-direction:column;align-items:center;justify-content:center;gap:.6em;padding:1em;text-align:center;font-size:.92em}
+.lab-frame.launch iframe{display:none}
+.lab-frame.launch .lab-launch{display:flex}
+.lab-launch a{background:var(--accent);color:#fff;text-decoration:none;font-weight:700;padding:.6em 1.3em;border-radius:100px}
 </style>
 </head>
 <body>
@@ -1316,7 +1320,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <h2>Bromine Water Bench: <span class="ac">find the C=C.</span></h2>
    <p class="small">Find the C=C, test each bottle with bromine water, decide, then match the tube, the molecules and the equation. <a href="lab.html" target="_blank" rel="noopener" data-umami-event="lab-open-full">Open full screen ↗</a></p>
   </div>
-  <div class="lab-frame"><iframe id="lab-iframe" data-src="lab.html?embed=1" title="Bromine Water Bench interactive lab" loading="lazy"></iframe></div>
+  <div class="lab-frame"><iframe id="lab-iframe" data-src="lab.html?embed=1" title="Bromine Water Bench interactive lab" loading="lazy"></iframe><div class="lab-launch"><span>Your screen is too short to use the lab here.</span><a href="lab.html" target="_blank" rel="noopener" data-umami-event="lab-launch-small">Open the lab ↗</a></div></div>
  </div>
 </section>
 
@@ -1722,8 +1726,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     btnNext.textContent=n===TOTAL?'Done':'Next →';
     btnNext.setAttribute('data-umami-event',n===TOTAL?'carousel-selesai':'nav-next');
     buildCharts(n);
-    const fr=slides[n-1].querySelector('iframe[data-src]');
-    if(fr && !fr.src){ fr.src=fr.dataset.src; if(window.umami) umami.track('lab-embed-open'); }
+    labFrame(slides[n-1]);
     fit(slides[n-1]);
     requestAnimationFrame(()=>fit(slides[n-1]));
     updateGate(false);
@@ -2156,6 +2159,16 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   });
   vidOv.querySelector('.close-ov').addEventListener('click',()=>{ vidFrame.innerHTML=''; });
   vidOv.addEventListener('click',e=>{ if(e.target===vidOv || e.target.classList.contains('vid-panel')){ vidOv.classList.remove('open'); vidFrame.innerHTML=''; } });
+
+  /* the lab needs about 480 px of height to show each step without scrolling;
+     on shorter screens offer a full-screen link instead of a cramped frame */
+  function labFrame(slide){
+    const fr=slide && slide.querySelector('iframe[data-src]'); if(!fr) return;
+    const box=fr.parentElement, small=box.clientHeight<480;
+    box.classList.toggle('launch',small);
+    if(!small && !fr.src){ fr.src=fr.dataset.src; if(window.umami) umami.track('lab-embed-open'); }
+  }
+  window.addEventListener('resize',()=>setTimeout(()=>labFrame(slides[current-1]),200));
 
   /* the embedded lab reports finished rounds */
   window.addEventListener('message',e=>{
