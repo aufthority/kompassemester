@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Bromine Water Bench — Aufthority</title>
+<meta name="description" content="Interactive lab: find the C=C, test with bromine water, and connect the tube, the molecules and the equation.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="website">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="Bromine Water Bench: an alkanes vs alkenes lab">
+<meta property="og:description"  content="Predict, test, decide: which bottles contain a C=C?">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:locale"       content="en_MY">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<script>
+/* Embedded inside the explainer? Then hide the page chrome and skip analytics
+   (the explainer already tracks the visit). */
+(function(){
+  var emb = /[?&]embed=1/.test(location.search) || window.self !== window.top;
+  document.documentElement.classList.toggle('embedded', emb);
+  if(!emb){
+    var s=document.createElement('script'); s.defer=true; s.src='https://cloud.umami.is/script.js';
+    s.setAttribute('data-website-id','f79c60f1-f9e7-4170-a979-f357ba756a18'); document.head.appendChild(s);
+  }
+})();
+</script>
+<script src="../shared/periodic-table.js" defer></script>
+
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#636b65;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#8a5d14;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--arrow:#b25f0c;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%;font-size:16px;overflow-x:hidden}
+b,strong{color:var(--ink);font-weight:700}
+a{color:var(--accent)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 28px}
+.embedded .wrap{padding:10px 12px 18px}
+.embedded body{font-size:15px}
+
+nav{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 8px;border-bottom:1px solid var(--rule);margin-bottom:12px}
+.embedded nav,.embedded .page-head,.embedded .madeby{display:none}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;gap:8px}
+.pillbtn{cursor:pointer;text-decoration:none;color:var(--accent-dark);border:1px solid var(--g-line);background:var(--g-bg);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;white-space:nowrap}
+@media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
+.pts{display:none}
+@media (max-width:340px){.logo{font-size:.92rem}.nav-right{gap:4px}.pillbtn{padding:4px 7px!important;font-size:.74rem}}
+@media (max-width:400px){.ptl{display:none}.pts{display:inline}.nav-right{gap:6px}.pillbtn{padding:5px 9px}}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.3em}
+h1{color:var(--ink);font-weight:800;line-height:1.1;letter-spacing:-.025em;font-size:1.8em;margin-bottom:.3em}
+h1 .ac{color:var(--accent)}
+h2{color:var(--ink);font-weight:800;font-size:1.08em;letter-spacing:-.01em;margin-bottom:.35em;display:flex;align-items:center;gap:.5em}
+h2 .num{flex:0 0 1.6em;height:1.6em;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.8em}
+p{margin-bottom:.5em;font-size:.95em}
+.small{font-size:.82em;color:var(--muted)}
+.page-head{margin-bottom:10px}
+
+.card{border:1px solid var(--rule);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#fff}
+.card.locked{opacity:.45;pointer-events:none}
+.card.locked .lock-note{display:block}
+.lock-note{display:none;font-size:.8em;color:var(--muted);font-weight:600}
+.card.done{border-color:var(--g-line)}
+.card.done h2 .num{background:var(--accent-dark)}
+
+.chips{display:flex;flex-wrap:wrap;gap:.35em;margin:.2em 0 .5em}
+.chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .82em 'DM Sans',sans-serif;padding:.35em .8em;border-radius:100px;cursor:pointer;text-align:left;line-height:1.3}
+.chip:hover{border-color:var(--ink)}
+.chip.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.chip .tick{margin-left:.3em;color:var(--accent)}
+.chips.col{flex-direction:column;align-items:stretch}
+.chips.col .chip{border-radius:8px}
+.ctx{font-size:.88em;color:var(--body);margin:0}
+
+.msg{font-size:.86em;padding:.4em .7em;border-left:3px solid var(--rule);border-radius:0 8px 8px 0;margin-top:.4em}
+.msg.good{border-color:var(--accent);background:var(--g-bg)}
+.msg.near{border-color:var(--orange);background:var(--o-bg)}
+.msg.bad{border-color:var(--red);background:var(--r-bg)}
+.msg p{margin:0;font-size:1em}.msg p+p{margin-top:.3em}
+.q{font-weight:700;color:var(--ink);font-size:.92em;margin:.6em 0 .3em}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .86em 'DM Sans',sans-serif;padding:.45em 1em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{border-color:var(--rule);color:var(--body);font-weight:600}
+.btn:disabled{opacity:.4;cursor:default}
+.btns{display:flex;flex-wrap:wrap;gap:.45em;margin-top:.55em}
+.work{display:none;margin-top:.5em}
+.work.show{display:block}
+table.w{width:100%;border-collapse:collapse;font-size:.8em}
+table.w th,table.w td{border-bottom:1px solid var(--rule);padding:.32em .4em;text-align:left;vertical-align:top}
+table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.score{font-size:.82em;color:var(--muted);text-align:center;margin-top:4px}
+.madeby{border-top:1px solid var(--rule);padding-top:.6em;margin-top:.8em;font-size:.8em;color:var(--muted)}
+
+/* four ideas */
+.ideas{display:grid;grid-template-columns:1fr 1fr;gap:.5em}
+@media (min-width:620px){.ideas{grid-template-columns:repeat(4,1fr)}}
+.idea{font-size:.8em;line-height:1.35;text-align:center}
+.idea svg{display:block;width:100%;height:44px;margin-bottom:.2em}
+.term{background:none;border:none;border-bottom:1.5px dotted var(--accent);color:inherit;font:inherit;padding:0;cursor:help}
+.def{display:block;margin:.2em 0 .4em;padding:.3em .6em;background:var(--g-bg);border-radius:6px;font-size:.92em;color:var(--accent-dark);font-weight:500}
+
+/* molecules */
+.mols{display:grid;grid-template-columns:1fr 1fr;gap:.45em}
+.mol{border:1.5px solid var(--rule);border-radius:10px;background:#fff;padding:.4em .3em .35em;cursor:pointer;font:700 .84em 'DM Sans',sans-serif;color:var(--ink);text-align:center}
+.mol svg{display:block;width:100%;height:56px}
+.mol small{display:block;font-weight:500;color:var(--muted);font-size:.86em}
+.mol.on{border-color:var(--accent);background:var(--g-bg)}
+.mc{fill:#2b332e}
+.mb{stroke:#2b332e;stroke-width:2.4;stroke-linecap:round}
+.mhl{fill:none;stroke:var(--accent);stroke-width:2;stroke-dasharray:3 2}
+.mtx{font:600 10px 'DM Sans',sans-serif;fill:var(--muted)}
+.mtx.hl{fill:var(--accent-dark);font-weight:700}
+.prow{display:flex;flex-wrap:wrap;align-items:center;gap:.2em .6em}
+.prow > span{font-size:.86em;min-width:8.5em;color:var(--ink)}
+.prow .chips{margin:.15em 0}
+
+/* bench */
+.bench{border-radius:10px;padding:28px 6px 10px;display:flex;justify-content:center;gap:8px;flex-wrap:wrap;transition:background .4s}
+.bench.dark{background:#2b302d}
+.bench.light{background:linear-gradient(#fff6d8,#fffdf5);border:1px solid var(--rule)}
+.tube{flex:1 1 0;min-width:0;max-width:170px;display:flex;flex-direction:column;align-items:center;gap:5px}
+.tube svg{width:90px;height:160px;display:block;overflow:visible}
+.tlabel{font-weight:700;font-size:.86em;text-align:center;line-height:1.25}
+.tlabel small{display:block;font-weight:500;font-size:.88em}
+.bench.dark .tlabel{color:#f2f4f2}.bench.dark .tlabel small{color:#c3ccc6}
+.bench.light .tlabel{color:var(--ink)}.bench.light .tlabel small{color:var(--muted)}
+.tag{font-size:.68em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:100px;background:#fff;color:#4a524c;min-height:1.5em}
+.tag:empty{visibility:hidden}
+.tstate{display:none;font-size:.76em;line-height:1.3;text-align:center;background:#fff;color:var(--ink);border-radius:6px;padding:3px 6px}
+.words .tstate{display:block}
+.tube .btn{font-size:.78em;padding:.4em .8em;background:#fff;width:100%;max-width:150px}
+.tube .btn.solid{background:var(--accent);color:#fff}
+.wordsw{display:flex;align-items:center;gap:6px;font-size:.84em;margin-top:.45em;cursor:pointer}
+.wordsw input{width:16px;height:16px;accent-color:var(--accent)}
+.glass{fill:none;stroke:#5c665f;stroke-width:2}
+.bench.dark .glass{stroke:#c9d1cb}
+.liq{transition:fill .9s ease, opacity .5s ease, transform .6s ease}
+.slow .liq{transition:fill 5s ease, opacity 5s ease, transform .6s ease}
+.hatch{pointer-events:none}
+.drop{fill:#e2852b;opacity:0}
+.dropping .drop{animation:drip .6s ease-in forwards}
+.dropping .drop:nth-of-type(2){animation-delay:.15s}.dropping .drop:nth-of-type(3){animation-delay:.3s}
+@keyframes drip{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(70px)}}
+.shake{animation:shake .8s ease-in-out}
+@keyframes shake{0%,100%{transform:rotate(0)}20%{transform:rotate(-9deg)}40%{transform:rotate(8deg)}60%{transform:rotate(-6deg)}80%{transform:rotate(4deg)}}
+.fume{fill:none;stroke:#cfd6d2;stroke-width:3;stroke-linecap:round;opacity:0}
+.bench.light .fume{stroke:#8f9a94}
+.fuming .fume{animation:fume 2.2s ease-out infinite}
+.fuming .fume:nth-of-type(2){animation-delay:.7s}.fuming .fume:nth-of-type(3){animation-delay:1.4s}
+@keyframes fume{0%{opacity:0;transform:translateY(6px)}30%{opacity:.9}100%{opacity:0;transform:translateY(-22px)}}
+.litmus{transition:fill 1.2s ease,opacity .3s}
+.rec{border-top:1px solid var(--rule);padding-top:.4em;margin-top:.5em}
+.concl{border-top:1px solid var(--rule);padding-top:.4em;margin-top:.5em}
+.concl .chips{margin-bottom:.2em}
+
+/* tube · molecules · equation */
+.tri{display:grid;grid-template-columns:1fr;gap:.5em}
+@media (min-width:640px){.tri{grid-template-columns:130px 1fr}}
+.tri-panel > .eyebrow{display:block}
+.tri-macro{display:flex;flex-direction:column;align-items:center;text-align:center;font-size:.84em}
+.tri-macro svg{width:64px;height:114px;overflow:visible}
+.tri-macro .mini{padding:12px 10px 4px;margin-bottom:.3em}
+.tri-sym{grid-column:1/-1}
+.tri-note{font-size:.8em;color:var(--muted);margin-bottom:.3em}
+.tabs .chip{font-size:.76em}
+.eqn{font-weight:600}
+
+/* reaction player (shared with the explainer) */
+.rx{margin:.2em 0}
+.rx-svg{width:100%;height:auto;max-height:240px;margin:0 auto;display:block;background:#fafbf9;border:1px solid var(--rule);border-radius:var(--radius)}
+.rx .eqn{margin:.4em 0 .3em;background:#f1f4f1;border-radius:8px;padding:.3em .6em;text-align:center;font-size:.88em;color:var(--ink)}
+.rx-cap{font-size:.86em;margin-bottom:.3em}
+.rx-key{font-size:.76em;color:var(--muted);margin:-.1em 0 .4em}
+.kdot{display:inline-block;width:.55em;height:.55em;border-radius:50%;background:var(--blue);vertical-align:.05em}
+.rx-ctl{display:flex;align-items:center;gap:.5em}
+.rx-count{flex:1;text-align:center;font-size:.72em;font-weight:700;color:var(--eyebrow);letter-spacing:.08em}
+.rx-ctl .btn{font-size:.78em;padding:.35em .8em}
+.at circle{stroke:var(--ink);stroke-width:1.4}
+.at text{font:700 10.5px 'DM Sans',sans-serif;text-anchor:middle;fill:#fff;pointer-events:none}
+.at-c circle{fill:#2b332e}
+.at-h circle{fill:#fff}.at-h text{fill:var(--ink)}
+.at-cl circle{fill:#3f9a62}
+.at-br circle{fill:#a8431f}
+.at-o circle{fill:var(--red)}
+.at-r circle{fill:#7a5cc4}
+.bnd line{stroke:var(--ink);stroke-width:2.2;stroke-linecap:round}
+.edot{fill:var(--blue)}
+.rx-ar{fill:none;stroke:var(--arrow);stroke-width:1.8;stroke-linecap:round}
+.rx-uv{fill:none;stroke:#7a5cc4;stroke-width:1.8;stroke-linecap:round}
+.rx-ln{fill:none;stroke:#8a938d;stroke-width:1.2;stroke-dasharray:5 4}
+.tx{font-family:'DM Sans',sans-serif;font-size:12px;fill:var(--body)}
+.tx.s{font-size:10.5px;fill:var(--muted)}
+.tx.b{font-weight:700;fill:var(--ink)}
+.tx.g{fill:var(--accent-dark);font-weight:700}.tx.r{fill:var(--red);font-weight:700}.tx.o{fill:#8a4f0c;font-weight:700}.tx.bl{fill:var(--blue);font-weight:700}
+.tx.mid{text-anchor:middle}.tx.end{text-anchor:end}
+.draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.1s ease-out forwards;animation-delay:var(--d,0s)}
+.fade{opacity:0;animation:fadeup .5s ease-out forwards;animation-delay:var(--d,.3s)}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeup{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@media (prefers-reduced-motion: reduce){
+  .liq,.slow .liq,.litmus{transition:none!important}
+  .shake,.dropping .drop,.fuming .fume,.draw,.fade{animation:none!important}
+  .draw{stroke-dashoffset:0}.fade{opacity:1}
+  .fuming .fume{opacity:.7}
+}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <defs>
+  <marker id="ar-fh" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M9.5 5 L1 1 L3 5 Z" fill="#b25f0c"/></marker>
+  <marker id="ar-full" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto"><path d="M9.5 5 L1 1 L2.5 5 L1 9 Z" fill="#b25f0c"/></marker>
+  <!-- hatching marks every orange layer, so results read without colour -->
+  <pattern id="hatch" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" stroke="#5a2a08" stroke-width="2.2" stroke-opacity=".55"/></pattern>
+ </defs>
+</svg>
+<div class="wrap">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <button type="button" class="pillbtn" id="btn-pt" data-umami-event="open-periodic-table"><span class="ptl">Periodic table</span><span class="pts">Table</span></button>
+      <a class="pillbtn" href="index.html" data-umami-event="lab-to-explainer">Explainer</a>
+      <a class="pillbtn" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+    </div>
+  </nav>
+  <div class="page-head">
+    <div class="eyebrow">Interactive lab · Alkanes vs alkenes</div>
+    <h1>Bromine Water Bench: <span class="ac">find the C=C.</span></h1>
+    <p class="small">Choose a scenario and work through the four steps. Bottles are shuffled every round.</p>
+  </div>
+
+  <section class="card" id="c0">
+    <div class="eyebrow">Choose a scenario</div>
+    <div class="chips" id="scen-chips"></div>
+    <p class="ctx" id="context"></p>
+  </section>
+
+  <section class="card">
+    <div class="eyebrow">Four ideas</div>
+    <div class="ideas">
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><circle class="mc" cx="14" cy="26" r="5"/><circle class="mc" cx="34" cy="16" r="5"/><circle class="mc" cx="54" cy="26" r="5"/><line class="mb" x1="14" y1="26" x2="34" y2="16"/><line class="mb" x1="34" y1="16" x2="54" y2="26"/><circle class="mc" cx="76" cy="26" r="5"/><circle class="mc" cx="100" cy="16" r="5"/><line class="mb" x1="75" y1="23" x2="99" y2="13"/><line class="mb" x1="77" y1="29" x2="101" y2="19"/><text class="mtx" x="34" y="42" text-anchor="middle">saturated</text><text class="mtx hl" x="88" y="42" text-anchor="middle">C=C</text></svg><b>Saturated:</b> single bonds only. <b>Unsaturated:</b> has a C=C.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><rect x="46" y="2" width="28" height="40" rx="5" fill="#eef3f4" stroke="#5c665f"/><rect x="47" y="22" width="26" height="19" rx="4" fill="#e2852b"/><rect x="47" y="22" width="26" height="19" rx="4" fill="url(#hatch)"/><text class="mtx" x="80" y="16">oil</text><text class="mtx" x="80" y="36">water</text></svg>Oil floats on water as a separate layer.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><circle cx="48" cy="22" r="11" fill="#a8431f" stroke="#1c2620"/><circle cx="70" cy="22" r="11" fill="#a8431f" stroke="#1c2620"/><text x="48" y="26" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Br</text><text x="70" y="26" font-size="9" font-weight="700" fill="#fff" text-anchor="middle">Br</text></svg>Br₂ is orange. The colour goes only when Br₂ reacts.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><circle class="mc" cx="14" cy="28" r="5"/><circle class="mc" cx="36" cy="28" r="5"/><line class="mb" x1="14" y1="25" x2="36" y2="25"/><line class="mb" x1="14" y1="31" x2="36" y2="31"/><text class="mtx" x="44" y="31">+Br₂→</text><circle class="mc" cx="84" cy="30" r="5"/><circle class="mc" cx="106" cy="30" r="5"/><line class="mb" x1="84" y1="30" x2="106" y2="30"/><circle cx="84" cy="11" r="7" fill="#a8431f"/><circle cx="106" cy="11" r="7" fill="#a8431f"/><line class="mb" x1="84" y1="18" x2="84" y2="25"/><line class="mb" x1="106" y1="18" x2="106" y2="25"/></svg>A C=C reacts at once, even in the dark. Alkanes need light.</div>
+    </div>
+  </section>
+
+  <section class="card" id="c1">
+    <h2><span class="num">1</span>Find the C=C and predict</h2>
+    <div id="q1"></div>
+    <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button><button class="btn ghost" id="rev1" type="button">Show the working</button></div>
+    <div class="msg" id="m1">Answer every part, then check.</div>
+  </section>
+
+  <section class="card locked" id="c2">
+    <h2><span class="num">2</span>Test and record</h2>
+    <p class="lock-note">Finish step 1 first.</p>
+    <div class="chips" id="cond">
+      <button type="button" class="chip on" data-c="dark">Dark cupboard</button>
+      <button type="button" class="chip" data-c="light">Bright light</button>
+    </div>
+    <div class="bench dark" id="bench"></div>
+    <label class="wordsw"><input type="checkbox" id="words"> Describe tubes in words</label>
+    <div id="recs"></div>
+    <div class="btns"><button class="btn solid" id="chk2" type="button">Check my record</button><button class="btn ghost" id="rev2" type="button">Show the working</button></div>
+    <div class="msg" id="m2">Shake each bottle, then record what each layer shows.</div>
+    <div class="work" id="w2"></div>
+  </section>
+
+  <section class="card locked" id="c3">
+    <h2><span class="num">3</span>Decide</h2>
+    <p class="lock-note">Finish step 2 first.</p>
+    <div id="concl"></div>
+    <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button><button class="btn ghost" id="rev3" type="button">Show the working</button></div>
+    <div class="msg" id="m3">Use your dark results only.</div>
+    <div class="work" id="w3"></div>
+  </section>
+
+  <section class="card locked" id="c4">
+    <h2><span class="num">4</span>Tube, molecules, equation</h2>
+    <p class="lock-note">Finish step 3 first.</p>
+    <div class="tri" id="tri"></div>
+    <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button><button class="btn ghost" id="rev4" type="button">Show the working</button></div>
+    <div class="msg" id="m4">Step through the molecules, then pick the equation.</div>
+  </section>
+
+  <div class="btns" style="justify-content:center">
+    <button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New bottles</button>
+    <button class="btn ghost" id="btn-next" type="button">Next scenario →</button>
+  </div>
+  <div class="score">Rounds completed: <span id="rounds">0</span></div>
+  <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Observations are simulated.</div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+
+  /* CHEMISTRY SETTINGS: one line per decision in the fidelity audit. */
+  const CHEM = {
+    product:  'dibromide', // row 10: 'dibromide' or 'bromohydrin'
+    labelProduct: true,    // row 10 decision "Label it": show a short note that bromine water mainly gives the bromohydrin
+    hbrFumes: true         // row 9 decision "Keep as is": fumes + damp litmus for an alkane in light
+  };
+
+  const $ = s=>document.querySelector(s);
+  const NS='http://www.w3.org/2000/svg';
+  function el(tag, attrs, text){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(text!==undefined) e.textContent=text; return e; }
+  function fit(){}
+  function updateGate(){ zoomChanged(); }
+  const track=(e,d)=>{ try{ if(window.umami) umami.track(e,d); }catch(_){} };
+  const shuffle=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+  const coin=()=>Math.random()<.5;
+
+  /* ===== reaction player and mechanisms, copied from the explainer ===== */
+/* ---------- REACTION PLAYER: step-by-step animated mechanisms ----------
+     Each .rx[data-rx] gets a stage, an equation box, a caption and step controls.
+     A step lists atom positions (at), bonds (b, [a,b,order]), electron dots (d),
+     arrows (ar, fishhook by default, full when def.full), labels (lb) and paths (ph).
+     Atoms and dots glide between steps; bonds fade; arrows draw after the move. */
+  const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const ELM = {C:[13,'at-c','C'], c:[6,'at-c',''], H:[8,'at-h','H'], Cl:[13,'at-cl','Cl'], Br:[14,'at-br','Br'], O:[12,'at-o','O'], R:[13,'at-r','R']};
+  function wave(x1,y1,x2,y2,n){
+    const dx=(x2-x1)/n, dy=(y2-y1)/n, L=Math.hypot(dx,dy), nx=-dy/L*6, ny=dx/L*6; let d='M'+x1+' '+y1;
+    for(let k=0;k<n;k++){ const s=k%2?-1:1; d+=' Q'+(x1+dx*(k+.5)+nx*s).toFixed(1)+' '+(y1+dy*(k+.5)+ny*s).toFixed(1)+' '+(x1+dx*(k+1)).toFixed(1)+' '+(y1+dy*(k+1)).toFixed(1); }
+    return d;
+  }
+  function rxPlayer(host, def){
+    host.innerHTML='<svg class="rx-svg" role="img"></svg><div class="eqn rx-eq"></div><p class="rx-cap"></p>'+(def.key?'<p class="rx-key">'+def.key+'</p>':'')+
+      '<div class="rx-ctl"><button type="button" class="btn rx-prev">← Step back</button><span class="rx-count"></span><button type="button" class="btn solid rx-next">Next step →</button></div>';
+    const svg=host.querySelector('svg'), eq=host.querySelector('.rx-eq'), cap=host.querySelector('.rx-cap'),
+          prev=host.querySelector('.rx-prev'), next=host.querySelector('.rx-next'), cnt=host.querySelector('.rx-count');
+    (function(){ /* crop the stage to what this reaction actually uses, so phones get bigger molecules */
+      let x0=1e9,y0=1e9,x1=-1e9,y1=-1e9; const grow=(x,y,r)=>{ x0=Math.min(x0,x-r); x1=Math.max(x1,x+r); y0=Math.min(y0,y-r); y1=Math.max(y1,y+r); };
+      def.steps.forEach(st=>{
+        for(const id in st.at) grow(st.at[id][0], st.at[id][1], ELM[def.atoms[id]][0]+8);
+        (st.lb||[]).forEach(l=>{ const w=l[2].length*3.3+4, m=/mid/.test(l[3]||'tx b mid'), xa=m?l[0]-w:l[0]-2, xb=m?l[0]+w:l[0]+2*w;
+          x0=Math.min(x0,xa); x1=Math.max(x1,xb); y0=Math.min(y0,l[1]-14); y1=Math.max(y1,l[1]+6); });
+        (st.ph||[]).forEach(d=>{ const m=d.match(/-?[\d.]+/g).map(Number); for(let j=0;j<m.length;j+=2) grow(m[j],m[j+1],6); });
+        (st.ln||[]).forEach(d=>{ const m=d.match(/-?[\d.]+/g).map(Number); for(let j=0;j<m.length;j+=2) grow(m[j],m[j+1],2); });
+      });
+      let w=x1-x0, h=y1-y0; if(w/h>3.2){ const nh=w/3.2; y0-=(nh-h)/2; h=nh; } if(w/h<1.6){ const nw=h*1.6; x0-=(nw-w)/2; w=nw; }
+      svg.setAttribute('viewBox', x0.toFixed(0)+' '+y0.toFixed(0)+' '+w.toFixed(0)+' '+h.toFixed(0));
+      svg.style.aspectRatio=(w/h).toFixed(3);
+    })();
+    if(host.dataset.label) svg.setAttribute('aria-label', host.dataset.label);
+    const gB=el('g',{}), gA=el('g',{}), gD=el('g',{}), gX=el('g',{});
+    svg.appendChild(gB); svg.appendChild(gA); svg.appendChild(gD); svg.appendChild(gX);
+    const S={}, BD={}, N=def.steps.length; let i=0, raf=0, first=true;
+    Object.keys(def.atoms).forEach(id=>{
+      const e=ELM[def.atoms[id]], g=el('g',{class:'at '+e[1]});
+      g.appendChild(el('circle',{r:e[0]})); if(e[2]) g.appendChild(el('text',{},e[2]));
+      gA.appendChild(g); S[id]={x:200,y:85,o:0,n:g};
+    });
+    (def.dots||[]).forEach(id=>{ const c=el('circle',{r:2.8,class:'edot'}); gD.appendChild(c); S[id]={x:200,y:85,o:0,n:c,dot:1}; });
+    function P(s,T){
+      if(typeof s[0]==='number') return {x:s[0],y:s[1]};
+      if(typeof s[1]==='string'){ const a=T[s[0]], b=T[s[1]]; return {x:(a.x+b.x)/2+(s[2]||0), y:(a.y+b.y)/2+(s[3]||0)}; }
+      const a=T[s[0]]; return {x:a.x+(s[1]||0), y:a.y+(s[2]||0)};
+    }
+    const bk=b=>[b[0],b[1]].sort().join('|')+':'+(b[2]||1);
+    function mkBond(b){ const g=el('g',{class:'bnd'}), ord=b[2]||1; for(let j=0;j<ord;j++) g.appendChild(el('line',{})); gB.appendChild(g); return {a:b[0],b:b[1],ord:ord,o:0,n:g}; }
+    function drawBond(B){
+      const A=S[B.a], C=S[B.b], dx=C.x-A.x, dy=C.y-A.y, L=Math.hypot(dx,dy)||1, nx=-dy/L, ny=dx/L;
+      const off=B.ord===1?[0]:B.ord===2?[-2.8,2.8]:[-4,0,4];
+      [...B.n.children].forEach((ln,j)=>{ const o=off[j];
+        ln.setAttribute('x1',(A.x+nx*o).toFixed(1)); ln.setAttribute('y1',(A.y+ny*o).toFixed(1));
+        ln.setAttribute('x2',(C.x+nx*o).toFixed(1)); ln.setAttribute('y2',(C.y+ny*o).toFixed(1)); });
+      B.n.style.opacity=B.o.toFixed(3);
+    }
+    function place(s){
+      if(s.dot){ s.n.setAttribute('cx',s.x.toFixed(1)); s.n.setAttribute('cy',s.y.toFixed(1)); }
+      else { const c=s.n.firstChild, t=c.nextSibling; c.setAttribute('cx',s.x.toFixed(1)); c.setAttribute('cy',s.y.toFixed(1));
+             if(t){ t.setAttribute('x',s.x.toFixed(1)); t.setAttribute('y',(s.y+3.8).toFixed(1)); } }
+      s.n.style.opacity=s.o.toFixed(3);
+    }
+    function overlay(st,T){
+      let k=0;
+      (st.ln||[]).forEach(d=>gX.appendChild(el('path',{class:'rx-ln',d:d})));
+      (st.ph||[]).forEach(d=>gX.appendChild(el('path',{class:'rx-uv draw',d:d,pathLength:1})));
+      (st.ar||[]).forEach(a=>{
+        const p=P(a[0],T), q=P(a[1],T), bend=a[2]||0, dx=q.x-p.x, dy=q.y-p.y, L=Math.hypot(dx,dy)||1;
+        const cx=(p.x+q.x)/2-dy/L*bend, cy=(p.y+q.y)/2+dx/L*bend;
+        gX.appendChild(el('path',{class:'rx-ar draw',pathLength:1,'marker-end':'url(#'+(def.full?'ar-full':'ar-fh')+')',
+          d:'M'+p.x.toFixed(1)+' '+p.y.toFixed(1)+' Q'+cx.toFixed(1)+' '+cy.toFixed(1)+' '+q.x.toFixed(1)+' '+q.y.toFixed(1),
+          style:'--d:'+(0.05+k++*0.3).toFixed(2)+'s'}));
+      });
+      (st.lb||[]).forEach(l=>gX.appendChild(el('text',{class:(l[3]||'tx b mid')+' fade',x:l[0],y:l[1],style:'--d:.05s'},l[2])));
+    }
+    function go(n){
+      i=n; const st=def.steps[n], T={};
+      for(const id in S) if(!S[id].dot){ const p=st.at[id]; T[id]=p?{x:p[0],y:p[1],o:1}:{x:S[id].x,y:S[id].y,o:0}; }
+      for(const id in S) if(S[id].dot){ const p=st.d&&st.d[id]; if(p){ const q=P(p,T); T[id]={x:q.x,y:q.y,o:1}; } else T[id]={x:S[id].x,y:S[id].y,o:0}; }
+      const bt={}; (st.b||[]).forEach(b=>{ const k=bk(b); bt[k]=1; if(!BD[k]) BD[k]=mkBond(b); });
+      const F={}; for(const id in S){ const s=S[id], hid=s.o<0.02; F[id]={x:hid?T[id].x:s.x, y:hid?T[id].y:s.y, o:s.o}; }
+      const BF={}; for(const k in BD) BF[k]=BD[k].o;
+      while(gX.firstChild) gX.removeChild(gX.firstChild);
+      eq.innerHTML=st.eq||''; cap.innerHTML=st.cap||'';
+      cnt.textContent='STEP '+(n+1)+' / '+N;
+      prev.disabled=n===0; next.textContent=n===N-1?'Replay ↺':'Next step →';
+      if(def.onStep) def.onStep(n, n===N-1);
+      if(n===N-1 && !host.dataset.done){ host.dataset.done='1'; updateGate(false); if(window.umami) umami.track('rx-done',{rx:host.dataset.rx}); }
+      const dur=(RM||first)?0:800, t0=performance.now(); first=false; cancelAnimationFrame(raf);
+      function frame(now){
+        const t=dur?Math.min(1,(now-t0)/dur):1, e=t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+        for(const id in S){ const s=S[id], f=F[id], g=T[id]; s.x=f.x+(g.x-f.x)*e; s.y=f.y+(g.y-f.y)*e; s.o=f.o+(g.o-f.o)*e; place(s); }
+        for(const k in BD){ const b=BD[k]; b.o=BF[k]+((bt[k]?1:0)-BF[k])*e; drawBond(b); }
+        if(t<1) raf=requestAnimationFrame(frame); else overlay(st,T);
+      }
+      if(dur) raf=requestAnimationFrame(frame); else frame(t0);
+      const sl=host.closest('.slide'); if(sl && sl.classList.contains('active')) fit(sl);
+    }
+    prev.addEventListener('click',()=>{ if(i>0) go(i-1); });
+    next.addEventListener('click',()=>go(i===N-1?0:i+1));
+    go(0);
+  }
+
+  const KEY_FH='<span class="kdot"></span> one electron &nbsp;·&nbsp; half-headed (fishhook) arrow: <b>one</b> electron moves';
+  const KEY_FULL='<span class="kdot"></span> electrons &nbsp;·&nbsp; full arrow: a <b>pair</b> of electrons moves';
+  const RX={};
+
+  /* 1 · free-radical chlorination of methane */
+  RX.halo={key:KEY_FH,
+    atoms:{C:'C',Ha:'H',Hb:'H',Hc:'H',Hd:'H',Cl1:'Cl',Cl2:'Cl',Cl3:'Cl',Cl4:'Cl'},
+    dots:['e1','e2','e3','e4','h1','h2'],
+    steps:[
+     {at:{Cl1:[180,85],Cl2:[220,85]}, b:[['Cl1','Cl2']],
+      d:{e1:['Cl1','Cl2',-4,-8], e2:['Cl1','Cl2',4,-8]},
+      ar:[[['Cl1','Cl2',-5,-11],['Cl1',3,-17],10],[['Cl1','Cl2',5,-11],['Cl2',-3,-17],-10]],
+      ph:[wave(40,26,166,70,8)], lb:[[40,18,'UV light','tx bl']],
+      eq:'Cl<sub>2</sub> → 2 Cl• &nbsp;(UV light)',
+      cap:'<b>1 · Initiation.</b> A Cl–Cl bond is a shared pair of electrons (the two dots). UV light gives it enough energy to break. Each fishhook arrow sends <b>one</b> electron to one chlorine.'},
+     {at:{Cl1:[120,85],Cl2:[280,85]},
+      d:{e1:['Cl1',0,-19], e2:['Cl2',0,-19]},
+      lb:[[120,125,'Cl•'],[280,125,'Cl•']],
+      eq:'Cl<sub>2</sub> → 2 Cl• &nbsp;(homolytic fission)',
+      cap:'The bond splits evenly: each chlorine keeps one electron. An atom with an unpaired electron is a <b>free radical</b>, and radicals are very reactive.'},
+     {at:{Cl1:[150,90],C:[250,90],Ha:[250,58],Hb:[282,90],Hc:[250,122],Hd:[218,90]},
+      b:[['C','Ha'],['C','Hb'],['C','Hc'],['C','Hd']],
+      d:{e1:['Cl1',17,0], h1:['Hd','C',-4,-9], h2:['Hd','C',3,-10]},
+      ar:[[['Cl1',19,-4],['Cl1','Hd',0,-6],-8],[['Hd','C',-4,-12],['Cl1','Hd',5,-9],10],[['Hd','C',3,-13],['C',-4,-16],-6]],
+      eq:'CH<sub>4</sub> + Cl• → CH<sub>3</sub>• + HCl',
+      cap:'<b>2 · Propagation, step 1.</b> Cl• attacks a C–H bond. One electron from that bond pairs with chlorine’s unpaired electron; the other stays on carbon.'},
+     {at:{Cl1:[90,130],Hd:[121,130],C:[260,85],Ha:[260,53],Hb:[292,85],Hc:[260,117]},
+      b:[['Cl1','Hd'],['C','Ha'],['C','Hb'],['C','Hc']],
+      d:{e1:['Cl1','Hd',-3,-8], h1:['Cl1','Hd',4,-8], h2:['C',-19,0]},
+      lb:[[105,160,'HCl'],[260,152,'CH₃•']],
+      eq:'CH<sub>4</sub> + Cl• → CH<sub>3</sub>• + HCl',
+      cap:'Products: hydrogen chloride and a <b>methyl radical</b>, CH<sub>3</sub>•. One radical was used up and a new one was made, so the chain carries on.'},
+     {at:{Cl3:[130,85],Cl4:[170,85],C:[260,85],Ha:[260,53],Hb:[292,85],Hc:[260,117]},
+      b:[['Cl3','Cl4'],['C','Ha'],['C','Hb'],['C','Hc']],
+      d:{e3:['Cl3','Cl4',-4,-8], e4:['Cl3','Cl4',4,-8], h2:['C',-19,0]},
+      ar:[[['C',-19,-4],['Cl4','C',4,-6],8],[['Cl3','Cl4',4,-11],['Cl4','C',-4,-8],-12],[['Cl3','Cl4',-4,-11],['Cl3',0,-17],6]],
+      eq:'CH<sub>3</sub>• + Cl<sub>2</sub> → CH<sub>3</sub>Cl + Cl•',
+      cap:'<b>2 · Propagation, step 2.</b> The methyl radical attacks a Cl<sub>2</sub> molecule. The Cl–Cl pair splits: one electron pairs with carbon’s, the other leaves on a new Cl•.'},
+     {at:{Cl3:[100,85],Cl4:[234,85],C:[270,85],Ha:[270,53],Hb:[302,85],Hc:[270,117]},
+      b:[['Cl4','C'],['C','Ha'],['C','Hb'],['C','Hc']],
+      d:{e3:['Cl3',0,-19], e4:['Cl4','C',4,-8], h2:['Cl4','C',-3,-8]},
+      lb:[[270,152,'CH₃Cl'],[100,125,'Cl•'],[100,146,'goes back to step 1','tx s mid']],
+      eq:'CH<sub>3</sub>• + Cl<sub>2</sub> → CH<sub>3</sub>Cl + Cl•',
+      cap:'Products: chloromethane and a new Cl•. That Cl• starts propagation step 1 again, so one UV photon can lead to thousands of CH<sub>3</sub>Cl molecules.'},
+     {at:{Cl1:[140,85],Cl2:[260,85]},
+      d:{e1:['Cl1',19,0], e2:['Cl2',-19,0]},
+      ar:[[['Cl1',21,-4],['Cl1','Cl2',-4,-6],-10],[['Cl2',-21,-4],['Cl1','Cl2',4,-6],10]],
+      eq:'Cl• + Cl• → Cl<sub>2</sub>',
+      cap:'<b>3 · Termination.</b> When two radicals meet, each gives its unpaired electron to make a new shared pair.'},
+     {at:{Cl1:[180,85],Cl2:[220,85]}, b:[['Cl1','Cl2']],
+      d:{e1:['Cl1','Cl2',-4,-8], e2:['Cl1','Cl2',4,-8]},
+      lb:[[200,125,'Cl₂']],
+      eq:'Cl• + Cl• → Cl<sub>2</sub> &nbsp;·&nbsp; CH<sub>3</sub>• + Cl• → CH<sub>3</sub>Cl &nbsp;·&nbsp; CH<sub>3</sub>• + CH<sub>3</sub>• → C<sub>2</sub>H<sub>6</sub>',
+      cap:'No new radical is made, so the chain stops. Any two radicals can do this, which is why a little ethane turns up among the products.'}
+    ]};
+
+  /* 3 · electrophilic addition of bromine to ethene (full arrows) */
+  RX.add={full:true, key:KEY_FULL, vb:'0 0 400 176',
+    atoms:{C1:'C',C2:'C',H1:'H',H2:'H',H3:'H',H4:'H',Br1:'Br',Br2:'Br'},
+    dots:['p1','p2','b1','b2'],
+    onStep:(n,last)=>{ const r=document.getElementById('bw-ene'); if(r) r.classList.toggle('clear', last); },
+    steps:[
+     {at:{C1:[175,118],C2:[225,118],H1:[148,102],H2:[148,134],H3:[252,102],H4:[252,134],Br1:[200,60],Br2:[200,22]},
+      b:[['C1','C2',2],['C1','H1'],['C1','H2'],['C2','H3'],['C2','H4'],['Br1','Br2']],
+      d:{p1:['C1','C2',-4,-9], p2:['C1','C2',4,-9], b1:['Br1','Br2',8,-3], b2:['Br1','Br2',8,3]},
+      ar:[[['C1','C2',0,-13],['Br1',0,19],-12],[['Br1','Br2',11,0],['Br2',16,-6],8]],
+      lb:[[222,66,'δ+','tx bl'],[222,28,'δ−','tx bl']],
+      eq:'CH<sub>2</sub>=CH<sub>2</sub> + Br<sub>2</sub> → ?',
+      cap:'<b>Approach.</b> The exposed π electrons repel the electrons in Br<sub>2</sub>, so the nearer Br becomes slightly positive (δ+). Its electron pair is pulled toward the far Br.'},
+     {at:{C1:[175,118],C2:[225,118],H1:[148,102],H2:[148,134],H3:[252,102],H4:[252,134],Br1:[172,78],Br2:[310,140]},
+      b:[['C1','C2'],['C1','H1'],['C1','H2'],['C2','H3'],['C2','H4'],['C1','Br1']],
+      d:{p1:['C1','Br1',8,-3], p2:['C1','Br1',8,3], b1:['Br2',-20,-4], b2:['Br2',-20,4]},
+      ar:[[['Br2',-23,0],['C2',12,13],8]],
+      lb:[[216,101,'+','tx r'],[328,128,'−','tx r']],
+      eq:'CH<sub>2</sub>Br–CH<sub>2</sub><sup>+</sup> + Br<sup>−</sup>',
+      cap:'<b>Intermediate.</b> The π pair forms a C–Br bond and the Br–Br pair leaves as Br<sup>−</sup>. The other carbon is left positive (a carbocation). Textbooks may draw a bromonium ring here instead.'},
+     {at:{C1:[175,118],C2:[225,118],H1:[148,102],H2:[148,134],H3:[252,102],H4:[252,134],Br1:[172,78],Br2:[228,158]},
+      b:[['C1','C2'],['C1','H1'],['C1','H2'],['C2','H3'],['C2','H4'],['C1','Br1'],['C2','Br2']],
+      d:{p1:['C1','Br1',8,-3], p2:['C1','Br1',8,3], b1:['C2','Br2',8,-3], b2:['C2','Br2',8,3]},
+      lb:[[320,70,'1,2-dibromoethane','tx g mid']],
+      eq:'CH<sub>2</sub>=CH<sub>2</sub> + Br<sub>2</sub> → CH<sub>2</sub>Br–CH<sub>2</sub>Br',
+      cap:'<b>Product.</b> Br<sup>−</sup> bonds to the positive carbon. The orange Br<sub>2</sub> has been used up, so the hexene tube turns colourless.'}
+    ]};
+
+  /* ===== end of explainer copy ===== */
+
+  /* ---------- tap-to-define terms ---------- */
+  const GLOSS={
+    iso:'Same formula, different structure.',
+    ref:'A sample you already know, tested the same way.'
+  };
+  document.addEventListener('click',e=>{
+    const t=e.target.closest('.term'); if(!t) return;
+    const nx=t.nextElementSibling; if(nx && nx.classList.contains('def')){ nx.remove(); return; }
+    const d=document.createElement('span'); d.className='def'; d.textContent=GLOSS[t.dataset.t]||''; t.after(d); track('lab-term',{t:t.dataset.t});
+  });
+  const term=(k,txt)=>'<button type="button" class="term" data-t="'+k+'">'+txt+'</button>';
+
+  /* ---------- misconceptions: every wrong answer names one ---------- */
+  const MIX={
+    M1:'Colour moving is not reacting.',
+    M2:'Only a dark test proves a C=C.',
+    M3:'A formula does not show the bonds.',
+    M4:'Addition is not substitution.',
+    M5:'A C=C needs no light.',
+    M6:'Saturated means single bonds only.',
+    M7:'Bromine is never destroyed.',
+    M8:'Check each layer.',
+    M9:'Oils are molecules too.'
+  };
+  function mixLine(m,text,step){ track('lab-mix-'+m,{step:step, scenario:R.S.id}); return '<p><b>'+MIX[m]+'</b> '+text+'</p>'; }
+
+  /* ---------- substances ---------- */
+  const SUB={
+    paraffin:{name:'Liquid paraffin', sat:true,  base:'#f3f5f3', mol:'paraffin', info:'saturated hydrocarbons; laxative and ointment base'},
+    olive:   {name:'Olive oil',       sat:false, base:'#e7dc8c', mol:'olive',    info:'most of its chains are oleic acid, with one C=C'},
+    cyclo:   {name:'Cyclohexane',     sat:true,  base:'#f3f5f3', mol:'cyclo',    info:'a ring of single bonds'},
+    hexene:  {name:'Hex-1-ene',       sat:false, base:'#f3f5f3', mol:'hexene',   info:'a chain with one C=C'},
+    hexane:  {name:'Hexane',          sat:true,  base:'#f3f5f3', mol:'hexane',   info:'an alkane'},
+    batchP:  {name:'Hexane batch',    sat:true,  base:'#f3f5f3', mol:'hexane',   info:'pure hexane'},
+    batchC:  {name:'Hexane batch',    sat:false, base:'#f3f5f3', mol:'hexene',   info:'contains hexene'}
+  };
+  const COL={aq:'#e2852b', aqPale:'#f5dcb6', orgBr:'#cf5a1c', clear:'#eef3f4'};
+  const nm=k=>SUB[k].name.replace('Hexane batch','Hexane');
+
+  /* ---------- molecule drawings ---------- */
+  function molSVG(kind, hl){
+    let C=[], B=[], extra='', cap='';
+    const zig=(n,x0)=>{ for(let i=0;i<n;i++) C.push([x0+i*19, i%2?18:34]); };
+    if(kind==='cyclo'){ for(let i=0;i<6;i++){ const a=Math.PI/3*i+Math.PI/6; C.push([80+22*Math.cos(a), 28+22*Math.sin(a)]); } for(let i=0;i<6;i++) B.push([i,(i+1)%6,1]); cap='ring'; }
+    else if(kind==='hexane'){ zig(6,32); for(let i=0;i<5;i++) B.push([i,i+1,1]); cap='6 C chain'; }
+    else if(kind==='hexene'){ zig(6,32); for(let i=0;i<5;i++) B.push([i,i+1,i===0?2:1]); cap='6 C chain'; }
+    else if(kind==='paraffin'){ zig(7,23); for(let i=0;i<6;i++) B.push([i,i+1,1]); extra='<text class="mtx" x="6" y="30">…</text><text class="mtx" x="146" y="30">…</text>'; cap='part of a long chain'; }
+    else if(kind==='olive'){ zig(7,23); for(let i=0;i<6;i++) B.push([i,i+1,i===3?2:1]); extra='<text class="mtx" x="6" y="30">…</text><text class="mtx" x="146" y="30">…</text>'; cap='part of a fat chain'; }
+    let s='<svg viewBox="0 0 160 56" aria-hidden="true">';
+    B.forEach(b=>{ const a=C[b[0]], c=C[b[1]];
+      if(b[2]===2){ const dx=c[0]-a[0], dy=c[1]-a[1], L=Math.hypot(dx,dy), nx=-dy/L*3.2, ny=dx/L*3.2;
+        s+='<line class="mb" x1="'+(a[0]+nx)+'" y1="'+(a[1]+ny)+'" x2="'+(c[0]+nx)+'" y2="'+(c[1]+ny)+'"/><line class="mb" x1="'+(a[0]-nx)+'" y1="'+(a[1]-ny)+'" x2="'+(c[0]-nx)+'" y2="'+(c[1]-ny)+'"/>';
+        if(hl) s+='<ellipse class="mhl" cx="'+((a[0]+c[0])/2)+'" cy="'+((a[1]+c[1])/2)+'" rx="17" ry="13"/><text class="mtx hl" x="'+((a[0]+c[0])/2)+'" y="'+(Math.max(a[1],c[1])+20)+'" text-anchor="middle">C=C</text>';
+      } else s+='<line class="mb" x1="'+a[0]+'" y1="'+a[1]+'" x2="'+c[0]+'" y2="'+c[1]+'"/>'; });
+    C.forEach(p=>{ s+='<circle class="mc" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="5.5"/>'; });
+    return {svg:s+extra+'</svg>', cap:cap};
+  }
+
+  const OBS=[
+    {id:'extract', t:'Orange moves into the top layer'},
+    {id:'quick',   t:'Colour goes at once'},
+    {id:'slow',    t:CHEM.hbrFumes?'Fades slowly; fumes turn litmus red':'Fades slowly in the light'},
+    {id:'bottom',  t:'Orange stays in the bottom layer'}
+  ];
+  const outcome=(sub,cond)=> !SUB[sub].sat ? 'quick' : (cond==='light' ? 'slow' : 'extract');
+
+  /* ---------- equations ---------- */
+  const BH=CHEM.product==='bromohydrin';
+  const EQ={
+    hexene: BH ? 'CH<sub>2</sub>=CH–C<sub>4</sub>H<sub>9</sub> + Br<sub>2</sub> + H<sub>2</sub>O → CH<sub>2</sub>Br–CH(OH)–C<sub>4</sub>H<sub>9</sub> + HBr'
+               : 'CH<sub>2</sub>=CH–C<sub>4</sub>H<sub>9</sub> + Br<sub>2</sub> → CH<sub>2</sub>Br–CHBr–C<sub>4</sub>H<sub>9</sub>',
+    olive:  BH ? '–CH=CH– + Br<sub>2</sub> + H<sub>2</sub>O → –CHBr–CH(OH)– + HBr'
+               : '–CH=CH– + Br<sub>2</sub> → –CHBr–CHBr–',
+    subst6: 'C<sub>6</sub>H<sub>14</sub> + Br<sub>2</sub> → C<sub>6</sub>H<sub>13</sub>Br + HBr'
+  };
+  const ADDNOTE = (!BH && CHEM.labelProduct) ? ' <span class="small">Simplified: in bromine water, most of the product has OH in place of one Br.</span>' : '';
+
+  /* ---------- scenarios ---------- */
+  const Q_COND={p:'Where do the tubes stand?', o:[
+    ['In the dark',1,'Only a C=C removes the colour in the dark.'],
+    ['In bright light',0,'In light, alkanes lose the colour too.','M2'],
+    ['It does not matter',0,'It does: in light, alkanes lose the colour too.','M2']]};
+
+  const SCEN=[
+   {id:'excipient', chip:'1 · Excipient check', cands:['paraffin','olive'],
+    setup(){ const s=shuffle(['paraffin','olive']); return {bottles:s.map(k=>({sub:k, sub2:'unlabelled oil'})), idOpts:['Liquid paraffin','Olive oil'], idOf:k=>SUB[k].name}; },
+    context:r=>'Two unlabelled oils: <b>liquid paraffin</b> and <b>olive oil</b>. Which is which?',
+    extra:r=>[Q_COND],
+    keyBottle:r=>r.bottles.find(b=>b.sub==='olive'), other:r=>r.bottles.find(b=>b.sub==='paraffin'),
+    explain(r){ const b=this.keyBottle(r); return {p:'Equation for bottle '+b.L+':', o:[
+      [EQ.olive,1,'Br<sub>2</sub> adds across each C=C.'+ADDNOTE],
+      ['C<sub>18</sub>H<sub>38</sub> + Br<sub>2</sub> → C<sub>18</sub>H<sub>37</sub>Br + HBr',0,'That is substitution, which needs light. The oil has a C=C.','M4'],
+      ['No reaction',0,'The colour vanished, so Br<sub>2</sub> was used up.','M1']]}; }},
+   {id:'isomers', chip:'2 · Same formula', cands:['cyclo','hexene'],
+    setup(){ const s=shuffle(['cyclo','hexene']); return {bottles:s.map(k=>({sub:k, sub2:'C<sub>6</sub>H<sub>12</sub>'})), idOpts:['Cyclohexane','Hex-1-ene'], idOf:k=>SUB[k].name}; },
+    context:r=>'Both bottles say <b>C<sub>6</sub>H<sub>12</sub></b>: cyclohexane and hex-1-ene ('+term('iso','isomers')+'). Which is which?',
+    extra:r=>[{p:'Does C<sub>6</sub>H<sub>12</sub> show which has a C=C?', o:[
+       ['No: a ring also has 2 fewer H',1,'A ring and a C=C both remove 2 H.'],
+       ['Yes: C<sub>n</sub>H<sub>2n</sub> means C=C',0,'Cyclohexane is also C<sub>6</sub>H<sub>12</sub>, with single bonds only.','M3'],
+       ['Yes: C<sub>6</sub>H<sub>12</sub> is a ring',0,'Hex-1-ene is also C<sub>6</sub>H<sub>12</sub>, and it is a chain.','M3']]}, Q_COND],
+    keyBottle:r=>r.bottles.find(b=>b.sub==='hexene'), other:r=>r.bottles.find(b=>b.sub==='cyclo'),
+    explain(r){ const b=this.keyBottle(r); return {p:'Equation for bottle '+b.L+':', o:[
+      [EQ.hexene,1,'Br<sub>2</sub> adds across the C=C.'+ADDNOTE],
+      ['C<sub>6</sub>H<sub>12</sub> + Br<sub>2</sub> → C<sub>6</sub>H<sub>11</sub>Br + HBr',0,'That is substitution, which needs light. Br<sub>2</sub> adds across the C=C.','M4'],
+      ['Cyclohexane + Br<sub>2</sub> → C<sub>6</sub>H<sub>12</sub>Br<sub>2</sub>',0,'Cyclohexane has no C=C. Its tube stayed orange.','M3']]}; }},
+   {id:'batch', chip:'3 · Solvent batch', cands:['hexane','hexene'],
+    setup(){ const contam=coin(), lot='HX-'+(1000+Math.floor(Math.random()*9000));
+      return {lot:lot, contam:contam, bottles:shuffle([{sub:'hexane',known:true},{sub:contam?'batchC':'batchP',sub2:'lot '+lot}]),
+        idOpts:['Pure: accept','Contains hexene: reject'], idOf:k=>k==='batchC'?'Contains hexene: reject':'Pure: accept'}; },
+    context:r=>'Hexane lot '+r.lot+' must contain no alkene. Test it beside pure hexane (a '+term('ref','reference')+').',
+    extra:r=>[{p:'Why test pure hexane too?', o:[
+       ['To see a "no C=C" result',1,'The reference shows what "no C=C" looks like.'],
+       ['Hexane reacts in the dark',0,'Hexane does not react in the dark.','M2'],
+       ['An orange top layer means a reaction',0,'An orange top layer is Br<sub>2</sub> dissolved, not reacted.','M1']]}, Q_COND],
+    keyBottle:r=>r.bottles.find(b=>!b.known), other:r=>r.contam?r.bottles.find(b=>b.known):null,
+    explain(r){ const b=this.keyBottle(r);
+      if(r.contam) return {p:'Equation for bottle '+b.L+':', o:[
+        [EQ.hexene,1,'The hexene adds Br<sub>2</sub>. The hexane does nothing in the dark.'+ADDNOTE],
+        [EQ.subst6,0,'Hexane needs light for that. Your test was dark.','M2'],
+        ['No reaction',0,'The colour vanished, so Br<sub>2</sub> was used up.','M1']]};
+      return {p:'Why did bottle '+b.L+' stay orange?', o:[
+        ['No C=C and no light: Br<sub>2</sub> only dissolved',1,'The orange is Br<sub>2</sub> itself, dissolved in hexane.'],
+        [EQ.subst6,0,'That needs light and removes the colour.','M2'],
+        ['The orange is a new brominated product',0,'The orange is Br<sub>2</sub> itself. Nothing reacted.','M1']]}; }},
+   {id:'window', chip:'4 · Sunny windowsill', cands:['hexane','hexene'],
+    setup(){ const k=coin()?'hexane':'hexene'; return {bottles:[{sub:k, sub2:'solvent X', startLight:true}], idOpts:['Hexane','Hex-1-ene'], idOf:x=>SUB[x].name}; },
+    context:r=>'Solvent X went colourless on a sunny windowsill. A trainee wrote "X is an alkene". X is hexane or hex-1-ene. Check.',
+    extra:r=>[
+     {p:'Does the windowsill tube prove a C=C?', o:[
+       ['No: in light, alkanes lose the colour too',1,'In light, Br<sub>2</sub> substitutes alkanes slowly.'],
+       ['Yes: only alkenes do that',0,'In light, alkanes lose the colour too.','M2'],
+       ['No: bromine water fades within an hour',0,'In the dark it stays orange. Br<sub>2</sub> must react to lose colour.','M7']]},
+     {p:'The fair test?', o:[
+       ['Repeat in the dark',1,'In the dark, only a C=C removes the colour.'],
+       ['Repeat in brighter light',0,'More light speeds up alkane substitution.','M2'],
+       ['Add more bromine water',0,'That tube was in light. Start again in the dark.','M2']]}],
+    keyBottle:r=>r.bottles[0], other:r=>null,
+    explain(r){ const b=r.bottles[0];
+      if(b.sub==='hexane') return {p:'What explains both tubes?', o:[
+        ['Light: '+EQ.subst6+' (slow). Dark: no reaction.',1,'X is hexane.'],
+        ['X is an alkene that needs light',0,'An alkene reacts at once in the dark.','M5'],
+        ['The bromine evaporated',0,'Your dark tube kept its colour. Br<sub>2</sub> must react to lose colour.','M7']]};
+      return {p:'Equation for solvent X:', o:[
+        [EQ.hexene,1,'X is hex-1-ene. Only the dark test proves it.'+ADDNOTE],
+        [EQ.subst6,0,'That is substitution of hexane. X lost its colour at once in the dark.','M4'],
+        ['No reaction: light bleached it',0,'It lost its colour in the dark too.','M7']]}; }}
+  ];
+
+  /* ---------- mechanisms (reused from the explainer) ---------- */
+  const ADD_DIB = JSON.parse(JSON.stringify({full:RX.add.full,key:RX.add.key,atoms:RX.add.atoms,dots:RX.add.dots,steps:RX.add.steps}));
+  ADD_DIB.steps[2].cap='<b>Product.</b> Br<sup>−</sup> bonds to the positive carbon. Br<sub>2</sub> is used up, so the colour goes.'+ADDNOTE;
+  const ADD_OH={full:true, key:KEY_FULL,
+    atoms:{C1:'C',C2:'C',H1:'H',H2:'H',H3:'H',H4:'H',Br1:'Br',Br2:'Br',O:'O',Hw1:'H',Hw2:'H'},
+    dots:['p1','p2','b1','b2','o1','o2'],
+    steps:[
+     JSON.parse(JSON.stringify(RX.add.steps[0])),
+     {at:{C1:[175,118],C2:[225,118],H1:[148,102],H2:[148,134],H3:[252,102],H4:[252,134],Br1:[172,78],Br2:[330,60],O:[250,172],Hw1:[272,182],Hw2:[234,190]},
+      b:[['C1','C2'],['C1','H1'],['C1','H2'],['C2','H3'],['C2','H4'],['C1','Br1'],['O','Hw1'],['O','Hw2']],
+      d:{p1:['C1','Br1',8,-3], p2:['C1','Br1',8,3], b1:['Br2',-20,-4], b2:['Br2',-20,4], o1:['O',-12,-8], o2:['O',-6,-13]},
+      ar:[[['O',-10,-14],['C2',4,16],-8]],
+      lb:[[216,101,'+','tx r'],[348,48,'−','tx r'],[300,182,'water','tx s mid']],
+      eq:'CH<sub>2</sub>Br–CH<sub>2</sub><sup>+</sup> + Br<sup>−</sup>',
+      cap:'<b>Intermediate.</b> Water, not Br<sup>−</sup>, usually reaches the positive carbon first.'},
+     {at:{C1:[175,118],C2:[225,118],H1:[148,102],H2:[148,134],H3:[252,102],H4:[252,134],Br1:[172,78],Br2:[330,60],O:[228,154],Hw1:[250,166],Hw2:[300,180]},
+      b:[['C1','C2'],['C1','H1'],['C1','H2'],['C2','H3'],['C2','H4'],['C1','Br1'],['C2','O'],['O','Hw1']],
+      d:{p1:['C1','Br1',8,-3], p2:['C1','Br1',8,3], o1:['C2','O',-8,-2], o2:['C2','O',-8,4], b1:['Br2',-20,-4], b2:['Br2',-20,4]},
+      lb:[[316,170,'H⁺','tx r'],[348,48,'−','tx r'],[330,110,'2-bromoethanol','tx g mid']],
+      eq:'CH<sub>2</sub>=CH<sub>2</sub> + Br<sub>2</sub> + H<sub>2</sub>O → CH<sub>2</sub>Br–CH<sub>2</sub>OH + HBr',
+      cap:'<b>Product.</b> A bromohydrin. Br<sub>2</sub> is used up, so the colour goes.'}
+    ]};
+  function DISSOLVE(name){ return {
+    atoms:{k1:'c',k2:'c',k3:'c',k4:'c',m1:'c',m2:'c',m3:'c',m4:'c',Br1:'Br',Br2:'Br',Br3:'Br',Br4:'Br'},
+    steps:[
+     {at:{k1:[40,62],k2:[60,50],k3:[80,62],k4:[100,50],m1:[300,62],m2:[320,50],m3:[340,62],m4:[360,50],Br1:[140,140],Br2:[168,140],Br3:[240,148],Br4:[268,148]},
+      b:[['k1','k2'],['k2','k3'],['k3','k4'],['m1','m2'],['m2','m3'],['m3','m4'],['Br1','Br2'],['Br3','Br4']],
+      ln:['M20 100 L380 100'], lb:[[24,26,name+' (top)','tx s'],[24,178,'water (bottom)','tx s']],
+      eq:'Before shaking', cap:'Br<sub>2</sub> starts in the water.'},
+     {at:{k1:[40,62],k2:[60,50],k3:[80,62],k4:[100,50],m1:[300,62],m2:[320,50],m3:[340,62],m4:[360,50],Br1:[140,62],Br2:[168,62],Br3:[230,44],Br4:[258,44]},
+      b:[['k1','k2'],['k2','k3'],['k3','k4'],['m1','m2'],['m2','m3'],['m3','m4'],['Br1','Br2'],['Br3','Br4']],
+      ln:['M20 100 L380 100'], lb:[[24,26,name+' (top)','tx s'],[24,178,'water (bottom)','tx s'],[200,86,'still Br₂, still orange','tx o mid']],
+      eq:'After shaking: no bonds made or broken', cap:'Br<sub>2</sub> moves into the top layer. No C=C, so no reaction.'}
+    ]}; }
+  const SUBST=(function(){ const d=JSON.parse(JSON.stringify(RX.halo)); const sw=s=>typeof s==='string'?s.replace(/Cl/g,'Br').replace(/chlor/g,'brom'):s;
+    for(const k in d.atoms) if(d.atoms[k]==='Cl') d.atoms[k]='Br';
+    d.steps.forEach(st=>{ st.eq=sw(st.eq); st.cap=sw(st.cap); if(st.lb) st.lb.forEach(l=>{ l[2]=sw(l[2]); if(l[3]) l[3]=sw(l[3]); }); });
+    return d; })();
+  const ADD = BH ? ADD_OH : ADD_DIB;
+
+  /* ---------- state ---------- */
+  let sc=0, R=null, solved=[false,false,false,false], rounds=0, cond='dark', busy=0;
+  const done=new Set();
+  const LETTERS='ABCDEFGHJK'.split('');
+  const DEFAULT={}; [1,2,3,4].forEach(n=>DEFAULT[n]=$('#m'+n).innerHTML);
+
+  function newRound(){
+    const S=SCEN[sc], base=S.setup(), lets=shuffle(LETTERS).slice(0,base.bottles.length).sort();
+    R=Object.assign(base,{S:S});
+    R.bottles=base.bottles.map((b,i)=>Object.assign({},b,{L:lets[i], tests:0, cond:null, res:null, rec:null, lit:false}));
+    R.concl=R.bottles.map((b,i)=>b.known?-1:i).filter(i=>i>=0);
+    R.mols=new Set(); R.pred={}; R.ans1={}; R.ans3={}; R.ans4=null;
+    R.explain=S.explain(R);
+    solved=[false,false,false,false];
+    cond=R.bottles.some(b=>b.startLight)?'light':'dark';
+    render();
+  }
+
+  function chipGroup(opts,sel,cb,col){
+    const g=document.createElement('div'); g.className='chips'+(col?' col':''); g.setAttribute('role','group');
+    opts.forEach((o,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(sel===i?' on':''); b.innerHTML=o; b.setAttribute('aria-pressed',sel===i?'true':'false');
+      b.addEventListener('click',()=>{ g.querySelectorAll('.chip').forEach(c=>{ c.classList.remove('on'); c.setAttribute('aria-pressed','false'); }); b.classList.add('on'); b.setAttribute('aria-pressed','true'); cb(i); }); g.appendChild(b); });
+    return g;
+  }
+  function msg(n,cls,html){ const m=$('#m'+n); m.className='msg '+cls; m.innerHTML=html; track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); }
+  function clearMsg(n){ const m=$('#m'+n); m.className='msg'; m.innerHTML=DEFAULT[n]; const w=$('#w'+n); if(w){ w.className='work'; w.innerHTML=''; } }
+  function setLocks(){
+    for(let k=2;k<=4;k++) $('#c'+k).classList.toggle('locked', !solved[k-2]);
+    for(let k=1;k<=4;k++) $('#c'+k).classList.toggle('done', solved[k-1]);
+  }
+  function unsolveFrom(k){
+    let changed=false;
+    for(let j=k;j<=4;j++){ if(solved[j-1]){ solved[j-1]=false; changed=true; } if(j>k) clearMsg(j); }
+    if(changed) setLocks();
+  }
+
+  function render(){
+    const S=R.S, sc0=$('#scen-chips'); sc0.innerHTML='';
+    SCEN.forEach((s,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(i===sc?' on':''); b.innerHTML=s.chip+(done.has(s.id)?'<span class="tick">✓</span>':'');
+      b.addEventListener('click',()=>{ if(i===sc) return; sc=i; track('lab-pick',{scenario:s.id}); newRound(); }); sc0.appendChild(b); });
+    $('#context').innerHTML=S.context(R);
+    renderQ1(false); renderBench(); renderRecs(); renderConcl(); $('#tri').innerHTML='';
+    [1,2,3,4].forEach(clearMsg); setLocks();
+    if(S.id==='window') simulateWindowsill();
+  }
+
+  /* ---------- step 1 ---------- */
+  function renderQ1(hl){
+    const q1=$('#q1'); q1.innerHTML='';
+    const c=R.S.cands;
+    const a=document.createElement('div'); a.innerHTML='<div class="q">Tap every molecule with a C=C.</div>';
+    const grid=document.createElement('div'); grid.className='mols';
+    c.forEach(k=>{ const b=document.createElement('button'); b.type='button'; b.className='mol'+(R.mols.has(k)?' on':''); b.setAttribute('aria-pressed',R.mols.has(k)?'true':'false');
+      const mv=molSVG(SUB[k].mol, hl && !SUB[k].sat);
+      b.innerHTML=mv.svg+nm(k)+'<small>'+mv.cap+'</small>';
+      b.addEventListener('click',()=>{ if(R.mols.has(k)) R.mols.delete(k); else R.mols.add(k); b.classList.toggle('on'); b.setAttribute('aria-pressed',R.mols.has(k)?'true':'false'); unsolveFrom(1); });
+      grid.appendChild(b); });
+    a.appendChild(grid); q1.appendChild(a);
+    const p=document.createElement('div'); p.innerHTML='<div class="q">In the dark, bromine water will:</div>';
+    c.forEach(k=>{ const r=document.createElement('div'); r.className='prow'; r.innerHTML='<span>'+nm(k)+'</span>';
+      r.appendChild(chipGroup(['Stay orange','Turn colourless'], R.pred[k], i=>{ R.pred[k]=i; unsolveFrom(1); track('lab-prediction',{scenario:R.S.id, sub:k, pick:i}); })); p.appendChild(r); });
+    q1.appendChild(p);
+    if(!R.qs) R.qs=R.S.extra(R).map(q=>({p:q.p, o:shuffle(q.o)}));
+    R.qs.forEach((q,qi)=>{ const d=document.createElement('div'); d.innerHTML='<div class="q">'+q.p+'</div>';
+      d.appendChild(chipGroup(q.o.map(o=>o[0]), R.ans1[qi], i=>{ R.ans1[qi]=i; unsolveFrom(1); }, true)); q1.appendChild(d); });
+  }
+  function check1(){
+    const lines=[]; let miss=0;
+    R.S.cands.forEach(k=>{ const s=SUB[k], picked=R.mols.has(k);
+      if(picked && s.sat) lines.push(k==='cyclo'?mixLine('M3','Cyclohexane is a ring of single bonds.',1):mixLine('M6',nm(k)+' has single bonds only.',1));
+      if(!picked && !s.sat) lines.push(k==='olive'?mixLine('M9','Look again: olive oil has a double line.',1):mixLine('M6','Look again: hex-1-ene has a double line.',1));
+      const pr=R.pred[k]; if(pr==null){ miss++; return; }
+      if(s.sat && pr===1) lines.push(mixLine('M2',nm(k)+' has no C=C, so it stays orange in the dark.',1));
+      if(!s.sat && pr===0) lines.push(mixLine('M5',nm(k)+' has a C=C, so it turns colourless.',1));
+    });
+    R.qs.forEach((q,qi)=>{ const a=R.ans1[qi]; if(a==null){ miss++; return; } const o=q.o[a]; if(!o[1]) lines.push(mixLine(o[3],o[2],1)); });
+    if(lines.length) return msg(1,'bad',lines.join(''));
+    if(miss) return msg(1,'near','Answer every part first.');
+    renderQ1(true);
+    msg(1,'good','<b>Right.</b> The C=C is circled.'); solve(1);
+  }
+  $('#chk1').addEventListener('click',check1);
+  $('#rev1').addEventListener('click',()=>{
+    R.mols=new Set(R.S.cands.filter(k=>!SUB[k].sat)); R.S.cands.forEach(k=>{ R.pred[k]=SUB[k].sat?0:1; });
+    R.qs.forEach((q,qi)=>{ R.ans1[qi]=q.o.findIndex(o=>o[1]); });
+    renderQ1(true);
+    msg(1,'near','The C=C is circled. Only a C=C removes the colour in the dark.');
+    track('lab-step1-reveal',{scenario:R.S.id}); solve(1);
+  });
+
+  /* ---------- step 2 ---------- */
+  function tubeSVG(b){
+    return '<svg viewBox="0 0 80 190" role="img" aria-label="Test tube for bottle '+b.L+'">'+
+      '<defs><clipPath id="clip'+b.L+'"><path d="M22 18 V150 a18 18 0 0 0 36 0 V18 Z"/></clipPath></defs>'+
+      '<g class="body"><g clip-path="url(#clip'+b.L+')">'+
+        '<g class="liq orgG"><rect class="liq org" x="20" y="120" width="40" height="70" fill="'+SUB[b.sub].base+'"/>'+
+        '<rect class="liq hatch hOrg" x="20" y="120" width="40" height="40" fill="url(#hatch)" opacity="0"/></g>'+
+        '<rect class="liq aq" x="20" y="130" width="40" height="60" fill="'+COL.aq+'" opacity="0"/>'+
+        '<rect class="liq hatch hAq" x="20" y="130" width="40" height="60" fill="url(#hatch)" opacity="0"/>'+
+        '<line class="liq iface" x1="22" y1="130" x2="58" y2="130" stroke="#7d8781" stroke-width="1.2" opacity="0"/>'+
+      '</g><path class="glass" d="M18 14 H62 M22 14 V150 a18 18 0 0 0 36 0 V14"/></g>'+
+      '<circle class="drop" cx="40" cy="4" r="3"/><circle class="drop" cx="40" cy="4" r="3"/><circle class="drop" cx="40" cy="4" r="3"/>'+
+      '<g class="fumes"><path class="fume" d="M32 10 q4 -6 0 -12 q-4 -6 0 -12"/><path class="fume" d="M40 10 q4 -6 0 -12 q-4 -6 0 -12"/><path class="fume" d="M48 10 q4 -6 0 -12 q-4 -6 0 -12"/></g>'+
+      '<rect class="litmus" x="54" y="-18" width="9" height="30" rx="1.5" fill="#4d7fd6" opacity="0"/>'+
+    '</svg>';
+  }
+  function renderBench(){
+    const bench=$('#bench'); bench.innerHTML='';
+    R.bottles.forEach((b,i)=>{
+      const t=document.createElement('div'); t.className='tube'; t.id='tube'+i;
+      t.innerHTML=tubeSVG(b)+
+        '<div class="tlabel">Bottle '+b.L+'<small>'+(b.known?'pure hexane (reference)':(b.sub2||''))+'</small></div><div class="tag"></div><div class="tstate" aria-live="polite"></div>'+
+        '<button type="button" class="btn solid t-add">Add bromine water</button>'+
+        (CHEM.hbrFumes?'<button type="button" class="btn t-lit" disabled>Damp litmus</button>':'');
+      t.querySelector('.t-add').addEventListener('click',()=>runTest(i));
+      if(CHEM.hbrFumes) t.querySelector('.t-lit').addEventListener('click',()=>litmus(i));
+      bench.appendChild(t); paint(i,'empty');
+    });
+    setCond(cond);
+  }
+  function setCond(c){
+    cond=c; $('#bench').className='bench '+c+($('#words').checked?' words':'');
+    $('#cond').querySelectorAll('.chip').forEach(x=>{ x.classList.toggle('on',x.dataset.c===c); x.setAttribute('aria-pressed',x.dataset.c===c?'true':'false'); });
+  }
+  $('#cond').querySelectorAll('.chip').forEach(x=>x.addEventListener('click',()=>setCond(x.dataset.c)));
+  $('#words').addEventListener('change',()=>{ $('#bench').classList.toggle('words',$('#words').checked); track('lab-words',{on:$('#words').checked}); });
+
+  const WORDS={
+    empty:b=>'Sample only.',
+    added:b=>'Bottom: orange. Top: sample.',
+    extract:b=>'Top: orange. Bottom: pale.',
+    quick:b=>'Top: '+(b.sub==='olive'?'pale yellow (oil)':'colourless')+'. Bottom: colourless.',
+    fading:b=>'Top: orange, fading.',
+    fade:b=>'Both layers colourless. Faded slowly.'
+  };
+  function paint(i,state){
+    const t=$('#tube'+i), b=R.bottles[i], svg=t.querySelector('svg'), og=t.querySelector('.orgG'), org=t.querySelector('.org'), aq=t.querySelector('.aq'),
+          ifc=t.querySelector('.iface'), hO=t.querySelector('.hOrg'), hA=t.querySelector('.hAq');
+    svg.classList.toggle('slow', state==='fade');
+    if(state==='empty'){ og.style.transform=''; org.setAttribute('fill',SUB[b.sub].base); aq.setAttribute('opacity',0); ifc.setAttribute('opacity',0); aq.setAttribute('fill',COL.aq); hO.setAttribute('opacity',0); hA.setAttribute('opacity',0); }
+    if(state==='added'){ og.style.transform='translateY(-40px)'; aq.setAttribute('opacity',1); ifc.setAttribute('opacity',1); hA.setAttribute('opacity',1); }
+    if(state==='extract'){ org.setAttribute('fill',COL.orgBr); aq.setAttribute('fill',COL.aqPale); hO.setAttribute('opacity',1); hA.setAttribute('opacity',.25); }
+    if(state==='quick'||state==='fade'){ org.setAttribute('fill',SUB[b.sub].base); aq.setAttribute('fill',COL.clear); hO.setAttribute('opacity',0); hA.setAttribute('opacity',0); }
+    t.querySelector('.tstate').textContent=WORDS[state==='fade'&&b.res!=='slow'?'fading':state](b);
+  }
+  const wait=ms=>new Promise(r=>setTimeout(r,RM?0:ms));
+  async function runTest(i){
+    const b=R.bottles[i], t=$('#tube'+i), svg=t.querySelector('svg'), c=cond, res=outcome(b.sub,c);
+    busy++; t.querySelectorAll('button').forEach(x=>x.disabled=true);
+    svg.classList.remove('fuming','dropping'); t.querySelector('.litmus').setAttribute('opacity',0); t.querySelector('.litmus').setAttribute('fill','#4d7fd6');
+    b.res=null; b.lit=false; b.rec=null; b.cond=c; b.tests++;
+    t.querySelector('.tag').textContent='testing…';
+    renderRecs(); unsolveFrom(2); clearMsg(2);
+    paint(i,'empty'); await wait(60);
+    void svg.getBoundingClientRect(); svg.classList.add('dropping'); await wait(500);
+    paint(i,'added'); await wait(650);
+    svg.querySelector('.body').classList.add('shake'); await wait(820); svg.querySelector('.body').classList.remove('shake');
+    if(res==='quick'){ paint(i,'quick'); await wait(900); }
+    else { paint(i,'extract'); await wait(1000);
+      if(res==='slow'){ if(CHEM.hbrFumes) svg.classList.add('fuming'); await wait(300); paint(i,'fade'); await wait(5000); } }
+    b.res=res; paint(i, res==='slow'?'fade':res);
+    t.querySelector('.tag').textContent=(c==='dark'?'dark':'light');
+    t.querySelectorAll('button').forEach(x=>x.disabled=false); busy--;
+    renderRecs();
+    track('lab-run',{scenario:R.S.id, cond:c});
+  }
+  function litmus(i){
+    const b=R.bottles[i], t=$('#tube'+i), l=t.querySelector('.litmus');
+    l.setAttribute('opacity',1); b.lit=true;
+    setTimeout(()=>l.setAttribute('fill', b.res==='slow' ? '#c8443a' : '#4d7fd6'), RM?0:200);
+    t.querySelector('.tstate').textContent+=' Litmus: '+(b.res==='slow'?'red.':'blue.');
+  }
+  function simulateWindowsill(){
+    const i=0, b=R.bottles[i], t=$('#tube'+i);
+    b.cond='light'; b.res=outcome(b.sub,'light'); b.tests=1;
+    paint(i,'empty'); paint(i,'added'); paint(i, b.res==='quick'?'quick':'fade');
+    t.querySelector('svg').classList.remove('slow');
+    t.querySelector('.tag').textContent='windowsill';
+    if(CHEM.hbrFumes) t.querySelector('.t-lit').disabled=false;
+    renderRecs();
+  }
+  function renderRecs(){
+    const box=$('#recs'); box.innerHTML='';
+    R.bottles.forEach(b=>{
+      const d=document.createElement('div'); d.className='rec';
+      d.innerHTML='<div class="q">Bottle '+b.L+(b.res?' ('+(b.cond==='dark'?'dark':'light')+')':'')+'</div>';
+      if(!b.res) d.innerHTML+='<p class="small">'+(b.tests?'Testing…':'Not tested.')+'</p>';
+      else d.appendChild(chipGroup(OBS.map(o=>o.t), b.rec==null?undefined:OBS.findIndex(o=>o.id===b.rec), k=>{ b.rec=OBS[k].id; unsolveFrom(2); }, true));
+      box.appendChild(d);
+    });
+  }
+  function recMix(b){
+    if(b.rec==='bottom') return ['M8','Shaking mixes Br<sub>2</sub> into the top layer of bottle '+b.L+'.'];
+    if(b.res==='extract' && b.rec==='quick') return ['M1','Bottle '+b.L+': the colour moved up; it did not go.'];
+    if(b.res==='quick' && b.rec==='extract') return ['M8','Bottle '+b.L+': is the top layer hatched (orange)?'];
+    if(b.res==='slow') return ['M2','Bottle '+b.L+' faded slowly, in light.'];
+    if(b.rec==='slow') return ['M2','Bottle '+b.L+' did not fade slowly.'];
+    return ['M8','Look again at bottle '+b.L+'.'];
+  }
+  $('#chk2').addEventListener('click',()=>{
+    if(busy) return msg(2,'near','Wait for the test to finish.');
+    const untested=R.bottles.filter(b=>!b.res); if(untested.length) return msg(2,'near','Test bottle '+untested.map(b=>b.L).join(' and ')+'.');
+    const norec=R.bottles.filter(b=>!b.rec); if(norec.length) return msg(2,'near','Record bottle '+norec.map(b=>b.L).join(' and ')+'.');
+    const wrong=R.bottles.filter(b=>b.rec!==b.res);
+    if(wrong.length) return msg(2,'bad',wrong.map(b=>{ const m=recMix(b); return mixLine(m[0],m[1],2); }).join(''));
+    const lit=R.bottles.filter(b=>b.cond==='light');
+    if(lit.length) return msg(2,'near',mixLine('M2','Correct record, but bottle '+lit.map(b=>b.L).join(' and ')+' was in light. Repeat in the dark.',2));
+    msg(2,'good','<b>Right.</b> All tests were in the dark.'); solve(2);
+  });
+  $('#rev2').addEventListener('click',()=>{
+    if(busy) return msg(2,'near','Wait for the test to finish.');
+    R.bottles.forEach((b,i)=>{ if(b.cond!=='dark'||!b.res){ b.cond='dark'; b.res=outcome(b.sub,'dark'); b.tests++; const t=$('#tube'+i);
+        t.querySelector('svg').classList.remove('fuming'); t.querySelector('.litmus').setAttribute('opacity',0);
+        paint(i,'empty'); paint(i,'added'); paint(i,b.res); t.querySelector('.tag').textContent='dark'; }
+      b.rec=b.res; });
+    setCond('dark'); renderRecs();
+    const w=$('#w2'); w.className='work show';
+    w.innerHTML='<table class="w"><tr><th>Bottle</th><th>In the dark</th></tr>'+R.bottles.map(b=>'<tr><td><b>'+b.L+'</b></td><td>'+OBS.find(o=>o.id===b.res).t+'</td></tr>').join('')+'</table>';
+    msg(2,'near','All bottles tested in the dark.');
+    track('lab-step2-reveal',{scenario:R.S.id}); solve(2);
+  });
+
+  /* ---------- step 3 ---------- */
+  function renderConcl(){
+    const box=$('#concl'); box.innerHTML='';
+    R.concl.forEach(i=>{
+      const b=R.bottles[i], d=document.createElement('div'); d.className='concl';
+      d.innerHTML='<div class="q">Bottle '+b.L+'</div>';
+      const a=R.ans3[i]||(R.ans3[i]={});
+      d.appendChild(chipGroup(['Saturated','Unsaturated'], a.sat, k=>{ a.sat=k; unsolveFrom(3); }));
+      d.appendChild(chipGroup(R.idOpts, a.id, k=>{ a.id=k; unsolveFrom(3); }));
+      box.appendChild(d);
+    });
+  }
+  $('#chk3').addEventListener('click',()=>{
+    const lines=[]; let miss=0;
+    R.concl.forEach(i=>{ const b=R.bottles[i], a=R.ans3[i]||{}, sat=SUB[b.sub].sat;
+      if(a.sat==null||a.id==null){ miss++; return; }
+      if((a.sat===0)!==sat){
+        if(b.sub==='cyclo') lines.push(mixLine('M3','Bottle '+b.L+' stayed orange: no C=C.',3));
+        else if(sat) lines.push(mixLine('M1','Bottle '+b.L+' stayed orange: no C=C.',3));
+        else lines.push(mixLine('M7','Bottle '+b.L+' lost its colour: Br<sub>2</sub> added to a C=C.',3));
+        return; }
+      const want=R.idOpts.indexOf(R.idOf(b.sub));
+      if(a.id!==want) lines.push(mixLine(b.sub==='olive'||b.sub==='paraffin'?'M9':'M6','Bottle '+b.L+': '+(sat?'saturated':'unsaturated')+' means '+R.idOpts[want]+'.',3));
+    });
+    if(miss) return msg(3,'near','Choose both answers for each bottle.');
+    if(lines.length) return msg(3,'bad',lines.join(''));
+    msg(3,'good','<b>Right.</b> '+conclSummary()); solve(3);
+  });
+  function conclSummary(){ return R.concl.map(i=>{ const b=R.bottles[i]; return b.L+': '+R.idOf(b.sub).replace(/:.*/,'')+' ('+SUB[b.sub].info+').'; }).join(' '); }
+  $('#rev3').addEventListener('click',()=>{
+    R.concl.forEach(i=>{ const b=R.bottles[i]; R.ans3[i]={sat:SUB[b.sub].sat?0:1, id:R.idOpts.indexOf(R.idOf(b.sub))}; });
+    renderConcl();
+    msg(3,'near','Stayed orange = saturated. Lost colour = unsaturated. '+conclSummary());
+    track('lab-step3-reveal',{scenario:R.S.id}); solve(3);
+  });
+
+  /* ---------- step 4 ---------- */
+  function zoomFor(b, which){
+    if(R.S.id==='window' && b.sub==='hexane') return which==='key'
+      ? {def:SUBST, tab:'Windowsill (light)', note:'Shown with methane. Hexane reacts the same way.'}
+      : {def:DISSOLVE('hexane'), tab:'Your dark test', note:''};
+    if(SUB[b.sub].sat){ const n=b.sub==='paraffin'?'paraffin':b.sub==='cyclo'?'cyclohexane':'hexane';
+      return {def:DISSOLVE(n), tab:'Bottle '+b.L+' (orange)', note:''}; }
+    return {def:ADD, tab:'Bottle '+b.L+' (colourless)', note:'Shown with ethene. Any C=C reacts the same way.'};
+  }
+  function miniTube(b){
+    const svg=$('#tube'+R.bottles.indexOf(b)).querySelector('svg').cloneNode(true);
+    svg.querySelectorAll('[id]').forEach(n=>n.id=n.id+'m'); svg.querySelectorAll('[clip-path]').forEach(n=>n.setAttribute('clip-path','url(#clip'+b.L+'m)'));
+    svg.querySelectorAll('.drop,.fumes,.litmus').forEach(n=>n.remove());
+    return svg;
+  }
+  function renderTri(){
+    const tri=$('#tri'); tri.innerHTML='';
+    const key=R.S.keyBottle(R), oth=R.S.other(R);
+    const zk=zoomFor(key,'key'), zo=oth?zoomFor(oth,'other'):(R.S.id==='window'&&key.sub==='hexane'?zoomFor(key,'other'):null);
+    const m=document.createElement('div'); m.className='tri-panel tri-macro';
+    m.innerHTML='<span class="eyebrow">Tube</span><div class="mini bench '+(key.cond||'dark')+'"></div><b>Bottle '+key.L+'</b>'+(SUB[key.sub].sat?'Stayed orange':'Turned colourless');
+    m.querySelector('.mini').appendChild(miniTube(key)); tri.appendChild(m);
+    const s=document.createElement('div'); s.className='tri-panel';
+    s.innerHTML='<span class="eyebrow">Molecules</span>';
+    const note=document.createElement('p'); note.className='tri-note';
+    const host=document.createElement('div'); host.className='rx';
+    const list=[zk].concat(zo?[zo]:[]);
+    function show(k){ const z=list[k]; note.textContent=z.note; note.hidden=!z.note; host.dataset.rx=k===0?'lab-key':'lab-other'; delete host.dataset.done; host.dataset.label=z.tab; rxPlayer(host,z.def); }
+    if(list.length>1){ const t=chipGroup(list.map(z=>z.tab),0,k=>{ show(k); track('lab-zoom-tab',{tab:k}); }); t.classList.add('tabs'); s.appendChild(t); }
+    s.appendChild(note); s.appendChild(host); tri.appendChild(s);
+    R.zoomKeyDone=false; show(0);
+    const y=document.createElement('div'); y.className='tri-panel tri-sym';
+    y.innerHTML='<span class="eyebrow">Equation</span><div class="q">'+R.explain.p+'</div>';
+    R.explain.o=R.explain.oS||(R.explain.oS=shuffle(R.explain.o));
+    y.appendChild(chipGroup(R.explain.o.map(o=>'<span class="eqn">'+o[0]+'</span>'), R.ans4==null?undefined:R.ans4, i=>{ R.ans4=i; unsolveFrom(4); }, true));
+    tri.appendChild(y);
+  }
+  function zoomChanged(){
+    const h=document.querySelector('#tri .rx'); if(h && h.dataset.rx==='lab-key' && h.dataset.done){ R.zoomKeyDone=true; track('lab-zoom-done',{scenario:R.S.id}); }
+  }
+  $('#chk4').addEventListener('click',()=>{
+    if(!R.zoomKeyDone) return msg(4,'near','Step through the molecules to the end first.');
+    if(R.ans4==null) return msg(4,'near','Choose an equation.');
+    const o=R.explain.o[R.ans4]; if(!o[1]) return msg(4,'bad',mixLine(o[3],o[2],4));
+    msg(4,'good','<b>Round complete.</b> '+o[2]); solve(4);
+  });
+  $('#rev4').addEventListener('click',()=>{
+    R.ans4=R.explain.o.findIndex(o=>o[1]); R.zoomKeyDone=true;
+    const g=$('#tri .tri-sym .chips'); [...g.children].forEach((c,i)=>{ c.classList.toggle('on',i===R.ans4); c.setAttribute('aria-pressed',i===R.ans4?'true':'false'); });
+    msg(4,'near',R.explain.o[R.ans4][2]); track('lab-step4-reveal',{scenario:R.S.id}); solve(4);
+  });
+
+  function solve(k){
+    solved[k-1]=true; setLocks(); track('lab-step'+k+'-solved',{scenario:R.S.id}); /* one event name per step: Umami funnels match names */
+    if(k===3 && !$('#tri').children.length) renderTri();
+    if(k===4) roundComplete();
+  }
+  function roundComplete(){
+    rounds++; $('#rounds').textContent=rounds; done.add(R.S.id);
+    const c=$('#scen-chips').children[sc]; if(c && !c.querySelector('.tick')) c.insertAdjacentHTML('beforeend','<span class="tick">✓</span>');
+    track('lab-round-complete',{scenario:R.S.id});
+    try{ if(window.parent!==window){ const o=location.origin; window.parent.postMessage({type:'organic-lab', event:'round-complete', reaction:R.S.id}, (o&&o!=='null')?o:'*'); } }catch(_){}
+  }
+  $('#btn-new').addEventListener('click',()=>newRound());
+  $('#btn-next').addEventListener('click',()=>{ sc=(sc+1)%SCEN.length; track('lab-pick',{scenario:SCEN[sc].id}); newRound(); });
+  $('#btn-pt').addEventListener('click',()=>{ if(window.KompasPT) KompasPT.open(); });
+  $('#btn-kompas').addEventListener('click',e=>{ if(history.length>1 && document.referrer && document.referrer.indexOf(location.host)>-1){ e.preventDefault(); history.back(); } });
+
+  newRound();
+})();
+</script>
+</body>
+</html>
