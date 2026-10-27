@@ -368,6 +368,13 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .bw.clear{fill:#eef3f4}
 @keyframes rise{0%{transform:translateY(0);opacity:0}15%{opacity:1}85%{opacity:1}100%{transform:translateY(-190px);opacity:0}}
 .slide.active .rise{animation:rise 4s linear infinite;animation-delay:var(--d,0s)}
+/* embedded lab */
+.si.lab-si{justify-content:flex-start;gap:.35em;max-width:860px}
+.lab-head{flex:0 0 auto}
+.lab-head h2{margin-bottom:.15em}
+.lab-head p{margin-bottom:.2em}
+.lab-frame{flex:1 1 auto;min-height:300px;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#fff}
+.lab-frame iframe{width:100%;height:100%;border:0;display:block}
 </style>
 </head>
 <body>
@@ -394,7 +401,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <nav>
     <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
     <div class="nav-right">
-      <a class="icon-btn back-kompas" id="btn-kompas" href="../../index.html" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+      <a class="icon-btn back-kompas" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
       <button class="icon-btn" id="btn-toc" data-umami-event="open-contents">Contents</button>
       <span id="progress-label">1 / 42</span>
     </div>
@@ -1302,6 +1309,17 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 
 <!-- ================= WRAP-UP ================= -->
 
+<section class="slide" data-sec="lab" data-title="Bromine Water Bench (lab)">
+ <div class="si lab-si">
+  <div class="lab-head">
+   <div class="eyebrow">Interactive lab</div>
+   <h2>Bromine Water Bench: <span class="ac">find the C=C.</span></h2>
+   <p class="small">Find the C=C, test each bottle with bromine water, decide, then match the tube, the molecules and the equation. <a href="lab.html" target="_blank" rel="noopener" data-umami-event="lab-open-full">Open full screen ↗</a></p>
+  </div>
+  <div class="lab-frame"><iframe id="lab-iframe" data-src="lab.html?embed=1" title="Bromine Water Bench interactive lab" loading="lazy"></iframe></div>
+ </div>
+</section>
+
 <section class="slide" data-sec="end" data-title="Quick quiz">
  <div class="si">
   <div class="txt">
@@ -1704,6 +1722,8 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     btnNext.textContent=n===TOTAL?'Done':'Next →';
     btnNext.setAttribute('data-umami-event',n===TOTAL?'carousel-selesai':'nav-next');
     buildCharts(n);
+    const fr=slides[n-1].querySelector('iframe[data-src]');
+    if(fr && !fr.src){ fr.src=fr.dataset.src; if(window.umami) umami.track('lab-embed-open'); }
     fit(slides[n-1]);
     requestAnimationFrame(()=>fit(slides[n-1]));
     updateGate(false);
@@ -1956,7 +1976,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
       d:{p1:['C1','Br1',8,-3], p2:['C1','Br1',8,3], b1:['C2','Br2',8,-3], b2:['C2','Br2',8,3]},
       lb:[[320,70,'1,2-dibromoethane','tx g mid']],
       eq:'CH<sub>2</sub>=CH<sub>2</sub> + Br<sub>2</sub> → CH<sub>2</sub>Br–CH<sub>2</sub>Br',
-      cap:'<b>Product.</b> Br<sup>−</sup> bonds to the positive carbon. The orange Br<sub>2</sub> has been used up, so the hexene tube turns colourless.'}
+      cap:'<b>Product.</b> Br<sup>−</sup> bonds to the positive carbon. The orange Br<sub>2</sub> has been used up, so the hexene tube turns colourless. (Simplified: in bromine water, most of the product has OH in place of one Br.)'}
     ]};
 
   /* 4 · complete combustion of methane */
@@ -2099,7 +2119,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   document.getElementById('btn-refs').addEventListener('click',()=>openOv('refs-overlay'));
 
   /* contents — bypasses gating */
-  const secNames={intro:'1 · Introduction',alk:'2 · Alkanes',cyc:'3 · Cycloalkanes',ene:'4 · Alkenes and cycloalkenes',iupac:'5 · IUPAC naming and drawing',rxn:'6 · Reactions of alkanes',ind:'7 · Industry and the real world',end:'Wrap-up'};
+  const secNames={intro:'1 · Introduction',alk:'2 · Alkanes',cyc:'3 · Cycloalkanes',ene:'4 · Alkenes and cycloalkenes',iupac:'5 · IUPAC naming and drawing',rxn:'6 · Reactions of alkanes',ind:'7 · Industry and the real world',lab:'Interactive lab',end:'Wrap-up'};
   function buildToc(){
     const ul=document.getElementById('toc-list'); ul.innerHTML=''; let last='';
     slides.forEach((s,i)=>{
@@ -2136,6 +2156,13 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   });
   vidOv.querySelector('.close-ov').addEventListener('click',()=>{ vidFrame.innerHTML=''; });
   vidOv.addEventListener('click',e=>{ if(e.target===vidOv || e.target.classList.contains('vid-panel')){ vidOv.classList.remove('open'); vidFrame.innerHTML=''; } });
+
+  /* the embedded lab reports finished rounds */
+  window.addEventListener('message',e=>{
+    if(e.origin!==location.origin && location.origin!=='null') return;
+    const d=e.data||{};
+    if(d.type==='organic-lab' && window.umami) umami.track('lab-'+d.event,{reaction:d.reaction||''});
+  });
 
   /* Back to Kompas: return to the exact course view the student came from
      (history.back keeps Kompas's state); otherwise open the Kompas home page. */
