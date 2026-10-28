@@ -143,10 +143,10 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 .ondark path{stroke:#c9d1cb}
 .ondark .tl1,.ondark .tl2{fill:#f2f4f2}.onlight .tl1{fill:#1c2620}.onlight .tl2{fill:#8a4f0c}
 /* hints overlay */
-#hints{position:fixed;inset:0;background:rgba(28,38,32,.45);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
-#hints.open{display:flex}
-#hints .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:14px 16px;max-height:100%;overflow:auto}
-#hints .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5em}
+#hints,#brief,#stp{position:fixed;inset:0;background:rgba(28,38,32,.45);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
+#hints.open,#brief.open,#stp.open{display:flex}
+#hints .box,#brief .box,#stp .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:14px 16px;max-height:100%;overflow:auto}
+#hints .top,#brief .top,#stp .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5em}
 .ideas{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
 .idea{font-size:.86em;line-height:1.35;text-align:center}
 .idea svg{display:block;width:100%;height:46px;margin-bottom:.2em}
@@ -178,6 +178,33 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 .wait-note{font-size:.84em;color:var(--muted);background:#f6f7f5;border-radius:8px;padding:.4em .65em}
 .stuck{font-size:.92em;color:var(--accent-dark)}
 @media (prefers-reduced-motion: reduce){ #plate *{transition:none!important} }
+/* step guide: the footer names the next move; the matching control glows */
+#gate.go{color:#a85f10;font-weight:700}
+.guide{box-shadow:0 0 0 3px rgba(217,130,31,.8);animation:guide 1.4s ease-in-out infinite}
+.chips.guide,.slrow.guide,.btns.guide{border-radius:10px}
+@keyframes guide{0%,100%{box-shadow:0 0 0 2px rgba(217,130,31,.25)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.9)}}
+.sop{padding-left:1.3em;font-size:.9em;margin:.3em 0 .6em}.sop li{margin-bottom:.3em}
+/* STP: the lab's controlled method document */
+#stp .box{max-width:720px;padding-top:0}
+#stp .top{position:sticky;top:0;background:#fff;padding:12px 0 8px;margin-bottom:.2em;z-index:1;border-bottom:1px solid var(--rule)}
+#stp-btn.sec{color:#a85f10;border-color:#efc58f;background:var(--o-bg)}
+.stp-doc{font-size:.86em;color:var(--body)}
+.stp-stamp{display:inline-block;border:2px solid var(--red);color:var(--red);font-weight:800;font-size:.72em;letter-spacing:.1em;text-transform:uppercase;padding:.15em .5em;border-radius:4px;transform:rotate(-2deg);margin:.5em 0}
+.stp-head{width:100%;border-collapse:collapse;margin-bottom:.6em}
+.stp-head th,.stp-head td{border:1px solid var(--ink);padding:.3em .5em;text-align:left;vertical-align:top}
+.stp-head th{background:var(--ink);color:#fff;letter-spacing:.04em}
+.stp-head td:first-child{width:36%;color:var(--muted);font-weight:600}
+.stp-sec{border-top:1px solid var(--rule);padding:.5em .35em .3em;scroll-margin-top:3.4em;border-radius:6px;transition:background .6s}
+.stp-sec.hit{background:var(--o-bg)}
+.stp-sec h3{font-size:1em;color:var(--ink);margin-bottom:.3em}
+.stp-sec p,.stp-sec li{font-size:1em;margin-bottom:.3em}
+.stp-sec ol,.stp-sec ul{padding-left:1.3em;margin-bottom:.3em}
+.stp-t{width:100%;border-collapse:collapse;margin:.2em 0 .4em}
+.stp-t th,.stp-t td{border:1px solid var(--rule);padding:.25em .45em;text-align:left;vertical-align:top}
+.stp-t th{background:#f6f7f5}
+.stp-f{background:#f6f7f5;border-radius:6px;padding:.4em .6em;font-weight:700;color:var(--ink);margin:.2em 0 .4em;overflow-x:auto}
+.tn{border-left:3px solid var(--accent);background:var(--g-bg);color:var(--accent-dark);border-radius:0 6px 6px 0;padding:.3em .6em;margin:.3em 0}
+.tn b{color:var(--accent-dark)}
 </style>
 </head>
 <body>
@@ -196,7 +223,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       <a class="pillbtn" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
     </div>
   </nav>
-  <div id="bar"><div id="bar-lbl"></div><button type="button" class="pillbtn" id="hints-btn" aria-haspopup="dialog">Hints</button></div>
+  <div id="bar"><div id="bar-lbl"></div><button type="button" class="pillbtn" id="stp-btn" aria-haspopup="dialog" title="Standard test procedure">STP</button><button type="button" class="pillbtn" id="hints-btn" aria-haspopup="dialog">Hints</button></div>
   <div id="track"><div id="fill"></div></div>
 
   <main id="stage">
@@ -258,6 +285,65 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   </div>
 </div>
 
+<div id="stp" role="dialog" aria-modal="true" aria-labelledby="stp-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="stp-title">Standard test procedure</div><button type="button" class="btn ghost" id="stp-close">Close</button></div>
+    <div class="stp-doc">
+      <div class="stp-stamp">Uncontrolled copy · for training only</div>
+      <table class="stp-head">
+        <tr><th colspan="2">Aufthority Lab · Quality Control</th></tr>
+        <tr><td>Product</td><td><b>Chlorpheniramine Maleate Tablets 4 mg</b></td></tr>
+        <tr><td>Tests</td><td>Identification and related substances by TLC</td></tr>
+        <tr><td>Document no.</td><td>STP-AL/CPM/02 · Revision 02</td></tr>
+        <tr><td>Prepared · Checked · Approved</td><td>QC Analyst · QC Executive · QA Manager</td></tr>
+      </table>
+      <section class="stp-sec" id="stp-1"><h3>1 · Purpose and scope</h3>
+        <p>To confirm that the tablets contain chlorpheniramine maleate (identification) and to limit its impurities (related substances) by thin-layer chromatography.</p></section>
+      <section class="stp-sec" id="stp-2"><h3>2 · Specification</h3>
+        <p><b>Identification (BP).</b> Under UV 254 nm, the two principal spots of Solution (1) correspond to those of Solution (2). After spraying, the principal spot of Solution (1) corresponds to that of Solution (2).</p>
+        <p><b>Related substances (BP).</b> Any secondary spot of Solution (1) is not more intense than the spot of Solution (2) (0.2%).</p>
+        <p class="tn"><b>Trainer’s note:</b> “corresponds” means the same Rf and the same colour. Spot size alone proves nothing.</p></section>
+      <section class="stp-sec" id="stp-3"><h3>3 · Plate, reagents and detection</h3>
+        <table class="stp-t">
+          <tr><td>Plate</td><td>Silica gel GF<sub>254</sub>. Heat at 105 °C for 30 minutes before use.</td></tr>
+          <tr><td>1 M acetic acid</td><td>Dilute 57 ml of glacial acetic acid to 1000 ml with water.</td></tr>
+          <tr><td>Dilute potassium iodobismuthate</td><td>Dissolve 100 g of tartaric acid in 500 ml of water and add 50 ml of potassium iodobismuthate solution R1. Store protected from light.</td></tr>
+          <tr><td>Detection</td><td>UV light, 254 nm. For identification, then spray with dilute potassium iodobismuthate.</td></tr></table>
+        <p class="tn"><b>Trainer’s note:</b> the GF<sub>254</sub> layer glows under UV 254 nm, so spots that absorb UV look dark. The spray turns amines orange.</p></section>
+      <section class="stp-sec" id="stp-4"><h3>4 · Identification</h3>
+        <p><b>Mobile phase.</b> 1 M acetic acid : methanol : ethyl acetate (20 : 30 : 50).</p>
+        <p><b>Solution (1).</b> Extract finely powdered tablets equivalent to 5 mg of chlorpheniramine maleate with chloroform. Filter, evaporate the filtrate to dryness with minimum heat, and dissolve the residue in 1 ml of chloroform.</p>
+        <p><b>Solution (2).</b> Dissolve 50 mg of chlorpheniramine maleate working standard (WS) in chloroform and dilute to 10 ml.</p>
+        <p><b>Procedure.</b></p>
+        <ol><li>Apply 2 µl of each solution on the origin line.</li>
+          <li>Develop until the solvent front has moved at least 15 cm from the origin.</li>
+          <li>Remove the plate, mark the front, dry in air and examine under UV 254 nm.</li>
+          <li>Spray with dilute potassium iodobismuthate.</li></ol>
+        <p class="tn"><b>Trainer’s note:</b> one average tablet weight of powder holds 4 mg of drug. Use the average tablet weight to work out how much powder holds 5 mg.</p></section>
+      <section class="stp-sec" id="stp-5"><h3>5 · Related substances</h3>
+        <p><b>Mobile phase.</b> Diethylamine : chloroform : cyclohexane (10 : 40 : 50).</p>
+        <p><b>Solution (1).</b> Extract finely powdered tablets equivalent to 50 mg of chlorpheniramine maleate with chloroform. Filter, evaporate the filtrate to dryness, and dissolve the residue in 1 ml of chloroform.</p>
+        <p><b>Solution (2).</b> Dilute 1 volume of Solution (1) to 500 volumes with chloroform.</p>
+        <p><b>Procedure.</b></p>
+        <ol><li>Apply 10 µl of each solution on the origin line.</li>
+          <li>Develop until the solvent front has moved at least 12 cm from the origin.</li>
+          <li>Remove the plate, mark the front, dry in air and examine under UV 254 nm.</li>
+          <li>Disregard any spot remaining on the line of application.</li></ol>
+        <p class="tn"><b>Trainer’s note:</b> judge each secondary spot against the Solution (2) spot, not against the main spot. A mobile phase that is too weak or too strong leaves every spot bunched at one end.</p></section>
+      <section class="stp-sec" id="stp-6"><h3>6 · Calculation of Rf</h3>
+        <div class="stp-f">Rf = distance moved by the spot ÷ distance moved by the solvent front</div>
+        <p>Measure both distances from the origin line. Report Rf to 2 decimal places.</p></section>
+    </div>
+  </div>
+</div>
+<div id="brief" role="dialog" aria-modal="true" aria-labelledby="brief-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="brief-title">Before you start: today’s procedure</div></div>
+    <div id="brief-body"></div>
+    <p class="small">The line at the bottom of the screen and the glowing box show your next move. <b>STP</b>, beside Hints, is the verified method you work from: it opens at the section you need now. <b>Hints</b> explains the ideas behind each step.</p>
+    <div class="btns"><button type="button" class="btn solid" id="brief-go">Start the lab</button><button type="button" class="btn ghost" id="brief-stp">Read the STP</button></div>
+  </div>
+</div>
 <div id="hints" role="dialog" aria-modal="true" aria-labelledby="hints-title">
   <div class="box">
     <div class="top"><div class="eyebrow" id="hints-title">Hints: four ideas</div><button type="button" class="btn ghost" id="hints-close">Close</button></div>
@@ -848,6 +934,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     $('#stage').classList.toggle('roomy', innerWidth>=640);
     const P=pages[page]; P.forEach((s,i)=>{ s.classList.add('on'); if(P.length===2) s.classList.add(i?'half-r':'half-l'); else s.classList.add('single'); });
     updatePager(); fitPage();
+    if(stepOf(page)===1 && R && !briefed.has(R.S.id)) openBrief();
     track('lab-page',{page:STEP_NAMES[stepOf(page)]+(P.length===1&&P[0].dataset.pane?' '+P[0].dataset.pane:'')});
   }
   function updatePager(){
@@ -861,7 +948,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     nx.textContent=last?(solved[3]?'New round ↺':'Continue →'):'Continue →';
     nx.disabled=!ok || (last && !solved[3]);
     nx.classList.toggle('ready', ok && k>0 && lastPaneOfStep(page) && solved[k-1]);
-    $('#gate').textContent=ok?'':(k===0?'Tap through the story first':'Check this step to continue');
+    guide();
   }
   $('#back').addEventListener('click',()=>goPage(page-1));
   $('#next').addEventListener('click',()=>{ if(page===pages.length-1){ if(solved[3]){ newRound(); goPage(firstPageOfStep(1)); } return; } if(canLeave(page)) goPage(page+1); });
@@ -876,10 +963,94 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       if(over()){ s.classList.add('scrolly'); track('lab-overflow',{page:s.dataset.title, w:innerWidth, h:innerHeight}); }
       s.dataset.k=k;
     });
+    guide();
   }
   function setAppH(){ document.documentElement.style.setProperty('--app-h', innerHeight+'px'); }
   let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ setAppH(); const before=wide; buildPages(); goPage(page); },120); });
 
+
+  /* ---------- step guide: the footer names the next move and the matching control glows ----------
+     It only ever points at the next empty input or button, never at the right answer. */
+  const briefed=new Set(); let glowEl=null;
+  const empty=id=>{ const e=$('#'+id); return !e || !e.value.trim(); };
+  const checkMove=n=>({t:$('#m'+n).classList.contains('bad')?'Fix what the feedback says, then press Check again':'Press Check', e:$('#chk'+n)});
+  const storyMove=()=>R.storyDone?{t:'Press Continue to start the lab',e:$('#next')}:{t:'Tap the picture to read the story',e:$('#story-next')};
+  const doneMove=k=>k<4?{t:'Step done. Press Continue',e:$('#next')}:{t:'Round complete. Try new values or the next scenario',e:$('#endrow')};
+  function guide(){
+    if(!pages.length || !R) return;
+    const g=nextMove(); let t=g.t||'', e=g.e||null;
+    if(e){ const s=e.closest('.scr'); if(s && !pages[page].includes(s)){ const j=pages.findIndex(p=>p.includes(s));
+      if(j>page){ t='Next screen: '+t; e=$('#next'); } else { t='Back a screen: '+t; e=$('#back'); } } }
+    const gate=$('#gate'); gate.textContent=t; gate.classList.toggle('go',!!t);
+    if(glowEl!==e){ if(glowEl) glowEl.classList.remove('guide'); glowEl=e; if(e) e.classList.add('guide'); }
+    const sb=$('#stp-btn'), sl=g.s?'STP §'+g.s:'STP';
+    if(sb.textContent!==sl){ sb.textContent=sl; sb.classList.toggle('sec',!!g.s); sb.dataset.s=g.s||''; }
+  }
+  function openBrief(){ briefed.add(R.S.id); $('#brief-body').innerHTML=briefHTML(); $('#brief').classList.add('open'); $('#brief-go').focus(); }
+  function closeBrief(){ $('#brief').classList.remove('open'); guide(); }
+  $('#brief-go').addEventListener('click',closeBrief);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#brief').classList.contains('open')) closeBrief(); });
+  document.addEventListener('click',()=>setTimeout(guide,0));
+  document.addEventListener('input',()=>guide());
+  function nextMove(){
+    const k=stepOf(page), sec=R.test==='id'?4:5;   /* STP section for this scenario's test */
+    if(k===0) return storyMove();
+    if(solved[k-1]) return doneMove(k);
+    if(k===1){
+      if(empty('a1')) return {t:'a. Work out how much tablet powder to weigh',e:$('#a1'),s:sec};
+      if(R.test==='rs' && empty('a1c')) return {t:'c. Turn the 1 in 500 dilution into a %',e:$('#a1c'),s:5};
+      if(R.ans1.b==null) return {t:'b. Choose why the powder is filtered',e:$('#q1b .chips'),s:sec};
+      return Object.assign(checkMove(1),{s:sec});
+    }
+    if(k===2){
+      if(busy) return {t:'Wait while the solvent climbs the plate',s:sec};
+      const obs=$('#obs').querySelectorAll('.chips');
+      if(R.trainee){
+        if(R.ans2.why==null) return {t:'Look at the trainee’s plate. What went wrong?',e:obs[0],s:5};
+        return {t:'Choose a mobile phase to run your own plate',e:$('#phase'),s:5};
+      }
+      if(!R.phase) return {t:'Choose a mobile phase',e:$('#phase'),s:sec};
+      const need=R.test==='id'?4:3;   /* same full run whatever the phase, so the prompt never hints it was wrong */
+      if(R.stage<need) return {t:['Spot both solutions on the origin line','Develop the plate in the tank','Look at the plate under UV 254 nm','Spray the plate with iodobismuthate'][R.stage],e:$('#runbtns .btn:not(:disabled)'),s:sec};
+      if(R.phase!==R.test) return {t:'Look at the plate, then press Check',e:$('#chk2'),s:sec};
+      const shown=obsQs().filter(q=>q.key==='why' || R.stage>=q.needs), i=shown.findIndex(q=>R.ans2[q.key]==null);
+      if(i>=0){ const key=shown[i].key; return {t:key==='why'?'Say what went wrong on the trainee’s plate':'Answer the next question about the plate',e:obs[i],s:(key==='why'||key==='org')?5:3}; }
+      return Object.assign(checkMove(2),{s:3});
+    }
+    if(k===3){
+      const T=targets3();
+      if(empty('rf0')) return {t:'Rf of spot '+T[0].s.letter+' = its distance ÷ the front distance',e:$('#rf0'),s:6};
+      if(empty('rf1')) return {t:'Now the Rf of spot '+T[1].s.letter,e:$('#rf1'),s:6};
+      return Object.assign(checkMove(3),{s:6});
+    }
+    const g=$('#q4').querySelectorAll('.chips'), id=R.test==='id';
+    if(R.ans4[0]==null) return {t:id?'Decide whether the tablet complies':'Compare the secondary spot with the Solution (2) spot',e:g[0],s:2};
+    if(R.ans4[1]==null) return {t:id?'Choose your reason':'Give the result for related substances',e:g[1],s:2};
+    return Object.assign(checkMove(4),{s:2});
+  }
+  function briefHTML(){
+    const id=R.test==='id';
+    return (R.S.id==='trainee'?'<p class="small" style="margin:0">First work out what went wrong on Aina’s plate, then run it properly yourself.</p>':'')+'<ol class="sop">'+
+      '<li><b>Prepare.</b> Calculate how much tablet powder to weigh'+(id?'':' and what the 1 in 500 dilution represents')+'. The powder is extracted with chloroform.</li>'+
+      '<li><b>Run the plate.</b> Choose the mobile phase, then Spot, Develop and view under UV 254 nm'+(id?', then Spray':'')+'. Answer what you see.</li>'+
+      '<li><b>Measure Rf.</b> Use the distances from the origin line.</li>'+
+      '<li><b>Decide.</b> '+(id?'Compare the tablet with the working standard.':'Compare the secondary spot with the 0.2% spot.')+'</li></ol>';
+  }
+
+  /* ---------- STP: opens at the section the current move needs ---------- */
+  function openSTP(s){
+    const d=$('#stp'); d.classList.add('open');
+    d.querySelectorAll('.stp-sec.hit').forEach(x=>x.classList.remove('hit'));
+    const sec=s?$('#stp-'+s):null;
+    if(sec){ sec.scrollIntoView({block:'start'}); sec.classList.add('hit'); } else d.querySelector('.box').scrollTop=0;
+    $('#stp-close').focus({preventScroll:true});
+  }
+  function closeSTP(){ $('#stp').classList.remove('open'); $('#stp-btn').focus({preventScroll:true}); }
+  $('#stp-btn').addEventListener('click',()=>openSTP($('#stp-btn').dataset.s));
+  $('#stp-close').addEventListener('click',closeSTP);
+  $('#stp').addEventListener('click',e=>{ if(e.target.id==='stp') closeSTP(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#stp').classList.contains('open')) closeSTP(); });
+  $('#brief-stp').addEventListener('click',()=>{ closeBrief(); openSTP(''); });
 
   setAppH(); buildPages(); newRound(); goPage(0);
 })();
