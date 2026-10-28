@@ -24,6 +24,7 @@
 <meta name="twitter:image"       content="https://www.aufthority.com/preview_v2.png">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
 <script src="../shared/periodic-table.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <style>
 :root{
   --ink:#1c2620;--body:#3f4742;--muted:#6f7771;--accent:#2d6a4f;--accent-dark:#1f4d39;
@@ -300,6 +301,10 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .plates{display:flex;gap:.6em;justify-content:center;margin:.3em 0}
 .plates svg{width:7.5em;height:auto}
 .cmp td:first-child{white-space:nowrap}
+/* locked contents rows and certificate */
+.toc button.lockd{color:var(--muted);opacity:.45;cursor:default}
+.cert-img{display:block;width:100%;max-width:560px;height:auto;border:1px solid var(--rule);border-radius:8px;margin:.5em 0}
+.cert-dl{display:inline-block;text-decoration:none}
 /* animations */
 .anim{display:flex;flex-direction:column;gap:.3em;min-width:0}
 .a-tabs{display:flex;flex-wrap:wrap;gap:.3em;justify-content:center}
@@ -1307,6 +1312,22 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   </div>
  </div>
 </section>
+<section class="slide" data-sec="end" data-title="Your certificate">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Well done</div>
+   <h2>You finished. <span class="ac">Take your certificate.</span></h2>
+   <p>You worked through every page of <b>Chromatography, Explained</b>. Type your name as you want it to appear, then create your certificate.</p>
+   <div class="calc">
+    <div class="calc-row"><label>Your full name<input id="cert-name" type="text" maxlength="60" autocomplete="name" placeholder="e.g. Nur Aisyah binti Ahmad"></label></div>
+    <button class="btn solid" id="cert-make" type="button">Create certificate</button>
+   </div>
+   <div id="cert-out"></div>
+   <p class="small">A record of completion from Kompas Semester, not an official KPJ Healthcare University award.</p>
+  </div>
+ </div>
+</section>
+
 
   </div><!-- /stage -->
 
@@ -1323,7 +1344,6 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 <div class="overlay" id="toc-overlay" role="dialog" aria-modal="true">
   <div class="panel">
     <div class="panel-head"><h3>Contents</h3><button class="icon-btn close-ov">Close</button></div>
-    <p class="toc-note">You can jump to any page from here, even if a page's questions are not finished.</p>
     <button type="button" class="pt-open" id="btn-pt" data-umami-event="open-periodic-table"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3h4v4H2zM14 3h4v4h-4zM2 8h4v4H2zM7 8h3v4H7zM11 8h3v4h-3zM14 8h4v4h-4zM2 13h4v4H2zM7 13h3v4H7zM11 13h3v4h-3zM14 13h4v4h-4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Periodic table</button>
     <ul class="toc" id="toc-list"></ul>
   </div>
@@ -1346,7 +1366,12 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 (function(){
   const slides   = document.querySelectorAll('.slide');
   const TOTAL    = slides.length;
+  /* progress is remembered on this device; a returning student resumes where they left off */
+  const PKEY='kompas.chromatography.progress';
+  let maxReached=1, isEducator=false, profileName='';
+  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.max>=1) maxReached=Math.min(sv.max, document.querySelectorAll('.slide').length); }catch(_){}
   let current = 1;
+  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.last>=1 && sv.last<=maxReached) current=sv.last; }catch(_){}
   const btnBack  = document.getElementById('btn-back');
   const btnNext  = document.getElementById('btn-next');
   const progFill = document.getElementById('progress-fill');
@@ -1846,15 +1871,14 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     return n;
   }
   function updateGate(alert){
-    const s=slides[current-1], n=pending(s);
+    const s=slides[current-1], n=current<maxReached?0:pending(s);
     btnNext.classList.toggle('locked', n>0);
     if(n===0){ hint.className=''; hint.textContent=''; return; }
     hint.className=alert?'alert':'';
     const what=n===1?'1 item':n+' items';
-    hint.innerHTML=alert
-      ? 'Please finish the questions or open the sections on this page first ('+what+' left). Or skip ahead using <button type="button" id="hint-toc">Contents</button>.'
-      : 'Finish '+what+' on this page to continue, or use <button type="button" id="hint-toc">Contents</button>';
-    document.getElementById('hint-toc').addEventListener('click',()=>openOv('toc-overlay'));
+    hint.textContent=alert
+      ? 'Please finish the questions or open the sections on this page first ('+what+' left).'
+      : 'Finish '+what+' on this page to continue.';
   }
   function flagPending(slide){
     [...slide.querySelectorAll('.toggle-wrap:not(.seen):not(.opt), .rcard:not(.seen), .choice-set:not([data-done]), .task:not([data-done])')]
@@ -1875,14 +1899,15 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     labFrame(slides[n-1]);
     animsFor(n);
     updateGate(false);
+    saveProgress();
     if(window.umami) umami.track('slide-view',{slide:n});
   }
 
   /* NAV BUTTONS ONLY — no swipe, no keyboard */
   btnNext.addEventListener('click',()=>{
     const s=slides[current-1];
-    if(pending(s)>0){ updateGate(true); flagPending(s); if(window.umami) umami.track('gate-blocked',{slide:current}); return; }
-    if(current<TOTAL){ current++; show(current); } else openOv('refs-overlay');
+    if(current>=maxReached && pending(s)>0){ updateGate(true); flagPending(s); if(window.umami) umami.track('gate-blocked',{slide:current}); return; }
+    if(current<TOTAL){ current++; reach(current); show(current); } else openOv('refs-overlay');
   });
   btnBack.addEventListener('click',()=>{ if(current>1){ current--; show(current); } });
 
@@ -1928,7 +1953,8 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     if(window.KompasPT) KompasPT.open();
   });
 
-  /* contents — bypasses gating */
+  /* contents: students can revisit any page they have already reached;
+     a signed-in Kompas educator can open every page */
   const secNames={intro:'Introduction',basics:'1 · Separation basics',extract:'2 · Extraction',tlc:'3 · Thin-layer chromatography',tlclab:'Lab · TLC Bench',read:'4 · Reading a TLC plate',hplc:'5 · HPLC',hplclab:'Lab · HPLC Bench',gc:'6 · Gas chromatography',end:'Wrap-up'};
   function buildToc(){
     const ul=document.getElementById('toc-list'); ul.innerHTML=''; let last='';
@@ -1937,7 +1963,9 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
       const li=document.createElement('li'), b=document.createElement('button');
       b.innerHTML='<span>'+(i+1)+'</span>'+s.dataset.title;
       if(i+1===current) b.className='cur';
-      b.addEventListener('click',()=>{ current=i+1; show(current); document.getElementById('toc-overlay').classList.remove('open'); if(window.umami) umami.track('toc-jump',{slide:current}); });
+      const open=isEducator || i+1<=maxReached;
+      if(!open){ b.classList.add('lockd'); b.disabled=true; b.setAttribute('aria-disabled','true'); }
+      b.addEventListener('click',()=>{ if(!(isEducator || i+1<=maxReached)) return; current=i+1; show(current); document.getElementById('toc-overlay').classList.remove('open'); if(window.umami) umami.track('toc-jump',{slide:current}); });
       li.appendChild(b); ul.appendChild(li);
     });
   }
@@ -1969,8 +1997,72 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     }catch(_){}
   });
 
+  /* ---------- progress: furthest page reached, remembered on this device ---------- */
+  function reach(n){ if(n>maxReached){ maxReached=n; } }
+  function saveProgress(){ try{ localStorage.setItem(PKEY, JSON.stringify({max:maxReached, last:current})); }catch(_){} }
+
+  /* ---------- Kompas sign-in: read the user's own role (RLS allows only their own row) ---------- */
+  window.addEventListener('DOMContentLoaded',async()=>{
+    try{
+      if(!window.supabase) return;
+      const sb=window.supabase.createClient('https://jtkskwopnprgmxlhppro.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0a3Nrd29wbnByZ214bGhwcHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDU0NDQsImV4cCI6MjEwMjUyMTQ0NH0.MVvaIH6fPhzC0aRk8XIZMU1OrAZYNbsT9V1diP8fuGw',{auth:{detectSessionInUrl:false}});
+      const {data:{session}}=await sb.auth.getSession(); if(!session) return;
+      const {data}=await sb.from('profiles').select('role, full_name').eq('id',session.user.id).single();
+      if(!data) return;
+      isEducator=data.role==='educator'; profileName=data.full_name||'';
+      buildToc(); fillCertName();
+    }catch(_){}
+  });
+
+  /* ---------- certificate of completion ---------- */
+  const certName=document.getElementById('cert-name'), certBtn=document.getElementById('cert-make'), certOut=document.getElementById('cert-out');
+  function fillCertName(){ if(certName && !certName.value && profileName){ certName.value=profileName; } }
+  function quizScore(){ const q=[...document.querySelectorAll('.quiz .choice-set')], d=q.filter(x=>x.dataset.done); return d.length===q.length&&q.length ? d.filter(x=>x.dataset.correct==='1').length+' / '+q.length : ''; }
+  function wrapLines(ctx,text,maxW){ const words=text.split(' '), lines=[]; let line=''; words.forEach(w=>{ const t=line?line+' '+w:w; if(ctx.measureText(t).width>maxW && line){ lines.push(line); line=w; } else line=t; }); if(line) lines.push(line); return lines; }
+  async function drawCert(name){
+    try{ await Promise.all(['800 60px "DM Sans"','700 30px "DM Sans"','500 30px "DM Sans"'].map(f=>document.fonts.load(f))); }catch(_){}
+    const W=2000, H=1414, c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+    const F=(w,sz)=>w+' '+sz+'px "DM Sans", system-ui, sans-serif';
+    x.fillStyle='#ffffff'; x.fillRect(0,0,W,H);
+    x.strokeStyle='#2d6a4f'; x.lineWidth=14; x.strokeRect(50,50,W-100,H-100);
+    x.strokeStyle='#cfe6d9'; x.lineWidth=4; x.strokeRect(84,84,W-168,H-168);
+    /* chromatogram motif */
+    x.strokeStyle='#cfe6d9'; x.lineWidth=6; x.beginPath();
+    for(let i=0;i<=400;i++){ const t=i/400, X=1280+t*600, y=1220-(220*Math.exp(-Math.pow((t-.3)/.035,2))+150*Math.exp(-Math.pow((t-.68)/.04,2))); i?x.lineTo(X,y):x.moveTo(X,y); } x.stroke();
+    x.textAlign='center'; x.fillStyle='#8a5d14'; x.font=F(700,30);
+    x.fillText('KOMPAS SEMESTER  ·  AUFTHORITY EDU',W/2,200);
+    x.fillStyle='#1c2620'; x.font=F(800,92); x.fillText('Certificate of Completion',W/2,320);
+    x.fillStyle='#3f4742'; x.font=F(500,38); x.fillText('This certifies that',W/2,430);
+    let sz=104; x.font=F(800,sz); while(x.measureText(name).width>1500 && sz>56){ sz-=4; x.font=F(800,sz); }
+    x.fillStyle='#2d6a4f'; x.fillText(name,W/2,560);
+    x.strokeStyle='#c9cec9'; x.lineWidth=3; x.beginPath(); x.moveTo(W/2-620,600); x.lineTo(W/2+620,600); x.stroke();
+    x.fillStyle='#3f4742'; x.font=F(500,38); x.fillText('has completed every page of the interactive explainer',W/2,680);
+    x.fillStyle='#1c2620'; x.font=F(800,64); x.fillText('Chromatography, Explained',W/2,775);
+    x.fillStyle='#636b65'; x.font=F(500,32); x.fillText('Extraction · Thin-layer chromatography · HPLC · Gas chromatography',W/2,835);
+    x.textAlign='left'; x.font=F(500,30); x.fillStyle='#3f4742';
+    const outcomes=['Explain the principles of extraction as sample preparation for chromatography.','Describe the principles and instrumentation of TLC, HPLC and GC.','Interpret a TLC chromatogram and its use in pharmaceutical analysis.'];
+    let y=930; outcomes.forEach(o=>{ x.fillStyle='#2d6a4f'; x.beginPath(); x.arc(300,y-10,9,0,Math.PI*2); x.fill(); x.fillStyle='#3f4742'; wrapLines(x,o,1300).forEach(l=>{ x.fillText(l,330,y); y+=44; }); y+=6; });
+    const today=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+    x.font=F(700,32); x.fillStyle='#1c2620'; x.fillText('Date: '+today,260,1190);
+    const qs=quizScore(); if(qs) x.fillText('Quick quiz: '+qs,260,1240);
+    x.font=F(500,24); x.fillStyle='#636b65'; x.textAlign='center';
+    x.fillText('A record of completion from Kompas Semester. Not an official KPJ Healthcare University award.',W/2,1316);
+    return c;
+  }
+  if(certBtn) certBtn.addEventListener('click',async()=>{
+    const name=(certName.value||'').trim().replace(/\s+/g,' ');
+    if(!name){ certOut.innerHTML='<p class="calc-out fail">Type your name first.</p>'; fit(slides[current-1]); return; }
+    certBtn.disabled=true;
+    const c=await drawCert(name.slice(0,60));
+    const url=c.toDataURL('image/png');
+    const file='chromatography-certificate-'+name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'.png';
+    certOut.innerHTML='<img class="cert-img" alt="Certificate of completion for '+name.replace(/[<>"&]/g,'')+'" src="'+url+'"><a class="btn solid cert-dl" download="'+file+'" href="'+url+'" data-umami-event="certificate-download">Download certificate (PNG)</a>';
+    certBtn.disabled=false; fit(slides[current-1]);
+    if(window.umami) umami.track('certificate-create');
+  });
+
   buildToc();
-  show(1);
+  show(current);
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fit(slides[current-1]));
 })();
 </script>
