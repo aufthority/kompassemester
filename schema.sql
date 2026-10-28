@@ -197,6 +197,96 @@ create policy quiz_questions_select on public.topic_quiz_questions
   for select to authenticated using (true);
 
 -- ============================================================
+-- CERTIFICATES (explainer completion certificates with a traceable serial)
+-- ============================================================
+-- A row is only ever written by issue_certificate(), never directly by the
+-- browser: the serial and the printed name are decided here, not by the client.
+
+create table public.certificates (
+  serial text primary key,                       -- e.g. KS-CHR-26-7F3K9Q
+  student_id uuid not null references public.profiles(id) on delete cascade,
+  explainer text not null,                       -- e.g. 'chromatography'
+  name_on_certificate text not null,             -- snapshot of profiles.full_name at issue time
+  issued_at timestamptz not null default now(),
+  unique (student_id, explainer)                 -- one certificate per student per explainer
+);
+
+alter table public.certificates enable row level security;
+
+-- A student can read their own certificates; educators can read all of them
+-- (this is how an educator checks a serial). No insert/update/delete policies:
+-- writes happen only inside issue_certificate().
+create policy certificates_select_own_or_educator on public.certificates
+  for select to authenticated using (student_id = auth.uid() or is_educator());
+
+-- Issue (or re-issue) the signed-in user's certificate for an explainer.
+-- Returns the existing certificate if one was already issued, so a student
+-- always gets the same serial.
+create or replace function public.issue_certificate(p_explainer text)
+returns table (serial text, name_on_certificate text, issued_at timestamptz)
+language plpgsql
+security definer
+set search_path to 'public', 'pg_temp'
+as $$
+#variable_conflict use_column
+declare
+  v_uid uuid := auth.uid();
+  v_name text;
+  v_code text;
+  v_serial text;
+  v_alpha constant text := '23456789ABCDEFGHJKMNPQRSTUVWXYZ'; -- no 0/O, 1/I/L
+  v_hex text;
+  i int;
+begin
+  if v_uid is null then
+    raise exception 'Sign in to Kompas Semester to get a certificate.';
+  end if;
+
+  v_code := case p_explainer when 'chromatography' then 'CHR' else null end;
+  if v_code is null then
+    raise exception 'Unknown explainer: %', p_explainer;
+  end if;
+
+  return query
+    select c.serial, c.name_on_certificate, c.issued_at
+    from public.certificates c
+    where c.student_id = v_uid and c.explainer = p_explainer;
+  if found then return; end if;
+
+  select nullif(trim(p.full_name), '') into v_name from public.profiles p where p.id = v_uid;
+  if v_name is null then
+    raise exception 'Your Kompas Semester profile has no name.';
+  end if;
+
+  loop
+    v_hex := md5(gen_random_uuid()::text);
+    v_serial := 'KS-' || v_code || '-' || to_char(now() at time zone 'Asia/Kuala_Lumpur', 'YY') || '-';
+    for i in 1..6 loop
+      v_serial := v_serial || substr(v_alpha, (('x' || substr(v_hex, i * 2 - 1, 2))::bit(8)::int % 31) + 1, 1);
+    end loop;
+    begin
+      insert into public.certificates (serial, student_id, explainer, name_on_certificate)
+      values (v_serial, v_uid, p_explainer, v_name);
+      exit;
+    exception when unique_violation then
+      -- serial clash: try another; a concurrent issue for the same student+explainer: return that one
+      if exists (select 1 from public.certificates c where c.student_id = v_uid and c.explainer = p_explainer) then
+        exit;
+      end if;
+    end;
+  end loop;
+
+  return query
+    select c.serial, c.name_on_certificate, c.issued_at
+    from public.certificates c
+    where c.student_id = v_uid and c.explainer = p_explainer;
+end;
+$$;
+
+revoke all on function public.issue_certificate(text) from public, anon;
+grant execute on function public.issue_certificate(text) to authenticated;
+
+-- ============================================================
 -- AFTER RUNNING THIS FILE
 -- ============================================================
 -- 1. Create your first educator account: sign up as a student via the app,
