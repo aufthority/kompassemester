@@ -2071,8 +2071,18 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     try{
       const {data,error}=await authSb.rpc('issue_certificate',{p_explainer:'chromatography'});
       if(error||!data||!data.length) throw error||new Error('No certificate returned');
-      const c=data[0], cv=await drawCert(c.name_on_certificate, c.serial, c.issued_at), url=cv.toDataURL('image/png');
-      certOut.innerHTML='<img class="cert-img" alt="Certificate of completion, serial '+esc(c.serial)+'" src="'+url+'"><p class="small" style="margin:.2em 0">Serial <b>'+esc(c.serial)+'</b></p><a class="btn solid cert-dl" download="chromatography-certificate-'+esc(c.serial)+'.png" href="'+url+'" data-umami-event="certificate-download">Download certificate (PNG)</a>';
+      const c=data[0], cv=await drawCert(c.name_on_certificate, c.serial, c.issued_at);
+      /* Blob URL, not a data: URL — browsers block top-level navigation to data: URLs */
+      const blob=await new Promise((res,rej)=>cv.toBlob(b=>b?res(b):rej(new Error('PNG failed')),'image/png'));
+      if(window._certURL) URL.revokeObjectURL(window._certURL);
+      const url=window._certURL=URL.createObjectURL(blob), fname='chromatography-certificate-'+c.serial+'.png';
+      certOut.innerHTML='<img class="cert-img" alt="Certificate of completion, serial '+esc(c.serial)+'" src="'+url+'"><p class="small" style="margin:.2em 0">Serial <b>'+esc(c.serial)+'</b></p><button class="btn solid" id="cert-dl" type="button">Download certificate (PNG)</button><p class="small" style="margin:.4em 0 0">On a phone, if nothing downloads, press and hold the certificate image and choose <b>Save image</b>.</p>';
+      /* plain button with no data-umami-event: Umami intercepts tagged links and ignores the download attribute */
+      document.getElementById('cert-dl').addEventListener('click',()=>{
+        const a=document.createElement('a'); a.href=url; a.download=fname; a.style.display='none';
+        document.body.appendChild(a); a.click(); a.remove();
+        if(window.umami) umami.track('certificate-download');
+      });
       if(window.umami) umami.track('certificate-create');
     }catch(err){
       console.warn('Certificate not issued:', err);
