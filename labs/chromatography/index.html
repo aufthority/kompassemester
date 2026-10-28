@@ -223,6 +223,13 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .overlay.open{display:block}
 .panel{max-width:620px;margin:16px auto;background:#fff;border-radius:14px;padding:18px 20px}
 .panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.vid-row{margin:.55em 0 .2em}
+.vid-btn{display:inline-flex;align-items:center;gap:.45em}
+.vid-btn span{font-size:.8em}
+#video-overlay .panel{max-width:880px}
+.vid-frame{position:relative;width:100%;aspect-ratio:16/9;background:#111;border-radius:10px;overflow:hidden}
+.vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vid-note{margin:.6em 0 0;font-size:.85em;color:var(--muted,#5b6660)}
 .panel-head h3{font-weight:800;color:var(--ink);font-size:1.3rem;letter-spacing:-.02em}
 .toc-note{font-size:.82rem;color:var(--muted);margin-bottom:8px}
 .toc{list-style:none}
@@ -655,6 +662,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
      <li><span class="n">3</span><span><b>Mark the front</b> in pencil as soon as the plate comes out, then dry it.</span></li>
      <li><span class="n">4</span><span><b>Detect</b> the spots under UV light or with a spray reagent.</span></li>
    </ol>
+   <p class="vid-row"><button type="button" class="btn vid-btn" data-yt="462CmolEFhc" data-ytitle="Thin Layer Chromatography" data-umami-event="video-open" data-umami-event-video="tlc"><span aria-hidden="true">▶</span> Watch it done (video)</button></p>
    <p class="cite">Watson (2017), Fig. 13.1</p>
   </div>
  </div>
@@ -926,6 +934,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
      <li><span class="n">3</span><span><b>Column:</b> a steel tube packed with 3–10 µm particles, usually C18.</span></li>
      <li><span class="n">4</span><span><b>Detector</b> (usually UV) and <b>data system:</b> peaks, areas, report.</span></li>
    </ol>
+   <p class="vid-row"><button type="button" class="btn vid-btn" data-yt="9ZqL4MOWAi8" data-ytitle="Basic Guide on How to Use the HPLC" data-umami-event="video-open" data-umami-event-video="hplc"><span aria-hidden="true">▶</span> Watch it done (video)</button></p>
    <p class="small">Chlorpheniramine assay: 150 × 4.6 mm C18 column, 5 µm packing, 1.0 ml/min, 20 µl, UV 254 nm. <span class="cite">Watson (2017), Ch. 12</span></p>
   </div>
  </div>
@@ -1121,6 +1130,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <p>The sample evaporates in the hot <b>injector</b>. A <b>split</b> injection sends only a small part (e.g. 1 in 10 to 1 in 100) onto the capillary column, so it is not overloaded.</p>
    <p>A <b>carrier gas</b> (helium or nitrogen) sweeps the vapour through the column. The <b>oven</b> can rise in a temperature programme (e.g. 10 °C/min), so compounds with very different boiling points all come out in reasonable time.</p>
    <p>The usual detector is the <b>FID</b>, a small hydrogen flame. <span class="cite">Watson (2017), Fig. 11.1</span></p>
+   <p class="vid-row"><button type="button" class="btn vid-btn" data-yt="ZpPzImDSfqc" data-ytitle="Introduction to Gas Chromatography" data-umami-event="video-open" data-umami-event-video="gc"><span aria-hidden="true">▶</span> Watch it done (video)</button></p>
   </div>
  </div>
 </section>
@@ -1355,12 +1365,22 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="panel">
     <div class="panel-head"><h3>Sources and further reading</h3><button class="icon-btn close-ov">Close</button></div>
     <ol class="refs">
+      <li><i>Basic guide on how to use the HPLC</i> [Video]. (n.d.). YouTube. <a href="https://www.youtube.com/watch?v=9ZqL4MOWAi8" target="_blank" rel="noopener">youtube.com</a></li>
       <li>European Pharmacopoeia. (2011). Chlorphenamine maleate [monograph 0386] (7th ed.). <a href="https://www.drugfuture.com/Pharmacopoeia/EP7/DATA/0386E.PDF" target="_blank" rel="noopener">drugfuture.com (PDF)</a></li>
       <li>International Council for Harmonisation. (2011). <i>Impurities: Guideline for residual solvents Q3C(R5)</i>. <a href="https://www.tga.gov.au/sites/default/files/ichq3cr5.pdf" target="_blank" rel="noopener">tga.gov.au (PDF)</a></li>
+      <li><i>Introduction to gas chromatography</i> [Video]. (n.d.). YouTube. <a href="https://www.youtube.com/watch?v=ZpPzImDSfqc" target="_blank" rel="noopener">youtube.com</a></li>
       <li>Manufacturer’s standard test procedure. (n.d.). <i>Chlorpheniramine maleate tablets 4 mg</i> [Internal QC document; used for the lab methods and limits].</li>
       <li>PKKB: pharmacokinetics knowledge base. (n.d.). <i>Chlorpheniramine</i>. Retrieved October 28, 2026, from <a href="https://cadd.zju.edu.cn/pkkb/compound/detail/573" target="_blank" rel="noopener">cadd.zju.edu.cn</a></li>
+      <li><i>Thin layer chromatography</i> [Video]. (n.d.). YouTube. <a href="https://www.youtube.com/watch?v=462CmolEFhc" target="_blank" rel="noopener">youtube.com</a></li>
       <li>Watson, D. G. (2017). <i>Pharmaceutical analysis: A textbook for pharmacy students and pharmaceutical chemists</i> (4th ed.). Elsevier. Chapters 10–13 and 15.</li>
     </ol>
+  </div>
+</div>
+<div class="overlay" id="video-overlay" role="dialog" aria-modal="true" aria-labelledby="video-title">
+  <div class="panel">
+    <div class="panel-head"><h3 id="video-title">Video</h3><button class="icon-btn close-ov">Close</button></div>
+    <div class="vid-frame" id="video-frame"></div>
+    <p class="vid-note">A demonstration from YouTube. <a id="video-link" href="#" target="_blank" rel="noopener">Open it on YouTube</a> if it does not play here.</p>
   </div>
 </div>
 
@@ -1948,6 +1968,19 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
     o.querySelector('.close-ov').addEventListener('click',()=>o.classList.remove('open'));
   });
+  /* demonstration videos: load the player only when opened, unload on close so it stops */
+  const vOv=document.getElementById('video-overlay'), vFrame=document.getElementById('video-frame');
+  function closeVid(){ vOv.classList.remove('open'); vFrame.innerHTML=''; }
+  document.querySelectorAll('.vid-btn').forEach(b=>b.addEventListener('click',()=>{
+    const id=b.dataset.yt;
+    document.getElementById('video-title').textContent=b.dataset.ytitle;
+    document.getElementById('video-link').href='https://www.youtube.com/watch?v='+id;
+    vFrame.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?rel=0&autoplay=1" title="'+b.dataset.ytitle.replace(/"/g,'&quot;')+'" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+    vOv.classList.add('open');
+  }));
+  vOv.addEventListener('click',e=>{ if(e.target===vOv) closeVid(); });
+  vOv.querySelector('.close-ov').addEventListener('click',closeVid);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && vOv.classList.contains('open')) closeVid(); });
   document.getElementById('btn-toc').addEventListener('click',()=>openOv('toc-overlay'));
   document.getElementById('btn-refs').addEventListener('click',()=>openOv('refs-overlay'));
   document.getElementById('btn-pt').addEventListener('click',()=>{
