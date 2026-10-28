@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>TLC Bench — Aufthority</title>
+<meta name="description" content="Interactive lab: identify chlorpheniramine maleate tablets by TLC and run the related-substances limit test, step by step.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="website">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="TLC Bench: a thin-layer chromatography lab">
+<meta property="og:description"  content="Prepare, spot, develop, measure Rf and decide: does the tablet pass?">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:locale"       content="en_MY">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<script>
+/* Embedded inside the explainer? Then hide the page chrome and skip analytics
+   (the explainer already tracks the visit). */
+(function(){
+  var emb = /[?&]embed=1/.test(location.search) || window.self !== window.top;
+  document.documentElement.classList.toggle('embedded', emb);
+  if(!emb){
+    var s=document.createElement('script'); s.defer=true; s.src='https://cloud.umami.is/script.js';
+    s.setAttribute('data-website-id','f79c60f1-f9e7-4170-a979-f357ba756a18'); document.head.appendChild(s);
+  }
+})();
+</script>
+<script src="../shared/periodic-table.js" defer></script>
+
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#636b65;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#8a5d14;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--arrow:#b25f0c;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%;font-size:16px;overflow-x:hidden}
+b,strong{color:var(--ink);font-weight:700}
+a{color:var(--accent)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px 28px}
+.embedded .wrap{padding:10px 12px 18px}
+.embedded body{font-size:15px}
+
+nav{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 8px;border-bottom:1px solid var(--rule);margin-bottom:12px}
+.embedded nav,.embedded .page-head,.embedded .madeby{display:none}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;gap:8px}
+.pillbtn{cursor:pointer;text-decoration:none;color:var(--accent-dark);border:1px solid var(--g-line);background:var(--g-bg);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;white-space:nowrap}
+@media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
+.pts{display:none}
+@media (max-width:340px){.logo{font-size:.92rem}.nav-right{gap:4px}.pillbtn{padding:4px 7px!important;font-size:.74rem}}
+@media (max-width:400px){.ptl{display:none}.pts{display:inline}.nav-right{gap:6px}.pillbtn{padding:5px 9px}}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.3em}
+h1{color:var(--ink);font-weight:800;line-height:1.1;letter-spacing:-.025em;font-size:1.8em;margin-bottom:.3em}
+h1 .ac{color:var(--accent)}
+h2{color:var(--ink);font-weight:800;font-size:1.08em;letter-spacing:-.01em;margin-bottom:.35em;display:flex;align-items:center;gap:.5em}
+h2 .num{flex:0 0 1.6em;height:1.6em;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.8em}
+p{margin-bottom:.5em;font-size:.95em}
+.small{font-size:.82em;color:var(--muted)}
+.page-head{margin-bottom:10px}
+
+.card{border:1px solid var(--rule);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#fff}
+.card.locked{opacity:.45;pointer-events:none}
+.card.locked .lock-note{display:block}
+.lock-note{display:none;font-size:.8em;color:var(--muted);font-weight:600}
+.card.done{border-color:var(--g-line)}
+.card.done h2 .num{background:var(--accent-dark)}
+
+.chips{display:flex;flex-wrap:wrap;gap:.35em;margin:.2em 0 .5em}
+.chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .82em 'DM Sans',sans-serif;padding:.35em .8em;border-radius:100px;cursor:pointer;text-align:left;line-height:1.3}
+.chip:hover{border-color:var(--ink)}
+.chip.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.chip .tick{margin-left:.3em;color:var(--accent)}
+.chips.col{flex-direction:column;align-items:stretch}
+.chips.col .chip{border-radius:8px}
+.ctx{font-size:.88em;color:var(--body);margin:0}
+
+.msg{font-size:.86em;padding:.4em .7em;border-left:3px solid var(--rule);border-radius:0 8px 8px 0;margin-top:.4em}
+.msg.good{border-color:var(--accent);background:var(--g-bg)}
+.msg.near{border-color:var(--orange);background:var(--o-bg)}
+.msg.bad{border-color:var(--red);background:var(--r-bg)}
+.msg p{margin:0;font-size:1em}.msg p+p{margin-top:.3em}
+.q{font-weight:700;color:var(--ink);font-size:.92em;margin:.6em 0 .3em}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .86em 'DM Sans',sans-serif;padding:.45em 1em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{border-color:var(--rule);color:var(--body);font-weight:600}
+.btn:disabled{opacity:.4;cursor:default}
+.btns{display:flex;flex-wrap:wrap;gap:.45em;margin-top:.55em}
+.work{display:none;margin-top:.5em}
+.work.show{display:block}
+table.w{width:100%;border-collapse:collapse;font-size:.8em}
+table.w th,table.w td{border-bottom:1px solid var(--rule);padding:.32em .4em;text-align:left;vertical-align:top}
+table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.score{font-size:.82em;color:var(--muted);text-align:center;margin-top:4px}
+.madeby{border-top:1px solid var(--rule);padding-top:.6em;margin-top:.8em;font-size:.8em;color:var(--muted)}
+
+/* four ideas */
+.ideas{display:grid;grid-template-columns:1fr 1fr;gap:.5em}
+@media (min-width:620px){.ideas{grid-template-columns:repeat(4,1fr)}}
+.idea{font-size:.8em;line-height:1.35;text-align:center}
+.idea svg{display:block;width:100%;height:44px;margin-bottom:.2em}
+.term{background:none;border:none;border-bottom:1.5px dotted var(--accent);color:inherit;font:inherit;padding:0;cursor:help}
+.def{display:block;margin:.2em 0 .4em;padding:.3em .6em;background:var(--g-bg);border-radius:6px;font-size:.92em;color:var(--accent-dark);font-weight:500}
+
+/* ---------- additions for the TLC bench ---------- */
+.calc-in{display:flex;flex-wrap:wrap;align-items:center;gap:.4em .6em;margin:.25em 0 .2em}
+.calc-in label{font-size:.86em;color:var(--ink)}
+.num-in{font:600 1em 'DM Sans',sans-serif;width:6.5em;padding:.3em .5em;border:1.5px solid var(--rule);border-radius:8px;color:var(--ink);background:#fff}
+.num-in:focus{outline:none;border-color:var(--accent)}
+.unit{font-size:.84em;color:var(--muted)}
+.given{background:#f6f7f5;border-radius:8px;padding:.45em .7em;font-size:.86em;margin:.3em 0 .4em}
+.given b{white-space:nowrap}
+.bench2{display:grid;grid-template-columns:1fr;gap:.6em;align-items:start}
+@media (min-width:600px){.bench2{grid-template-columns:240px 1fr}}
+.plate-box{background:#f4f5f2;border:1px solid var(--rule);border-radius:10px;padding:6px;display:flex;justify-content:center}
+.plate-box svg{width:100%;max-width:240px;height:auto;display:block}
+.ctl .chips{margin:.15em 0 .4em}
+.runbtns{display:flex;flex-wrap:wrap;gap:.35em;margin:.3em 0}
+.runbtns .btn{font-size:.8em;padding:.4em .8em}
+.runbtns .btn.doneb{border-color:var(--g-line);color:var(--accent-dark);background:var(--g-bg)}
+.pstate{font-size:.82em;color:var(--muted);min-height:1.3em}
+.words-box{display:none;font-size:.84em;background:#f6f7f5;border-radius:8px;padding:.4em .6em;margin-top:.35em;color:var(--ink)}
+.words .words-box{display:block}
+.wordsw{display:flex;align-items:center;gap:6px;font-size:.84em;margin-top:.45em;cursor:pointer}
+.wordsw input{width:16px;height:16px;accent-color:var(--accent)}
+.trainee{font-size:.8em;font-weight:700;color:var(--red);letter-spacing:.04em}
+.ptx{font:600 9.5px 'DM Sans',sans-serif;fill:#5c665f}
+.ptx.b{fill:var(--ink);font-weight:700}
+.ptx.s{font-size:8.5px;font-weight:500}
+.pen{fill:none;stroke:#7b827d;stroke-width:1;stroke-dasharray:2.5 2}
+.lane-lbl{font:700 10px 'DM Sans',sans-serif;fill:var(--ink);text-anchor:middle}
+.spot-lt{font:700 9px 'DM Sans',sans-serif;fill:var(--accent-dark)}
+@media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+ <defs>
+  <!-- hatching marks orange (sprayed) spots, so results read without colour -->
+  <pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#5a2a08" stroke-width="1.6" stroke-opacity=".6"/></pattern>
+ </defs>
+</svg>
+<div class="wrap">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <button type="button" class="pillbtn" id="btn-pt" data-umami-event="open-periodic-table"><span class="ptl">Periodic table</span><span class="pts">Table</span></button>
+      <a class="pillbtn" href="index.html" data-umami-event="lab-to-explainer">Explainer</a>
+      <a class="pillbtn" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+    </div>
+  </nav>
+  <div class="page-head">
+    <div class="eyebrow">Interactive lab · Thin-layer chromatography</div>
+    <h1>TLC Bench: <span class="ac">is it chlorpheniramine, and is it pure?</span></h1>
+    <p class="small">Based on a real QC method for chlorpheniramine maleate 4 mg tablets. Choose a scenario and work through the four steps. The numbers change every round.</p>
+  </div>
+
+  <section class="card" id="c0">
+    <div class="eyebrow">Choose a scenario</div>
+    <div class="chips" id="scen-chips"></div>
+    <p class="ctx" id="context"></p>
+  </section>
+
+  <section class="card">
+    <div class="eyebrow">Four ideas</div>
+    <div class="ideas">
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><rect x="6" y="35" width="108" height="7" rx="2" fill="#eef0ee" stroke="#5c665f"/><circle cx="22" cy="28" r="6" fill="#c0392b"/><circle cx="68" cy="10" r="6" fill="#3a6bd1"/><text x="31" y="31" font-size="8.5" fill="#636b65">polar</text><text x="77" y="13" font-size="8.5" fill="#636b65">less polar</text></svg>Silica is polar. <b>Polar</b> compounds stick to it and move <b>less</b>.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><line x1="20" y1="40" x2="100" y2="40" stroke="#5c665f" stroke-dasharray="3 2"/><line x1="20" y1="4" x2="100" y2="4" stroke="#3a6bd1"/><circle cx="60" cy="20" r="5" fill="#2b332e"/><path d="M106 40 V4 M102 40 V20" stroke="#b25f0c" stroke-width="1.6"/><text x="10" y="24" font-size="9" fill="#1c2620" font-weight="700">Rf</text></svg><b>Rf</b> = distance moved by the spot ÷ distance moved by the solvent.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><rect x="30" y="4" width="60" height="38" rx="3" fill="#c8efc0" stroke="#5c665f"/><circle cx="50" cy="24" r="6" fill="#2f3a33"/><circle cx="72" cy="15" r="6" fill="#2f3a33"/></svg>Under <b>UV 254 nm</b> the plate glows green. Spots look <b>dark</b>.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><rect x="30" y="4" width="60" height="38" rx="3" fill="#fbf3d0" stroke="#5c665f"/><circle cx="60" cy="24" r="7" fill="#d9741c"/><circle cx="60" cy="24" r="7" fill="url(#hatch)"/></svg><b>Iodobismuthate</b> spray turns <b>amines</b> orange.</div>
+    </div>
+  </section>
+
+  <section class="card" id="c1">
+    <h2><span class="num">1</span>Prepare the solutions</h2>
+    <div id="q1"></div>
+    <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button><button class="btn ghost" id="rev1" type="button">Show the working</button></div>
+    <div class="msg" id="m1">Answer every part, then check.</div>
+    <div class="work" id="w1"></div>
+  </section>
+
+  <section class="card locked" id="c2">
+    <h2><span class="num">2</span>Run the plate</h2>
+    <p class="lock-note">Finish step 1 first.</p>
+    <div class="bench2" id="bench">
+      <div class="plate-box"><svg id="plate" viewBox="0 0 240 330" role="img" aria-label="TLC plate"></svg></div>
+      <div class="ctl">
+        <div class="q">Mobile phase</div>
+        <div class="chips col" id="phase"></div>
+        <div class="runbtns" id="runbtns"></div>
+        <div class="pstate" id="pstate" aria-live="polite"></div>
+        <div class="words-box" id="words-box" aria-live="polite"></div>
+        <label class="wordsw"><input type="checkbox" id="words"> Describe the plate in words</label>
+      </div>
+    </div>
+    <div id="obs"></div>
+    <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button><button class="btn ghost" id="rev2" type="button">Show the working</button></div>
+    <div class="msg" id="m2">Choose the mobile phase, then run the plate step by step.</div>
+    <div class="work" id="w2"></div>
+  </section>
+
+  <section class="card locked" id="c3">
+    <h2><span class="num">3</span>Measure Rf</h2>
+    <p class="lock-note">Finish step 2 first.</p>
+    <div id="dist"></div>
+    <div id="q3"></div>
+    <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button><button class="btn ghost" id="rev3" type="button">Show the working</button></div>
+    <div class="msg" id="m3">Rf = spot distance ÷ solvent front distance. Give 2 decimal places.</div>
+    <div class="work" id="w3"></div>
+  </section>
+
+  <section class="card locked" id="c4">
+    <h2><span class="num">4</span>Decide and report</h2>
+    <p class="lock-note">Finish step 3 first.</p>
+    <div id="q4"></div>
+    <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button><button class="btn ghost" id="rev4" type="button">Show the working</button></div>
+    <div class="msg" id="m4">Compare with the specification.</div>
+  </section>
+
+  <div class="btns" style="justify-content:center">
+    <button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New values</button>
+    <button class="btn ghost" id="btn-next" type="button">Next scenario →</button>
+  </div>
+  <div class="score">Rounds completed: <span id="rounds">0</span></div>
+  <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Methods follow a manufacturer's standard test procedure (STP) for chlorpheniramine maleate 4 mg tablets. Plates and Rf values are simulated.</div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const $ = s=>document.querySelector(s);
+  const NS='http://www.w3.org/2000/svg';
+  const track=(e,d)=>{ try{ if(window.umami) umami.track(e,d); }catch(_){} };
+  const shuffle=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const r1=x=>Math.round(x*10)/10, r2=x=>Math.round(x*100)/100;
+  const coin=()=>Math.random()<.5;
+  const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const wait=ms=>new Promise(r=>setTimeout(r,RM?0:ms));
+  function el(tag, attrs, text){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(text!==undefined) e.textContent=text; return e; }
+
+  /* ---------- tap-to-define terms ---------- */
+  const GLOSS={
+    ws:'Working standard (WS): pure chlorpheniramine maleate of known quality, used for comparison.',
+    origin:'The pencil line where the solutions are spotted.',
+    front:'How far the mobile phase climbed. Mark it in pencil as soon as the plate comes out.',
+    amine:'A compound with a basic nitrogen. Chlorpheniramine is an amine; maleic acid is not.',
+    secondary:'Any spot in the sample lane other than the main (principal) spot.'
+  };
+  document.addEventListener('click',e=>{
+    const t=e.target.closest('.term'); if(!t) return;
+    const nx=t.nextElementSibling; if(nx && nx.classList.contains('def')){ nx.remove(); return; }
+    const d=document.createElement('span'); d.className='def'; d.textContent=GLOSS[t.dataset.t]||''; t.after(d); track('lab-term',{t:t.dataset.t});
+  });
+  const term=(k,txt)=>'<button type="button" class="term" data-t="'+k+'">'+txt+'</button>';
+
+  /* ---------- misconceptions: every wrong answer names one ---------- */
+  const MIX={
+    M1:'Rf is a fraction, never above 1.',
+    M2:'Powder needed = drug wanted × tablet weight ÷ drug per tablet.',
+    M3:'The dilution sets the limit.',
+    M4:'Too weak a mobile phase leaves spots on the origin.',
+    M5:'Too strong a mobile phase sends everything to the front.',
+    M6:'Only amines turn orange with iodobismuthate.',
+    M7:'Identity needs the same Rf and the same colour.',
+    M8:'The origin spot is maleic acid: disregard it.',
+    M9:'Compare the secondary spot with Solution (2), not with the main spot.',
+    M10:'Chloroform dissolves the drug, not the filler.',
+    M11:'Most drugs are colourless on the plate.',
+    M12:'Measure each distance from the origin line.'
+  };
+  function mixLine(m,text,step){ track('lab-mix-'+m,{step:step, scenario:R.S.id}); return '<p><b>'+MIX[m]+'</b> '+text+'</p>'; }
+
+  /* ---------- mobile phases ---------- */
+  const PH={
+    id:{t:'1 M acetic acid : methanol : ethyl acetate (20 : 30 : 50)', short:'acetic acid / methanol / ethyl acetate'},
+    rs:{t:'Diethylamine : chloroform : cyclohexane (10 : 40 : 50)', short:'diethylamine / chloroform / cyclohexane'},
+    hex:{t:'Hexane only', short:'hexane'},
+    meoh:{t:'Methanol only', short:'methanol'}
+  };
+  /* Rf of each species in each mobile phase (simulated, drawn once per round) */
+  function rfFor(kind, ph){
+    const b=R.base;
+    if(ph==='hex') return kind==='mal'?0:0.02;
+    if(ph==='meoh') return b.meoh;
+    if(ph==='id') return {cpm:b.idC, mal:b.idM, fake:b.fake}[kind];
+    if(ph==='rs') return {cpm:b.rsC, mal:0, imp:b.rsI, fake:b.fake}[kind];
+  }
+
+  /* ---------- scenarios ---------- */
+  const SCEN=[
+   {id:'identify', chip:'1 · Identify', test:'id',
+    context:r=>'Release testing. Prove the tablets contain <b>chlorpheniramine maleate</b> by comparing them with the '+term('ws','working standard')+'.'},
+   {id:'related', chip:'2 · Related substances', test:'rs',
+    context:r=>'Release testing. Check that no impurity in the tablets is above <b>0.2%</b>.'},
+   {id:'trainee', chip:'3 · Trainee’s plate', test:'rs',
+    context:r=>'A trainee ran the related-substances test with the wrong mobile phase (<b>'+PH[r.badPh].short+'</b>). Find the problem, then run it properly.'},
+   {id:'complaint', chip:'4 · Complaint sample', test:'id',
+    context:r=>'A pharmacy returned tablets from a patient complaint. Do they really contain chlorpheniramine?'}
+  ];
+
+  /* ---------- state ---------- */
+  let sc=0, R=null, solved=[false,false,false,false], rounds=0, busy=0;
+  const done=new Set();
+  const DEFAULT={}; [1,2,3,4].forEach(n=>DEFAULT[n]=$('#m'+n).innerHTML);
+
+  function newRound(){
+    const S=SCEN[sc];
+    const r={S:S, test:S.test};
+    r.atw=r1(rnd(87,93));
+    r.want=S.test==='id'?5:50;
+    r.front=S.test==='id'?r1(rnd(15.0,16.0)):r1(rnd(12.0,13.0));
+    let idC,idM; do{ idC=rnd(.38,.50); idM=rnd(.66,.80); }while(idM-idC<.2);
+    r.base={idC:idC, idM:idM, rsC:rnd(.48,.60), rsI:coin()?rnd(.28,.36):rnd(.72,.80), meoh:rnd(.88,.94), fake:rnd(.60,.66)};
+    r.fake = S.id==='complaint' && coin();          /* counterfeit: no chlorpheniramine */
+    r.impHigh = S.test==='rs' && coin();            /* impurity spot above the 0.2% spot? */
+    r.badPh = S.id==='trainee' ? (coin()?'hex':'meoh') : null;
+    r.ans1={}; r.ans2={}; r.ans4={};
+    r.phase=null; r.stage=0; r.run=null;
+    R=r;
+    if(r.badPh){ r.phase=r.badPh; buildRun(r.badPh); r.stage=3; r.trainee=true; }
+    solved=[false,false,false,false];
+    render();
+  }
+
+  /* lanes and spots for a run in a given mobile phase */
+  function buildRun(ph){
+    const r=R, lanes=[];
+    if(r.test==='id'){
+      const sample = r.fake
+        ? [{kind:'fake', amine:false, size:1}]
+        : [{kind:'cpm', amine:true, size:1},{kind:'mal', amine:false, size:.9}];
+      lanes.push({name:'Solution (1)', sub:'tablet extract', spots:sample});
+      lanes.push({name:'Solution (2)', sub:'working standard', spots:[{kind:'cpm', amine:true, size:1},{kind:'mal', amine:false, size:.9}]});
+    } else {
+      lanes.push({name:'Solution (1)', sub:'tablet extract', spots:[{kind:'mal', amine:false, size:.9},{kind:'cpm', amine:true, size:1.25},{kind:'imp', amine:true, size:r.impHigh?.9:.18}]});
+      lanes.push({name:'Solution (2)', sub:'1 in 500 dilution', spots:[{kind:'cpm', amine:true, size:.45}]});
+    }
+    lanes.forEach((L,li)=>L.spots.forEach(s=>{
+      let rf=rfFor(s.kind,ph);
+      if(ph==='meoh') rf=rf+(s.kind==='mal'?.02:0);
+      rf=Math.max(0,Math.min(.97,rf+(li?0:(Math.random()-.5)*.012)));   /* tiny lane-to-lane wobble */
+      s.rf=rf; s.dist=r1(rf*r.front);
+    }));
+    /* label measurable spots a, b, c … in lane order, lowest first; the origin spot is not measured */
+    let k=0; const L='abcdefgh';
+    lanes.forEach(La=>{ La.spots.slice().sort((x,y)=>x.dist-y.dist).forEach(s=>{ s.letter = s.dist>0.15 ? L[k++] : null; }); });
+    r.run={ph:ph, lanes:lanes};
+  }
+
+  function chipGroup(opts,sel,cb,col){
+    const g=document.createElement('div'); g.className='chips'+(col?' col':''); g.setAttribute('role','group');
+    opts.forEach((o,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(sel===i?' on':''); b.innerHTML=o; b.setAttribute('aria-pressed',sel===i?'true':'false');
+      b.addEventListener('click',()=>{ g.querySelectorAll('.chip').forEach(c=>{ c.classList.remove('on'); c.setAttribute('aria-pressed','false'); }); b.classList.add('on'); b.setAttribute('aria-pressed','true'); cb(i); }); g.appendChild(b); });
+    return g;
+  }
+  function msg(n,cls,html){ const m=$('#m'+n); m.className='msg '+cls; m.innerHTML=html; track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); }
+  function clearMsg(n){ const m=$('#m'+n); m.className='msg'; m.innerHTML=DEFAULT[n]; const w=$('#w'+n); if(w){ w.className='work'; w.innerHTML=''; } }
+  function setLocks(){
+    for(let k=2;k<=4;k++) $('#c'+k).classList.toggle('locked', !solved[k-2]);
+    for(let k=1;k<=4;k++) $('#c'+k).classList.toggle('done', solved[k-1]);
+  }
+  function unsolveFrom(k){
+    let changed=false;
+    for(let j=k;j<=4;j++){ if(solved[j-1]){ solved[j-1]=false; changed=true; } if(j>k) clearMsg(j); }
+    if(changed) setLocks();
+  }
+  const numIn=(id,val)=>'<input class="num-in" id="'+id+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':val)+'">';
+  const readNum=id=>{ const v=($('#'+id).value||'').replace(',','.').trim(); return v===''?null:parseFloat(v); };
+  const close=(a,b,rel,abs)=>a!=null && Math.abs(a-b)<=Math.max(Math.abs(b)*rel, abs||0);
+
+  function render(){
+    const S=R.S, sc0=$('#scen-chips'); sc0.innerHTML='';
+    SCEN.forEach((s,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(i===sc?' on':''); b.innerHTML=s.chip+(done.has(s.id)?'<span class="tick">✓</span>':'');
+      b.addEventListener('click',()=>{ if(i===sc) return; sc=i; track('lab-pick',{scenario:s.id}); newRound(); }); sc0.appendChild(b); });
+    $('#context').innerHTML=S.context(R);
+    renderQ1(); renderPhase(); drawPlate(); renderObs(); $('#dist').innerHTML=''; $('#q3').innerHTML=''; $('#q4').innerHTML='';
+    [1,2,3,4].forEach(clearMsg); setLocks();
+  }
+
+  /* ---------- step 1: prepare ---------- */
+  function q1Opts(){
+    if(!R.q1o) R.q1o=shuffle([
+      ['Chlorpheniramine dissolves in chloroform; the filler (lactose, starch) does not, so filtering removes it.',1],
+      ['Chloroform breaks down the excipients so they cannot be seen on the plate.',0,'Nothing is broken down. The filler simply does not dissolve and stays on the filter paper.'],
+      ['Filtering removes the maleate so only the amine is spotted.',0,'Maleic acid passes through the filter with the drug. You will see its spot later.']]);
+    return R.q1o;
+  }
+  function renderQ1(){
+    const q=$('#q1'), r=R; q.innerHTML='';
+    const d=document.createElement('div');
+    d.innerHTML='<div class="given">Label claim: <b>4 mg</b> chlorpheniramine maleate per tablet. Average tablet weight: <b>'+r.atw.toFixed(1)+' mg</b>.</div>'+
+      '<div class="q">a. How much tablet powder contains '+r.want+' mg of chlorpheniramine maleate?</div>'+
+      '<div class="calc-in">'+numIn('a1',r.ans1.a)+'<span class="unit">mg of powder</span></div>';
+    q.appendChild(d);
+    const e=document.createElement('div'); e.innerHTML='<div class="q">b. The powder is shaken with chloroform and filtered. Why?</div>';
+    e.appendChild(chipGroup(q1Opts().map(o=>o[0]), r.ans1.b, i=>{ r.ans1.b=i; unsolveFrom(1); }, true)); q.appendChild(e);
+    if(r.test==='rs'){
+      const f=document.createElement('div');
+      f.innerHTML='<div class="q">c. Solution (2) is Solution (1) diluted <b>1 in 500</b>. What limit does its spot represent?</div><div class="calc-in">'+numIn('a1c',r.ans1.c)+'<span class="unit">% of the drug</span></div>';
+      q.appendChild(f);
+    }
+    q.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{ r.ans1.a=$('#a1').value; if($('#a1c')) r.ans1.c=$('#a1c').value; unsolveFrom(1); }));
+  }
+  function want1(){ return R.want*R.atw/4; }
+  $('#chk1').addEventListener('click',()=>{
+    const a=readNum('a1'), lines=[]; let miss=0; const W=want1();
+    if(a==null) miss++;
+    else if(!close(a,W,.01,.05)){
+      if(close(a,R.want*4/R.atw,.02)) lines.push(mixLine('M2','You divided the wrong way round. Every '+R.atw.toFixed(1)+' mg of powder holds 4 mg of drug, so multiply by the tablet weight, then divide by 4.',1));
+      else if(close(a,R.want,.01)) lines.push(mixLine('M2','That is the mass of drug, not of powder. The powder is mostly filler.',1));
+      else lines.push(mixLine('M2','Check: '+R.want+' × '+R.atw.toFixed(1)+' ÷ 4.',1));
+    }
+    if(R.ans1.b==null) miss++; else { const o=q1Opts()[R.ans1.b]; if(!o[1]) lines.push(mixLine('M10',o[2],1)); }
+    if(R.test==='rs'){ const c=readNum('a1c');
+      if(c==null) miss++;
+      else if(!close(c,0.2,0,.005)) lines.push(mixLine('M3',(close(c,500,0,1)?'500 is the dilution, not the limit. ':'')+'1 in 500 = 1 ÷ 500 × 100 = 0.2%.',1)); }
+    if(lines.length) return msg(1,'bad',lines.join(''));
+    if(miss) return msg(1,'near','Answer every part first.');
+    msg(1,'good','<b>Right.</b> Weigh '+r2(W).toFixed(2)+' mg of powder. The extract is evaporated and taken up in 1 ml of chloroform.'); solve(1);
+  });
+  $('#rev1').addEventListener('click',()=>{
+    const W=want1(); R.ans1.a=r2(W).toFixed(2); R.ans1.b=q1Opts().findIndex(o=>o[1]); if(R.test==='rs') R.ans1.c='0.2';
+    renderQ1();
+    const w=$('#w1'); w.className='work show';
+    w.innerHTML='<table class="w"><tr><th>Step</th><th>Working</th></tr>'+
+      '<tr><td>Powder</td><td>'+R.want+' mg × '+R.atw.toFixed(1)+' mg ÷ 4 mg = <b>'+r2(W).toFixed(2)+' mg</b></td></tr>'+
+      '<tr><td>Why chloroform</td><td>The drug dissolves; the filler does not and stays on the filter.</td></tr>'+
+      (R.test==='rs'?'<tr><td>Limit</td><td>1 ÷ 500 × 100 = <b>0.2%</b></td></tr>':'')+'</table>';
+    msg(1,'near','Working shown. Move on to the plate.'); track('lab-step1-reveal',{scenario:R.S.id}); solve(1);
+  });
+
+  /* ---------- step 2: the plate ---------- */
+  const X0=24, Y0=272, CM=14, PL={x:40,y:20,w:180,h:280};   /* origin 2 cm above the bottom edge, 14 px per cm */
+  function laneX(i,n){ return PL.x + PL.w*(i+1)/(n+1); }
+  const STAGE_TXT=[null,'Spotted. Put the plate in the tank to develop.','Developed and dried. The plate looks blank in daylight.','Under UV 254 nm. Dark spots circled in pencil.','Sprayed with dilute potassium iodobismuthate.'];
+  function lanesNow(){ return R.run ? R.run.lanes : (R.test==='id'?[{name:'Solution (1)'},{name:'Solution (2)'}]:[{name:'Solution (1)'},{name:'Solution (2)'}]); }
+
+  function drawPlate(anim){
+    const svg=$('#plate'); while(svg.firstChild) svg.removeChild(svg.firstChild);
+    const st=R.stage, lanes=lanesNow(), n=lanes.length;
+    const bg = st===3 ? '#c8efc0' : st===4 ? '#fbf3d0' : '#ffffff';
+    svg.appendChild(el('rect',{x:PL.x,y:PL.y,width:PL.w,height:PL.h,rx:3,fill:bg,stroke:'#5c665f','stroke-width':1.4}));
+    if(st===3) svg.appendChild(el('text',{class:'ptx s',x:PL.x+PL.w-4,y:PL.y+12,'text-anchor':'end'},'UV 254 nm'));
+    /* ruler: centimetres from the origin */
+    svg.appendChild(el('line',{x1:X0,y1:Y0,x2:X0,y2:Y0-17*CM,stroke:'#9aa39d','stroke-width':1}));
+    for(let c=0;c<=17;c++){ const y=Y0-c*CM; svg.appendChild(el('line',{x1:X0-(c%5?3:6),y1:y,x2:X0,y2:y,stroke:'#9aa39d','stroke-width':1}));
+      if(c%5===0) svg.appendChild(el('text',{class:'ptx s',x:X0-8,y:y+3,'text-anchor':'end'},c)); }
+    svg.appendChild(el('text',{class:'ptx s',x:X0-2,y:Y0+14,'text-anchor':'middle'},'cm'));
+    /* origin line */
+    svg.appendChild(el('line',{class:'pen',x1:PL.x+8,y1:Y0,x2:PL.x+PL.w-8,y2:Y0}));
+    svg.appendChild(el('text',{class:'ptx s',x:PL.x+PL.w-6,y:Y0+11,'text-anchor':'end'},'origin'));
+    lanes.forEach((L,i)=>svg.appendChild(el('text',{class:'lane-lbl',x:laneX(i,n),y:PL.y+PL.h+15},'('+(i+1)+')')));
+    if(st>=2 && R.run){
+      const fy=Y0-R.front*CM;
+      svg.appendChild(el('line',{class:'pen',x1:PL.x+8,y1:fy,x2:PL.x+PL.w-8,y2:fy}));
+      svg.appendChild(el('text',{class:'ptx s',x:PL.x+PL.w-6,y:fy-3,'text-anchor':'end'},'solvent front'));
+    }
+    if(st===1) lanes.forEach((L,i)=>svg.appendChild(el('circle',{cx:laneX(i,n),cy:Y0,r:3.2,fill:'#9aa39d'})));
+    if(st>=3 && R.run){
+      lanes.forEach((L,i)=>L.spots.forEach(s=>{
+        const x=laneX(i,n), y=Y0-s.dist*CM, rx=7.5*Math.sqrt(s.size)+1, ry=5*Math.sqrt(s.size)+1;
+        if(st===3){ const e=el('ellipse',{cx:x,cy:y,rx:rx,ry:ry,fill:'#2f3a33','fill-opacity':(0.35+0.55*Math.min(1,s.size)).toFixed(2)}); svg.appendChild(e); }
+        if(st===4 && s.amine){ svg.appendChild(el('ellipse',{cx:x,cy:y,rx:rx,ry:ry,fill:'#d9741c','fill-opacity':(0.4+0.5*Math.min(1,s.size)).toFixed(2)})); svg.appendChild(el('ellipse',{cx:x,cy:y,rx:rx,ry:ry,fill:'url(#hatch)'})); }
+        svg.appendChild(el('ellipse',{class:'pen',cx:x,cy:y,rx:rx+2.5,ry:ry+2.5}));
+        if(s.letter && solved[1]) svg.appendChild(el('text',{class:'spot-lt',x:x+rx+5,y:y+3},s.letter));
+      }));
+    }
+    if(anim) animateDev(svg);
+    $('#pstate').innerHTML=(R.trainee&&R.stage===3?'<span class="trainee">Trainee’s plate · '+PH[R.badPh].short+'</span><br>':'')+(R.stage?STAGE_TXT[R.stage]:'Plate heated at 105 °C for 30 min. Spot '+(R.test==='id'?'2':'10')+' µl of each solution on the origin.');
+    describe();
+    renderRunBtns();
+  }
+  async function animateDev(svg){
+    /* tank + solvent climbing, then the plate is drawn developed */
+    const lanes=lanesNow(), n=lanes.length;
+    const tank=el('rect',{x:PL.x-8,y:120,width:PL.w+16,height:PL.h-90,rx:4,fill:'none',stroke:'#8fb3c9','stroke-width':1.5});
+    const wet=el('rect',{x:PL.x,y:PL.y+PL.h,width:PL.w,height:0,fill:'#d7ebf7','fill-opacity':.75});
+    svg.insertBefore(wet, svg.children[1]); svg.appendChild(tank);
+    const dots=lanes.map((L,i)=>L.spots.map(s=>{ const c=el('circle',{cx:laneX(i,n),cy:Y0,r:3,fill:'#9aa39d'}); svg.appendChild(c); return {c:c,s:s}; }));
+    const target=Y0-R.front*CM, start=PL.y+PL.h, T=RM?0:2200, t0=performance.now();
+    await new Promise(res=>{
+      function f(now){ const t=T?Math.min(1,(now-t0)/T):1, y=start+(target-start)*t;
+        wet.setAttribute('y',y); wet.setAttribute('height',start-y);
+        const prog=Math.max(0,(Y0-y)/(Y0-target));
+        dots.forEach(l=>l.forEach(d=>{ d.c.setAttribute('cy',Y0-d.s.dist*CM*prog); d.c.setAttribute('opacity',Math.max(0,1-prog*1.6)); }));
+        if(t<1) requestAnimationFrame(f); else res(); }
+      requestAnimationFrame(f);
+    });
+  }
+  function describe(){
+    const b=$('#words-box'), st=R.stage; if(!R.run || st<3){ b.textContent=st===2?'The plate is white. No spots can be seen in daylight.':st===1?'Two small wet spots sit on the origin line.':'A clean plate with a pencil origin line.'; return; }
+    const parts=R.run.lanes.map((L,i)=>{
+      const vis=L.spots.filter(s=>st===3||s.amine);
+      if(!vis.length) return 'Lane ('+(i+1)+'): no spots.';
+      return 'Lane ('+(i+1)+'): '+vis.slice().sort((a,b)=>a.dist-b.dist).map(s=>(st===3?'dark':'orange')+' spot at '+s.dist.toFixed(1)+' cm'+(s.size<.25?' (very small, very faint)':s.size<.6?' (small, faint)':s.size>1.1?' (large, dark)':' (medium)')).join('; ')+'.';
+    });
+    b.textContent=(st===3?'Green glowing plate. ':'Pale yellow plate. ')+'Solvent front at '+R.front.toFixed(1)+' cm. '+parts.join(' ');
+  }
+  $('#words').addEventListener('change',()=>{ $('#bench').classList.toggle('words',$('#words').checked); track('lab-words',{on:$('#words').checked}); });
+
+  function phaseOpts(){ if(!R.phO) R.phO=shuffle([R.test,'hex','meoh']); return R.phO; }
+  function renderPhase(){
+    const box=$('#phase'); box.innerHTML='';
+    const opts=phaseOpts(), sel=R.trainee&&R.stage===3&&R.phase===R.badPh?undefined:(R.phase?opts.indexOf(R.phase):undefined);
+    box.replaceWith((function(){ const g=chipGroup(opts.map(k=>PH[k].t), sel, i=>{ R.trainee=false; R.phase=opts[i]; R.stage=0; R.run=null; R.ans2={why:R.ans2.why}; unsolveFrom(2); clearMsg(2); drawPlate(); renderObs(); track('lab-phase',{scenario:R.S.id, ph:opts[i]}); }, true); g.id='phase'; return g; })());
+  }
+  function renderRunBtns(){
+    const box=$('#runbtns'); box.innerHTML='';
+    const steps=[['Spot',1],['Develop',2],['UV 254 nm',3]]; if(R.test==='id') steps.push(['Spray',4]);
+    steps.forEach(([t,s])=>{ const b=document.createElement('button'); b.type='button';
+      const isDone=R.stage>=s && !(R.trainee); b.className='btn'+(isDone?' doneb':(R.stage===s-1&&R.phase&&!R.trainee?' solid':''));
+      b.textContent=(isDone?'✓ ':'')+t; b.disabled=busy||R.trainee||!R.phase||R.stage!==s-1;
+      b.addEventListener('click',()=>runStage(s)); box.appendChild(b); });
+  }
+  async function runStage(s){
+    if(busy) return;
+    if(s===1){ buildRun(R.phase); R.stage=1; drawPlate(); return; }
+    if(s===2){ busy++; renderRunBtns(); R.stage=1; drawPlate(); await animateDev($('#plate')); busy--; R.stage=2; drawPlate(); track('lab-run',{scenario:R.S.id, ph:R.phase}); renderObs(); return; }
+    R.stage=s; drawPlate(); renderObs();
+  }
+
+  /* questions under the plate */
+  function obsQs(){
+    if(R.oq) return R.oq;
+    const qs=[];
+    if(R.trainee || R.S.id==='trainee'){
+      const hex=R.badPh==='hex';
+      qs.push({key:'why', p:'What went wrong on the trainee’s plate?', o:shuffle([
+        [hex?'Mobile phase too weak: nothing left the origin':'Mobile phase too strong: everything ran to the front',1],
+        [hex?'Mobile phase too strong: everything ran to the front':'Mobile phase too weak: nothing left the origin',0,hex?'The spots are on the origin, not at the front.':'The spots are at the front, not on the origin.',hex?'M4':'M5'],
+        ['The plate was not dried before UV',0,'Drying does not move spots. The mobile phase decides how far they travel.',hex?'M4':'M5']])});
+    }
+    qs.push({key:'blank', needs:2, p:'After developing, why does the plate look blank in daylight?', o:shuffle([
+      ['The spots are colourless',1],['The spots washed off the plate',0,'They are still there. UV light will show them.','M11'],['Nothing was spotted',0,'You spotted both lanes. Most drugs are simply colourless.','M11']])});
+    if(R.test==='id'){
+      qs.push({key:'n1', needs:3, p:'Under UV, how many spots are in lane (1)?', o:[['1',R.fake?1:0,'Count the dark spots in lane (1) again.','M7'],['2',R.fake?0:1,'Count the dark spots in lane (1) again.','M7'],['3',0,'Count the dark spots in lane (1) again.','M7']]});
+      qs.push({key:'or', needs:4, p:'After spraying, which spot in lane (2) is orange?', o:[['The lower spot',1],['The upper spot',0,'Look again: the orange spot is the amine, chlorpheniramine.','M6'],['Both spots',0,'Maleic acid is not an amine, so it does not turn orange.','M6']]});
+    } else {
+      qs.push({key:'org', needs:3, p:'Which spot in lane (1) do you disregard?', o:shuffle([
+        ['The spot on the origin line',1],['The large main spot',0,'The main spot is chlorpheniramine. The method says to disregard the spot on the origin.','M8'],['The small extra spot',0,'That extra spot is the one you must judge.','M9']])});
+    }
+    R.oq=qs; return qs;
+  }
+  function renderObs(){
+    const box=$('#obs'); box.innerHTML='';
+    const qs=obsQs();
+    qs.forEach(q=>{
+      const avail = q.key==='why' ? true : (R.phase===R.test && R.stage>=q.needs && !R.trainee);
+      if(!avail) return;
+      const d=document.createElement('div'); d.innerHTML='<div class="q">'+q.p+'</div>';
+      d.appendChild(chipGroup(q.o.map(o=>o[0]), R.ans2[q.key], i=>{ R.ans2[q.key]=i; unsolveFrom(2); }, true)); box.appendChild(d);
+    });
+  }
+  $('#chk2').addEventListener('click',()=>{
+    if(busy) return msg(2,'near','Wait for the plate to finish developing.');
+    const qs=obsQs(), lines=[];
+    const why=qs.find(q=>q.key==='why');
+    if(why){ const a=R.ans2.why; if(a==null) return msg(2,'near','First say what went wrong on the trainee’s plate.'); const o=why.o[a]; if(!o[1]) return msg(2,'bad',mixLine(o[3],o[2],2)); }
+    if(!R.phase || R.trainee) return msg(2,'near','Now choose a mobile phase and run the plate yourself.');
+    if(R.phase!==R.test){
+      if(R.stage<3) return msg(2,'near','Run the plate to the end and look under UV.');
+      return msg(2,'bad', R.phase==='hex'?mixLine('M4','Hexane is the weakest solvent. Polar drugs stay on the origin. Use the method’s mobile phase.',2):mixLine('M5','Methanol is so strong that all spots run together near the front. Use the method’s mobile phase.',2));
+    }
+    const last=R.test==='id'?4:3;
+    if(R.stage<last) return msg(2,'near',R.test==='id'?'Finish every stage: spot, develop, UV, then spray.':'Finish every stage: spot, develop, then UV.');
+    let miss=0;
+    qs.filter(q=>q.key!=='why').forEach(q=>{ const a=R.ans2[q.key]; if(a==null){ miss++; return; } const o=q.o[a]; if(!o[1]) lines.push(mixLine(o[3],o[2],2)); });
+    if(lines.length) return msg(2,'bad',lines.join(''));
+    if(miss) return msg(2,'near','Answer the questions under the plate.');
+    msg(2,'good','<b>Right.</b> '+(R.test==='id'?(R.fake?'Lane (1) has one UV spot and nothing turns orange.':'Two UV spots in each lane: chlorpheniramine (orange after spraying) and maleic acid.'):'Maleic acid stays on the origin in this basic mobile phase, so it is disregarded.'));
+    solve(2);
+  });
+  $('#rev2').addEventListener('click',async ()=>{
+    if(busy) return msg(2,'near','Wait for the plate to finish developing.');
+    R.trainee=false; R.phase=R.test; buildRun(R.test); R.stage=R.test==='id'?4:3; R.oq=null;
+    const qs=obsQs(); qs.forEach(q=>{ R.ans2[q.key]=q.o.findIndex(o=>o[1]); });
+    renderPhase(); drawPlate(); renderObs();
+    const w=$('#w2'); w.className='work show';
+    w.innerHTML='<table class="w"><tr><th>Stage</th><th>What it shows</th></tr>'+
+      (R.badPh?'<tr><td>Trainee</td><td>'+(R.badPh==='hex'?'Hexane is too weak: spots stay on the origin.':'Methanol is too strong: spots run to the front.')+'</td></tr>':'')+
+      '<tr><td>Mobile phase</td><td>'+PH[R.test].t+'</td></tr><tr><td>Daylight</td><td>Blank: the spots are colourless.</td></tr>'+
+      (R.test==='id'?'<tr><td>UV 254</td><td>'+(R.fake?'Lane (1): one spot. Lane (2): two spots.':'Two spots per lane.')+'</td></tr><tr><td>Spray</td><td>Only the amine (chlorpheniramine) turns orange.</td></tr>'
+                    :'<tr><td>UV 254</td><td>Origin spot (maleic acid, disregard), main spot, one secondary spot.</td></tr>')+'</table>';
+    msg(2,'near','Plate run with the correct mobile phase.'); track('lab-step2-reveal',{scenario:R.S.id}); solve(2);
+  });
+
+  /* ---------- step 3: Rf ---------- */
+  function targets3(){
+    const L=R.run.lanes;
+    if(R.test==='id'){
+      const s1=R.fake?L[0].spots[0]:L[0].spots.find(s=>s.kind==='cpm');
+      const s2=L[1].spots.find(s=>s.kind==='cpm');
+      return [{s:s1, lbl:R.fake?'the only spot in lane (1)':'the orange spot in lane (1)'},{s:s2, lbl:'the orange spot in lane (2)'}];
+    }
+    return [{s:L[0].spots.find(s=>s.kind==='cpm'), lbl:'the main spot in lane (1)'},{s:L[0].spots.find(s=>s.kind==='imp'), lbl:'the secondary spot in lane (1)'}];
+  }
+  function renderStep3(){
+    const L=R.run.lanes;
+    let h='<table class="w"><tr><th>Spot</th><th>Lane</th><th>Distance from origin</th></tr>';
+    L.forEach((La,i)=>La.spots.filter(s=>s.letter).sort((a,b)=>a.dist-b.dist).forEach(s=>{ h+='<tr><td><b>'+s.letter+'</b></td><td>('+(i+1)+')</td><td>'+s.dist.toFixed(1)+' cm</td></tr>'; }));
+    h+='<tr><td><b>front</b></td><td>all</td><td>'+R.front.toFixed(1)+' cm</td></tr></table>';
+    $('#dist').innerHTML='<p class="small">Measured with a ruler from the '+term('origin','origin line')+'. Spot letters are on the plate.</p>'+h;
+    const T=targets3();
+    $('#q3').innerHTML=T.map((t,k)=>'<div class="q">Rf of spot <b>'+t.s.letter+'</b> ('+t.lbl+')</div><div class="calc-in">'+numIn('rf'+k,R.ans3?R.ans3[k]:'')+'</div>').join('');
+    $('#q3').querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{ R.ans3=[readNumS('rf0'),readNumS('rf1')]; unsolveFrom(3); }));
+    drawPlate();
+  }
+  const readNumS=id=>$('#'+id)?$('#'+id).value:'';
+  $('#chk3').addEventListener('click',()=>{
+    const T=targets3(), lines=[]; let miss=0;
+    T.forEach((t,k)=>{ const v=readNum('rf'+k), want=t.s.dist/R.front;
+      if(v==null){ miss++; return; }
+      if(close(v,want,0,.011)) return;
+      if(v>1 || close(v,R.front/t.s.dist,.02)) lines.push(mixLine('M1','Spot '+t.s.letter+': divide the spot distance by the front distance, not the other way round.',3));
+      else if(close(v,t.s.dist/(R.front+2),0,.011) || close(v,(t.s.dist+2)/(R.front+2),0,.011)) lines.push(mixLine('M12','Spot '+t.s.letter+': the distances in the table are already from the origin.',3));
+      else lines.push(mixLine('M1','Spot '+t.s.letter+': '+t.s.dist.toFixed(1)+' ÷ '+R.front.toFixed(1)+'.',3));
+    });
+    if(lines.length) return msg(3,'bad',lines.join(''));
+    if(miss) return msg(3,'near','Enter both Rf values.');
+    msg(3,'good','<b>Right.</b> '+T.map(t=>t.s.letter+': '+(t.s.dist/R.front).toFixed(2)).join(' · ')); solve(3);
+  });
+  $('#rev3').addEventListener('click',()=>{
+    const T=targets3(); R.ans3=T.map(t=>(t.s.dist/R.front).toFixed(2)); renderStep3();
+    const w=$('#w3'); w.className='work show';
+    w.innerHTML='<table class="w"><tr><th>Spot</th><th>Working</th><th>Rf</th></tr>'+T.map(t=>'<tr><td><b>'+t.s.letter+'</b></td><td>'+t.s.dist.toFixed(1)+' ÷ '+R.front.toFixed(1)+'</td><td><b>'+(t.s.dist/R.front).toFixed(2)+'</b></td></tr>').join('')+'</table>';
+    msg(3,'near','Rf = spot distance ÷ front distance.'); track('lab-step3-reveal',{scenario:R.S.id}); solve(3);
+  });
+
+  /* ---------- step 4: decide ---------- */
+  function q4Def(){
+    if(R.q4) return R.q4;
+    if(R.test==='id'){
+      const ok=!R.fake;
+      R.q4=[{p:'Does the tablet extract comply with the identification test?', o:[['Complies',ok?1:0,ok?'':'Lane (1) has no orange spot at the standard’s Rf.','M7'],['Does not comply',ok?0:1,ok?'Same Rf as the standard and both orange: it complies.':'','M7']]},
+             {p:'Your reason:', o:shuffle([
+               ['Same Rf as the standard, and the spot turns orange',ok?1:0,'That is not what lane (1) shows.','M7'],
+               ['Different Rf, and no orange (amine) spot',ok?0:1,'Lane (1) matches the standard in Rf and colour.','M7'],
+               ['The lane (1) spot is bigger than the standard',0,'Identity depends on Rf and colour, not spot size.','M7']])}];
+    } else {
+      const hi=R.impHigh;
+      R.q4=[{p:'Is the secondary spot (lane 1) more intense than the Solution (2) spot?', o:[['Yes',hi?1:0,'Compare it with the lane (2) spot: it is smaller and fainter.','M9'],['No',hi?0:1,'Compare it with the lane (2) spot: it is larger and darker.','M9']]},
+             {p:'Result for related substances:', o:[['Complies: impurity not more than 0.2%',hi?0:1,'The secondary spot is more intense than the 0.2% spot, so the impurity is above 0.2%.','M9'],['Does not comply: impurity above 0.2%',hi?1:0,'The secondary spot is less intense than the 0.2% spot.','M9']]}];
+    }
+    return R.q4;
+  }
+  function renderStep4(){
+    const box=$('#q4'); box.innerHTML='';
+    q4Def().forEach((q,k)=>{ const d=document.createElement('div'); d.innerHTML='<div class="q">'+q.p+'</div>';
+      d.appendChild(chipGroup(q.o.map(o=>o[0]), R.ans4[k], i=>{ R.ans4[k]=i; unsolveFrom(4); }, true)); box.appendChild(d); });
+  }
+  $('#chk4').addEventListener('click',()=>{
+    const Q=q4Def(), lines=[]; let miss=0;
+    Q.forEach((q,k)=>{ const a=R.ans4[k]; if(a==null){ miss++; return; } const o=q.o[a]; if(!o[1]) lines.push(mixLine(o[3],o[2],4)); });
+    if(miss) return msg(4,'near','Answer both parts.');
+    if(lines.length) return msg(4,'bad',lines.join(''));
+    msg(4,'good','<b>Round complete.</b> '+summary4()); solve(4);
+  });
+  function summary4(){
+    if(R.test==='id') return R.fake?'Report: does not comply with identification. Quarantine the sample and report it to the regulator (in Malaysia, NPRA) as a suspected counterfeit.':'Report: identification complies with BP.';
+    return R.impHigh?'Report: does not comply. The batch cannot be released until the impurity is investigated.':'Report: related substances comply (no secondary spot above 0.2%).';
+  }
+  $('#rev4').addEventListener('click',()=>{
+    const Q=q4Def(); Q.forEach((q,k)=>{ R.ans4[k]=q.o.findIndex(o=>o[1]); }); renderStep4();
+    msg(4,'near',summary4()); track('lab-step4-reveal',{scenario:R.S.id}); solve(4);
+  });
+
+  function solve(k){
+    solved[k-1]=true; setLocks(); track('lab-step'+k+'-solved',{scenario:R.S.id});
+    if(k===2){ renderStep3(); }
+    if(k===3){ renderStep4(); }
+    if(k===4) roundComplete();
+  }
+  function roundComplete(){
+    rounds++; $('#rounds').textContent=rounds; done.add(R.S.id);
+    const c=$('#scen-chips').children[sc]; if(c && !c.querySelector('.tick')) c.insertAdjacentHTML('beforeend','<span class="tick">✓</span>');
+    track('lab-round-complete',{scenario:R.S.id});
+    try{ if(window.parent!==window){ const o=location.origin; window.parent.postMessage({type:'tlc-lab', event:'round-complete', reaction:R.S.id}, (o&&o!=='null')?o:'*'); } }catch(_){}
+  }
+  $('#btn-new').addEventListener('click',()=>newRound());
+  $('#btn-next').addEventListener('click',()=>{ sc=(sc+1)%SCEN.length; track('lab-pick',{scenario:SCEN[sc].id}); newRound(); });
+  $('#btn-pt').addEventListener('click',()=>{ if(window.KompasPT) KompasPT.open(); });
+  $('#btn-kompas').addEventListener('click',e=>{ if(history.length>1 && document.referrer && document.referrer.indexOf(location.host)>-1){ e.preventDefault(); history.back(); } });
+
+  newRound();
+})();
+</script>
+</body>
+</html>

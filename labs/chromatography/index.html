@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Chromatography, Explained — Aufthority</title>
+<script defer src="https://cloud.umami.is/script.js"
+  data-website-id="f79c60f1-f9e7-4170-a979-f357ba756a18"></script>
+<meta name="description" content="Extraction, thin-layer chromatography, HPLC and gas chromatography for pharmacy students, with two virtual labs built on a real chlorpheniramine tablet method.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="article">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="Chromatography, Explained">
+<meta property="og:description"  content="From tablet powder to a pass or fail: extraction, TLC, HPLC and GC in pharmaceutical analysis.">
+<meta property="og:url"          content="https://kompassemester.aufthority.com/labs/chromatography/">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale"       content="en_MY">
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:site"        content="@theaufthority">
+<meta name="twitter:title"       content="Chromatography, Explained">
+<meta name="twitter:description" content="Extraction, TLC, HPLC and GC for pharmacy students.">
+<meta name="twitter:image"       content="https://www.aufthority.com/preview_v2.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<script src="../shared/periodic-table.js" defer></script>
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#6f7771;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#9a6a1c;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;--k:1;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;overflow:hidden;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+b,strong{color:var(--ink);font-weight:700}
+
+#shell{height:100vh;height:var(--app-h,100dvh);max-width:1120px;margin:0 auto;padding:0 16px;display:flex;flex-direction:column}
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 8px}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-kompas{text-decoration:none;color:var(--accent-dark);border-color:var(--g-line);background:var(--g-bg)}
+@media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
+.icon-btn{background:#fff;border:1px solid var(--rule);color:var(--body);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;cursor:pointer}
+#progress-label{font-size:.78rem;color:var(--muted);min-width:44px;text-align:right}
+#progress-track{flex:0 0 3px;background:var(--rule);border-radius:3px}
+#progress-fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.slide{position:absolute;inset:0;display:none;overflow:hidden;font-size:calc(var(--k) * 16px)}
+.slide.active{display:block}
+.si{height:100%;display:flex;flex-direction:column;justify-content:center;gap:.7em;padding:.8em 0 .4em;max-width:720px;margin:0 auto}
+.si.has-ill{max-width:none}
+.ill{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;align-items:stretch;min-height:0}
+.ill svg{width:100%;height:calc(var(--k) * 29vh);height:calc(var(--k) * 29dvh);display:block}
+.ill figcaption{font-size:.72em;color:var(--muted);text-align:center;margin-top:.25em}
+.txt{flex:0 0 auto;min-width:0}
+@media (min-width:760px) and (orientation:landscape){
+  .slide{font-size:calc(var(--k) * 17px)}
+  .si.has-ill{flex-direction:row;align-items:center;gap:2.4em;padding:1em 0}
+  .si.has-ill .ill{flex:0 0 46%}
+  .si.has-ill .ill svg{height:auto;max-height:calc(var(--k) * 64vh);max-height:calc(var(--k) * 64dvh)}
+  .si.has-ill .txt{flex:1 1 auto}
+}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.45em}
+h1,h2{color:var(--ink);font-weight:800;line-height:1.08;letter-spacing:-.025em;margin-bottom:.45em}
+h1{font-size:2.05em}
+h2{font-size:1.65em}
+@media (min-width:760px){h1{font-size:2.4em}h2{font-size:1.9em}}
+h1 .ac,h2 .ac{color:var(--accent)}
+p{margin-bottom:.6em;font-size:.97em}
+.small{font-size:.82em;color:var(--muted)}
+.cite{font-size:.78em;color:var(--muted);white-space:nowrap}
+.cite a{color:var(--muted)}
+.callout{border-left:3px solid var(--accent);background:var(--g-bg);padding:.5em .85em;margin:.55em 0;font-size:.92em;border-radius:0 8px 8px 0}
+.callout.warn{border-color:var(--red);background:var(--r-bg)}
+.callout.note{border-color:var(--orange);background:var(--o-bg)}
+.pill-list{display:flex;flex-wrap:wrap;gap:.4em;margin:.55em 0}
+.pill{background:var(--g-bg);color:var(--accent-dark);padding:.3em .8em;font-size:.82em;font-weight:500;border-radius:100px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:.5em;margin:.55em 0}
+.tile{border:1px solid var(--rule);border-radius:var(--radius);padding:.55em .75em}
+.tile .n{font-size:1.3em;font-weight:800;color:var(--accent);line-height:1.15;letter-spacing:-.02em;margin-bottom:.15em}
+.tile .l{font-size:.84em;color:var(--body)}
+.steps{list-style:none;margin:.55em 0;display:flex;flex-direction:column;gap:.45em}
+.steps li{display:flex;gap:.65em;align-items:flex-start;font-size:.92em}
+.steps .n{flex:0 0 1.65em;height:1.65em;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82em;margin-top:.05em}
+.data-table{width:100%;border-collapse:collapse;font-size:.84em;margin:.45em 0}
+.data-table th,.data-table td{border-bottom:1px solid var(--rule);padding:.4em .55em;text-align:left;vertical-align:top}
+.data-table th{font-weight:700;color:var(--muted);font-size:.8em;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid var(--rule)}
+.data-table td:first-child{color:var(--ink);font-weight:500}
+.data-table tr.hl td{background:var(--g-bg)}
+.map3{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.55em 0}
+.box{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .75em;font-size:.86em}
+.box h3{font-size:1.1em;font-weight:800;color:var(--accent);margin-bottom:.15em}
+.box .q{font-size:.9em;color:var(--muted);margin-bottom:.3em}
+.box ul{padding-left:1.1em}
+
+/* HTML diagrams */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.4em;margin:.6em 0}
+.node{border:1.5px solid var(--ink);border-radius:8px;padding:.35em .65em;font-size:.84em;font-weight:500;color:var(--ink);background:#fff;text-align:center}
+.node small{display:block;font-weight:400;color:var(--muted);font-size:.85em}
+.node.g{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.node.o{border-color:var(--orange);background:var(--o-bg)}
+.node.r{border-color:var(--red);background:var(--r-bg)}
+.node.ghost{border-style:dashed;color:var(--muted)}
+.arr{color:var(--orange);font-weight:800;font-size:1em}
+.node-group{display:flex;align-items:center;gap:.35em}
+.node-group .or{color:var(--muted);font-size:.84em}
+/* flows: one straight row when it fits, otherwise a snake (→ row, turn down, ← row, turn down …) */
+.flow.row{flex-wrap:nowrap}
+.flow.row > *{flex:0 0 auto}
+.flow.snake{display:grid;align-items:stretch;gap:0}
+.flow.snake .cell{display:flex;min-width:0}
+.flow.snake .cell > .node{flex:1;display:flex;flex-direction:column;justify-content:center}
+.flow.snake .cell > .node-group{flex:1}
+.flow.snake .cell > .node-group > .node{flex:1}
+.flow.snake .arr{align-self:center;text-align:center;line-height:1}
+.flow.snake .arr.down{padding:.2em 0}
+.lane{display:grid;grid-template-columns:8.5em 1fr;gap:.6em;align-items:center;padding:.45em 0;border-bottom:1px solid var(--rule)}
+.lane:last-of-type{border-bottom:none}
+.lane .lname{font-weight:800;color:var(--ink);font-size:.9em;line-height:1.2}
+.lane .lname small{display:block;font-weight:500;color:var(--muted);font-size:.8em}
+.lane .flow{margin:0}
+.stack{display:flex;flex-direction:column;gap:.4em;margin:.6em 0}
+.layer{display:grid;grid-template-columns:2.2em 1fr;gap:.6em;align-items:center;border:1px solid var(--g-line);background:var(--g-bg);border-radius:var(--radius);padding:.5em .7em;font-size:.88em}
+.layer .ln{width:2.2em;height:2.2em;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+.layer > div > b:first-child{display:block;margin-bottom:.1em}
+.htl{display:grid;grid-template-columns:repeat(4,1fr);gap:.6em;margin:.6em 0}
+.htl .ev{border-top:3px solid var(--accent);padding-top:.4em;font-size:.86em}
+.htl .yr{font-weight:800;color:var(--accent);font-size:1.25em;letter-spacing:-.02em;display:block}
+@media (max-width:520px){.htl{grid-template-columns:1fr 1fr}.map3{grid-template-columns:1fr}.lane{grid-template-columns:1fr;gap:.25em}}
+.eq{display:flex;align-items:center;justify-content:center;gap:.6em;flex-wrap:wrap;margin:.6em 0}
+.eq .term{text-align:center;font-size:.82em;color:var(--ink);font-weight:500}
+.eq .term svg{width:5.2em;height:auto;display:block;margin:0 auto .25em}
+.eq .op{font-size:1.6em;font-weight:800;color:var(--orange)}
+.forms{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.6em 0}
+.form{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .7em;font-size:.86em}
+.form svg{width:100%;height:3.4em;display:block;margin-bottom:.3em}
+.form h3{font-size:1.05em;font-weight:800;color:var(--ink);margin-bottom:.1em}
+@media (max-width:520px){.forms{grid-template-columns:1fr}.form{display:grid;grid-template-columns:4.5em 1fr;gap:.6em;align-items:center}.form svg{height:2.6em;margin:0}}
+
+/* interactions */
+.toggle-wrap{border:1px solid var(--rule);border-radius:var(--radius);margin:.45em 0;overflow:hidden}
+.toggle-btn{width:100%;background:#fff;border:none;color:var(--ink);font:600 .92em 'DM Sans',sans-serif;text-align:left;padding:.6em .85em;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:.6em}
+.toggle-btn .hint{font-weight:600;color:var(--accent);font-size:.8em;white-space:nowrap}
+.toggle-btn .hint::after{content:" +"}
+.toggle-wrap.open .toggle-btn .hint::after{content:" −"}
+.toggle-wrap.seen{border-color:var(--g-line)}
+.toggle-body{display:none;padding:0 .85em .7em;font-size:.9em}
+.toggle-wrap.open .toggle-body{display:block}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5em,1fr));gap:.45em;margin:.55em 0}
+.rcard{border:1px solid var(--rule);border-radius:var(--radius);background:#fff;text-align:left;padding:.55em .7em;cursor:pointer;font:400 .84em 'DM Sans',sans-serif;color:var(--body);display:block}
+.rcard .rt{font-weight:800;color:var(--ink);display:flex;justify-content:space-between;gap:.4em}
+.rcard .rt::after{content:"Tap";font-weight:600;font-size:.8em;color:var(--accent)}
+.rcard .rb{display:none;margin-top:.3em}
+.rcard.seen{border-color:var(--accent);background:var(--g-bg)}
+.rcard.seen .rt::after{content:""}
+.rcard.seen .rb{display:block}
+.rcard svg{width:100%;height:3.2em;display:block;margin:.2em 0}
+.choice-q{font-weight:700;color:var(--ink);font-size:.95em;margin-bottom:.45em}
+.choices{display:flex;flex-wrap:wrap;gap:.4em}
+.choice{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:500 .88em 'DM Sans',sans-serif;padding:.45em .85em;border-radius:100px;cursor:pointer}
+.choice:hover{border-color:var(--ink)}
+.choice.right{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.choice.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red);text-decoration:line-through}
+.feedback{display:none;font-size:.88em;margin-top:.5em;padding:.45em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.feedback.show{display:block}
+.stepper .choice-set{display:none}
+.stepper .choice-set.cur{display:block}
+.step-count{font-size:.75em;font-weight:700;color:var(--eyebrow);letter-spacing:.08em;margin-bottom:.3em}
+.next-q{margin-top:.55em;background:#fff;border:1.5px solid var(--ink);border-radius:100px;font:600 .84em 'DM Sans',sans-serif;padding:.38em .9em;cursor:pointer;display:none}
+.choice-set.done .next-q{display:inline-block}
+.calc{border:1px solid var(--rule);border-radius:var(--radius);padding:.65em .75em;margin:.55em 0}
+.calc-row{display:flex;gap:.6em;margin-bottom:.5em;flex-wrap:wrap}
+.calc label{font-size:.76em;font-weight:600;color:var(--muted);display:flex;flex-direction:column;gap:.2em;flex:1;min-width:8em}
+.calc input,.calc select{font:500 1.05em 'DM Sans',sans-serif;padding:.32em .45em;border:1px solid var(--rule);border-radius:6px;background:#fff;color:var(--ink);width:100%}
+.calc-out{font-size:.9em;padding:.45em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.calc-out.fail{border-color:var(--red);background:var(--r-bg)}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:600 .84em 'DM Sans',sans-serif;padding:.4em .95em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.range{width:100%;accent-color:var(--accent);margin:.4em 0}
+.scale-lbl{display:flex;justify-content:space-between;font-size:.74em;color:var(--muted);font-weight:600}
+.coa{display:flex;flex-direction:column;gap:.3em;margin:.45em 0}
+.coa-row{display:grid;grid-template-columns:1fr 1.3fr 4.8em;gap:.5em;align-items:center;background:#fff;border:1px solid var(--rule);border-radius:8px;color:var(--ink);font:400 .82em 'DM Sans',sans-serif;text-align:left;padding:.42em .65em;cursor:pointer}
+.coa-row b{font-weight:700}
+.coa-row .v{text-align:right;font-weight:700;color:var(--muted)}
+.coa-row.pass{border-color:var(--accent)}.coa-row.pass .v{color:var(--accent)}
+.coa-row.fail{border-color:var(--red);background:var(--r-bg)}.coa-row.fail .v{color:var(--red)}
+.coa-row.next{border-color:var(--orange);background:var(--o-bg)}.coa-row.next .v{color:var(--orange)}
+#coa-exp{min-height:2.7em;font-size:.86em;border-left:3px solid var(--rule);padding:.35em .65em}
+.coa-decision{display:none;margin-top:.5em}
+.coa-decision.show{display:block}
+.cards{display:flex;flex-direction:column;gap:.4em;margin:.55em 0}
+.card{display:flex;gap:.75em;border:1px solid var(--rule);border-radius:var(--radius);padding:.5em .75em;font-size:.88em}
+.card .cn{font-size:1.35em;font-weight:800;color:var(--accent);line-height:1}
+.madeby{border-top:1px solid var(--rule);padding-top:.6em;margin-top:.3em}
+.madeby p{font-size:.82em;color:var(--muted);margin-bottom:.45em}
+.madeby p b,.madeby p b a{color:var(--ink)}
+.socials{display:flex;flex-wrap:wrap;gap:.35em}
+.socials a{font-size:.8em;font-weight:600;color:var(--accent-dark);background:var(--g-bg);padding:.28em .75em;border-radius:100px;text-decoration:none}
+.socials a:hover{background:var(--g-line)}
+.score{font-size:1.25em;font-weight:800;color:var(--accent);margin-top:.5em}
+.pulse{animation:pulse 1s ease 2}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,130,31,0)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.45)}}
+
+#bottom{flex:0 0 auto;padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+#gate-hint{font-size:.78rem;color:var(--muted);text-align:center;min-height:1.2em;margin-bottom:5px}
+#gate-hint.alert{color:var(--orange);font-weight:600}
+#gate-hint button{background:none;border:none;color:var(--accent);text-decoration:underline;font:inherit;font-weight:600;cursor:pointer;padding:0}
+#nav-wrap{display:flex;justify-content:space-between;gap:10px}
+.nav-btn{flex:1;max-width:200px;background:#fff;border:1.5px solid var(--ink);color:var(--ink);font:700 .92rem 'DM Sans',sans-serif;padding:10px 14px;border-radius:100px;cursor:pointer}
+#btn-next{background:var(--ink);color:#fff;margin-left:auto}
+#btn-next.locked{background:#fff;color:var(--muted);border-color:var(--rule)}
+.nav-btn:disabled{opacity:.3;cursor:default}
+footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
+
+.overlay{display:none;position:fixed;inset:0;z-index:50;background:rgba(20,30,25,.35);padding:16px;overflow-y:auto}
+.overlay.open{display:block}
+.panel{max-width:620px;margin:16px auto;background:#fff;border-radius:14px;padding:18px 20px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.panel-head h3{font-weight:800;color:var(--ink);font-size:1.3rem;letter-spacing:-.02em}
+.toc-note{font-size:.82rem;color:var(--muted);margin-bottom:8px}
+.toc{list-style:none}
+.toc li{border-bottom:1px solid var(--rule)}
+.toc button{background:none;border:none;color:var(--ink);font:400 .9rem 'DM Sans',sans-serif;padding:7px 0;width:100%;text-align:left;cursor:pointer;display:flex;gap:10px}
+.toc button span{color:var(--muted);min-width:22px}
+.toc button.cur{color:var(--accent);font-weight:700}
+.toc .sec{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;padding:12px 0 3px;border:none}
+.refs{padding-left:20px;font-size:.82rem;color:var(--body)}
+.refs li{margin-bottom:7px;word-break:break-word}
+
+/* ---------- SVG diagram + chart styling ---------- */
+.ln{fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ln.thin{stroke-width:1.2}
+.ln.g{stroke:var(--accent)}.ln.r{stroke:var(--red)}.ln.o{stroke:var(--orange)}.ln.b{stroke:var(--blue)}.ln.m{stroke:#a3aaa5}
+.dash{stroke-dasharray:4 4}
+.fg{fill:var(--g-bg)}.fgs{fill:var(--accent)}.fb{fill:var(--b-bg)}.fr{fill:var(--r-bg)}.frs{fill:var(--red)}.fo{fill:var(--o-bg)}.fos{fill:var(--orange)}.fw{fill:#fff}.fk{fill:var(--ink)}.fgr{fill:#eef0ee}.fpow{fill:#d9d4c7}
+.tx{font-family:'DM Sans',sans-serif;font-size:12px;fill:var(--body)}
+.tx.s{font-size:10.5px;fill:var(--muted)}
+.tx.b{font-weight:700;fill:var(--ink)}
+.tx.g{fill:var(--accent-dark);font-weight:700}.tx.r{fill:var(--red);font-weight:700}.tx.o{fill:#a85f10;font-weight:700}.tx.bl{fill:var(--blue);font-weight:700}
+.tx.mid{text-anchor:middle}.tx.end{text-anchor:end}
+.bar{fill:var(--accent)}.bar.hl{fill:var(--red)}
+.axis{stroke:#c9cdca;stroke-width:1;fill:none}
+.grid{stroke:#eceeec;stroke-width:1}
+
+/* animations run only on the active slide, restart on every visit */
+.slide.active .draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.1s ease-out forwards;animation-delay:var(--d,0s)}
+.slide.active .fade{opacity:0;animation:fadeup .5s ease-out forwards;animation-delay:var(--d,.3s)}
+.slide.active .stagger > *{opacity:0;animation:fadeup .45s ease-out forwards;animation-delay:var(--d,0s)}
+.slide.active .grow-x{transform-box:fill-box;transform-origin:left center;animation:growx .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
+.slide.active .grow-y{transform-box:fill-box;transform-origin:center bottom;animation:growy .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
+.slide.active .updown{animation:updown 2s ease-in-out infinite}
+.slide.active .spin{transform-box:view-box;animation:spin 6s linear infinite}
+.slide.active .spin-r{transform-box:view-box;animation:spin 6s linear infinite reverse}
+.slide.active .drop{animation:drop 2.4s ease-in infinite}
+.slide.active .bounce{animation:bounce 1.2s ease-in-out infinite}
+.slide.active .cyc{animation:cyc 6s infinite;animation-delay:var(--d,0s)}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeup{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes growx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes growy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes updown{0%,100%{transform:translateY(0)}50%{transform:translateY(22px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes drop{0%{transform:translateY(0);opacity:0}10%{opacity:1}80%{opacity:1}100%{transform:translateY(46px);opacity:0}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes cyc{0%,22%{opacity:1}26%,100%{opacity:.28}}
+
+/* last resort when a page cannot fit at a readable size: the page body scrolls,
+   the Back/Next bar stays pinned, and a fade hints at more below */
+.slide.scrolly{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.slide.scrolly .si{height:auto;min-height:100%;justify-content:flex-start}
+#stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;pointer-events:none;background:linear-gradient(rgba(255,255,255,0),#fff);opacity:0;transition:opacity .2s}
+#stage.more::after{opacity:1}
+.ph-step.scrolly{overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ph-step.scrolly .ph-in{height:auto;min-height:100%;justify-content:flex-start}
+@media (max-height:700px){footer{display:none}}
+@media (prefers-reduced-motion: reduce){
+  .slide.active *{animation:none!important;opacity:1!important;stroke-dashoffset:0!important;transform:none!important}
+}
+
+
+/* ---------- additions for this explainer ---------- */
+.pt-open{display:inline-flex;align-items:center;gap:.45em;background:#fff;border:1.5px solid var(--accent);color:var(--accent-dark);font:700 .84rem 'DM Sans',sans-serif;padding:.42em .95em;border-radius:100px;cursor:pointer;margin:.1em 0 .5em}
+.pt-open svg{width:1.05em;height:1.05em}
+.toggle-wrap.opt .toggle-btn .tag{font-size:.7em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--eyebrow);margin-right:.5em}
+.toggle-wrap.opt{border-style:dashed}
+.clo{display:inline-block;font-size:.72em;font-weight:700;color:var(--accent-dark);background:var(--g-bg);border-radius:100px;padding:.1em .55em;margin-left:.3em;vertical-align:.1em}
+.sim{border:1px solid var(--rule);border-radius:var(--radius);padding:.55em .75em;margin:.5em 0}
+.sim .range{margin:.2em 0}
+.sim-out{font-size:.88em;margin-top:.3em}
+.sim svg{width:100%;height:auto;display:block}
+.chips2{display:flex;flex-wrap:wrap;gap:.3em;margin:.3em 0}
+.chip2{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .8em 'DM Sans',sans-serif;padding:.3em .7em;border-radius:100px;cursor:pointer}
+.chip2.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.plates{display:flex;gap:.6em;justify-content:center;margin:.3em 0}
+.plates svg{width:7.5em;height:auto}
+.cmp td:first-child{white-space:nowrap}
+/* embedded lab */
+.si.lab-si{justify-content:flex-start;gap:.35em;max-width:860px}
+.lab-head{flex:0 0 auto}
+.lab-head h2{margin-bottom:.15em}
+.lab-head p{margin-bottom:.2em}
+.lab-frame{flex:1 1 auto;min-height:300px;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#fff}
+.lab-frame iframe{width:100%;height:100%;border:0;display:block}
+.lab-launch{display:none;height:100%;flex-direction:column;align-items:center;justify-content:center;gap:.6em;padding:1em;text-align:center;font-size:.92em}
+.lab-frame.launch iframe{display:none}
+.lab-frame.launch .lab-launch{display:flex}
+.lab-launch a{background:var(--accent);color:#fff;text-decoration:none;font-weight:700;padding:.6em 1.3em;border-radius:100px}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ar-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#c0392b"/></marker>
+    <marker id="ar-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#d9821f"/></marker>
+    <pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#5a2a08" stroke-width="1.6" stroke-opacity=".6"/></pattern>
+  </defs>
+</svg>
+<script>
+/* Size the page to the visible screen. 100vh/100dvh are unreliable on many
+   Android and in-app browsers (they include the area behind the toolbar). */
+(function(){
+  function setH(){ document.documentElement.style.setProperty('--app-h', window.innerHeight + 'px'); }
+  setH();
+  window.addEventListener('resize', setH);
+  window.addEventListener('orientationchange', function(){ setTimeout(setH, 250); });
+  window.addEventListener('pageshow', setH);
+})();
+</script>
+<div id="shell">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <a class="icon-btn back-kompas" id="btn-kompas" href="../../index.html" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+      <button class="icon-btn" id="btn-toc" data-umami-event="open-contents">Contents</button>
+      <span id="progress-label">1 / 44</span>
+    </div>
+  </nav>
+  <div id="progress-track"><div id="progress-fill"></div></div>
+
+  <div id="stage">
+
+<!-- ================= INTRODUCTION ================= -->
+
+<section class="slide active" data-sec="intro" data-title="Start here">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="Bar showing that 4 mg of a 90 mg tablet is chlorpheniramine maleate and 86 mg is excipients">
+    <text class="tx b" x="20" y="34" style="font-size:15px">One chlorpheniramine tablet: 90 mg</text>
+    <text class="tx s" x="20" y="54">average tablet weight, 4 mg tablet</text>
+    <rect class="fg grow-x" x="20" y="74" width="360" height="40" rx="6" style="--d:.1s"/>
+    <rect class="fgs grow-x" x="20" y="74" width="16" height="40" style="--d:.9s"/>
+    <text class="tx g fade" x="44" y="99" style="--d:.6s">86 mg excipients: filler, binder, lubricant, colour</text>
+    <path class="ln g fade" d="M28 120 L28 140" style="--d:1.2s"/>
+    <text class="tx g fade" x="20" y="158" style="--d:1.2s;font-size:14px">4 mg drug (4.4%)</text>
+    <text class="tx s fade" x="20" y="190" style="--d:1.4s">How do we find it, prove what it is, and measure it?</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Start here</div>
+   <h1>Find 4 mg <span class="ac">in a 90 mg tablet.</span></h1>
+   <p>A chlorpheniramine maleate tablet is an everyday antihistamine. Each 90 mg tablet holds only <b>4 mg</b> of drug. The rest is excipients.</p>
+   <p>Before a batch is released, a QC laboratory must <b>prove the drug is there</b>, show that <b>impurities are low</b>, and <b>measure</b> how much drug each tablet contains. It does all three with <b>chromatography</b>.</p>
+   <p class="small">Written for Diploma in Pharmacy students. Use Next to move through the pages, or Contents to jump around. A periodic table is in Contents.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="intro" data-title="What you will learn">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Map of this chapter</div>
+   <h2>Prepare, separate, <span class="ac">detect, decide.</span></h2>
+   <div class="stack stagger">
+    <div class="layer"><div class="ln">1</div><div><b>Extraction <span class="clo">CLO1</span></b>Get the drug out of the tablet and away from what gets in the way: liquid–liquid and solid-phase extraction.</div></div>
+    <div class="layer"><div class="ln">2</div><div><b>TLC, HPLC and GC <span class="clo">CLO1</span> <span class="clo">CLO2</span></b>How each one separates, what its stationary phase is, and how it detects compounds.</div></div>
+    <div class="layer"><div class="ln">3</div><div><b>Reading a TLC plate <span class="clo">CLO2</span></b>Rf values, identity tests and limit tests used in pharmaceutical analysis.</div></div>
+   </div>
+   <p class="small">Two virtual labs use a real QC method for chlorpheniramine maleate 4 mg tablets: a <b>TLC Bench</b> and an <b>HPLC Bench</b>. The main reference is Watson, <i>Pharmaceutical Analysis</i> (4th ed.).</p>
+  </div>
+ </div>
+</section>
+
+<!-- ================= BASICS ================= -->
+
+<section class="slide" data-sec="basics" data-title="Two phases">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="Two compounds carried by a moving phase over a fixed phase; the one that sticks more moves less">
+    <text class="tx b" x="20" y="24">mobile phase (moves)</text>
+    <path class="ln b" d="M20 40 H370" marker-end="url(#ar-o)"/>
+    <rect class="fgr" x="20" y="130" width="360" height="40" rx="4"/>
+    <text class="tx b" x="20" y="192">stationary phase (stays still)</text>
+    <circle class="frs fade" cx="60" cy="118" r="10" style="--d:.2s"/><circle class="frs fade" cx="130" cy="118" r="10" style="--d:.8s"/>
+    <circle class="fgs fade" cx="60" cy="86" r="10" style="--d:.2s"/><circle class="fgs fade" cx="300" cy="86" r="10" style="--d:.8s"/>
+    <path class="ln m dash fade" d="M74 118 H114" style="--d:.8s"/><path class="ln m dash fade" d="M74 86 H284" style="--d:.8s"/>
+    <text class="tx r fade" x="148" y="122" style="--d:1s">sticks more → moves less</text>
+    <text class="tx g fade" x="230" y="70" style="--d:1s">sticks less → moves further</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">The basic idea</div>
+   <h2>Every chromatography method <span class="ac">has two phases.</span></h2>
+   <p>The <b>stationary phase</b> stays still: a layer of silica on a plate, or packing inside a column. The <b>mobile phase</b> moves over it: a liquid or a gas.</p>
+   <p>Each compound is pulled two ways. The mobile phase carries it forward; the stationary phase holds it back. A compound that spends more time in the stationary phase moves <b>more slowly</b>. Different compounds therefore separate.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="basics" data-title="Polarity decides">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">The basic idea</div>
+   <h2>Like sticks <span class="ac">to like.</span></h2>
+   <p>How strongly a compound is held depends mostly on <b>polarity</b>. A polar stationary phase (such as silica, covered in –OH groups) holds polar compounds. A non-polar stationary phase (such as C18 chains) holds non-polar compounds. Tap each card.</p>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Polar groups</span><span class="rb">–OH, –COOH, –NH<sub>2</sub>, and charged (ionised) groups. They hydrogen-bond to silica, so they move <b>less</b> on a silica plate.</span></button>
+     <button class="rcard"><span class="rt">Non-polar parts</span><span class="rb">C–H chains and benzene rings. They prefer non-polar surroundings, so on silica they move <b>further</b>.</span></button>
+     <button class="rcard"><span class="rt">Most drugs</span><span class="rb">Have both. Chlorpheniramine has two aromatic rings (non-polar) and a basic nitrogen that becomes charged in acid (polar).</span></button>
+   </div>
+   <div class="callout">Change the polarity of the mobile phase and you change how fast compounds move. You will use this in every technique.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="basics" data-title="Three techniques">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">The basic idea</div>
+   <h2>Three techniques, <span class="ac">one principle.</span></h2>
+   <div class="map3 stagger">
+    <div class="box"><h3>TLC</h3><div class="q">Thin-layer chromatography</div>Liquid mobile phase climbs a <b>plate</b> coated with silica. Cheap; many samples at once; mainly for identity and impurity limit tests.</div>
+    <div class="box"><h3>HPLC</h3><div class="q">High-performance liquid chromatography</div>Liquid mobile phase is <b>pumped</b> through a packed column. The industry standard for measuring drug content.</div>
+    <div class="box"><h3>GC</h3><div class="q">Gas chromatography</div>A <b>gas</b> carries vapour through a heated column. For compounds that evaporate without breaking down, such as residual solvents.</div>
+   </div>
+   <p class="small">All three need a clean, dissolved sample first. That is what extraction does.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="basics" data-title="Check: basics">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Two quick <span class="ac">questions.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 2</div>
+      <div class="choice-q">On a silica plate, compound A moves further than compound B. Which is more polar?</div>
+      <div class="choices"><button class="choice" data-v="a">A</button><button class="choice" data-v="b">B</button><button class="choice" data-v="c">They are equally polar</button></div>
+      <div class="feedback">B. Silica is polar, so it holds the more polar compound back.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 2</div>
+      <div class="choice-q">Which technique uses a gas as the mobile phase?</div>
+      <div class="choices"><button class="choice" data-v="a">TLC</button><button class="choice" data-v="b">HPLC</button><button class="choice" data-v="c">GC</button></div>
+      <div class="feedback">GC. TLC and HPLC both use a liquid mobile phase.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= EXTRACTION ================= -->
+
+<section class="slide" data-sec="extract" data-title="Why extract first">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Extraction · CLO1</div>
+   <h2>Get the drug out, <span class="ac">leave the rest behind.</span></h2>
+   <p>Extraction moves the drug into a <b>solvent it dissolves in well</b>, where the excipients dissolve poorly. Tap each excipient to see how it is handled.</p>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Fillers</span><span class="rb">Lactose, starch, cellulose. Polar, so they dissolve or swell in water but not in chloroform. Insoluble filler is <b>filtered off</b>.</span></button>
+     <button class="rcard"><span class="rt">Lubricants</span><span class="rb">Magnesium stearate, stearic acid. Only 1–2% of the tablet and weak UV absorbers, so they rarely interfere.</span></button>
+     <button class="rcard"><span class="rt">Colours</span><span class="rb">In tablets, usually metal oxides or insoluble dyes: they are <b>filtered off</b> with the filler.</span></button>
+     <button class="rcard"><span class="rt">Creams, syrups</span><span class="rb">Oils, preservatives and dyes need more work, such as partitioning between two solvents or solid-phase extraction.</span></button>
+   </div>
+   <p class="cite">Watson (2017), Ch. 15</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="extract" data-title="Liquid–liquid extraction">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="Separating funnel with an upper water layer and a lower chloroform layer; the drug moves into the chloroform">
+    <path class="ln" d="M150 20 H250 M160 20 V40 Q120 80 140 150 L190 175 V200 M240 20 V40 Q280 80 260 150 L210 175 V200"/>
+    <path class="fb" d="M146 62 Q126 88 132 110 H268 Q274 88 254 62 Z"/>
+    <path class="fo" d="M132 110 Q134 135 140 150 L190 175 H210 L260 150 Q266 135 268 110 Z"/>
+    <path class="ln m" d="M132 110 H268"/>
+    <text class="tx b" x="282" y="88">water (upper)</text>
+    <text class="tx s" x="282" y="102">salts, sugars stay here</text>
+    <text class="tx b" x="282" y="138">chloroform (lower)</text>
+    <text class="tx s" x="282" y="152">denser than water</text>
+    <circle class="fgs fade" cx="185" cy="92" r="5" style="--d:.3s"/><circle class="fgs fade" cx="210" cy="132" r="5" style="--d:.9s"/><circle class="fgs fade" cx="230" cy="140" r="5" style="--d:1.1s"/><circle class="fgs fade" cx="190" cy="145" r="5" style="--d:1.3s"/>
+    <circle class="frs" cx="165" cy="80" r="4"/><circle class="frs" cx="235" cy="85" r="4"/>
+    <text class="tx g fade" x="20" y="130" style="--d:1.3s">● drug</text><text class="tx r" x="20" y="148">● sugar</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Extraction · liquid–liquid</div>
+   <h2>Two liquids <span class="ac">that do not mix.</span></h2>
+   <p>In <b>liquid–liquid extraction</b> (solvent extraction), the sample is shaken with two <b>immiscible</b> liquids, usually water and an organic solvent. Each compound <b>partitions</b>: it divides itself between the layers according to where it dissolves better.</p>
+   <p>Non-polar, un-ionised molecules go to the organic layer. Polar and charged molecules stay in the water. The layers are then run off separately.</p>
+   <p class="small">Chloroform is denser than water, so it forms the <b>lower</b> layer. Ether and hexane float on top.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="extract" data-title="pH switches the layer">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Extraction · try it</div>
+   <h2>Change the pH, <span class="ac">move the drug.</span></h2>
+   <p>Chlorpheniramine is a <b>base</b> (pK<sub>a</sub> about 9.2). In acid it takes an H<sup>+</sup>, becomes charged and stays in water. In alkali it is the neutral <b>free base</b> and moves into the organic layer. Drag the slider.</p>
+   <div class="sim">
+     <input type="range" class="range" id="ph-r" min="2" max="12" step="0.5" value="5" aria-label="pH of the water layer">
+     <div class="scale-lbl"><span>pH 2 (acid)</span><span>pH 12 (alkali)</span></div>
+     <svg id="ph-svg" viewBox="0 0 400 70" aria-hidden="true"></svg>
+     <div class="sim-out" id="ph-out"></div>
+   </div>
+   <p class="small">Simplified: only the un-ionised form is counted as moving into the organic layer. <span class="cite">(pK<sub>a</sub>: <a href="https://cadd.zju.edu.cn/pkkb/compound/detail/573" target="_blank" rel="noopener">PKKB</a>)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="extract" data-title="Extracting a base">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Extraction · a classic scheme</div>
+   <h2>Wash in acid, <span class="ac">extract in alkali.</span></h2>
+   <p>Watson shows how pH switching cleans up an organic base, such as cyclizine in an injection:</p>
+   <div class="flow stagger">
+     <div class="node">Dissolve in dilute acid<small>the base is charged: stays in water</small></div>
+     <div class="node o">Shake with ether<small>neutral and acidic excipients leave</small></div>
+     <div class="node">Make alkaline<small>the base becomes neutral</small></div>
+     <div class="node g">Extract into organic solvent<small>the drug moves; salts stay</small></div>
+     <div class="node">Back-extract into acid<small>ready for UV or HPLC</small></div>
+   </div>
+   <p class="small">For an organic <b>acid</b> the rule flips: high pH keeps it in water, low pH sends it into the organic layer.</p>
+   <p class="cite">Watson (2017), Fig. 15.1</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="extract" data-title="Solid-phase extraction">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="Four SPE cartridges: condition, load, wash, elute">
+    <g>
+     <path class="ln" d="M30 30 V150 H70 V30"/><rect class="fpow" x="31" y="110" width="38" height="40"/><text class="tx b mid" x="50" y="180">1 Condition</text><text class="tx s mid" x="50" y="196">solvent wets it</text><path class="ln b" d="M50 40 V100" marker-end="url(#ar-o)"/>
+     <path class="ln" d="M125 30 V150 H165 V30"/><rect class="fpow" x="126" y="110" width="38" height="40"/><circle class="fgs" cx="138" cy="120" r="4"/><circle class="fgs" cx="152" cy="128" r="4"/><circle class="frs" cx="146" cy="116" r="4"/><circle class="frs" cx="134" cy="138" r="4"/><text class="tx b mid" x="145" y="180">2 Load</text><text class="tx s mid" x="145" y="196">sample sticks</text>
+     <path class="ln" d="M220 30 V150 H260 V30"/><rect class="fpow" x="221" y="110" width="38" height="40"/><circle class="fgs" cx="233" cy="122" r="4"/><circle class="fgs" cx="247" cy="132" r="4"/><circle class="frs drop" cx="240" cy="158" r="4"/><text class="tx b mid" x="240" y="180">3 Wash</text><text class="tx s mid" x="240" y="196">interferents out</text>
+     <path class="ln" d="M315 30 V150 H355 V30"/><rect class="fpow" x="316" y="110" width="38" height="40"/><circle class="fgs drop" cx="335" cy="158" r="4"/><text class="tx b mid" x="335" y="180">4 Elute</text><text class="tx s mid" x="335" y="196">strong solvent</text>
+    </g>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Extraction · solid-phase (SPE)</div>
+   <h2>A tiny column <span class="ac">that catches the drug.</span></h2>
+   <p>In <b>solid-phase extraction</b>, the sample passes through a small cartridge packed with an adsorbent, often C18 silica. Four steps:</p>
+   <ol class="steps">
+     <li><span class="n">1</span><span><b>Condition</b> with methanol, then water or buffer.</span></li>
+     <li><span class="n">2</span><span><b>Load</b> the sample in a weak solvent: the drug is held on the solid.</span></li>
+     <li><span class="n">3</span><span><b>Wash</b> with a weak solvent: interfering compounds rinse through.</span></li>
+     <li><span class="n">4</span><span><b>Elute</b> with a small volume of a strong solvent: the drug comes off clean.</span></li>
+   </ol>
+   <p class="cite">Watson (2017), Fig. 15.6</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="extract" data-title="SPE or liquid–liquid?">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Extraction · compare</div>
+   <h2>Why labs <span class="ac">switch to SPE.</span></h2>
+   <table class="data-table">
+    <tr><th></th><th>Liquid–liquid</th><th>Solid-phase</th></tr>
+    <tr><td>Solvent choice</td><td>Limited: the two liquids must not mix</td><td>Wide: the solid never dissolves</td></tr>
+    <tr><td>Emulsions</td><td>Can form and trap the drug</td><td>Do not form</td></tr>
+    <tr><td>Solvent volume</td><td>Large</td><td>Small</td></tr>
+    <tr><td>Concentrating</td><td>Extra evaporation step</td><td>Load a large volume, elute a small one</td></tr>
+    <tr><td>Batches</td><td>One after another</td><td>Many at once on a vacuum manifold</td></tr>
+   </table>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>Example: chlorpromazine syrup</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>The syrup is made alkaline (pH 9.5) and passed through a C18 cartridge. The free-base drug sticks; the dye, preservative and buffer wash through. An acidic buffer then elutes the drug, now charged, and leaves the oily flavouring behind. <span class="cite">(Watson, 2017, Box 15.1)</span></p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="extract" data-title="Check: extraction">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Three questions <span class="ac">on extraction.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="c">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">You want chlorpheniramine (a base, pK<sub>a</sub> 9.2) in the chloroform layer. The water layer should be at about:</div>
+      <div class="choices"><button class="choice" data-v="a">pH 2</button><button class="choice" data-v="b">pH 7</button><button class="choice" data-v="c">pH 11</button></div>
+      <div class="feedback">pH 11, about 2 units above the pK<sub>a</sub>, so almost all of the base is un-ionised and moves into chloroform. At pH 2 and pH 7 it is mostly charged and stays in water.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">In SPE, which step removes the interfering compounds?</div>
+      <div class="choices"><button class="choice" data-v="a">Condition</button><button class="choice" data-v="b">Wash</button><button class="choice" data-v="c">Elute</button></div>
+      <div class="feedback">The wash. A weak solvent rinses interferents through while the drug stays on the solid. Eluting comes after, with a strong solvent.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">Tablet powder is shaken with chloroform and filtered. What stays on the filter paper?</div>
+      <div class="choices"><button class="choice" data-v="a">Lactose and starch</button><button class="choice" data-v="b">Chlorpheniramine</button><button class="choice" data-v="c">Nothing</button></div>
+      <div class="feedback">The polar filler does not dissolve in chloroform, so it stays on the filter. The drug passes through in solution.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= TLC ================= -->
+
+<section class="slide" data-sec="tlc" data-title="The TLC set-up">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="TLC plate in a tank: spots on the origin, solvent climbing to the front">
+    <path class="ln" d="M110 40 V196 H290 V40"/><path class="ln thin" d="M104 40 H296"/>
+    <rect class="fb" x="111" y="176" width="178" height="19"/>
+    <rect class="fw ln" x="150" y="30" width="100" height="160"/>
+    <rect class="fb grow-y" x="151" y="62" width="98" height="127" style="--d:.2s;opacity:.7"/>
+    <path class="ln m dash" d="M152 166 H248"/><path class="ln b dash fade" d="M152 62 H248" style="--d:1s"/>
+    <circle class="fk fade" cx="180" cy="120" r="6" style="--d:1.1s"/><circle class="fk fade" cx="220" cy="90" r="6" style="--d:1.2s"/>
+    <circle class="fk" cx="180" cy="166" r="2.5" opacity=".3"/><circle class="fk" cx="220" cy="166" r="2.5" opacity=".3"/>
+    <text class="tx b" x="300" y="66">solvent front</text>
+    <text class="tx b" x="300" y="170">origin (pencil)</text>
+    <text class="tx b" x="20" y="190">mobile phase</text><path class="ln o" d="M96 186 H108" marker-end="url(#ar-o)"/>
+    <text class="tx s" x="20" y="60">lid keeps the tank</text><text class="tx s" x="20" y="74">saturated with vapour</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">TLC · instrumentation · CLO1</div>
+   <h2>A plate, a tank <span class="ac">and capillary action.</span></h2>
+   <ol class="steps">
+     <li><span class="n">1</span><span><b>Spot</b> a few µl of each solution on a pencil <b>origin</b> line, about 1 µl at a time, drying between spots.</span></li>
+     <li><span class="n">2</span><span><b>Develop:</b> stand the plate in a closed tank with the mobile phase below the origin. The solvent climbs by capillary action.</span></li>
+     <li><span class="n">3</span><span><b>Mark the front</b> in pencil as soon as the plate comes out, then dry it.</span></li>
+     <li><span class="n">4</span><span><b>Detect</b> the spots under UV light or with a spray reagent.</span></li>
+   </ol>
+   <p class="cite">Watson (2017), Fig. 13.1</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="tlc" data-title="Stationary phases">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">TLC · stationary phase</div>
+   <h2>Mostly silica, <span class="ac">sometimes modified.</span></h2>
+   <table class="data-table">
+    <tr><th>Plate</th><th>What it is</th><th>Used for</th></tr>
+    <tr><td>Silica gel G</td><td>Silica (~15 µm) with calcium sulfate binder</td><td>Most pharmacopoeial tests</td></tr>
+    <tr class="hl"><td>Silica gel GF<sub>254</sub></td><td>Silica G plus a fluorescent indicator</td><td>Spots seen under UV 254 nm (used in the chlorpheniramine method)</td></tr>
+    <tr><td>Cellulose</td><td>Cellulose powder</td><td>e.g. identification of tetracyclines</td></tr>
+    <tr><td>Kieselguhr G</td><td>Inert diatomaceous earth</td><td>Support for a liquid phase, e.g. fixed oils</td></tr>
+   </table>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>Plates for basic drugs and for reverse phase</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Amine salts stick to the acidic silanol (Si–OH) groups and barely move. Spraying the plate with KOH, or adding a base such as diethylamine to the mobile phase, keeps them as free bases. Silica can also be <b>silanised</b> (coated with C18 or methyl groups) to give reverse-phase plates. <span class="cite">(Watson, 2017, Ch. 13)</span></p></div>
+   </div>
+   <p class="cite">Watson (2017), Table 13.1</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="tlc" data-title="Mobile phase strength">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">TLC · mobile phase · try it</div>
+   <h2>A more polar solvent <span class="ac">moves spots further.</span></h2>
+   <p>Solvents are ranked by polarity in the <b>elutropic series</b>. On silica, a more polar mobile phase competes harder for the silica and carries polar compounds further. Choose a solvent:</p>
+   <div class="sim">
+     <div class="chips2" id="elu-chips"></div>
+     <svg id="elu-svg" viewBox="0 0 400 120" aria-hidden="true"></svg>
+     <div class="sim-out" id="elu-out"></div>
+   </div>
+   <p class="small">Illustrative plate. Real methods mix solvents to land the drug in the middle of the plate (Rf about 0.3–0.7). <span class="cite">Polarity index: Watson (2017), Table 13.2</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="tlc" data-title="Seeing the spots">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">TLC · detection · CLO1</div>
+   <h2>Most drugs are colourless. <span class="ac">So how do we see them?</span></h2>
+   <p>Tap each detection method.</p>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">UV 254 nm</span><span class="rb">The F<sub>254</sub> plate glows green. A drug that absorbs UV blocks the glow and shows as a <b>dark spot</b>. Used in most monographs.</span></button>
+     <button class="rcard"><span class="rt">UV 365 nm</span><span class="rb">For compounds that <b>fluoresce</b> themselves, e.g. anthraquinones in aloes.</span></button>
+     <button class="rcard"><span class="rt">Iodine vapour</span><span class="rb">Brown spots with many organic compounds. Reversible: the iodine evaporates.</span></button>
+     <button class="rcard"><span class="rt">Iodobismuthate</span><span class="rb">Dragendorff-type spray: <b>orange</b> spots with amines (nitrogen bases), e.g. chlorpheniramine, codeine.</span></button>
+     <button class="rcard"><span class="rt">Ninhydrin</span><span class="rb">Pink with primary amines, e.g. aminoglycosides such as gentamicin.</span></button>
+   </div>
+   <p class="cite">Watson (2017), Ch. 13</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="tlc" data-title="Rf value">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="Rf equals spot distance divided by solvent front distance">
+    <rect class="fw ln" x="40" y="14" width="120" height="186"/>
+    <path class="ln m dash" d="M44 180 H156"/><path class="ln b dash" d="M44 34 H156"/>
+    <ellipse class="fk" cx="100" cy="100" rx="9" ry="6"/>
+    <path class="ln o" d="M176 180 V40" marker-end="url(#ar-o)"/><path class="ln g" d="M200 180 V106" marker-end="url(#ar-o)"/>
+    <text class="tx o" x="182" y="34">solvent: 14.6 cm</text><text class="tx g" x="206" y="104">spot: 5.8 cm</text>
+    <text class="tx b" x="226" y="150" style="font-size:15px">Rf = 5.8 ÷ 14.6</text>
+    <text class="tx b" x="226" y="172" style="font-size:15px">   = 0.40</text>
+    <text class="tx s" x="44" y="194">origin</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">TLC · the number on the plate</div>
+   <h2>Rf: how far, <span class="ac">compared with the solvent.</span></h2>
+   <p><b>Rf = distance moved by the spot ÷ distance moved by the solvent front</b>, both measured from the origin. It is always between 0 and 1. Measure to the <b>centre</b> of the spot.</p>
+   <div class="calc">
+    <div class="calc-row"><label>Spot distance (cm)<input id="rf-a" type="number" step="0.1" value="5.8"></label><label>Front distance (cm)<input id="rf-b" type="number" step="0.1" value="14.6"></label></div>
+    <div class="calc-out" id="rf-out"></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="tlc" data-title="Check: TLC">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Three questions <span class="ac">on TLC.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="a">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">The solvent moved 10 cm and a spot moved 4 cm. Its Rf is:</div>
+      <div class="choices"><button class="choice" data-v="a">0.40</button><button class="choice" data-v="b">2.5</button><button class="choice" data-v="c">0.60</button></div>
+      <div class="feedback">4 ÷ 10 = 0.40. A value above 1 means the division was upside down; 0.60 is the distance the spot did <i>not</i> travel.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">Every spot stayed on the origin. What should you change?</div>
+      <div class="choices"><button class="choice" data-v="a">Use a less polar mobile phase</button><button class="choice" data-v="b">Spot more sample</button><button class="choice" data-v="c">Use a more polar mobile phase</button></div>
+      <div class="feedback">A more polar (stronger) mobile phase competes for the silica and moves the spots up.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">On a GF<sub>254</sub> plate under UV 254 nm, a drug spot looks:</div>
+      <div class="choices"><button class="choice" data-v="a">Bright green</button><button class="choice" data-v="b">Dark on a glowing background</button><button class="choice" data-v="c">Orange</button></div>
+      <div class="feedback">The drug absorbs the UV and blocks the plate’s green glow, so it shows as a dark spot. Orange spots come from iodobismuthate spray.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="tlclab" data-title="TLC Bench (lab)">
+ <div class="si lab-si">
+  <div class="lab-head">
+   <div class="eyebrow">Interactive lab · TLC</div>
+   <h2>TLC Bench: <span class="ac">is it chlorpheniramine, and is it pure?</span></h2>
+   <p class="small">Prepare the extract, run the plate, measure Rf and decide. Four scenarios. <a href="tlc-lab.html" target="_blank" rel="noopener" data-umami-event="lab-open-full">Open full screen ↗</a></p>
+  </div>
+  <div class="lab-frame"><iframe data-src="tlc-lab.html?embed=1" title="TLC Bench interactive lab" loading="lazy"></iframe><div class="lab-launch"><span>Your screen is too short to use the lab here.</span><a href="tlc-lab.html" target="_blank" rel="noopener" data-umami-event="lab-launch-small">Open the lab ↗</a></div></div>
+ </div>
+</section>
+
+<!-- ================= READING A TLC CHROMATOGRAM ================= -->
+
+<section class="slide" data-sec="read" data-title="Identity tests">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="Sample lane and standard lane with matching spots at the same height">
+    <rect class="fgr ln" x="100" y="14" width="200" height="180"/>
+    <path class="ln m dash" d="M106 174 H294"/><path class="ln b dash" d="M106 30 H294"/>
+    <ellipse cx="160" cy="112" rx="10" ry="6" fill="#d9741c"/><ellipse cx="160" cy="112" rx="10" ry="6" fill="url(#hatch)"/>
+    <ellipse cx="240" cy="112" rx="10" ry="6" fill="#d9741c"/><ellipse cx="240" cy="112" rx="10" ry="6" fill="url(#hatch)"/>
+    <ellipse class="ln m dash" cx="160" cy="66" rx="10" ry="6"/><ellipse class="ln m dash" cx="240" cy="66" rx="10" ry="6"/>
+    <path class="ln g dash fade" d="M110 112 H290" style="--d:.6s"/>
+    <text class="tx b mid" x="160" y="208">sample</text><text class="tx b mid" x="240" y="208">standard</text>
+    <text class="tx g fade" x="306" y="116" style="--d:.8s">same Rf,</text><text class="tx g fade" x="306" y="130" style="--d:.8s">same colour</text>
+    <text class="tx s" x="306" y="70">maleic acid</text><text class="tx s" x="306" y="82">(UV only)</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Reading a plate · CLO2</div>
+   <h2>Identity: <span class="ac">match the standard.</span></h2>
+   <p>The sample and a <b>reference standard</b> run side by side on the same plate. The test passes when the principal spot of the sample has the <b>same Rf</b> and the <b>same colour or reaction</b> as the standard.</p>
+   <p>For chlorpheniramine maleate tablets, the plate is checked twice: under UV 254 nm, <b>two</b> spots (the drug and maleic acid) must match the standard; after iodobismuthate spray, the <b>orange</b> amine spot must match.</p>
+   <p class="small">Comparing on one plate cancels out day-to-day changes in Rf.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="read" data-title="Limit tests">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="Limit test: impurity spot in the sample compared with a dilute standard spot">
+    <rect class="fgr ln" x="100" y="14" width="200" height="180"/>
+    <path class="ln m dash" d="M106 174 H294"/><path class="ln b dash" d="M106 30 H294"/>
+    <ellipse class="fk" cx="160" cy="96" rx="13" ry="8"/>
+    <ellipse class="fk" cx="160" cy="136" rx="7" ry="4.5" opacity=".75"/>
+    <ellipse class="fk" cx="240" cy="136" rx="4.5" ry="3" opacity=".45"/>
+    <text class="tx b mid" x="160" y="208">1% sample</text><text class="tx b mid" x="240" y="208">0.01% std</text>
+    <text class="tx s" x="20" y="100">main drug</text><path class="ln m" d="M70 96 H140"/>
+    <text class="tx r" x="20" y="140">impurity</text><path class="ln m" d="M66 136 H146"/>
+    <text class="tx r fade" x="304" y="124" style="--d:.6s">impurity spot</text><text class="tx r fade" x="304" y="138" style="--d:.6s">bigger than std:</text><text class="tx r fade" x="304" y="152" style="--d:.6s">FAIL</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Reading a plate · CLO2</div>
+   <h2>Limit test: <span class="ac">is the impurity spot too big?</span></h2>
+   <p>A concentrated sample is run beside a <b>dilute standard</b>. Any secondary spot in the sample must be <b>no more intense</b> than the standard spot.</p>
+   <p>The dilution sets the limit. Watson’s example: 1% w/v hydrocortisone acetate beside 0.01% w/v hydrocortisone gives a limit of <b>0.01 ÷ 1 × 100 = 1%</b>. Here the impurity spot is bigger, so the sample fails.</p>
+   <p>In the chlorpheniramine method, Solution (2) is Solution (1) diluted 1 in 500: a <b>0.2%</b> limit. The spot left on the origin (maleic acid) is disregarded.</p>
+   <p class="cite">Watson (2017), Fig. 13.7</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="read" data-title="Practice: pass or fail?">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Reading a plate · practice</div>
+   <h2>Pass <span class="ac">or fail?</span></h2>
+   <p class="small">Each plate: lane 1 is the concentrated sample, lane 2 is the 0.2% standard. Ignore the spot on the origin.</p>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="p">
+      <div class="step-count">PLATE 1 OF 3</div>
+      <div class="plates"><svg viewBox="0 0 100 130" aria-label="Plate 1"><rect class="fgr ln" x="5" y="5" width="90" height="120"/><path class="ln m dash" d="M10 112 H90"/><ellipse class="fk" cx="35" cy="112" rx="5" ry="3"/><ellipse class="fk" cx="35" cy="60" rx="10" ry="6"/><ellipse class="fk" cx="35" cy="84" rx="3" ry="2" opacity=".4"/><ellipse class="fk" cx="68" cy="60" rx="5" ry="3.5" opacity=".55"/></svg></div>
+      <div class="choices"><button class="choice" data-v="p">Complies</button><button class="choice" data-v="f">Does not comply</button></div>
+      <div class="feedback">The secondary spot is smaller and fainter than the standard spot, so the impurity is below 0.2%.</div>
+      <button class="next-q">Next plate →</button>
+    </div>
+    <div class="choice-set" data-answer="f">
+      <div class="step-count">PLATE 2 OF 3</div>
+      <div class="plates"><svg viewBox="0 0 100 130" aria-label="Plate 2"><rect class="fgr ln" x="5" y="5" width="90" height="120"/><path class="ln m dash" d="M10 112 H90"/><ellipse class="fk" cx="35" cy="112" rx="5" ry="3"/><ellipse class="fk" cx="35" cy="60" rx="10" ry="6"/><ellipse class="fk" cx="35" cy="30" rx="7" ry="4.5" opacity=".8"/><ellipse class="fk" cx="68" cy="60" rx="5" ry="3.5" opacity=".55"/></svg></div>
+      <div class="choices"><button class="choice" data-v="p">Complies</button><button class="choice" data-v="f">Does not comply</button></div>
+      <div class="feedback">The secondary spot above the main spot is larger and darker than the standard spot: the impurity is above 0.2%.</div>
+      <button class="next-q">Next plate →</button>
+    </div>
+    <div class="choice-set" data-answer="p">
+      <div class="step-count">PLATE 3 OF 3</div>
+      <div class="plates"><svg viewBox="0 0 100 130" aria-label="Plate 3"><rect class="fgr ln" x="5" y="5" width="90" height="120"/><path class="ln m dash" d="M10 112 H90"/><ellipse class="fk" cx="35" cy="112" rx="9" ry="5.5"/><ellipse class="fk" cx="35" cy="60" rx="10" ry="6"/><ellipse class="fk" cx="68" cy="60" rx="5" ry="3.5" opacity=".55"/></svg></div>
+      <div class="choices"><button class="choice" data-v="p">Complies</button><button class="choice" data-v="f">Does not comply</button></div>
+      <div class="feedback">The only extra spot is on the origin. The method says to disregard it, so the sample complies.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="read" data-title="TLC: strengths and limits">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Reading a plate · applications</div>
+   <h2>Where TLC <span class="ac">earns its place.</span></h2>
+   <p>TLC is used for identity checks on raw materials, impurity limit tests and cleaning checks in manufacturing. Open both sections.</p>
+   <div class="toggle-wrap">
+     <button class="toggle-btn"><span>Strengths</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Cheap and robust. Many samples run on one plate. Nearly any compound can be seen with the right spray. The whole chromatogram is visible, so nothing can hide by never leaving the column, as can happen in HPLC or GC.</p></div>
+   </div>
+   <div class="toggle-wrap">
+     <button class="toggle-btn"><span>Limits</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Less separating power than HPLC. Limited sensitivity. Not for volatile compounds. Results depend on operator skill. Spot size is a rough guide to amount, so for measuring content, HPLC is used. (High-performance TLC with a densitometer can measure, but is less common.)</p></div>
+   </div>
+   <p class="cite">Watson (2017), Ch. 13 keypoints</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="read" data-title="Check: reading plates">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Two questions <span class="ac">on reading plates.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 2</div>
+      <div class="choice-q">2 µl of a 1% w/v sample is run beside 2 µl of a 0.02% w/v impurity standard. What limit does this set?</div>
+      <div class="choices"><button class="choice" data-v="a">0.02%</button><button class="choice" data-v="b">2%</button><button class="choice" data-v="c">50%</button></div>
+      <div class="feedback">0.02 ÷ 1 × 100 = 2%. 0.02% is the standard’s concentration, not the limit; 50% comes from dividing the wrong way round.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 2</div>
+      <div class="choice-q">A sample spot has the same Rf as the standard but does not turn orange with iodobismuthate. The standard does. Conclusion?</div>
+      <div class="choices"><button class="choice" data-v="a">Complies: the Rf matches</button><button class="choice" data-v="b">Repeat with a bigger spot</button><button class="choice" data-v="c">Does not comply</button></div>
+      <div class="feedback">Identity needs the same Rf <b>and</b> the same reaction. Two different compounds can share an Rf by chance.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= HPLC ================= -->
+
+<section class="slide" data-sec="hplc" data-title="Inside an HPLC">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">HPLC · instrumentation · CLO1</div>
+   <h2>Pump, inject, separate, <span class="ac">detect.</span></h2>
+   <div class="flow stagger">
+     <div class="node">Solvent reservoir<small>filtered, degassed mobile phase</small></div>
+     <div class="node">Pump<small>steady flow, e.g. 1 ml/min, high pressure</small></div>
+     <div class="node o">Injector<small>loop, often 20 µl</small></div>
+     <div class="node g">Column<small>steel tube, 3–10 µm particles</small></div>
+     <div class="node">Detector<small>usually UV</small></div>
+     <div class="node">Data system<small>peaks, areas, report</small></div>
+   </div>
+   <p>Narrow tubing joins the parts to keep <b>dead volume</b> small. Larger instruments add an autosampler, a column oven and a <b>gradient</b> mixer that changes the mobile phase during the run.</p>
+   <p class="small">Chlorpheniramine assay: 150 × 4.6 mm C18 column, 5 µm packing, 1.0 ml/min, 20 µl, UV 254 nm.</p>
+   <p class="cite">Watson (2017), Ch. 12</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="hplc" data-title="Normal or reverse phase">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="Silica surface with OH groups compared with C18 chains on silica">
+    <text class="tx b mid" x="100" y="22">Normal phase: silica</text>
+    <rect class="fgr" x="20" y="150" width="160" height="22"/>
+    <g class="ln b"><path d="M40 150 V130"/><path d="M70 150 V130"/><path d="M100 150 V130"/><path d="M130 150 V130"/><path d="M160 150 V130"/></g>
+    <text class="tx bl mid" x="100" y="124">–OH –OH –OH</text>
+    <text class="tx s mid" x="100" y="192">polar: holds polar compounds</text>
+    <text class="tx b mid" x="300" y="22">Reverse phase: C18 (ODS)</text>
+    <rect class="fgr" x="220" y="150" width="160" height="22"/>
+    <g class="ln g" style="stroke-width:2.6"><path d="M240 150 C236 120 244 100 240 60"/><path d="M270 150 C266 120 274 100 270 60"/><path d="M300 150 C296 120 304 100 300 60"/><path d="M330 150 C326 120 334 100 330 60"/><path d="M360 150 C356 120 364 100 360 60"/></g>
+    <text class="tx s mid" x="300" y="192">non-polar: holds non-polar compounds</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">HPLC · stationary phase · CLO1</div>
+   <h2>C18 does <span class="ac">most of the work.</span></h2>
+   <p><b>Normal (straight) phase:</b> polar silica, less polar mobile phase. Compounds are held by <b>adsorption</b> of their polar groups.</p>
+   <p><b>Reverse phase:</b> silica coated with C18 (octadecylsilane, <b>ODS</b>) chains, with a polar mobile phase such as methanol–water. Compounds <b>partition</b> into the oily layer: the more lipophilic, the longer they stay.</p>
+   <p>ODS and similar phases are used for <b>more than 80%</b> of pharmaceutical analyses.</p>
+   <p class="cite">Watson (2017), Fig. 12.2 and Table 12.2</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="hplc" data-title="Mobile phase strength">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">HPLC · mobile phase · try it</div>
+   <h2>More methanol, <span class="ac">earlier peak.</span></h2>
+   <p>In reverse phase, the organic solvent is the <b>strong</b> part of the mobile phase. A useful rule (the "rule of 3"): <b>10% less methanol makes retention about 3 times longer.</b> Move the slider.</p>
+   <div class="sim">
+     <input type="range" class="range" id="mo-r" min="40" max="70" step="5" value="55" aria-label="Methanol percent">
+     <div class="scale-lbl"><span>40% methanol</span><span>70% methanol</span></div>
+     <svg id="mo-svg" viewBox="0 0 400 130" aria-hidden="true"></svg>
+     <div class="sim-out" id="mo-out"></div>
+   </div>
+   <p class="small">Illustrative chromatogram for chlorpheniramine on C18 with the ion-pair buffer. <span class="cite">Watson (2017), Ch. 12</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="hplc" data-title="Charged drugs and ion pairs">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">HPLC · ionisable drugs</div>
+   <h2>A charged drug <span class="ac">slips through C18.</span></h2>
+   <p>Most drugs are acids or bases, so mobile-phase <b>pH</b> changes how charged they are. A charged molecule is polar and is held poorly by C18. The effect is largest within about 1 pH unit of the pK<sub>a</sub>.</p>
+   <p>The chlorpheniramine method runs at <b>pH 3.6</b>, where the drug is protonated (+). To hold it, the buffer contains <b>sodium hexanesulfonate</b>. The sulfonate’s chain sits in the C18 layer and its negative end pairs with the drug: an <b>ion pair</b>. It works like an ion-exchange column made in place.</p>
+   <div class="toggle-wrap">
+     <button class="toggle-btn"><span>Why not just raise the pH?</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Silica-based columns are usually used between about pH 2 and 8.5. Above that the silica slowly dissolves. To keep a base like chlorpheniramine (pK<sub>a</sub> about 9.2) fully neutral you would need pH 11 or more, so methods use pH control together with ion pairing instead. <span class="cite">(Watson, 2017, Ch. 12)</span></p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="hplc" data-title="HPLC detectors">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">HPLC · detection · CLO1</div>
+   <h2>The detector <span class="ac">sees what comes out.</span></h2>
+   <p>Tap each detector.</p>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">UV / visible</span><span class="rb">The workhorse. Measures absorbance at one wavelength, e.g. 254 nm. The drug must have a <b>chromophore</b>.</span></button>
+     <button class="rcard"><span class="rt">Diode array (DAD)</span><span class="rb">Records the whole UV spectrum across each peak, so it can check that a peak is <b>pure</b> (one compound only).</span></button>
+     <button class="rcard"><span class="rt">Fluorescence</span><span class="rb">Very sensitive and selective for fluorescent compounds or derivatives. Useful for drugs in blood.</span></button>
+     <button class="rcard"><span class="rt">Electrochemical</span><span class="rb">For compounds that are easily oxidised, such as adrenaline.</span></button>
+     <button class="rcard"><span class="rt">RI, ELSD, CAD</span><span class="rb"><b>Universal</b> detectors for compounds without a chromophore, such as sugars and lipids. RI is cheap but sensitive to temperature.</span></button>
+     <button class="rcard"><span class="rt">Mass spectrometer</span><span class="rb">Identifies peaks by mass. Highly selective; used for impurities and bioanalysis.</span></button>
+   </div>
+   <p class="cite">Watson (2017), Table 12.5</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="hplc" data-title="Reading a chromatogram">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="Chromatogram labelled with t0, retention time and peak area">
+    <path class="axis" d="M30 180 H390 M30 180 V20"/>
+    <path class="ln g draw" pathLength="1" d="M30 180 L70 180 L74 172 L78 186 L82 180 L230 180 C240 180 244 40 252 40 C260 40 266 176 282 180 L390 180" style="stroke-width:2.2"/>
+    <path class="fg" d="M236 180 C242 100 246 40 252 40 C260 40 264 140 282 180 Z" opacity=".8"/>
+    <text class="tx o mid" x="76" y="164">t0</text>
+    <path class="ln o dash" d="M252 40 V196"/><text class="tx b" x="258" y="60">tR</text>
+    <text class="tx g" x="290" y="140">area ∝ amount</text>
+    <path class="ln b" d="M78 196 H250" marker-end="url(#ar-o)"/><text class="tx bl mid" x="164" y="208">retention time</text>
+    <text class="tx s" x="34" y="16">detector signal</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">HPLC · the output</div>
+   <h2>Time says <span class="ac">what; area says how much.</span></h2>
+   <ul class="steps">
+     <li><span class="n">t0</span><span><b>Dead time:</b> when an unretained compound (or solvent) reaches the detector.</span></li>
+     <li><span class="n">tR</span><span><b>Retention time:</b> when the peak comes out. Compared with a standard, it identifies the compound.</span></li>
+     <li><span class="n">k′</span><span><b>Capacity factor</b> = (tR − t0) ÷ t0: how many times longer the drug spends in the stationary phase than in the mobile phase.</span></li>
+     <li><span class="n">A</span><span><b>Peak area</b> is proportional to the amount injected. The sample’s area is compared with a standard’s area.</span></li>
+   </ul>
+   <p class="cite">Watson (2017), Ch. 10</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="hplc" data-title="System suitability">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">HPLC · before any sample</div>
+   <h2>Prove the system works <span class="ac">before you trust it.</span></h2>
+   <p>Each day the standard is injected several times. The results must meet the method’s limits before any sample is injected. These are the limits in the chlorpheniramine method:</p>
+   <table class="data-table">
+    <tr><th>Parameter</th><th>Limit</th><th>Checks</th></tr>
+    <tr><td>Tailing factor</td><td>≤ 2.0</td><td>Peak shape. Tailing upsets the area.</td></tr>
+    <tr><td>Plate count (N)</td><td>≥ 1500</td><td>Column efficiency: narrow peaks.</td></tr>
+    <tr><td>RSD of peak area</td><td>≤ 2.0%</td><td>Injection precision.</td></tr>
+    <tr><td>RSD of retention time</td><td>≤ 1.0%</td><td>Steady flow and mobile phase.</td></tr>
+    <tr><td>k′</td><td>≥ 2.0</td><td>The peak is well away from t0.</td></tr>
+   </table>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>Plate count and resolution</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p><b>N = 5.54 (tR ÷ W½)²</b>, where W½ is the peak width at half height. Narrower peaks give more plates. <b>Resolution</b> between two peaks, Rs = 2(tR<sub>B</sub> − tR<sub>A</sub>) ÷ (W<sub>A</sub> + W<sub>B</sub>), uses baseline widths; Rs above about 1.2–1.5 means full separation. <span class="cite">(Watson, 2017, Ch. 10)</span></p></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="hplc" data-title="Check: HPLC">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Three questions <span class="ac">on HPLC.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">On a C18 column, which of these elutes last?</div>
+      <div class="choices"><button class="choice" data-v="a">The most polar compound</button><button class="choice" data-v="b">The most lipophilic compound</button><button class="choice" data-v="c">The smallest compound</button></div>
+      <div class="feedback">The most lipophilic (non-polar) compound partitions most into the C18 layer, so it comes out last.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">t0 = 1.5 min and tR = 7.5 min. What is k′?</div>
+      <div class="choices"><button class="choice" data-v="a">4.0</button><button class="choice" data-v="b">5.0</button><button class="choice" data-v="c">6.0</button></div>
+      <div class="feedback">(7.5 − 1.5) ÷ 1.5 = 4.0. Dividing 7.5 by 1.5 without subtracting gives 5.0.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">The RSD of the standard’s peak area is 2.8% (limit 2.0%). What do you do?</div>
+      <div class="choices"><button class="choice" data-v="a">Inject the samples and average more results</button><button class="choice" data-v="b">Report the result with a note</button><button class="choice" data-v="c">Stop, find the fault and repeat system suitability</button></div>
+      <div class="feedback">No sample results count until the system passes. Find the cause (e.g. a bubble in the injector), fix it, and repeat.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="hplclab" data-title="HPLC Bench (lab)">
+ <div class="si lab-si">
+  <div class="lab-head">
+   <div class="eyebrow">Interactive lab · HPLC</div>
+   <h2>HPLC Bench: <span class="ac">how much drug is in each tablet?</span></h2>
+   <p class="small">Set the method, pass system suitability, calculate mg per tablet and decide. Three scenarios. <a href="hplc-lab.html" target="_blank" rel="noopener" data-umami-event="lab-open-full">Open full screen ↗</a></p>
+  </div>
+  <div class="lab-frame"><iframe data-src="hplc-lab.html?embed=1" title="HPLC Bench interactive lab" loading="lazy"></iframe><div class="lab-launch"><span>Your screen is too short to use the lab here.</span><a href="hplc-lab.html" target="_blank" rel="noopener" data-umami-event="lab-launch-small">Open the lab ↗</a></div></div>
+ </div>
+</section>
+
+<!-- ================= GC ================= -->
+
+<section class="slide" data-sec="gc" data-title="When to use GC">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">GC · principle · CLO1</div>
+   <h2>If it can fly, <span class="ac">GC can separate it.</span></h2>
+   <p>In gas chromatography the sample is <b>vaporised</b> and carried by a gas through a heated column. Compounds separate by how long they spend dissolved in the liquid stationary phase on the column wall.</p>
+   <div class="map3 stagger">
+    <div class="box"><h3>Good for</h3>Residual solvents, volatile impurities, volatile oils, fatty acids, compounds with no UV chromophore.</div>
+    <div class="box"><h3>Strength</h3>Capillary columns separate far better than HPLC. The gas needs no disposal.</div>
+    <div class="box"><h3>Limit</h3>Only <b>volatile, heat-stable</b> compounds. Others need derivatising first. No water or salts.</div>
+   </div>
+   <p class="cite">Watson (2017), Ch. 11 keypoints</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="gc" data-title="Inside a GC">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">GC · instrumentation · CLO1</div>
+   <h2>Carrier gas, hot injector, <span class="ac">oven, detector.</span></h2>
+   <div class="flow stagger">
+     <div class="node">Carrier gas<small>helium or nitrogen</small></div>
+     <div class="node o">Injector<small>heated; 0.5–2 µl through a septum</small></div>
+     <div class="node g">Column in oven<small>held hot or heated in a programme</small></div>
+     <div class="node">Detector<small>usually FID</small></div>
+     <div class="node">Data system</div>
+   </div>
+   <p>The sample evaporates in the hot injector. A <b>split</b> injection sends only a small part (e.g. 1 in 10 to 1 in 100) onto a capillary column, so it is not overloaded.</p>
+   <p>The oven can rise in a <b>temperature programme</b> (e.g. 10 °C/min), so compounds with very different boiling points all come out in a reasonable time.</p>
+   <p class="cite">Watson (2017), Fig. 11.1</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="gc" data-title="GC columns">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">GC · stationary phase · CLO1</div>
+   <h2>Packed or capillary: <span class="ac">a coat of liquid either way.</span></h2>
+   <table class="data-table">
+    <tr><th></th><th>Packed</th><th>Capillary</th></tr>
+    <tr><td>Tube</td><td>Glass, 2–5 mm wide, about 2 m long</td><td>Fused silica, 0.15–0.5 mm wide, 12–50 m long</td></tr>
+    <tr><td>Stationary phase</td><td>Liquid coated on silanised support particles</td><td>Liquid film (0.1–5 µm) bonded to the inside wall</td></tr>
+    <tr><td>Efficiency</td><td>About 4000–6000 plates</td><td>More than 100,000 plates</td></tr>
+    <tr><td>Carrier gas</td><td>Nitrogen, ~20 ml/min</td><td>Helium, 0.5–2 ml/min</td></tr>
+   </table>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>Temperature, length and film thickness</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Lower oven temperature improves resolution. Resolution grows with the <b>square root</b> of column length, so twice the resolution needs a column four times longer. A thicker film holds volatile compounds longer. <span class="cite">(Watson, 2017, Ch. 11)</span></p></div>
+   </div>
+   <p class="cite">Watson (2017), Ch. 11</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="gc" data-title="Phase polarity">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="chart-mcr" viewBox="0 0 400 232" role="img" aria-label="McReynolds constants of common GC phases, from squalane 0 to Carbowax 2318"></svg>
+   <figcaption>McReynolds constant: higher = more polar. Watson (2017), Table 11.1</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">GC · choosing a phase</div>
+   <h2>From oily silicone <span class="ac">to polar wax.</span></h2>
+   <p>Most GC stationary phases are <b>silicone polymers</b>. Swapping methyl groups for phenyl or cyanopropyl groups makes them more polar. <b>Carbowax</b> (polyethylene glycol) is the most polar common phase.</p>
+   <p>Like sticks to like again: a <b>non-polar phase</b> (OV-1) separates mainly by boiling point; a <b>polar phase</b> (Carbowax) holds polar compounds such as alcohols longer.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="gc" data-title="GC detectors">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">GC · detection · CLO1</div>
+   <h2>Burn it, <span class="ac">count the ions.</span></h2>
+   <p>Tap each detector.</p>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Flame ionisation (FID)</span><span class="rb">The most used. Compounds burn in a hydrogen flame and make ions; the current is measured. Detects almost all <b>C–H compounds</b>. Water gives no signal.</span></button>
+     <button class="rcard"><span class="rt">Electron capture (ECD)</span><span class="rb">Very sensitive to <b>halogenated</b> compounds.</span></button>
+     <button class="rcard"><span class="rt">Nitrogen–phosphorus (NPD)</span><span class="rb">Selective for compounds containing <b>N or P</b>, such as many drugs in body fluids.</span></button>
+     <button class="rcard"><span class="rt">Thermal conductivity (TCD)</span><span class="rb">Universal but less sensitive. Can measure <b>water</b>, and does not destroy the sample.</span></button>
+     <button class="rcard"><span class="rt">Mass spectrometer</span><span class="rb">GC–MS identifies each peak from its mass spectrum.</span></button>
+   </div>
+   <p class="cite">Watson (2017), Table 11.3</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="gc" data-title="Residual solvents">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">GC · in pharmacy</div>
+   <h2>The chloroform <span class="ac">must not stay in the tablet.</span></h2>
+   <p>Solvents used to make a drug can remain in it. ICH Q3C sorts them by risk, and GC measures them:</p>
+   <table class="data-table">
+    <tr><th>Class</th><th>Meaning</th><th>Example limit</th></tr>
+    <tr><td>Class 1</td><td>Avoid</td><td>Benzene 2 ppm</td></tr>
+    <tr class="hl"><td>Class 2</td><td>Limit</td><td>Chloroform 60 ppm · methanol 3000 ppm</td></tr>
+    <tr><td>Class 3</td><td>Low toxicity</td><td>Ethanol 5000 ppm</td></tr>
+   </table>
+   <p><b>Headspace GC</b> is the usual method: the sample is sealed in a vial and heated, and only the vapour above it is injected. The drug and excipients never enter the column. <span class="cite">(<a href="https://www.tga.gov.au/sites/default/files/ichq3cr5.pdf" target="_blank" rel="noopener">ICH Q3C</a>; Watson, 2017, Ch. 11)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="gc" data-title="Check: GC">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Two questions <span class="ac">on GC.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 2</div>
+      <div class="choice-q">Which sample is <b>not</b> suitable for direct GC?</div>
+      <div class="choices"><button class="choice" data-v="a">Ethanol in a tincture</button><button class="choice" data-v="b">A salt that breaks down when heated</button><button class="choice" data-v="c">Peppermint oil</button></div>
+      <div class="feedback">GC needs volatile, heat-stable compounds. A salt that decomposes cannot be vaporised intact.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 2</div>
+      <div class="choice-q">The most widely used GC detector for organic compounds is:</div>
+      <div class="choices"><button class="choice" data-v="a">Flame ionisation (FID)</button><button class="choice" data-v="b">UV at 254 nm</button><button class="choice" data-v="c">Thermal conductivity (TCD)</button></div>
+      <div class="feedback">FID responds to almost all C–H compounds over a wide range. UV is the usual HPLC detector; TCD is universal but less sensitive.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= WRAP-UP ================= -->
+
+<section class="slide" data-sec="end" data-title="Three techniques compared">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Wrap-up</div>
+   <h2>Side by side.</h2>
+   <table class="data-table cmp">
+    <tr><th></th><th>TLC</th><th>HPLC</th><th>GC</th></tr>
+    <tr><td>Mobile phase</td><td>Solvent mixture (capillary action)</td><td>Pumped liquid</td><td>Carrier gas</td></tr>
+    <tr><td>Stationary phase</td><td>Silica layer on a plate</td><td>Packed column, usually C18</td><td>Liquid film in a capillary</td></tr>
+    <tr><td>Detection</td><td>UV 254 nm, sprays</td><td>UV, DAD, others</td><td>FID, others</td></tr>
+    <tr><td>Output</td><td>Spots, Rf</td><td>Peaks, tR, area</td><td>Peaks, tR, area</td></tr>
+    <tr><td>Main QC use</td><td>Identity, impurity limits</td><td>Assay, impurities</td><td>Residual solvents</td></tr>
+   </table>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="end" data-title="Quick quiz">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check your understanding</div>
+   <h2>Five questions, <span class="ac">no marks recorded.</span></h2>
+   <div class="stepper quiz">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 5</div>
+      <div class="choice-q">A spot moved 4.5 cm; the solvent front moved 15.0 cm. The Rf is:</div>
+      <div class="choices"><button class="choice" data-v="a">3.33</button><button class="choice" data-v="b">0.30</button><button class="choice" data-v="c">0.45</button></div>
+      <div class="feedback">4.5 ÷ 15.0 = 0.30. 3.33 is the division upside down.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 5</div>
+      <div class="choice-q">To extract a basic drug from water into an organic solvent, the water should be:</div>
+      <div class="choices"><button class="choice" data-v="a">Acidic</button><button class="choice" data-v="b">Neutral</button><button class="choice" data-v="c">Alkaline</button></div>
+      <div class="feedback">In alkali the base is un-ionised, so it moves into the organic layer. In acid it is charged and stays in water.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 3 OF 5</div>
+      <div class="choice-q">On a C18 column, methanol is raised from 55% to 65%. The drug peak:</div>
+      <div class="choices"><button class="choice" data-v="a">Comes out earlier</button><button class="choice" data-v="b">Comes out later</button><button class="choice" data-v="c">Does not move</button></div>
+      <div class="feedback">Methanol is the strong solvent in reverse phase. 10% more makes retention about 3 times shorter.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 4 OF 5</div>
+      <div class="choice-q">In the chlorpheniramine related-substances test, a spot stays on the origin line. You:</div>
+      <div class="choices"><button class="choice" data-v="a">Fail the sample</button><button class="choice" data-v="b">Disregard it (it is maleic acid)</button><button class="choice" data-v="c">Measure its Rf</button></div>
+      <div class="feedback">The method says to disregard the spot on the line of application. In the basic mobile phase, maleic acid does not move.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 5 OF 5</div>
+      <div class="choice-q">Residual chloroform in a drug substance is best measured by:</div>
+      <div class="choices"><button class="choice" data-v="a">TLC with iodine vapour</button><button class="choice" data-v="b">HPLC with UV detection</button><button class="choice" data-v="c">Headspace GC</button></div>
+      <div class="feedback">Chloroform is volatile, so headspace GC measures it without injecting the drug. It has no useful UV chromophore for HPLC.</div>
+    </div>
+    <div class="score" id="quiz-score"></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="end" data-title="Summary">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Take home</div>
+   <h2>Prepare, separate, <span class="ac">detect, decide.</span></h2>
+   <div class="cards stagger">
+     <div class="card"><div class="cn">1</div><div>Extraction moves the drug into a solvent the excipients avoid. pH decides which layer an acid or base goes to; SPE catches, washes and releases it.</div></div>
+     <div class="card"><div class="cn">2</div><div>TLC: silica plate, solvent by capillary action, UV or spray detection. HPLC: pumped liquid, C18 column, UV detector. GC: carrier gas, coated capillary in an oven, FID.</div></div>
+     <div class="card"><div class="cn">3</div><div>Rf = spot ÷ front. Identity needs the same Rf and the same reaction as the standard; a limit test compares a secondary spot with a dilute standard.</div></div>
+     <div class="card"><div class="cn">4</div><div>No HPLC result counts until system suitability passes.</div></div>
+   </div>
+   <div style="margin:.6em 0"><button class="btn solid" id="btn-refs" data-umami-event="open-sources">Sources and further reading (5) →</button></div>
+   <div class="madeby">
+     <p><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Plates, chromatograms and lab results are simulated. Not a substitute for the current pharmacopoeia or a product’s own specification.</p>
+     <div class="socials">
+       <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Website</a>
+       <a href="https://www.linkedin.com/in/aufbinali/" target="_blank" rel="noopener" data-umami-event="link-linkedin">LinkedIn</a>
+       <a href="https://aufthority.substack.com/" target="_blank" rel="noopener" data-umami-event="link-substack">Substack</a>
+       <a href="https://www.instagram.com/aufthority/" target="_blank" rel="noopener" data-umami-event="link-instagram">Instagram</a>
+       <a href="https://www.tiktok.com/@aufthority" target="_blank" rel="noopener" data-umami-event="link-tiktok">TikTok</a>
+       <a href="https://www.threads.com/@aufthority" target="_blank" rel="noopener" data-umami-event="link-threads">Threads</a>
+       <a href="mailto:the.aufthority@gmail.com" data-umami-event="link-email">the.aufthority@gmail.com</a>
+     </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+  </div><!-- /stage -->
+
+  <div id="bottom">
+    <div id="gate-hint"></div>
+    <div id="nav-wrap">
+      <button id="btn-back" class="nav-btn" disabled data-umami-event="nav-back">← Back</button>
+      <button id="btn-next" class="nav-btn" data-umami-event="nav-next">Next →</button>
+    </div>
+    <footer>Informed decisions, better health.</footer>
+  </div>
+</div>
+
+<div class="overlay" id="toc-overlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <div class="panel-head"><h3>Contents</h3><button class="icon-btn close-ov">Close</button></div>
+    <p class="toc-note">You can jump to any page from here, even if a page's questions are not finished.</p>
+    <button type="button" class="pt-open" id="btn-pt" data-umami-event="open-periodic-table"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3h4v4H2zM14 3h4v4h-4zM2 8h4v4H2zM7 8h3v4H7zM11 8h3v4h-3zM14 8h4v4h-4zM2 13h4v4H2zM7 13h3v4H7zM11 13h3v4h-3zM14 13h4v4h-4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Periodic table</button>
+    <ul class="toc" id="toc-list"></ul>
+  </div>
+</div>
+
+<div class="overlay" id="refs-overlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <div class="panel-head"><h3>Sources and further reading</h3><button class="icon-btn close-ov">Close</button></div>
+    <ol class="refs">
+      <li>European Pharmacopoeia. (2011). Chlorphenamine maleate [monograph 0386] (7th ed.). <a href="https://www.drugfuture.com/Pharmacopoeia/EP7/DATA/0386E.PDF" target="_blank" rel="noopener">drugfuture.com (PDF)</a></li>
+      <li>International Council for Harmonisation. (2011). <i>Impurities: Guideline for residual solvents Q3C(R5)</i>. <a href="https://www.tga.gov.au/sites/default/files/ichq3cr5.pdf" target="_blank" rel="noopener">tga.gov.au (PDF)</a></li>
+      <li>Manufacturer’s standard test procedure. (n.d.). <i>Chlorpheniramine maleate tablets 4 mg</i> [Internal QC document; used for the lab methods and limits].</li>
+      <li>PKKB: pharmacokinetics knowledge base. (n.d.). <i>Chlorpheniramine</i>. Retrieved October 28, 2026, from <a href="https://cadd.zju.edu.cn/pkkb/compound/detail/573" target="_blank" rel="noopener">cadd.zju.edu.cn</a></li>
+      <li>Watson, D. G. (2017). <i>Pharmaceutical analysis: A textbook for pharmacy students and pharmaceutical chemists</i> (4th ed.). Elsevier. Chapters 10–13 and 15.</li>
+    </ol>
+  </div>
+</div>
+
+<script>
+(function(){
+  const slides   = document.querySelectorAll('.slide');
+  const TOTAL    = slides.length;
+  let current = 1;
+  const btnBack  = document.getElementById('btn-back');
+  const btnNext  = document.getElementById('btn-next');
+  const progFill = document.getElementById('progress-fill');
+  const progLbl  = document.getElementById('progress-label');
+  const hint     = document.getElementById('gate-hint');
+  const NS = 'http://www.w3.org/2000/svg';
+
+  document.querySelectorAll('.stagger').forEach(c=>{
+    [...c.children].forEach((e,i)=>e.style.setProperty('--d',(0.1 + i*0.11).toFixed(2)+'s'));
+  });
+
+  /* ---------- CHARTS (built once, when first shown) ---------- */
+  function el(tag, attrs, text){
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  function tip(node, text){ node.appendChild(el('title',{},text)); return node; }
+
+  function hbar(id, data, opts){
+    const svg=document.getElementById(id); if(!svg||svg.dataset.built) return; svg.dataset.built='1';
+    const W=400, L=opts.labelW, R=50, top=10, bh=opts.bh, gap=opts.gap, plotW=W-L-R;
+    data.forEach((d,i)=>{
+      const y=top+i*(bh+gap), w=Math.max(3,d.v/opts.max*plotW);
+      svg.appendChild(el('text',{class:'tx end',x:L-8,y:y+bh*0.68},d.label));
+      svg.appendChild(tip(el('rect',{class:'bar grow-x'+(d.hl?' hl':''),x:L,y:y,width:w,height:bh,rx:4,style:'--d:'+(0.1+i*0.08)+'s'}), d.label+': '+d.disp));
+      svg.appendChild(el('text',{class:'tx b fade',x:L+w+6,y:y+bh*0.68,style:'--d:'+(0.5+i*0.08)+'s'},d.disp));
+    });
+    const y=top+data.length*(bh+gap);
+    svg.appendChild(el('text',{class:'tx s',x:L,y:y+10},opts.axisLabel));
+  }
+
+  function buildCharts(n){
+    const s=slides[n-1];
+    if(s.querySelector('#chart-mcr')) hbar('chart-mcr',[
+      {label:'Squalane',v:0,disp:'0'},{label:'OV-1 (methyl)',v:222,disp:'222'},{label:'SE-54 (5% phenyl)',v:337,disp:'337'},
+      {label:'OV-17 (50% phenyl)',v:886,disp:'886'},{label:'OV-225 (cyanopropyl)',v:1813,disp:'1813'},{label:'Carbowax (PEG)',v:2318,disp:'2318',hl:true}],
+      {max:2400,labelW:136,bh:22,gap:10,axisLabel:'McReynolds constant (sum)'});
+  }
+
+  /* ---------- pH partition simulator ---------- */
+  const phR=document.getElementById('ph-r'), phSvg=document.getElementById('ph-svg'), phOut=document.getElementById('ph-out');
+  function drawPh(){
+    const pH=parseFloat(phR.value), un=100/(1+Math.pow(10,9.2-pH));
+    while(phSvg.firstChild) phSvg.removeChild(phSvg.firstChild);
+    phSvg.appendChild(el('rect',{x:20,y:6,width:360,height:24,rx:4,class:'fb'}));
+    phSvg.appendChild(el('rect',{x:20,y:36,width:360,height:24,rx:4,class:'fo'}));
+    phSvg.appendChild(el('text',{class:'tx s',x:26,y:22},'water'));
+    phSvg.appendChild(el('text',{class:'tx s',x:26,y:52},'chloroform'));
+    const nOrg=Math.round(un/5), nAq=20-nOrg;
+    for(let i=0;i<20;i++){ const inOrg=i<nOrg, x=110+(i%20)*13;
+      phSvg.appendChild(el('circle',{cx:x,cy:inOrg?48:18,r:4.5,class:inOrg?'fgs':'frs'})); }
+    phOut.innerHTML='pH <b>'+pH.toFixed(1)+'</b>: <b>'+un.toFixed(un<1||un>99?1:0)+'%</b> un-ionised (free base, green) → chloroform; <b>'+(100-un).toFixed(un<1||un>99?1:0)+'%</b> charged (red) → water.';
+  }
+  phR.addEventListener('input',()=>{ drawPh(); if(window.umami) umami.track('sim-ph'); }); drawPh();
+
+  /* ---------- elutropic series simulator (illustrative) ---------- */
+  const ELU=[['Hexane',0],['Toluene',2.4],['Dichloromethane',3.1],['Chloroform',4.1],['Ethyl acetate',4.4],['Methanol',5.1]];
+  const eluChips=document.getElementById('elu-chips'), eluSvg=document.getElementById('elu-svg'), eluOut=document.getElementById('elu-out');
+  function drawElu(k){
+    const p=ELU[k][1]/5.1, rfPolar=Math.min(.92,.9*Math.pow(p,1.7)), rfLess=Math.min(.95,.08+.88*Math.pow(p,.8));
+    [...eluChips.children].forEach((c,i)=>c.classList.toggle('on',i===k));
+    while(eluSvg.firstChild) eluSvg.removeChild(eluSvg.firstChild);
+    const x0=40, x1=360, Y=v=>x0+v*(x1-x0);
+    eluSvg.appendChild(el('rect',{x:20,y:20,width:360,height:76,rx:4,class:'fgr'}));
+    eluSvg.appendChild(el('line',{x1:x0,y1:24,x2:x0,y2:92,class:'ln m dash'}));
+    eluSvg.appendChild(el('line',{x1:x1,y1:24,x2:x1,y2:92,class:'ln b dash'}));
+    eluSvg.appendChild(el('text',{class:'tx s mid',x:x0,y:112},'origin'));
+    eluSvg.appendChild(el('text',{class:'tx s mid',x:x1,y:112},'front'));
+    eluSvg.appendChild(el('ellipse',{cx:Y(rfPolar),cy:44,rx:8,ry:6,class:'frs'}));
+    eluSvg.appendChild(el('ellipse',{cx:Y(rfLess),cy:72,rx:8,ry:6,class:'fgs'}));
+    eluSvg.appendChild(el('text',{class:'tx s',x:24,y:14},'plate turned on its side: solvent runs left to right'));
+    eluOut.innerHTML='<b>'+ELU[k][0]+'</b> (polarity index '+ELU[k][1]+'): polar drug Rf ≈ <b>'+rfPolar.toFixed(2)+'</b> (red); less polar compound Rf ≈ <b>'+rfLess.toFixed(2)+'</b> (green).'+(rfPolar<.1?' Too weak: the drug stays near the origin.':rfLess>.85&&rfPolar>.8?' Too strong: everything runs near the front.':'');
+  }
+  ELU.forEach((e,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip2'; b.textContent=e[0]; b.addEventListener('click',()=>{ drawElu(i); if(window.umami) umami.track('sim-elutropic',{solvent:e[0]}); }); eluChips.appendChild(b); });
+  drawElu(0);
+
+  /* ---------- Rf calculator ---------- */
+  const rfa=document.getElementById('rf-a'), rfb=document.getElementById('rf-b'), rfo=document.getElementById('rf-out');
+  function calcRf(){
+    const a=parseFloat(rfa.value), b=parseFloat(rfb.value);
+    if(!(a>=0)||!(b>0)){ rfo.className='calc-out'; rfo.textContent='Enter both distances, measured from the origin.'; return; }
+    if(a>b){ rfo.className='calc-out fail'; rfo.textContent='A spot cannot travel further than the solvent front. Check your distances.'; return; }
+    rfo.className='calc-out'; rfo.innerHTML='Rf = '+a+' ÷ '+b+' = <b>'+(a/b).toFixed(2)+'</b>';
+  }
+  rfa.addEventListener('input',calcRf); rfb.addEventListener('input',calcRf); calcRf();
+
+  /* ---------- methanol slider: rule of 3 (illustrative) ---------- */
+  const moR=document.getElementById('mo-r'), moSvg=document.getElementById('mo-svg'), moOut=document.getElementById('mo-out');
+  function drawMo(){
+    const M=+moR.value, t0=1.5, k=3.5*Math.pow(3,(55-M)/10), tR=t0*(1+k), tmax=30;
+    while(moSvg.firstChild) moSvg.removeChild(moSvg.firstChild);
+    const L=30, R=390, B=104, T=14, X=t=>L+t/tmax*(R-L);
+    moSvg.appendChild(el('path',{class:'axis',d:'M'+L+' '+B+' H'+R}));
+    [0,10,20,30].forEach(t=>moSvg.appendChild(el('text',{class:'tx s mid',x:X(t),y:B+14},t)));
+    moSvg.appendChild(el('text',{class:'tx s end',x:R,y:B+26},'min'));
+    const sig=tR/Math.sqrt(4000)*1.0, h=Math.min(1,0.6/ (sig*4)) ; let d='';
+    for(let i=0;i<=500;i++){ const t=tmax*i/500, y=Math.exp(-0.5*Math.pow((t-tR)/sig,2))*h*(B-T); d+=(i?'L':'M')+X(t).toFixed(1)+' '+(B-y).toFixed(1)+' '; }
+    moSvg.appendChild(el('path',{class:'ln g',d:d,style:'stroke-width:2'}));
+    moSvg.appendChild(el('line',{class:'ln o dash',x1:X(t0),y1:B,x2:X(t0),y2:T+20}));
+    moSvg.appendChild(el('text',{class:'tx o',x:X(t0)+4,y:T+22},'t0'));
+    if(tR>tmax) moSvg.appendChild(el('text',{class:'tx r end',x:R,y:T+30},'peak after 30 min →'));
+    moOut.innerHTML='Methanol <b>'+M+'%</b>: tR ≈ <b>'+tR.toFixed(1)+' min</b>, k′ ≈ <b>'+k.toFixed(1)+'</b>.'+(k<2?' Too close to t0 (k′ below 2).':tR>15?' Run is getting long.':' A good working range.');
+  }
+  moR.addEventListener('input',()=>{ drawMo(); if(window.umami) umami.track('sim-methanol'); }); drawMo();
+
+  /* ---------- AUTO-FIT: shrink a page until it fits without scrolling ---------- */
+  const MIN_K = 0.8;   /* never shrink text below 80% of normal */
+  const stageEl = document.getElementById('stage');
+  function updateMore(){
+    const s = slides[current-1];
+    const more = s && s.classList.contains('scrolly') && (s.scrollTop + s.clientHeight < s.scrollHeight - 4);
+    stageEl.classList.toggle('more', !!more);
+  }
+  /* ---------- FLOW CHARTS: straight row if it fits, otherwise snake ---------- */
+  document.querySelectorAll('.flow').forEach(f=>{
+    f._items=[...f.children].filter(c=>!c.classList.contains('arr')).map(c=>c.outerHTML);
+    f._sig=''; f._nat=0;
+  });
+  function flowDelays(f){ [...f.children].forEach((e,i)=>e.style.setProperty('--d',(0.1+i*0.08).toFixed(2)+'s')); }
+  function renderRow(f){
+    f.classList.remove('snake'); f.classList.add('row'); f.style.gridTemplateColumns='';
+    f.innerHTML=f._items.join('<span class="arr" aria-hidden="true">→</span>'); flowDelays(f);
+  }
+  function renderSnake(f,cols){
+    const it=f._items, n=it.length; let h='';
+    f.classList.remove('row'); f.classList.add('snake');
+    f.style.gridTemplateColumns=Array(cols).fill('minmax(0,1fr)').join(' 1.5em ');
+    for(let i=0;i<n;i++){
+      const r=Math.floor(i/cols), p=i%cols, rev=r%2===1;
+      const c=rev?cols-1-p:p, gr=2*r+1, gc=2*c+1;
+      h+='<div class="cell" style="grid-row:'+gr+';grid-column:'+gc+'">'+it[i]+'</div>';
+      if(i<n-1){
+        if(p<cols-1) h+='<span class="arr" aria-hidden="true" style="grid-row:'+gr+';grid-column:'+(rev?gc-1:gc+1)+'">'+(rev?'←':'→')+'</span>';
+        else h+='<span class="arr down" aria-hidden="true" style="grid-row:'+(gr+1)+';grid-column:'+gc+'">↓</span>';
+      }
+    }
+    f.innerHTML=h; flowDelays(f);
+  }
+  function layoutFlow(f,k){
+    const w=f.clientWidth; if(!w) return;
+    if(!f._nat){ renderRow(f); f._sig='row'; f._nat=f.scrollWidth/k; }
+    const fs=parseFloat(getComputedStyle(f).fontSize)||16;
+    const fitsRow=f._nat*k<=w+1;
+    const cols=Math.min(f._items.length,Math.max(2,Math.min(3,Math.floor(w/(9*fs)))));
+    const sig=fitsRow?'row':'s'+cols;
+    if(sig===f._sig) return;      /* unchanged: don't rebuild (avoids replaying animations) */
+    f._sig=sig; fitsRow?renderRow(f):renderSnake(f,cols);
+  }
+
+  function fit(slide){
+    if(!slide) return;
+    const si=slide.querySelector('.si');
+    const flows=[...slide.querySelectorAll('.flow')];
+    slide.classList.remove('scrolly'); slide.scrollTop = 0;
+    let k=1; slide.style.setProperty('--k',k); flows.forEach(f=>layoutFlow(f,k));
+    let g=0;
+    const over = () => si.scrollHeight>slide.clientHeight+1 || si.scrollWidth>slide.clientWidth+1;
+    while(g++<16 && over() && k>MIN_K){
+      k=+(k-0.03).toFixed(2); slide.style.setProperty('--k',k); flows.forEach(f=>layoutFlow(f,k));
+    }
+    if (over()) slide.classList.add('scrolly');
+    updateMore();
+  }
+  slides.forEach(s=>s.addEventListener('scroll', updateMore, {passive:true}));
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>fit(slides[current-1]),120); });
+
+  /* ---------- GATING ---------- */
+  function pending(slide){
+    let n=0;
+    slide.querySelectorAll('.toggle-wrap:not(.opt)').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
+    slide.querySelectorAll('.rcard').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
+    slide.querySelectorAll('.choice-set').forEach(s=>{ if(!s.dataset.done) n++; });
+    slide.querySelectorAll('.task').forEach(t=>{ if(!t.dataset.done) n++; });
+    return n;
+  }
+  function updateGate(alert){
+    const s=slides[current-1], n=pending(s);
+    btnNext.classList.toggle('locked', n>0);
+    if(n===0){ hint.className=''; hint.textContent=''; return; }
+    hint.className=alert?'alert':'';
+    const what=n===1?'1 item':n+' items';
+    hint.innerHTML=alert
+      ? 'Please finish the questions or open the sections on this page first ('+what+' left). Or skip ahead using <button type="button" id="hint-toc">Contents</button>.'
+      : 'Finish '+what+' on this page to continue, or use <button type="button" id="hint-toc">Contents</button>';
+    document.getElementById('hint-toc').addEventListener('click',()=>openOv('toc-overlay'));
+  }
+  function flagPending(slide){
+    [...slide.querySelectorAll('.toggle-wrap:not(.seen):not(.opt), .rcard:not(.seen), .choice-set:not([data-done]), .task:not([data-done])')]
+      .filter(e=>e.offsetParent!==null)
+      .forEach(e=>{ e.classList.remove('pulse'); void e.offsetWidth; e.classList.add('pulse'); });
+  }
+
+  function show(n){
+    slides.forEach((s,i)=>s.classList.toggle('active',i+1===n));
+    progFill.style.width=((n/TOTAL)*100)+'%';
+    progLbl.textContent=n+' / '+TOTAL;
+    btnBack.disabled=n===1;
+    btnNext.textContent=n===TOTAL?'Done':'Next →';
+    btnNext.setAttribute('data-umami-event',n===TOTAL?'carousel-selesai':'nav-next');
+    buildCharts(n);
+    fit(slides[n-1]);
+    requestAnimationFrame(()=>fit(slides[n-1]));
+    labFrame(slides[n-1]);
+    updateGate(false);
+    if(window.umami) umami.track('slide-view',{slide:n});
+  }
+
+  /* NAV BUTTONS ONLY — no swipe, no keyboard */
+  btnNext.addEventListener('click',()=>{
+    const s=slides[current-1];
+    if(pending(s)>0){ updateGate(true); flagPending(s); if(window.umami) umami.track('gate-blocked',{slide:current}); return; }
+    if(current<TOTAL){ current++; show(current); } else openOv('refs-overlay');
+  });
+  btnBack.addEventListener('click',()=>{ if(current>1){ current--; show(current); } });
+
+  document.querySelectorAll('.toggle-btn').forEach(b=>b.addEventListener('click',()=>{
+    const w=b.parentElement; w.classList.toggle('open'); w.classList.add('seen'); fit(slides[current-1]); updateGate(false);
+    if(window.umami) umami.track('toggle',{label:b.textContent.trim().slice(0,40)});
+  }));
+  document.querySelectorAll('.rcard').forEach(c=>c.addEventListener('click',()=>{ c.classList.add('seen'); fit(slides[current-1]); updateGate(false); }));
+
+  document.querySelectorAll('.choice-set').forEach(set=>{
+    const ans=set.dataset.answer;
+    set.querySelectorAll('.choice').forEach(c=>c.addEventListener('click',()=>{
+      if(set.dataset.done) return;
+      set.dataset.done='1'; set.classList.add('done');
+      const ok=c.dataset.v===ans; set.dataset.correct=ok?'1':'0';
+      set.querySelectorAll('.choice').forEach(x=>{ if(x.dataset.v===ans) x.classList.add('right'); });
+      if(!ok) c.classList.add('wrong');
+      set.querySelector('.feedback').classList.add('show');
+      if(window.umami) umami.track('choice',{correct:ok});
+      updateScore(); fit(slides[current-1]); updateGate(false);
+    }));
+    const nx=set.querySelector('.next-q');
+    if(nx) nx.addEventListener('click',()=>{
+      const nxt=set.nextElementSibling;
+      if(nxt&&nxt.classList.contains('choice-set')){ set.classList.remove('cur'); nxt.classList.add('cur'); fit(slides[current-1]); }
+    });
+  });
+  function updateScore(){
+    const q=document.querySelectorAll('.quiz .choice-set'), done=[...q].filter(s=>s.dataset.done);
+    if(done.length<q.length) return;
+    document.getElementById('quiz-score').textContent='Your score: '+done.filter(s=>s.dataset.correct==='1').length+' / '+q.length;
+  }
+
+  function openOv(id){ if(id==='toc-overlay') buildToc(); document.getElementById(id).classList.add('open'); }
+  document.querySelectorAll('.overlay').forEach(o=>{
+    o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
+    o.querySelector('.close-ov').addEventListener('click',()=>o.classList.remove('open'));
+  });
+  document.getElementById('btn-toc').addEventListener('click',()=>openOv('toc-overlay'));
+  document.getElementById('btn-refs').addEventListener('click',()=>openOv('refs-overlay'));
+  document.getElementById('btn-pt').addEventListener('click',()=>{
+    document.getElementById('toc-overlay').classList.remove('open');
+    if(window.KompasPT) KompasPT.open();
+  });
+
+  /* contents — bypasses gating */
+  const secNames={intro:'Introduction',basics:'1 · Separation basics',extract:'2 · Extraction',tlc:'3 · Thin-layer chromatography',tlclab:'Lab · TLC Bench',read:'4 · Reading a TLC plate',hplc:'5 · HPLC',hplclab:'Lab · HPLC Bench',gc:'6 · Gas chromatography',end:'Wrap-up'};
+  function buildToc(){
+    const ul=document.getElementById('toc-list'); ul.innerHTML=''; let last='';
+    slides.forEach((s,i)=>{
+      if(s.dataset.sec!==last){ const h=document.createElement('li'); h.className='sec'; h.textContent=secNames[s.dataset.sec]; ul.appendChild(h); last=s.dataset.sec; }
+      const li=document.createElement('li'), b=document.createElement('button');
+      b.innerHTML='<span>'+(i+1)+'</span>'+s.dataset.title;
+      if(i+1===current) b.className='cur';
+      b.addEventListener('click',()=>{ current=i+1; show(current); document.getElementById('toc-overlay').classList.remove('open'); if(window.umami) umami.track('toc-jump',{slide:current}); });
+      li.appendChild(b); ul.appendChild(li);
+    });
+  }
+
+  /* the labs need about 480 px of height to show each step without scrolling;
+     on shorter screens offer a full-screen link instead of a cramped frame */
+  function labFrame(slide){
+    const fr=slide && slide.querySelector('iframe[data-src]'); if(!fr) return;
+    const box=fr.parentElement, small=box.clientHeight<480;
+    box.classList.toggle('launch',small);
+    if(!small && !fr.src){ fr.src=fr.dataset.src; if(window.umami) umami.track('lab-embed-open',{lab:fr.dataset.src.split('.')[0]}); }
+  }
+  window.addEventListener('resize',()=>setTimeout(()=>labFrame(slides[current-1]),200));
+
+  /* the embedded labs report finished rounds */
+  window.addEventListener('message',e=>{
+    if(e.origin!==location.origin && location.origin!=='null') return;
+    const d=e.data||{};
+    if((d.type==='tlc-lab'||d.type==='hplc-lab') && window.umami) umami.track(d.type+'-'+d.event,{scenario:d.reaction||''});
+  });
+
+  /* Back to Kompas: return to the exact course view the student came from
+     (history.back keeps Kompas's state); otherwise open the Kompas home page. */
+  document.getElementById('btn-kompas').addEventListener('click',e=>{
+    try{
+      if (document.referrer && new URL(document.referrer).origin===location.origin && history.length>1){
+        e.preventDefault(); history.back();
+      }
+    }catch(_){}
+  });
+
+  buildToc();
+  show(1);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fit(slides[current-1]));
+})();
+</script>
+</body>
+</html>
