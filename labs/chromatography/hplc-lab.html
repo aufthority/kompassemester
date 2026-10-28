@@ -143,10 +143,10 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 .ondark path{stroke:#c9d1cb}
 .ondark .tl1,.ondark .tl2{fill:#f2f4f2}.onlight .tl1{fill:#1c2620}.onlight .tl2{fill:#8a4f0c}
 /* hints overlay */
-#hints{position:fixed;inset:0;background:rgba(28,38,32,.45);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
-#hints.open{display:flex}
-#hints .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:14px 16px;max-height:100%;overflow:auto}
-#hints .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5em}
+#hints,#brief,#stp{position:fixed;inset:0;background:rgba(28,38,32,.45);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
+#hints.open,#brief.open,#stp.open{display:flex}
+#hints .box,#brief .box,#stp .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:14px 16px;max-height:100%;overflow:auto}
+#hints .top,#brief .top,#stp .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5em}
 .ideas{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
 .idea{font-size:.86em;line-height:1.35;text-align:center}
 .idea svg{display:block;width:100%;height:46px;margin-bottom:.2em}
@@ -188,6 +188,33 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 .stuck{font-size:.92em;color:var(--accent-dark)}
 .chrom{margin:.2em 0}
 #set .q,#pred .q{margin-top:.25em}
+/* step guide: the footer names the next move; the matching control glows */
+#gate.go{color:#a85f10;font-weight:700}
+.guide{box-shadow:0 0 0 3px rgba(217,130,31,.8);animation:guide 1.4s ease-in-out infinite}
+.chips.guide,.slrow.guide,.btns.guide{border-radius:10px}
+@keyframes guide{0%,100%{box-shadow:0 0 0 2px rgba(217,130,31,.25)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.9)}}
+.sop{padding-left:1.3em;font-size:.9em;margin:.3em 0 .6em}.sop li{margin-bottom:.3em}
+/* STP: the lab's controlled method document */
+#stp .box{max-width:720px;padding-top:0}
+#stp .top{position:sticky;top:0;background:#fff;padding:12px 0 8px;margin-bottom:.2em;z-index:1;border-bottom:1px solid var(--rule)}
+#stp-btn.sec{color:#a85f10;border-color:#efc58f;background:var(--o-bg)}
+.stp-doc{font-size:.86em;color:var(--body)}
+.stp-stamp{display:inline-block;border:2px solid var(--red);color:var(--red);font-weight:800;font-size:.72em;letter-spacing:.1em;text-transform:uppercase;padding:.15em .5em;border-radius:4px;transform:rotate(-2deg);margin:.5em 0}
+.stp-head{width:100%;border-collapse:collapse;margin-bottom:.6em}
+.stp-head th,.stp-head td{border:1px solid var(--ink);padding:.3em .5em;text-align:left;vertical-align:top}
+.stp-head th{background:var(--ink);color:#fff;letter-spacing:.04em}
+.stp-head td:first-child{width:36%;color:var(--muted);font-weight:600}
+.stp-sec{border-top:1px solid var(--rule);padding:.5em .35em .3em;scroll-margin-top:3.4em;border-radius:6px;transition:background .6s}
+.stp-sec.hit{background:var(--o-bg)}
+.stp-sec h3{font-size:1em;color:var(--ink);margin-bottom:.3em}
+.stp-sec p,.stp-sec li{font-size:1em;margin-bottom:.3em}
+.stp-sec ol,.stp-sec ul{padding-left:1.3em;margin-bottom:.3em}
+.stp-t{width:100%;border-collapse:collapse;margin:.2em 0 .4em}
+.stp-t th,.stp-t td{border:1px solid var(--rule);padding:.25em .45em;text-align:left;vertical-align:top}
+.stp-t th{background:#f6f7f5}
+.stp-f{background:#f6f7f5;border-radius:6px;padding:.4em .6em;font-weight:700;color:var(--ink);margin:.2em 0 .4em;overflow-x:auto}
+.tn{border-left:3px solid var(--accent);background:var(--g-bg);color:var(--accent-dark);border-radius:0 6px 6px 0;padding:.3em .6em;margin:.3em 0}
+.tn b{color:var(--accent-dark)}
 </style>
 </head>
 <body>
@@ -201,7 +228,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       <a class="pillbtn" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
     </div>
   </nav>
-  <div id="bar"><div id="bar-lbl"></div><button type="button" class="pillbtn" id="hints-btn" aria-haspopup="dialog">Hints</button></div>
+  <div id="bar"><div id="bar-lbl"></div><button type="button" class="pillbtn" id="stp-btn" aria-haspopup="dialog" title="Standard test procedure">STP</button><button type="button" class="pillbtn" id="hints-btn" aria-haspopup="dialog">Hints</button></div>
   <div id="track"><div id="fill"></div></div>
 
   <main id="stage">
@@ -261,6 +288,87 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   </div>
 </div>
 
+<div id="stp" role="dialog" aria-modal="true" aria-labelledby="stp-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="stp-title">Standard test procedure</div><button type="button" class="btn ghost" id="stp-close">Close</button></div>
+    <div class="stp-doc">
+      <div class="stp-stamp">Uncontrolled copy · for training only</div>
+      <table class="stp-head">
+        <tr><th colspan="2">Aufthority Lab · Quality Control</th></tr>
+        <tr><td>Product</td><td><b>Chlorpheniramine Maleate Tablets 4 mg</b></td></tr>
+        <tr><td>Test</td><td>Assay by HPLC</td></tr>
+        <tr><td>Document no.</td><td>STP-AL/CPM/09 · Revision 02</td></tr>
+        <tr><td>Prepared · Checked · Approved</td><td>QC Analyst · QC Executive · QA Manager</td></tr>
+      </table>
+      <section class="stp-sec" id="stp-1"><h3>1 · Purpose and scope</h3>
+        <p>To determine the chlorpheniramine maleate content of the tablets by reverse-phase ion-pair HPLC. Applies to batch release and to stability samples.</p></section>
+      <section class="stp-sec" id="stp-2"><h3>2 · Specification</h3>
+        <table class="stp-t"><tr><th>Limit</th><th>% of label claim</th><th>mg per tablet</th></tr>
+          <tr><td>Release</td><td>95.0–105.0%</td><td>3.80–4.20</td></tr>
+          <tr><td>Shelf life</td><td>92.5–107.5%</td><td>3.70–4.30</td></tr></table>
+        <p>A result outside the limits is out of specification (OOS) and must be investigated.</p>
+        <p class="tn"><b>Trainer’s note:</b> a new batch is judged against release limits; a sample stored in a stability study is judged against shelf-life limits.</p></section>
+      <section class="stp-sec" id="stp-3"><h3>3 · Chromatographic conditions</h3>
+        <table class="stp-t">
+          <tr><td>Column</td><td>C18 (ODS), 150 × 4.6 mm, 5 µm packing, or equivalent</td></tr>
+          <tr><td>Mobile phase</td><td>Solution A : methanol (45 : 55)</td></tr>
+          <tr><td>Flow rate</td><td>1.0 ml/min</td></tr>
+          <tr><td>Detector</td><td>UV, 254 nm</td></tr>
+          <tr><td>Injection volume</td><td>20 µl</td></tr></table>
+        <p class="tn"><b>Trainer’s note:</b> in reverse phase the non-polar C18 holds the drug and methanol is the strong solvent. A small change in methanol shifts retention a lot.</p></section>
+      <section class="stp-sec" id="stp-4"><h3>4 · Reagents and mobile phase</h3>
+        <p><b>Solution A.</b> Dissolve about 5.14 g of sodium hexanesulfonate in water and dilute to 2 L. Adjust to pH 3.6 with glacial acetic acid. Filter through a 0.45 µm membrane.</p>
+        <p><b>Mobile phase.</b> Mix Solution A and methanol (45 : 55). Filter and degas in an ultrasonic bath.</p>
+        <p><b>Diluent.</b> Water.</p>
+        <p class="tn"><b>Trainer’s note:</b> at pH 3.6 the drug carries a positive charge. Hexanesulfonate pairs with it so it can be held by C18.</p></section>
+      <section class="stp-sec" id="stp-5"><h3>5 · Standard preparation</h3>
+        <ol><li>Weigh accurately about 100 mg of chlorpheniramine maleate working standard (WS) into a 50 ml volumetric flask.</li>
+          <li>Add about 15 ml of diluent, sonicate for 2 minutes, dilute to volume and mix.</li>
+          <li>Pipette 4 ml into a 50 ml volumetric flask, dilute to volume with diluent and mix.</li>
+          <li>Filter through a 0.45 µm membrane. Final concentration: about 0.16 mg/ml.</li></ol></section>
+      <section class="stp-sec" id="stp-6"><h3>6 · Assay preparation</h3>
+        <ol><li>Finely powder 20 tablets.</li>
+          <li>Weigh accurately about 90 mg of powder (about 4 mg of drug) into a 25 ml volumetric flask.</li>
+          <li>Add 15 ml of diluent, sonicate until dissolved, dilute to volume and mix.</li>
+          <li>Filter through a 0.45 µm membrane. Final concentration: about 0.16 mg/ml.</li></ol></section>
+      <section class="stp-sec" id="stp-7"><h3>7 · Procedure</h3>
+        <ol><li>Equilibrate the column with mobile phase until the baseline is stable.</li>
+          <li>Inject the standard preparation (20 µl) five times. Check system suitability (section 8).</li>
+          <li>Only if every limit is met, inject the assay preparation (20 µl).</li>
+          <li>Record the chromatograms and measure the peak areas of chlorpheniramine.</li></ol>
+        <p class="tn"><b>Trainer’s note:</b> the early peak is maleic acid, the salt partner. Measure the chlorpheniramine peak.</p></section>
+      <section class="stp-sec" id="stp-8"><h3>8 · System suitability (standard preparation)</h3>
+        <table class="stp-t"><tr><th>Parameter</th><th>Limit</th></tr>
+          <tr><td>Tailing factor</td><td>Not more than 2.0</td></tr>
+          <tr><td>Plate count</td><td>Not less than 1500</td></tr>
+          <tr><td>RSD of peak area (5 injections)</td><td>Not more than 2.0%</td></tr>
+          <tr><td>RSD of retention time</td><td>Not more than 1.0%</td></tr>
+          <tr><td>Capacity factor k′</td><td>Not less than 2.0</td></tr></table>
+        <p class="tn"><b>Trainer’s note:</b> k′ uses the retention time tR and the unretained time t0. RSD uses the sample standard deviation (n − 1).</p></section>
+      <section class="stp-sec" id="stp-9"><h3>9 · Calculation</h3>
+        <p><b>Content per tablet, R1 (mg/tablet)</b></p>
+        <div class="stp-f">R1 = (Spl Area ÷ Std Area) × (Std Wt ÷ 50) × (4 ÷ 50) × 25 × (ATW ÷ Spl Wt) × (P ÷ 100)</div>
+        <p><b>Percentage of label claim, R2</b></p>
+        <div class="stp-f">R2 = R1 ÷ 4 × 100</div>
+        <table class="stp-t">
+          <tr><td>Spl Area</td><td>Peak area of chlorpheniramine, assay preparation</td></tr>
+          <tr><td>Std Area</td><td>Mean peak area of chlorpheniramine, standard preparation</td></tr>
+          <tr><td>Std Wt</td><td>Weight of WS (mg)</td></tr>
+          <tr><td>Spl Wt</td><td>Weight of powder (mg)</td></tr>
+          <tr><td>ATW</td><td>Average tablet weight (mg/tablet)</td></tr>
+          <tr><td>P</td><td>% potency of WS, as-is basis</td></tr></table>
+        <p>Report R1 to 2 decimal places and R2 to 1 decimal place.</p></section>
+    </div>
+  </div>
+</div>
+<div id="brief" role="dialog" aria-modal="true" aria-labelledby="brief-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="brief-title">Before you start: today’s procedure</div></div>
+    <div id="brief-body"></div>
+    <p class="small">The line at the bottom of the screen and the glowing box show your next move. <b>STP</b>, beside Hints, is the verified method you work from: it opens at the section you need now. <b>Hints</b> explains the ideas behind each step.</p>
+    <div class="btns"><button type="button" class="btn solid" id="brief-go">Start the lab</button><button type="button" class="btn ghost" id="brief-stp">Read the STP</button></div>
+  </div>
+</div>
 <div id="hints" role="dialog" aria-modal="true" aria-labelledby="hints-title">
   <div class="box">
     <div class="top"><div class="eyebrow" id="hints-title">Hints: four ideas</div><button type="button" class="btn ghost" id="hints-close">Close</button></div>
@@ -786,6 +894,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     $('#stage').classList.toggle('roomy', innerWidth>=640);
     const P=pages[page]; P.forEach((s,i)=>{ s.classList.add('on'); if(P.length===2) s.classList.add(i?'half-r':'half-l'); else s.classList.add('single'); });
     updatePager(); fitPage();
+    if(stepOf(page)===1 && R && !briefed.has(R.S.id)) openBrief();
     track('lab-page',{page:STEP_NAMES[stepOf(page)]+(P.length===1&&P[0].dataset.pane?' '+P[0].dataset.pane:'')});
   }
   function updatePager(){
@@ -799,7 +908,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     nx.textContent=last?(solved[3]?'New round ↺':'Continue →'):'Continue →';
     nx.disabled=!ok || (last && !solved[3]);
     nx.classList.toggle('ready', ok && k>0 && lastPaneOfStep(page) && solved[k-1]);
-    $('#gate').textContent=ok?'':(k===0?'Tap through the story first':'Check this step to continue');
+    guide();
   }
   $('#back').addEventListener('click',()=>goPage(page-1));
   $('#next').addEventListener('click',()=>{ if(page===pages.length-1){ if(solved[3]){ newRound(); goPage(firstPageOfStep(1)); } return; } if(canLeave(page)) goPage(page+1); });
@@ -814,10 +923,92 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       if(over()){ s.classList.add('scrolly'); track('lab-overflow',{page:s.dataset.title, w:innerWidth, h:innerHeight}); }
       s.dataset.k=k;
     });
+    guide();
   }
   function setAppH(){ document.documentElement.style.setProperty('--app-h', innerHeight+'px'); }
   let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ setAppH(); const before=wide; buildPages(); goPage(page); },120); });
 
+
+  /* ---------- step guide: the footer names the next move and the matching control glows ----------
+     It only ever points at the next empty input or button, never at the right answer. */
+  const briefed=new Set(); let glowEl=null;
+  const empty=id=>{ const e=$('#'+id); return !e || !e.value.trim(); };
+  const checkMove=n=>({t:$('#m'+n).classList.contains('bad')?'Fix what the feedback says, then press Check again':'Press Check', e:$('#chk'+n)});
+  const storyMove=()=>R.storyDone?{t:'Press Continue to start the lab',e:$('#next')}:{t:'Tap the picture to read the story',e:$('#story-next')};
+  const doneMove=k=>k<4?{t:'Step done. Press Continue',e:$('#next')}:{t:'Round complete. Try new values or the next scenario',e:$('#endrow')};
+  function guide(){
+    if(!pages.length || !R) return;
+    const g=nextMove(); let t=g.t||'', e=g.e||null;
+    if(e){ const s=e.closest('.scr'); if(s && !pages[page].includes(s)){ const j=pages.findIndex(p=>p.includes(s));
+      if(j>page){ t='Next screen: '+t; e=$('#next'); } else { t='Back a screen: '+t; e=$('#back'); } } }
+    const gate=$('#gate'); gate.textContent=t; gate.classList.toggle('go',!!t);
+    if(glowEl!==e){ if(glowEl) glowEl.classList.remove('guide'); glowEl=e; if(e) e.classList.add('guide'); }
+    const sb=$('#stp-btn'), sl=g.s?'STP §'+g.s:'STP';
+    if(sb.textContent!==sl){ sb.textContent=sl; sb.classList.toggle('sec',!!g.s); sb.dataset.s=g.s||''; }
+  }
+  function openBrief(){ briefed.add(R.S.id); $('#brief-body').innerHTML=briefHTML(); $('#brief').classList.add('open'); $('#brief-go').focus(); }
+  function closeBrief(){ $('#brief').classList.remove('open'); guide(); }
+  $('#brief-go').addEventListener('click',closeBrief);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#brief').classList.contains('open')) closeBrief(); });
+  document.addEventListener('click',()=>setTimeout(guide,0));
+  document.addEventListener('input',()=>guide());
+  /* the slider starts at 50%, so it only counts as set once the student moves it */
+  document.addEventListener('input',e=>{ if(e.target.id==='meoh' && R) R.meohSet=true; },true);
+  document.addEventListener('click',e=>{ if(R && e.target.closest && e.target.closest('#mm,#mp')) R.meohSet=true; },true);
+  function nextMove(){
+    const k=stepOf(page);
+    if(k===0) return storyMove();
+    if(solved[k-1]) return doneMove(k);
+    if(k===1){
+      const g=$('#set').querySelectorAll('.chips'), s=R.set;
+      if(s.col==null) return {t:'Choose the column',e:g[0],s:3};
+      if(s.ip==null) return {t:'Choose the aqueous part of the mobile phase',e:g[1],s:3};
+      if(!R.meohSet) return {t:'Set the methanol with the slider or − / +',e:$('#meoh').closest('.slrow'),s:3};
+      if(s.wl==null) return {t:'Choose the detector wavelength',e:g[2],s:3};
+      if(R.pred==null) return {t:'Predict what more methanol does to the peak',e:$('#pred .chips'),s:3};
+      if(!R.inj) return {t:'Inject the standard',e:$('#inject1'),s:7};
+      if(empty('kk')) return {t:'Read t0 and tR on the chromatogram, then calculate k′',e:$('#kk'),s:8};
+      return Object.assign(checkMove(1),{s:8});
+    }
+    if(k===2){
+      if(empty('rsd')) return {t:'Calculate the RSD of the five peak areas',e:$('#rsd'),s:8};
+      if(R.ans2.dec==null) return {t:'Compare every value with its limit, then decide',e:$('#q2 .chips'),s:8};
+      if(R.ans2.dec===1 && R.ans2.which==null) return {t:'Pick the limit that failed',e:$('#which .chips'),s:8};
+      return Object.assign(checkMove(2),{s:8});
+    }
+    if(k===3){
+      if(empty('r1')) return {t:'Work through the R1 formula one term at a time',e:$('#r1'),s:9};
+      if(empty('r2')) return {t:'Turn R1 into a % of the 4 mg label claim',e:$('#r2'),s:9};
+      return Object.assign(checkMove(3),{s:9});
+    }
+    const g=$('#q4').querySelectorAll('.chips');
+    if(R.ans4[0]==null) return {t:'Choose the limits that apply to this sample',e:g[0],s:2};
+    if(R.ans4[1]==null) return {t:'Decide whether the result complies',e:g[1],s:2};
+    return Object.assign(checkMove(4),{s:2});
+  }
+  function briefHTML(){
+    return '<p class="small" style="margin:0">'+R.S.context(R)+'</p><ol class="sop">'+
+      '<li><b>Set up the method.</b> Choose the column, the aqueous part, the methanol percentage and the wavelength.</li>'+
+      '<li><b>Test injection.</b> Predict, inject the standard once, then calculate k′ from t0 and tR.</li>'+
+      '<li><b>System check.</b> Five injections of the standard must meet every limit. If one fails, stop and fix the system before any sample.</li>'+
+      '<li><b>Assay.</b> Inject the sample, then calculate mg per tablet and % of label claim.</li>'+
+      '<li><b>Decide.</b> Choose the right limits and decide whether the result complies.</li></ol>';
+  }
+
+  /* ---------- STP: opens at the section the current move needs ---------- */
+  function openSTP(s){
+    const d=$('#stp'); d.classList.add('open');
+    d.querySelectorAll('.stp-sec.hit').forEach(x=>x.classList.remove('hit'));
+    const sec=s?$('#stp-'+s):null;
+    if(sec){ sec.scrollIntoView({block:'start'}); sec.classList.add('hit'); } else d.querySelector('.box').scrollTop=0;
+    $('#stp-close').focus({preventScroll:true});
+  }
+  function closeSTP(){ $('#stp').classList.remove('open'); $('#stp-btn').focus({preventScroll:true}); }
+  $('#stp-btn').addEventListener('click',()=>openSTP($('#stp-btn').dataset.s));
+  $('#stp-close').addEventListener('click',closeSTP);
+  $('#stp').addEventListener('click',e=>{ if(e.target.id==='stp') closeSTP(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#stp').classList.contains('open')) closeSTP(); });
+  $('#brief-stp').addEventListener('click',()=>{ closeBrief(); openSTP(''); });
 
   setAppH(); buildPages(); newRound(); goPage(0);
 })();
