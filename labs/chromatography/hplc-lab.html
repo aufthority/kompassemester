@@ -215,6 +215,8 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 .stp-f{background:#f6f7f5;border-radius:6px;padding:.4em .6em;font-weight:700;color:var(--ink);margin:.2em 0 .4em;overflow-x:auto}
 .tn{border-left:3px solid var(--accent);background:var(--g-bg);color:var(--accent-dark);border-radius:0 6px 6px 0;padding:.3em .6em;margin:.3em 0}
 .tn b{color:var(--accent-dark)}
+.crit span.def{font-weight:500;text-align:left;color:var(--accent-dark)}
+.strip{width:100%;height:auto;display:block;max-height:4.6em;margin:.1em 0}
 </style>
 </head>
 <body>
@@ -247,7 +249,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       <div class="btns" style="margin-top:0"><button class="btn solid" id="inject1" type="button">Inject the standard</button></div>
       <div id="chrom1"></div>
       <div id="k1"></div>
-      <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button><button class="btn ghost" id="rev1" type="button" hidden>Show the working</button></div>
+      <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button><button class="btn ghost" id="rev1" type="button" hidden>Show the working</button><button class="btn ghost" id="reset1" type="button" title="Clear the chromatogram and inject again">Reset</button></div>
       <div class="msg" id="m1">Choose the settings, make a prediction, then inject.</div>
       <div class="work" id="w1"></div>
     </section>
@@ -259,7 +261,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     <section class="scr" data-step="2" data-pane="b" data-title="Pass or stop?">
       <div id="q2"></div>
       <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button><button class="btn ghost" id="rev2" type="button" hidden>Show the working</button></div>
-      <div class="msg" id="m2">Work out the RSD of the peak areas, then decide.</div>
+      <div class="msg" id="m2">Compare every value with its limit, then decide.</div>
       <div class="work" id="w2"></div>
     </section>
 
@@ -269,7 +271,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     <section class="scr" data-step="3" data-pane="b" data-title="Calculate">
       <div id="s3b"></div>
       <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button><button class="btn ghost" id="rev3" type="button" hidden>Show the working</button></div>
-      <div class="msg" id="m3">Give mg per tablet to 2 decimal places and % label claim to 1 decimal place.</div>
+      <div class="msg" id="m3">Answer part a, then give R2 to 1 decimal place.</div>
       <div class="work" id="w3"></div>
     </section>
 
@@ -344,7 +346,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
           <tr><td>RSD of peak area (5 injections)</td><td>Not more than 2.0%</td></tr>
           <tr><td>RSD of retention time</td><td>Not more than 1.0%</td></tr>
           <tr><td>Capacity factor k′</td><td>Not less than 2.0</td></tr></table>
-        <p class="tn"><b>Trainer’s note:</b> k′ uses the retention time tR and the unretained time t0. RSD uses the sample standard deviation (n − 1).</p></section>
+        <p class="tn"><b>Trainer’s note:</b> the data system calculates these values for you. Your job is to compare each one with its limit. RSD tells you how much the five injections wobble: small means they agree.</p></section>
       <section class="stp-sec" id="stp-9"><h3>9 · Calculation</h3>
         <p><b>Content per tablet, R1 (mg/tablet)</b></p>
         <div class="stp-f">R1 = (Spl Area ÷ Std Area) × (Std Wt ÷ 50) × (4 ÷ 50) × 25 × (ATW ÷ Spl Wt) × (P ÷ 100)</div>
@@ -357,7 +359,8 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
           <tr><td>Spl Wt</td><td>Weight of powder (mg)</td></tr>
           <tr><td>ATW</td><td>Average tablet weight (mg/tablet)</td></tr>
           <tr><td>P</td><td>% potency of WS, as-is basis</td></tr></table>
-        <p>Report R1 to 2 decimal places and R2 to 1 decimal place.</p></section>
+        <p>Report R1 to 2 decimal places and R2 to 1 decimal place.</p>
+        <p class="tn"><b>Trainer’s note:</b> the data system calculates R1. Each factor corrects for one thing: the peak comparison, the dilutions, the purity of the standard, and the powder weighed versus one whole tablet.</p></section>
     </div>
   </div>
 </div>
@@ -399,6 +402,26 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   const sd=a=>{ const m=mean(a); return Math.sqrt(a.reduce((s,x)=>s+(x-m)*(x-m),0)/(a.length-1)); };
   const psd=a=>{ const m=mean(a); return Math.sqrt(a.reduce((s,x)=>s+(x-m)*(x-m),0)/a.length); };
 
+  /* ---------- tap-to-define terms ---------- */
+  const GLOSS={
+    k:'Capacity factor k′: how long the column holds the drug compared with something it does not hold at all. Too small, and the drug comes out mixed with the junk at the start.',
+    t0:'t0: the time something the column does not hold at all takes to pass through. It shows as a small blip near the start.',
+    tR:'tR (retention time): the time the drug peak comes out.',
+    tail:'Tailing factor: how lopsided the peak is. 1.0 is perfectly symmetrical; a long tail on the right makes it bigger.',
+    plates:'Plate count: how sharp (narrow) the peak is. More plates means a sharper peak.',
+    rsdA:'RSD of area: how much the five peak areas wobble, as a % of their average. Small means the injections agree with each other.',
+    rsdT:'RSD of tR: how much the time the peak comes out wobbles between the five injections.',
+    potency:'Potency (P): how pure the working standard is, from its certificate.',
+    atw:'Average tablet weight: the mean weight of one whole tablet. Most of it is filler; only 4 mg is the drug.',
+    lc:'Label claim: the amount printed on the pack, here 4 mg per tablet.'
+  };
+  document.addEventListener('click',e=>{
+    const t=e.target.closest('.term'); if(!t) return;
+    const nx=t.nextElementSibling; if(nx && nx.classList.contains('def')){ nx.remove(); fitPage(); return; }
+    const d=document.createElement('span'); d.className='def'; d.textContent=GLOSS[t.dataset.t]||''; t.after(d); track('lab-term',{t:t.dataset.t}); fitPage();
+  });
+  const term=(k,txt)=>'<button type="button" class="term" data-t="'+k+'">'+txt+'</button>';
+
   /* ---------- misconceptions: every wrong answer names one ---------- */
   const MIX={
     H1:'Reverse phase needs a non-polar (C18) column.',
@@ -411,7 +434,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     H8:'RSD uses the sample SD (n − 1).',
     H9:'If system suitability fails, no samples are injected.',
     H10:'Correct for the standard’s potency (P).',
-    H11:'Scale the sample weight up to one tablet (ATW ÷ Spl Wt).',
+    H11:'Each term in the calculation corrects for one thing.',
     H12:'Sample area goes on top.',
     H13:'% label claim = mg per tablet ÷ 4 × 100.',
     H14:'Release and shelf-life limits are different.'
@@ -562,6 +585,13 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     const d=$('#pred'); d.innerHTML='<div class="q">Predict: if you raise the methanol, the chlorpheniramine peak comes out</div>';
     d.appendChild(chipGroup(['Earlier','Later','At the same time'], R.pred, i=>{ R.pred=i; unsolveFrom(1); track('lab-prediction',{scenario:R.S.id,pick:i}); }));
   }
+  /* Reset: clear the test injection so it can be run again. Settings stay; later steps go back to how they first looked (same numbers). */
+  $('#reset1').addEventListener('click',()=>{
+    R.ans1.k=null; R.ssFixed=false; R.ans2={}; R.ans3={}; R.ans4={};
+    ['#ss','#q2','#s3a','#s3b','#q4'].forEach(s=>{ $(s).innerHTML=''; });
+    [2,3,4].forEach(n=>{ $('#rev'+n).hidden=true; R.tries[n]=0; });
+    invalidate1();
+  });
   function invalidate1(){ R.inj=null; $('#chrom1').innerHTML=''; $('#k1').innerHTML=''; unsolveFrom(1); clearMsg(1); fitPage(); }
   function kNow(){
     const s=R.set, M=s.meoh;
@@ -579,7 +609,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     const peaks=[{t:tM, area:A*0.25, N:1500, T:1.2, label:'maleic acid'}, {t:tR, area:A, N:s.col===1?800:R.N, T:s.col===1?2.4:R.T, label:'chlorpheniramine', sub:tR<=tmax?'tR '+tR.toFixed(2):''}];
     const svg=chromSVG(peaks,{t0:R.t0, tmax:tmax, ymax:ref, note:s.wl===1?'Almost no signal at 365 nm':'', label:'Test injection of the standard'});
     const c=$('#chrom1'); c.innerHTML=''; c.appendChild(svg);
-    $('#k1').innerHTML='<div class="q">Capacity factor k′ of the chlorpheniramine peak</div><div class="calc-in">'+numIn('kk',R.ans1.k)+'<span class="unit">(no units)</span></div>';
+    $('#k1').innerHTML='<div class="q">'+term('k','Capacity factor k′')+' of the chlorpheniramine peak</div><p class="small" style="margin:0">k′ = ('+term('tR','tR')+' − '+term('t0','t0')+') ÷ t0. Read both times on the chromatogram.</p><div class="calc-in">'+numIn('kk',R.ans1.k)+'<span class="unit">(no units)</span></div>';
     $('#kk').addEventListener('input',()=>{ R.ans1.k=$('#kk').value; unsolveFrom(1); });
     unsolveFrom(1); clearMsg(1); fitPage();
     track('lab-run',{scenario:R.S.id, meoh:s.meoh, col:s.col, ip:s.ip, wl:s.wl});
@@ -622,18 +652,28 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   function ssNow(){ return R.ssFixed ? R.ss2 : R.ss; }
   function ssPass(ss){ const rsdA=sd(ss.areas)/mean(ss.areas)*100, rsdT=sd(ss.tRs)/mean(ss.tRs)*100;
     return {rsdA:rsdA, rsdT:rsdT, ok:{T:ss.T<=2.0, N:ss.N>=1500, A:rsdA<=2.0, tR:rsdT<=1.0, k:ss.k>=2.0}}; }
+  /* five dots: how far each injection's area sits from the average, in % */
+  function rsdStrip(ss){
+    const m=mean(ss.areas), dev=ss.areas.map(a=>(a-m)/m*100), lim=Math.max(3,Math.ceil(Math.max(...dev.map(Math.abs)))+1);
+    const L=16, Rt=304, cy=24, X=v=>L+(v+lim)/(2*lim)*(Rt-L);
+    let s='<svg class="strip" viewBox="0 0 320 54" role="img" aria-label="Spread of the five peak areas around their average">';
+    s+='<line x1="'+L+'" y1="'+cy+'" x2="'+Rt+'" y2="'+cy+'" stroke="#c9cdca"/><line x1="'+X(0)+'" y1="'+(cy-15)+'" x2="'+X(0)+'" y2="'+(cy+15)+'" stroke="#1c2620" stroke-dasharray="3 2"/>';
+    [-lim,0,lim].forEach(v=>{ s+='<text x="'+X(v)+'" y="50" font-size="10" text-anchor="middle" fill="#636b65">'+(v===0?'average':(v>0?'+':'−')+Math.abs(v)+'%')+'</text>'; });
+    dev.forEach((d,i)=>{ s+='<circle cx="'+X(d).toFixed(1)+'" cy="'+(cy+[-6,6,-2,2,0][i])+'" r="5.5" fill="#2d6a4f" fill-opacity=".7"/>'; });
+    return s+'</svg>';
+  }
   function renderSS(){
     const ss=ssNow(), P=ssPass(ss);
-    let h='<div class="scroll-x"><table class="ss"><tr><th>Injection</th><th>tR (min)</th><th>Peak area</th></tr>';
+    let h='<div class="scroll-x"><table class="ss"><tr><th>Injection</th><th>'+term('tR','tR')+' (min)</th><th>Peak area</th></tr>';
     ss.areas.forEach((a,i)=>{ h+='<tr><td>'+(i+1)+'</td><td>'+ss.tRs[i].toFixed(2)+'</td><td>'+fmtA(a)+'</td></tr>'; });
-    h+='</table></div>';
-    h+='<div class="crit"><span>Tailing factor (limit ≤ 2.0)</span><span>'+ss.T.toFixed(2)+'</span><span>Plate count (limit ≥ 1500)</span><span>'+ss.N.toLocaleString('en-US')+'</span>'+
-       '<span>RSD of tR (limit ≤ 1.0%)</span><span>'+P.rsdT.toFixed(2)+'%</span><span>k′ (limit ≥ 2.0)</span><span>'+ss.k.toFixed(2)+'</span><span>RSD of area (limit ≤ 2.0%)</span><span>?</span></div>';
+    h+='</table></div><p class="small" style="margin:0">Calculated by the data system:</p>';
+    h+='<div class="crit"><span>'+term('tail','Tailing factor')+' (limit ≤ 2.0)</span><span>'+ss.T.toFixed(2)+'</span><span>'+term('plates','Plate count')+' (limit ≥ 1500)</span><span>'+ss.N.toLocaleString('en-US')+'</span>'+
+       '<span>'+term('rsdT','RSD of tR')+' (limit ≤ 1.0%)</span><span>'+P.rsdT.toFixed(2)+'%</span><span>'+term('k','k′')+' (limit ≥ 2.0)</span><span>'+ss.k.toFixed(2)+'</span><span>'+term('rsdA','RSD of area')+' (limit ≤ 2.0%)</span><span>'+P.rsdA.toFixed(2)+'%</span></div>';
     if(R.ssFixed) h='<div class="fixnote">'+fixText()+' The standard was injected five more times:</div>'+h;
     $('#ss').innerHTML=h;
-    const q=$('#q2'); q.innerHTML='<p class="small" style="margin:0">The five results are '+(innerWidth>=900?'on the left':'on the previous screen')+'.</p><div class="q">a. RSD of the five peak areas</div><div class="calc-in">'+numIn('rsd',R.ans2.rsd)+'<span class="unit">%</span></div>';
-    q.querySelector('input').addEventListener('input',()=>{ R.ans2.rsd=$('#rsd').value; unsolveFrom(2); });
-    const d=document.createElement('div'); d.innerHTML='<div class="q">b. Decision</div>';
+    const q=$('#q2'); q.innerHTML='<p class="small" style="margin:0">The results are '+(innerWidth>=900?'on the left':'on the previous screen')+'.</p><div class="q">How close are the five peak areas?</div>'+rsdStrip(ss)+
+      '<p class="small" style="margin:0">Each dot is one injection. The tighter the cluster, the smaller the '+term('rsdA','RSD')+' value. One stray dot makes it jump.</p>';
+    const d=document.createElement('div'); d.innerHTML='<div class="q">a. Decision</div>';
     d.appendChild(chipGroup(['All limits met: inject the samples','A limit is failed: stop and fix the system'], R.ans2.dec, i=>{ R.ans2.dec=i; unsolveFrom(2); renderWhich(); }, true)); q.appendChild(d);
     const w=document.createElement('div'); w.id='which'; q.appendChild(w); renderWhich();
     fitPage();
@@ -642,42 +682,35 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   function renderWhich(){
     const w=$('#which'); if(!w) return; w.innerHTML='';
     if(R.ans2.dec!==1) return;
-    w.innerHTML='<div class="q">c. Which limit failed?</div>';
+    w.innerHTML='<div class="q">b. Which limit failed?</div>';
     w.appendChild(chipGroup(whichOpts().map(o=>o[0]), R.ans2.which, i=>{ R.ans2.which=i; unsolveFrom(2); }));
     fitPage();
   }
   function fixText(){ return R.failMode==='precision' ? 'Fixed: an air bubble in the injector gave one low area. The injector was purged.' : 'Fixed: the old column had active sites that made the peak tail. It was replaced with a new C18 column.'; }
   $('#chk2').addEventListener('click',()=>{
     const ss=ssNow(), P=ssPass(ss), allOk=Object.values(P.ok).every(Boolean);
-    const rsdShown=sd(ss.areas)/mean(ss.areas)*100;
-    const v=readNum('rsd');
-    if(v==null) return msg(2,'near','Calculate the RSD of the peak areas first.');
-    if(!close(v,rsdShown,.05,.03)){
-      const pop=psd(ss.areas)/mean(ss.areas)*100;
-      if(close(v,pop,.03,.02)) return msg(2,'bad',mixLine('H8','You used the population SD (÷ n). Divide by n − 1 = 4.',2));
-      if(close(v,sd(ss.areas),.02)) return msg(2,'bad',mixLine('H8','That is the SD. RSD = SD ÷ mean × 100.',2));
-      return msg(2,'bad',mixLine('H8','RSD = SD (n − 1) ÷ mean × 100.',2));
-    }
-    if(R.ans2.dec==null) return msg(2,'near','Now decide: inject the samples or stop?');
+    if(R.ans2.dec==null) return msg(2,'near','Compare every value with its limit, then decide: inject the samples or stop?');
     if(allOk && R.ans2.dec===1) return msg(2,'bad','<p><b>Every limit is met.</b> Compare each value with its limit again.</p>');
     if(!allOk && R.ans2.dec===0) return msg(2,'bad',mixLine('H9','Check every value against its limit before going on.',2));
     if(!allOk){
       if(R.ans2.which==null) return msg(2,'near','Which limit failed?');
       const key=whichOpts()[R.ans2.which][1];
       if(P.ok[key]) return msg(2,'bad','<p><b>That one passes.</b> Find the value outside its limit.</p>');
-      R.ssFixed=true; R.ss2=buildSS(false); R.ans2={}; renderSS();
+      R.ssFixed=true; R.ss2=R.ss2||buildSS(false); R.ans2={}; renderSS();
       msg(2,'near','<b>Right: stop.</b> '+fixText()+' Check the new results.'); track('lab-ss-fixed',{mode:R.failMode});
       return;
     }
-    msg(2,'good','<b>Right.</b> RSD of area '+rsdShown.toFixed(2)+'%. All limits met, so the samples can be injected.'); solve(2);
+    msg(2,'good','<b>Right.</b> Every value is within its limit, so the system can be trusted and the samples can be injected.'); solve(2);
   });
   $('#rev2').addEventListener('click',()=>{
     let pre='';
-    if(!R.ssFixed && R.failMode){ const P=ssPass(R.ss); pre='<p class="small">First set: '+(R.failMode==='precision'?'RSD of area '+P.rsdA.toFixed(2)+'% (above 2.0%)':'tailing factor '+R.ss.T.toFixed(2)+' (above 2.0)')+'. '+fixText()+'</p>'; R.ssFixed=true; R.ss2=buildSS(false); }
-    const ss=ssNow(), m=mean(ss.areas), s=sd(ss.areas), rsd=s/m*100;
-    R.ans2={rsd:rsd.toFixed(2), dec:0}; renderSS();
+    if(!R.ssFixed && R.failMode){ const P=ssPass(R.ss); pre='<p class="small">First set: '+(R.failMode==='precision'?'RSD of area '+P.rsdA.toFixed(2)+'% (above 2.0%)':'tailing factor '+R.ss.T.toFixed(2)+' (above 2.0)')+'. '+fixText()+'</p>'; R.ssFixed=true; R.ss2=R.ss2||buildSS(false); }
+    const ss=ssNow(), P=ssPass(ss), m=mean(ss.areas), s=sd(ss.areas);
+    R.ans2={dec:0}; renderSS();
+    const rows=[['Tailing factor',ss.T.toFixed(2),'≤ 2.0'],['Plate count',ss.N.toLocaleString('en-US'),'≥ 1500'],['RSD of tR',P.rsdT.toFixed(2)+'%','≤ 1.0%'],['k′',ss.k.toFixed(2),'≥ 2.0'],['RSD of area',P.rsdA.toFixed(2)+'%','≤ 2.0%']];
     const w=$('#w2'); w.className='work show';
-    w.innerHTML=pre+'<table class="w"><tr><th>Quantity</th><th>Value</th></tr><tr><td>Mean area</td><td>'+fmtA(m)+'</td></tr><tr><td>SD (n − 1)</td><td>'+fmtA(s)+'</td></tr><tr><td>RSD</td><td>'+fmtA(s)+' ÷ '+fmtA(m)+' × 100 = <b>'+rsd.toFixed(2)+'%</b></td></tr></table>';
+    w.innerHTML=pre+'<table class="w"><tr><th>Parameter</th><th>Result</th><th>Limit</th></tr>'+rows.map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+' ✓</td></tr>').join('')+'</table>'+
+      '<p class="small">RSD = spread of the five areas ÷ their average × 100 = '+fmtA(s)+' ÷ '+fmtA(m)+' × 100. The data system does this for you.</p>';
     msg(2,'near','All limits met on this set: inject the samples.'); track('lab-step2-reveal',{scenario:R.S.id}); solve(2);
   });
 
@@ -691,42 +724,46 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     const R1=R.splA/stdA*R.stdWt/50*4/50*25*R.atw/R.splWt*R.P/100;
     return {stdA:stdA, splA:R.splA, R1:R1, R2:R1/4*100};
   }
+  function q3Opts(){
+    if(!R.q3o) R.q3o=shuffle([
+      ['To scale the powder you weighed up to one whole tablet',1],
+      ['To correct for the purity of the standard',0,'That is the job of P ÷ 100. The tablet-weight term scales the powder you weighed up to one whole tablet.','H11'],
+      ['To turn the peak area into milligrams',0,'Comparing the sample peak with the standard peak does that. The tablet-weight term scales the powder you weighed up to one whole tablet.','H11']]);
+    return R.q3o;
+  }
   function renderStep3(){
     const a=assay(), ss=ssNow(), tR=mean(ss.tRs);
     const box=$('#s3a'); box.innerHTML=''; const boxB=$('#s3b'); boxB.innerHTML='';
     const svg=chromSVG([{t:R.t0*1.25, area:R.F*0.16*0.25, N:1500, T:1.2, label:'maleic acid'},{t:tR, area:a.splA, N:ss.N, T:ss.T, label:'chlorpheniramine', sub:'area '+fmtA(a.splA)}],{t0:R.t0, tmax:15, label:'Sample chromatogram'});
-    const g=document.createElement('div'); g.innerHTML='<p class="small">Sample: 20 tablets powdered; a portion equal to one tablet’s worth (about 4 mg of drug) made up to 25 ml with water.</p>';
+    const g=document.createElement('div'); g.innerHTML='<p class="small">Sample: 20 tablets powdered; a portion holding about 4 mg of drug made up to 25 ml with water.</p>';
     g.appendChild(svg); box.appendChild(g);
-    const d=document.createElement('div'), d2=document.createElement('div');
-    d.innerHTML='<div class="given">Std Area (mean) <b>'+fmtA(a.stdA)+'</b> · Spl Area <b>'+fmtA(a.splA)+'</b><br>Std Wt <b>'+R.stdWt.toFixed(1)+' mg</b> (to 50 ml, then 4 → 50 ml) · Potency P <b>'+R.P.toFixed(1)+'%</b><br>Spl Wt <b>'+R.splWt.toFixed(1)+' mg</b> (to 25 ml) · Average tablet weight <b>'+R.atw.toFixed(1)+' mg</b></div>'+
-      '<p class="small">R1 = (Spl Area ÷ Std Area) × (Std Wt ÷ 50) × (4 ÷ 50) × 25 × (ATW ÷ Spl Wt) × (P ÷ 100)</p>';
-    d2.innerHTML='<p class="small" style="margin:0">The data and formula are '+(innerWidth>=900?'on the left':'on the previous screen')+'.</p><div class="q">a. Content per tablet, R1</div><div class="calc-in">'+numIn('r1',R.ans3.r1)+'<span class="unit">mg/tablet</span></div>'+
-      '<div class="q">b. Percentage of label claim, R2</div><div class="calc-in">'+numIn('r2',R.ans3.r2)+'<span class="unit">%</span></div>';
-    box.appendChild(d); boxB.appendChild(d2);
-    boxB.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{ R.ans3.r1=$('#r1').value; R.ans3.r2=$('#r2').value; unsolveFrom(3); }));
+    const d=document.createElement('div');
+    d.innerHTML='<div class="given">Standard: peak area <b>'+fmtA(a.stdA)+'</b> (mean of five) · weighed <b>'+R.stdWt.toFixed(1)+' mg</b> · '+term('potency','potency')+' <b>'+R.P.toFixed(1)+'%</b><br>Sample: peak area <b>'+fmtA(a.splA)+'</b> · powder weighed <b>'+R.splWt.toFixed(1)+' mg</b> · '+term('atw','average tablet weight')+' <b>'+R.atw.toFixed(1)+' mg</b></div>'+
+      '<div class="fixnote">Data system result: content per tablet, <b>R1 = '+a.R1.toFixed(2)+' mg</b></div>'+
+      '<p class="small" style="margin:0">It compares the sample peak with the standard peak, allows for the dilutions and the standard’s purity, then scales up to one whole tablet (full formula: STP §9).</p>';
+    box.appendChild(d);
+    boxB.innerHTML='<p class="small" style="margin:0">The data system’s result is '+(innerWidth>=900?'on the left':'on the previous screen')+'.</p><div class="q">a. The calculation multiplies by (average tablet weight ÷ powder weighed). Why?</div>';
+    boxB.appendChild(chipGroup(q3Opts().map(o=>o[0]), R.ans3.why, i=>{ R.ans3.why=i; unsolveFrom(3); }, true));
+    boxB.insertAdjacentHTML('beforeend','<div class="q">b. Percentage of '+term('lc','label claim')+', R2</div><p class="small" style="margin:0">R2 = R1 ÷ 4 mg × 100</p><div class="calc-in">'+numIn('r2',R.ans3.r2)+'<span class="unit">%</span></div>');
+    $('#r2').addEventListener('input',()=>{ R.ans3.r2=$('#r2').value; unsolveFrom(3); });
   }
   $('#chk3').addEventListener('click',()=>{
-    const a=assay(), v1=readNum('r1'), v2=readNum('r2');
-    if(v1==null||v2==null) return msg(3,'near','Enter both R1 and R2.');
-    if(!close(v1,a.R1,.01)){
-      const base=a.R1;
-      if(close(v1,base/(R.P/100),.004)) return msg(3,'bad',mixLine('H10','Multiply by P ÷ 100 = '+(R.P/100).toFixed(3)+'.',3));
-      if(close(v1,base/(R.atw/R.splWt),.004)) return msg(3,'bad',mixLine('H11','Multiply by ATW ÷ Spl Wt = '+R.atw.toFixed(1)+' ÷ '+R.splWt.toFixed(1)+'.',3));
-      if(close(v1,base*Math.pow(a.stdA/a.splA,2),.004)) return msg(3,'bad',mixLine('H12','Use Spl Area ÷ Std Area, not the other way round.',3));
-      return msg(3,'bad','<p><b>Check each factor.</b> Work through the formula one term at a time.</p>');
+    const a=assay(), v2=readNum('r2'), lines=[]; let miss=0;
+    if(R.ans3.why==null) miss++; else { const o=q3Opts()[R.ans3.why]; if(!o[1]) lines.push(mixLine(o[3],o[2],3)); }
+    if(v2==null) miss++;
+    else if(!close(v2,a.R2,0,.5) && !close(v2,+a.R1.toFixed(2)/4*100,0,.5)){
+      if(close(v2,a.R1,.01)) lines.push(mixLine('H13','R2 is a percentage of 4 mg: divide R1 by 4, then multiply by 100.',3));
+      else lines.push(mixLine('H13',a.R1.toFixed(2)+' ÷ 4 × 100.',3));
     }
-    const want2=v1/4*100;
-    if(!close(v2,want2,0,.5) && !close(v2,a.R2,0,.5)){
-      if(close(v2,v1,.01)) return msg(3,'bad',mixLine('H13','R2 is a percentage of 4 mg.',3));
-      return msg(3,'bad',mixLine('H13',v1.toFixed(2)+' ÷ 4 × 100.',3));
-    }
+    if(lines.length) return msg(3,'bad',lines.join(''));
+    if(miss) return msg(3,'near','Answer both parts.');
     msg(3,'good','<b>Right.</b> '+a.R1.toFixed(2)+' mg per tablet = '+a.R2.toFixed(1)+'% of label claim.'); solve(3);
   });
   $('#rev3').addEventListener('click',()=>{
-    const a=assay(); R.ans3={r1:a.R1.toFixed(2), r2:a.R2.toFixed(1)}; renderStep3();
+    const a=assay(); R.ans3={why:q3Opts().findIndex(o=>o[1]), r2:a.R2.toFixed(1)}; renderStep3();
     const w=$('#w3'); w.className='work show';
-    const rows=[['Spl Area ÷ Std Area',fmtA(a.splA)+' ÷ '+fmtA(a.stdA),(a.splA/a.stdA).toFixed(4)],['Std Wt ÷ 50',R.stdWt.toFixed(1)+' ÷ 50',(R.stdWt/50).toFixed(4)],['4 ÷ 50','dilution of the standard','0.0800'],['× 25','sample volume (ml)','25'],['ATW ÷ Spl Wt',R.atw.toFixed(1)+' ÷ '+R.splWt.toFixed(1),(R.atw/R.splWt).toFixed(4)],['P ÷ 100',R.P.toFixed(1)+' ÷ 100',(R.P/100).toFixed(3)],['R1','product of all terms','<b>'+a.R1.toFixed(2)+' mg/tablet</b>'],['R2',a.R1.toFixed(2)+' ÷ 4 × 100','<b>'+a.R2.toFixed(1)+'%</b>']];
-    w.innerHTML='<table class="w"><tr><th>Term</th><th>Values</th><th>Result</th></tr>'+rows.map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td></tr>').join('')+'</table>';
+    const rows=[['Spl Area ÷ Std Area','Compares the sample peak with the standard peak'],['Std Wt ÷ 50 × 4 ÷ 50','How much drug is in each ml of the standard'],['× 25','The sample was made up to 25 ml'],['ATW ÷ Spl Wt','Scales the powder weighed up to one whole tablet'],['P ÷ 100','Allows for the purity of the standard'],['R2',a.R1.toFixed(2)+' ÷ 4 × 100 = <b>'+a.R2.toFixed(1)+'%</b>']];
+    w.innerHTML='<table class="w"><tr><th>Term</th><th>What it does</th></tr>'+rows.map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>').join('')+'</table>';
     msg(3,'near','Working shown.'); track('lab-step3-reveal',{scenario:R.S.id}); solve(3);
   });
 
@@ -764,7 +801,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   function solve(k){
     solved[k-1]=true; track('lab-step'+k+'-solved',{scenario:R.S.id}); /* one event name per step: Umami funnels match names */
     if(k===1 && !$('#ss').innerHTML){ renderSS(); }
-    if(k===2){ R.splA=null; renderStep3(); }
+    if(k===2){ renderStep3(); }
     if(k===3){ R.ans4={}; renderStep4(); }
     if(k===4){ roundComplete(); $('#endrow').hidden=false; }
     setLocks(); fitPage();
@@ -971,13 +1008,12 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       return Object.assign(checkMove(1),{s:8});
     }
     if(k===2){
-      if(empty('rsd')) return {t:'Calculate the RSD of the five peak areas',e:$('#rsd'),s:8};
       if(R.ans2.dec==null) return {t:'Compare every value with its limit, then decide',e:$('#q2 .chips'),s:8};
       if(R.ans2.dec===1 && R.ans2.which==null) return {t:'Pick the limit that failed',e:$('#which .chips'),s:8};
       return Object.assign(checkMove(2),{s:8});
     }
     if(k===3){
-      if(empty('r1')) return {t:'Work through the R1 formula one term at a time',e:$('#r1'),s:9};
+      if(R.ans3.why==null) return {t:'Choose why the tablet weight is in the calculation',e:$('#s3b .chips'),s:9};
       if(empty('r2')) return {t:'Turn R1 into a % of the 4 mg label claim',e:$('#r2'),s:9};
       return Object.assign(checkMove(3),{s:9});
     }
@@ -990,8 +1026,8 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     return '<p class="small" style="margin:0">'+R.S.context(R)+'</p><ol class="sop">'+
       '<li><b>Set up the method.</b> Choose the column, the aqueous part, the methanol percentage and the wavelength.</li>'+
       '<li><b>Test injection.</b> Predict, inject the standard once, then calculate k′ from t0 and tR.</li>'+
-      '<li><b>System check.</b> Five injections of the standard must meet every limit. If one fails, stop and fix the system before any sample.</li>'+
-      '<li><b>Assay.</b> Inject the sample, then calculate mg per tablet and % of label claim.</li>'+
+      '<li><b>System check.</b> The data system reports five injections of the standard. Every limit must be met; if one fails, stop and fix the system before any sample.</li>'+
+      '<li><b>Assay.</b> Inject the sample. The data system gives mg per tablet; you work out the % of label claim.</li>'+
       '<li><b>Decide.</b> Choose the right limits and decide whether the result complies.</li></ol>';
   }
 
