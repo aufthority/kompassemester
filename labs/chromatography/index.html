@@ -300,6 +300,17 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .plates{display:flex;gap:.6em;justify-content:center;margin:.3em 0}
 .plates svg{width:7.5em;height:auto}
 .cmp td:first-child{white-space:nowrap}
+/* animations */
+.anim{display:flex;flex-direction:column;gap:.3em;min-width:0}
+.a-tabs{display:flex;flex-wrap:wrap;gap:.3em;justify-content:center}
+.a-ui{display:flex;align-items:center;gap:.4em}
+.a-ui button{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .78em 'DM Sans',sans-serif;padding:.32em .85em;cursor:pointer;white-space:nowrap}
+.a-ui .a-play{background:var(--ink);color:#fff;min-width:7.2em}
+.a-bar{flex:1;height:4px;background:var(--rule);border-radius:4px;overflow:hidden}
+.a-fill{height:100%;width:0;background:var(--accent)}
+.anim-cap{font-size:.82em;min-height:4.1em;margin:0;line-height:1.4;color:var(--ink)}
+.ill .anim-svg{background:#fbfcfb;border-radius:12px}
+@media (max-height:700px){.anim-cap{min-height:3em}}
 /* embedded lab */
 .si.lab-si{justify-content:flex-start;gap:.35em;max-width:860px}
 .lab-head{flex:0 0 auto}
@@ -350,22 +361,13 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 <section class="slide active" data-sec="intro" data-title="Start here">
  <div class="si has-ill">
   <figure class="ill">
-   <svg viewBox="0 0 400 210" role="img" aria-label="Bar showing that 4 mg of a 90 mg tablet is chlorpheniramine maleate and 86 mg is excipients">
-    <text class="tx b" x="20" y="34" style="font-size:15px">One chlorpheniramine tablet: 90 mg</text>
-    <text class="tx s" x="20" y="54">average tablet weight, 4 mg tablet</text>
-    <rect class="fg grow-x" x="20" y="74" width="360" height="40" rx="6" style="--d:.1s"/>
-    <rect class="fgs grow-x" x="20" y="74" width="16" height="40" style="--d:.9s"/>
-    <text class="tx g fade" x="44" y="99" style="--d:.6s">86 mg excipients: filler, binder, lubricant, colour</text>
-    <path class="ln g fade" d="M28 120 L28 140" style="--d:1.2s"/>
-    <text class="tx g fade" x="20" y="158" style="--d:1.2s;font-size:14px">4 mg drug (4.4%)</text>
-    <text class="tx s fade" x="20" y="190" style="--d:1.4s">How do we find it, prove what it is, and measure it?</text>
-   </svg>
+   <div class="anim" data-anim="hook"><svg class="anim-svg" viewBox="0 0 400 230" role="img" aria-label="Animation: one tablet holds many substances; extraction removes the filler, then chromatography races the rest apart"></svg><div class="a-ui"><button type="button" class="a-play">▶ Play</button><button type="button" class="a-replay">↺ Replay</button><div class="a-bar"><div class="a-fill"></div></div></div></div>
   </figure>
   <div class="txt">
    <div class="eyebrow">Start here</div>
    <h1>Find 4 mg <span class="ac">in a 90 mg tablet.</span></h1>
-   <p>A chlorpheniramine maleate tablet is an everyday antihistamine. Each 90 mg tablet holds only <b>4 mg</b> of drug. The rest is excipients.</p>
-   <p>Before a batch is released, a QC laboratory must <b>prove the drug is there</b>, show that <b>impurities are low</b>, and <b>measure</b> how much drug each tablet contains. It does all three with <b>chromatography</b>.</p>
+   <p>A chlorpheniramine maleate tablet holds only <b>4 mg</b> of drug, mixed with filler, colour and traces of impurities.</p>
+   <p>Before a batch is released, a QC laboratory must <b>prove the drug is there</b>, show that <b>impurities are low</b>, and <b>measure</b> how much each tablet contains. It does all three by making the mixture <b>race</b>: <b>chromatography</b>.</p>
    <p class="small">Written for Diploma in Pharmacy students. Use Next to move through the pages, or Contents to jump around. A periodic table is in Contents.</p>
   </div>
  </div>
@@ -388,26 +390,17 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 
 <!-- ================= BASICS ================= -->
 
-<section class="slide" data-sec="basics" data-title="Two phases">
+<section class="slide" data-sec="basics" data-title="Why compounds separate">
  <div class="si has-ill">
   <figure class="ill">
-   <svg viewBox="0 0 400 210" role="img" aria-label="Two compounds carried by a moving phase over a fixed phase; the one that sticks more moves less">
-    <text class="tx b" x="20" y="24">mobile phase (moves)</text>
-    <path class="ln b" d="M20 40 H370" marker-end="url(#ar-o)"/>
-    <rect class="fgr" x="20" y="130" width="360" height="40" rx="4"/>
-    <text class="tx b" x="20" y="192">stationary phase (stays still)</text>
-    <circle class="frs fade" cx="60" cy="118" r="10" style="--d:.2s"/><circle class="frs fade" cx="130" cy="118" r="10" style="--d:.8s"/>
-    <circle class="fgs fade" cx="60" cy="86" r="10" style="--d:.2s"/><circle class="fgs fade" cx="300" cy="86" r="10" style="--d:.8s"/>
-    <path class="ln m dash fade" d="M74 118 H114" style="--d:.8s"/><path class="ln m dash fade" d="M74 86 H284" style="--d:.8s"/>
-    <text class="tx r fade" x="148" y="122" style="--d:1s">sticks more → moves less</text>
-    <text class="tx g fade" x="230" y="70" style="--d:1s">sticks less → moves further</text>
-   </svg>
+   <div class="anim" data-anim="surface"><svg class="anim-svg" viewBox="0 0 400 230" role="img" aria-label="Animation: a polar and a non-polar molecule moving over a silica surface, with the TLC plate they produce"></svg><div class="a-ui"><button type="button" class="a-play">▶ Play</button><button type="button" class="a-replay">↺ Replay</button><div class="a-bar"><div class="a-fill"></div></div></div><p class="anim-cap" aria-live="polite"></p></div>
   </figure>
   <div class="txt">
-   <div class="eyebrow">The basic idea</div>
-   <h2>Every chromatography method <span class="ac">has two phases.</span></h2>
-   <p>The <b>stationary phase</b> stays still: a layer of silica on a plate, or packing inside a column. The <b>mobile phase</b> moves over it: a liquid or a gas.</p>
-   <p>Each compound is pulled two ways. The mobile phase carries it forward; the stationary phase holds it back. A compound that spends more time in the stationary phase moves <b>more slowly</b>. Different compounds therefore separate.</p>
+   <div class="eyebrow">The basic idea · watch</div>
+   <h2>Stick, let go, <span class="ac">move on.</span></h2>
+   <p>Every chromatography method has a <b>stationary phase</b> that stays still and a <b>mobile phase</b> that moves over it.</p>
+   <p>Molecules keep jumping between the two, and they move forward <b>only while they are in the mobile phase</b>. A compound that sticks to the stationary phase more often falls behind. That is what separates compounds.</p>
+   <p class="small">Colour code on every animation: red circle = polar compound (has an –OH), blue hexagon = non-polar compound, purple dots = solvent.</p>
   </div>
  </div>
 </section>
@@ -429,16 +422,17 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 </section>
 
 <section class="slide" data-sec="basics" data-title="Three techniques">
- <div class="si">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="anim" data-anim="tech"><div class="a-tabs" role="group"><button type="button" class="chip2 a-tab on" aria-pressed="true" data-o='{"tech": "tlc"}'>TLC</button><button type="button" class="chip2 a-tab" aria-pressed="false" data-o='{"tech": "hplc"}'>HPLC</button><button type="button" class="chip2 a-tab" aria-pressed="false" data-o='{"tech": "gc"}'>GC</button></div><svg class="anim-svg" viewBox="0 0 400 230" role="img" aria-label="Animation comparing TLC, HPLC and GC"></svg><div class="a-ui"><button type="button" class="a-play">▶ Play</button><button type="button" class="a-replay">↺ Replay</button><div class="a-bar"><div class="a-fill"></div></div></div><p class="anim-cap" aria-live="polite"></p></div>
+  </figure>
   <div class="txt">
-   <div class="eyebrow">The basic idea</div>
+   <div class="eyebrow">The basic idea · watch all three</div>
    <h2>Three techniques, <span class="ac">one principle.</span></h2>
-   <div class="map3 stagger">
-    <div class="box"><h3>TLC</h3><div class="q">Thin-layer chromatography</div>Liquid mobile phase climbs a <b>plate</b> coated with silica. Cheap; many samples at once; mainly for identity and impurity limit tests.</div>
-    <div class="box"><h3>HPLC</h3><div class="q">High-performance liquid chromatography</div>Liquid mobile phase is <b>pumped</b> through a packed column. The industry standard for measuring drug content.</div>
-    <div class="box"><h3>GC</h3><div class="q">Gas chromatography</div>A <b>gas</b> carries vapour through a heated column. For compounds that evaporate without breaking down, such as residual solvents.</div>
-   </div>
-   <p class="small">All three need a clean, dissolved sample first. That is what extraction does.</p>
+   <p><b>TLC:</b> liquid climbs a plate. Compounds end up in different <b>places</b>: you measure Rf.</p>
+   <p><b>HPLC:</b> liquid is pumped through a packed column. Compounds come out at different <b>times</b>: you read retention times.</p>
+   <p><b>GC:</b> a gas carries vapour through a hot column. Also separated in time, but only for compounds that <b>evaporate</b> without breaking down.</p>
+   <p class="small">Tap TLC, HPLC or GC above the animation to switch. All three need a clean, dissolved sample first.</p>
   </div>
  </div>
 </section>
@@ -683,17 +677,16 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 </section>
 
 <section class="slide" data-sec="tlc" data-title="Mobile phase strength">
- <div class="si">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="anim" data-anim="surface"><div class="a-tabs" role="group"><button type="button" class="chip2 a-tab on" aria-pressed="true" data-o='{"solvent": "hex"}'>Hexane</button><button type="button" class="chip2 a-tab" aria-pressed="false" data-o='{"solvent": "etac"}'>Ethyl acetate</button><button type="button" class="chip2 a-tab" aria-pressed="false" data-o='{"solvent": "meoh"}'>Methanol</button></div><svg class="anim-svg" viewBox="0 0 400 230" role="img" aria-label="Animation: how hexane, ethyl acetate and methanol compete for the silica surface"></svg><div class="a-ui"><button type="button" class="a-play">▶ Play</button><button type="button" class="a-replay">↺ Replay</button><div class="a-bar"><div class="a-fill"></div></div></div><p class="anim-cap" aria-live="polite"></p></div>
+  </figure>
   <div class="txt">
-   <div class="eyebrow">TLC · mobile phase · try it</div>
-   <h2>A more polar solvent <span class="ac">moves spots further.</span></h2>
-   <p>Solvents are ranked by polarity in the <b>elutropic series</b>. On silica, a more polar mobile phase competes harder for the silica and carries polar compounds further. Choose a solvent:</p>
-   <div class="sim">
-     <div class="chips2" id="elu-chips"></div>
-     <svg id="elu-svg" viewBox="0 0 400 120" aria-hidden="true"></svg>
-     <div class="sim-out" id="elu-out"></div>
-   </div>
-   <p class="small">Illustrative plate. Real methods mix solvents to land the drug in the middle of the plate (Rf about 0.3–0.7). <span class="cite">Polarity index: Watson (2017), Table 13.2</span></p>
+   <div class="eyebrow">TLC · mobile phase · watch</div>
+   <h2>The solvent competes <span class="ac">for the silica.</span></h2>
+   <p>On silica, the mobile phase and the compounds compete for the same polar <b>–OH sites</b>. A more polar solvent takes more of them, so compounds stick less and move further.</p>
+   <p>Solvents are ranked by polarity in the <b>elutropic series</b>: hexane (0) → toluene → dichloromethane → chloroform → ethyl acetate (4.4) → methanol (5.1) → water.</p>
+   <p class="small">Too weak: everything stays near the origin. Too strong: everything runs to the front. Real methods mix solvents to land the drug at Rf about 0.3–0.7. <span class="cite">Polarity index: Watson (2017), Table 13.2</span></p>
   </div>
  </div>
 </section>
@@ -915,21 +908,20 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 <!-- ================= HPLC ================= -->
 
 <section class="slide" data-sec="hplc" data-title="Inside an HPLC">
- <div class="si">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="anim" data-anim="tech" data-o='{"tech": "hplc"}'><svg class="anim-svg" viewBox="0 0 400 230" role="img" aria-label="Animation of an HPLC system: pump, injector, column, detector and chromatogram"></svg><div class="a-ui"><button type="button" class="a-play">▶ Play</button><button type="button" class="a-replay">↺ Replay</button><div class="a-bar"><div class="a-fill"></div></div></div><p class="anim-cap" aria-live="polite"></p></div>
+  </figure>
   <div class="txt">
    <div class="eyebrow">HPLC · instrumentation · CLO1</div>
    <h2>Pump, inject, separate, <span class="ac">detect.</span></h2>
-   <div class="flow stagger">
-     <div class="node">Solvent reservoir<small>filtered, degassed mobile phase</small></div>
-     <div class="node">Pump<small>steady flow, e.g. 1 ml/min, high pressure</small></div>
-     <div class="node o">Injector<small>loop, often 20 µl</small></div>
-     <div class="node g">Column<small>steel tube, 3–10 µm particles</small></div>
-     <div class="node">Detector<small>usually UV</small></div>
-     <div class="node">Data system<small>peaks, areas, report</small></div>
-   </div>
-   <p>Narrow tubing joins the parts to keep <b>dead volume</b> small. Larger instruments add an autosampler, a column oven and a <b>gradient</b> mixer that changes the mobile phase during the run.</p>
-   <p class="small">Chlorpheniramine assay: 150 × 4.6 mm C18 column, 5 µm packing, 1.0 ml/min, 20 µl, UV 254 nm.</p>
-   <p class="cite">Watson (2017), Ch. 12</p>
+   <ol class="steps">
+     <li><span class="n">1</span><span><b>Pump:</b> pushes filtered, degassed mobile phase at a steady flow (e.g. 1 ml/min) under high pressure.</span></li>
+     <li><span class="n">2</span><span><b>Injector:</b> a loop, often 20 µl, puts the sample into the flow as one band.</span></li>
+     <li><span class="n">3</span><span><b>Column:</b> a steel tube packed with 3–10 µm particles, usually C18.</span></li>
+     <li><span class="n">4</span><span><b>Detector</b> (usually UV) and <b>data system:</b> peaks, areas, report.</span></li>
+   </ol>
+   <p class="small">Chlorpheniramine assay: 150 × 4.6 mm C18 column, 5 µm packing, 1.0 ml/min, 20 µl, UV 254 nm. <span class="cite">Watson (2017), Ch. 12</span></p>
   </div>
  </div>
 </section>
@@ -937,25 +929,14 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 <section class="slide" data-sec="hplc" data-title="Normal or reverse phase">
  <div class="si has-ill">
   <figure class="ill">
-   <svg viewBox="0 0 400 210" role="img" aria-label="Silica surface with OH groups compared with C18 chains on silica">
-    <text class="tx b mid" x="100" y="22">Normal phase: silica</text>
-    <rect class="fgr" x="20" y="150" width="160" height="22"/>
-    <g class="ln b"><path d="M40 150 V130"/><path d="M70 150 V130"/><path d="M100 150 V130"/><path d="M130 150 V130"/><path d="M160 150 V130"/></g>
-    <text class="tx bl mid" x="100" y="124">–OH –OH –OH</text>
-    <text class="tx s mid" x="100" y="192">polar: holds polar compounds</text>
-    <text class="tx b mid" x="300" y="22">Reverse phase: C18 (ODS)</text>
-    <rect class="fgr" x="220" y="150" width="160" height="22"/>
-    <g class="ln g" style="stroke-width:2.6"><path d="M240 150 C236 120 244 100 240 60"/><path d="M270 150 C266 120 274 100 270 60"/><path d="M300 150 C296 120 304 100 300 60"/><path d="M330 150 C326 120 334 100 330 60"/><path d="M360 150 C356 120 364 100 360 60"/></g>
-    <text class="tx s mid" x="300" y="192">non-polar: holds non-polar compounds</text>
-   </svg>
+   <div class="anim" data-anim="column"><div class="a-tabs" role="group"><button type="button" class="chip2 a-tab on" aria-pressed="true" data-o='{"mode": "np"}'>Normal phase</button><button type="button" class="chip2 a-tab" aria-pressed="false" data-o='{"mode": "rp"}'>Reverse phase (C18)</button></div><svg class="anim-svg" viewBox="0 0 400 230" role="img" aria-label="Animation: the same two molecules on a normal-phase and a reverse-phase column, with the detector trace"></svg><div class="a-ui"><button type="button" class="a-play">▶ Play</button><button type="button" class="a-replay">↺ Replay</button><div class="a-bar"><div class="a-fill"></div></div></div><p class="anim-cap" aria-live="polite"></p></div>
   </figure>
   <div class="txt">
-   <div class="eyebrow">HPLC · stationary phase · CLO1</div>
-   <h2>C18 does <span class="ac">most of the work.</span></h2>
-   <p><b>Normal (straight) phase:</b> polar silica, less polar mobile phase. Compounds are held by <b>adsorption</b> of their polar groups.</p>
-   <p><b>Reverse phase:</b> silica coated with C18 (octadecylsilane, <b>ODS</b>) chains, with a polar mobile phase such as methanol–water. Compounds <b>partition</b> into the oily layer: the more lipophilic, the longer they stay.</p>
-   <p>ODS and similar phases are used for <b>more than 80%</b> of pharmaceutical analyses.</p>
-   <p class="cite">Watson (2017), Fig. 12.2 and Table 12.2</p>
+   <div class="eyebrow">HPLC · stationary phase · watch</div>
+   <h2>Flip the phases, <span class="ac">flip the order.</span></h2>
+   <p><b>Normal phase:</b> polar silica, non-polar mobile phase. Polar compounds are held by <b>adsorption</b> and come out last.</p>
+   <p><b>Reverse phase:</b> silica coated with C18 (octadecylsilane, <b>ODS</b>) chains, with a polar mobile phase such as methanol–water. Compounds <b>partition</b> into the oily layer: the more non-polar, the longer they stay.</p>
+   <p>ODS and similar phases are used for <b>more than 80%</b> of pharmaceutical analyses. <span class="cite">Watson (2017), Fig. 12.2 and Table 12.2</span></p>
   </div>
  </div>
 </section>
@@ -978,12 +959,15 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 </section>
 
 <section class="slide" data-sec="hplc" data-title="Charged drugs and ion pairs">
- <div class="si">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="anim" data-anim="column"><div class="a-tabs" role="group"><button type="button" class="chip2 a-tab on" aria-pressed="true" data-o='{"mode": "ip0"}'>No ion pair</button><button type="button" class="chip2 a-tab" aria-pressed="false" data-o='{"mode": "ip1"}'>With hexanesulfonate</button></div><svg class="anim-svg" viewBox="0 0 400 230" role="img" aria-label="Animation: charged chlorpheniramine on C18 with and without an ion-pair reagent"></svg><div class="a-ui"><button type="button" class="a-play">▶ Play</button><button type="button" class="a-replay">↺ Replay</button><div class="a-bar"><div class="a-fill"></div></div></div><p class="anim-cap" aria-live="polite"></p></div>
+  </figure>
   <div class="txt">
-   <div class="eyebrow">HPLC · ionisable drugs</div>
+   <div class="eyebrow">HPLC · ionisable drugs · watch</div>
    <h2>A charged drug <span class="ac">slips through C18.</span></h2>
-   <p>Most drugs are acids or bases, so mobile-phase <b>pH</b> changes how charged they are. A charged molecule is polar and is held poorly by C18. The effect is largest within about 1 pH unit of the pK<sub>a</sub>.</p>
-   <p>The chlorpheniramine method runs at <b>pH 3.6</b>, where the drug is protonated (+). To hold it, the buffer contains <b>sodium hexanesulfonate</b>. The sulfonate’s chain sits in the C18 layer and its negative end pairs with the drug: an <b>ion pair</b>. It works like an ion-exchange column made in place.</p>
+   <p>Most drugs are acids or bases, so mobile-phase <b>pH</b> changes how charged they are. A charged molecule is polar and is held poorly by C18.</p>
+   <p>The chlorpheniramine method runs at <b>pH 3.6</b>, where the drug carries a + charge. Its buffer contains <b>sodium hexanesulfonate</b>: the oily tail sits in the C18 layer and the (−) head pairs with the drug. This is an <b>ion pair</b>.</p>
    <div class="toggle-wrap">
      <button class="toggle-btn"><span>Why not just raise the pH?</span><span class="hint">Open</span></button>
      <div class="toggle-body"><p>Silica-based columns are usually used between about pH 2 and 8.5. Above that the silica slowly dissolves. To keep a base like chlorpheniramine (pK<sub>a</sub> about 9.2) fully neutral you would need pH 11 or more, so methods use pH control together with ion pairing instead. <span class="cite">(Watson, 2017, Ch. 12)</span></p></div>
@@ -1122,20 +1106,16 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 </section>
 
 <section class="slide" data-sec="gc" data-title="Inside a GC">
- <div class="si">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="anim" data-anim="tech" data-o='{"tech": "gc"}'><svg class="anim-svg" viewBox="0 0 400 230" role="img" aria-label="Animation of a GC system: carrier gas, hot injector, coiled column in an oven, FID and chromatogram"></svg><div class="a-ui"><button type="button" class="a-play">▶ Play</button><button type="button" class="a-replay">↺ Replay</button><div class="a-bar"><div class="a-fill"></div></div></div><p class="anim-cap" aria-live="polite"></p></div>
+  </figure>
   <div class="txt">
    <div class="eyebrow">GC · instrumentation · CLO1</div>
    <h2>Carrier gas, hot injector, <span class="ac">oven, detector.</span></h2>
-   <div class="flow stagger">
-     <div class="node">Carrier gas<small>helium or nitrogen</small></div>
-     <div class="node o">Injector<small>heated; 0.5–2 µl through a septum</small></div>
-     <div class="node g">Column in oven<small>held hot or heated in a programme</small></div>
-     <div class="node">Detector<small>usually FID</small></div>
-     <div class="node">Data system</div>
-   </div>
-   <p>The sample evaporates in the hot injector. A <b>split</b> injection sends only a small part (e.g. 1 in 10 to 1 in 100) onto a capillary column, so it is not overloaded.</p>
-   <p>The oven can rise in a <b>temperature programme</b> (e.g. 10 °C/min), so compounds with very different boiling points all come out in a reasonable time.</p>
-   <p class="cite">Watson (2017), Fig. 11.1</p>
+   <p>The sample evaporates in the hot <b>injector</b>. A <b>split</b> injection sends only a small part (e.g. 1 in 10 to 1 in 100) onto the capillary column, so it is not overloaded.</p>
+   <p>A <b>carrier gas</b> (helium or nitrogen) sweeps the vapour through the column. The <b>oven</b> can rise in a temperature programme (e.g. 10 °C/min), so compounds with very different boiling points all come out in reasonable time.</p>
+   <p>The usual detector is the <b>FID</b>, a small hydrogen flame. <span class="cite">Watson (2017), Fig. 11.1</span></p>
   </div>
  </div>
 </section>
@@ -1424,27 +1404,6 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   }
   phR.addEventListener('input',()=>{ drawPh(); if(window.umami) umami.track('sim-ph'); }); drawPh();
 
-  /* ---------- elutropic series simulator (illustrative) ---------- */
-  const ELU=[['Hexane',0],['Toluene',2.4],['Dichloromethane',3.1],['Chloroform',4.1],['Ethyl acetate',4.4],['Methanol',5.1]];
-  const eluChips=document.getElementById('elu-chips'), eluSvg=document.getElementById('elu-svg'), eluOut=document.getElementById('elu-out');
-  function drawElu(k){
-    const p=ELU[k][1]/5.1, rfPolar=Math.min(.92,.9*Math.pow(p,1.7)), rfLess=Math.min(.95,.08+.88*Math.pow(p,.8));
-    [...eluChips.children].forEach((c,i)=>c.classList.toggle('on',i===k));
-    while(eluSvg.firstChild) eluSvg.removeChild(eluSvg.firstChild);
-    const x0=40, x1=360, Y=v=>x0+v*(x1-x0);
-    eluSvg.appendChild(el('rect',{x:20,y:20,width:360,height:76,rx:4,class:'fgr'}));
-    eluSvg.appendChild(el('line',{x1:x0,y1:24,x2:x0,y2:92,class:'ln m dash'}));
-    eluSvg.appendChild(el('line',{x1:x1,y1:24,x2:x1,y2:92,class:'ln b dash'}));
-    eluSvg.appendChild(el('text',{class:'tx s mid',x:x0,y:112},'origin'));
-    eluSvg.appendChild(el('text',{class:'tx s mid',x:x1,y:112},'front'));
-    eluSvg.appendChild(el('ellipse',{cx:Y(rfPolar),cy:44,rx:8,ry:6,class:'frs'}));
-    eluSvg.appendChild(el('ellipse',{cx:Y(rfLess),cy:72,rx:8,ry:6,class:'fgs'}));
-    eluSvg.appendChild(el('text',{class:'tx s',x:24,y:14},'plate turned on its side: solvent runs left to right'));
-    eluOut.innerHTML='<b>'+ELU[k][0]+'</b> (polarity index '+ELU[k][1]+'): polar drug Rf ≈ <b>'+rfPolar.toFixed(2)+'</b> (red); less polar compound Rf ≈ <b>'+rfLess.toFixed(2)+'</b> (green).'+(rfPolar<.1?' Too weak: the drug stays near the origin.':rfLess>.85&&rfPolar>.8?' Too strong: everything runs near the front.':'');
-  }
-  ELU.forEach((e,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip2'; b.textContent=e[0]; b.addEventListener('click',()=>{ drawElu(i); if(window.umami) umami.track('sim-elutropic',{solvent:e[0]}); }); eluChips.appendChild(b); });
-  drawElu(0);
-
   /* ---------- Rf calculator ---------- */
   const rfa=document.getElementById('rf-a'), rfb=document.getElementById('rf-b'), rfo=document.getElementById('rf-out');
   function calcRf(){
@@ -1473,6 +1432,347 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     moOut.innerHTML='Methanol <b>'+M+'%</b>: tR ≈ <b>'+tR.toFixed(1)+' min</b>, k′ ≈ <b>'+k.toFixed(1)+'</b>.'+(k<2?' Too close to t0 (k′ below 2).':tR>15?' Run is getting long.':' A good working range.');
   }
   moR.addEventListener('input',()=>{ drawMo(); if(window.umami) umami.track('sim-methanol'); }); drawMo();
+
+  /* ---------- ANIMATIONS: play / pause / replay ----------
+     Each animation is a pure function of time t (seconds): draw(t) places everything,
+     so pause, replay and tab switches are exact. Same colour code everywhere:
+     red circle "OH" = polar compound, blue hexagon = non-polar compound, purple dots = solvent. */
+  const RMO = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const ANIM={};
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  const ease=x=>{ x=clamp(x,0,1); return x*x*(3-2*x); };
+  const fx=n=>n.toFixed(1);
+  function E(tag,attrs,parent,text){ const e=el(tag,attrs,text); parent.appendChild(e); return e; }
+  function at(g,x,y,s){ g.setAttribute('transform','translate('+fx(x)+' '+fx(y)+')'+(s!=null?' scale('+s.toFixed(3)+')':'')); }
+  const FONT='DM Sans,system-ui,sans-serif';
+  const COL={p:'#c0392b', n:'#3a6bd1', sol:'#7a5cc4', drug:'#2d6a4f', imp:'#d9821f', fill:'#b9bfba', ink:'#1c2620', muted:'#6f7771'};
+  /* time spent moving after t seconds, for a molecule that cycles: move C·(1−f), then stick C·f */
+  function moveT(t,C,f,ph){
+    if(t<=0) return 0;
+    const m=C*(1-f), acc=x=>{ const n=Math.floor(x/C), r=x-n*C; return n*m+Math.min(r,m); };
+    return acc(t+ph)-acc(ph);
+  }
+  /* 0 = moving, 1 = stuck (eased at both ends) */
+  function stuckAt(t,C,f,ph){
+    if(t<=0||f<=0) return 0;
+    const m=C*(1-f), r=(t+ph)%C; if(r<m) return 0;
+    const s=r-m, d=C*f, e=Math.min(.22,d/3);
+    return ease(s<e?s/e:(d-s<e?(d-s)/e:1));
+  }
+  function molP(parent,r){ r=r||9; const g=E('g',{},parent); E('circle',{r:r,fill:COL.p,stroke:'#fff','stroke-width':1.5},g); E('text',{y:r*.36,'text-anchor':'middle','font-size':r*.86,'font-weight':800,fill:'#fff','font-family':FONT},g,'OH'); return g; }
+  function hexD(r){ let d=''; for(let i=0;i<6;i++){ const a=Math.PI/3*i+Math.PI/6; d+=(i?'L':'M')+fx(r*Math.cos(a))+' '+fx(r*Math.sin(a)); } return d+'Z'; }
+  function molN(parent,r,charge){ r=r||10; const g=E('g',{},parent); E('path',{d:hexD(r),fill:COL.n,stroke:'#fff','stroke-width':1.5},g); E('circle',{r:r*.45,fill:'none',stroke:'#fff','stroke-width':1.2,opacity:.8},g);
+    if(charge){ E('circle',{cx:r*.9,cy:-r*.9,r:5.5,fill:'#fff',stroke:COL.p,'stroke-width':1.3},g); E('text',{x:r*.9,y:-r*.9+3.2,'text-anchor':'middle','font-size':9,'font-weight':800,fill:COL.p,'font-family':FONT},g,'+'); }
+    return g; }
+  function txt(parent,x,y,s,cls,extra){ return E('text',Object.assign({x:x,y:y,'font-family':FONT,'font-size':10.5,fill:COL.muted},extra||{}),parent,s); }
+  function legend(svg,x,y,items){
+    const g=E('g',{},svg); let cx=x;
+    items.forEach(it=>{ const m=it[0]==='p'?molP(g,5.5):it[0]==='n'?molN(g,6):E('circle',{r:3,fill:COL.sol},g); at(m,cx+6,y); const t=txt(g,cx+15,y+3.5,it[1]); cx+=15+it[1].length*5.4+12; });
+    return g;
+  }
+
+  /* ---- 0 · hook: one tablet, many things inside, make them race ---- */
+  ANIM.hook=function(svg){
+    E('rect',{width:400,height:230,rx:12,fill:'#f4f7f5'},svg);
+    const head=E('text',{x:200,y:38,'text-anchor':'middle','font-family':FONT,'font-size':21,'font-weight':800,fill:COL.ink},svg,'');
+    const sub=E('text',{x:200,y:60,'text-anchor':'middle','font-family':FONT,'font-size':12.5,'font-weight':600,fill:COL.muted},svg,'');
+    const tab=E('g',{},svg); E('ellipse',{rx:46,ry:30,fill:'#fff',stroke:'#9aa39d','stroke-width':2},tab); E('path',{d:'M0 -30 V30',stroke:'#c9cec9','stroke-width':2},tab); E('text',{y:5,'text-anchor':'middle','font-family':FONT,'font-size':12,'font-weight':800,fill:COL.ink},tab,'90 mg');
+    const filt=E('g',{opacity:0},svg); E('path',{d:'M60 168 H340',stroke:'#9aa39d','stroke-width':2,'stroke-dasharray':'6 4'},filt); txt(filt,344,172,'filter');
+    const track=E('g',{opacity:0},svg); E('rect',{x:30,y:92,width:350,height:84,rx:8,fill:'#e8effc'},track);
+    for(let i=0;i<6;i++) E('path',{d:'M'+(60+i*55)+' 186 l14 0 l-4 -4 M'+(74+i*55)+' 186 l-4 4',stroke:COL.sol,'stroke-width':1.5,fill:'none'},track);
+    txt(track,30,202,'mobile phase flows →',null,{fill:COL.sol,'font-weight':700});
+    /* 36 particles: 26 filler, 5 drug, 3 impurity, 2 other */
+    const P=[]; let seed=7; const rnd=()=>{ seed=(seed*9301+49297)%233280; return seed/233280; };
+    const kinds=[].concat(Array(26).fill('fill'),Array(5).fill('drug'),Array(3).fill('imp'),Array(2).fill('oth'));
+    const speed={drug:52,imp:86,oth:26}, laneY={imp:110,drug:134,oth:158};
+    kinds.forEach((k,i)=>{
+      const a=rnd()*Math.PI*2, rr=Math.sqrt(rnd())*58;
+      const c=E('circle',{r:k==='fill'?4:5.2,fill:k==='fill'?COL.fill:k==='drug'?COL.drug:k==='imp'?COL.imp:'#8a5d14',stroke:'#fff','stroke-width':1},svg);
+      P.push({k:k,c:c,sx:200+Math.cos(a)*rr*1.6,sy:122+Math.sin(a)*rr*.75,ph:rnd()*6,fall:.6+rnd()*.8,lane:0});
+    });
+    let li={drug:0,imp:0,oth:0}; P.forEach(p=>{ if(p.k!=='fill'){ p.lane=li[p.k]++; } });
+    const ring=E('circle',{cx:0,cy:0,r:0,fill:'none',stroke:COL.drug,'stroke-width':2,opacity:0},svg);
+    const lbl={drug:txt(svg,0,0,'drug',null,{'font-weight':800,fill:COL.drug,'font-size':12,opacity:0}), imp:txt(svg,0,0,'impurity',null,{'font-weight':800,fill:'#a85f10','font-size':12,opacity:0}), oth:txt(svg,0,0,'other',null,{'font-weight':800,fill:'#8a5d14','font-size':12,opacity:0})};
+    const T=[[0,'One tablet.','90 mg. Looks simple.'],[2.4,'Inside: a crowd.','Mostly filler, plus colour…'],[4.8,'Only 4 mg is the drug.','The green dots. Where is it, and how much?'],[7.2,'Step 1: extract.','The filler stays behind on the filter.'],[9.6,'Still mixed. Now race them.','The mobile phase carries everything forward.'],[13.4,'Different speeds → separated.','That is chromatography.'],[15.6,'But why different speeds?','Press Next to find out.']];
+    return {dur:17.5, caps:[[0,'']], draw(t){
+      let cur=T[0]; T.forEach(x=>{ if(t>=x[0]) cur=x; });
+      const k=clamp((t-cur[0])/.35,0,1);
+      head.textContent=cur[1]; sub.textContent=cur[2];
+      head.setAttribute('opacity',k); sub.setAttribute('opacity',k);
+      at(head,0,(1-ease(k))*8);
+      const tb=t<2.4?ease(t/.45)*(1+.04*Math.sin(t*5)):Math.max(0,1-(t-2.4)/.3);
+      at(tab,200,128,Math.max(.001,tb)); tab.setAttribute('opacity',t<2.7?1:0);
+      filt.setAttribute('opacity',t>7&&t<10.2?ease((t-7)/.4)*(1-ease((t-9.8)/.4)):0);
+      track.setAttribute('opacity',ease((t-9.6)/.5));
+      P.forEach(p=>{
+        let x,y,o=1;
+        const ex=ease((t-2.4)/.7);
+        const jig=t<9.6?(t<7.2?2:4.5):0;
+        x=200+(p.sx-200)*ex+Math.sin(t*3+p.ph)*jig*ex; y=128+(p.sy-128)*ex+Math.cos(t*2.6+p.ph)*jig*ex;
+        if(t<2.45){ o=0; }
+        if(p.k==='fill' && t>7.4){ const d=(t-7.4)*120*p.fall; y+=d; o=clamp(1-(y-150)/30,0,1); }
+        if(p.k!=='fill' && t>9.6){
+          const lx=44+p.lane*9, ly=laneY[p.k]+((p.lane%2)?4:-4);
+          const g=ease((t-9.6)/.7); x=x+(lx-x)*g; y=y+(ly-y)*g;
+          if(t>10.3) x=lx+speed[p.k]*Math.min(t-10.3,4.6);
+        }
+        p.c.setAttribute('cx',fx(x)); p.c.setAttribute('cy',fx(y)); p.c.setAttribute('opacity',o);
+        p.x=x; p.y=y;
+      });
+      const pr=t>4.8&&t<7.2?((t-4.8)%1.2)/1.2:0;
+      const dr=P.filter(p=>p.k==='drug'); const mx=dr.reduce((s,p)=>s+p.x,0)/dr.length, my=dr.reduce((s,p)=>s+p.y,0)/dr.length;
+      ring.setAttribute('cx',fx(mx)); ring.setAttribute('cy',fx(my)); ring.setAttribute('r',fx(14+pr*50)); ring.setAttribute('opacity',pr?1-pr:0);
+      ['drug','imp','oth'].forEach(k=>{ const ps=P.filter(p=>p.k===k), x=Math.max(...ps.map(p=>p.x)); lbl[k].setAttribute('x',fx(Math.min(x+10,340))); lbl[k].setAttribute('y',fx(laneY[k]+4)); lbl[k].setAttribute('opacity',ease((t-13.6)/.5)); });
+    }};
+  };
+
+  /* ---- 1 · molecules on a silica surface, with a live TLC plate ----
+     o.solvent: undefined (basic), 'hex', 'etac', 'meoh' */
+  const SOLV={
+    basic:{fr:.7,fb:.2,occ:0,name:'',t0:3,run:13,caps:[
+      [0,'Zoom in on a TLC plate. The silica surface is covered in polar <b>–OH</b> groups. The <b>mobile phase</b> (purple dots) flows over it.'],
+      [3,'Watch the <b style="color:#c0392b">polar</b> molecule: its –OH forms <b>hydrogen bonds</b> with the silica, so it stops. Then it lets go and moves on.'],
+      [8,'The <b style="color:#3a6bd1">non-polar</b> molecule has almost nothing to bond with. It spends most of its time moving with the solvent.'],
+      [12,'A molecule moves forward <b>only while it is in the mobile phase</b>. The plate on the right fills in as they move: red falls behind.'],
+      [16,'<b>Rf = the fraction of time a compound spends moving.</b> More sticking, lower Rf. That is why compounds separate.']]},
+    hex:{fr:.9,fb:.42,occ:0,name:'Hexane',t0:1.5,run:12,caps:[
+      [0,'<b>Hexane</b> is non-polar. It cannot compete for the –OH sites.'],
+      [4,'So the polar molecule sticks almost all the time and stays near the origin. <b>Too weak.</b>']]},
+    etac:{fr:.55,fb:.15,occ:.5,name:'Ethyl acetate',t0:1.5,run:12,caps:[
+      [0,'<b>Ethyl acetate</b> is more polar. Its molecules (purple) take about half of the –OH sites.'],
+      [4,'Fewer free sites, so the polar molecule sticks less and moves further. The two spots are well apart. <b>Just right.</b>']]},
+    meoh:{fr:.1,fb:.04,occ:.88,name:'Methanol',t0:1.5,run:12,caps:[
+      [0,'<b>Methanol</b> is very polar. It takes almost every –OH site.'],
+      [4,'Nothing can stick, so both compounds run with the solvent to the front together. <b>Too strong:</b> no separation.']]}
+  };
+  ANIM.surface=function(svg,o){
+    const S=SOLV[o.solvent||'basic'], V=21, X0=26, Y_SURF=176, OHs=[];
+    E('rect',{width:400,height:230,rx:12,fill:'#fbfcfb'},svg);
+    E('rect',{x:8,y:44,width:300,height:132,fill:'#f1f0fa'},svg);
+    txt(svg,14,58,'mobile phase'+(S.name?': '+S.name:'')+' →',null,{fill:COL.sol,'font-weight':700});
+    const sol=[]; for(let i=0;i<16;i++) sol.push({c:E('circle',{r:2.4,fill:COL.sol,opacity:.55},svg),x:(i*53)%300,y:70+((i*37)%96)});
+    E('rect',{x:8,y:Y_SURF,width:300,height:30,fill:'#dfe3df'},svg);
+    txt(svg,14,220,'stationary phase: silica',null,{'font-weight':700,fill:COL.ink});
+    for(let x=18;x<=298;x+=20){ E('path',{d:'M'+x+' '+Y_SURF+' V'+(Y_SURF-8),stroke:'#8b948e','stroke-width':1.6},svg); txt(svg,x,Y_SURF+12,'OH',null,{'text-anchor':'middle','font-size':7.5,'font-weight':700,fill:'#6f7771'}); OHs.push(x); }
+    let k=0; const occ=[]; OHs.forEach((x,i)=>{ if(S.occ && ((i*0.618)%1)<S.occ){ occ.push(x); E('circle',{cx:x,cy:Y_SURF-12,r:4,fill:COL.sol},svg); } });
+    const free=OHs.filter(x=>!occ.includes(x));
+    const bondR=E('path',{stroke:COL.p,'stroke-width':1.6,'stroke-dasharray':'3 2.5',fill:'none'},svg);
+    const bondB=E('path',{stroke:'#8b948e','stroke-width':1.2,'stroke-dasharray':'1.5 2.5',fill:'none'},svg);
+    const mr=molP(svg), mb=molN(svg);
+    legend(svg,12,26,[['p','polar'],['n','non-polar'],['s','solvent']]);
+    /* live plate */
+    const PX=316, PW=52, PY0=204, PH=160;
+    E('rect',{x:PX,y:PY0-PH-8,width:PW,height:PH+16,rx:3,fill:'#fff',stroke:'#9aa39d','stroke-width':1.4},svg);
+    txt(svg,PX+PW/2,28,'TLC plate',null,{'text-anchor':'middle','font-weight':700,fill:COL.ink});
+    E('path',{d:'M'+(PX+4)+' '+PY0+' H'+(PX+PW-4),stroke:'#9aa39d','stroke-dasharray':'3 2'},svg);
+    const wet=E('rect',{x:PX+1,y:PY0,width:PW-2,height:0,fill:'#e7e4f7'},svg);
+    const front=E('path',{stroke:COL.sol,'stroke-width':1.4,'stroke-dasharray':'3 2'},svg);
+    const sR=E('ellipse',{rx:7,ry:4.5,fill:COL.p,opacity:.85},svg), sB=E('ellipse',{rx:7,ry:4.5,fill:COL.n,opacity:.85},svg);
+    const lR=txt(svg,0,0,'',null,{'font-size':9.5,'font-weight':800,fill:COL.p}), lB=txt(svg,0,0,'',null,{'font-size':9.5,'font-weight':800,fill:COL.n});
+    const pr={C:2.2,ph:.3}, pb={C:1.7,ph:1.1};
+    return {dur:S.t0+S.run+(o.solvent?1.5:3), caps:S.caps, draw(t){
+      sol.forEach(s=>{ const x=(s.x+t*V*1.4)%300; s.c.setAttribute('cx',fx(12+x)); s.c.setAttribute('cy',fx(s.y+Math.sin(t*2+s.x)*3)); });
+      const tt=clamp(t-S.t0,0,S.run);
+      const one=(m,par,f,laneY,bond,strong)=>{
+        const mt=moveT(tt,par.C,f,par.ph), x=X0+V*mt, st=tt>0&&tt<S.run?stuckAt(tt,par.C,f,par.ph):0;
+        const y=laneY+(Y_SURF-21-laneY)*st;
+        at(m,x,y);
+        let ox=free.length?free.reduce((a,b)=>Math.abs(b-x)<Math.abs(a-x)?b:a):x;
+        bond.setAttribute('d',st>.6?'M'+fx(x)+' '+fx(y+9)+' L'+fx(ox)+' '+(Y_SURF-8):''); bond.setAttribute('opacity',st);
+        return mt;
+      };
+      const mR=one(mr,pr,S.fr,120,bondR), mB=one(mb,pb,S.fb,90,bondB);
+      const fr=tt/S.run;
+      wet.setAttribute('y',fx(PY0-PH*fr)); wet.setAttribute('height',fx(PH*fr));
+      front.setAttribute('d',tt>0?'M'+(PX+3)+' '+fx(PY0-PH*fr)+' H'+(PX+PW-3):'');
+      const yR=PY0-PH*mR/S.run, yB=PY0-PH*mB/S.run;
+      sR.setAttribute('cx',PX+14); sR.setAttribute('cy',fx(yR)); sB.setAttribute('cx',PX+37); sB.setAttribute('cy',fx(yB));
+      const done=tt>=S.run-.01;
+      lR.textContent=tt>0?(mR/Math.max(tt,.01)).toFixed(2):''; lB.textContent=tt>0?(mB/Math.max(tt,.01)).toFixed(2):'';
+      lR.setAttribute('x',PX-2); lR.setAttribute('y',fx(yR+3.5)); lR.setAttribute('text-anchor','end');
+      lB.setAttribute('x',PX+PW+2); lB.setAttribute('y',fx(yB+3.5));
+      lR.setAttribute('opacity',done?1:.55); lB.setAttribute('opacity',done?1:.55);
+    }};
+  };
+
+  /* ---- 2 · inside an HPLC column, with the detector trace ----
+     o.mode: 'np' normal phase, 'rp' reverse phase, 'ip0' charged drug without ion pair, 'ip1' with hexanesulfonate */
+  ANIM.column=function(svg,o){
+    const mode=o.mode||'np', IP=mode.startsWith('ip'), V=69, X0=30, XEND=318, T0=1, SURF=128;
+    const MODES={
+      np:{bg:'#f6f5ec', mp:'mobile phase: non-polar solvent →', sp:'stationary phase: silica (polar –OH)', mols:[['p',.7,62],['n',.2,88]], caps:[
+        [0,'<b>Normal phase:</b> a polar silica column with a <b>non-polar</b> mobile phase.'],
+        [3,'The <b style="color:#c0392b">polar</b> molecule keeps sticking to the –OH groups. The <b style="color:#3a6bd1">non-polar</b> one stays in the mobile phase.'],
+        [7.5,'The detector draws a <b>peak</b> each time a compound leaves the column. Blue comes out first.'],
+        [13,'The time a peak appears is its <b>retention time</b>. More sticking = longer retention time.']]},
+      rp:{bg:'#eef4fb', mp:'mobile phase: water + methanol (polar) →', sp:'stationary phase: C18 chains (non-polar)', mols:[['p',.15,62],['n',.7,88]], caps:[
+        [0,'<b>Reverse phase:</b> oily C18 chains on the silica, with a <b>polar</b> water–methanol mobile phase.'],
+        [3,'Now the <b style="color:#3a6bd1">non-polar</b> molecule slips into the C18 layer and lingers. The <b style="color:#c0392b">polar</b> one stays in the water.'],
+        [7.5,'The order <b>flips</b>: red comes out first, blue later.'],
+        [13,'Most drugs are part polar, part non-polar, so C18 holds them a useful amount. That is why it is used for most HPLC assays.']]},
+      ip0:{bg:'#eef4fb', mp:'water + methanol, pH 3.6 →', sp:'C18 chains, no ion-pair reagent', mols:[['d',.08,74]], caps:[
+        [0,'At pH 3.6 chlorpheniramine picks up an H<sup>+</sup> and carries a <b>positive charge</b> (+).'],
+        [3,'A charged molecule prefers the water. It barely enters the C18 layer.'],
+        [6.5,'It comes out almost with the solvent (t0): k′ far below 2. Not usable.']]},
+      ip1:{bg:'#eef4fb', mp:'water + methanol + hexanesulfonate, pH 3.6 →', sp:'C18 chains holding sulfonate (−) heads', mols:[['d',.7,74]], caps:[
+        [0,'Hexanesulfonate has an oily tail and a <b>negative head</b> (−). The tails sink into the C18 layer.'],
+        [3,'Now the surface is dotted with (−) heads. The (+) drug pairs with them, stops, and lets go again: an <b>ion pair</b>.'],
+        [9,'The drug is held long enough to come out well after t0, with k′ above 2.']]}
+    }, M=MODES[mode];
+    E('rect',{width:400,height:230,rx:12,fill:'#fbfcfb'},svg);
+    E('rect',{x:20,y:36,width:300,height:118,rx:6,fill:M.bg,stroke:'#9aa39d','stroke-width':1.4},svg);
+    txt(svg,26,50,M.mp,null,{fill:COL.sol,'font-weight':700,'font-size':9.5});
+    E('rect',{x:21,y:SURF,width:298,height:25,fill:'#dfe3df'},svg);
+    txt(svg,26,148,M.sp,null,{'font-size':9,'font-weight':700,fill:COL.ink});
+    const sites=[];
+    if(mode==='np'){ for(let x=30;x<=310;x+=18){ E('path',{d:'M'+x+' '+SURF+' V'+(SURF-7),stroke:'#8b948e','stroke-width':1.6},svg); sites.push(x); } }
+    else { for(let x=28;x<=312;x+=12){ E('path',{d:'M'+x+' '+SURF+' q-3 -7 0 -14 t0 -14',stroke:'#2d6a4f','stroke-width':1.8,fill:'none',opacity:.85},svg); }
+      if(mode==='ip1') for(let x=40;x<=300;x+=36){ E('path',{d:'M'+x+' '+SURF+' q3 -8 0 -16 t0 -12',stroke:COL.imp,'stroke-width':2,fill:'none'},svg); E('circle',{cx:x,cy:SURF-31,r:5,fill:'#fff',stroke:COL.imp,'stroke-width':1.5},svg); txt(svg,x,SURF-28.5,'−',null,{'text-anchor':'middle','font-size':9,'font-weight':800,fill:COL.imp}); sites.push(x); } }
+    E('rect',{x:322,y:66,width:40,height:52,rx:5,fill:'#fff',stroke:'#5c665f','stroke-width':1.4},svg);
+    txt(svg,342,88,'UV',null,{'text-anchor':'middle','font-weight':800,fill:COL.ink}); txt(svg,342,100,'detector',null,{'text-anchor':'middle','font-size':8});
+    const sol=[]; for(let i=0;i<14;i++) sol.push({c:E('circle',{r:2.2,fill:COL.sol,opacity:.5},svg),x:(i*41)%290,y:58+((i*29)%56)});
+    const ms=M.mols.map((m,i)=>{ const g=m[0]==='p'?molP(svg):molN(svg,10,m[0]==='d'); const bd=E('path',{stroke:m[0]==='p'?COL.p:m[0]==='n'?'#2d6a4f':COL.imp,'stroke-width':1.5,'stroke-dasharray':'3 2.5',fill:'none'},svg);
+      return {g:g,bd:bd,k:m[0],f:m[1],y:m[2],C:m[0]==='p'?2.1:1.8,ph:i*.7,exit:null}; });
+    legend(svg,22,22,IP?[['n','chlorpheniramine (+ charged)'],['s','solvent']]:[['p','polar'],['n','non-polar'],['s','solvent']]);
+    /* trace */
+    const GX0=30, GX1=388, GY=218, GH=44, DUR=17;
+    E('path',{d:'M'+GX0+' '+GY+' H'+GX1,stroke:'#9aa39d'},svg);
+    txt(svg,GX1,229,'time →',null,{'text-anchor':'end','font-size':8.5});
+    const t0=T0+(XEND-X0)/V;
+    const gx=t=>GX0+(t/DUR)*(GX1-GX0);
+    E('path',{d:'M'+fx(gx(t0))+' '+(GY+2)+' V'+(GY-GH+6),stroke:COL.imp,'stroke-dasharray':'3 3'},svg);
+    txt(svg,gx(t0)+3,GY+10,'t0',null,{'font-size':9,'font-weight':800,fill:'#a85f10'});
+    const trace=E('path',{fill:'none',stroke:COL.ink,'stroke-width':1.6},svg);
+    const plbl=ms.map(m=>txt(svg,0,0,'',null,{'font-size':9.5,'font-weight':800,fill:m.k==='p'?COL.p:COL.n,'text-anchor':'middle'}));
+    /* exit times: solve moveT = distance / V */
+    ms.forEach(m=>{ const need=(XEND-X0)/V; let a=0,b=60; for(let i=0;i<40;i++){ const c=(a+b)/2; if(moveT(c,m.C,m.f,m.ph)<need) a=c; else b=c; } m.exit=T0+b; });
+    return {dur:DUR, caps:M.caps, draw(t){
+      sol.forEach(s=>{ const x=(s.x+t*V)%290; s.c.setAttribute('cx',fx(26+x)); s.c.setAttribute('cy',fx(s.y)); });
+      ms.forEach(m=>{
+        const tt=Math.max(0,t-T0), mt=moveT(tt,m.C,m.f,m.ph), x=X0+V*mt;
+        const st=x<XEND?stuckAt(tt,m.C,m.f,m.ph):0;
+        const sy=m.k==='p'?SURF-17:(mode==='ip1'?SURF-46:SURF-14);
+        const y=m.y+(sy-m.y)*st;
+        at(m.g,Math.min(x,XEND+20),y); m.g.setAttribute('opacity',x>XEND+12?0:1);
+        let sx=sites.length?sites.reduce((a,b)=>Math.abs(b-x)<Math.abs(a-x)?b:a):x;
+        m.bd.setAttribute('d',st>.6&&m.k!=='n'?'M'+fx(x)+' '+fx(y+9)+' L'+fx(sx)+' '+(mode==='ip1'?SURF-36:SURF-7):'');
+        m.bd.setAttribute('opacity',st);
+      });
+      let d=''; const tn=Math.min(t,DUR);
+      for(let i=0;i<=240;i++){ const tm=DUR*i/240; if(tm>tn) break; let y=0; ms.forEach(m=>{ y+=Math.exp(-.5*Math.pow((tm-m.exit)/.3,2)); }); y+=.12*Math.exp(-.5*Math.pow((tm-t0)/.12,2)); d+=(i?'L':'M')+fx(gx(tm))+' '+fx(GY-y*GH); }
+      trace.setAttribute('d',d);
+      ms.forEach((m,i)=>{ const L=plbl[i]; L.setAttribute('x',fx(gx(m.exit))); L.setAttribute('y',GY-GH-3); L.textContent=t>m.exit+.3?(m.k==='p'?'red':m.k==='n'?'blue':'drug')+' peak':''; });
+    }};
+  };
+
+  /* ---- 3 · TLC vs HPLC vs GC ---- */
+  ANIM.tech=function(svg,o){
+    const kind=o.tech||'tlc';
+    E('rect',{width:400,height:230,rx:12,fill:'#fbfcfb'},svg);
+    const caps={
+      tlc:[[0,'<b>TLC:</b> the mobile phase climbs a silica plate by capillary action.'],[4,'Each compound moves only part of the way, depending on how much it sticks to the silica.'],[9,'The solvent stops at the front. Compounds are separated in <b>space</b>: you measure <b>Rf</b>.']],
+      hplc:[[0,'<b>HPLC:</b> a pump pushes liquid through a column packed with tiny particles.'],[3,'The sample is injected as one band. Compounds that stick more travel more slowly.'],[6,'They leave one after another. The detector draws peaks: separated in <b>time</b>, read the <b>retention time</b>.']],
+      gc:[[0,'<b>GC:</b> the sample is injected into a hot injector and turns into <b>vapour</b>.'],[3,'A carrier gas sweeps the vapour through a long, thin column coiled in a hot oven.'],[6.5,'Compounds dissolve in and out of a liquid film on the column wall. The FID flame detects each one: peaks in <b>time</b>.'],[10.5,'Only compounds that <b>evaporate without breaking down</b> can be measured by GC.']]
+    }[kind];
+    const blue=COL.n, red=COL.p, dur=13;
+    function band(col){ const g=E('g',{},svg); [[-5,-2],[0,3],[5,-1],[-2,5],[3,-5]].forEach(p=>E('circle',{cx:p[0],cy:p[1],r:2.6,fill:col},g)); return g; }
+    function traceSet(x0,x1,y,h,peaks){
+      E('path',{d:'M'+x0+' '+y+' H'+x1,stroke:'#9aa39d'},svg); txt(svg,x1,y+11,'time →',null,{'text-anchor':'end','font-size':8.5});
+      const tr=E('path',{fill:'none',stroke:COL.ink,'stroke-width':1.6},svg);
+      return t=>{ let d=''; for(let i=0;i<=200;i++){ const tm=dur*i/200; if(tm>t) break; let v=0; peaks.forEach(p=>{ v+=p[1]*Math.exp(-.5*Math.pow((tm-p[0])/.28,2)); }); d+=(i?'L':'M')+fx(x0+(x1-x0)*tm/dur)+' '+fx(y-v*h); } tr.setAttribute('d',d); };
+    }
+    if(kind==='tlc'){
+      E('rect',{x:130,y:40,width:140,height:178,rx:6,fill:'none',stroke:'#8fb3c9','stroke-width':2},svg);
+      E('rect',{x:131,y:196,width:138,height:21,fill:'#e7e4f7'},svg);
+      E('rect',{x:166,y:28,width:68,height:182,rx:2,fill:'#fff',stroke:'#5c665f','stroke-width':1.4},svg);
+      const wet=E('rect',{x:167,y:210,width:66,height:0,fill:'#e7e4f7'},svg);
+      E('path',{d:'M170 190 H230',stroke:'#9aa39d','stroke-dasharray':'3 2'},svg); txt(svg,128,193,'origin',null,{'text-anchor':'end','font-size':9});
+      const fr=E('path',{stroke:COL.sol,'stroke-width':1.4,'stroke-dasharray':'3 2'},svg);
+      const sR=E('ellipse',{rx:7,ry:4.5,fill:red},svg), sB=E('ellipse',{rx:7,ry:4.5,fill:blue},svg);
+      txt(svg,128,214,'mobile phase',null,{'text-anchor':'end','font-size':9,fill:COL.sol,'font-weight':700});
+      const lab=E('g',{opacity:0},svg); txt(lab,250,70,'separated',null,{'font-weight':800,fill:COL.ink,'font-size':12}); txt(lab,250,86,'in SPACE',null,{'font-weight':800,fill:COL.drug,'font-size':14}); txt(lab,250,104,'→ measure Rf',null,{'font-size':10.5});
+      return {dur:dur,caps:caps,draw(t){
+        const f=ease((t-.8)/8.5), yF=190-150*f;
+        wet.setAttribute('y',fx(Math.min(210,yF))); wet.setAttribute('height',fx(210-Math.min(210,yF)));
+        fr.setAttribute('d',t>.9?'M168 '+fx(yF)+' H232':'');
+        sR.setAttribute('cx',186); sR.setAttribute('cy',fx(190-150*f*.3)); sB.setAttribute('cx',214); sB.setAttribute('cy',fx(190-150*f*.75));
+        lab.setAttribute('opacity',ease((t-9.4)/.6));
+      }};
+    }
+    if(kind==='hplc'){
+      E('rect',{x:10,y:58,width:26,height:40,rx:4,fill:'#e7e4f7',stroke:'#5c665f'},svg); txt(svg,23,112,'solvent',null,{'text-anchor':'middle','font-size':8.5});
+      E('rect',{x:44,y:60,width:40,height:36,rx:4,fill:'#fff',stroke:'#5c665f','stroke-width':1.4},svg); txt(svg,64,112,'pump',null,{'text-anchor':'middle','font-size':8.5,'font-weight':700,fill:COL.ink});
+      const plunger=E('rect',{x:50,y:72,width:12,height:12,fill:'#9aa39d'},svg);
+      E('circle',{cx:98,cy:78,r:8,fill:'#fff',stroke:'#5c665f','stroke-width':1.4},svg); txt(svg,98,112,'injector',null,{'text-anchor':'middle','font-size':8.5});
+      E('rect',{x:110,y:64,width:200,height:28,rx:6,fill:'#eef0ee',stroke:'#5c665f','stroke-width':1.4},svg);
+      for(let x=116;x<306;x+=8) for(let y=69;y<90;y+=7) E('circle',{cx:x+((y/7)%2)*4,cy:y,r:2.4,fill:'#d5dad6'},svg);
+      txt(svg,210,58,'column (packed, C18)',null,{'text-anchor':'middle','font-size':9,'font-weight':700,fill:COL.ink});
+      E('path',{d:'M36 78 H44 M84 78 H90 M106 78 H110 M310 78 H318',stroke:'#5c665f','stroke-width':2},svg);
+      E('rect',{x:318,y:62,width:44,height:32,rx:4,fill:'#fff',stroke:'#5c665f','stroke-width':1.4},svg); txt(svg,340,82,'UV',null,{'text-anchor':'middle','font-weight':800,fill:COL.ink}); txt(svg,340,108,'detector',null,{'text-anchor':'middle','font-size':8.5});
+      txt(svg,64,48,'high pressure',null,{'text-anchor':'middle','font-size':9,fill:'#a85f10','font-weight':700});
+      const bR=band(red), bB=band(blue);
+      const exB=5.6, exR=9.6, upd=traceSet(30,388,206,58,[[exB,1],[exR,.85]]);
+      const lab=E('g',{opacity:0},svg); txt(lab,388,128,'separated in TIME',null,{'text-anchor':'end','font-weight':800,fill:COL.drug,'font-size':12}); txt(lab,388,142,'→ retention time',null,{'text-anchor':'end','font-size':10.5});
+      return {dur:dur,caps:caps,draw(t){
+        at(plunger,0,Math.sin(t*9)*4);
+        const pos=(ex)=>{ const s=1.4; if(t<s) return 98; const f=(t-s)/(ex-s); return 112+(318-112)*f; };
+        const xb=pos(exB), xr=pos(exR);
+        at(bB,Math.min(xb,330),78); bB.setAttribute('opacity',t<1||xb>330?0:1);
+        at(bR,Math.min(xr,330),78); bR.setAttribute('opacity',t<1||xr>330?0:1);
+        upd(t); lab.setAttribute('opacity',ease((t-10)/.6));
+      }};
+    }
+    /* gc */
+    E('rect',{x:8,y:50,width:24,height:56,rx:10,fill:'#e8effc',stroke:'#5c665f'},svg); txt(svg,20,82,'He',null,{'text-anchor':'middle','font-weight':800,fill:COL.ink,'font-size':10}); txt(svg,20,118,'carrier gas',null,{'text-anchor':'middle','font-size':8});
+    E('rect',{x:42,y:58,width:34,height:30,rx:4,fill:'#fbecea',stroke:COL.p,'stroke-width':1.4},svg); txt(svg,59,77,'250 °C',null,{'text-anchor':'middle','font-size':8,'font-weight':800,fill:COL.p}); txt(svg,59,100,'injector',null,{'text-anchor':'middle','font-size':8});
+    const drop=E('circle',{cx:59,cy:44,r:3.5,fill:COL.drug},svg);
+    E('rect',{x:86,y:24,width:224,height:110,rx:8,fill:'#fdf3e6',stroke:'#d9821f','stroke-width':1.4},svg); txt(svg,94,36,'oven (hot)',null,{'font-size':9,'font-weight':800,fill:'#a85f10'});
+    const heat=[]; for(let i=0;i<5;i++) heat.push(E('path',{d:'M'+(120+i*40)+' 132 q4 -6 0 -12 q-4 -6 0 -12',stroke:'#e2a35c','stroke-width':1.6,fill:'none',opacity:.6},svg));
+    let pd='M96 46'; for(let r=0;r<4;r++){ const y=46+r*22; pd+=(r%2?' H100':' H296')+(r<3?' a11 11 0 0 '+(r%2?0:1)+' 0 22':''); } pd+=' L318 112';
+    const coil=E('path',{d:pd,fill:'none',stroke:'#8b948e','stroke-width':3,'stroke-linecap':'round'},svg);
+    E('path',{d:'M76 72 H96 V46',fill:'none',stroke:'#8b948e','stroke-width':3},svg);
+    E('rect',{x:318,y:94,width:42,height:34,rx:4,fill:'#fff',stroke:'#5c665f','stroke-width':1.4},svg); txt(svg,339,142,'FID',null,{'text-anchor':'middle','font-size':9,'font-weight':800,fill:COL.ink});
+    const flame=E('path',{d:'M339 116 q-6 -8 0 -18 q6 10 0 18 Z',fill:'#f2a33a'},svg);
+    const L=coil.getTotalLength();
+    const bR=band(red), bB=band(blue), exB=6.8, exR=10.6;
+    const upd=traceSet(30,388,214,46,[[exB,1],[exR,.85]]);
+    const lab=E('g',{opacity:0},svg); txt(lab,388,160,'only volatile,',null,{'text-anchor':'end','font-weight':800,fill:COL.drug,'font-size':11.5}); txt(lab,388,174,'heat-stable compounds',null,{'text-anchor':'end','font-weight':800,fill:COL.drug,'font-size':11.5});
+    return {dur:dur,caps:caps,draw(t){
+      drop.setAttribute('cy',fx(44+Math.min(1,t/.8)*16)); drop.setAttribute('opacity',t<.9?1:0);
+      heat.forEach((h,i)=>at(h,0,-((t*14+i*7)%14)));
+      flame.setAttribute('transform','translate(339 116) scale(1 '+(1+.15*Math.sin(t*14)).toFixed(2)+') translate(-339 -116)');
+      const pos=(ex,g)=>{ const s=1.4; if(t<1){ g.setAttribute('opacity',0); return; } if(t<s){ at(g,59+(t-1)/(s-1)*20,72); g.setAttribute('opacity',1); g.setAttribute('transform',g.getAttribute('transform')+' scale('+(.6+(t-1)).toFixed(2)+')'); return; }
+        const f=(t-s)/(ex-s); if(f>1){ g.setAttribute('opacity',0); return; } const p=coil.getPointAtLength(f*L); at(g,p.x,p.y); g.setAttribute('opacity',1); };
+      pos(exB,bB); pos(exR,bR);
+      upd(t); lab.setAttribute('opacity',ease((t-11)/.6));
+    }};
+  };
+
+  /* ---------- player ---------- */
+  const players=[];
+  document.querySelectorAll('.anim').forEach(host=>{
+    const svg=host.querySelector('.anim-svg'), cap=host.querySelector('.anim-cap'), bP=host.querySelector('.a-play'), bR=host.querySelector('.a-replay'), fill=host.querySelector('.a-fill');
+    let A=null, t=0, playing=false, last=0, raf=0, opts={};
+    host.querySelectorAll('.a-tab').forEach(tb=>{ if(tb.classList.contains('on')) Object.assign(opts,JSON.parse(tb.dataset.o)); });
+    if(host.dataset.o) Object.assign(opts,JSON.parse(host.dataset.o));
+    function build(){ while(svg.firstChild) svg.removeChild(svg.firstChild); A=ANIM[host.dataset.anim](svg,opts); t=0; draw(); }
+    function draw(){ A.draw(t); fill.style.width=(t/A.dur*100).toFixed(1)+'%'; if(cap){ let c=A.caps[0][1]; A.caps.forEach(x=>{ if(t>=x[0]) c=x[1]; }); if(cap.innerHTML!==c) cap.innerHTML=c; } }
+    function ui(){ bP.textContent=playing?'❚❚ Pause':(t>=A.dur?'▶ Play again':(t>0?'▶ Resume':'▶ Play')); bP.setAttribute('aria-pressed',playing?'true':'false'); }
+    function frame(now){ if(!playing) return; t=Math.min(A.dur,t+(now-last)/1000); last=now; draw();
+      if(t>=A.dur){ playing=false; ui(); if(window.umami) umami.track('anim-complete',{anim:host.dataset.anim}); return; } raf=requestAnimationFrame(frame); }
+    function play(){ if(!A) build(); if(t>=A.dur) t=0; playing=true; last=performance.now(); ui(); cancelAnimationFrame(raf); raf=requestAnimationFrame(frame); }
+    function pause(){ playing=false; cancelAnimationFrame(raf); if(A) ui(); }
+    bP.addEventListener('click',()=>{ if(playing) pause(); else { play(); if(window.umami) umami.track('anim-play',{anim:host.dataset.anim}); } });
+    bR.addEventListener('click',()=>{ pause(); t=0; play(); if(window.umami) umami.track('anim-replay',{anim:host.dataset.anim}); });
+    host.querySelectorAll('.a-tab').forEach(tb=>tb.addEventListener('click',()=>{
+      host.querySelectorAll('.a-tab').forEach(x=>{ x.classList.toggle('on',x===tb); x.setAttribute('aria-pressed',x===tb?'true':'false'); });
+      opts=Object.assign({},JSON.parse(tb.dataset.o)); pause(); build(); play(); if(window.umami) umami.track('anim-tab',{anim:host.dataset.anim, tab:tb.textContent});
+    }));
+    players.push({host:host,
+      enter(){ build(); if(RMO){ t=A.dur; draw(); ui(); } else play(); },
+      leave(){ pause(); }});
+  });
+  function animsFor(n){ const s=slides[n-1]; players.forEach(p=>{ if(s.contains(p.host)) p.enter(); else p.leave(); }); }
 
   /* ---------- AUTO-FIT: shrink a page until it fits without scrolling ---------- */
   const MIN_K = 0.8;   /* never shrink text below 80% of normal */
@@ -1572,6 +1872,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     fit(slides[n-1]);
     requestAnimationFrame(()=>fit(slides[n-1]));
     labFrame(slides[n-1]);
+    animsFor(n);
     updateGate(false);
     if(window.umami) umami.track('slide-view',{slide:n});
   }
