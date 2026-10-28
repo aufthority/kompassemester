@@ -1317,13 +1317,15 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="txt">
    <div class="eyebrow">Well done</div>
    <h2>You finished. <span class="ac">Take your certificate.</span></h2>
-   <p>You worked through every page of <b>Chromatography, Explained</b>. Type your name as you want it to appear, then create your certificate.</p>
-   <div class="calc">
-    <div class="calc-row"><label>Your full name<input id="cert-name" type="text" maxlength="60" autocomplete="name" placeholder="e.g. Nur Aisyah binti Ahmad"></label></div>
-    <button class="btn solid" id="cert-make" type="button">Create certificate</button>
-   </div>
+   <p>You worked through every page of <b>Chromatography, Explained</b>.</p>
+   <div class="calc" id="cert-box"><p class="small" style="margin:0">Checking your Kompas Semester sign-in…</p></div>
    <div id="cert-out"></div>
-   <p class="small">A record of completion from Kompas Semester, not an official KPJ Healthcare University award.</p>
+   <div class="calc" id="cert-check" hidden>
+    <div class="calc-row"><label>Educators: check a certificate serial<input id="cert-serial" type="text" maxlength="20" autocomplete="off" placeholder="KS-CHR-26-XXXXXX"></label></div>
+    <button class="btn" id="cert-lookup" type="button">Check serial</button>
+    <div id="cert-check-out"></div>
+   </div>
+   <p class="small">Each certificate has a serial number recorded by Kompas Semester. It is a record of completion, not an official KPJ Healthcare University award.</p>
   </div>
  </div>
 </section>
@@ -1368,7 +1370,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   const TOTAL    = slides.length;
   /* progress is remembered on this device; a returning student resumes where they left off */
   const PKEY='kompas.chromatography.progress';
-  let maxReached=1, isEducator=false, profileName='';
+  let maxReached=1, isEducator=false, profileName='', signedIn=false, authSb=null;
   try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.max>=1) maxReached=Math.min(sv.max, document.querySelectorAll('.slide').length); }catch(_){}
   let current = 1;
   try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.last>=1 && sv.last<=maxReached) current=sv.last; }catch(_){}
@@ -2004,22 +2006,64 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   /* ---------- Kompas sign-in: read the user's own role (RLS allows only their own row) ---------- */
   window.addEventListener('DOMContentLoaded',async()=>{
     try{
-      if(!window.supabase) return;
+      if(!window.supabase){ renderCertBox(); return; }
       const sb=window.supabase.createClient('https://jtkskwopnprgmxlhppro.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0a3Nrd29wbnByZ214bGhwcHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDU0NDQsImV4cCI6MjEwMjUyMTQ0NH0.MVvaIH6fPhzC0aRk8XIZMU1OrAZYNbsT9V1diP8fuGw',{auth:{detectSessionInUrl:false}});
-      const {data:{session}}=await sb.auth.getSession(); if(!session) return;
+      authSb=sb;
+      const {data:{session}}=await sb.auth.getSession(); if(!session){ renderCertBox(); return; }
       const {data}=await sb.from('profiles').select('role, full_name').eq('id',session.user.id).single();
-      if(!data) return;
-      isEducator=data.role==='educator'; profileName=data.full_name||'';
-      buildToc(); fillCertName();
-    }catch(_){}
+      if(!data){ renderCertBox(); return; }
+      signedIn=true; isEducator=data.role==='educator'; profileName=(data.full_name||'').trim();
+      buildToc(); renderCertBox();
+    }catch(_){ renderCertBox(); }
   });
 
   /* ---------- certificate of completion ---------- */
-  const certName=document.getElementById('cert-name'), certBtn=document.getElementById('cert-make'), certOut=document.getElementById('cert-out');
-  function fillCertName(){ if(certName && !certName.value && profileName){ certName.value=profileName; } }
-  function quizScore(){ const q=[...document.querySelectorAll('.quiz .choice-set')], d=q.filter(x=>x.dataset.done); return d.length===q.length&&q.length ? d.filter(x=>x.dataset.correct==='1').length+' / '+q.length : ''; }
+  const certBox=document.getElementById('cert-box'), certOut=document.getElementById('cert-out');
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function renderCertBox(){
+    if(!certBox) return;
+    if(!signedIn){
+      certBox.innerHTML='<p style="margin:0 0 .4em">Sign in to <b>Kompas Semester</b> to get your certificate. It is issued in your registered name with a serial number.</p><a class="btn solid cert-dl" href="../../index.html" data-umami-event="certificate-signin">Open Kompas Semester</a><p class="small" style="margin:.4em 0 0">Then come back to this page.</p>';
+    } else if(!profileName){
+      certBox.innerHTML='<p style="margin:0">Your Kompas Semester profile has no name yet. Add it in your Kompas account, then come back.</p>';
+    } else {
+      certBox.innerHTML='<p style="margin:0 0 .4em">Name on your certificate: <b>'+esc(profileName)+'</b><br><span class="small">From your Kompas Semester account.</span></p><button class="btn solid" id="cert-make" type="button">Create certificate</button>';
+      document.getElementById('cert-make').addEventListener('click',makeCert);
+    }
+    document.getElementById('cert-check').hidden=!isEducator;
+    if(slides[current-1].contains(certBox)) fit(slides[current-1]);
+  }
+  async function makeCert(){
+    const btn=document.getElementById('cert-make'); btn.disabled=true; btn.textContent='Issuing…';
+    try{
+      const {data,error}=await authSb.rpc('issue_certificate',{p_explainer:'chromatography'});
+      if(error||!data||!data.length) throw error||new Error('No certificate returned');
+      const c=data[0], cv=await drawCert(c.name_on_certificate, c.serial, c.issued_at), url=cv.toDataURL('image/png');
+      certOut.innerHTML='<img class="cert-img" alt="Certificate of completion, serial '+esc(c.serial)+'" src="'+url+'"><p class="small" style="margin:.2em 0">Serial <b>'+esc(c.serial)+'</b></p><a class="btn solid cert-dl" download="chromatography-certificate-'+esc(c.serial)+'.png" href="'+url+'" data-umami-event="certificate-download">Download certificate (PNG)</a>';
+      if(window.umami) umami.track('certificate-create');
+    }catch(err){
+      console.warn('Certificate not issued:', err);
+      certOut.innerHTML='<p class="calc-out fail">Could not issue your certificate. Check that you are signed in to Kompas Semester and online, then try again.</p>';
+    }
+    btn.disabled=false; btn.textContent='Create certificate'; fit(slides[current-1]);
+  }
+  const lookBtn=document.getElementById('cert-lookup');
+  if(lookBtn) lookBtn.addEventListener('click',async()=>{
+    const out=document.getElementById('cert-check-out'), sn=(document.getElementById('cert-serial').value||'').trim().toUpperCase();
+    if(!sn){ out.innerHTML='<p class="calc-out fail">Type a serial first.</p>'; fit(slides[current-1]); return; }
+    out.innerHTML='<p class="small">Checking…</p>';
+    try{
+      const {data,error}=await authSb.from('certificates').select('serial, explainer, name_on_certificate, issued_at').eq('serial',sn).maybeSingle();
+      if(error) throw error;
+      out.innerHTML=data
+        ? '<p class="calc-out"><b>Genuine.</b> '+esc(data.name_on_certificate)+' · '+esc(data.explainer)+' · issued '+new Date(data.issued_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Kuala_Lumpur'})+'</p>'
+        : '<p class="calc-out fail"><b>No certificate has this serial.</b> Treat the certificate as not genuine.</p>';
+      if(window.umami) umami.track('certificate-check');
+    }catch(_){ out.innerHTML='<p class="calc-out fail">Could not check right now. Try again.</p>'; }
+    fit(slides[current-1]);
+  });
   function wrapLines(ctx,text,maxW){ const words=text.split(' '), lines=[]; let line=''; words.forEach(w=>{ const t=line?line+' '+w:w; if(ctx.measureText(t).width>maxW && line){ lines.push(line); line=w; } else line=t; }); if(line) lines.push(line); return lines; }
-  async function drawCert(name){
+  async function drawCert(name, serial, issuedAt){
     try{ await Promise.all(['800 60px "DM Sans"','700 30px "DM Sans"','500 30px "DM Sans"'].map(f=>document.fonts.load(f))); }catch(_){}
     const W=2000, H=1414, c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
     const F=(w,sz)=>w+' '+sz+'px "DM Sans", system-ui, sans-serif';
@@ -2042,24 +2086,14 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     x.textAlign='left'; x.font=F(500,30); x.fillStyle='#3f4742';
     const outcomes=['Explain the principles of extraction as sample preparation for chromatography.','Describe the principles and instrumentation of TLC, HPLC and GC.','Interpret a TLC chromatogram and its use in pharmaceutical analysis.'];
     let y=930; outcomes.forEach(o=>{ x.fillStyle='#2d6a4f'; x.beginPath(); x.arc(300,y-10,9,0,Math.PI*2); x.fill(); x.fillStyle='#3f4742'; wrapLines(x,o,1300).forEach(l=>{ x.fillText(l,330,y); y+=44; }); y+=6; });
-    const today=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-    x.font=F(700,32); x.fillStyle='#1c2620'; x.fillText('Date: '+today,260,1190);
-    const qs=quizScore(); if(qs) x.fillText('Quick quiz: '+qs,260,1240);
+    const day=new Date(issuedAt).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Kuala_Lumpur'});
+    x.font=F(700,32); x.fillStyle='#1c2620'; x.fillText('Issued: '+day,260,1180);
+    x.fillText('Serial: '+serial,260,1232);
     x.font=F(500,24); x.fillStyle='#636b65'; x.textAlign='center';
-    x.fillText('A record of completion from Kompas Semester. Not an official KPJ Healthcare University award.',W/2,1316);
+    x.fillText('Recorded by Kompas Semester; educators can check this serial. A record of completion, not an official KPJ Healthcare University award.',W/2,1316);
     return c;
   }
-  if(certBtn) certBtn.addEventListener('click',async()=>{
-    const name=(certName.value||'').trim().replace(/\s+/g,' ');
-    if(!name){ certOut.innerHTML='<p class="calc-out fail">Type your name first.</p>'; fit(slides[current-1]); return; }
-    certBtn.disabled=true;
-    const c=await drawCert(name.slice(0,60));
-    const url=c.toDataURL('image/png');
-    const file='chromatography-certificate-'+name.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')+'.png';
-    certOut.innerHTML='<img class="cert-img" alt="Certificate of completion for '+name.replace(/[<>"&]/g,'')+'" src="'+url+'"><a class="btn solid cert-dl" download="'+file+'" href="'+url+'" data-umami-event="certificate-download">Download certificate (PNG)</a>';
-    certBtn.disabled=false; fit(slides[current-1]);
-    if(window.umami) umami.track('certificate-create');
-  });
+
 
   buildToc();
   show(current);
