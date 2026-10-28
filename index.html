@@ -76,6 +76,12 @@ button{cursor:pointer;}
 .auth-info.show{display:block;}
 .auth-toggle{margin-top:18px;font-size:12.5px;color:var(--ink-soft);}
 .auth-toggle button{background:none;border:none;padding:0;font:inherit;color:var(--forest-700);font-weight:600;text-decoration:underline;cursor:pointer;}
+.auth-tour{margin-top:22px;padding-top:18px;border-top:1px solid rgba(27,67,50,0.12);}
+.btn-tour{width:100%;padding:11px;background:rgba(27,67,50,0.06);color:var(--forest-700);border:1px solid rgba(27,67,50,0.2);border-radius:var(--radius-sm);font-size:13.5px;font-weight:600;cursor:pointer;transition:background .15s;}
+.btn-tour:hover{background:rgba(27,67,50,0.11);}
+.tour-list{display:flex;flex-direction:column;gap:10px;margin-top:14px;}
+.tour-list .lab-card{padding:14px 16px;text-align:left;}
+.tour-list .lab-card h3{font-size:15px;}
 .pdpa-notice{text-align:left;background:rgba(255,255,255,0.55);border:1px solid rgba(27,67,50,0.14);border-radius:var(--radius-sm);padding:14px 15px;margin:16px 0 14px;font-size:11.5px;line-height:1.55;color:var(--ink-soft);max-height:180px;overflow-y:auto;}
 .pdpa-notice h4{font-size:12px;color:var(--forest-900);margin-bottom:6px;}
 .pdpa-notice p{margin-bottom:8px;}
@@ -687,7 +693,47 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
     <div class="auth-toggle" id="auth-toggle">
       New here? <button type="button" id="show-signup">Create an account</button>
     </div>
+    <div class="auth-tour"><button type="button" class="btn-tour" id="show-tour">Take a tour of interactive labs</button></div>
   </div>
+  <div class="modal-overlay" id="tour-overlay" role="dialog" aria-modal="true" aria-labelledby="tour-title">
+    <div class="modal-sheet">
+      <div class="modal-head">
+        <div class="modal-title" id="tour-title">Take a tour</div>
+        <button class="modal-close" id="tour-close" type="button" aria-label="Close"><svg class="icon icon-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg></button>
+      </div>
+      <div class="meta">Try a few of the labs Kompas Semester students use. No account needed.</div>
+      <div class="tour-list">
+        <a class="card glass lab-card" href="labs/chromatography/index.html" data-tour="chromatography">
+          <div><h3>Chromatography Explainer</h3><div class="meta">Extraction, TLC, HPLC and GC, with animations of why compounds separate.</div></div>
+          <span class="lab-card-go">Open</span>
+        </a>
+        <a class="card glass lab-card" href="labs/atomic-structure.html" data-tour="atomic-structure">
+          <div><h3>Atomic Structure Explorer</h3><div class="meta">Build an atom and see how its electrons are arranged.</div></div>
+          <span class="lab-card-go">Open</span>
+        </a>
+        <a class="card glass lab-card" href="labs/acidbase.html" data-tour="acidbase">
+          <div><h3>Acid–Base Lab</h3><div class="meta">Strong and weak acids, pH and titration curves.</div></div>
+          <span class="lab-card-go">Open</span>
+        </a>
+        <a class="card glass lab-card" href="labs/osd/index.html" data-tour="osd">
+          <div><h3>Oral Solid Doses Lab</h3><div class="meta">How tablets and capsules are designed and made.</div></div>
+          <span class="lab-card-go">Open</span>
+        </a>
+      </div>
+    </div>
+  </div>
+  <script>
+/* ---------- LAB TOUR (sign-in screen) ---------- */
+(() => {
+  const ov = document.getElementById('tour-overlay');
+  const open = () => { ov.classList.add('open'); document.getElementById('tour-close').focus(); };
+  const close = () => { ov.classList.remove('open'); document.getElementById('show-tour').focus(); };
+  document.getElementById('show-tour').addEventListener('click', open);
+  document.getElementById('tour-close').addEventListener('click', close);
+  ov.addEventListener('click', e => { if (e.target === ov) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('open')) close(); });
+})();
+  </script>
 </div>
 
 <div id="recovery-screen" style="display:none">
