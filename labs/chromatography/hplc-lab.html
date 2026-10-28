@@ -35,16 +35,19 @@
   --radius:10px;color-scheme:light;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#fff}
-body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%;font-size:16px;overflow-x:hidden}
+[hidden]{display:none!important}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.45;-webkit-text-size-adjust:100%;font-size:16px;overflow:hidden}
+@media (min-width:900px) and (min-height:700px){.scr{font-size:calc(var(--k,1)*18px)}}
 b,strong{color:var(--ink);font-weight:700}
 a{color:var(--accent)}
-.wrap{max-width:760px;margin:0 auto;padding:0 16px 28px}
-.embedded .wrap{padding:10px 12px 18px}
-.embedded body{font-size:15px}
 
-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 8px;border-bottom:1px solid var(--rule);margin-bottom:12px}
-.embedded nav,.embedded .page-head,.embedded .madeby{display:none}
+/* one screen, no page scroll: top bar, stage, footer */
+#app{height:100vh;height:var(--app-h,100dvh);max-width:1040px;margin:0 auto;padding:0 14px;display:flex;flex-direction:column}
+.embedded #app{padding:0 10px}
+
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0 6px;border-bottom:1px solid var(--rule)}
+.embedded nav{display:none}
 .logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
 .logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
 .nav-right{display:flex;gap:8px}
@@ -54,58 +57,101 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:8px;paddin
 @media (max-width:340px){.logo{font-size:.92rem}.nav-right{gap:4px}.pillbtn{padding:4px 7px!important;font-size:.74rem}}
 @media (max-width:400px){.ptl{display:none}.pts{display:inline}.nav-right{gap:6px}.pillbtn{padding:5px 9px}}
 
-.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.3em}
-h1{color:var(--ink);font-weight:800;line-height:1.1;letter-spacing:-.025em;font-size:1.8em;margin-bottom:.3em}
+#bar{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:7px 0 5px}
+#bar-lbl{flex:1;min-width:0;font-size:.8rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar-lbl span{color:var(--eyebrow);letter-spacing:.06em;text-transform:uppercase;font-size:.9em;margin-right:.35em}
+#hints-btn{flex:0 0 auto}
+#track{flex:0 0 3px;background:var(--rule);border-radius:3px;margin-bottom:6px}
+#fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;gap:.35em;font-size:calc(var(--k,1)*16px);overflow:hidden;padding:2px 1px 4px}
+.scr.on{display:flex}
+.scr.scrolly{overflow-y:auto}
+.scr.half-l{right:calc(50% + 8px)}
+.scr.half-r{left:calc(50% + 8px)}
+/* wider screens: every pane is a card; two panes share the width equally, a single pane is one centred card */
+#stage.roomy .scr.on{border:1px solid var(--rule);border-radius:14px;padding:14px 18px;background:#fff}
+#stage.roomy .scr.single{left:max(0px,calc(50% - 340px));right:max(0px,calc(50% - 340px));top:50%;bottom:auto;transform:translateY(-50%);max-height:100%}
+#stage.roomy .scr.single .madeby{margin-top:.8em}
+@media (max-height:600px){#stage.roomy .scr.on{padding:8px 12px}}
+.grow{flex:1 1 auto;min-height:0}
+
+#foot{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 0 10px;border-top:1px solid var(--rule)}
+#gate{flex:1;text-align:center;font-size:.74rem;color:var(--muted);line-height:1.25}
+#foot .btn{min-width:6.2em}
+#next.ready{animation:nudge 1.6s ease-in-out 2}
+@keyframes nudge{0%,100%{transform:none}50%{transform:translateX(3px)}}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.15em}
+h1{color:var(--ink);font-weight:800;line-height:1.1;letter-spacing:-.025em;font-size:1.6em;margin-bottom:.2em}
 h1 .ac{color:var(--accent)}
-h2{color:var(--ink);font-weight:800;font-size:1.08em;letter-spacing:-.01em;margin-bottom:.35em;display:flex;align-items:center;gap:.5em}
-h2 .num{flex:0 0 1.6em;height:1.6em;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.8em}
-p{margin-bottom:.5em;font-size:.95em}
+p{margin-bottom:.4em;font-size:.95em}
 .small{font-size:.82em;color:var(--muted)}
-.page-head{margin-bottom:10px}
+.madeby{margin-top:auto;border-top:1px solid var(--rule);padding-top:.5em;font-size:.78em;color:var(--muted)}
 
-.card{border:1px solid var(--rule);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#fff}
-.card.locked{opacity:.45;pointer-events:none}
-.card.locked .lock-note{display:block}
-.lock-note{display:none;font-size:.8em;color:var(--muted);font-weight:600}
-.card.done{border-color:var(--g-line)}
-.card.done h2 .num{background:var(--accent-dark)}
-
-.chips{display:flex;flex-wrap:wrap;gap:.35em;margin:.2em 0 .5em}
-.chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .82em 'DM Sans',sans-serif;padding:.35em .8em;border-radius:100px;cursor:pointer;text-align:left;line-height:1.3}
+.chips{display:flex;flex-wrap:wrap;gap:.3em;margin:.15em 0 .35em}
+.chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .82em 'DM Sans',sans-serif;padding:.32em .75em;border-radius:100px;cursor:pointer;text-align:left;line-height:1.3}
 .chip:hover{border-color:var(--ink)}
 .chip.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
 .chip .tick{margin-left:.3em;color:var(--accent)}
 .chips.col{flex-direction:column;align-items:stretch}
 .chips.col .chip{border-radius:8px}
-.ctx{font-size:.88em;color:var(--body);margin:0}
+.ctx{font-size:.9em;color:var(--body);margin:0}
 
-.msg{font-size:.86em;padding:.4em .7em;border-left:3px solid var(--rule);border-radius:0 8px 8px 0;margin-top:.4em}
+.msg{font-size:.84em;padding:.35em .65em;border-left:3px solid var(--rule);border-radius:0 8px 8px 0}
 .msg.good{border-color:var(--accent);background:var(--g-bg)}
 .msg.near{border-color:var(--orange);background:var(--o-bg)}
 .msg.bad{border-color:var(--red);background:var(--r-bg)}
-.msg p{margin:0;font-size:1em}.msg p+p{margin-top:.3em}
-.q{font-weight:700;color:var(--ink);font-size:.92em;margin:.6em 0 .3em}
-.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .86em 'DM Sans',sans-serif;padding:.45em 1em;cursor:pointer}
+.msg p{margin:0;font-size:1em}.msg p+p{margin-top:.25em}
+.q{font-weight:700;color:var(--ink);font-size:.92em;margin:.3em 0 .2em}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .86em 'DM Sans',sans-serif;padding:.42em 1em;cursor:pointer}
 .btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
 .btn.ghost{border-color:var(--rule);color:var(--body);font-weight:600}
 .btn:disabled{opacity:.4;cursor:default}
-.btns{display:flex;flex-wrap:wrap;gap:.45em;margin-top:.55em}
-.work{display:none;margin-top:.5em}
+.btns{display:flex;flex-wrap:wrap;gap:.4em;margin-top:.2em}
+.work{display:none}
 .work.show{display:block}
 table.w{width:100%;border-collapse:collapse;font-size:.8em}
-table.w th,table.w td{border-bottom:1px solid var(--rule);padding:.32em .4em;text-align:left;vertical-align:top}
+table.w th,table.w td{border-bottom:1px solid var(--rule);padding:.25em .4em;text-align:left;vertical-align:top}
 table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.score{font-size:.82em;color:var(--muted);text-align:center;margin-top:4px}
-.madeby{border-top:1px solid var(--rule);padding-top:.6em;margin-top:.8em;font-size:.8em;color:var(--muted)}
 
-/* four ideas */
-.ideas{display:grid;grid-template-columns:1fr 1fr;gap:.5em}
-@media (min-width:620px){.ideas{grid-template-columns:repeat(4,1fr)}}
-.idea{font-size:.8em;line-height:1.35;text-align:center}
-.idea svg{display:block;width:100%;height:44px;margin-bottom:.2em}
+/* story */
+#story{display:flex;flex-direction:column;gap:.3em;min-height:0}
+.story-head{display:flex;align-items:center;justify-content:space-between}
+.dots{display:flex;gap:5px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--rule)}.dots i.on{background:var(--accent)}
+.scene{display:block;width:100%;border:0;padding:0;background:none;cursor:pointer;border-radius:10px}
+.scene svg{display:block;width:100%;height:auto;max-height:13em}
+.say{font-size:.9em;margin:0;background:var(--g-bg);border-radius:10px;padding:.5em .75em;color:var(--ink);line-height:1.4}
+.story-nav{display:flex;align-items:center;justify-content:space-between;gap:.5em}
+.bob{animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:none}50%{transform:translateY(-1.5px)}}
+.blink{animation:blink 4s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes blink{0%,92%,100%{transform:none}95%{transform:scaleY(.1)}}
+.pulse{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.spin{animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sorange{fill:#e2852b}.sorange-h{opacity:1}
+.sclear{fill:#eef3f4}.sclear-h{opacity:0}
+.sclear-anim{fill:#e2852b;animation:toclear 1s 1.6s forwards}.sclear-anim-h{animation:hatchoff 1s 1.6s forwards}
+@keyframes toclear{to{fill:#eef3f4}}@keyframes hatchoff{to{opacity:0}}
+.sdrop{opacity:0;animation:sdrop .7s ease-in .2s 2}
+@keyframes sdrop{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(34px)}}
+.slbl{opacity:0;animation:fadein .5s 2.7s forwards}
+@keyframes fadein{to{opacity:1}}
+.ondark path{stroke:#c9d1cb}
+.ondark .tl1,.ondark .tl2{fill:#f2f4f2}.onlight .tl1{fill:#1c2620}.onlight .tl2{fill:#8a4f0c}
+/* hints overlay */
+#hints{position:fixed;inset:0;background:rgba(28,38,32,.45);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
+#hints.open{display:flex}
+#hints .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:14px 16px;max-height:100%;overflow:auto}
+#hints .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5em}
+.ideas{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
+.idea{font-size:.86em;line-height:1.35;text-align:center}
+.idea svg{display:block;width:100%;height:46px;margin-bottom:.2em}
 .term{background:none;border:none;border-bottom:1.5px dotted var(--accent);color:inherit;font:inherit;padding:0;cursor:help}
-.def{display:block;margin:.2em 0 .4em;padding:.3em .6em;background:var(--g-bg);border-radius:6px;font-size:.92em;color:var(--accent-dark);font-weight:500}
-
+.def{display:block;margin:.2em 0 .3em;padding:.3em .6em;background:var(--g-bg);border-radius:6px;font-size:.92em;color:var(--accent-dark);font-weight:500}
 
 /* ---------- additions for the HPLC bench ---------- */
 .calc-in{display:flex;flex-wrap:wrap;align-items:center;gap:.4em .6em;margin:.25em 0 .2em}
@@ -114,8 +160,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 .unit{font-size:.84em;color:var(--muted)}
 .given{background:#f6f7f5;border-radius:8px;padding:.45em .7em;font-size:.86em;margin:.3em 0 .4em}
 .given b{white-space:nowrap}
-.set{display:grid;grid-template-columns:1fr;gap:.1em .8em}
-@media (min-width:600px){.set{grid-template-columns:1fr 1fr}}
+.set{display:grid;grid-template-columns:1fr;gap:0 .8em}
 .set .q{margin-top:.45em}
 .slrow{display:flex;align-items:center;gap:.4em}
 .slrow input[type=range]{flex:1;min-width:0;accent-color:var(--accent)}
@@ -140,10 +185,14 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 .fixnote{font-size:.84em;background:var(--g-bg);border-radius:8px;padding:.4em .6em;margin:.4em 0}
 .scroll-x{overflow-x:auto;-webkit-overflow-scrolling:touch}
 @media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
+.stuck{font-size:.92em;color:var(--accent-dark)}
+.chrom{margin:.2em 0}
+#set .q,#pred .q{margin-top:.25em}
 </style>
 </head>
 <body>
-<div class="wrap">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#5a2a08" stroke-width="1.6" stroke-opacity=".6"/></pattern></defs></svg>
+<div id="app">
   <nav>
     <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
     <div class="nav-right">
@@ -152,75 +201,77 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       <a class="pillbtn" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
     </div>
   </nav>
-  <div class="page-head">
-    <div class="eyebrow">Interactive lab · High-performance liquid chromatography</div>
-    <h1>HPLC Bench: <span class="ac">how much drug is in each tablet?</span></h1>
-    <p class="small">Based on a real QC assay for chlorpheniramine maleate 4 mg tablets. Choose a scenario and work through the four steps. The numbers change every round.</p>
+  <div id="bar"><div id="bar-lbl"></div><button type="button" class="pillbtn" id="hints-btn" aria-haspopup="dialog">Hints</button></div>
+  <div id="track"><div id="fill"></div></div>
+
+  <main id="stage">
+    <section class="scr" id="s0" data-step="0" data-title="Start">
+      <div class="eyebrow" style="margin:0">Choose a scenario <span class="small" style="text-transform:none;letter-spacing:0;font-weight:500">· rounds completed: <span id="rounds">0</span></span></div>
+      <div class="chips" id="scen-chips"></div>
+      <div id="story"></div>
+    </section>
+
+    <section class="scr" data-step="1" data-pane="a" data-title="Settings">
+      <p class="method" style="margin:0">Fixed: 150 × 4.6 mm column, 5 µm packing · flow 1.0 ml/min · 20 µl injection · standard 0.16 mg/ml</p>
+      <div class="set" id="set"></div>
+      <div id="pred"></div>
+    </section>
+    <section class="scr" data-step="1" data-pane="b" data-title="Test injection">
+      <div class="btns" style="margin-top:0"><button class="btn solid" id="inject1" type="button">Inject the standard</button></div>
+      <div id="chrom1"></div>
+      <div id="k1"></div>
+      <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button><button class="btn ghost" id="rev1" type="button" hidden>Show the working</button></div>
+      <div class="msg" id="m1">Choose the settings, make a prediction, then inject.</div>
+      <div class="work" id="w1"></div>
+    </section>
+
+    <section class="scr" data-step="2" data-pane="a" data-title="Replicate injections">
+      <p class="small" style="margin:0">Before any sample, five injections of the standard must meet every limit.</p>
+      <div id="ss"></div>
+    </section>
+    <section class="scr" data-step="2" data-pane="b" data-title="Pass or stop?">
+      <div id="q2"></div>
+      <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button><button class="btn ghost" id="rev2" type="button" hidden>Show the working</button></div>
+      <div class="msg" id="m2">Work out the RSD of the peak areas, then decide.</div>
+      <div class="work" id="w2"></div>
+    </section>
+
+    <section class="scr" data-step="3" data-pane="a" data-title="Sample">
+      <div id="s3a"></div>
+    </section>
+    <section class="scr" data-step="3" data-pane="b" data-title="Calculate">
+      <div id="s3b"></div>
+      <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button><button class="btn ghost" id="rev3" type="button" hidden>Show the working</button></div>
+      <div class="msg" id="m3">Give mg per tablet to 2 decimal places and % label claim to 1 decimal place.</div>
+      <div class="work" id="w3"></div>
+    </section>
+
+    <section class="scr" data-step="4" data-title="Decide">
+      <div id="q4"></div>
+      <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button><button class="btn ghost" id="rev4" type="button" hidden>Show the working</button></div>
+      <div class="msg" id="m4">Compare your result with the right limits.</div>
+      <div class="btns" id="endrow" hidden><button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New values</button><button class="btn ghost" id="btn-next" type="button">Next scenario →</button></div>
+    </section>
+  </main>
+
+  <div id="foot">
+    <button class="btn" id="back" type="button">← Back</button>
+    <div id="gate" aria-live="polite"></div>
+    <button class="btn solid" id="next" type="button">Continue →</button>
   </div>
+</div>
 
-  <section class="card" id="c0">
-    <div class="eyebrow">Choose a scenario</div>
-    <div class="chips" id="scen-chips"></div>
-    <p class="ctx" id="context"></p>
-  </section>
-
-  <section class="card">
-    <div class="eyebrow">Four ideas</div>
+<div id="hints" role="dialog" aria-modal="true" aria-labelledby="hints-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="hints-title">Hints: four ideas</div><button type="button" class="btn ghost" id="hints-close">Close</button></div>
     <div class="ideas">
       <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><rect x="8" y="30" width="104" height="10" rx="2" fill="#eef0ee" stroke="#5c665f"/><path d="M20 30 v-14 M34 30 v-14 M48 30 v-14 M62 30 v-14 M76 30 v-14 M90 30 v-14 M104 30 v-14" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round"/><text x="60" y="10" font-size="9" text-anchor="middle" fill="#1c2620" font-weight="700">C18 chains</text></svg><b>C18 (ODS)</b> column: oily chains hold the <b>non-polar</b> part of a drug.</div>
       <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><path d="M8 38 H112" stroke="#9aa39d"/><path d="M14 38 L22 38 Q28 6 34 38 L112 38" fill="none" stroke="#2d6a4f" stroke-width="1.8"/><path d="M14 38 L70 38 Q78 14 86 38 L112 38" fill="none" stroke="#b25f0c" stroke-width="1.8" stroke-dasharray="3 2"/><text x="28" y="10" font-size="8" fill="#2d6a4f" text-anchor="middle">more MeOH</text><text x="80" y="10" font-size="8" fill="#8a4f0c" text-anchor="middle">less MeOH</text></svg><b>More methanol</b> = stronger mobile phase = <b>earlier</b> peak.</div>
       <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><circle cx="44" cy="22" r="11" fill="#e8effc" stroke="#3a6bd1"/><text x="44" y="26" font-size="10" text-anchor="middle" fill="#3a6bd1" font-weight="700">+</text><circle cx="76" cy="22" r="11" fill="#fbecea" stroke="#c0392b"/><text x="76" y="26" font-size="12" text-anchor="middle" fill="#c0392b" font-weight="700">−</text><text x="44" y="42" font-size="7.5" text-anchor="middle" fill="#636b65">drug</text><text x="76" y="42" font-size="7.5" text-anchor="middle" fill="#636b65">sulfonate</text></svg><b>Ion pair:</b> hexanesulfonate (−) pairs with the charged drug (+) so it sticks to C18.</div>
       <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><path d="M8 40 H112" stroke="#9aa39d"/><path d="M30 40 Q42 0 54 40 Z" fill="#cfe6d9" stroke="#2d6a4f"/><path d="M70 40 Q80 16 90 40 Z" fill="#cfe6d9" stroke="#2d6a4f"/><text x="42" y="36" font-size="8" text-anchor="middle" fill="#1f4d39" font-weight="700">std</text><text x="80" y="37" font-size="8" text-anchor="middle" fill="#1f4d39" font-weight="700">spl</text></svg><b>Peak area</b> is proportional to amount. Compare the sample with a <b>standard</b>.</div>
     </div>
-  </section>
-
-  <section class="card" id="c1">
-    <h2><span class="num">1</span>Set up the method</h2>
-    <p class="method">Fixed: 150 × 4.6 mm column, 5 µm packing · flow 1.0 ml/min · 20 µl injection · standard 0.16 mg/ml</p>
-    <div class="set" id="set"></div>
-    <div id="pred"></div>
-    <div class="btns"><button class="btn solid" id="inject1" type="button">Inject the standard</button></div>
-    <div id="chrom1"></div>
-    <div id="k1"></div>
-    <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button><button class="btn ghost" id="rev1" type="button">Show the working</button></div>
-    <div class="msg" id="m1">Choose the settings, make a prediction, then inject.</div>
-    <div class="work" id="w1"></div>
-  </section>
-
-  <section class="card locked" id="c2">
-    <h2><span class="num">2</span>System suitability</h2>
-    <p class="lock-note">Finish step 1 first.</p>
-    <p class="small">Before any sample is injected, five replicate injections of the standard must meet every limit.</p>
-    <div id="ss"></div>
-    <div id="q2"></div>
-    <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button><button class="btn ghost" id="rev2" type="button">Show the working</button></div>
-    <div class="msg" id="m2">Work out the RSD of the peak areas, then decide.</div>
-    <div class="work" id="w2"></div>
-  </section>
-
-  <section class="card locked" id="c3">
-    <h2><span class="num">3</span>Assay the sample</h2>
-    <p class="lock-note">Finish step 2 first.</p>
-    <div id="s3"></div>
-    <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button><button class="btn ghost" id="rev3" type="button">Show the working</button></div>
-    <div class="msg" id="m3">Give mg per tablet to 2 decimal places and % label claim to 1 decimal place.</div>
-    <div class="work" id="w3"></div>
-  </section>
-
-  <section class="card locked" id="c4">
-    <h2><span class="num">4</span>Decide and report</h2>
-    <p class="lock-note">Finish step 3 first.</p>
-    <div id="q4"></div>
-    <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button><button class="btn ghost" id="rev4" type="button">Show the working</button></div>
-    <div class="msg" id="m4">Compare your result with the right limits.</div>
-  </section>
-
-  <div class="btns" style="justify-content:center">
-    <button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New values</button>
-    <button class="btn ghost" id="btn-next" type="button">Next scenario →</button>
+    <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. The method follows a manufacturer's standard test procedure (STP) for chlorpheniramine maleate 4 mg tablets. Chromatograms and results are simulated.</div>
   </div>
-  <div class="score">Rounds completed: <span id="rounds">0</span></div>
-  <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. The method follows a manufacturer's standard test procedure (STP) for chlorpheniramine maleate 4 mg tablets. Chromatograms and results are simulated.</div>
 </div>
 
 <script>
@@ -286,7 +337,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     const near=v=>[92.5,95,105,107.5].some(L=>Math.abs(v-L)<.5);
     do{ r.pct = S.limits==='shelf' ? rnd(90.0,98.0) : rnd(93.5,106.0); }while(near(r.pct));
     r.failMode = S.fail ? (coin()?'precision':'tailing') : null;
-    r.ss = null; r.ssFixed=false; r.ans2={}; r.ans3={}; r.ans4={};
+    r.ss = null; r.ssFixed=false; r.tries=[0,0,0,0,0]; r.ans2={}; r.ans3={}; r.ans4={};
     R=r; solved=[false,false,false,false];
     render();
   }
@@ -312,16 +363,25 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       b.addEventListener('click',()=>{ g.querySelectorAll('.chip').forEach(c=>{ c.classList.remove('on'); c.setAttribute('aria-pressed','false'); }); b.classList.add('on'); b.setAttribute('aria-pressed','true'); cb(i); }); g.appendChild(b); });
     return g;
   }
-  function msg(n,cls,html){ const m=$('#m'+n); m.className='msg '+cls; m.innerHTML=html; track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); }
-  function clearMsg(n){ const m=$('#m'+n); m.className='msg'; m.innerHTML=DEFAULT[n]; const w=$('#w'+n); if(w){ w.className='work'; w.innerHTML=''; } }
-  function setLocks(){
-    for(let k=2;k<=4;k++) $('#c'+k).classList.toggle('locked', !solved[k-2]);
-    for(let k=1;k<=4;k++) $('#c'+k).classList.toggle('done', solved[k-1]);
+  /* feedback: at most two points, so a page never overflows.
+     A wrong Check counts as a try; "Show the working" appears after 3 tries on that step. */
+  function msg(n,cls,html){
+    const m=$('#m'+n); m.className='msg '+cls;
+    const tmp=document.createElement('div'); tmp.innerHTML=html; const ps=tmp.querySelectorAll(':scope > p');
+    if(ps.length>2){ for(let i=2;i<ps.length;i++) ps[i].remove(); tmp.insertAdjacentHTML('beforeend','<p>…and '+(ps.length-2)+' more. Fix these first.</p>'); }
+    if(cls==='bad'){
+      R.tries[n]=(R.tries[n]||0)+1;
+      if(R.tries[n]>=3){ const rv=$('#rev'+n); if(rv.hidden){ rv.hidden=false; track('lab-step'+n+'-working-offered',{scenario:R.S.id}); } tmp.insertAdjacentHTML('beforeend','<p class="stuck">Stuck? <b>Show the working</b> is now available.</p>'); }
+    }
+    m.innerHTML=tmp.innerHTML;
+    track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); fitPage();
   }
+  function clearMsg(n){ const m=$('#m'+n); m.className='msg'; m.innerHTML=DEFAULT[n]; const w=$('#w'+n); if(w){ w.className='work'; w.innerHTML=''; } }
+  function setLocks(){ updatePager(); }
   function unsolveFrom(k){
     let changed=false;
     for(let j=k;j<=4;j++){ if(solved[j-1]){ solved[j-1]=false; changed=true; } if(j>k) clearMsg(j); }
-    if(changed) setLocks();
+    if(changed){ $('#endrow').hidden=true; setLocks(); }
   }
   const numIn=(id,val)=>'<input class="num-in" id="'+id+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':val)+'">';
   const readNum=id=>{ const e=$('#'+id); if(!e) return null; const v=(e.value||'').replace(/,/g,'').trim(); return v===''?null:parseFloat(v); };
@@ -331,11 +391,11 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     const S=R.S, sc0=$('#scen-chips'); sc0.innerHTML='';
     SCEN.forEach((s,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(i===sc?' on':''); b.innerHTML=s.chip+(done.has(s.id)?'<span class="tick">✓</span>':'');
       b.addEventListener('click',()=>{ if(i===sc) return; sc=i; track('lab-pick',{scenario:s.id}); newRound(); }); sc0.appendChild(b); });
-    $('#context').innerHTML=S.context(R);
     R.ss=buildSS(!!R.failMode, R.failMode);
+    R.beat=0; R.storyDone=false; renderStory();
     renderSet(); renderPred(); $('#chrom1').innerHTML=''; $('#k1').innerHTML='';
-    $('#ss').innerHTML=''; $('#q2').innerHTML=''; $('#s3').innerHTML=''; $('#q4').innerHTML='';
-    [1,2,3,4].forEach(clearMsg); setLocks();
+    $('#ss').innerHTML=''; $('#q2').innerHTML=''; $('#s3a').innerHTML=''; $('#s3b').innerHTML=''; $('#q4').innerHTML='';
+    [1,2,3,4].forEach(n=>{ clearMsg(n); $('#rev'+n).hidden=true; }); $('#endrow').hidden=true; setLocks();
   }
 
   /* ---------- chromatogram drawing ---------- */
@@ -379,7 +439,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   function renderSet(){
     const box=$('#set'); box.innerHTML='';
     const add=(title,key)=>{ const d=document.createElement('div'); d.innerHTML='<div class="q">'+title+'</div>';
-      d.appendChild(chipGroup(OPT[key], R.set[key], i=>{ R.set[key]=i; invalidate1(); }, true)); box.appendChild(d); };
+      d.appendChild(chipGroup(OPT[key], R.set[key], i=>{ R.set[key]=i; invalidate1(); }, key==='ip')); box.appendChild(d); };
     add('Column','col'); add('Aqueous part of the mobile phase','ip');
     const m=document.createElement('div');
     m.innerHTML='<div class="q">Methanol in the mobile phase</div><div class="slrow"><button type="button" class="btn ghost" id="mm">−</button><input type="range" id="meoh" min="40" max="70" step="1" value="'+R.set.meoh+'" aria-label="Methanol percent"><button type="button" class="btn ghost" id="mp">+</button></div><div class="mval" id="mv"></div>';
@@ -394,7 +454,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     const d=$('#pred'); d.innerHTML='<div class="q">Predict: if you raise the methanol, the chlorpheniramine peak comes out</div>';
     d.appendChild(chipGroup(['Earlier','Later','At the same time'], R.pred, i=>{ R.pred=i; unsolveFrom(1); track('lab-prediction',{scenario:R.S.id,pick:i}); }));
   }
-  function invalidate1(){ R.inj=null; $('#chrom1').innerHTML=''; $('#k1').innerHTML=''; unsolveFrom(1); clearMsg(1); }
+  function invalidate1(){ R.inj=null; $('#chrom1').innerHTML=''; $('#k1').innerHTML=''; unsolveFrom(1); clearMsg(1); fitPage(); }
   function kNow(){
     const s=R.set, M=s.meoh;
     if(s.col===1) return 0.15;
@@ -413,14 +473,14 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     const c=$('#chrom1'); c.innerHTML=''; c.appendChild(svg);
     $('#k1').innerHTML='<div class="q">Capacity factor k′ of the chlorpheniramine peak</div><div class="calc-in">'+numIn('kk',R.ans1.k)+'<span class="unit">(no units)</span></div>';
     $('#kk').addEventListener('input',()=>{ R.ans1.k=$('#kk').value; unsolveFrom(1); });
-    unsolveFrom(1); clearMsg(1);
+    unsolveFrom(1); clearMsg(1); fitPage();
     track('lab-run',{scenario:R.S.id, meoh:s.meoh, col:s.col, ip:s.ip, wl:s.wl});
   });
   $('#chk1').addEventListener('click',()=>{
     const s=R.set;
     if(R.pred==null) return msg(1,'near','Make your prediction first.');
     if(R.pred!==0) return msg(1,'bad',mixLine('H4','Methanol is the strong solvent in reverse phase. More of it pulls the drug off the C18 sooner.',1));
-    if(!R.inj) return msg(1,'near','Inject the standard to see the chromatogram.');
+    if(!R.inj) return msg(1,'near','Press Inject the standard to see the chromatogram.');
     if(s.col===1) return msg(1,'bad',mixLine('H1','Plain silica is polar (normal phase). With a water-rich mobile phase nothing is held: everything comes out near t0.',1));
     if(s.ip===1) return msg(1,'bad',mixLine('H2','At pH 3.6 chlorpheniramine is protonated (+). Without hexanesulfonate it barely sticks to C18, so k′ is far below 2.',1));
     if(s.wl===1) return msg(1,'bad',mixLine('H3','Chlorpheniramine hardly absorbs at 365 nm. The method uses 254 nm.',1));
@@ -463,11 +523,12 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
        '<span>RSD of tR (limit ≤ 1.0%)</span><span>'+P.rsdT.toFixed(2)+'%</span><span>k′ (limit ≥ 2.0)</span><span>'+ss.k.toFixed(2)+'</span><span>RSD of area (limit ≤ 2.0%)</span><span>?</span></div>';
     if(R.ssFixed) h='<div class="fixnote">'+fixText()+' The standard was injected five more times:</div>'+h;
     $('#ss').innerHTML=h;
-    const q=$('#q2'); q.innerHTML='<div class="q">a. RSD of the five peak areas</div><div class="calc-in">'+numIn('rsd',R.ans2.rsd)+'<span class="unit">%</span></div>';
+    const q=$('#q2'); q.innerHTML='<p class="small" style="margin:0">The five results are '+(innerWidth>=900?'on the left':'on the previous screen')+'.</p><div class="q">a. RSD of the five peak areas</div><div class="calc-in">'+numIn('rsd',R.ans2.rsd)+'<span class="unit">%</span></div>';
     q.querySelector('input').addEventListener('input',()=>{ R.ans2.rsd=$('#rsd').value; unsolveFrom(2); });
     const d=document.createElement('div'); d.innerHTML='<div class="q">b. Decision</div>';
     d.appendChild(chipGroup(['All limits met: inject the samples','A limit is failed: stop and fix the system'], R.ans2.dec, i=>{ R.ans2.dec=i; unsolveFrom(2); renderWhich(); }, true)); q.appendChild(d);
     const w=document.createElement('div'); w.id='which'; q.appendChild(w); renderWhich();
+    fitPage();
   }
   function whichOpts(){ if(!R.wo) R.wo=shuffle([['Tailing factor','T'],['Plate count','N'],['RSD of area','A'],['RSD of tR','tR']]); return R.wo; }
   function renderWhich(){
@@ -475,6 +536,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     if(R.ans2.dec!==1) return;
     w.innerHTML='<div class="q">c. Which limit failed?</div>';
     w.appendChild(chipGroup(whichOpts().map(o=>o[0]), R.ans2.which, i=>{ R.ans2.which=i; unsolveFrom(2); }));
+    fitPage();
   }
   function fixText(){ return R.failMode==='precision' ? 'Fixed: an air bubble in the injector gave one low area. The injector was purged.' : 'Fixed: the old column had active sites that made the peak tail. It was replaced with a new C18 column.'; }
   $('#chk2').addEventListener('click',()=>{
@@ -523,17 +585,17 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   }
   function renderStep3(){
     const a=assay(), ss=ssNow(), tR=mean(ss.tRs);
-    const box=$('#s3'); box.innerHTML='';
+    const box=$('#s3a'); box.innerHTML=''; const boxB=$('#s3b'); boxB.innerHTML='';
     const svg=chromSVG([{t:R.t0*1.25, area:R.F*0.16*0.25, N:1500, T:1.2, label:'maleic acid'},{t:tR, area:a.splA, N:ss.N, T:ss.T, label:'chlorpheniramine', sub:'area '+fmtA(a.splA)}],{t0:R.t0, tmax:15, label:'Sample chromatogram'});
     const g=document.createElement('div'); g.innerHTML='<p class="small">Sample: 20 tablets powdered; a portion equal to one tablet’s worth (about 4 mg of drug) made up to 25 ml with water.</p>';
     g.appendChild(svg); box.appendChild(g);
-    const d=document.createElement('div');
+    const d=document.createElement('div'), d2=document.createElement('div');
     d.innerHTML='<div class="given">Std Area (mean) <b>'+fmtA(a.stdA)+'</b> · Spl Area <b>'+fmtA(a.splA)+'</b><br>Std Wt <b>'+R.stdWt.toFixed(1)+' mg</b> (to 50 ml, then 4 → 50 ml) · Potency P <b>'+R.P.toFixed(1)+'%</b><br>Spl Wt <b>'+R.splWt.toFixed(1)+' mg</b> (to 25 ml) · Average tablet weight <b>'+R.atw.toFixed(1)+' mg</b></div>'+
-      '<p class="small">R1 = (Spl Area ÷ Std Area) × (Std Wt ÷ 50) × (4 ÷ 50) × 25 × (ATW ÷ Spl Wt) × (P ÷ 100)</p>'+
-      '<div class="q">a. Content per tablet, R1</div><div class="calc-in">'+numIn('r1',R.ans3.r1)+'<span class="unit">mg/tablet</span></div>'+
+      '<p class="small">R1 = (Spl Area ÷ Std Area) × (Std Wt ÷ 50) × (4 ÷ 50) × 25 × (ATW ÷ Spl Wt) × (P ÷ 100)</p>';
+    d2.innerHTML='<p class="small" style="margin:0">The data and formula are '+(innerWidth>=900?'on the left':'on the previous screen')+'.</p><div class="q">a. Content per tablet, R1</div><div class="calc-in">'+numIn('r1',R.ans3.r1)+'<span class="unit">mg/tablet</span></div>'+
       '<div class="q">b. Percentage of label claim, R2</div><div class="calc-in">'+numIn('r2',R.ans3.r2)+'<span class="unit">%</span></div>';
-    box.appendChild(d);
-    box.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{ R.ans3.r1=$('#r1').value; R.ans3.r2=$('#r2').value; unsolveFrom(3); }));
+    box.appendChild(d); boxB.appendChild(d2);
+    boxB.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{ R.ans3.r1=$('#r1').value; R.ans3.r2=$('#r2').value; unsolveFrom(3); }));
   }
   $('#chk3').addEventListener('click',()=>{
     const a=assay(), v1=readNum('r1'), v2=readNum('r2');
@@ -592,11 +654,12 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   });
 
   function solve(k){
-    solved[k-1]=true; setLocks(); track('lab-step'+k+'-solved',{scenario:R.S.id});
+    solved[k-1]=true; track('lab-step'+k+'-solved',{scenario:R.S.id}); /* one event name per step: Umami funnels match names */
     if(k===1 && !$('#ss').innerHTML){ renderSS(); }
     if(k===2){ R.splA=null; renderStep3(); }
     if(k===3){ R.ans4={}; renderStep4(); }
-    if(k===4) roundComplete();
+    if(k===4){ roundComplete(); $('#endrow').hidden=false; }
+    setLocks(); fitPage();
   }
   function roundComplete(){
     rounds++; $('#rounds').textContent=rounds; done.add(R.S.id);
@@ -604,12 +667,159 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     track('lab-round-complete',{scenario:R.S.id});
     try{ if(window.parent!==window){ const o=location.origin; window.parent.postMessage({type:'hplc-lab', event:'round-complete', reaction:R.S.id}, (o&&o!=='null')?o:'*'); } }catch(_){}
   }
-  $('#btn-new').addEventListener('click',()=>newRound());
-  $('#btn-next').addEventListener('click',()=>{ sc=(sc+1)%SCEN.length; track('lab-pick',{scenario:SCEN[sc].id}); newRound(); });
+  $('#btn-new').addEventListener('click',()=>{ newRound(); goPage(firstPageOfStep(1)); });
+  $('#btn-next').addEventListener('click',()=>{ sc=(sc+1)%SCEN.length; track('lab-pick',{scenario:SCEN[sc].id}); newRound(); goPage(0); });
   $('#btn-pt').addEventListener('click',()=>{ if(window.KompasPT) KompasPT.open(); });
   $('#btn-kompas').addEventListener('click',e=>{ if(history.length>1 && document.referrer && document.referrer.indexOf(location.host)>-1){ e.preventDefault(); history.back(); } });
 
-  newRound();
+
+  /* ---------- STORY: three tap-through beats that set the problem ----------
+     Recurring characters: Aina (trainee pharmacist) and Ravi (senior pharmacist). Lightweight 2D SVG. */
+  function person(who,x,y,s,mirror){
+    const skin=who==='aina'?'#e3b48c':'#a9714b';
+    let g='<g class="who-'+who+'" transform="translate('+x+' '+y+') scale('+(mirror?-s:s)+' '+s+')"><g class="bob">';
+    g+='<path d="M-22 0 Q-23 -33 0 -35 Q23 -33 22 0 Z" fill="#fff" stroke="#b9c2bc" stroke-width="1.5"/>';
+    g+='<path d="M-8 -34 L0 -21 L8 -34" fill="none" stroke="#2d6a4f" stroke-width="2.4" stroke-linejoin="round"/>';
+    g+='<rect x="7" y="-25" width="8" height="5" rx="1" fill="#2d6a4f"/>';
+    if(who==='aina'){
+      g+='<path d="M-15 -47 Q-16 -68 0 -68 Q16 -68 15 -47 Q15 -33 0 -31 Q-15 -33 -15 -47 Z" fill="#3f7d63"/>';
+      g+='<ellipse cx="0" cy="-49" rx="10" ry="11.5" fill="'+skin+'"/>';
+    } else {
+      g+='<rect x="-4" y="-40" width="8" height="6" fill="'+skin+'"/>';
+      g+='<circle cx="0" cy="-51" r="12.5" fill="'+skin+'"/>';
+      g+='<path d="M-12.5 -54 Q-12 -66 0 -66 Q12 -66 12.5 -54 Q8 -60 0 -60 Q-7 -60 -12.5 -54 Z" fill="#26201c"/>';
+      g+='<g fill="none" stroke="#26201c" stroke-width="1.3"><circle cx="-4.6" cy="-51" r="3.4"/><circle cx="4.6" cy="-51" r="3.4"/><path d="M-1.2 -51 H1.2"/></g>';
+    }
+    g+='<g class="blink"><circle cx="-4.4" cy="-51" r="1.4" fill="#1c2620"/><circle cx="4.4" cy="-51" r="1.4" fill="#1c2620"/></g>';
+    g+='<path d="M-3.5 -45.5 Q0 -42.5 3.5 -45.5" fill="none" stroke="#1c2620" stroke-width="1.3" stroke-linecap="round"/>';
+    return g+'</g></g>';
+  }
+
+  function hplcBox(x,y,peaks){
+    let s='<g transform="translate('+x+' '+y+')"><rect x="-62" y="-92" width="124" height="92" rx="6" fill="#e9edea" stroke="#5c665f" stroke-width="1.6"/>'+
+      '<rect x="-52" y="-82" width="104" height="44" rx="3" fill="#fff" stroke="#9aa39d"/><path d="M-46 -44 H46" stroke="#9aa39d"/>';
+    s+='<path d="'+peaks+'" fill="none" stroke="#2d6a4f" stroke-width="1.8"/>';
+    s+='<rect x="-52" y="-30" width="30" height="22" rx="2" fill="#cfd6d2"/><rect x="-16" y="-30" width="30" height="22" rx="2" fill="#cfd6d2"/><rect x="20" y="-30" width="32" height="22" rx="2" fill="#2d6a4f"/><text x="36" y="-15" text-anchor="middle" font-size="8" font-weight="800" fill="#fff">C18</text></g>';
+    return s;
+  }
+  const STORY={
+    release:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'A new batch of chlorpheniramine 4 mg tablets needs its assay result. Each tablet must contain 95.0–105.0% of the 4 mg label claim.',
+      know:'You calculate the mg per tablet and decide correctly whether the batch passes.',
+      scene:r=>hplcBox(232,128,'M-46 -44 L-10 -44 Q-4 -76 2 -44 L46 -44')+'<text class="pulse" x="232" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5d14">How much drug per tablet?</text>'},
+    stability:{who:'aina', name:'Aina', role:'trainee pharmacist',
+      problem:'These tablets were stored for 24 months in a stability study. Do they still contain enough chlorpheniramine?',
+      know:'You choose the right limits and decide correctly.',
+      scene:r=>hplcBox(232,128,'M-46 -44 L-10 -44 Q-4 -68 2 -44 L46 -44')+'<text class="pulse" x="232" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5d14">24 months later?</text>'},
+    suitability:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'Same release assay, but the instrument has been acting up this week. Check the system before you trust any result.',
+      know:'You catch a failing system before any sample is injected, then finish the assay.',
+      scene:r=>hplcBox(232,128,'M-46 -44 L-12 -44 Q-6 -76 0 -50 Q8 -44 30 -44 L46 -44')+'<text class="pulse" x="232" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#c0392b">Can we trust it?</text>'}
+  };
+  const SCENE_W=320, SCENE_H=150;
+  function sceneFor(beat){
+    const st=STORY[R.S.id], who=st.who;
+    let s='<svg viewBox="0 0 '+SCENE_W+' '+SCENE_H+'" role="img" aria-label="'+(['The problem','The method','Your goal'][beat])+'"><rect width="320" height="150" rx="10" fill="#f4f7f5"/>';
+    if(beat===0) s+=st.scene(R)+person(who,72,140,1.45);
+    if(beat===1){
+      s+='<g transform="translate(150 20)"><rect width="156" height="112" rx="8" fill="#fff" stroke="#cfe6d9" stroke-width="2"/><path d="M12 92 H146" stroke="#9aa39d"/>'+
+         '<path d="M12 92 L40 92 Q46 30 52 92 L146 92" fill="none" stroke="#2d6a4f" stroke-width="2"/><text x="46" y="24" text-anchor="middle" font-size="10" font-weight="700" fill="#1f4d39">standard</text>'+
+         '<path d="M12 92 L98 92 Q104 36 110 92 L146 92" fill="none" stroke="#b25f0c" stroke-width="2" stroke-dasharray="4 3"/><text x="104" y="30" text-anchor="middle" font-size="10" font-weight="700" fill="#8a4f0c">sample</text>'+
+         '<text x="78" y="106" text-anchor="middle" font-size="9" fill="#636b65">compare peak areas</text></g>';
+      s+=person(who==='aina'?'ravi':'aina',70,140,1.45);
+    }
+    if(beat===2){
+      s+=person('aina',58,140,1.35)+person('ravi',118,140,1.35,true);
+      s+='<g transform="translate(176 22)"><rect width="128" height="108" rx="8" fill="#fff" stroke="#cfe6d9" stroke-width="2"/>';
+      STEP_NAMES.slice(1).forEach((t,i)=>{ s+='<circle cx="16" cy="'+(20+i*24)+'" r="8" fill="#2d6a4f"/><text x="16" y="'+(23.5+i*24)+'" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">'+(i+1)+'</text><text x="30" y="'+(23.5+i*24)+'" font-size="10" font-weight="700" fill="#1c2620">'+t+'</text>'; });
+      s+='</g>';
+    }
+    return s+'</svg>';
+  }
+  const BEAT_TITLE=['1 · The problem','2 · The method','3 · Your goal'];
+  function renderStory(){
+    const st=STORY[R.S.id], b=R.beat||0, box=$('#story');
+    let text='';
+    if(b===0) text='<p class="say"><b>'+st.name+'</b> <span class="small">('+st.role+')</span><br>'+st.problem+'</p>';
+    if(b===1) text='<p class="say">Set up a <b>reverse-phase</b> method on a C18 column. Check the system with <b>five injections</b> of the standard. Then inject the sample and compare its <b>peak area</b> with the standard’s.</p>';
+    if(b===2) text='<p class="say"><b>Objective:</b> assay chlorpheniramine tablets by HPLC.<br><b>You succeed when:</b> '+st.know+'</p>';
+    box.innerHTML='<div class="story-head"><span class="eyebrow" style="margin:0">'+BEAT_TITLE[b]+'</span><span class="dots">'+[0,1,2].map(i=>'<i class="'+(i<=b?'on':'')+'"></i>').join('')+'</span></div>'+
+      '<button type="button" class="scene" id="scene" aria-label="Next part of the story">'+sceneFor(b)+'</button>'+text+
+      '<div class="story-nav">'+(b>0?'<button type="button" class="btn ghost" id="story-back">‹ Back</button>':'<span></span>')+
+      (b<2?'<button type="button" class="btn solid" id="story-next">Tap to continue ›</button>':'<span class="small">Ready? Press <b>Continue</b> below.</span>')+'</div>';
+    const nx=$('#story-next'); if(nx) nx.addEventListener('click',storyNext);
+    $('#scene').addEventListener('click',storyNext);
+    const bk=$('#story-back'); if(bk) bk.addEventListener('click',()=>{ R.beat=Math.max(0,b-1); renderStory(); });
+    if(b===2 && !R.storyDone){ R.storyDone=true; track('lab-story-done',{scenario:R.S.id}); }
+    updatePager(); fitPage();
+  }
+  function storyNext(){ if((R.beat||0)<2){ R.beat=(R.beat||0)+1; track('lab-story-beat',{scenario:R.S.id, beat:R.beat}); renderStory(); } }
+
+  /* ---------- hints ---------- */
+  const hints=$('#hints');
+  $('#hints-btn').addEventListener('click',()=>{ hints.classList.add('open'); $('#hints-close').focus(); track('lab-hints',{page:page}); });
+  $('#hints-close').addEventListener('click',()=>{ hints.classList.remove('open'); $('#hints-btn').focus(); });
+  hints.addEventListener('click',e=>{ if(e.target===hints) hints.classList.remove('open'); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') hints.classList.remove('open'); });
+
+  /* ---------- pager: one screen at a time ----------
+     Narrow screens show one pane per page; wide screens show both panes of a step side by side. */
+  const SCR=[...document.querySelectorAll('.scr')];
+  const STEP_NAMES=['HPLC Bench','Set up','System check','Assay','Decide'];
+  let pages=[], page=0, wide=null;
+  function isWide(){ return innerWidth>=900 && innerHeight>=560; }
+  function buildPages(){
+    const w=isWide(); if(w===wide && pages.length) return; wide=w;
+    const cur=pages.length?pages[page][0]:SCR[0];
+    pages=[];
+    SCR.forEach(s=>{ const last=pages[pages.length-1];
+      if(w && last && s.dataset.pane==='b' && last[0].dataset.step===s.dataset.step) last.push(s); else pages.push([s]); });
+    page=Math.max(0,pages.findIndex(p=>p.includes(cur)));
+  }
+  const stepOf=p=>+pages[p][0].dataset.step;
+  const firstPageOfStep=k=>pages.findIndex(p=>+p[0].dataset.step===k);
+  function lastPaneOfStep(p){ const k=stepOf(p); return p+1>=pages.length || stepOf(p+1)!==k; }
+  function canLeave(p){ const k=stepOf(p); if(k===0) return !!(R&&R.storyDone); if(!lastPaneOfStep(p)) return true; return solved[k-1]; }
+  function goPage(n){
+    page=Math.max(0,Math.min(pages.length-1,n));
+    SCR.forEach(s=>{ s.classList.remove('on','half-l','half-r','single','scrolly'); s.style.setProperty('--k',1); });
+    $('#stage').classList.toggle('roomy', innerWidth>=640);
+    const P=pages[page]; P.forEach((s,i)=>{ s.classList.add('on'); if(P.length===2) s.classList.add(i?'half-r':'half-l'); else s.classList.add('single'); });
+    updatePager(); fitPage();
+    track('lab-page',{page:STEP_NAMES[stepOf(page)]+(P.length===1&&P[0].dataset.pane?' '+P[0].dataset.pane:'')});
+  }
+  function updatePager(){
+    if(!pages.length) return;
+    const k=stepOf(page), P=pages[page], same=pages.filter(p=>stepOf(pages.indexOf(p))===k);
+    const part=(P.length===1 && same.length>1)?' ('+(same.indexOf(P)+1)+'/'+same.length+')':'';
+    $('#bar-lbl').innerHTML=(k?'<span>Step '+k+' of 4</span>':'')+STEP_NAMES[k]+part;
+    $('#fill').style.width=(page/(pages.length-1)*100)+'%';
+    $('#back').disabled=page===0;
+    const last=page===pages.length-1, ok=canLeave(page), nx=$('#next');
+    nx.textContent=last?(solved[3]?'New round ↺':'Continue →'):'Continue →';
+    nx.disabled=!ok || (last && !solved[3]);
+    nx.classList.toggle('ready', ok && k>0 && lastPaneOfStep(page) && solved[k-1]);
+    $('#gate').textContent=ok?'':(k===0?'Tap through the story first':'Check this step to continue');
+  }
+  $('#back').addEventListener('click',()=>goPage(page-1));
+  $('#next').addEventListener('click',()=>{ if(page===pages.length-1){ if(solved[3]){ newRound(); goPage(firstPageOfStep(1)); } return; } if(canLeave(page)) goPage(page+1); });
+
+  /* fit: shrink the text slightly if a page is too tall; scroll only as a last resort (logged) */
+  function fitPage(){
+    if(!pages.length) return;
+    pages[page].forEach(s=>{
+      s.classList.remove('scrolly'); let k=1; s.style.setProperty('--k',k);
+      const over=()=>s.scrollHeight>s.clientHeight+1;
+      let g=0; while(over() && k>0.8 && g++<10){ k=+(k-0.04).toFixed(2); s.style.setProperty('--k',k); }
+      if(over()){ s.classList.add('scrolly'); track('lab-overflow',{page:s.dataset.title, w:innerWidth, h:innerHeight}); }
+      s.dataset.k=k;
+    });
+  }
+  function setAppH(){ document.documentElement.style.setProperty('--app-h', innerHeight+'px'); }
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ setAppH(); const before=wide; buildPages(); goPage(page); },120); });
+
+
+  setAppH(); buildPages(); newRound(); goPage(0);
 })();
 </script>
 </body>

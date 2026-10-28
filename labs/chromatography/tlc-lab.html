@@ -35,16 +35,19 @@
   --radius:10px;color-scheme:light;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#fff}
-body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%;font-size:16px;overflow-x:hidden}
+[hidden]{display:none!important}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.45;-webkit-text-size-adjust:100%;font-size:16px;overflow:hidden}
+@media (min-width:900px) and (min-height:700px){.scr{font-size:calc(var(--k,1)*18px)}}
 b,strong{color:var(--ink);font-weight:700}
 a{color:var(--accent)}
-.wrap{max-width:760px;margin:0 auto;padding:0 16px 28px}
-.embedded .wrap{padding:10px 12px 18px}
-.embedded body{font-size:15px}
 
-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 8px;border-bottom:1px solid var(--rule);margin-bottom:12px}
-.embedded nav,.embedded .page-head,.embedded .madeby{display:none}
+/* one screen, no page scroll: top bar, stage, footer */
+#app{height:100vh;height:var(--app-h,100dvh);max-width:1040px;margin:0 auto;padding:0 14px;display:flex;flex-direction:column}
+.embedded #app{padding:0 10px}
+
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0 6px;border-bottom:1px solid var(--rule)}
+.embedded nav{display:none}
 .logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
 .logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
 .nav-right{display:flex;gap:8px}
@@ -54,87 +57,127 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:8px;paddin
 @media (max-width:340px){.logo{font-size:.92rem}.nav-right{gap:4px}.pillbtn{padding:4px 7px!important;font-size:.74rem}}
 @media (max-width:400px){.ptl{display:none}.pts{display:inline}.nav-right{gap:6px}.pillbtn{padding:5px 9px}}
 
-.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.3em}
-h1{color:var(--ink);font-weight:800;line-height:1.1;letter-spacing:-.025em;font-size:1.8em;margin-bottom:.3em}
+#bar{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:7px 0 5px}
+#bar-lbl{flex:1;min-width:0;font-size:.8rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar-lbl span{color:var(--eyebrow);letter-spacing:.06em;text-transform:uppercase;font-size:.9em;margin-right:.35em}
+#hints-btn{flex:0 0 auto}
+#track{flex:0 0 3px;background:var(--rule);border-radius:3px;margin-bottom:6px}
+#fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;gap:.35em;font-size:calc(var(--k,1)*16px);overflow:hidden;padding:2px 1px 4px}
+.scr.on{display:flex}
+.scr.scrolly{overflow-y:auto}
+.scr.half-l{right:calc(50% + 8px)}
+.scr.half-r{left:calc(50% + 8px)}
+/* wider screens: every pane is a card; two panes share the width equally, a single pane is one centred card */
+#stage.roomy .scr.on{border:1px solid var(--rule);border-radius:14px;padding:14px 18px;background:#fff}
+#stage.roomy .scr.single{left:max(0px,calc(50% - 340px));right:max(0px,calc(50% - 340px));top:50%;bottom:auto;transform:translateY(-50%);max-height:100%}
+#stage.roomy .scr.single .madeby{margin-top:.8em}
+@media (max-height:600px){#stage.roomy .scr.on{padding:8px 12px}}
+.grow{flex:1 1 auto;min-height:0}
+
+#foot{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 0 10px;border-top:1px solid var(--rule)}
+#gate{flex:1;text-align:center;font-size:.74rem;color:var(--muted);line-height:1.25}
+#foot .btn{min-width:6.2em}
+#next.ready{animation:nudge 1.6s ease-in-out 2}
+@keyframes nudge{0%,100%{transform:none}50%{transform:translateX(3px)}}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.15em}
+h1{color:var(--ink);font-weight:800;line-height:1.1;letter-spacing:-.025em;font-size:1.6em;margin-bottom:.2em}
 h1 .ac{color:var(--accent)}
-h2{color:var(--ink);font-weight:800;font-size:1.08em;letter-spacing:-.01em;margin-bottom:.35em;display:flex;align-items:center;gap:.5em}
-h2 .num{flex:0 0 1.6em;height:1.6em;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.8em}
-p{margin-bottom:.5em;font-size:.95em}
+p{margin-bottom:.4em;font-size:.95em}
 .small{font-size:.82em;color:var(--muted)}
-.page-head{margin-bottom:10px}
+.madeby{margin-top:auto;border-top:1px solid var(--rule);padding-top:.5em;font-size:.78em;color:var(--muted)}
 
-.card{border:1px solid var(--rule);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#fff}
-.card.locked{opacity:.45;pointer-events:none}
-.card.locked .lock-note{display:block}
-.lock-note{display:none;font-size:.8em;color:var(--muted);font-weight:600}
-.card.done{border-color:var(--g-line)}
-.card.done h2 .num{background:var(--accent-dark)}
-
-.chips{display:flex;flex-wrap:wrap;gap:.35em;margin:.2em 0 .5em}
-.chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .82em 'DM Sans',sans-serif;padding:.35em .8em;border-radius:100px;cursor:pointer;text-align:left;line-height:1.3}
+.chips{display:flex;flex-wrap:wrap;gap:.3em;margin:.15em 0 .35em}
+.chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .82em 'DM Sans',sans-serif;padding:.32em .75em;border-radius:100px;cursor:pointer;text-align:left;line-height:1.3}
 .chip:hover{border-color:var(--ink)}
 .chip.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
 .chip .tick{margin-left:.3em;color:var(--accent)}
 .chips.col{flex-direction:column;align-items:stretch}
 .chips.col .chip{border-radius:8px}
-.ctx{font-size:.88em;color:var(--body);margin:0}
+.ctx{font-size:.9em;color:var(--body);margin:0}
 
-.msg{font-size:.86em;padding:.4em .7em;border-left:3px solid var(--rule);border-radius:0 8px 8px 0;margin-top:.4em}
+.msg{font-size:.84em;padding:.35em .65em;border-left:3px solid var(--rule);border-radius:0 8px 8px 0}
 .msg.good{border-color:var(--accent);background:var(--g-bg)}
 .msg.near{border-color:var(--orange);background:var(--o-bg)}
 .msg.bad{border-color:var(--red);background:var(--r-bg)}
-.msg p{margin:0;font-size:1em}.msg p+p{margin-top:.3em}
-.q{font-weight:700;color:var(--ink);font-size:.92em;margin:.6em 0 .3em}
-.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .86em 'DM Sans',sans-serif;padding:.45em 1em;cursor:pointer}
+.msg p{margin:0;font-size:1em}.msg p+p{margin-top:.25em}
+.q{font-weight:700;color:var(--ink);font-size:.92em;margin:.3em 0 .2em}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .86em 'DM Sans',sans-serif;padding:.42em 1em;cursor:pointer}
 .btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
 .btn.ghost{border-color:var(--rule);color:var(--body);font-weight:600}
 .btn:disabled{opacity:.4;cursor:default}
-.btns{display:flex;flex-wrap:wrap;gap:.45em;margin-top:.55em}
-.work{display:none;margin-top:.5em}
+.btns{display:flex;flex-wrap:wrap;gap:.4em;margin-top:.2em}
+.work{display:none}
 .work.show{display:block}
 table.w{width:100%;border-collapse:collapse;font-size:.8em}
-table.w th,table.w td{border-bottom:1px solid var(--rule);padding:.32em .4em;text-align:left;vertical-align:top}
+table.w th,table.w td{border-bottom:1px solid var(--rule);padding:.25em .4em;text-align:left;vertical-align:top}
 table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-.score{font-size:.82em;color:var(--muted);text-align:center;margin-top:4px}
-.madeby{border-top:1px solid var(--rule);padding-top:.6em;margin-top:.8em;font-size:.8em;color:var(--muted)}
 
-/* four ideas */
-.ideas{display:grid;grid-template-columns:1fr 1fr;gap:.5em}
-@media (min-width:620px){.ideas{grid-template-columns:repeat(4,1fr)}}
-.idea{font-size:.8em;line-height:1.35;text-align:center}
-.idea svg{display:block;width:100%;height:44px;margin-bottom:.2em}
+/* story */
+#story{display:flex;flex-direction:column;gap:.3em;min-height:0}
+.story-head{display:flex;align-items:center;justify-content:space-between}
+.dots{display:flex;gap:5px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--rule)}.dots i.on{background:var(--accent)}
+.scene{display:block;width:100%;border:0;padding:0;background:none;cursor:pointer;border-radius:10px}
+.scene svg{display:block;width:100%;height:auto;max-height:13em}
+.say{font-size:.9em;margin:0;background:var(--g-bg);border-radius:10px;padding:.5em .75em;color:var(--ink);line-height:1.4}
+.story-nav{display:flex;align-items:center;justify-content:space-between;gap:.5em}
+.bob{animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:none}50%{transform:translateY(-1.5px)}}
+.blink{animation:blink 4s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes blink{0%,92%,100%{transform:none}95%{transform:scaleY(.1)}}
+.pulse{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.spin{animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sorange{fill:#e2852b}.sorange-h{opacity:1}
+.sclear{fill:#eef3f4}.sclear-h{opacity:0}
+.sclear-anim{fill:#e2852b;animation:toclear 1s 1.6s forwards}.sclear-anim-h{animation:hatchoff 1s 1.6s forwards}
+@keyframes toclear{to{fill:#eef3f4}}@keyframes hatchoff{to{opacity:0}}
+.sdrop{opacity:0;animation:sdrop .7s ease-in .2s 2}
+@keyframes sdrop{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(34px)}}
+.slbl{opacity:0;animation:fadein .5s 2.7s forwards}
+@keyframes fadein{to{opacity:1}}
+.ondark path{stroke:#c9d1cb}
+.ondark .tl1,.ondark .tl2{fill:#f2f4f2}.onlight .tl1{fill:#1c2620}.onlight .tl2{fill:#8a4f0c}
+/* hints overlay */
+#hints{position:fixed;inset:0;background:rgba(28,38,32,.45);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
+#hints.open{display:flex}
+#hints .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:14px 16px;max-height:100%;overflow:auto}
+#hints .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5em}
+.ideas{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
+.idea{font-size:.86em;line-height:1.35;text-align:center}
+.idea svg{display:block;width:100%;height:46px;margin-bottom:.2em}
 .term{background:none;border:none;border-bottom:1.5px dotted var(--accent);color:inherit;font:inherit;padding:0;cursor:help}
-.def{display:block;margin:.2em 0 .4em;padding:.3em .6em;background:var(--g-bg);border-radius:6px;font-size:.92em;color:var(--accent-dark);font-weight:500}
+.def{display:block;margin:.2em 0 .3em;padding:.3em .6em;background:var(--g-bg);border-radius:6px;font-size:.92em;color:var(--accent-dark);font-weight:500}
+
 
 /* ---------- additions for the TLC bench ---------- */
-.calc-in{display:flex;flex-wrap:wrap;align-items:center;gap:.4em .6em;margin:.25em 0 .2em}
-.calc-in label{font-size:.86em;color:var(--ink)}
-.num-in{font:600 1em 'DM Sans',sans-serif;width:6.5em;padding:.3em .5em;border:1.5px solid var(--rule);border-radius:8px;color:var(--ink);background:#fff}
+.calc-in{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .6em;margin:.1em 0}
+.num-in{font:600 1em 'DM Sans',sans-serif;width:6.5em;padding:.28em .5em;border:1.5px solid var(--rule);border-radius:8px;color:var(--ink);background:#fff}
 .num-in:focus{outline:none;border-color:var(--accent)}
 .unit{font-size:.84em;color:var(--muted)}
-.given{background:#f6f7f5;border-radius:8px;padding:.45em .7em;font-size:.86em;margin:.3em 0 .4em}
+.given{background:#f6f7f5;border-radius:8px;padding:.4em .65em;font-size:.86em;margin:.1em 0 .2em}
 .given b{white-space:nowrap}
-.bench2{display:grid;grid-template-columns:1fr;gap:.6em;align-items:start}
-@media (min-width:600px){.bench2{grid-template-columns:240px 1fr}}
-.plate-box{background:#f4f5f2;border:1px solid var(--rule);border-radius:10px;padding:6px;display:flex;justify-content:center}
-.plate-box svg{width:100%;max-width:240px;height:auto;display:block}
-.ctl .chips{margin:.15em 0 .4em}
-.runbtns{display:flex;flex-wrap:wrap;gap:.35em;margin:.3em 0}
-.runbtns .btn{font-size:.8em;padding:.4em .8em}
-.runbtns .btn.doneb{border-color:var(--g-line);color:var(--accent-dark);background:var(--g-bg)}
-.pstate{font-size:.82em;color:var(--muted);min-height:1.3em}
-.words-box{display:none;font-size:.84em;background:#f6f7f5;border-radius:8px;padding:.4em .6em;margin-top:.35em;color:var(--ink)}
+.plate-box{flex:1 1 auto;min-height:9em;background:#f4f5f2;border:1px solid var(--rule);border-radius:10px;padding:4px;display:flex;justify-content:center}
+.plate-box svg{height:100%;width:100%;max-width:300px;display:block}
+.runrow{display:flex;flex-wrap:wrap;gap:.3em;align-items:center}
+.runrow .btn{font-size:.78em;padding:.34em .75em}
+.runrow .btn.doneb{border-color:var(--g-line);color:var(--accent-dark);background:var(--g-bg)}
+.pstate{font-size:.8em;color:var(--muted);line-height:1.3}
+.words-box{display:none;font-size:.8em;background:#f6f7f5;border-radius:8px;padding:.35em .6em;color:var(--ink)}
 .words .words-box{display:block}
-.wordsw{display:flex;align-items:center;gap:6px;font-size:.84em;margin-top:.45em;cursor:pointer}
-.wordsw input{width:16px;height:16px;accent-color:var(--accent)}
-.trainee{font-size:.8em;font-weight:700;color:var(--red);letter-spacing:.04em}
+.trainee{font-weight:700;color:var(--red)}
 .ptx{font:600 9.5px 'DM Sans',sans-serif;fill:#5c665f}
-.ptx.b{fill:var(--ink);font-weight:700}
 .ptx.s{font-size:8.5px;font-weight:500}
 .pen{fill:none;stroke:#7b827d;stroke-width:1;stroke-dasharray:2.5 2}
 .lane-lbl{font:700 10px 'DM Sans',sans-serif;fill:var(--ink);text-anchor:middle}
-.spot-lt{font:700 9px 'DM Sans',sans-serif;fill:var(--accent-dark)}
-@media (prefers-reduced-motion: reduce){ *{animation:none!important;transition:none!important} }
+.spot-lt{font:700 10px 'DM Sans',sans-serif;fill:var(--accent-dark)}
+.wait-note{font-size:.84em;color:var(--muted);background:#f6f7f5;border-radius:8px;padding:.4em .65em}
+.stuck{font-size:.92em;color:var(--accent-dark)}
+@media (prefers-reduced-motion: reduce){ #plate *{transition:none!important} }
 </style>
 </head>
 <body>
@@ -144,7 +187,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   <pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#5a2a08" stroke-width="1.6" stroke-opacity=".6"/></pattern>
  </defs>
 </svg>
-<div class="wrap">
+<div id="app">
   <nav>
     <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
     <div class="nav-right">
@@ -153,80 +196,79 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       <a class="pillbtn" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
     </div>
   </nav>
-  <div class="page-head">
-    <div class="eyebrow">Interactive lab · Thin-layer chromatography</div>
-    <h1>TLC Bench: <span class="ac">is it chlorpheniramine, and is it pure?</span></h1>
-    <p class="small">Based on a real QC method for chlorpheniramine maleate 4 mg tablets. Choose a scenario and work through the four steps. The numbers change every round.</p>
+  <div id="bar"><div id="bar-lbl"></div><button type="button" class="pillbtn" id="hints-btn" aria-haspopup="dialog">Hints</button></div>
+  <div id="track"><div id="fill"></div></div>
+
+  <main id="stage">
+    <section class="scr" id="s0" data-step="0" data-title="Start">
+      <div class="eyebrow" style="margin:0">Choose a scenario <span class="small" style="text-transform:none;letter-spacing:0;font-weight:500">· rounds completed: <span id="rounds">0</span></span></div>
+      <div class="chips" id="scen-chips"></div>
+      <div id="story"></div>
+    </section>
+
+    <section class="scr" data-step="1" data-pane="a" data-title="Calculate">
+      <div id="q1a"></div>
+    </section>
+    <section class="scr" data-step="1" data-pane="b" data-title="Extract">
+      <div id="q1b"></div>
+      <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button><button class="btn ghost" id="rev1" type="button" hidden>Show the working</button></div>
+      <div class="msg" id="m1">Answer every part, then check.</div>
+      <div class="work" id="w1"></div>
+    </section>
+
+    <section class="scr" data-step="2" data-pane="a" data-title="Run the plate">
+      <div class="q" style="margin-top:0">Mobile phase</div>
+      <div class="chips col" id="phase"></div>
+      <div class="runrow" id="runbtns"></div>
+      <div class="pstate" id="pstate" aria-live="polite"></div>
+      <div class="plate-box" id="pbox"><svg id="plate" viewBox="0 0 240 330" role="img" aria-label="TLC plate"></svg></div>
+      <div class="words-box" id="words-box" aria-live="polite"></div>
+      <label class="wordsw"><input type="checkbox" id="words"> Describe the plate in words</label>
+    </section>
+    <section class="scr" data-step="2" data-pane="b" data-title="Look at the plate">
+      <div id="obs"></div>
+      <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button><button class="btn ghost" id="rev2" type="button" hidden>Show the working</button></div>
+      <div class="msg" id="m2">Run the plate, then answer the questions.</div>
+      <div class="work" id="w2"></div>
+    </section>
+
+    <section class="scr" data-step="3" data-pane="a" data-title="Measure">
+      <div class="plate-box"><svg id="plate3" viewBox="0 0 240 330" role="img" aria-label="Developed plate with spot letters"></svg></div>
+      <div id="dist"></div>
+    </section>
+    <section class="scr" data-step="3" data-pane="b" data-title="Calculate Rf">
+      <div id="q3"></div>
+      <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button><button class="btn ghost" id="rev3" type="button" hidden>Show the working</button></div>
+      <div class="msg" id="m3">Rf = spot distance ÷ solvent front distance. Give 2 decimal places.</div>
+      <div class="work" id="w3"></div>
+    </section>
+
+    <section class="scr" data-step="4" data-title="Decide">
+      <div id="q4"></div>
+      <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button><button class="btn ghost" id="rev4" type="button" hidden>Show the working</button></div>
+      <div class="msg" id="m4">Compare with the specification.</div>
+      <div class="btns" id="endrow" hidden><button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New values</button><button class="btn ghost" id="btn-next" type="button">Next scenario →</button></div>
+    </section>
+  </main>
+
+  <div id="foot">
+    <button class="btn" id="back" type="button">← Back</button>
+    <div id="gate" aria-live="polite"></div>
+    <button class="btn solid" id="next" type="button">Continue →</button>
   </div>
+</div>
 
-  <section class="card" id="c0">
-    <div class="eyebrow">Choose a scenario</div>
-    <div class="chips" id="scen-chips"></div>
-    <p class="ctx" id="context"></p>
-  </section>
-
-  <section class="card">
-    <div class="eyebrow">Four ideas</div>
+<div id="hints" role="dialog" aria-modal="true" aria-labelledby="hints-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="hints-title">Hints: four ideas</div><button type="button" class="btn ghost" id="hints-close">Close</button></div>
     <div class="ideas">
       <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><rect x="6" y="35" width="108" height="7" rx="2" fill="#eef0ee" stroke="#5c665f"/><circle cx="22" cy="28" r="6" fill="#c0392b"/><circle cx="68" cy="10" r="6" fill="#3a6bd1"/><text x="31" y="31" font-size="8.5" fill="#636b65">polar</text><text x="77" y="13" font-size="8.5" fill="#636b65">less polar</text></svg>Silica is polar. <b>Polar</b> compounds stick to it and move <b>less</b>.</div>
       <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><line x1="20" y1="40" x2="100" y2="40" stroke="#5c665f" stroke-dasharray="3 2"/><line x1="20" y1="4" x2="100" y2="4" stroke="#3a6bd1"/><circle cx="60" cy="20" r="5" fill="#2b332e"/><path d="M106 40 V4 M102 40 V20" stroke="#b25f0c" stroke-width="1.6"/><text x="10" y="24" font-size="9" fill="#1c2620" font-weight="700">Rf</text></svg><b>Rf</b> = distance moved by the spot ÷ distance moved by the solvent.</div>
       <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><rect x="30" y="4" width="60" height="38" rx="3" fill="#c8efc0" stroke="#5c665f"/><circle cx="50" cy="24" r="6" fill="#2f3a33"/><circle cx="72" cy="15" r="6" fill="#2f3a33"/></svg>Under <b>UV 254 nm</b> the plate glows green. Spots look <b>dark</b>.</div>
       <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><rect x="30" y="4" width="60" height="38" rx="3" fill="#fbf3d0" stroke="#5c665f"/><circle cx="60" cy="24" r="7" fill="#d9741c"/><circle cx="60" cy="24" r="7" fill="url(#hatch)"/></svg><b>Iodobismuthate</b> spray turns <b>amines</b> orange.</div>
     </div>
-  </section>
-
-  <section class="card" id="c1">
-    <h2><span class="num">1</span>Prepare the solutions</h2>
-    <div id="q1"></div>
-    <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button><button class="btn ghost" id="rev1" type="button">Show the working</button></div>
-    <div class="msg" id="m1">Answer every part, then check.</div>
-    <div class="work" id="w1"></div>
-  </section>
-
-  <section class="card locked" id="c2">
-    <h2><span class="num">2</span>Run the plate</h2>
-    <p class="lock-note">Finish step 1 first.</p>
-    <div class="bench2" id="bench">
-      <div class="plate-box"><svg id="plate" viewBox="0 0 240 330" role="img" aria-label="TLC plate"></svg></div>
-      <div class="ctl">
-        <div class="q">Mobile phase</div>
-        <div class="chips col" id="phase"></div>
-        <div class="runbtns" id="runbtns"></div>
-        <div class="pstate" id="pstate" aria-live="polite"></div>
-        <div class="words-box" id="words-box" aria-live="polite"></div>
-        <label class="wordsw"><input type="checkbox" id="words"> Describe the plate in words</label>
-      </div>
-    </div>
-    <div id="obs"></div>
-    <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button><button class="btn ghost" id="rev2" type="button">Show the working</button></div>
-    <div class="msg" id="m2">Choose the mobile phase, then run the plate step by step.</div>
-    <div class="work" id="w2"></div>
-  </section>
-
-  <section class="card locked" id="c3">
-    <h2><span class="num">3</span>Measure Rf</h2>
-    <p class="lock-note">Finish step 2 first.</p>
-    <div id="dist"></div>
-    <div id="q3"></div>
-    <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button><button class="btn ghost" id="rev3" type="button">Show the working</button></div>
-    <div class="msg" id="m3">Rf = spot distance ÷ solvent front distance. Give 2 decimal places.</div>
-    <div class="work" id="w3"></div>
-  </section>
-
-  <section class="card locked" id="c4">
-    <h2><span class="num">4</span>Decide and report</h2>
-    <p class="lock-note">Finish step 3 first.</p>
-    <div id="q4"></div>
-    <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button><button class="btn ghost" id="rev4" type="button">Show the working</button></div>
-    <div class="msg" id="m4">Compare with the specification.</div>
-  </section>
-
-  <div class="btns" style="justify-content:center">
-    <button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New values</button>
-    <button class="btn ghost" id="btn-next" type="button">Next scenario →</button>
+    <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Methods follow a manufacturer's standard test procedure (STP) for chlorpheniramine maleate 4 mg tablets. Plates and Rf values are simulated.</div>
   </div>
-  <div class="score">Rounds completed: <span id="rounds">0</span></div>
-  <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Methods follow a manufacturer's standard test procedure (STP) for chlorpheniramine maleate 4 mg tablets. Plates and Rf values are simulated.</div>
 </div>
 
 <script>
@@ -240,7 +282,6 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   const r1=x=>Math.round(x*10)/10, r2=x=>Math.round(x*100)/100;
   const coin=()=>Math.random()<.5;
   const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-  const wait=ms=>new Promise(r=>setTimeout(r,RM?0:ms));
   function el(tag, attrs, text){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(text!==undefined) e.textContent=text; return e; }
 
   /* ---------- tap-to-define terms ---------- */
@@ -253,8 +294,8 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   };
   document.addEventListener('click',e=>{
     const t=e.target.closest('.term'); if(!t) return;
-    const nx=t.nextElementSibling; if(nx && nx.classList.contains('def')){ nx.remove(); return; }
-    const d=document.createElement('span'); d.className='def'; d.textContent=GLOSS[t.dataset.t]||''; t.after(d); track('lab-term',{t:t.dataset.t});
+    const nx=t.nextElementSibling; if(nx && nx.classList.contains('def')){ nx.remove(); fitPage(); return; }
+    const d=document.createElement('span'); d.className='def'; d.textContent=GLOSS[t.dataset.t]||''; t.after(d); track('lab-term',{t:t.dataset.t}); fitPage();
   });
   const term=(k,txt)=>'<button type="button" class="term" data-t="'+k+'">'+txt+'</button>';
 
@@ -293,14 +334,10 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 
   /* ---------- scenarios ---------- */
   const SCEN=[
-   {id:'identify', chip:'1 · Identify', test:'id',
-    context:r=>'Release testing. Prove the tablets contain <b>chlorpheniramine maleate</b> by comparing them with the '+term('ws','working standard')+'.'},
-   {id:'related', chip:'2 · Related substances', test:'rs',
-    context:r=>'Release testing. Check that no impurity in the tablets is above <b>0.2%</b>.'},
-   {id:'trainee', chip:'3 · Trainee’s plate', test:'rs',
-    context:r=>'A trainee ran the related-substances test with the wrong mobile phase (<b>'+PH[r.badPh].short+'</b>). Find the problem, then run it properly.'},
-   {id:'complaint', chip:'4 · Complaint sample', test:'id',
-    context:r=>'A pharmacy returned tablets from a patient complaint. Do they really contain chlorpheniramine?'}
+   {id:'identify', chip:'1 · Identify', test:'id'},
+   {id:'related', chip:'2 · Related substances', test:'rs'},
+   {id:'trainee', chip:'3 · Trainee’s plate', test:'rs'},
+   {id:'complaint', chip:'4 · Complaint sample', test:'id'}
   ];
 
   /* ---------- state ---------- */
@@ -319,7 +356,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     r.fake = S.id==='complaint' && coin();          /* counterfeit: no chlorpheniramine */
     r.impHigh = S.test==='rs' && coin();            /* impurity spot above the 0.2% spot? */
     r.badPh = S.id==='trainee' ? (coin()?'hex':'meoh') : null;
-    r.ans1={}; r.ans2={}; r.ans4={};
+    r.ans1={}; r.ans2={}; r.ans4={}; r.tries=[0,0,0,0,0];
     r.phase=null; r.stage=0; r.run=null;
     R=r;
     if(r.badPh){ r.phase=r.badPh; buildRun(r.badPh); r.stage=3; r.trainee=true; }
@@ -358,28 +395,37 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       b.addEventListener('click',()=>{ g.querySelectorAll('.chip').forEach(c=>{ c.classList.remove('on'); c.setAttribute('aria-pressed','false'); }); b.classList.add('on'); b.setAttribute('aria-pressed','true'); cb(i); }); g.appendChild(b); });
     return g;
   }
-  function msg(n,cls,html){ const m=$('#m'+n); m.className='msg '+cls; m.innerHTML=html; track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); }
-  function clearMsg(n){ const m=$('#m'+n); m.className='msg'; m.innerHTML=DEFAULT[n]; const w=$('#w'+n); if(w){ w.className='work'; w.innerHTML=''; } }
-  function setLocks(){
-    for(let k=2;k<=4;k++) $('#c'+k).classList.toggle('locked', !solved[k-2]);
-    for(let k=1;k<=4;k++) $('#c'+k).classList.toggle('done', solved[k-1]);
+  /* feedback: at most two points, so a page never overflows.
+     A wrong Check counts as a try; "Show the working" appears after 3 tries on that step. */
+  function msg(n,cls,html){
+    const m=$('#m'+n); m.className='msg '+cls;
+    const tmp=document.createElement('div'); tmp.innerHTML=html; const ps=tmp.querySelectorAll(':scope > p');
+    if(ps.length>2){ for(let i=2;i<ps.length;i++) ps[i].remove(); tmp.insertAdjacentHTML('beforeend','<p>…and '+(ps.length-2)+' more. Fix these first.</p>'); }
+    if(cls==='bad'){
+      R.tries[n]=(R.tries[n]||0)+1;
+      if(R.tries[n]>=3){ const rv=$('#rev'+n); if(rv.hidden){ rv.hidden=false; track('lab-step'+n+'-working-offered',{scenario:R.S.id}); } tmp.insertAdjacentHTML('beforeend','<p class="stuck">Stuck? <b>Show the working</b> is now available.</p>'); }
+    }
+    m.innerHTML=tmp.innerHTML;
+    track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); fitPage();
   }
+  function clearMsg(n){ const m=$('#m'+n); m.className='msg'; m.innerHTML=DEFAULT[n]; const w=$('#w'+n); if(w){ w.className='work'; w.innerHTML=''; } }
+  function setLocks(){ updatePager(); }
   function unsolveFrom(k){
     let changed=false;
     for(let j=k;j<=4;j++){ if(solved[j-1]){ solved[j-1]=false; changed=true; } if(j>k) clearMsg(j); }
-    if(changed) setLocks();
+    if(changed){ $('#endrow').hidden=true; setLocks(); }
   }
   const numIn=(id,val)=>'<input class="num-in" id="'+id+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':val)+'">';
-  const readNum=id=>{ const v=($('#'+id).value||'').replace(',','.').trim(); return v===''?null:parseFloat(v); };
+  const readNum=id=>{ const e=$('#'+id); if(!e) return null; const v=(e.value||'').replace(',','.').trim(); return v===''?null:parseFloat(v); };
   const close=(a,b,rel,abs)=>a!=null && Math.abs(a-b)<=Math.max(Math.abs(b)*rel, abs||0);
 
   function render(){
-    const S=R.S, sc0=$('#scen-chips'); sc0.innerHTML='';
+    const sc0=$('#scen-chips'); sc0.innerHTML='';
     SCEN.forEach((s,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(i===sc?' on':''); b.innerHTML=s.chip+(done.has(s.id)?'<span class="tick">✓</span>':'');
       b.addEventListener('click',()=>{ if(i===sc) return; sc=i; track('lab-pick',{scenario:s.id}); newRound(); }); sc0.appendChild(b); });
-    $('#context').innerHTML=S.context(R);
-    renderQ1(); renderPhase(); drawPlate(); renderObs(); $('#dist').innerHTML=''; $('#q3').innerHTML=''; $('#q4').innerHTML='';
-    [1,2,3,4].forEach(clearMsg); setLocks();
+    R.beat=0; R.storyDone=false; renderStory();
+    renderQ1(); renderPhase(); drawPlate(); renderObs(); $('#dist').innerHTML=''; $('#q3').innerHTML=''; $('#q4').innerHTML=''; $('#plate3').innerHTML='';
+    [1,2,3,4].forEach(n=>{ clearMsg(n); $('#rev'+n).hidden=true; }); $('#endrow').hidden=true; setLocks();
   }
 
   /* ---------- step 1: prepare ---------- */
@@ -391,20 +437,16 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     return R.q1o;
   }
   function renderQ1(){
-    const q=$('#q1'), r=R; q.innerHTML='';
-    const d=document.createElement('div');
-    d.innerHTML='<div class="given">Label claim: <b>4 mg</b> chlorpheniramine maleate per tablet. Average tablet weight: <b>'+r.atw.toFixed(1)+' mg</b>.</div>'+
+    const qa=$('#q1a'), qb=$('#q1b'), r=R; qa.innerHTML=''; qb.innerHTML='';
+    let h='<div class="given">Label claim: <b>4 mg</b> chlorpheniramine maleate per tablet. Average tablet weight: <b>'+r.atw.toFixed(1)+' mg</b>.</div>'+
       '<div class="q">a. How much tablet powder contains '+r.want+' mg of chlorpheniramine maleate?</div>'+
       '<div class="calc-in">'+numIn('a1',r.ans1.a)+'<span class="unit">mg of powder</span></div>';
-    q.appendChild(d);
-    const e=document.createElement('div'); e.innerHTML='<div class="q">b. The powder is shaken with chloroform and filtered. Why?</div>';
-    e.appendChild(chipGroup(q1Opts().map(o=>o[0]), r.ans1.b, i=>{ r.ans1.b=i; unsolveFrom(1); }, true)); q.appendChild(e);
-    if(r.test==='rs'){
-      const f=document.createElement('div');
-      f.innerHTML='<div class="q">c. Solution (2) is Solution (1) diluted <b>1 in 500</b>. What limit does its spot represent?</div><div class="calc-in">'+numIn('a1c',r.ans1.c)+'<span class="unit">% of the drug</span></div>';
-      q.appendChild(f);
-    }
-    q.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{ r.ans1.a=$('#a1').value; if($('#a1c')) r.ans1.c=$('#a1c').value; unsolveFrom(1); }));
+    if(r.test==='rs') h+='<div class="q">c. Solution (2) is Solution (1) diluted <b>1 in 500</b>. What limit does its spot represent?</div><div class="calc-in">'+numIn('a1c',r.ans1.c)+'<span class="unit">% of the drug</span></div>';
+    else h+='<p class="small">The extract is evaporated and taken up in 1 ml of chloroform (Solution 1). The working standard is dissolved in chloroform (Solution 2).</p>';
+    qa.innerHTML=h;
+    qb.innerHTML='<div class="q" style="margin-top:0">b. The powder is shaken with chloroform and filtered. Why?</div>';
+    qb.appendChild(chipGroup(q1Opts().map(o=>o[0]), r.ans1.b, i=>{ r.ans1.b=i; unsolveFrom(1); }, true));
+    qa.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{ r.ans1.a=$('#a1').value; if($('#a1c')) r.ans1.c=$('#a1c').value; unsolveFrom(1); }));
   }
   function want1(){ return R.want*R.atw/4; }
   $('#chk1').addEventListener('click',()=>{
@@ -413,34 +455,34 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     else if(!close(a,W,.01,.05)){
       if(close(a,R.want*4/R.atw,.02)) lines.push(mixLine('M2','You divided the wrong way round. Every '+R.atw.toFixed(1)+' mg of powder holds 4 mg of drug, so multiply by the tablet weight, then divide by 4.',1));
       else if(close(a,R.want,.01)) lines.push(mixLine('M2','That is the mass of drug, not of powder. The powder is mostly filler.',1));
-      else lines.push(mixLine('M2','Check: '+R.want+' × '+R.atw.toFixed(1)+' ÷ 4.',1));
+      else lines.push(mixLine('M2','Check part a: '+R.want+' × tablet weight ÷ 4.',1));
     }
     if(R.ans1.b==null) miss++; else { const o=q1Opts()[R.ans1.b]; if(!o[1]) lines.push(mixLine('M10',o[2],1)); }
     if(R.test==='rs'){ const c=readNum('a1c');
       if(c==null) miss++;
-      else if(!close(c,0.2,0,.005)) lines.push(mixLine('M3',(close(c,500,0,1)?'500 is the dilution, not the limit. ':'')+'1 in 500 = 1 ÷ 500 × 100 = 0.2%.',1)); }
+      else if(!close(c,0.2,0,.005)) lines.push(mixLine('M3',(close(c,500,0,1)?'500 is the dilution, not the limit. ':'')+'Part c: 1 in 500 = 1 ÷ 500 × 100.',1)); }
     if(lines.length) return msg(1,'bad',lines.join(''));
-    if(miss) return msg(1,'near','Answer every part first.');
-    msg(1,'good','<b>Right.</b> Weigh '+r2(W).toFixed(2)+' mg of powder. The extract is evaporated and taken up in 1 ml of chloroform.'); solve(1);
+    if(miss) return msg(1,'near','Answer every part first (part a is on the previous screen).');
+    msg(1,'good','<b>Right.</b> Weigh '+r2(W).toFixed(2)+' mg of powder.'); solve(1);
   });
   $('#rev1').addEventListener('click',()=>{
     const W=want1(); R.ans1.a=r2(W).toFixed(2); R.ans1.b=q1Opts().findIndex(o=>o[1]); if(R.test==='rs') R.ans1.c='0.2';
     renderQ1();
     const w=$('#w1'); w.className='work show';
-    w.innerHTML='<table class="w"><tr><th>Step</th><th>Working</th></tr>'+
-      '<tr><td>Powder</td><td>'+R.want+' mg × '+R.atw.toFixed(1)+' mg ÷ 4 mg = <b>'+r2(W).toFixed(2)+' mg</b></td></tr>'+
-      '<tr><td>Why chloroform</td><td>The drug dissolves; the filler does not and stays on the filter.</td></tr>'+
-      (R.test==='rs'?'<tr><td>Limit</td><td>1 ÷ 500 × 100 = <b>0.2%</b></td></tr>':'')+'</table>';
-    msg(1,'near','Working shown. Move on to the plate.'); track('lab-step1-reveal',{scenario:R.S.id}); solve(1);
+    w.innerHTML='<table class="w"><tr><th>Part</th><th>Working</th></tr>'+
+      '<tr><td>a</td><td>'+R.want+' mg × '+R.atw.toFixed(1)+' mg ÷ 4 mg = <b>'+r2(W).toFixed(2)+' mg</b></td></tr>'+
+      '<tr><td>b</td><td>The drug dissolves; the filler does not and stays on the filter.</td></tr>'+
+      (R.test==='rs'?'<tr><td>c</td><td>1 ÷ 500 × 100 = <b>0.2%</b></td></tr>':'')+'</table>';
+    msg(1,'near','Working shown. Continue to the plate.'); track('lab-step1-reveal',{scenario:R.S.id}); solve(1);
   });
 
   /* ---------- step 2: the plate ---------- */
   const X0=24, Y0=272, CM=14, PL={x:40,y:20,w:180,h:280};   /* origin 2 cm above the bottom edge, 14 px per cm */
   function laneX(i,n){ return PL.x + PL.w*(i+1)/(n+1); }
-  const STAGE_TXT=[null,'Spotted. Put the plate in the tank to develop.','Developed and dried. The plate looks blank in daylight.','Under UV 254 nm. Dark spots circled in pencil.','Sprayed with dilute potassium iodobismuthate.'];
-  function lanesNow(){ return R.run ? R.run.lanes : (R.test==='id'?[{name:'Solution (1)'},{name:'Solution (2)'}]:[{name:'Solution (1)'},{name:'Solution (2)'}]); }
+  const STAGE_TXT=[null,'Spotted. Press Develop.','Developed and dried. The plate looks blank in daylight.','Under UV 254 nm. Dark spots circled in pencil.','Sprayed with dilute potassium iodobismuthate.'];
+  function lanesNow(){ return R.run ? R.run.lanes : [{name:'Solution (1)'},{name:'Solution (2)'}]; }
 
-  function drawPlate(anim){
+  function drawPlate(){
     const svg=$('#plate'); while(svg.firstChild) svg.removeChild(svg.firstChild);
     const st=R.stage, lanes=lanesNow(), n=lanes.length;
     const bg = st===3 ? '#c8efc0' : st===4 ? '#fbf3d0' : '#ffffff';
@@ -451,7 +493,6 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     for(let c=0;c<=17;c++){ const y=Y0-c*CM; svg.appendChild(el('line',{x1:X0-(c%5?3:6),y1:y,x2:X0,y2:y,stroke:'#9aa39d','stroke-width':1}));
       if(c%5===0) svg.appendChild(el('text',{class:'ptx s',x:X0-8,y:y+3,'text-anchor':'end'},c)); }
     svg.appendChild(el('text',{class:'ptx s',x:X0-2,y:Y0+14,'text-anchor':'middle'},'cm'));
-    /* origin line */
     svg.appendChild(el('line',{class:'pen',x1:PL.x+8,y1:Y0,x2:PL.x+PL.w-8,y2:Y0}));
     svg.appendChild(el('text',{class:'ptx s',x:PL.x+PL.w-6,y:Y0+11,'text-anchor':'end'},'origin'));
     lanes.forEach((L,i)=>svg.appendChild(el('text',{class:'lane-lbl',x:laneX(i,n),y:PL.y+PL.h+15},'('+(i+1)+')')));
@@ -464,14 +505,14 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     if(st>=3 && R.run){
       lanes.forEach((L,i)=>L.spots.forEach(s=>{
         const x=laneX(i,n), y=Y0-s.dist*CM, rx=7.5*Math.sqrt(s.size)+1, ry=5*Math.sqrt(s.size)+1;
-        if(st===3){ const e=el('ellipse',{cx:x,cy:y,rx:rx,ry:ry,fill:'#2f3a33','fill-opacity':(0.35+0.55*Math.min(1,s.size)).toFixed(2)}); svg.appendChild(e); }
+        if(st===3) svg.appendChild(el('ellipse',{cx:x,cy:y,rx:rx,ry:ry,fill:'#2f3a33','fill-opacity':(0.35+0.55*Math.min(1,s.size)).toFixed(2)}));
         if(st===4 && s.amine){ svg.appendChild(el('ellipse',{cx:x,cy:y,rx:rx,ry:ry,fill:'#d9741c','fill-opacity':(0.4+0.5*Math.min(1,s.size)).toFixed(2)})); svg.appendChild(el('ellipse',{cx:x,cy:y,rx:rx,ry:ry,fill:'url(#hatch)'})); }
         svg.appendChild(el('ellipse',{class:'pen',cx:x,cy:y,rx:rx+2.5,ry:ry+2.5}));
         if(s.letter && solved[1]) svg.appendChild(el('text',{class:'spot-lt',x:x+rx+5,y:y+3},s.letter));
       }));
     }
-    if(anim) animateDev(svg);
-    $('#pstate').innerHTML=(R.trainee&&R.stage===3?'<span class="trainee">Trainee’s plate · '+PH[R.badPh].short+'</span><br>':'')+(R.stage?STAGE_TXT[R.stage]:'Plate heated at 105 °C for 30 min. Spot '+(R.test==='id'?'2':'10')+' µl of each solution on the origin.');
+    $('#pstate').innerHTML=(R.trainee&&R.stage===3?'<span class="trainee">Trainee’s plate · '+PH[R.badPh].short+'.</span> ':'')+(R.stage?STAGE_TXT[R.stage]:'Plate heated at 105 °C for 30 min. Press Spot to apply '+(R.test==='id'?'2':'10')+' µl of each solution.');
+    if(solved[1]) $('#plate3').innerHTML=svg.innerHTML;
     describe();
     renderRunBtns();
   }
@@ -501,13 +542,13 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     });
     b.textContent=(st===3?'Green glowing plate. ':'Pale yellow plate. ')+'Solvent front at '+R.front.toFixed(1)+' cm. '+parts.join(' ');
   }
-  $('#words').addEventListener('change',()=>{ $('#bench').classList.toggle('words',$('#words').checked); track('lab-words',{on:$('#words').checked}); });
+  $('#words').addEventListener('change',()=>{ $('#app').classList.toggle('words',$('#words').checked); track('lab-words',{on:$('#words').checked}); fitPage(); });
 
   function phaseOpts(){ if(!R.phO) R.phO=shuffle([R.test,'hex','meoh']); return R.phO; }
   function renderPhase(){
-    const box=$('#phase'); box.innerHTML='';
     const opts=phaseOpts(), sel=R.trainee&&R.stage===3&&R.phase===R.badPh?undefined:(R.phase?opts.indexOf(R.phase):undefined);
-    box.replaceWith((function(){ const g=chipGroup(opts.map(k=>PH[k].t), sel, i=>{ R.trainee=false; R.phase=opts[i]; R.stage=0; R.run=null; R.ans2={why:R.ans2.why}; unsolveFrom(2); clearMsg(2); drawPlate(); renderObs(); track('lab-phase',{scenario:R.S.id, ph:opts[i]}); }, true); g.id='phase'; return g; })());
+    const g=chipGroup(opts.map(k=>PH[k].t), sel, i=>{ R.trainee=false; R.phase=opts[i]; R.stage=0; R.run=null; R.ans2={why:R.ans2.why}; unsolveFrom(2); clearMsg(2); drawPlate(); renderObs(); fitPage(); track('lab-phase',{scenario:R.S.id, ph:opts[i]}); }, true);
+    g.id='phase'; $('#phase').replaceWith(g);
   }
   function renderRunBtns(){
     const box=$('#runbtns'); box.innerHTML='';
@@ -520,15 +561,15 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   async function runStage(s){
     if(busy) return;
     if(s===1){ buildRun(R.phase); R.stage=1; drawPlate(); return; }
-    if(s===2){ busy++; renderRunBtns(); R.stage=1; drawPlate(); await animateDev($('#plate')); busy--; R.stage=2; drawPlate(); track('lab-run',{scenario:R.S.id, ph:R.phase}); renderObs(); return; }
-    R.stage=s; drawPlate(); renderObs();
+    if(s===2){ busy++; renderRunBtns(); R.stage=1; drawPlate(); await animateDev($('#plate')); busy--; R.stage=2; drawPlate(); track('lab-run',{scenario:R.S.id, ph:R.phase}); renderObs(); fitPage(); return; }
+    R.stage=s; drawPlate(); renderObs(); fitPage();
   }
 
-  /* questions under the plate */
+  /* questions about the plate */
   function obsQs(){
     if(R.oq) return R.oq;
     const qs=[];
-    if(R.trainee || R.S.id==='trainee'){
+    if(R.S.id==='trainee'){
       const hex=R.badPh==='hex';
       qs.push({key:'why', p:'What went wrong on the trainee’s plate?', o:shuffle([
         [hex?'Mobile phase too weak: nothing left the origin':'Mobile phase too strong: everything ran to the front',1],
@@ -548,13 +589,15 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   }
   function renderObs(){
     const box=$('#obs'); box.innerHTML='';
-    const qs=obsQs();
+    const qs=obsQs(); let shown=0;
     qs.forEach(q=>{
       const avail = q.key==='why' ? true : (R.phase===R.test && R.stage>=q.needs && !R.trainee);
-      if(!avail) return;
-      const d=document.createElement('div'); d.innerHTML='<div class="q">'+q.p+'</div>';
+      if(!avail) return; shown++;
+      const d=document.createElement('div'); d.innerHTML='<div class="q"'+(shown===1?' style="margin-top:0"':'')+'>'+q.p+'</div>';
       d.appendChild(chipGroup(q.o.map(o=>o[0]), R.ans2[q.key], i=>{ R.ans2[q.key]=i; unsolveFrom(2); }, true)); box.appendChild(d);
     });
+    const need=R.trainee?'Then choose a mobile phase and run the plate yourself (previous screen).':(R.phase!==R.test||R.stage<(R.test==='id'?4:3))?'More questions appear as you run the plate'+(innerWidth>=900?' (left).':' (previous screen).'):'';
+    if(need) box.insertAdjacentHTML('beforeend','<p class="wait-note">'+need+'</p>');
   }
   $('#chk2').addEventListener('click',()=>{
     if(busy) return msg(2,'near','Wait for the plate to finish developing.');
@@ -571,11 +614,11 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     let miss=0;
     qs.filter(q=>q.key!=='why').forEach(q=>{ const a=R.ans2[q.key]; if(a==null){ miss++; return; } const o=q.o[a]; if(!o[1]) lines.push(mixLine(o[3],o[2],2)); });
     if(lines.length) return msg(2,'bad',lines.join(''));
-    if(miss) return msg(2,'near','Answer the questions under the plate.');
+    if(miss) return msg(2,'near','Answer every question about the plate.');
     msg(2,'good','<b>Right.</b> '+(R.test==='id'?(R.fake?'Lane (1) has one UV spot and nothing turns orange.':'Two UV spots in each lane: chlorpheniramine (orange after spraying) and maleic acid.'):'Maleic acid stays on the origin in this basic mobile phase, so it is disregarded.'));
     solve(2);
   });
-  $('#rev2').addEventListener('click',async ()=>{
+  $('#rev2').addEventListener('click',()=>{
     if(busy) return msg(2,'near','Wait for the plate to finish developing.');
     R.trainee=false; R.phase=R.test; buildRun(R.test); R.stage=R.test==='id'?4:3; R.oq=null;
     const qs=obsQs(); qs.forEach(q=>{ R.ans2[q.key]=q.o.findIndex(o=>o[1]); });
@@ -604,13 +647,13 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     let h='<table class="w"><tr><th>Spot</th><th>Lane</th><th>Distance from origin</th></tr>';
     L.forEach((La,i)=>La.spots.filter(s=>s.letter).sort((a,b)=>a.dist-b.dist).forEach(s=>{ h+='<tr><td><b>'+s.letter+'</b></td><td>('+(i+1)+')</td><td>'+s.dist.toFixed(1)+' cm</td></tr>'; }));
     h+='<tr><td><b>front</b></td><td>all</td><td>'+R.front.toFixed(1)+' cm</td></tr></table>';
-    $('#dist').innerHTML='<p class="small">Measured with a ruler from the '+term('origin','origin line')+'. Spot letters are on the plate.</p>'+h;
+    $('#dist').innerHTML='<p class="small" style="margin:.2em 0">Measured with a ruler from the '+term('origin','origin line')+'.</p>'+h;
     const T=targets3();
-    $('#q3').innerHTML=T.map((t,k)=>'<div class="q">Rf of spot <b>'+t.s.letter+'</b> ('+t.lbl+')</div><div class="calc-in">'+numIn('rf'+k,R.ans3?R.ans3[k]:'')+'</div>').join('');
-    $('#q3').querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{ R.ans3=[readNumS('rf0'),readNumS('rf1')]; unsolveFrom(3); }));
+    $('#q3').innerHTML=T.map((t,k)=>'<div class="q"'+(k?'':' style="margin-top:0"')+'>Rf of spot <b>'+t.s.letter+'</b> ('+t.lbl+')</div><div class="calc-in">'+numIn('rf'+k,R.ans3?R.ans3[k]:'')+'</div>').join('')+
+      '<p class="small">Distances are on the '+(innerWidth>=900?'left':'previous screen')+'.</p>';
+    $('#q3').querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{ R.ans3=[$('#rf0').value,$('#rf1').value]; unsolveFrom(3); }));
     drawPlate();
   }
-  const readNumS=id=>$('#'+id)?$('#'+id).value:'';
   $('#chk3').addEventListener('click',()=>{
     const T=targets3(), lines=[]; let miss=0;
     T.forEach((t,k)=>{ const v=readNum('rf'+k), want=t.s.dist/R.front;
@@ -618,7 +661,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       if(close(v,want,0,.011)) return;
       if(v>1 || close(v,R.front/t.s.dist,.02)) lines.push(mixLine('M1','Spot '+t.s.letter+': divide the spot distance by the front distance, not the other way round.',3));
       else if(close(v,t.s.dist/(R.front+2),0,.011) || close(v,(t.s.dist+2)/(R.front+2),0,.011)) lines.push(mixLine('M12','Spot '+t.s.letter+': the distances in the table are already from the origin.',3));
-      else lines.push(mixLine('M1','Spot '+t.s.letter+': '+t.s.dist.toFixed(1)+' ÷ '+R.front.toFixed(1)+'.',3));
+      else lines.push(mixLine('M1','Spot '+t.s.letter+': use its distance and the front distance from the table.',3));
     });
     if(lines.length) return msg(3,'bad',lines.join(''));
     if(miss) return msg(3,'near','Enter both Rf values.');
@@ -649,7 +692,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     return R.q4;
   }
   function renderStep4(){
-    const box=$('#q4'); box.innerHTML='';
+    const box=$('#q4'); box.innerHTML='<p class="small" style="margin:0">Look back at the plate with Back if you need it.</p>';
     q4Def().forEach((q,k)=>{ const d=document.createElement('div'); d.innerHTML='<div class="q">'+q.p+'</div>';
       d.appendChild(chipGroup(q.o.map(o=>o[0]), R.ans4[k], i=>{ R.ans4[k]=i; unsolveFrom(4); }, true)); box.appendChild(d); });
   }
@@ -670,10 +713,11 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   });
 
   function solve(k){
-    solved[k-1]=true; setLocks(); track('lab-step'+k+'-solved',{scenario:R.S.id});
-    if(k===2){ renderStep3(); }
-    if(k===3){ renderStep4(); }
-    if(k===4) roundComplete();
+    solved[k-1]=true; track('lab-step'+k+'-solved',{scenario:R.S.id}); /* one event name per step: Umami funnels match names */
+    if(k===2) renderStep3();
+    if(k===3) renderStep4();
+    if(k===4){ roundComplete(); $('#endrow').hidden=false; }
+    setLocks(); fitPage();
   }
   function roundComplete(){
     rounds++; $('#rounds').textContent=rounds; done.add(R.S.id);
@@ -681,12 +725,163 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     track('lab-round-complete',{scenario:R.S.id});
     try{ if(window.parent!==window){ const o=location.origin; window.parent.postMessage({type:'tlc-lab', event:'round-complete', reaction:R.S.id}, (o&&o!=='null')?o:'*'); } }catch(_){}
   }
-  $('#btn-new').addEventListener('click',()=>newRound());
-  $('#btn-next').addEventListener('click',()=>{ sc=(sc+1)%SCEN.length; track('lab-pick',{scenario:SCEN[sc].id}); newRound(); });
+  $('#btn-new').addEventListener('click',()=>{ newRound(); goPage(firstPageOfStep(1)); });
+  $('#btn-next').addEventListener('click',()=>{ sc=(sc+1)%SCEN.length; track('lab-pick',{scenario:SCEN[sc].id}); newRound(); goPage(0); });
   $('#btn-pt').addEventListener('click',()=>{ if(window.KompasPT) KompasPT.open(); });
   $('#btn-kompas').addEventListener('click',e=>{ if(history.length>1 && document.referrer && document.referrer.indexOf(location.host)>-1){ e.preventDefault(); history.back(); } });
 
-  newRound();
+  /* ---------- STORY: three tap-through beats that set the problem ----------
+     Recurring characters: Aina (trainee pharmacist) and Ravi (senior pharmacist). Lightweight 2D SVG. */
+  function person(who,x,y,s,mirror){
+    const skin=who==='aina'?'#e3b48c':'#a9714b';
+    let g='<g class="who-'+who+'" transform="translate('+x+' '+y+') scale('+(mirror?-s:s)+' '+s+')"><g class="bob">';
+    g+='<path d="M-22 0 Q-23 -33 0 -35 Q23 -33 22 0 Z" fill="#fff" stroke="#b9c2bc" stroke-width="1.5"/>';
+    g+='<path d="M-8 -34 L0 -21 L8 -34" fill="none" stroke="#2d6a4f" stroke-width="2.4" stroke-linejoin="round"/>';
+    g+='<rect x="7" y="-25" width="8" height="5" rx="1" fill="#2d6a4f"/>';
+    if(who==='aina'){
+      g+='<path d="M-15 -47 Q-16 -68 0 -68 Q16 -68 15 -47 Q15 -33 0 -31 Q-15 -33 -15 -47 Z" fill="#3f7d63"/>';
+      g+='<ellipse cx="0" cy="-49" rx="10" ry="11.5" fill="'+skin+'"/>';
+    } else {
+      g+='<rect x="-4" y="-40" width="8" height="6" fill="'+skin+'"/>';
+      g+='<circle cx="0" cy="-51" r="12.5" fill="'+skin+'"/>';
+      g+='<path d="M-12.5 -54 Q-12 -66 0 -66 Q12 -66 12.5 -54 Q8 -60 0 -60 Q-7 -60 -12.5 -54 Z" fill="#26201c"/>';
+      g+='<g fill="none" stroke="#26201c" stroke-width="1.3"><circle cx="-4.6" cy="-51" r="3.4"/><circle cx="4.6" cy="-51" r="3.4"/><path d="M-1.2 -51 H1.2"/></g>';
+    }
+    g+='<g class="blink"><circle cx="-4.4" cy="-51" r="1.4" fill="#1c2620"/><circle cx="4.4" cy="-51" r="1.4" fill="#1c2620"/></g>';
+    g+='<path d="M-3.5 -45.5 Q0 -42.5 3.5 -45.5" fill="none" stroke="#1c2620" stroke-width="1.3" stroke-linecap="round"/>';
+    return g+'</g></g>';
+  }
+
+  function box(x,y,lbl,col){
+    return '<g transform="translate('+x+' '+y+')"><rect x="-34" y="-46" width="68" height="46" rx="4" fill="'+(col||'#fff')+'" stroke="#5c665f" stroke-width="1.6"/><rect x="-34" y="-46" width="68" height="10" rx="3" fill="#2d6a4f"/>'+
+      '<text x="0" y="-22" text-anchor="middle" font-size="9" font-weight="800" fill="#1c2620">CPM</text><text x="0" y="-11" text-anchor="middle" font-size="8" fill="#3f4742">'+lbl+'</text></g>';
+  }
+  function miniPlate(x,y,spray){
+    let s='<g transform="translate('+x+' '+y+')"><rect x="-30" y="-100" width="60" height="100" rx="3" fill="'+(spray?'#fbf3d0':'#c8efc0')+'" stroke="#5c665f" stroke-width="1.5"/><path d="M-26 -12 H26 M-26 -90 H26" stroke="#7b827d" stroke-dasharray="2.5 2"/>';
+    [[-14,-48],[14,-48]].forEach(p=>{ s+= spray ? '<ellipse cx="'+p[0]+'" cy="'+p[1]+'" rx="7" ry="5" fill="#d9741c"/><ellipse cx="'+p[0]+'" cy="'+p[1]+'" rx="7" ry="5" fill="url(#hatch)"/>' : '<ellipse cx="'+p[0]+'" cy="'+p[1]+'" rx="7" ry="5" fill="#2f3a33"/>'; });
+    if(!spray) [[-14,-72],[14,-72]].forEach(p=>{ s+='<ellipse cx="'+p[0]+'" cy="'+p[1]+'" rx="6" ry="4" fill="#2f3a33" opacity=".7"/>'; });
+    return s+'</g>';
+  }
+  const STORY={
+    identify:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'This batch of chlorpheniramine 4 mg tablets is ready for release. First we must prove the tablets really contain chlorpheniramine.',
+      know:'You decide correctly whether the tablets pass the identification test.',
+      scene:r=>'<rect x="150" y="122" width="160" height="6" rx="2" fill="#c9b79a"/>'+box(200,122,'4 mg')+box(262,122,'4 mg')+'<text class="pulse" x="230" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5d14">Is it really CPM?</text>'},
+    related:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'The same batch needs an impurity check. No impurity may be more than 0.2% of the drug.',
+      know:'You decide correctly whether the batch passes the 0.2% limit.',
+      scene:r=>'<rect x="150" y="122" width="160" height="6" rx="2" fill="#c9b79a"/>'+box(230,122,'4 mg')+'<text class="pulse" x="230" y="44" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5d14">Any impurity above 0.2%?</text>'},
+    trainee:{who:'aina', name:'Aina', role:'trainee pharmacist',
+      problem:r=>'I ran the related-substances plate with '+PH[r.badPh].short+', but the spots look strange. What did I do wrong?',
+      know:'You find the mistake, run the plate properly and decide.',
+      scene:r=>{ let s='<g transform="translate(230 128)"><rect x="-30" y="-100" width="60" height="100" rx="3" fill="#c8efc0" stroke="#5c665f" stroke-width="1.5"/>'; const y=r.badPh==='hex'?-12:-88; [-14,14].forEach(x=>{ s+='<ellipse cx="'+x+'" cy="'+y+'" rx="8" ry="5" fill="#2f3a33"/>'; }); return s+'</g><text class="pulse" x="230" y="20" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5d14">Strange plate?</text>'; }},
+    complaint:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'A pharmacy sent back these tablets after a patient complaint. They look right, but are they real chlorpheniramine?',
+      know:'You decide correctly whether the tablets contain chlorpheniramine.',
+      scene:r=>'<rect x="150" y="122" width="160" height="6" rx="2" fill="#c9b79a"/>'+box(230,122,'returned','#fbecea')+'<text class="pulse" x="230" y="44" text-anchor="middle" font-size="16" font-weight="800" fill="#c0392b">?</text>'}
+  };
+  const SCENE_W=320, SCENE_H=150;
+  function sceneFor(beat){
+    const st=STORY[R.S.id], who=st.who;
+    let s='<svg viewBox="0 0 '+SCENE_W+' '+SCENE_H+'" role="img" aria-label="'+(['The problem','The method','Your goal'][beat])+'"><rect width="320" height="150" rx="10" fill="#f4f7f5"/>';
+    if(beat===0) s+=st.scene(R)+person(who,72,140,1.45);
+    if(beat===1){
+      s+=miniPlate(196,132,false)+(R.test==='id'?miniPlate(270,132,true):'');
+      s+='<text x="196" y="146" text-anchor="middle" font-size="9" font-weight="700" fill="#1c2620">UV 254</text>'+(R.test==='id'?'<text x="270" y="146" text-anchor="middle" font-size="9" font-weight="700" fill="#1c2620">spray</text>':'');
+      s+=person(who==='aina'?'ravi':'aina',70,140,1.45);
+    }
+    if(beat===2){
+      s+=person('aina',58,140,1.35)+person('ravi',118,140,1.35,true);
+      s+='<g transform="translate(176 22)"><rect width="128" height="108" rx="8" fill="#fff" stroke="#cfe6d9" stroke-width="2"/>';
+      STEP_NAMES.slice(1).forEach((t,i)=>{ s+='<circle cx="16" cy="'+(20+i*24)+'" r="8" fill="#2d6a4f"/><text x="16" y="'+(23.5+i*24)+'" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">'+(i+1)+'</text><text x="30" y="'+(23.5+i*24)+'" font-size="10" font-weight="700" fill="#1c2620">'+t+'</text>'; });
+      s+='</g>';
+    }
+    return s+'</svg>';
+  }
+  const BEAT_TITLE=['1 · The problem','2 · The method','3 · Your goal'];
+  function renderStory(){
+    const st=STORY[R.S.id], b=R.beat||0, box=$('#story');
+    let text='';
+    if(b===0) text='<p class="say"><b>'+st.name+'</b> <span class="small">('+st.role+')</span><br>'+(typeof st.problem==='function'?st.problem(R):st.problem)+'</p>';
+    if(b===1) text='<p class="say">Extract the powder with chloroform. Spot it beside the '+term('ws','working standard')+' on a silica GF<sub>254</sub> plate, develop, then look under <b>UV 254 nm</b>'+(R.test==='id'?' and spray with <b>iodobismuthate</b>':'')+'.</p>';
+    if(b===2) text='<p class="say"><b>Objective:</b> '+(R.test==='id'?'identify chlorpheniramine by TLC.':'limit-test impurities by TLC.')+'<br><b>You succeed when:</b> '+st.know+'</p>';
+    box.innerHTML='<div class="story-head"><span class="eyebrow" style="margin:0">'+BEAT_TITLE[b]+'</span><span class="dots">'+[0,1,2].map(i=>'<i class="'+(i<=b?'on':'')+'"></i>').join('')+'</span></div>'+
+      '<button type="button" class="scene" id="scene" aria-label="Next part of the story">'+sceneFor(b)+'</button>'+text+
+      '<div class="story-nav">'+(b>0?'<button type="button" class="btn ghost" id="story-back">‹ Back</button>':'<span></span>')+
+      (b<2?'<button type="button" class="btn solid" id="story-next">Tap to continue ›</button>':'<span class="small">Ready? Press <b>Continue</b> below.</span>')+'</div>';
+    const nx=$('#story-next'); if(nx) nx.addEventListener('click',storyNext);
+    $('#scene').addEventListener('click',storyNext);
+    const bk=$('#story-back'); if(bk) bk.addEventListener('click',()=>{ R.beat=Math.max(0,b-1); renderStory(); });
+    if(b===2 && !R.storyDone){ R.storyDone=true; track('lab-story-done',{scenario:R.S.id}); }
+    updatePager(); fitPage();
+  }
+  function storyNext(){ if((R.beat||0)<2){ R.beat=(R.beat||0)+1; track('lab-story-beat',{scenario:R.S.id, beat:R.beat}); renderStory(); } }
+
+  /* ---------- hints ---------- */
+  const hints=$('#hints');
+  $('#hints-btn').addEventListener('click',()=>{ hints.classList.add('open'); $('#hints-close').focus(); track('lab-hints',{page:page}); });
+  $('#hints-close').addEventListener('click',()=>{ hints.classList.remove('open'); $('#hints-btn').focus(); });
+  hints.addEventListener('click',e=>{ if(e.target===hints) hints.classList.remove('open'); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') hints.classList.remove('open'); });
+
+  /* ---------- pager: one screen at a time ----------
+     Narrow screens show one pane per page; wide screens show both panes of a step side by side. */
+  const SCR=[...document.querySelectorAll('.scr')];
+  const STEP_NAMES=['TLC Bench','Prepare','Run the plate','Measure Rf','Decide'];
+  let pages=[], page=0, wide=null;
+  function isWide(){ return innerWidth>=900 && innerHeight>=560; }
+  function buildPages(){
+    const w=isWide(); if(w===wide && pages.length) return; wide=w;
+    const cur=pages.length?pages[page][0]:SCR[0];
+    pages=[];
+    SCR.forEach(s=>{ const last=pages[pages.length-1];
+      if(w && last && s.dataset.pane==='b' && last[0].dataset.step===s.dataset.step) last.push(s); else pages.push([s]); });
+    page=Math.max(0,pages.findIndex(p=>p.includes(cur)));
+  }
+  const stepOf=p=>+pages[p][0].dataset.step;
+  const firstPageOfStep=k=>pages.findIndex(p=>+p[0].dataset.step===k);
+  function lastPaneOfStep(p){ const k=stepOf(p); return p+1>=pages.length || stepOf(p+1)!==k; }
+  function canLeave(p){ const k=stepOf(p); if(k===0) return !!(R&&R.storyDone); if(!lastPaneOfStep(p)) return true; return solved[k-1]; }
+  function goPage(n){
+    page=Math.max(0,Math.min(pages.length-1,n));
+    SCR.forEach(s=>{ s.classList.remove('on','half-l','half-r','single','scrolly'); s.style.setProperty('--k',1); });
+    $('#stage').classList.toggle('roomy', innerWidth>=640);
+    const P=pages[page]; P.forEach((s,i)=>{ s.classList.add('on'); if(P.length===2) s.classList.add(i?'half-r':'half-l'); else s.classList.add('single'); });
+    updatePager(); fitPage();
+    track('lab-page',{page:STEP_NAMES[stepOf(page)]+(P.length===1&&P[0].dataset.pane?' '+P[0].dataset.pane:'')});
+  }
+  function updatePager(){
+    if(!pages.length) return;
+    const k=stepOf(page), P=pages[page], same=pages.filter(p=>stepOf(pages.indexOf(p))===k);
+    const part=(P.length===1 && same.length>1)?' ('+(same.indexOf(P)+1)+'/'+same.length+')':'';
+    $('#bar-lbl').innerHTML=(k?'<span>Step '+k+' of 4</span>':'')+STEP_NAMES[k]+part;
+    $('#fill').style.width=(page/(pages.length-1)*100)+'%';
+    $('#back').disabled=page===0;
+    const last=page===pages.length-1, ok=canLeave(page), nx=$('#next');
+    nx.textContent=last?(solved[3]?'New round ↺':'Continue →'):'Continue →';
+    nx.disabled=!ok || (last && !solved[3]);
+    nx.classList.toggle('ready', ok && k>0 && lastPaneOfStep(page) && solved[k-1]);
+    $('#gate').textContent=ok?'':(k===0?'Tap through the story first':'Check this step to continue');
+  }
+  $('#back').addEventListener('click',()=>goPage(page-1));
+  $('#next').addEventListener('click',()=>{ if(page===pages.length-1){ if(solved[3]){ newRound(); goPage(firstPageOfStep(1)); } return; } if(canLeave(page)) goPage(page+1); });
+
+  /* fit: shrink the text slightly if a page is too tall; scroll only as a last resort (logged) */
+  function fitPage(){
+    if(!pages.length) return;
+    pages[page].forEach(s=>{
+      s.classList.remove('scrolly'); let k=1; s.style.setProperty('--k',k);
+      const over=()=>s.scrollHeight>s.clientHeight+1;
+      let g=0; while(over() && k>0.8 && g++<10){ k=+(k-0.04).toFixed(2); s.style.setProperty('--k',k); }
+      if(over()){ s.classList.add('scrolly'); track('lab-overflow',{page:s.dataset.title, w:innerWidth, h:innerHeight}); }
+      s.dataset.k=k;
+    });
+  }
+  function setAppH(){ document.documentElement.style.setProperty('--app-h', innerHeight+'px'); }
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ setAppH(); const before=wide; buildPages(); goPage(page); },120); });
+
+
+  setAppH(); buildPages(); newRound(); goPage(0);
 })();
 </script>
 </body>
