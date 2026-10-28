@@ -254,7 +254,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     </section>
     <section class="scr" data-step="2" data-pane="b" data-title="Look at the plate">
       <div id="obs"></div>
-      <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button><button class="btn ghost" id="rev2" type="button" hidden>Show the working</button></div>
+      <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button><button class="btn ghost" id="rev2" type="button" hidden>Show the working</button><button class="btn ghost" id="reset2" type="button" title="Clear the plate and run it again">Reset</button></div>
       <div class="msg" id="m2">Run the plate, then answer the questions.</div>
       <div class="work" id="w2"></div>
     </section>
@@ -376,7 +376,10 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     origin:'The pencil line where the solutions are spotted.',
     front:'How far the mobile phase climbed. Mark it in pencil as soon as the plate comes out.',
     amine:'A compound with a basic nitrogen. Chlorpheniramine is an amine; maleic acid is not.',
-    secondary:'Any spot in the sample lane other than the main (principal) spot.'
+    secondary:'Any spot in the sample lane other than the main (principal) spot.',
+    lc:'Label claim: the amount printed on the pack, here 4 mg per tablet.',
+    atw:'Average tablet weight: the mean weight of one whole tablet. Most of it is filler; only 4 mg is the drug.',
+    rf:'Rf: how far a spot travelled compared with the solvent. It is always between 0 and 1.'
   };
   document.addEventListener('click',e=>{
     const t=e.target.closest('.term'); if(!t) return;
@@ -452,6 +455,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 
   /* lanes and spots for a run in a given mobile phase */
   function buildRun(ph){
+    if(R.runs && R.runs[ph]){ R.run=R.runs[ph]; return; }   /* same plate on a re-run within a round */
     const r=R, lanes=[];
     if(r.test==='id'){
       const sample = r.fake
@@ -473,6 +477,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     let k=0; const L='abcdefgh';
     lanes.forEach(La=>{ La.spots.slice().sort((x,y)=>x.dist-y.dist).forEach(s=>{ s.letter = s.dist>0.15 ? L[k++] : null; }); });
     r.run={ph:ph, lanes:lanes};
+    (r.runs=r.runs||{})[ph]=r.run;
   }
 
   function chipGroup(opts,sel,cb,col){
@@ -524,10 +529,10 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   }
   function renderQ1(){
     const qa=$('#q1a'), qb=$('#q1b'), r=R; qa.innerHTML=''; qb.innerHTML='';
-    let h='<div class="given">Label claim: <b>4 mg</b> chlorpheniramine maleate per tablet. Average tablet weight: <b>'+r.atw.toFixed(1)+' mg</b>.</div>'+
+    let h='<div class="given">'+term('lc','Label claim')+': <b>4 mg</b> chlorpheniramine maleate per tablet. '+term('atw','Average tablet weight')+': <b>'+r.atw.toFixed(1)+' mg</b>. So '+r.atw.toFixed(1)+' mg of powder holds 4 mg of drug.</div>'+
       '<div class="q">a. How much tablet powder contains '+r.want+' mg of chlorpheniramine maleate?</div>'+
       '<div class="calc-in">'+numIn('a1',r.ans1.a)+'<span class="unit">mg of powder</span></div>';
-    if(r.test==='rs') h+='<div class="q">c. Solution (2) is Solution (1) diluted <b>1 in 500</b>. What limit does its spot represent?</div><div class="calc-in">'+numIn('a1c',r.ans1.c)+'<span class="unit">% of the drug</span></div>';
+    if(r.test==='rs') h+='<div class="q">c. Solution (2) is Solution (1) diluted <b>1 in 500</b>. What limit does its spot represent?</div><p class="small" style="margin:0">1 in 500 means 1 part in every 500 parts. Write it as a %.</p><div class="calc-in">'+numIn('a1c',r.ans1.c)+'<span class="unit">% of the drug</span></div>';
     else h+='<p class="small">The extract is evaporated and taken up in 1 ml of chloroform (Solution 1). The working standard is dissolved in chloroform (Solution 2).</p>';
     qa.innerHTML=h;
     qb.innerHTML='<div class="q" style="margin-top:0">b. The powder is shaken with chloroform and filtered. Why?</div>';
@@ -651,6 +656,16 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     R.stage=s; drawPlate(); renderObs(); fitPage();
   }
 
+  /* Reset: put the plate back as it was first seen (blank, or the trainee's plate). Other choices stay; later steps go back to how they first looked. */
+  $('#reset2').addEventListener('click',()=>{
+    if(busy) return;
+    if(R.badPh){ R.phase=R.badPh; buildRun(R.badPh); R.stage=3; R.trainee=true; } else { R.stage=0; R.run=null; }
+    R.ans3=null; R.ans4={};
+    ['#dist','#q3','#plate3','#q4'].forEach(s=>{ $(s).innerHTML=''; });
+    [3,4].forEach(n=>{ $('#rev'+n).hidden=true; R.tries[n]=0; });
+    unsolveFrom(2); clearMsg(2); renderPhase(); drawPlate(); renderObs(); fitPage();
+  });
+
   /* questions about the plate */
   function obsQs(){
     if(R.oq) return R.oq;
@@ -735,7 +750,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     h+='<tr><td><b>front</b></td><td>all</td><td>'+R.front.toFixed(1)+' cm</td></tr></table>';
     $('#dist').innerHTML='<p class="small" style="margin:.2em 0">Measured with a ruler from the '+term('origin','origin line')+'.</p>'+h;
     const T=targets3();
-    $('#q3').innerHTML=T.map((t,k)=>'<div class="q"'+(k?'':' style="margin-top:0"')+'>Rf of spot <b>'+t.s.letter+'</b> ('+t.lbl+')</div><div class="calc-in">'+numIn('rf'+k,R.ans3?R.ans3[k]:'')+'</div>').join('')+
+    $('#q3').innerHTML=T.map((t,k)=>'<div class="q"'+(k?'':' style="margin-top:0"')+'>'+term('rf','Rf')+' of spot <b>'+t.s.letter+'</b> ('+t.lbl+')</div><div class="calc-in">'+numIn('rf'+k,R.ans3?R.ans3[k]:'')+'</div>').join('')+
       '<p class="small">Distances are on the '+(innerWidth>=900?'left':'previous screen')+'.</p>';
     $('#q3').querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{ R.ans3=[$('#rf0').value,$('#rf1').value]; unsolveFrom(3); }));
     drawPlate();
