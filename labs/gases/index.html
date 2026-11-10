@@ -362,6 +362,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .ill .chips2{justify-content:center}
 .ill .sim{margin:0}
 #pv-box{max-height:calc(var(--k) * 90px)}
+.rcard .mini{display:block;width:100%;height:auto;max-height:calc(var(--k) * 4.6em);margin:0 0 .4em;pointer-events:none}
 </style>
 </head>
 <body>
@@ -468,13 +469,13 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 <section class="slide" data-sec="pres" data-title="What makes a gas a gas">
  <div class="si">
   <div class="txt">
-   <div class="eyebrow">Gases and pressure · tap each card</div>
+   <div class="eyebrow">Gases and pressure · watch, then tap each card</div>
    <h2>Four things <span class="ac">every gas does.</span></h2>
    <div class="rgrid">
-     <button class="rcard"><span class="rt">Fills its container</span><span class="rb">A gas takes the volume and shape of whatever holds it.</span></button>
-     <button class="rcard"><span class="rt">Squeezes easily</span><span class="rb">Gases are the most compressible state. That is why a small cylinder holds hundreds of litres of oxygen.</span></button>
-     <button class="rcard"><span class="rt">Mixes completely</span><span class="rb">Two gases in one container mix evenly. Air and Entonox are gas mixtures.</span></button>
-     <button class="rcard"><span class="rt">Low density</span><span class="rb">Much lower than liquids and solids. Densities of gases are given in g/L, not g/ml.</span></button>
+     <button class="rcard"><svg class="mini" data-mini="fill" viewBox="0 0 120 64" aria-hidden="true"></svg><span class="rt">Fills its container</span><span class="rb">A gas takes the volume and shape of whatever holds it.</span></button>
+     <button class="rcard"><svg class="mini" data-mini="squeeze" viewBox="0 0 120 64" aria-hidden="true"></svg><span class="rt">Squeezes easily</span><span class="rb">Gases are the most compressible state. That is why a small cylinder holds hundreds of litres of oxygen.</span></button>
+     <button class="rcard"><svg class="mini" data-mini="mix" viewBox="0 0 120 64" aria-hidden="true"></svg><span class="rt">Mixes completely</span><span class="rb">Two gases in one container mix evenly. Air and Entonox are gas mixtures.</span></button>
+     <button class="rcard"><svg class="mini" data-mini="density" viewBox="0 0 120 64" aria-hidden="true"></svg><span class="rt">Low density</span><span class="rb">Much lower than liquids and solids. Densities of gases are given in g/L, not g/ml.</span></button>
    </div>
    <p class="small">Only 11 elements are gases at 25 °C and 1 atm, for example H₂, N₂, O₂ and the noble gases. Many small molecules are gases too: CO₂, N₂O, NH₃. <span class="cite">(Chang 5.1)</span></p>
   </div>
@@ -1290,6 +1291,59 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     }));
   })();
 
+
+  /* ---------- four properties of gases: one small looping animation per card ---------- */
+  (function(){
+    const svgs=[...document.querySelectorAll('svg.mini')]; if(!svgs.length) return;
+    const R2=(a,b)=>a+Math.random()*(b-a);
+    const M=svgs.map(svg=>{
+      const mode=svg.dataset.mini, g={svg:svg,mode:mode,P:[],t:0};
+      E('rect',{x:1,y:1,width:118,height:62,rx:6,fill:'#fff',stroke:'#5c665f','stroke-width':1.6},svg);
+      const add=(n,col,r,x0,x1,y0,y1)=>{ for(let i=0;i<n;i++){ const a=R2(0,Math.PI*2), sp=R2(22,40);
+        g.P.push({x:R2(x0,x1),y:R2(y0,y1),vx:Math.cos(a)*sp,vy:Math.sin(a)*sp,r:r,e:E('circle',{r:r,fill:col},svg)}); } };
+      if(mode==='fill'){ g.vial=E('path',{d:'M6 30 V58 H24 V30',fill:'none',stroke:'#9aa39d','stroke-width':1.4},svg); add(14,COL.g,2.6,8,22,40,56); }
+      if(mode==='squeeze'){ g.pist=E('rect',{y:3,width:5,height:58,rx:1.5,fill:'#5c665f'},svg); g.rod=E('rect',{y:30,height:4,fill:'#9aa39d'},svg); add(14,COL.g,2.6,6,100,6,58);
+        g.lbl=txt(svg,8,13,'',{'font-size':8,'font-weight':700,fill:COL.r}); }
+      if(mode==='mix'){ add(9,COL.b,2.6,6,54,6,58); add(9,COL.r,2.6,66,114,6,58); g.P.forEach((p,i)=>p.side=i<9?0:1); g.div=E('rect',{x:59,y:2,width:2.4,height:60,fill:'#5c665f'},svg); }
+      if(mode==='density'){ E('line',{x1:60,y1:2,x2:60,y2:62,stroke:'#cfd3d0','stroke-width':1.2},svg);
+        E('rect',{x:4,y:14,width:52,height:46,rx:3,fill:'#d9ecf7'},svg);
+        g.L=[]; for(let r=0;r<5;r++) for(let c=0;c<7;c++) g.L.push({x:9+c*7,y:22+r*8,ph:R2(0,6.3),e:E('circle',{r:3.1,fill:COL.b},svg)});
+        add(4,COL.g,3.1,66,114,8,58);
+        txt(svg,30,10,'liquid',{'text-anchor':'middle','font-size':8,'font-weight':700,fill:COL.b}); txt(svg,90,10,'gas',{'text-anchor':'middle','font-size':8,'font-weight':700,fill:COL.g}); }
+      return g;
+    });
+    function reset(g){
+      if(g.mode==='fill') g.P.forEach(p=>{ p.x=R2(8,22); p.y=R2(40,56); });
+      if(g.mode==='mix') g.P.forEach(p=>{ p.x=p.side?R2(66,114):R2(6,54); p.y=R2(6,58); });
+    }
+    function step(g,dt){
+      g.t+=dt;
+      let x0=4,x1=116,y0=4,y1=60, wall=null;
+      if(g.mode==='fill'){ const c=g.t%7; if(c<dt) reset(g); g.vial.setAttribute('opacity',c<1.2?1:Math.max(0,1-(c-1.2)/0.6)); if(c<1.2){ x0=6; x1=24; y0=32; } }
+      if(g.mode==='squeeze'){ const c=g.t%5, k=.5-.5*Math.cos(c/5*Math.PI*2); x1=112-60*k; wall=x1;
+        g.pist.setAttribute('x',fx(x1+2)); g.rod.setAttribute('x',fx(x1+7)); g.rod.setAttribute('width',fx(Math.max(0,118-x1-7)));
+        g.lbl.textContent=k>.6?'P ↑':k<.2?'':'squeeze'; }
+      if(g.mode==='mix'){ const c=g.t%8; if(c<dt) reset(g); g.div.setAttribute('opacity',c<1.6?1:Math.max(0,1-(c-1.6)/0.4)); g.blocked=c<1.8; }
+      if(g.mode==='density'){ x0=64; g.L.forEach(p=>{ p.e.setAttribute('cx',fx(p.x+1.1*Math.sin(g.t*7+p.ph))); p.e.setAttribute('cy',fx(p.y+1.1*Math.cos(g.t*6+p.ph))); }); }
+      g.P.forEach(p=>{
+        let lo=x0, hi=x1;
+        if(g.mode==='mix' && g.blocked){ if(p.side){ lo=63; } else { hi=57; } }
+        p.x+=p.vx*dt; p.y+=p.vy*dt;
+        if(p.x<lo+p.r){ p.x=lo+p.r; p.vx=Math.abs(p.vx); } if(p.x>hi-p.r){ p.x=hi-p.r; p.vx=-Math.abs(p.vx); }
+        if(p.y<y0+p.r){ p.y=y0+p.r; p.vy=Math.abs(p.vy); } if(p.y>y1-p.r){ p.y=y1-p.r; p.vy=-Math.abs(p.vy); }
+        p.e.setAttribute('cx',fx(p.x)); p.e.setAttribute('cy',fx(p.y));
+      });
+    }
+    let raf=0, last=0;
+    function frame(now){
+      const host=svgs[0].closest('.slide'); if(!host||!host.classList.contains('active')){ raf=0; return; }
+      const dt=Math.min(.05,(now-last)/1000||0); last=now; M.forEach(g=>step(g,dt)); raf=requestAnimationFrame(frame);
+    }
+    function still(){ M.forEach(g=>{ g.t=0; reset(g); if(g.mode==='fill') g.t=4; for(let i=0;i<60;i++) step(g,.05); }); }
+    window.__miniStart=function(){ if(RMO){ still(); return; } if(raf) return; last=performance.now(); raf=requestAnimationFrame(frame); };
+    still();
+  })();
+
   /* ---------- ANIMATION: Boyle's law in a sealed syringe ---------- */
   ANIM.boyle=function(svg){
     E('rect',{width:400,height:230,rx:12,fill:'#fbfcfb'},svg);
@@ -1496,6 +1550,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     if(s.querySelector('#mb-svg') && !document.getElementById('mb-svg').childNodes.length) drawMB('t');
     if(s.querySelector('#z-svg')) drawZ();
     if(s.querySelector('#kmt-svg') && window.__kmtStart) window.__kmtStart();
+    if(s.querySelector('svg.mini') && window.__miniStart) window.__miniStart();
   }
 
 
