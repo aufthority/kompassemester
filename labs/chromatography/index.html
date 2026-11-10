@@ -333,6 +333,8 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .lab-launch{display:none;height:100%;flex-direction:column;align-items:center;justify-content:center;gap:.6em;padding:1em;text-align:center;font-size:.92em}
 .lab-frame.launch iframe{display:none}
 .lab-frame.launch .lab-launch{display:flex}
+.lab-status{font-size:.82em;font-weight:700;color:#a85f10;margin:.15em 0 0}
+.lab-status.ok{color:var(--accent-dark)}
 .lab-launch a{background:var(--accent);color:#fff;text-decoration:none;font-weight:700;padding:.6em 1.3em;border-radius:100px}
 </style>
 </head>
@@ -785,6 +787,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <div class="eyebrow">Interactive lab · TLC</div>
    <h2>TLC Bench: <span class="ac">is it chlorpheniramine, and is it pure?</span></h2>
    <p class="small">Prepare the extract, run the plate, measure Rf and decide. Four scenarios. <a href="tlc-lab.html" target="_blank" rel="noopener" data-umami-event="lab-open-full">Open full screen ↗</a></p>
+   <p class="lab-status task" data-lab="tlc-lab" aria-live="polite">Finish one full round of the TLC Bench (all steps) to unlock Next.</p>
   </div>
   <div class="lab-frame"><iframe data-src="tlc-lab.html?embed=1" title="TLC Bench interactive lab" loading="lazy"></iframe><div class="lab-launch"><span>Your screen is too short to use the lab here.</span><a href="tlc-lab.html" target="_blank" rel="noopener" data-umami-event="lab-launch-small">Open the lab ↗</a></div></div>
  </div>
@@ -1096,6 +1099,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <div class="eyebrow">Interactive lab · HPLC</div>
    <h2>HPLC Bench: <span class="ac">how much drug is in each tablet?</span></h2>
    <p class="small">Set the method, pass system suitability, calculate mg per tablet and decide. Three scenarios. <a href="hplc-lab.html" target="_blank" rel="noopener" data-umami-event="lab-open-full">Open full screen ↗</a></p>
+   <p class="lab-status task" data-lab="hplc-lab" aria-live="polite">Finish one full round of the HPLC Bench (all steps) to unlock Next.</p>
   </div>
   <div class="lab-frame"><iframe data-src="hplc-lab.html?embed=1" title="HPLC Bench interactive lab" loading="lazy"></iframe><div class="lab-launch"><span>Your screen is too short to use the lab here.</span><a href="hplc-lab.html" target="_blank" rel="noopener" data-umami-event="lab-launch-small">Open the lab ↗</a></div></div>
  </div>
@@ -1893,7 +1897,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     return n;
   }
   function updateGate(alert){
-    const s=slides[current-1], n=current<maxReached?0:pending(s);
+    const s=slides[current-1], n=(isEducator||current<maxReached)?0:pending(s);
     btnNext.classList.toggle('locked', n>0);
     if(n===0){ hint.className=''; hint.textContent=''; return; }
     hint.className=alert?'alert':'';
@@ -1928,7 +1932,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   /* NAV BUTTONS ONLY — no swipe, no keyboard */
   btnNext.addEventListener('click',()=>{
     const s=slides[current-1];
-    if(current>=maxReached && pending(s)>0){ updateGate(true); flagPending(s); if(window.umami) umami.track('gate-blocked',{slide:current}); return; }
+    if(!isEducator && current>=maxReached && pending(s)>0){ updateGate(true); flagPending(s); if(window.umami) umami.track('gate-blocked',{slide:current}); return; }
     if(current<TOTAL){ current++; reach(current); show(current); } else openOv('refs-overlay');
   });
   btnBack.addEventListener('click',()=>{ if(current>1){ current--; show(current); } });
@@ -2020,7 +2024,17 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     if(e.origin!==location.origin && location.origin!=='null') return;
     const d=e.data||{};
     if((d.type==='tlc-lab'||d.type==='hplc-lab') && window.umami) umami.track(d.type+'-'+d.event,{scenario:d.reaction||''});
+    if((d.type==='tlc-lab'||d.type==='hplc-lab') && d.event==='round-complete') markLab(d.type);
   });
+  /* a lab page stays locked until that bench has one completed round. The bench also records
+     the round on this device, so a round finished full screen (another tab) unlocks it too. */
+  const LABKEY=l=>'kompas.chromatography.'+l+'.done';
+  function markLab(l){
+    document.querySelectorAll('.lab-status[data-lab="'+l+'"]').forEach(t=>{ if(t.dataset.done) return; t.dataset.done='1'; t.classList.add('ok'); t.innerHTML='Lab round complete. Press Next to continue.'; });
+    updateGate(false);
+  }
+  ['tlc-lab','hplc-lab'].forEach(l=>{ try{ if(localStorage.getItem(LABKEY(l))) markLab(l); }catch(_){} });
+  window.addEventListener('storage',e=>{ const m=/^kompas\.chromatography\.(tlc-lab|hplc-lab)\.done$/.exec(e.key||''); if(m && e.newValue) markLab(m[1]); });
 
   /* Back to Kompas: return to the exact course view the student came from
      (history.back keeps Kompas's state); otherwise open the Kompas home page. */
@@ -2046,7 +2060,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
       const {data}=await sb.from('profiles').select('role, full_name').eq('id',session.user.id).single();
       if(!data){ renderCertBox(); return; }
       signedIn=true; isEducator=data.role==='educator'; profileName=(data.full_name||'').trim();
-      buildToc(); renderCertBox();
+      buildToc(); renderCertBox(); updateGate(false);
     }catch(_){ renderCertBox(); }
   });
 
