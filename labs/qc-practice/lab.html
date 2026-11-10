@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>QC Lab Day — Aufthority</title>
+<meta name="description" content="Interactive lab: receive reference standards, prepare a working-standard solution, work safely with chloroform and review the worksheet, step by step.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="website">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="QC Lab Day: reference standards and good laboratory practice">
+<meta property="og:description"  content="Standard in, result out: receive, weigh, work safely and record like a QC analyst.">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:locale"       content="en_MY">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<script>
+/* Embedded inside the explainer? Then hide the page chrome and skip analytics
+   (the explainer already tracks the visit). */
+(function(){
+  var emb = /[?&]embed=1/.test(location.search) || window.self !== window.top;
+  document.documentElement.classList.toggle('embedded', emb);
+  if(!emb){
+    var s=document.createElement('script'); s.defer=true; s.src='https://cloud.umami.is/script.js';
+    s.setAttribute('data-website-id','f79c60f1-f9e7-4170-a979-f357ba756a18'); document.head.appendChild(s);
+  }
+})();
+</script>
+<script src="../shared/periodic-table.js" defer></script>
+
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#636b65;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#8a5d14;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--arrow:#b25f0c;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.45;-webkit-text-size-adjust:100%;font-size:16px;overflow:hidden}
+@media (min-width:900px) and (min-height:700px){.scr{font-size:calc(var(--k,1)*18px)}}
+b,strong{color:var(--ink);font-weight:700}
+a{color:var(--accent)}
+
+/* one screen, no page scroll: top bar, stage, footer */
+#app{height:100vh;height:var(--app-h,100dvh);max-width:1040px;margin:0 auto;padding:0 14px;display:flex;flex-direction:column}
+.embedded #app{padding:0 10px}
+
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0 6px;border-bottom:1px solid var(--rule)}
+.embedded nav{display:none}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;gap:8px}
+.pillbtn{cursor:pointer;text-decoration:none;color:var(--accent-dark);border:1px solid var(--g-line);background:var(--g-bg);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;white-space:nowrap}
+@media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
+.pts{display:none}
+@media (max-width:340px){.logo{font-size:.92rem}.nav-right{gap:4px}.pillbtn{padding:4px 7px!important;font-size:.74rem}}
+@media (max-width:400px){.ptl{display:none}.pts{display:inline}.nav-right{gap:6px}.pillbtn{padding:5px 9px}}
+
+#bar{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:7px 0 5px}
+#bar-lbl{flex:1;min-width:0;font-size:.8rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar-lbl span{color:var(--eyebrow);letter-spacing:.06em;text-transform:uppercase;font-size:.9em;margin-right:.35em}
+#hints-btn{flex:0 0 auto}
+#track{flex:0 0 3px;background:var(--rule);border-radius:3px;margin-bottom:6px}
+#fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;gap:.35em;font-size:calc(var(--k,1)*16px);overflow:hidden;padding:2px 1px 4px}
+.scr.on{display:flex}
+.scr.scrolly{overflow-y:auto}
+.scr.half-l{right:calc(50% + 8px)}
+.scr.half-r{left:calc(50% + 8px)}
+/* wider screens: every pane is a card; two panes share the width equally, a single pane is one centred card */
+#stage.roomy .scr.on{border:1px solid var(--rule);border-radius:14px;padding:14px 18px;background:#fff}
+#stage.roomy .scr.single{left:max(0px,calc(50% - 340px));right:max(0px,calc(50% - 340px));top:50%;bottom:auto;transform:translateY(-50%);max-height:100%}
+#stage.roomy .scr.single .madeby{margin-top:.8em}
+@media (max-height:600px){#stage.roomy .scr.on{padding:8px 12px}}
+.grow{flex:1 1 auto;min-height:0}
+
+#foot{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 0 10px;border-top:1px solid var(--rule)}
+#gate{flex:1;text-align:center;font-size:.74rem;color:var(--muted);line-height:1.25}
+#foot .btn{min-width:6.2em}
+#next.ready{animation:nudge 1.6s ease-in-out 2}
+@keyframes nudge{0%,100%{transform:none}50%{transform:translateX(3px)}}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.15em}
+h1{color:var(--ink);font-weight:800;line-height:1.1;letter-spacing:-.025em;font-size:1.6em;margin-bottom:.2em}
+h1 .ac{color:var(--accent)}
+p{margin-bottom:.4em;font-size:.95em}
+.small{font-size:.82em;color:var(--muted)}
+.madeby{margin-top:auto;border-top:1px solid var(--rule);padding-top:.5em;font-size:.78em;color:var(--muted)}
+
+.chips{display:flex;flex-wrap:wrap;gap:.3em;margin:.15em 0 .35em}
+.chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .82em 'DM Sans',sans-serif;padding:.32em .75em;border-radius:100px;cursor:pointer;text-align:left;line-height:1.3}
+.chip:hover{border-color:var(--ink)}
+.chip.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.chip .tick{margin-left:.3em;color:var(--accent)}
+.chips.col{flex-direction:column;align-items:stretch}
+.chips.col .chip{border-radius:8px}
+.ctx{font-size:.9em;color:var(--body);margin:0}
+
+.msg{font-size:.84em;padding:.35em .65em;border-left:3px solid var(--rule);border-radius:0 8px 8px 0}
+.msg.good{border-color:var(--accent);background:var(--g-bg)}
+.msg.near{border-color:var(--orange);background:var(--o-bg)}
+.msg.bad{border-color:var(--red);background:var(--r-bg)}
+.msg p{margin:0;font-size:1em}.msg p+p{margin-top:.25em}
+.q{font-weight:700;color:var(--ink);font-size:.92em;margin:.3em 0 .2em}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .86em 'DM Sans',sans-serif;padding:.42em 1em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{border-color:var(--rule);color:var(--body);font-weight:600}
+.btn:disabled{opacity:.4;cursor:default}
+.btns{display:flex;flex-wrap:wrap;gap:.4em;margin-top:.2em}
+.work{display:none}
+.work.show{display:block}
+table.w{width:100%;border-collapse:collapse;font-size:.8em}
+table.w th,table.w td{border-bottom:1px solid var(--rule);padding:.25em .4em;text-align:left;vertical-align:top}
+table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+/* story */
+#story{display:flex;flex-direction:column;gap:.3em;min-height:0}
+.story-head{display:flex;align-items:center;justify-content:space-between}
+.dots{display:flex;gap:5px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--rule)}.dots i.on{background:var(--accent)}
+.scene{display:block;width:100%;border:0;padding:0;background:none;cursor:pointer;border-radius:10px}
+.scene svg{display:block;width:100%;height:auto;max-height:13em}
+.say{font-size:.9em;margin:0;background:var(--g-bg);border-radius:10px;padding:.5em .75em;color:var(--ink);line-height:1.4}
+.story-nav{display:flex;align-items:center;justify-content:space-between;gap:.5em}
+.bob{animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:none}50%{transform:translateY(-1.5px)}}
+.blink{animation:blink 4s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes blink{0%,92%,100%{transform:none}95%{transform:scaleY(.1)}}
+.pulse{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.spin{animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sorange{fill:#e2852b}.sorange-h{opacity:1}
+.sclear{fill:#eef3f4}.sclear-h{opacity:0}
+.sclear-anim{fill:#e2852b;animation:toclear 1s 1.6s forwards}.sclear-anim-h{animation:hatchoff 1s 1.6s forwards}
+@keyframes toclear{to{fill:#eef3f4}}@keyframes hatchoff{to{opacity:0}}
+.sdrop{opacity:0;animation:sdrop .7s ease-in .2s 2}
+@keyframes sdrop{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(34px)}}
+.slbl{opacity:0;animation:fadein .5s 2.7s forwards}
+@keyframes fadein{to{opacity:1}}
+.ondark path{stroke:#c9d1cb}
+.ondark .tl1,.ondark .tl2{fill:#f2f4f2}.onlight .tl1{fill:#1c2620}.onlight .tl2{fill:#8a4f0c}
+/* hints overlay */
+#hints,#brief,#stp{position:fixed;inset:0;background:rgba(28,38,32,.45);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
+#hints.open,#brief.open,#stp.open{display:flex}
+#hints .box,#brief .box,#stp .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:14px 16px;max-height:100%;overflow:auto}
+#hints .top,#brief .top,#stp .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5em}
+.ideas{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
+.idea{font-size:.86em;line-height:1.35;text-align:center}
+.idea svg{display:block;width:100%;height:46px;margin-bottom:.2em}
+.term{background:none;border:none;border-bottom:1.5px dotted var(--accent);color:inherit;font:inherit;padding:0;cursor:help}
+.def{display:block;margin:.2em 0 .3em;padding:.3em .6em;background:var(--g-bg);border-radius:6px;font-size:.92em;color:var(--accent-dark);font-weight:500}
+
+
+/* ---------- shared bench styles (from the TLC bench) ---------- */
+.calc-in{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .6em;margin:.1em 0}
+.num-in{font:600 1em 'DM Sans',sans-serif;width:6.5em;padding:.28em .5em;border:1.5px solid var(--rule);border-radius:8px;color:var(--ink);background:#fff}
+.num-in:focus{outline:none;border-color:var(--accent)}
+.unit{font-size:.84em;color:var(--muted)}
+.given{background:#f6f7f5;border-radius:8px;padding:.4em .65em;font-size:.86em;margin:.1em 0 .2em}
+.given b{white-space:nowrap}
+.plate-box{flex:1 1 auto;min-height:9em;background:#f4f5f2;border:1px solid var(--rule);border-radius:10px;padding:4px;display:flex;justify-content:center}
+.plate-box svg{height:100%;width:100%;max-width:300px;display:block}
+.runrow{display:flex;flex-wrap:wrap;gap:.3em;align-items:center}
+.runrow .btn{font-size:.78em;padding:.34em .75em}
+.runrow .btn.doneb{border-color:var(--g-line);color:var(--accent-dark);background:var(--g-bg)}
+.pstate{font-size:.8em;color:var(--muted);line-height:1.3}
+.words-box{display:none;font-size:.8em;background:#f6f7f5;border-radius:8px;padding:.35em .6em;color:var(--ink)}
+.words .words-box{display:block}
+.trainee{font-weight:700;color:var(--red)}
+.ptx{font:600 9.5px 'DM Sans',sans-serif;fill:#5c665f}
+.ptx.s{font-size:8.5px;font-weight:500}
+.pen{fill:none;stroke:#7b827d;stroke-width:1;stroke-dasharray:2.5 2}
+.lane-lbl{font:700 10px 'DM Sans',sans-serif;fill:var(--ink);text-anchor:middle}
+.spot-lt{font:700 10px 'DM Sans',sans-serif;fill:var(--accent-dark)}
+.wait-note{font-size:.84em;color:var(--muted);background:#f6f7f5;border-radius:8px;padding:.4em .65em}
+.stuck{font-size:.92em;color:var(--accent-dark)}
+@media (prefers-reduced-motion: reduce){ #plate *{transition:none!important} }
+/* step guide: the footer names the next move; the matching control glows */
+#gate.go{color:#a85f10;font-weight:700}
+.guide{box-shadow:0 0 0 3px rgba(217,130,31,.8);animation:guide 1.4s ease-in-out infinite}
+.chips.guide,.slrow.guide,.btns.guide{border-radius:10px}
+@keyframes guide{0%,100%{box-shadow:0 0 0 2px rgba(217,130,31,.25)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.9)}}
+.sop{padding-left:1.3em;font-size:.9em;margin:.3em 0 .6em}.sop li{margin-bottom:.3em}
+/* STP: the lab's controlled method document */
+#stp .box{max-width:720px;padding-top:0}
+#stp .top{position:sticky;top:0;background:#fff;padding:12px 0 8px;margin-bottom:.2em;z-index:1;border-bottom:1px solid var(--rule)}
+#stp-btn.sec{color:#a85f10;border-color:#efc58f;background:var(--o-bg)}
+.stp-doc{font-size:.86em;color:var(--body)}
+.stp-stamp{display:inline-block;border:2px solid var(--red);color:var(--red);font-weight:800;font-size:.72em;letter-spacing:.1em;text-transform:uppercase;padding:.15em .5em;border-radius:4px;transform:rotate(-2deg);margin:.5em 0}
+.stp-head{width:100%;border-collapse:collapse;margin-bottom:.6em}
+.stp-head th,.stp-head td{border:1px solid var(--ink);padding:.3em .5em;text-align:left;vertical-align:top}
+.stp-head th{background:var(--ink);color:#fff;letter-spacing:.04em}
+.stp-head td:first-child{width:36%;color:var(--muted);font-weight:600}
+.stp-sec{border-top:1px solid var(--rule);padding:.5em .35em .3em;scroll-margin-top:3.4em;border-radius:6px;transition:background .6s}
+.stp-sec.hit{background:var(--o-bg)}
+.stp-sec h3{font-size:1em;color:var(--ink);margin-bottom:.3em}
+.stp-sec p,.stp-sec li{font-size:1em;margin-bottom:.3em}
+.stp-sec ol,.stp-sec ul{padding-left:1.3em;margin-bottom:.3em}
+.stp-t{width:100%;border-collapse:collapse;margin:.2em 0 .4em}
+.stp-t th,.stp-t td{border:1px solid var(--rule);padding:.25em .45em;text-align:left;vertical-align:top}
+.stp-t th{background:#f6f7f5}
+.stp-f{background:#f6f7f5;border-radius:6px;padding:.4em .6em;font-weight:700;color:var(--ink);margin:.2em 0 .4em;overflow-x:auto}
+.tn{border-left:3px solid var(--accent);background:var(--g-bg);color:var(--accent-dark);border-radius:0 6px 6px 0;padding:.3em .6em;margin:.3em 0}
+.tn b{color:var(--accent-dark)}
+
+/* ---------- additions for QC Lab Day ---------- */
+.lbl-card{border:1px solid var(--rule);border-left:6px solid #b5651d;border-radius:10px;background:#fff;padding:.35em .65em;margin:.3em 0;font-size:.82em;line-height:1.45}
+.lbl-card.ws{border-left-color:var(--accent)}
+.lbl-card .lt{font-weight:800;color:var(--ink);display:flex;justify-content:space-between;gap:.5em}
+.lbl-card .lt span{font-weight:700;font-size:.85em;color:var(--muted)}
+.lbl-card .lf{color:var(--muted);font-size:.92em}
+.sds{border:1px solid var(--rule);border-radius:10px;background:#fff;font-size:.8em;line-height:1.4;overflow:hidden}
+.sds .sh{background:#f4f5f2;padding:.3em .6em;font-weight:800;color:var(--ink)}
+.sds .row{display:grid;grid-template-columns:5.6em 1fr;gap:.5em;padding:.28em .6em;border-top:1px solid var(--rule)}
+.sds .row b{color:var(--ink)}
+.sds .ghs{display:flex;gap:.35em;align-items:center;margin:.1em 0}
+.sds .ghs svg{width:2.4em;height:2.4em;flex:0 0 auto}
+.sds .sig{font-weight:800;color:var(--red);margin-left:.3em}
+.wsheet{border:1px solid #d9d4c7;border-radius:10px;background:#fffef8;font-size:.8em;overflow:hidden}
+.wsheet .wh{background:#f3efe2;padding:.3em .6em;font-weight:800;color:var(--ink);display:flex;justify-content:space-between;gap:.5em}
+.wsheet table{width:100%;border-collapse:collapse}
+.wsheet td{border-top:1px dashed #e0dccf;padding:.32em .5em;vertical-align:top}
+.wsheet td.no{width:1.7em;font-weight:800;color:var(--muted)}
+.wsheet td.k{width:40%;color:var(--muted)}
+.wsheet .ink{font-family:'Segoe Print','Bradley Hand','Comic Sans MS',cursive;color:#1f3a8a;font-size:1.05em}
+.wsheet .pencil{font-family:'Segoe Print','Bradley Hand','Comic Sans MS',cursive;color:#9a9f9b;font-size:1.05em}
+.wsheet .ow b{position:relative;font-weight:700}
+.wsheet .ow .u{position:absolute;left:.04em;top:-.04em;font-style:normal;font-weight:700;opacity:.8}
+.wsheet .tipex{background:#fff;border-radius:4px;box-shadow:0 0 0 2px #fbfbfb,0 0 0 3px #e7e7e7;padding:0 .25em}
+.wsheet .note{display:inline-block;background:#fff3a6;border:1px solid #e6d36b;border-radius:2px;padding:0 .3em;font-size:.82em;color:#6b5a10;transform:rotate(-2deg)}
+.wsheet del{text-decoration-thickness:1.5px;text-decoration-color:#1f3a8a}
+.wsheet .blank{display:inline-block;width:6em;border-bottom:1.5px solid #9aa39d;height:1em}
+.chips.multi .chip.on::before{content:"✓ "}
+.today{font-weight:700;color:var(--ink)}
+</style>
+</head>
+<body>
+<div id="app">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <button type="button" class="pillbtn" id="btn-pt" data-umami-event="open-periodic-table"><span class="ptl">Periodic table</span><span class="pts">Table</span></button>
+      <a class="pillbtn" href="index.html" data-umami-event="lab-to-explainer">Explainer</a>
+      <a class="pillbtn" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+    </div>
+  </nav>
+  <div id="bar"><div id="bar-lbl"></div><button type="button" class="pillbtn" id="stp-btn" aria-haspopup="dialog" title="Standard test procedure">STP</button><button type="button" class="pillbtn" id="hints-btn" aria-haspopup="dialog">Hints</button></div>
+  <div id="track"><div id="fill"></div></div>
+
+  <main id="stage">
+    <section class="scr" id="s0" data-step="0" data-title="Start">
+      <div class="eyebrow" style="margin:0">Choose a scenario <span class="small" style="text-transform:none;letter-spacing:0;font-weight:500">· rounds completed: <span id="rounds">0</span></span></div>
+      <div class="chips" id="scen-chips"></div>
+      <div id="story"></div>
+    </section>
+
+    <section class="scr" data-step="1" data-pane="a" data-title="The labels">
+      <div id="q1a"></div>
+    </section>
+    <section class="scr" data-step="1" data-pane="b" data-title="Store and use">
+      <div id="q1b"></div>
+      <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button></div>
+      <div class="msg" id="m1">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="2" data-pane="a" data-title="Balance">
+      <div id="q2a"></div>
+    </section>
+    <section class="scr" data-step="2" data-pane="b" data-title="Weigh and dilute">
+      <div id="q2b"></div>
+      <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button></div>
+      <div class="msg" id="m2">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="3" data-pane="a" data-title="Safety data sheet">
+      <div id="q3a"></div>
+    </section>
+    <section class="scr" data-step="3" data-pane="b" data-title="Work safely">
+      <div id="q3"></div>
+      <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button></div>
+      <div class="msg" id="m3">Use the safety data sheet to answer.</div>
+    </section>
+
+    <section class="scr" data-step="4" data-pane="a" data-title="Worksheet">
+      <div id="q4a"></div>
+    </section>
+    <section class="scr" data-step="4" data-pane="b" data-title="Review">
+      <div id="q4"></div>
+      <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button></div>
+      <div class="msg" id="m4">Review the worksheet against ALCOA+.</div>
+      <div class="btns" id="endrow" hidden><button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New values</button><button class="btn ghost" id="btn-next" type="button">Next scenario →</button></div>
+    </section>
+  </main>
+
+  <div id="foot">
+    <button class="btn" id="back" type="button">← Back</button>
+    <div id="gate" aria-live="polite"></div>
+    <button class="btn solid" id="next" type="button">Continue →</button>
+  </div>
+</div>
+
+<div id="stp" role="dialog" aria-modal="true" aria-labelledby="stp-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="stp-title">Standard test procedure</div><button type="button" class="btn ghost" id="stp-close">Close</button></div>
+    <div class="stp-doc">
+      <div class="stp-stamp">Uncontrolled copy · for training only</div>
+      <table class="stp-head">
+        <tr><th colspan="2">Aufthority Lab · Quality Control</th></tr>
+        <tr><td>Product</td><td><b>Chlorpheniramine maleate tablets 4 mg</b></td></tr>
+        <tr><td>Covers</td><td>Reference standards, balance use, the dissolution standard solution, TLC solutions in chloroform, records</td></tr>
+        <tr><td>Based on</td><td>Product STP; PIC/S GMP Guide Ch. 4 and 6; WHO TRS 943 Annex 3; USP &lt;41&gt;; chloroform SDS</td></tr>
+        <tr><td>Prepared · Checked · Approved</td><td>QC Analyst · QC Executive · QA Manager</td></tr>
+      </table>
+      <section class="stp-sec" id="stp-1"><h3>1 · Receiving reference standards</h3>
+        <ol><li>Check the label: name, issuing body, batch, quantity. Read the leaflet or certificate for storage and the assigned value.</li>
+          <li>Write the date received on the container and sign. Write the date opened when first opened. <span class="tn">(GMP 6.21–6.22)</span></li>
+          <li>Store exactly as the leaflet says. Log the standard in the reference standard register.</li>
+          <li>The pharmacopoeial CRS is the primary standard; it is kept for qualifying the working standard (WS). Routine tests use the WS.</li>
+          <li>A WS past its re-test date is quarantined and requalified against the CRS before use.</li></ol></section>
+      <section class="stp-sec" id="stp-2"><h3>2 · Analytical balance</h3>
+        <ol><li>Before use: level, clean, daily check passed.</li>
+          <li>Repeatability: weigh a test weight 10 times; s = standard deviation. <b>Minimum weight = 2000 × s</b> (2 × s must be ≤ 0.10% of the amount weighed).</li>
+          <li>Weigh only amounts at or above the minimum weight.</li>
+          <li>Weigh by difference: vial before − vial after = mass transferred. Attach the printout.</li>
+          <li>Let containers from the fridge reach room temperature before opening.</li></ol></section>
+      <section class="stp-sec" id="stp-3"><h3>3 · Dissolution: standard solution</h3>
+        <ol><li>Weigh accurately about 20 mg of chlorpheniramine maleate WS into a 100 ml volumetric flask.</li>
+          <li>Add 30 ml medium to dissolve. Dilute to volume with medium and mix well.</li>
+          <li>Dilute 4 ml of this solution to 100 ml with medium. Mix and filter.</li>
+          <li>The final concentration is about 0.008 mg/ml (8 µg/ml).</li></ol>
+        <p>Drug in the stock (mg/ml) = Std Wt × (P ÷ 100) ÷ 100, where P = % potency of the WS on an “as is” basis.</p>
+        <p class="tn"><b>Trainer’s note:</b> make up to volume with the bottom of the meniscus on the mark, eye level with it.</p></section>
+      <section class="stp-sec" id="stp-4"><h3>4 · Identification by TLC: chloroform</h3>
+        <ol><li>Solution (1): extract tablet powder equivalent to 5 mg with chloroform, filter, evaporate to dryness with minimum heat, dissolve the residue in 1 ml chloroform.</li>
+          <li>Solution (2): dissolve 50 mg of WS and dilute to 10 ml with chloroform.</li></ol>
+        <p class="tn"><b>Safety:</b> read the chloroform SDS first. All open handling and evaporation in a fume hood. Gloves as SDS Section 8. Spills as Section 6. Waste to the halogenated solvent container.</p></section>
+      <section class="stp-sec" id="stp-5"><h3>5 · Records</h3>
+        <ol><li>Write directly on the worksheet in permanent ink, at the time of the work. No loose notes.</li>
+          <li>Correct a mistake with one line so the original stays readable. Write the right value, initials, date and the reason.</li>
+          <li>No correction fluid, no overwriting, no pencil, no blank boxes. A second person checks and signs.</li></ol>
+        <p class="tn"><b>ALCOA+:</b> Attributable, Legible, Contemporaneous, Original, Accurate, plus Complete, Consistent, Enduring, Available.</p></section>
+    </div>
+  </div>
+</div>
+<div id="brief" role="dialog" aria-modal="true" aria-labelledby="brief-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="brief-title">Before you start: today’s procedure</div></div>
+    <div id="brief-body"></div>
+    <p class="small">The line at the bottom of the screen and the glowing box show your next move. <b>STP</b>, beside Hints, is the method you work from: it opens at the section you need now. <b>Hints</b> explains the ideas behind each step.</p>
+    <div class="btns"><button type="button" class="btn solid" id="brief-go">Start the lab</button><button type="button" class="btn ghost" id="brief-stp">Read the STP</button></div>
+  </div>
+</div>
+<div id="hints" role="dialog" aria-modal="true" aria-labelledby="hints-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="hints-title">Hints: four ideas</div><button type="button" class="btn ghost" id="hints-close">Close</button></div>
+    <div class="ideas">
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><rect x="10" y="10" width="30" height="24" rx="4" fill="#b5651d" opacity=".85"/><path d="M46 22 H70" stroke="#d9821f" stroke-width="2"/><path d="M66 18 l5 4 -5 4" fill="none" stroke="#d9821f" stroke-width="2"/><rect x="78" y="10" width="30" height="24" rx="4" fill="#2d6a4f" opacity=".85"/><text x="25" y="25" font-size="8" text-anchor="middle" fill="#fff" font-weight="800">CRS</text><text x="93" y="25" font-size="8" text-anchor="middle" fill="#fff" font-weight="800">WS</text></svg>The <b>CRS</b> is primary. The <b>WS</b> gets its potency P by comparison with it.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><rect x="20" y="22" width="80" height="16" rx="4" fill="#e4e6e3" stroke="#9aa39d"/><rect x="30" y="26" width="40" height="8" rx="2" fill="#1c2620"/><rect x="40" y="14" width="40" height="5" rx="2" fill="#b9c2bc"/><text x="60" y="10" font-size="8" text-anchor="middle" fill="#1c2620" font-weight="700">min. weight = 2000 × s</text></svg>Below the <b>minimum weight</b>, the balance error is too big. Weigh more.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="18" font-size="9" text-anchor="middle" fill="#1c2620" font-weight="700">before − after</text><text x="60" y="34" font-size="9" text-anchor="middle" fill="#2d6a4f" font-weight="800">= in the flask</text></svg>Weigh <b>by difference</b>. Then correct for <b>potency</b>, then for each <b>dilution</b>.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="22" y="26" font-size="12" fill="#1f3a8a">20.81</text><path d="M20 22 H56" stroke="#c0392b" stroke-width="1.5"/><text x="62" y="26" font-size="12" fill="#1f3a8a">20.18</text><text x="22" y="40" font-size="7" fill="#6f7771">AH · date · reason</text></svg>One line through a mistake: the original stays <b>readable</b>.</div>
+    </div>
+    <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Labels, readings and the SDS extract are simulated for training. Always use the real documents in your lab.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const $ = s=>document.querySelector(s);
+  const NS='http://www.w3.org/2000/svg';
+  const track=(e,d)=>{ try{ if(window.umami) umami.track(e,d); }catch(_){} };
+  const shuffle=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const r2=x=>Math.round(x*100)/100;
+
+  /* ---------- tap-to-define terms ---------- */
+  const GLOSS={
+    crs:'CRS (chemical reference substance): the pharmacopoeia’s own standard. A primary standard.',
+    ws:'Working standard (WS): an in-house batch whose potency was assigned by comparison with the CRS.',
+    p:'P: the % potency of the working standard on an “as is” basis, from its qualification record.',
+    s:'s: the standard deviation of 10 weighings of the same test weight. It shows how much the balance wobbles.',
+    sds:'SDS (safety data sheet): 16 sections from the supplier on the hazards of a chemical and how to work with it safely.',
+    alcoa:'ALCOA+: Attributable, Legible, Contemporaneous, Original, Accurate, plus Complete, Consistent, Enduring, Available.'
+  };
+  document.addEventListener('click',e=>{
+    const t=e.target.closest('.term'); if(!t) return;
+    const nx=t.nextElementSibling; if(nx && nx.classList.contains('def')){ nx.remove(); fitPage(); return; }
+    const d=document.createElement('span'); d.className='def'; d.textContent=GLOSS[t.dataset.t]||''; t.after(d); track('lab-term',{t:t.dataset.t}); fitPage();
+  });
+  const term=(k,txt)=>'<button type="button" class="term" data-t="'+k+'">'+txt+'</button>';
+
+  /* ---------- misconceptions: every wrong answer names one ---------- */
+  const MIX={
+    M1:'Primary: accepted as it is.', M2:'Secondary: valued by comparison.', M3:'Store as the label says.',
+    M4:'Record receipt and opening.', M5:'An expired WS is quarantined.', M6:'Min. weight = 2000 × s.',
+    M7:'Readability is not accuracy.', M8:'Warm up before opening.', M9:'Before − after.',
+    M10:'Correct for potency.', M11:'Correct for every dilution.', M12:'Bottom of the meniscus, eye level.',
+    M13:'Read the SDS first.', M14:'Contain the hazard first; PPE comes last.', M15:'Halogenated waste is separate.',
+    M16:'Spills follow SDS Section 6.', M17:'Every container is labelled.', M18:'ALCOA+.', M19:'One line, still readable.'
+  };
+  function mixLine(m,text,step){ track('lab-mix-'+m,{step:step, scenario:R.S.id}); return '<p><b>'+MIX[m]+'</b> '+text+'</p>'; }
+
+  /* ---------- GHS pictograms (simplified) ---------- */
+  function ghs(kind){
+    const sym=kind==='skull'?'<ellipse cx="30" cy="25" rx="8" ry="8.5"/><rect x="25" y="29" width="10" height="6" rx="1.5"/><circle cx="27" cy="24" r="2.2" fill="#fff"/><circle cx="33" cy="24" r="2.2" fill="#fff"/><path d="M19 36 L41 44 M41 36 L19 44" stroke="#111" stroke-width="3.2" stroke-linecap="round"/>'
+      :'<circle cx="30" cy="20" r="5"/><path d="M20 44 Q20 28 30 28 Q40 28 40 44 Z"/><path d="M30 31 l1.6 3.4 3.6 .5 -2.6 2.5 .6 3.6 -3.2-1.7 -3.2 1.7 .6-3.6 -2.6-2.5 3.6-.5 z" fill="#fff"/>';
+    return '<svg viewBox="0 0 60 60" role="img" aria-label="'+(kind==='skull'?'GHS06 toxic':'GHS08 health hazard')+'"><path d="M30 3 L57 30 L30 57 L3 30 Z" fill="#fff" stroke="#d81e05" stroke-width="4.5" stroke-linejoin="round"/><g fill="#111">'+sym+'</g></svg>';
+  }
+
+  /* ---------- dates ---------- */
+  const DAY=864e5, today=new Date();
+  const fmt=d=>d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+  const fmtS=d=>d.toLocaleDateString('en-GB',{day:'2-digit',month:'2-digit',year:'2-digit'});
+
+  /* ---------- scenarios ---------- */
+  const SCEN=[
+   {id:'routine', chip:'1 · Routine day'},
+   {id:'expired', chip:'2 · Expired standard'},
+   {id:'trainee', chip:'3 · Aina’s bench'},
+   {id:'audit', chip:'4 · Audit day'}
+  ];
+
+  /* ---------- state ---------- */
+  let sc=0, R=null, solved=[false,false,false,false], rounds=0, busy=0;
+  const done=new Set();
+  const DEFAULT={}; [1,2,3,4].forEach(n=>DEFAULT[n]=$('#m'+n).innerHTML);
+
+  function newRound(){
+    const S=SCEN[sc], r={S:S};
+    r.exp=S.id==='expired'; r.tr=S.id==='trainee'; r.aud=S.id==='audit';
+    r.lot='WS-CPM-'+String(today.getFullYear()-1).slice(2)+'-0'+(1+Math.floor(rnd(1,8)));
+    r.P=+rnd(98.5,99.5).toFixed(1);
+    r.retest=new Date(today.getTime()+(r.exp?-rnd(20,70):rnd(90,300))*DAY);
+    r.batch=1+Math.floor(rnd(2,7));
+    r.s=+(r.tr?rnd(0.0070,0.0090):rnd(0.0045,0.0090)).toFixed(4);
+    r.W1=r2(rnd(1180,1260)); r.m=r2(rnd(19.6,20.6)); r.W2=r2(r.W1-r.m); r.m=r2(r.W1-r.W2);
+    r.ans1={}; r.ans2={}; r.ans3={}; r.ans4={flags:new Set()};
+    R=r; solved=[false,false,false,false];
+    buildSheet();
+    render();
+  }
+  const mmin=()=>2000*R.s;
+  const stock=()=>R.m*(R.P/100)/100;           /* mg/ml in the 100 ml flask */
+  const finalC=()=>stock()*4/100*1000;          /* µg/ml after 4 → 100 ml */
+
+  function chipGroup(opts,sel,cb,col){
+    const g=document.createElement('div'); g.className='chips'+(col?' col':''); g.setAttribute('role','group');
+    opts.forEach((o,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(sel===i?' on':''); b.innerHTML=o; b.setAttribute('aria-pressed',sel===i?'true':'false');
+      b.addEventListener('click',()=>{ g.querySelectorAll('.chip').forEach(c=>{ c.classList.remove('on'); c.setAttribute('aria-pressed','false'); }); b.classList.add('on'); b.setAttribute('aria-pressed','true'); cb(i); }); g.appendChild(b); });
+    return g;
+  }
+  /* feedback: at most two points, so a page never overflows. Students keep trying until the step is right. */
+  function msg(n,cls,html){
+    const m=$('#m'+n); m.className='msg '+cls;
+    const tmp=document.createElement('div'); tmp.innerHTML=html; const ps=tmp.querySelectorAll(':scope > p');
+    if(ps.length>2){ for(let i=2;i<ps.length;i++) ps[i].remove(); tmp.insertAdjacentHTML('beforeend','<p>…and '+(ps.length-2)+' more. Fix these first.</p>'); }
+    m.innerHTML=tmp.innerHTML;
+    track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); fitPage();
+  }
+  function clearMsg(n){ const m=$('#m'+n); m.className='msg'; m.innerHTML=DEFAULT[n]; }
+  function unsolveFrom(k){
+    let changed=false;
+    for(let j=k;j<=4;j++){ if(solved[j-1]){ solved[j-1]=false; changed=true; } if(j>k) clearMsg(j); }
+    if(changed){ $('#endrow').hidden=true; updatePager(); }
+  }
+  const numIn=(id,val)=>'<input class="num-in" id="'+id+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':val)+'">';
+  const readNum=id=>{ const e=$('#'+id); if(!e) return null; const v=(e.value||'').replace(',','.').trim(); return v===''?null:parseFloat(v); };
+  const close=(a,b,rel,abs)=>a!=null && Math.abs(a-b)<=Math.max(Math.abs(b)*rel, abs||0);
+
+
+  function render(){
+    const sc0=$('#scen-chips'); sc0.innerHTML='';
+    SCEN.forEach((s,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(i===sc?' on':''); b.innerHTML=s.chip+(done.has(s.id)?'<span class="tick">✓</span>':'');
+      b.addEventListener('click',()=>{ if(i===sc) return; sc=i; track('lab-pick',{scenario:s.id}); newRound(); }); sc0.appendChild(b); });
+    R.beat=0; R.storyDone=false; renderStory();
+    renderQ1(); renderQ2(); renderQ3(); renderQ4();
+    [1,2,3,4].forEach(clearMsg); $('#endrow').hidden=true; updatePager();
+  }
+  /* a chip question built from [text, right?, feedback, misconception] options */
+  function ask(box,label,opts,key,store,step,first,row){
+    const d=document.createElement('div'); d.innerHTML='<div class="q"'+(first?' style="margin-top:0"':'')+'>'+label+'</div>';
+    d.appendChild(chipGroup(opts.map(o=>o[0]), store[key], i=>{ store[key]=i; unsolveFrom(step); }, !row)); box.appendChild(d);
+  }
+  function judge(defs,store,step){
+    const lines=[]; let miss=0;
+    defs.forEach(q=>{ const a=store[q.k]; if(a==null){ miss++; return; } const o=q.o[a]; if(!o[1]) lines.push(mixLine(o[3],o[2],step)); });
+    return {lines:lines, miss:miss};
+  }
+
+  /* ---------- step 1: receive the standards ---------- */
+  function q1Def(){
+    if(R.q1) return R.q1;
+    const q=[
+      {k:'a', pane:'a', p:'a. Item A, the '+term('crs','CRS')+', is a:', o:shuffle([['Primary standard',1],['Secondary standard',0,'Its value is accepted without comparing it with anything: it is the pharmacopoeia’s own.','M1'],['Working standard',0,'Working standards are made in-house and qualified against a primary. This one comes from the pharmacopoeia.','M1']])},
+      {k:'b', pane:'a', p:'b. Item B, the '+term('ws','working standard')+', is a:', o:shuffle([['Secondary standard',1],['Primary standard',0,'It was qualified against the CRS, so its value comes from comparison.','M2'],['Certified reference material',0,'A CRM comes from an ISO 17034 producer with a certificate. This batch was qualified in-house.','M2']])},
+      {k:'c', pane:'b', p:'c. Where do you store the CRS?', o:shuffle([['Fridge at about 5 °C, closed, protected from light',1],['Freezer at −20 °C, to be safe',0,'Colder is not always better. Freezing can harm some standards. Follow the leaflet.','M3'],['On the bench shelf, ready for use',0,'Heat, light and humidity degrade standards. The leaflet gives the storage condition.','M3']])},
+      {k:'d', pane:'b', p:'d. What do you write on each container now?', o:shuffle([['The date received and my signature',1],['Nothing: the supplier’s label is enough',0,'GMP asks for the date received, and later the date opened, with a signature.','M4'],['A new expiry date, one year from today',0,'You cannot set a validity date yourself. Record the date received.','M4']])}
+    ];
+    if(R.exp) q.push({k:'e', pane:'b', p:'e. The WS re-test date has passed. You:', o:shuffle([['Quarantine it and have it requalified against the CRS',1],['Use it: the powder still looks white',0,'Appearance cannot show a loss of potency. It is not fit for use until requalified.','M5'],['Write a new re-test date on the label',0,'Only a documented requalification can set a new date.','M5']])});
+    else q.push({k:'e', pane:'b', p:'e. Which standard do you weigh for today’s dissolution test?', o:shuffle([['The working standard (WS)',1],['The CRS',0,'Your STP names the WS. The CRS is scarce and is kept for qualifying the WS.','M2']])});
+    R.q1=q; return q;
+  }
+  function renderQ1(){
+    const qa=$('#q1a'), qb=$('#q1b');
+    qa.innerHTML='<div class="given">Today is <span class="today">'+fmt(today)+'</span>. Two parcels arrived for chlorpheniramine work.</div>'+
+      '<div class="lbl-card"><div class="lt">A · Chlorphenamine maleate CRS <span>simulated label</span></div>European Pharmacopoeia (EDQM) · batch '+R.batch+' · about 100 mg<div class="lf">Leaflet: store at +5 °C ± 3 °C, protect from light. Use the batch currently valid.</div></div>'+
+      '<div class="lbl-card ws"><div class="lt">B · Chlorpheniramine maleate WS <span>in-house label</span></div>Lot '+R.lot+' · potency <b>'+R.P.toFixed(1)+'%</b> (as is) · qualified against Ph. Eur. CRS<div class="lf">Re-test by: <b>'+fmt(R.retest)+'</b> · store 2–8 °C in a desiccator, protect from light</div></div>';
+    qb.innerHTML='';
+    q1Def().forEach(q=>ask(q.pane==='a'?qa:qb, q.p, q.o, q.k, R.ans1, 1, q.k==='c'));
+  }
+  $('#chk1').addEventListener('click',()=>{
+    const j=judge(q1Def(),R.ans1,1);
+    if(j.lines.length) return msg(1,'bad',j.lines.join(''));
+    if(j.miss) return msg(1,'near','Answer every part first (parts a and b are on the '+(innerWidth>=900?'left':'previous screen')+').');
+    if(R.exp){
+      if(!R.requal){ R.requal=true; R.oldLot=R.lot; R.lot=R.lot.replace(/-0(\d)$/,(m,d)=>'-0'+(+d%8+1)); R.P=+rnd(98.5,99.5).toFixed(1); buildSheet(); renderQ2(); renderQ4(); }
+      msg(1,'good','<b>Right.</b> Lot '+R.oldLot+' is quarantined. Ravi gives you a lot requalified this week: <b>'+R.lot+'</b>, potency <b>'+R.P.toFixed(1)+'%</b>. Use this P.');
+    } else msg(1,'good','<b>Right.</b> The CRS goes to the fridge, logged and signed. You weigh the working standard (P = '+R.P.toFixed(1)+'%).');
+    solve(1);
+  });
+
+  /* ---------- step 2: balance, weighing, dilution ---------- */
+  function q2Opts(){
+    if(R.q2o) return R.q2o;
+    R.q2o={
+      b: R.tr ? shuffle([['No: 10 mg is below the minimum weight. Weigh about 20 mg into 100 ml, as the STP says',1],['Yes: the balance reads to 0.01 mg',0,'Readability is not accuracy. Below the minimum weight the error is more than 0.10%.','M7'],['Yes, if she weighs it twice and takes the mean',0,'Averaging does not rescue a weight below the minimum weight.','M7']])
+                : shuffle([['Yes: 20 mg is above the minimum weight',1],['No: 20 mg is below the minimum weight',0,'Compare 20 mg with your minimum weight from part a.','M6']]),
+      c: shuffle([['Let it reach room temperature first',1],['Open it at once, so it stays cold',0,'Water condenses on cold powder and changes its weight.','M8'],['Warm it on the hot plate',0,'Heat can degrade it. Room temperature is enough.','M8']]),
+      g: shuffle([['The bottom of the meniscus, at eye level',1],['The top edge of the meniscus',0,'For clear solutions, use the bottom of the curve.','M12'],['The bottom of the meniscus, looking down from above',0,'Looking from above or below shifts the reading. Eye level only.','M12']])
+    };
+    return R.q2o;
+  }
+  function renderQ2(){
+    const qa=$('#q2a'), qb=$('#q2b'), o=q2Opts();
+    qa.innerHTML='<div class="given">Balance BAL-03, readability 0.01 mg. Today’s check: 10 weighings of a 20 mg test weight, '+term('s','s')+' = <b>'+R.s.toFixed(4)+' mg</b>.'+
+      (R.tr?'<br>Aina plans to weigh <b>10 mg</b> of WS into a 50 ml flask “to save standard”.':'')+'</div>'+
+      '<div class="q">a. Minimum weight for this balance</div><div class="calc-in">'+numIn('a2',R.ans2.a)+'<span class="unit">mg</span></div>';
+    ask(qa,'b. '+(R.tr?'Can Aina weigh 10 mg?':'The STP asks for about 20 mg. Can you weigh it here?'), o.b,'b',R.ans2,2);
+    ask(qa,'c. The WS comes from the fridge. Before opening it:', o.c,'c',R.ans2,2);
+    qb.innerHTML='<div class="given">Vial + WS before: <b>'+R.W1.toFixed(2)+' mg</b>. After tipping into the 100 ml flask: <b>'+R.W2.toFixed(2)+' mg</b>. '+term('p','P')+' = <b>'+R.P.toFixed(1)+'%</b>. Then 4 ml → 100 ml.</div>'+
+      '<div class="q" style="margin-top:0">d. Mass of WS in the flask</div><div class="calc-in">'+numIn('d2',R.ans2.d)+'<span class="unit">mg</span></div>'+
+      '<div class="q">e. Drug in the 100 ml stock (4 decimal places)</div><div class="calc-in">'+numIn('e2',R.ans2.e)+'<span class="unit">mg/ml</span></div>'+
+      '<div class="q">f. Final standard solution (2 decimal places)</div><div class="calc-in">'+numIn('f2',R.ans2.f)+'<span class="unit">µg/ml</span></div>';
+    ask(qb,'g. Making up to volume, you read:', o.g,'g',R.ans2,2);
+    [['a2','a'],['d2','d'],['e2','e'],['f2','f']].forEach(([id,k])=>{ const i=$('#'+id); if(i) i.addEventListener('input',()=>{ R.ans2[k]=i.value; unsolveFrom(2); }); });
+  }
+  $('#chk2').addEventListener('click',()=>{
+    const lines=[]; let miss=0; const o=q2Opts();
+    const a=readNum('a2'), M=mmin();
+    if(a==null) miss++;
+    else if(!close(a,M,.01,.05)){
+      if(close(a,2*R.s/0.10,.02)) lines.push(mixLine('M6','0.10% is 0.001 as a fraction. 2 × s ÷ 0.001 = 2000 × s.',2));
+      else if(close(a,1000*R.s,.02)) lines.push(mixLine('M6','The rule uses 2 × s, so 2000 × s, not 1000 × s.',2));
+      else lines.push(mixLine('M6','2000 × '+R.s.toFixed(4)+' mg.',2));
+    }
+    ['b','c'].forEach(k=>{ const v=R.ans2[k]; if(v==null) miss++; else { const c=o[k][v]; if(!c[1]) lines.push(mixLine(c[3],c[2],2)); } });
+    const d=readNum('d2');
+    if(d==null) miss++;
+    else if(!close(d,R.m,0,.005)){
+      if(close(d,R.W1+R.W2,.001)) lines.push(mixLine('M9','You added the two weights. Subtract: before − after.',2));
+      else if(close(d,R.W2,.001)||close(d,R.W1,.001)) lines.push(mixLine('M9','That is a vial weight. The mass in the flask is the difference.',2));
+      else lines.push(mixLine('M9','Check your subtraction: '+R.W1.toFixed(2)+' − '+R.W2.toFixed(2)+'.',2));
+    }
+    const e=readNum('e2'), S=stock(), dm=d!=null&&close(d,R.m,0,.005)?d:R.m;
+    if(e==null) miss++;
+    else if(!close(e,S,.002,.00006)){
+      if(close(e,dm/100,.002,.00006)) lines.push(mixLine('M10','You left out the potency. Multiply by P ÷ 100 = '+(R.P/100).toFixed(3)+'.',2));
+      else if(close(e,dm/(R.P/100)/100,.002,.00006)) lines.push(mixLine('M10','You divided by the potency. Only '+R.P.toFixed(1)+'% of the powder is drug, so multiply.',2));
+      else if(close(e,S*100,.002)||close(e,S*1000,.002)) lines.push(mixLine('M11','Divide by the 100 ml volume to get mg per ml.',2));
+      else lines.push(mixLine('M10','mass × (P ÷ 100) ÷ 100 ml.',2));
+    }
+    const f=readNum('f2'), F=finalC();
+    if(f==null) miss++;
+    else if(!close(f,F,.002,.006)){
+      if(close(f,F/1000,.01,.00006)) lines.push(mixLine('M11','That is in mg/ml. Multiply by 1000 for µg/ml.',2));
+      else if(close(f,S*1000,.01)) lines.push(mixLine('M11','You missed the 4 ml → 100 ml dilution: multiply by 4 ÷ 100.',2));
+      else if(close(f,dm*4/100/100*1000,.002,.006)) lines.push(mixLine('M10','Use the potency-corrected stock from part e.',2));
+      else lines.push(mixLine('M11','stock (mg/ml) × 4 ÷ 100 × 1000.',2));
+    }
+    if(R.ans2.g==null) miss++; else { const c=o.g[R.ans2.g]; if(!c[1]) lines.push(mixLine(c[3],c[2],2)); }
+    if(lines.length) return msg(2,'bad',lines.join(''));
+    if(miss) return msg(2,'near','Answer every part first (parts a to c are on the '+(innerWidth>=900?'left':'previous screen')+').');
+    msg(2,'good','<b>Right.</b> Minimum weight '+(+M.toPrecision(3))+' mg. '+R.m.toFixed(2)+' mg × '+R.P.toFixed(1)+'% ÷ 100 ml = '+S.toFixed(4)+' mg/ml; after 4 → 100 ml: <b>'+F.toFixed(2)+' µg/ml</b>.'); solve(2);
+  });
+
+  /* ---------- step 3: chloroform and the SDS ---------- */
+  function q3Def(){
+    if(R.q3) return R.q3;
+    const q=[
+      {k:'a', p:'a. Which pictograms are on the chloroform bottle?', o:shuffle([['Toxic (skull) and health hazard',1],['Flammable and corrosive',0,'Section 2 lists the hazards. Chloroform is toxic by inhalation and harms organs; it does not burn easily.','M13'],['Exclamation mark only',0,'Section 2 shows two pictograms and the word Danger. Read it again.','M13']])},
+      {k:'b', p:'b. Where do you evaporate Solution (1)?', o:shuffle([['In a fume hood, sash lowered',1],['On the open bench, wearing a mask',0,'A mask is PPE, the last line of defence. Remove the vapour at the source first.','M14'],['On the bench, beside an open window',0,'A window does not reliably remove a toxic vapour from your breathing zone.','M14']])},
+      {k:'c', p:'c. Which gloves?', o:shuffle([['The glove material named in SDS Section 8',1],['Any disposable glove',0,'Chloroform passes through thin nitrile gloves within minutes. Section 8 names the material.','M13'],['None: work quickly',0,'Chloroform is absorbed through the skin. Section 8 says what to wear.','M13']])},
+      {k:'d', p:'d. Used chloroform and leftover TLC solutions go to:', o:shuffle([['The labelled halogenated waste container',1],['The sink, with plenty of water',0,'Never pour hazardous solvents down the sink (SDS Section 13).','M15'],['The general solvent waste bottle',0,'Chloroform is halogenated and is collected separately.','M15']])}
+    ];
+    if(R.tr) q.push({k:'e', p:'e. Aina knocks over a beaker: about 20 ml of chloroform on the open bench. You:', o:shuffle([['Warn others, ventilate, Section 8 PPE, spill kit, halogenated waste, report',1],['Wipe it up with paper towels and put them in the bin',0,'Vapour keeps coming off the towels. Follow Section 6 and dispose of it as hazardous waste.','M16'],['Wash it into the sink with water',0,'It does not mix with water and must not reach drains (Section 6).','M16']])});
+    if(R.aud) q.push({k:'e', p:'e. The inspector picks up a small bottle on your bench: clear liquid, no label. You filled it with chloroform this morning. You:', o:shuffle([['Label it now: name, hazard pictograms, date and initials',1],['Explain that everyone knows what it is',0,'Every container of a hazardous chemical needs a label (CLASS Regulations 2013).','M17'],['Pour it back into the stock bottle',0,'Never return decanted solvent: it may contaminate the stock. Label it.','M17']])});
+    R.q3=q; return q;
+  }
+  function renderQ3(){
+    const H=[['H302','harmful if swallowed'],['H315','causes skin irritation'],['H319','causes serious eye irritation'],['H331','toxic if inhaled'],['H351','suspected of causing cancer'],['H361d','suspected of damaging the unborn child'],['H372','damages organs (liver, kidneys) through prolonged or repeated exposure']];
+    $('#q3a').innerHTML='<div class="given">STP identification by TLC: extract the powder with chloroform, evaporate to dryness, dissolve in 1 ml; dissolve 50 mg WS to 10 ml with chloroform. Read the '+term('sds','SDS')+' first.</div>'+
+      '<div class="sds"><div class="sh">SDS extract · Chloroform (trichloromethane)</div>'+
+      '<div class="row"><b>2 · Hazards</b><div><div class="ghs">'+ghs('skull')+ghs('health')+'<span class="sig">Danger</span></div>'+H.map(h=>'<b>'+h[0]+'</b> '+h[1]).join(' · ')+'</div></div>'+
+      '<div class="row"><b>6 · Spills</b><div>Keep people away, ventilate, wear Section 8 PPE. Absorb with inert material; do not let it reach drains.</div></div>'+
+      '<div class="row"><b>7 · Handling</b><div>Use only in a well-ventilated place or fume hood. Keep the container tightly closed, away from light.</div></div>'+
+      '<div class="row"><b>8 · PPE</b><div>Fume hood. Safety goggles. Gloves: fluoroelastomer (Viton); thin nitrile gives only brief splash protection. Lab coat.</div></div>'+
+      '<div class="row"><b>13 · Disposal</b><div>Halogenated organic waste. Do not empty into drains.</div></div></div>'+
+      '<p class="small" style="margin:.3em 0 0">Simplified training extract. Use your supplier’s full SDS.</p>';
+    const box=$('#q3'); box.innerHTML='';
+    q3Def().forEach((q,i)=>ask(box,q.p,q.o,q.k,R.ans3,3,i===0,q.k!=='e'));
+  }
+  $('#chk3').addEventListener('click',()=>{
+    const j=judge(q3Def(),R.ans3,3);
+    if(j.lines.length) return msg(3,'bad',j.lines.join(''));
+    if(j.miss) return msg(3,'near','Answer every part first.');
+    msg(3,'good','<b>Right.</b> Hood, Section 8 gloves, halogenated waste'+(R.tr?', and the spill handled as Section 6 says.':R.aud?', and every container labelled.':'.')); solve(3);
+  });
+
+  /* ---------- step 4: the worksheet ---------- */
+  function swapDigits(v){ const s=v.toFixed(2); const t=s.slice(0,-2)+s.slice(-1)+s.slice(-2,-1); return t===s?(v+0.1).toFixed(2):t; }
+  function buildSheet(){
+    const r=R, yest=new Date(today.getTime()-DAY), who=r.tr?'NA':'AH';
+    const G=[
+      {id:'bal', k:'Balance used', v:'<span class="ink">BAL-03 · daily check passed · '+who+' '+fmtS(today)+'</span>'},
+      {id:'cor', k:'Weight of WS (mg)', v:'<span class="ink"><del>'+swapDigits(r.m)+'</del> '+r.m.toFixed(2)+' '+who+' '+fmtS(today)+' · transcription error</span>'},
+      {id:'lot', k:'WS lot · potency', v:'<span class="ink">'+r.lot+' · '+r.P.toFixed(1)+'%</span>'},
+      {id:'prn', k:'Balance printout', v:'<span class="ink">attached, page 2 · '+who+'</span>'}
+    ];
+    const F=[
+      {id:'ow', k:'Flask volume (ml)', v:'<span class="ink ow" aria-label="100, with the middle digit written over another digit">1<b>0<i class="u">5</i></b>0</span>',
+        pr:shuffle([['Legible: the first value can no longer be read',1],['Available',0,'It is on the sheet and can be found. The problem is what it hides.','M18'],['Contemporaneous',0,'The time is not the issue. Can you still read the first value?','M18']])},
+      {id:'pen', k:'Dilution', v:'<span class="pencil">4 ml → 100 ml</span> <span class="note" style="background:#eef0ee;border-color:#cfd3d0;color:#636b65">pencil</span>',
+        pr:shuffle([['Enduring: pencil can be rubbed out',1],['Attributable',0,'Who wrote it is not the problem here. Think about how long the entry will last.','M18'],['Accurate',0,'The value may be right. Think about how long it will last.','M18']])},
+      {id:'stk', k:'Vial before · after (mg)', v:'<span class="ink">'+r.W1.toFixed(2)+' · '+r.W2.toFixed(2)+'</span> <span class="note">copied from a sticky note at 4 pm</span>',
+        pr:shuffle([['Original: the note was the first record',1],['Legible',0,'The numbers are readable. Where was the first record made?','M18'],['Attributable',0,'The problem is the first record, not the name.','M18']])},
+      {id:'blk', k:'Checked by', v:'<span class="blank"></span>',
+        pr:shuffle([['Complete: the second-person check is missing',1],['Legible',0,'There is nothing to read: something is missing.','M18'],['Enduring',0,'The issue is a missing entry.','M18']])},
+      {id:'bkd', k:'Date of analysis', v:'<span class="ink">'+fmtS(yest)+'</span>',
+        pr:shuffle([['Accurate: it is not the day the work was done',1],['Legible',0,'It is easy to read. Is it true?','M18'],['Enduring',0,'It is in ink. Is it true?','M18']])},
+      {id:'tpx', k:'Std Wt used in the formula (mg)', v:'<span class="ink tipex">'+r.m.toFixed(2)+'</span> <span class="small">(written on correction fluid)</span>',
+        pr:shuffle([['Original: the first entry is destroyed',1],['Available',0,'The page is available. What happened to the first entry?','M18'],['Attributable',0,'The problem is the hidden first entry.','M18']])}
+    ];
+    const nF=r.aud?4:2, nG=r.aud?2:3;
+    let flaws=shuffle(r.tr?F.filter(x=>x.id==='stk').concat(shuffle(F.filter(x=>x.id!=='stk')).slice(0,nF-1)):F).slice(0,nF);
+    const goods=[G[1]].concat(shuffle([G[0],G[2],G[3]]).slice(0,nG-1));
+    if(r.tr) flaws=flaws.map(f=>f.id==='stk'?Object.assign({},f,{v:f.v.replace('at 4 pm','by Aina at 4 pm')}):f);
+    r.rows=shuffle(flaws.map(f=>Object.assign({bad:true},f)).concat(goods));
+    r.ask=r.rows.filter(x=>x.bad)[Math.floor(rnd(0,nF))];
+    r.q4c=shuffle([['One line through 40, write 4 beside it, initial, date and give the reason',1],['Correction fluid over 40, then write 4',0,'Correction fluid destroys the original entry.','M19'],['Write 4 over the 40',0,'Writing over a figure makes both values unreadable.','M19'],['Copy the page out again neatly and shred the old one',0,'The old page is the original record. Destroying it is a serious data-integrity breach.','M19']]);
+  }
+  function renderQ4(){
+    const r=R, who=r.tr?'Aina (NA)':'Ahmad (AH)';
+    $('#q4a').innerHTML='<div class="given">Today is <span class="today">'+fmt(today)+'</span>; all of this work was done today. '+(r.aud?'The NPRA inspector reads your worksheet.':'Review the worksheet before it goes to the QC executive.')+'</div>'+
+      '<div class="wsheet"><div class="wh">Worksheet · dissolution standard · CPM 4 mg <span>'+who+'</span></div><table>'+
+      r.rows.map((x,i)=>'<tr><td class="no">'+(i+1)+'</td><td class="k">'+x.k+'</td><td>'+x.v+'</td></tr>').join('')+'</table></div>';
+    const box=$('#q4'); box.innerHTML='<div class="q" style="margin-top:0">a. Tap every entry that breaks the rules ('+term('alcoa','ALCOA+')+').</div>';
+    const g=document.createElement('div'); g.className='chips multi'; g.setAttribute('role','group');
+    r.rows.forEach((x,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(r.ans4.flags.has(i)?' on':''); b.textContent='Entry '+(i+1); b.setAttribute('aria-pressed',r.ans4.flags.has(i)?'true':'false');
+      b.addEventListener('click',()=>{ if(r.ans4.flags.has(i)) r.ans4.flags.delete(i); else r.ans4.flags.add(i); b.classList.toggle('on'); b.setAttribute('aria-pressed',r.ans4.flags.has(i)?'true':'false'); r.ans4.touched=true; unsolveFrom(4); }); g.appendChild(b); });
+    box.appendChild(g);
+    ask(box,'b. Which principle does entry '+(r.rows.indexOf(r.ask)+1)+' break most clearly?', r.ask.pr,'b',r.ans4,4);
+    ask(box,'c. The dilution was written as 40 ml instead of 4 ml. How is it corrected?', r.q4c,'c',r.ans4,4);
+  }
+  $('#chk4').addEventListener('click',()=>{
+    const r=R, lines=[]; let miss=0;
+    if(!r.ans4.touched) miss++;
+    else {
+      r.rows.forEach((x,i)=>{ if(!x.bad && r.ans4.flags.has(i)) lines.push(mixLine('M18','Entry '+(i+1)+' is fine: '+(x.id==='cor'?'a single line, the original still readable, initials, date and reason. That is how to correct.':'it is in ink, signed or traceable, and true.'),4)); });
+      const missed=r.rows.filter((x,i)=>x.bad && !r.ans4.flags.has(i)).length;
+      if(missed) lines.push(mixLine('M18',missed===1?'One entry that breaks the rules is not marked yet. Check each one against ALCOA+.':missed+' entries that break the rules are not marked yet. Check each one against ALCOA+.',4));
+    }
+    ['b','c'].forEach(k=>{ const v=r.ans4[k]; if(v==null){ miss++; return; } const o=(k==='b'?r.ask.pr:r.q4c)[v]; if(!o[1]) lines.push(mixLine(o[3],o[2],4)); });
+    if(lines.length) return msg(4,'bad',lines.join(''));
+    if(miss) return msg(4,'near','Answer every part first.');
+    msg(4,'good','<b>Round complete.</b> '+(r.aud?'The inspector notes the entries are corrected properly and the analyst is retrained.':'The worksheet goes back for correction before the QC executive signs.')); solve(4);
+  });
+
+  /* tail hooks: nothing extra to redraw when these pages open */
+  function renderObs(){}
+  function renderStep3(){}
+
+  function solve(k){
+    solved[k-1]=true; track('lab-step'+k+'-solved',{scenario:R.S.id});
+    if(k===4){ roundComplete(); $('#endrow').hidden=false; }
+    updatePager(); fitPage();
+  }
+  function roundComplete(){
+    rounds++; $('#rounds').textContent=rounds; done.add(R.S.id);
+    const c=$('#scen-chips').children[sc]; if(c && !c.querySelector('.tick')) c.insertAdjacentHTML('beforeend','<span class="tick">✓</span>');
+    track('lab-round-complete',{scenario:R.S.id});
+    try{ localStorage.setItem('kompas.qc-practice.qc-lab.done', String(Date.now())); }catch(_){}
+    try{ if(window.parent!==window){ const o=location.origin; window.parent.postMessage({type:'qc-lab', event:'round-complete', reaction:R.S.id}, (o&&o!=='null')?o:'*'); } }catch(_){}
+  }
+  $('#btn-new').addEventListener('click',()=>{ newRound(); goPage(firstPageOfStep(1)); });
+  $('#btn-next').addEventListener('click',()=>{ sc=(sc+1)%SCEN.length; track('lab-pick',{scenario:SCEN[sc].id}); newRound(); goPage(0); });
+  $('#btn-pt').addEventListener('click',()=>{ if(window.KompasPT) KompasPT.open(); });
+  $('#btn-kompas').addEventListener('click',e=>{ if(history.length>1 && document.referrer && document.referrer.indexOf(location.host)>-1){ e.preventDefault(); location.assign(e.currentTarget.href); } });
+
+  /* ---------- STORY ---------- */
+  function person(who,x,y,s,mirror){
+    const skin=who==='aina'?'#e3b48c':'#a9714b';
+    let g='<g class="who-'+who+'" transform="translate('+x+' '+y+') scale('+(mirror?-s:s)+' '+s+')"><g class="bob">';
+    g+='<path d="M-22 0 Q-23 -33 0 -35 Q23 -33 22 0 Z" fill="#fff" stroke="#b9c2bc" stroke-width="1.5"/>';
+    g+='<path d="M-8 -34 L0 -21 L8 -34" fill="none" stroke="#2d6a4f" stroke-width="2.4" stroke-linejoin="round"/>';
+    g+='<rect x="7" y="-25" width="8" height="5" rx="1" fill="#2d6a4f"/>';
+    if(who==='aina'){
+      g+='<path d="M-15 -47 Q-16 -68 0 -68 Q16 -68 15 -47 Q15 -33 0 -31 Q-15 -33 -15 -47 Z" fill="#3f7d63"/>';
+      g+='<ellipse cx="0" cy="-49" rx="10" ry="11.5" fill="'+skin+'"/>';
+    } else {
+      g+='<rect x="-4" y="-40" width="8" height="6" fill="'+skin+'"/>';
+      g+='<circle cx="0" cy="-51" r="12.5" fill="'+skin+'"/>';
+      g+='<path d="M-12.5 -54 Q-12 -66 0 -66 Q12 -66 12.5 -54 Q8 -60 0 -60 Q-7 -60 -12.5 -54 Z" fill="#26201c"/>';
+      g+='<g fill="none" stroke="#26201c" stroke-width="1.3"><circle cx="-4.6" cy="-51" r="3.4"/><circle cx="4.6" cy="-51" r="3.4"/><path d="M-1.2 -51 H1.2"/></g>';
+    }
+    g+='<g class="blink"><circle cx="-4.4" cy="-51" r="1.4" fill="#1c2620"/><circle cx="4.4" cy="-51" r="1.4" fill="#1c2620"/></g>';
+    g+='<path d="M-3.5 -45.5 Q0 -42.5 3.5 -45.5" fill="none" stroke="#1c2620" stroke-width="1.3" stroke-linecap="round"/>';
+    return g+'</g></g>';
+  }
+
+  const vial=(x,y,c,l)=>'<g transform="translate('+x+' '+y+')"><rect x="-13" y="-40" width="26" height="40" rx="5" fill="'+c+'" opacity=".9" stroke="#7a3f0f" stroke-width="1.2"/><rect x="-10" y="-50" width="20" height="10" rx="2" fill="#5c665f"/><rect x="-10" y="-28" width="20" height="14" rx="2" fill="#fff"/><text x="0" y="-18" text-anchor="middle" font-size="7" font-weight="800" fill="#1c2620">'+l+'</text></g>';
+  const bottle=(x,y)=>'<g transform="translate('+x+' '+y+')"><path d="M-8 -60 h16 v10 q14 6 14 20 v28 q0 2 -2 2 h-40 q-2 0 -2 -2 v-28 q0 -14 14 -20 z" fill="#eef5fb" stroke="#8fb3c9" stroke-width="1.5"/><rect x="-14" y="-30" width="28" height="20" rx="2" fill="#fff" stroke="#c9cdca"/><path d="M-6 -26 l6 6 -6 6 -6 -6 z" fill="#fff" stroke="#d81e05" stroke-width="1.6" transform="translate(4 0)"/><text x="0" y="6" text-anchor="middle" font-size="7.5" font-weight="700" fill="#1c2620">CHCl₃</text></g>';
+  const clip=(x,y)=>'<g transform="translate('+x+' '+y+')"><rect x="-22" y="-56" width="44" height="58" rx="4" fill="#fffef8" stroke="#b9b29c" stroke-width="1.4"/><rect x="-9" y="-60" width="18" height="8" rx="2" fill="#7d8b96"/><path d="M-14 -40 h28 M-14 -30 h28 M-14 -20 h20 M-14 -10 h24" stroke="#1f3a8a" stroke-width="1.3"/></g>';
+  const STORY={
+    routine:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'A new batch of the CRS and a fresh working standard arrived. Log them in, then prepare today’s dissolution standard and the TLC solutions.',
+      know:'You receive the standards correctly, prepare an accurate standard solution, work safely and keep a clean record.',
+      scene:()=>vial(200,120,'#b5651d','CRS')+vial(240,120,'#2d6a4f','WS')+clip(290,124)},
+    expired:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'Before you weigh the working standard, read its label carefully. Something on it needs your attention.',
+      know:'You spot the problem with the standard, act correctly, and still produce a valid result.',
+      scene:()=>vial(220,120,'#2d6a4f','WS')+'<text class="pulse" x="220" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#c0392b">Still valid?</text>'},
+    trainee:{who:'aina', name:'Aina', role:'trainee pharmacist',
+      problem:'I want to weigh only 10 mg of standard to save it. Then I need to make the TLC solutions in chloroform. Can you watch me?',
+      know:'You catch Aina’s weighing problem and her chloroform spill, and fix both.',
+      scene:()=>bottle(210,124)+'<text class="pulse" x="250" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5d14">Only 10 mg?</text>'},
+    audit:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'NPRA GMP inspectors are in the lab today. They will watch you work and read your worksheet.',
+      know:'Everything you do and write would satisfy an inspector.',
+      scene:()=>clip(210,124)+bottle(266,124)+'<text class="pulse" x="238" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5d14">Inspection day</text>'}
+  };
+  const SCENE_W=320, SCENE_H=150;
+  function sceneFor(beat){
+    const st=STORY[R.S.id], who=st.who;
+    let s='<svg viewBox="0 0 '+SCENE_W+' '+SCENE_H+'" role="img" aria-label="'+(['The problem','The method','Your goal'][beat])+'"><rect width="320" height="150" rx="10" fill="#f4f7f5"/>';
+    if(beat===0) s+=st.scene()+person(who,72,140,1.45);
+    if(beat===1){
+      s+=vial(170,120,'#2d6a4f','WS')+'<g transform="translate(222 120)"><rect x="-26" y="-14" width="52" height="14" rx="3" fill="#e4e6e3" stroke="#9aa39d"/><rect x="-18" y="-10" width="22" height="7" rx="1" fill="#1c2620"/><rect x="-14" y="-20" width="28" height="4" rx="2" fill="#b9c2bc"/></g>'+clip(285,124);
+      s+=person(who==='aina'?'ravi':'aina',70,140,1.45);
+    }
+    if(beat===2){
+      s+=person('aina',58,140,1.35)+person('ravi',118,140,1.35,true);
+      s+='<g transform="translate(176 22)"><rect width="128" height="108" rx="8" fill="#fff" stroke="#cfe6d9" stroke-width="2"/>';
+      STEP_NAMES.slice(1).forEach((t,i)=>{ s+='<circle cx="16" cy="'+(20+i*24)+'" r="8" fill="#2d6a4f"/><text x="16" y="'+(23.5+i*24)+'" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">'+(i+1)+'</text><text x="30" y="'+(23.5+i*24)+'" font-size="10" font-weight="700" fill="#1c2620">'+t+'</text>'; });
+      s+='</g>';
+    }
+    return s+'</svg>';
+  }
+  const BEAT_TITLE=['1 · The problem','2 · The method','3 · Your goal'];
+  function renderStory(){
+    const st=STORY[R.S.id], b=R.beat||0, box=$('#story');
+    let text='';
+    if(b===0) text='<p class="say"><b>'+st.name+'</b> <span class="small">('+st.role+')</span><br>'+st.problem+'</p>';
+    if(b===1) text='<p class="say">Receive the '+term('crs','CRS')+' and the '+term('ws','working standard')+', weigh the WS above the balance’s minimum weight, make the standard solution, handle chloroform as the '+term('sds','SDS')+' says, and check the worksheet.</p>';
+    if(b===2) text='<p class="say"><b>Objective:</b> standard in, result out, with nothing an inspector could fault.<br><b>You succeed when:</b> '+st.know+'</p>';
+    box.innerHTML='<div class="story-head"><span class="eyebrow" style="margin:0">'+BEAT_TITLE[b]+'</span><span class="dots">'+[0,1,2].map(i=>'<i class="'+(i<=b?'on':'')+'"></i>').join('')+'</span></div>'+
+      '<button type="button" class="scene" id="scene" aria-label="Next part of the story">'+sceneFor(b)+'</button>'+text+
+      '<div class="story-nav">'+(b>0?'<button type="button" class="btn ghost" id="story-back">‹ Back</button>':'<span></span>')+
+      (b<2?'<button type="button" class="btn solid" id="story-next">Tap to continue ›</button>':'<span class="small">Ready? Press <b>Continue</b> below.</span>')+'</div>';
+    const nx=$('#story-next'); if(nx) nx.addEventListener('click',storyNext);
+    $('#scene').addEventListener('click',storyNext);
+    const bk=$('#story-back'); if(bk) bk.addEventListener('click',()=>{ R.beat=Math.max(0,b-1); renderStory(); });
+    if(b===2 && !R.storyDone){ R.storyDone=true; track('lab-story-done',{scenario:R.S.id}); }
+    updatePager(); fitPage();
+  }
+  function storyNext(){ if((R.beat||0)<2){ R.beat=(R.beat||0)+1; track('lab-story-beat',{scenario:R.S.id, beat:R.beat}); renderStory(); } }
+
+  /* ---------- hints ---------- */
+  const hints=$('#hints');
+  $('#hints-btn').addEventListener('click',()=>{ hints.classList.add('open'); $('#hints-close').focus(); track('lab-hints',{page:page}); });
+  $('#hints-close').addEventListener('click',()=>{ hints.classList.remove('open'); $('#hints-btn').focus(); });
+  hints.addEventListener('click',e=>{ if(e.target===hints) hints.classList.remove('open'); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') hints.classList.remove('open'); });
+
+  /* ---------- pager: one screen at a time ----------
+     Narrow screens show one pane per page; wide screens show both panes of a step side by side. */
+  const SCR=[...document.querySelectorAll('.scr')];
+  const STEP_NAMES=['QC Lab Day','Receive','Prepare','Safety','Records'];
+  let pages=[], page=0, wide=null;
+  function isWide(){ return innerWidth>=900 && innerHeight>=560; }
+  function buildPages(){
+    const w=isWide(); if(w===wide && pages.length) return; wide=w;
+    const cur=pages.length?pages[page][0]:SCR[0];
+    pages=[];
+    SCR.forEach(s=>{ const last=pages[pages.length-1];
+      if(w && last && s.dataset.pane==='b' && last[0].dataset.step===s.dataset.step) last.push(s); else pages.push([s]); });
+    page=Math.max(0,pages.findIndex(p=>p.includes(cur)));
+  }
+  const stepOf=p=>+pages[p][0].dataset.step;
+  const firstPageOfStep=k=>pages.findIndex(p=>+p[0].dataset.step===k);
+  function lastPaneOfStep(p){ const k=stepOf(p); return p+1>=pages.length || stepOf(p+1)!==k; }
+  function canLeave(p){ const k=stepOf(p); if(k===0) return !!(R&&R.storyDone); if(!lastPaneOfStep(p)) return true; return solved[k-1]; }
+  function goPage(n){
+    page=Math.max(0,Math.min(pages.length-1,n));
+    SCR.forEach(s=>{ s.classList.remove('on','half-l','half-r','single','scrolly'); s.style.setProperty('--k',1); });
+    $('#stage').classList.toggle('roomy', innerWidth>=640);
+    const P=pages[page]; P.forEach((s,i)=>{ s.classList.add('on'); if(P.length===2) s.classList.add(i?'half-r':'half-l'); else s.classList.add('single'); });
+    updatePager(); fitPage();
+    if(stepOf(page)===1 && R && !briefed.has(R.S.id)) openBrief();
+    if(stepOf(page)===2) renderObs();
+    if(stepOf(page)===3 && solved[1]) renderStep3();
+    track('lab-page',{page:STEP_NAMES[stepOf(page)]+(P.length===1&&P[0].dataset.pane?' '+P[0].dataset.pane:'')});
+  }
+  function updatePager(){
+    if(!pages.length) return;
+    const k=stepOf(page), P=pages[page], same=pages.filter(p=>stepOf(pages.indexOf(p))===k);
+    const part=(P.length===1 && same.length>1)?' ('+(same.indexOf(P)+1)+'/'+same.length+')':'';
+    $('#bar-lbl').innerHTML=(k?'<span>Step '+k+' of 4</span>':'')+STEP_NAMES[k]+part;
+    $('#fill').style.width=(page/(pages.length-1)*100)+'%';
+    $('#back').disabled=page===0;
+    const last=page===pages.length-1, ok=canLeave(page), nx=$('#next');
+    nx.textContent=last?(solved[3]?'New round ↺':'Continue →'):'Continue →';
+    nx.disabled=!ok || (last && !solved[3]);
+    nx.classList.toggle('ready', ok && k>0 && lastPaneOfStep(page) && solved[k-1]);
+    guide();
+  }
+  $('#back').addEventListener('click',()=>goPage(page-1));
+  $('#next').addEventListener('click',()=>{ if(page===pages.length-1){ if(solved[3]){ newRound(); goPage(firstPageOfStep(1)); } return; } if(canLeave(page)) goPage(page+1); });
+
+  /* fit: shrink the text slightly if a page is too tall; scroll only as a last resort (logged) */
+  function fitPage(){
+    if(!pages.length) return;
+    pages[page].forEach(s=>{
+      s.classList.remove('scrolly'); let k=1; s.style.setProperty('--k',k);
+      const over=()=>s.scrollHeight>s.clientHeight+1;
+      let g=0; while(over() && k>0.8 && g++<10){ k=+(k-0.04).toFixed(2); s.style.setProperty('--k',k); }
+      if(over()){ s.classList.add('scrolly'); track('lab-overflow',{page:s.dataset.title, w:innerWidth, h:innerHeight}); }
+      s.dataset.k=k;
+    });
+    guide();
+  }
+  function setAppH(){ document.documentElement.style.setProperty('--app-h', innerHeight+'px'); }
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ setAppH(); buildPages(); goPage(page); },120); });
+
+  /* ---------- step guide: the footer names the next move and the matching control glows ----------
+     It only ever points at the next empty input or button, never at the right answer. */
+  const briefed=new Set(); let glowEl=null;
+  const empty=id=>{ const e=$('#'+id); return !e || !e.value.trim(); };
+  const checkMove=n=>({t:$('#m'+n).classList.contains('bad')?'Fix what the feedback says, then press Check again':'Press Check', e:$('#chk'+n)});
+  const storyMove=()=>R.storyDone?{t:'Press Continue to start the lab',e:$('#next')}:{t:'Tap the picture to read the story',e:$('#story-next')};
+  const doneMove=k=>k<4?{t:'Step done. Press Continue',e:$('#next')}:{t:'Round complete. Try new values or the next scenario',e:$('#endrow')};
+  function guide(){
+    if(!pages.length || !R) return;
+    const g=nextMove(); let t=g.t||'', e=g.e||null;
+    if(e){ const s=e.closest('.scr'); if(s && !pages[page].includes(s)){ const j=pages.findIndex(p=>p.includes(s));
+      if(j>page){ t='Next screen: '+t; e=$('#next'); } else { t='Back a screen: '+t; e=$('#back'); } } }
+    const gate=$('#gate'); gate.textContent=t; gate.classList.toggle('go',!!t);
+    if(glowEl!==e){ if(glowEl) glowEl.classList.remove('guide'); glowEl=e; if(e) e.classList.add('guide'); }
+    const sb=$('#stp-btn'), sl=g.s?'STP §'+g.s:'STP';
+    if(sb.textContent!==sl){ sb.textContent=sl; sb.classList.toggle('sec',!!g.s); sb.dataset.s=g.s||''; }
+  }
+  function openBrief(){ briefed.add(R.S.id); $('#brief-body').innerHTML=briefHTML(); $('#brief').classList.add('open'); $('#brief-go').focus(); }
+  function closeBrief(){ $('#brief').classList.remove('open'); guide(); }
+  $('#brief-go').addEventListener('click',closeBrief);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#brief').classList.contains('open')) closeBrief(); });
+  document.addEventListener('click',()=>setTimeout(guide,0));
+  document.addEventListener('input',()=>guide());
+
+  function nextMove(){
+    const k=stepOf(page);
+    if(k===0) return storyMove();
+    if(solved[k-1]) return doneMove(k);
+    const firstOpen=(box,store,keys)=>{ const g=$(box).querySelectorAll('.chips'); for(let i=0;i<keys.length;i++) if(store[keys[i]]==null) return {i:i,e:g[i]}; return null; };
+    if(k===1){
+      const Q=q1Def(), ga=$('#q1a').querySelectorAll('.chips'), gb=$('#q1b').querySelectorAll('.chips');
+      const qa=Q.filter(q=>q.pane==='a'), qb=Q.filter(q=>q.pane==='b');
+      for(let i=0;i<qa.length;i++) if(R.ans1[qa[i].k]==null) return {t:qa[i].k+'. Read the labels and classify item '+(i?'B':'A'),e:ga[i],s:1};
+      for(let i=0;i<qb.length;i++) if(R.ans1[qb[i].k]==null) return {t:qb[i].k+'. '+({c:'Choose the storage',d:'Say what you write on the container',e:R.exp?'Decide what to do with the expired WS':'Choose the standard for today'})[qb[i].k],e:gb[i],s:1};
+      return Object.assign(checkMove(1),{s:1});
+    }
+    if(k===2){
+      const ga=$('#q2a').querySelectorAll('.chips');
+      if(empty('a2')) return {t:'a. Work out the minimum weight',e:$('#a2'),s:2};
+      if(R.ans2.b==null) return {t:'b. Decide whether the weight is allowed',e:ga[0],s:2};
+      if(R.ans2.c==null) return {t:'c. Say what to do before opening the vial',e:ga[1],s:2};
+      if(empty('d2')) return {t:'d. Work out the mass in the flask',e:$('#d2'),s:2};
+      if(empty('e2')) return {t:'e. Work out the stock concentration',e:$('#e2'),s:3};
+      if(empty('f2')) return {t:'f. Work out the final concentration',e:$('#f2'),s:3};
+      if(R.ans2.g==null) return {t:'g. Say how to read the volume',e:$('#q2b .chips'),s:3};
+      return Object.assign(checkMove(2),{s:3});
+    }
+    if(k===3){
+      const f=firstOpen('#q3',R.ans3,q3Def().map(q=>q.k));
+      if(f) return {t:q3Def()[f.i].k+'. Use the SDS to answer',e:f.e,s:4};
+      return Object.assign(checkMove(3),{s:4});
+    }
+    const g=$('#q4').querySelectorAll('.chips');
+    if(!R.ans4.touched) return {t:'a. Mark the entries that break the rules',e:g[0],s:5};
+    if(R.ans4.b==null) return {t:'b. Name the principle',e:g[1],s:5};
+    if(R.ans4.c==null) return {t:'c. Choose how to correct the entry',e:g[2],s:5};
+    return Object.assign(checkMove(4),{s:5});
+  }
+  function briefHTML(){
+    return (R.exp?'<p class="small" style="margin:0">Read the working standard’s label carefully today.</p>':R.tr?'<p class="small" style="margin:0">Aina is at the bench with you. Watch her weighing and her chloroform.</p>':R.aud?'<p class="small" style="margin:0">An NPRA inspector is watching. Everything counts.</p>':'')+'<ol class="sop">'+
+      '<li><b>Receive.</b> Classify the two standards, store them and record their arrival.</li>'+
+      '<li><b>Prepare.</b> Check the balance’s minimum weight, weigh the WS by difference and work out the standard’s concentration.</li>'+
+      '<li><b>Safety.</b> Use the chloroform SDS to work safely.</li>'+
+      '<li><b>Records.</b> Review the worksheet against ALCOA+.</li></ol>';
+  }
+  /* ---------- STP: opens at the section the current move needs ---------- */
+  function openSTP(s){
+    const d=$('#stp'); d.classList.add('open');
+    d.querySelectorAll('.stp-sec.hit').forEach(x=>x.classList.remove('hit'));
+    const sec=s?$('#stp-'+s):null;
+    if(sec){ sec.scrollIntoView({block:'start'}); sec.classList.add('hit'); } else d.querySelector('.box').scrollTop=0;
+    $('#stp-close').focus({preventScroll:true});
+  }
+  function closeSTP(){ $('#stp').classList.remove('open'); $('#stp-btn').focus({preventScroll:true}); }
+  $('#stp-btn').addEventListener('click',()=>openSTP($('#stp-btn').dataset.s));
+  $('#stp-close').addEventListener('click',closeSTP);
+  $('#stp').addEventListener('click',e=>{ if(e.target.id==='stp') closeSTP(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#stp').classList.contains('open')) closeSTP(); });
+  $('#brief-stp').addEventListener('click',()=>{ closeBrief(); openSTP(''); });
+
+
+  /* test hook: lets the automated checks read the round (no effect for students) */
+  window.__lab={get R(){ return R; }, mmin:()=>mmin(), stock:()=>stock(), finalC:()=>finalC(),
+    q1:()=>q1Def(), q2:()=>q2Opts(), q3:()=>q3Def()};
+
+  setAppH(); buildPages(); newRound(); goPage(0);
+})();
+</script>
+</body>
+</html>

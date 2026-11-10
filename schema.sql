@@ -242,7 +242,7 @@ begin
     raise exception 'Sign in to Kompas Semester to get a certificate.';
   end if;
 
-  v_code := case p_explainer when 'chromatography' then 'CHR' when 'spectroscopy' then 'SPC' else null end;
+  v_code := case p_explainer when 'chromatography' then 'CHR' when 'spectroscopy' then 'SPC' when 'qc-practice' then 'QCP' else null end;
   if v_code is null then
     raise exception 'Unknown explainer: %', p_explainer;
   end if;
