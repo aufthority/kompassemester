@@ -158,6 +158,8 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 .calc-in{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .6em;margin:.1em 0}
 .num-in{font:600 1em 'DM Sans',sans-serif;width:6.5em;padding:.28em .5em;border:1.5px solid var(--rule);border-radius:8px;color:var(--ink);background:#fff}
 .num-in:focus{outline:none;border-color:var(--accent)}
+.num-in.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red)}
+.num-in.wrong + .unit::after{content:" ✕ check this";color:var(--red);font-weight:700}
 .unit{font-size:.84em;color:var(--muted)}
 .given{background:#f6f7f5;border-radius:8px;padding:.4em .65em;font-size:.86em;margin:.1em 0 .2em}
 .given b{white-space:nowrap}
@@ -500,6 +502,9 @@ table.vt tr.hl td{background:var(--o-bg)}
   }
   const numIn=(id,val)=>'<input class="num-in" id="'+id+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':val)+'">';
   const readNum=id=>{ const e=$('#'+id); if(!e) return null; const v=(e.value||'').replace(',','.').trim(); return v===''?null:parseFloat(v); };
+  /* a wrong number box turns red when Check is pressed; editing it clears the mark */
+  const markNum=(id,bad)=>{ const e=$('#'+id); if(e) e.classList.toggle('wrong',!!bad); };
+  document.addEventListener('input',e=>{ const t=e.target; if(t && t.classList && t.classList.contains('num-in')) t.classList.remove('wrong'); });
   const close=(a,b,rel,abs)=>a!=null && Math.abs(a-b)<=Math.max(Math.abs(b)*rel, abs||0);
 
   function render(){
@@ -532,6 +537,7 @@ table.vt tr.hl td{background:var(--o-bg)}
   }
   $('#chk1').addEventListener('click',()=>{
     const a=readNum('a1'), lines=[]; let miss=0; const W=want1(), v2=R.S.id==='linear'?R.vol3:4;
+    markNum('a1', a!=null && !close(a,W,.01,.000002));
     if(a==null) miss++;
     else if(!close(a,W,.01,.000002)){
       if(close(a,R.w/100,.01)) lines.push(mixLine('M1','You stopped after the first flask. Now dilute '+v2+' ml to 100 ml: × '+v2+' ÷ 100.',1));
@@ -692,6 +698,7 @@ table.vt tr.hl td{background:var(--o-bg)}
   $('#chk3').addEventListener('click',()=>{
     const W=want3(), lines=[]; let miss=0, lin=R.S.id==='linear';
     if(lin){ const c=readNum('c3');
+      markNum('c3', c!=null && !close(c,W.c,.01,.000002));
       if(c==null) miss++;
       else if(!close(c,W.c,.01,.000002)){
         if(close(c,R.A[R.k]/R.m,.01)) lines.push(mixLine('M10','You left out b. Take b away from A first: (A − b) ÷ m.',3));
@@ -700,6 +707,7 @@ table.vt tr.hl td{background:var(--o-bg)}
       }
     }
     const p=readNum('p3');
+    markNum('p3', p!=null && !close(p,W.pct,0,.5));
     if(p==null) miss++;
     else if(!close(p,W.pct,0,.5)){
       const ratio=R.A[R.k]/R.Astd;

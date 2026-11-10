@@ -158,6 +158,8 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 .calc-in{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .6em;margin:.1em 0}
 .num-in{font:600 1em 'DM Sans',sans-serif;width:6.5em;padding:.28em .5em;border:1.5px solid var(--rule);border-radius:8px;color:var(--ink);background:#fff}
 .num-in:focus{outline:none;border-color:var(--accent)}
+.num-in.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red)}
+.num-in.wrong + .unit::after{content:" ✕ check this";color:var(--red);font-weight:700}
 .unit{font-size:.84em;color:var(--muted)}
 .given{background:#f6f7f5;border-radius:8px;padding:.4em .65em;font-size:.86em;margin:.1em 0 .2em}
 .given b{white-space:nowrap}
@@ -508,6 +510,9 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   }
   const numIn=(id,val)=>'<input class="num-in" id="'+id+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':val)+'">';
   const readNum=id=>{ const e=$('#'+id); if(!e) return null; const v=(e.value||'').replace(',','.').trim(); return v===''?null:parseFloat(v); };
+  /* a wrong number box turns red when Check is pressed; editing it clears the mark */
+  const markNum=(id,bad)=>{ const e=$('#'+id); if(e) e.classList.toggle('wrong',!!bad); };
+  document.addEventListener('input',e=>{ const t=e.target; if(t && t.classList && t.classList.contains('num-in')) t.classList.remove('wrong'); });
   const close=(a,b,rel,abs)=>a!=null && Math.abs(a-b)<=Math.max(Math.abs(b)*rel, abs||0);
 
   function render(){
@@ -552,6 +557,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     if(R.test==='rs'){ const c=readNum('a1c');
       if(c==null) miss++;
       else if(!close(c,0.2,0,.005)) lines.push(mixLine('M3',(close(c,500,0,1)?'500 is the dilution, not the limit. ':'')+'Part c: 1 in 500 = 1 ÷ 500 × 100.',1)); }
+    markNum('a1',a!=null&&!close(a,W,.01,.05)); if(R.test==='rs'){ const c=readNum('a1c'); markNum('a1c',c!=null&&!close(c,0.2,0,.005)); }
     if(lines.length) return msg(1,'bad',lines.join(''));
     if(miss) return msg(1,'near','Answer every part first (part a is on the previous screen).');
     msg(1,'good','<b>Right.</b> Weigh '+r2(W).toFixed(2)+' mg of powder.'); solve(1);
@@ -758,6 +764,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   $('#chk3').addEventListener('click',()=>{
     const T=targets3(), lines=[]; let miss=0;
     T.forEach((t,k)=>{ const v=readNum('rf'+k), want=t.s.dist/R.front;
+      markNum('rf'+k, v!=null && !close(v,want,0,.011));
       if(v==null){ miss++; return; }
       if(close(v,want,0,.011)) return;
       if(v>1 || close(v,R.front/t.s.dist,.02)) lines.push(mixLine('M1','Spot '+t.s.letter+': divide the spot distance by the front distance, not the other way round.',3));

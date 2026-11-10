@@ -157,6 +157,8 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 .calc-in{display:flex;flex-wrap:wrap;align-items:center;gap:.4em .6em;margin:.25em 0 .2em}
 .num-in{font:600 1em 'DM Sans',sans-serif;width:6.5em;padding:.3em .5em;border:1.5px solid var(--rule);border-radius:8px;color:var(--ink);background:#fff}
 .num-in:focus{outline:none;border-color:var(--accent)}
+.num-in.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red)}
+.num-in.wrong + .unit::after{content:" ✕ check this";color:var(--red);font-weight:700}
 .unit{font-size:.84em;color:var(--muted)}
 .given{background:#f6f7f5;border-radius:8px;padding:.45em .7em;font-size:.86em;margin:.3em 0 .4em}
 .given b{white-space:nowrap}
@@ -516,6 +518,9 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   }
   const numIn=(id,val)=>'<input class="num-in" id="'+id+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':val)+'">';
   const readNum=id=>{ const e=$('#'+id); if(!e) return null; const v=(e.value||'').replace(/,/g,'').trim(); return v===''?null:parseFloat(v); };
+  /* a wrong number box turns red when Check is pressed; editing it clears the mark */
+  const markNum=(id,bad)=>{ const e=$('#'+id); if(e) e.classList.toggle('wrong',!!bad); };
+  document.addEventListener('input',e=>{ const t=e.target; if(t && t.classList && t.classList.contains('num-in')) t.classList.remove('wrong'); });
   const close=(a,b,rel,abs)=>a!=null && Math.abs(a-b)<=Math.max(Math.abs(b)*rel, abs||0);
 
   function render(){
@@ -626,6 +631,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     if(k<2) return msg(1,'bad',mixLine('H6','The peak comes out too close to t0. Lower the methanol a little.',1));
     if(tR>12) return msg(1,'bad',mixLine('H7','The peak takes '+(tR>15?'more than 15':tR.toFixed(1))+' min. Raise the methanol: 10% more methanol makes retention about 3 times shorter.',1));
     const v=readNum('kk'), want=(tR-R.t0)/R.t0;
+    markNum('kk', v!=null && !close(v,want,.02,.03));
     if(v==null) return msg(1,'near','Calculate k′ from tR and t0 on the chromatogram.');
     if(!close(v,want,.02,.03)){
       if(close(v,tR/R.t0,.02,.03)) return msg(1,'bad',mixLine('H5','You divided tR by t0. Subtract t0 first: k′ counts only the time spent in the stationary phase.',1));
@@ -750,6 +756,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   $('#chk3').addEventListener('click',()=>{
     const a=assay(), v2=readNum('r2'), lines=[]; let miss=0;
     if(R.ans3.why==null) miss++; else { const o=q3Opts()[R.ans3.why]; if(!o[1]) lines.push(mixLine(o[3],o[2],3)); }
+    markNum('r2', v2!=null && !close(v2,a.R2,0,.5) && !close(v2,+a.R1.toFixed(2)/4*100,0,.5));
     if(v2==null) miss++;
     else if(!close(v2,a.R2,0,.5) && !close(v2,+a.R1.toFixed(2)/4*100,0,.5)){
       if(close(v2,a.R1,.01)) lines.push(mixLine('H13','R2 is a percentage of 4 mg: divide R1 by 4, then multiply by 100.',3));
