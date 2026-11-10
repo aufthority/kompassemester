@@ -1396,11 +1396,12 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   /* progress is kept per person: signed-in students under their own id, visitors under a device key.
      Educators: nothing saved. In Kompas student preview the gates are on and nothing is saved. */
   let PKEY='kompas.chromatography.progress.v2', saveOn=true, previewOn=false;
-  try{ localStorage.removeItem('kompas.chromatography.progress'); }catch(_){}
+  const OLDKEY='kompas.chromatography.progress';   /* progress saved before 10 Nov 2026: kept, and restored below */
+  let fromOld=false; try{ fromOld=!localStorage.getItem(PKEY) && !!localStorage.getItem(OLDKEY); }catch(_){}
   let maxReached=1, isEducator=false, profileName='', signedIn=false, authSb=null;
-  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.max>=1) maxReached=Math.min(sv.max, document.querySelectorAll('.slide').length); }catch(_){}
+  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||localStorage.getItem(OLDKEY)||'null'); if(sv && sv.max>=1) maxReached=Math.min(sv.max, document.querySelectorAll('.slide').length); }catch(_){}
   let current = 1;
-  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.last>=1 && sv.last<=maxReached) current=sv.last; }catch(_){}
+  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||localStorage.getItem(OLDKEY)||'null'); if(sv && sv.last>=1 && sv.last<=maxReached) current=sv.last; }catch(_){}
   const btnBack  = document.getElementById('btn-back');
   const btnNext  = document.getElementById('btn-next');
   const progFill = document.getElementById('progress-fill');
@@ -2072,7 +2073,14 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
       try{ previewOn=data.role==='educator' && !!sessionStorage.getItem('kompas.previewCourse'); }catch(_){ previewOn=false; }
       isEducator=data.role==='educator' && !previewOn;
       if(data.role==='educator'){ saveOn=false; if(previewOn){ maxReached=1; current=1; } }
-      else { PKEY='kompas.chromatography.progress.u.'+session.user.id; loadProgress(); }
+      else { PKEY='kompas.chromatography.progress.u.'+session.user.id; loadProgress();
+        if(!localStorage.getItem(PKEY)){   /* first visit since the change: restore this device's earlier progress, once */
+          try{ const old=JSON.parse(localStorage.getItem(OLDKEY)||'null');
+            if(old && old.max>=1){ maxReached=Math.min(old.max,TOTAL); current=(old.last>=1&&old.last<=maxReached)?old.last:1; localStorage.removeItem(OLDKEY); if(fromOld) localStorage.removeItem('kompas.chromatography.progress.v2'); } }catch(_){} }
+        if(maxReached<TOTAL){   /* a certificate means every page was finished */
+          try{ const r=await authSb.from('certificates').select('serial').eq('student_id',session.user.id).eq('explainer','chromatography').maybeSingle();
+            if(r && r.data) maxReached=TOTAL; }catch(_){} }
+        saveProgress(); }
       show(current); buildToc(); renderCertBox(); updateGate(false);
     }catch(_){ renderCertBox(); }
   });
