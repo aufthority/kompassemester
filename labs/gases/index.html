@@ -362,6 +362,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .ill .chips2{justify-content:center}
 .ill .sim{margin:0}
 #pv-box{max-height:calc(var(--k) * 90px)}
+@media (max-width:759px),(orientation:portrait){.slide #gl-svg{height:calc(var(--k) * 24vh)}}
 .rcard .mini{display:block;width:100%;height:auto;max-height:calc(var(--k) * 4.6em);margin:0 0 .4em;pointer-events:none}
 </style>
 </head>
@@ -591,16 +592,20 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 </section>
 
 <section class="slide" data-sec="laws" data-title="Gay-Lussac’s law">
- <div class="si">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="gl-svg" viewBox="0 0 400 230" role="img" aria-label="Animation: a sealed can is heated from the start temperature to the car temperature. The molecules move faster and hit the walls harder and more often, so the pressure rises"></svg>
+   <figcaption id="gl-cap">Same can, same molecules: only the temperature changes.</figcaption>
+  </figure>
   <div class="txt">
-   <div class="eyebrow">The gas laws · try it</div>
+   <div class="eyebrow">The gas laws · watch, then try it</div>
    <h2>Heat a closed can: <span class="ac">pressure rises.</span></h2>
-   <p>In a rigid container the volume cannot change. So at constant volume and amount, <b>pressure is proportional to absolute temperature</b>: P₁ ÷ T₁ = P₂ ÷ T₂.</p>
+   <p>In a rigid container the volume cannot change. At constant volume and amount, <b>pressure is proportional to absolute temperature</b>: P₁ ÷ T₁ = P₂ ÷ T₂.</p>
    <div class="calc">
     <div class="calc-row"><label>Can pressure at start (atm)<input id="gl-p" type="text" inputmode="decimal" value="8.0"></label><label>Start (°C)<input id="gl-t1" type="text" inputmode="decimal" value="25"></label><label>In a hot car (°C)<input id="gl-t2" type="text" inputmode="decimal" value="60"></label></div>
     <div class="calc-out" id="gl-out" aria-live="polite"></div>
    </div>
-   <p class="small">That is why spray cans say: <i>“Pressurised container: protect from sunlight and do not expose to temperatures exceeding 50 °C.”</i> Many courses call this <b>Gay-Lussac’s law</b>. Chang treats it as a form of Charles’s law; Silberberg calls it Amontons’s law.</p>
+   <p class="small">Hence the spray-can label: <i>“do not expose to temperatures exceeding 50 °C”</i>. Usually called <b>Gay-Lussac’s law</b> (Chang: a form of Charles’s law; Silberberg: Amontons’s law).</p>
   </div>
  </div>
 </section>
@@ -1376,6 +1381,67 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
       }};
   };
 
+  /* ---------- Gay-Lussac animation: a sealed can heats and cools, following the calculator ---------- */
+  const GLA=(function(){
+    const svg=document.getElementById('gl-svg'); if(!svg) return null;
+    const st={P1:8,T1:298,T2:333,t:0,hits:0,rate:0,t0:0};
+    const bg=E('rect',{width:400,height:230,rx:12,fill:'#eef5fb'},svg);
+    const heat=E('g',{},svg);
+    for(let i=0;i<5;i++) E('path',{d:'M'+(70+i*22)+' 222 q-8 -12 0 -22 q8 10 0 22 z',fill:'#e2852b'},heat);
+    const CX0=50,CY0=40,CW=120,CH=150;
+    const can=E('rect',{x:CX0,y:CY0,width:CW,height:CH,rx:14,fill:'#fff',stroke:'#5c665f','stroke-width':3},svg);
+    E('rect',{x:CX0+CW/2-12,y:CY0-14,width:24,height:15,rx:3,fill:'#9aa39d'},svg);
+    txt(svg,CX0+CW/2,CY0-20,'sealed',{'text-anchor':'middle','font-size':10,'font-weight':700,fill:COL.ink});
+    const M=[]; for(let i=0;i<18;i++){ const a=Math.random()*Math.PI*2, s=50+Math.random()*30;
+      M.push({x:CX0+12+Math.random()*(CW-24),y:CY0+12+Math.random()*(CH-24),vx:Math.cos(a)*s,vy:Math.sin(a)*s,e:E('circle',{r:4.5,fill:COL.b},svg)}); }
+    /* thermometer */
+    const TX=215; E('rect',{x:TX,y:40,width:14,height:140,rx:7,fill:'#fff',stroke:'#5c665f','stroke-width':1.6},svg);
+    E('circle',{cx:TX+7,cy:188,r:12,fill:COL.r},svg);
+    const merc=E('rect',{x:TX+3.5,width:7,rx:3.5,fill:COL.r},svg);
+    const tT=txt(svg,TX+7,26,'',{'text-anchor':'middle','font-size':13,'font-weight':800,fill:COL.ink});
+    /* gauge */
+    const GX=318,GY=86,GR=46;
+    E('circle',{cx:GX,cy:GY,r:GR,fill:'#fff',stroke:COL.ink,'stroke-width':2},svg);
+    for(let i=0;i<=8;i++){ const a=(-210+240*i/8)*Math.PI/180; E('line',{x1:fx(GX+(GR-8)*Math.cos(a)),y1:fx(GY+(GR-8)*Math.sin(a)),x2:fx(GX+(GR-2)*Math.cos(a)),y2:fx(GY+(GR-2)*Math.sin(a)),stroke:'#9aa39d','stroke-width':1.5},svg); }
+    const needle=E('line',{x1:GX,y1:GY,stroke:COL.r,'stroke-width':3,'stroke-linecap':'round'},svg);
+    E('circle',{cx:GX,cy:GY,r:4,fill:COL.ink},svg);
+    const tP=txt(svg,GX,GY+GR+22,'',{'text-anchor':'middle','font-size':15,'font-weight':800,fill:COL.r});
+    const tH=txt(svg,GX,GY+GR+42,'',{'text-anchor':'middle','font-size':10,fill:COL.muted});
+    const warn=txt(svg,GX,GY-GR-10,'above 50 °C!',{'text-anchor':'middle','font-size':12,'font-weight':800,fill:COL.r,opacity:0});
+    const cap=document.getElementById('gl-cap');
+    function draw(dt){
+      st.t+=dt; const c=st.t%9;
+      let f=0; if(c<1.2) f=0; else if(c<4.2) f=ease((c-1.2)/3); else if(c<6.6) f=1; else f=1-ease((c-6.6)/2.4);
+      const T=st.T1+(st.T2-st.T1)*f, P=st.P1*T/st.T1, sp=Math.sqrt(T/298);
+      const hot=clamp((T-288)/60,0,1);
+      bg.setAttribute('fill',hot>.5?'#fdf3e6':'#eef5fb'); heat.setAttribute('opacity',(.15+.85*f*(st.T2>st.T1?1:0)).toFixed(2));
+      let h=0;
+      M.forEach(m=>{ m.x+=m.vx*sp*dt; m.y+=m.vy*sp*dt;
+        if(m.x<CX0+8){m.x=CX0+8;m.vx=Math.abs(m.vx);h++;} if(m.x>CX0+CW-8){m.x=CX0+CW-8;m.vx=-Math.abs(m.vx);h++;}
+        if(m.y<CY0+8){m.y=CY0+8;m.vy=Math.abs(m.vy);h++;} if(m.y>CY0+CH-8){m.y=CY0+CH-8;m.vy=-Math.abs(m.vy);h++;}
+        m.e.setAttribute('cx',fx(m.x)); m.e.setAttribute('cy',fx(m.y)); m.e.setAttribute('fill',hot>.5?COL.r:COL.b); });
+      st.hits+=h; can.setAttribute('stroke',h?(hot>.5?COL.r:COL.b):'#5c665f');
+      if(st.t-st.t0>1){ st.rate=Math.round(st.hits/(st.t-st.t0)); st.hits=0; st.t0=st.t; }
+      const lo=Math.min(st.T1,st.T2)-15, hi=Math.max(st.T1,st.T2)+15, mh=12+120*clamp((T-lo)/(hi-lo),0,1);
+      merc.setAttribute('y',fx(180-mh)); merc.setAttribute('height',fx(mh+4));
+      tT.textContent=Math.round(T-273)+' °C = '+Math.round(T)+' K';
+      const Pmax=Math.max(st.P1,st.P1*st.T2/st.T1)*1.25, a=(-210+240*clamp(P/Pmax,0,1))*Math.PI/180;
+      needle.setAttribute('x2',fx(GX+(GR-12)*Math.cos(a))); needle.setAttribute('y2',fx(GY+(GR-12)*Math.sin(a)));
+      tP.textContent=P.toFixed(2)+' atm'; tH.textContent='wall hits: '+st.rate+' per second';
+      warn.setAttribute('opacity',T-273>50?1:0);
+      if(cap) cap.textContent=f>.5?'Hot: faster molecules hit the walls harder and more often, so P rises.':'Same can, same molecules: only the temperature changes.';
+    }
+    let raf=0,last=0;
+    function frame(now){ const host=svg.closest('.slide'); if(!host||!host.classList.contains('active')){ raf=0; return; }
+      const dt=Math.min(.05,(now-last)/1000||0); last=now; draw(dt); raf=requestAnimationFrame(frame); }
+    return {
+      set(P1,T1,T2){ st.P1=P1; st.T1=T1; st.T2=T2; st.t=0; st.t0=0; st.hits=0; if(RMO){ st.t=5; st.t0=5; draw(0); } },
+      start(){ if(RMO){ st.t=5; st.t0=5; draw(0); return; } if(raf) return; st.t0=st.t; st.hits=0; last=performance.now(); raf=requestAnimationFrame(frame); },
+      still(){ st.t=5; st.t0=5; st.hits=0; draw(0); }
+    };
+  })();
+  if(GLA) GLA.still();
+
   /* ---------- Gay-Lussac: spray can in a hot car (shows the °C mistake) ---------- */
   (function(){
     const p=document.getElementById('gl-p'), a=document.getElementById('gl-t1'), b=document.getElementById('gl-t2'), o=document.getElementById('gl-out');
@@ -1384,6 +1450,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
       const P1=num(p.value), t1=num(a.value), t2=num(b.value);
       if(!(P1>0)||isNaN(t1)||isNaN(t2)||t1<=-273||t2<=-273){ o.className='calc-out'; o.textContent='Enter a pressure and two temperatures.'; return; }
       const T1=t1+273, T2=t2+273, P2=P1*T2/T1;
+      if(GLA) GLA.set(P1,T1,T2);
       o.className='calc-out'+(t2>50?' fail':'');
       o.innerHTML='P₂ = '+P1+' × ('+T2+' K ÷ '+T1+' K) = <b>'+P2.toFixed(2)+' atm</b>'+(t2>50?' Above 50 °C: outside the label’s limit.':'')+
         (t1>0&&t2>0?'<br><span class="small">Wrong way, in °C: '+P1+' × '+t2+' ÷ '+t1+' = '+(P1*t2/t1).toFixed(1)+' atm. Far too high, because °C does not start at zero energy.</span>':'');
@@ -1551,6 +1618,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     if(s.querySelector('#z-svg')) drawZ();
     if(s.querySelector('#kmt-svg') && window.__kmtStart) window.__kmtStart();
     if(s.querySelector('svg.mini') && window.__miniStart) window.__miniStart();
+    if(s.querySelector('#gl-svg') && GLA) GLA.start();
   }
 
 
