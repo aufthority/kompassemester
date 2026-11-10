@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Reference Standards and GLP, Explained — Aufthority</title>
+<script defer src="https://cloud.umami.is/script.js"
+  data-website-id="f79c60f1-f9e7-4170-a979-f357ba756a18"></script>
+<meta name="description" content="Reference standards, good laboratory practice, lab safety and core QC technique for pharmacy students, with a virtual QC lab built on a real chlorpheniramine method.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="article">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="Reference Standards and GLP, Explained">
+<meta property="og:description"  content="Right standard, right lab, right record: reference standards and good laboratory practice in pharmaceutical QC.">
+<meta property="og:url"          content="https://kompassemester.aufthority.com/labs/qc-practice/">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale"       content="en_MY">
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:site"        content="@theaufthority">
+<meta name="twitter:title"       content="Reference Standards and GLP, Explained">
+<meta name="twitter:description" content="Reference standards and good laboratory practice for pharmacy students.">
+<meta name="twitter:image"       content="https://www.aufthority.com/preview_v2.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<script src="../shared/periodic-table.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#6f7771;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#9a6a1c;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;--k:1;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;overflow:hidden;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+b,strong{color:var(--ink);font-weight:700}
+
+#shell{height:100vh;height:var(--app-h,100dvh);max-width:1120px;margin:0 auto;padding:0 16px;display:flex;flex-direction:column}
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 8px}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-kompas{text-decoration:none;color:var(--accent-dark);border-color:var(--g-line);background:var(--g-bg)}
+@media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
+.icon-btn{background:#fff;border:1px solid var(--rule);color:var(--body);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;cursor:pointer}
+#progress-label{font-size:.78rem;color:var(--muted);min-width:44px;text-align:right}
+#progress-track{flex:0 0 3px;background:var(--rule);border-radius:3px}
+#progress-fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.slide{position:absolute;inset:0;display:none;overflow:hidden;font-size:calc(var(--k) * 16px)}
+.slide.active{display:block}
+.si{height:100%;display:flex;flex-direction:column;justify-content:center;gap:.7em;padding:.8em 0 .4em;max-width:720px;margin:0 auto}
+.si.has-ill{max-width:none}
+.ill{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;align-items:stretch;min-height:0}
+.ill svg{width:100%;height:calc(var(--k) * 29vh);height:calc(var(--k) * 29dvh);display:block}
+.ill figcaption{font-size:.72em;color:var(--muted);text-align:center;margin-top:.25em}
+.txt{flex:0 0 auto;min-width:0}
+@media (min-width:760px) and (orientation:landscape){
+  .slide{font-size:calc(var(--k) * 17px)}
+  .si.has-ill{flex-direction:row;align-items:center;gap:2.4em;padding:1em 0}
+  .si.has-ill .ill{flex:0 0 46%}
+  .si.has-ill .ill svg{height:auto;max-height:calc(var(--k) * 64vh);max-height:calc(var(--k) * 64dvh)}
+  .si.has-ill .txt{flex:1 1 auto}
+}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.45em}
+h1,h2{color:var(--ink);font-weight:800;line-height:1.08;letter-spacing:-.025em;margin-bottom:.45em}
+h1{font-size:2.05em}
+h2{font-size:1.65em}
+@media (min-width:760px){h1{font-size:2.4em}h2{font-size:1.9em}}
+h1 .ac,h2 .ac{color:var(--accent)}
+p{margin-bottom:.6em;font-size:.97em}
+.small{font-size:.82em;color:var(--muted)}
+.cite{font-size:.78em;color:var(--muted);white-space:nowrap}
+.cite a{color:var(--muted)}
+.callout{border-left:3px solid var(--accent);background:var(--g-bg);padding:.5em .85em;margin:.55em 0;font-size:.92em;border-radius:0 8px 8px 0}
+.callout.warn{border-color:var(--red);background:var(--r-bg)}
+.callout.note{border-color:var(--orange);background:var(--o-bg)}
+.pill-list{display:flex;flex-wrap:wrap;gap:.4em;margin:.55em 0}
+.pill{background:var(--g-bg);color:var(--accent-dark);padding:.3em .8em;font-size:.82em;font-weight:500;border-radius:100px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:.5em;margin:.55em 0}
+.tile{border:1px solid var(--rule);border-radius:var(--radius);padding:.55em .75em}
+.tile .n{font-size:1.3em;font-weight:800;color:var(--accent);line-height:1.15;letter-spacing:-.02em;margin-bottom:.15em}
+.tile .l{font-size:.84em;color:var(--body)}
+.steps{list-style:none;margin:.55em 0;display:flex;flex-direction:column;gap:.45em}
+.steps li{display:flex;gap:.65em;align-items:flex-start;font-size:.92em}
+.steps .n{flex:0 0 1.65em;height:1.65em;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82em;margin-top:.05em}
+.data-table{width:100%;border-collapse:collapse;font-size:.84em;margin:.45em 0}
+.data-table th,.data-table td{border-bottom:1px solid var(--rule);padding:.4em .55em;text-align:left;vertical-align:top}
+.data-table th{font-weight:700;color:var(--muted);font-size:.8em;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid var(--rule)}
+.data-table td:first-child{color:var(--ink);font-weight:500}
+.data-table tr.hl td{background:var(--g-bg)}
+.map3{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.55em 0}
+.box{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .75em;font-size:.86em}
+.box h3{font-size:1.1em;font-weight:800;color:var(--accent);margin-bottom:.15em}
+.box .q{font-size:.9em;color:var(--muted);margin-bottom:.3em}
+.box ul{padding-left:1.1em}
+
+/* HTML diagrams */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.4em;margin:.6em 0}
+.node{border:1.5px solid var(--ink);border-radius:8px;padding:.35em .65em;font-size:.84em;font-weight:500;color:var(--ink);background:#fff;text-align:center}
+.node small{display:block;font-weight:400;color:var(--muted);font-size:.85em}
+.node.g{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.node.o{border-color:var(--orange);background:var(--o-bg)}
+.node.r{border-color:var(--red);background:var(--r-bg)}
+.node.ghost{border-style:dashed;color:var(--muted)}
+.arr{color:var(--orange);font-weight:800;font-size:1em}
+.node-group{display:flex;align-items:center;gap:.35em}
+.node-group .or{color:var(--muted);font-size:.84em}
+/* flows: one straight row when it fits, otherwise a snake (→ row, turn down, ← row, turn down …) */
+.flow.row{flex-wrap:nowrap}
+.flow.row > *{flex:0 0 auto}
+.flow.snake{display:grid;align-items:stretch;gap:0}
+.flow.snake .cell{display:flex;min-width:0}
+.flow.snake .cell > .node{flex:1;display:flex;flex-direction:column;justify-content:center}
+.flow.snake .cell > .node-group{flex:1}
+.flow.snake .cell > .node-group > .node{flex:1}
+.flow.snake .arr{align-self:center;text-align:center;line-height:1}
+.flow.snake .arr.down{padding:.2em 0}
+.lane{display:grid;grid-template-columns:8.5em 1fr;gap:.6em;align-items:center;padding:.45em 0;border-bottom:1px solid var(--rule)}
+.lane:last-of-type{border-bottom:none}
+.lane .lname{font-weight:800;color:var(--ink);font-size:.9em;line-height:1.2}
+.lane .lname small{display:block;font-weight:500;color:var(--muted);font-size:.8em}
+.lane .flow{margin:0}
+.stack{display:flex;flex-direction:column;gap:.4em;margin:.6em 0}
+.layer{display:grid;grid-template-columns:2.2em 1fr;gap:.6em;align-items:center;border:1px solid var(--g-line);background:var(--g-bg);border-radius:var(--radius);padding:.5em .7em;font-size:.88em}
+.layer .ln{width:2.2em;height:2.2em;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+.layer > div > b:first-child{display:block;margin-bottom:.1em}
+.htl{display:grid;grid-template-columns:repeat(4,1fr);gap:.6em;margin:.6em 0}
+.htl .ev{border-top:3px solid var(--accent);padding-top:.4em;font-size:.86em}
+.htl .yr{font-weight:800;color:var(--accent);font-size:1.25em;letter-spacing:-.02em;display:block}
+@media (max-width:520px){.htl{grid-template-columns:1fr 1fr}.map3{grid-template-columns:1fr}.lane{grid-template-columns:1fr;gap:.25em}}
+.eq{display:flex;align-items:center;justify-content:center;gap:.6em;flex-wrap:wrap;margin:.6em 0}
+.eq .term{text-align:center;font-size:.82em;color:var(--ink);font-weight:500}
+.eq .term svg{width:5.2em;height:auto;display:block;margin:0 auto .25em}
+.eq .op{font-size:1.6em;font-weight:800;color:var(--orange)}
+.forms{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.6em 0}
+.form{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .7em;font-size:.86em}
+.form svg{width:100%;height:3.4em;display:block;margin-bottom:.3em}
+.form h3{font-size:1.05em;font-weight:800;color:var(--ink);margin-bottom:.1em}
+@media (max-width:520px){.forms{grid-template-columns:1fr}.form{display:grid;grid-template-columns:4.5em 1fr;gap:.6em;align-items:center}.form svg{height:2.6em;margin:0}}
+
+/* interactions */
+.toggle-wrap{border:1px solid var(--rule);border-radius:var(--radius);margin:.45em 0;overflow:hidden}
+.toggle-btn{width:100%;background:#fff;border:none;color:var(--ink);font:600 .92em 'DM Sans',sans-serif;text-align:left;padding:.6em .85em;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:.6em}
+.toggle-btn .hint{font-weight:600;color:var(--accent);font-size:.8em;white-space:nowrap}
+.toggle-btn .hint::after{content:" +"}
+.toggle-wrap.open .toggle-btn .hint::after{content:" −"}
+.toggle-wrap.seen{border-color:var(--g-line)}
+.toggle-body{display:none;padding:0 .85em .7em;font-size:.9em}
+.toggle-wrap.open .toggle-body{display:block}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5em,1fr));gap:.45em;margin:.55em 0}
+.rcard{border:1px solid var(--rule);border-radius:var(--radius);background:#fff;text-align:left;padding:.55em .7em;cursor:pointer;font:400 .84em 'DM Sans',sans-serif;color:var(--body);display:block}
+.rcard .rt{font-weight:800;color:var(--ink);display:flex;justify-content:space-between;gap:.4em}
+.rcard .rt::after{content:"Tap";font-weight:600;font-size:.8em;color:var(--accent)}
+.rcard .rb{display:none;margin-top:.3em}
+.rcard.seen{border-color:var(--accent);background:var(--g-bg)}
+.rcard.seen .rt::after{content:""}
+.rcard.seen .rb{display:block}
+.rcard svg{width:100%;height:3.2em;display:block;margin:.2em 0}
+.choice-q{font-weight:700;color:var(--ink);font-size:.95em;margin-bottom:.45em}
+.choices{display:flex;flex-wrap:wrap;gap:.4em}
+.choice{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:500 .88em 'DM Sans',sans-serif;padding:.45em .85em;border-radius:100px;cursor:pointer}
+.choice:hover{border-color:var(--ink)}
+.choice.right{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.choice.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red);text-decoration:line-through}
+.feedback{display:none;font-size:.88em;margin-top:.5em;padding:.45em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.feedback.show{display:block}
+.stepper .choice-set{display:none}
+.stepper .choice-set.cur{display:block}
+.step-count{font-size:.75em;font-weight:700;color:var(--eyebrow);letter-spacing:.08em;margin-bottom:.3em}
+.next-q{margin-top:.55em;background:#fff;border:1.5px solid var(--ink);border-radius:100px;font:600 .84em 'DM Sans',sans-serif;padding:.38em .9em;cursor:pointer;display:none}
+.choice-set.done .next-q{display:inline-block}
+.calc{border:1px solid var(--rule);border-radius:var(--radius);padding:.65em .75em;margin:.55em 0}
+.calc-row{display:flex;gap:.6em;margin-bottom:.5em;flex-wrap:wrap}
+.calc label{font-size:.76em;font-weight:600;color:var(--muted);display:flex;flex-direction:column;gap:.2em;flex:1;min-width:8em}
+.calc input,.calc select{font:500 1.05em 'DM Sans',sans-serif;padding:.32em .45em;border:1px solid var(--rule);border-radius:6px;background:#fff;color:var(--ink);width:100%}
+.calc-out{font-size:.9em;padding:.45em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.calc-out.fail{border-color:var(--red);background:var(--r-bg)}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:600 .84em 'DM Sans',sans-serif;padding:.4em .95em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.range{width:100%;accent-color:var(--accent);margin:.4em 0}
+.scale-lbl{display:flex;justify-content:space-between;font-size:.74em;color:var(--muted);font-weight:600}
+.coa{display:flex;flex-direction:column;gap:.3em;margin:.45em 0}
+.coa-row{display:grid;grid-template-columns:1fr 1.3fr 4.8em;gap:.5em;align-items:center;background:#fff;border:1px solid var(--rule);border-radius:8px;color:var(--ink);font:400 .82em 'DM Sans',sans-serif;text-align:left;padding:.42em .65em;cursor:pointer}
+.coa-row b{font-weight:700}
+.coa-row .v{text-align:right;font-weight:700;color:var(--muted)}
+.coa-row.pass{border-color:var(--accent)}.coa-row.pass .v{color:var(--accent)}
+.coa-row.fail{border-color:var(--red);background:var(--r-bg)}.coa-row.fail .v{color:var(--red)}
+.coa-row.next{border-color:var(--orange);background:var(--o-bg)}.coa-row.next .v{color:var(--orange)}
+#coa-exp{min-height:2.7em;font-size:.86em;border-left:3px solid var(--rule);padding:.35em .65em}
+.coa-decision{display:none;margin-top:.5em}
+.coa-decision.show{display:block}
+.cards{display:flex;flex-direction:column;gap:.4em;margin:.55em 0}
+.card{display:flex;gap:.75em;border:1px solid var(--rule);border-radius:var(--radius);padding:.5em .75em;font-size:.88em}
+.card .cn{font-size:1.35em;font-weight:800;color:var(--accent);line-height:1}
+.madeby{border-top:1px solid var(--rule);padding-top:.6em;margin-top:.3em}
+.madeby p{font-size:.82em;color:var(--muted);margin-bottom:.45em}
+.madeby p b,.madeby p b a{color:var(--ink)}
+.socials{display:flex;flex-wrap:wrap;gap:.35em}
+.socials a{font-size:.8em;font-weight:600;color:var(--accent-dark);background:var(--g-bg);padding:.28em .75em;border-radius:100px;text-decoration:none}
+.socials a:hover{background:var(--g-line)}
+.score{font-size:1.25em;font-weight:800;color:var(--accent);margin-top:.5em}
+.pulse{animation:pulse 1s ease 2}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,130,31,0)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.45)}}
+
+#bottom{flex:0 0 auto;padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+#gate-hint{font-size:.78rem;color:var(--muted);text-align:center;min-height:1.2em;margin-bottom:5px}
+#gate-hint.alert{color:var(--orange);font-weight:600}
+#gate-hint button{background:none;border:none;color:var(--accent);text-decoration:underline;font:inherit;font-weight:600;cursor:pointer;padding:0}
+#nav-wrap{display:flex;justify-content:space-between;gap:10px}
+.nav-btn{flex:1;max-width:200px;background:#fff;border:1.5px solid var(--ink);color:var(--ink);font:700 .92rem 'DM Sans',sans-serif;padding:10px 14px;border-radius:100px;cursor:pointer}
+#btn-next{background:var(--ink);color:#fff;margin-left:auto}
+#btn-next.locked{background:#fff;color:var(--muted);border-color:var(--rule)}
+.nav-btn:disabled{opacity:.3;cursor:default}
+footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
+
+.overlay{display:none;position:fixed;inset:0;z-index:50;background:rgba(20,30,25,.35);padding:16px;overflow-y:auto}
+.overlay.open{display:block}
+.panel{max-width:620px;margin:16px auto;background:#fff;border-radius:14px;padding:18px 20px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.vid-row{margin:.55em 0 .2em}
+.vid-btn{display:inline-flex;align-items:center;gap:.45em}
+.vid-btn span{font-size:.8em}
+#video-overlay .panel{max-width:880px}
+.vid-frame{position:relative;width:100%;aspect-ratio:16/9;background:#111;border-radius:10px;overflow:hidden}
+.vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vid-note{margin:.6em 0 0;font-size:.85em;color:var(--muted,#5b6660)}
+.panel-head h3{font-weight:800;color:var(--ink);font-size:1.3rem;letter-spacing:-.02em}
+.toc-note{font-size:.82rem;color:var(--muted);margin-bottom:8px}
+.toc{list-style:none}
+.toc li{border-bottom:1px solid var(--rule)}
+.toc button{background:none;border:none;color:var(--ink);font:400 .9rem 'DM Sans',sans-serif;padding:7px 0;width:100%;text-align:left;cursor:pointer;display:flex;gap:10px}
+.toc button span{color:var(--muted);min-width:22px}
+.toc button.cur{color:var(--accent);font-weight:700}
+.toc .sec{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;padding:12px 0 3px;border:none}
+.refs{padding-left:20px;font-size:.82rem;color:var(--body)}
+.refs li{margin-bottom:7px;word-break:break-word}
+
+/* ---------- SVG diagram + chart styling ---------- */
+.ln{fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ln.thin{stroke-width:1.2}
+.ln.g{stroke:var(--accent)}.ln.r{stroke:var(--red)}.ln.o{stroke:var(--orange)}.ln.b{stroke:var(--blue)}.ln.m{stroke:#a3aaa5}
+.dash{stroke-dasharray:4 4}
+.fg{fill:var(--g-bg)}.fgs{fill:var(--accent)}.fb{fill:var(--b-bg)}.fr{fill:var(--r-bg)}.frs{fill:var(--red)}.fo{fill:var(--o-bg)}.fos{fill:var(--orange)}.fw{fill:#fff}.fk{fill:var(--ink)}.fgr{fill:#eef0ee}.fpow{fill:#d9d4c7}
+.tx{font-family:'DM Sans',sans-serif;font-size:12px;fill:var(--body)}
+.tx.s{font-size:10.5px;fill:var(--muted)}
+.tx.b{font-weight:700;fill:var(--ink)}
+.tx.g{fill:var(--accent-dark);font-weight:700}.tx.r{fill:var(--red);font-weight:700}.tx.o{fill:#a85f10;font-weight:700}.tx.bl{fill:var(--blue);font-weight:700}
+.tx.mid{text-anchor:middle}.tx.end{text-anchor:end}
+.bar{fill:var(--accent)}.bar.hl{fill:var(--red)}
+.axis{stroke:#c9cdca;stroke-width:1;fill:none}
+.grid{stroke:#eceeec;stroke-width:1}
+
+/* animations run only on the active slide, restart on every visit */
+.slide.active .draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.1s ease-out forwards;animation-delay:var(--d,0s)}
+.slide.active .fade{opacity:0;animation:fadeup .5s ease-out forwards;animation-delay:var(--d,.3s)}
+.slide.active .stagger > *{opacity:0;animation:fadeup .45s ease-out forwards;animation-delay:var(--d,0s)}
+.slide.active .grow-x{transform-box:fill-box;transform-origin:left center;animation:growx .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
+.slide.active .grow-y{transform-box:fill-box;transform-origin:center bottom;animation:growy .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
+.slide.active .updown{animation:updown 2s ease-in-out infinite}
+.slide.active .spin{transform-box:view-box;animation:spin 6s linear infinite}
+.slide.active .spin-r{transform-box:view-box;animation:spin 6s linear infinite reverse}
+.slide.active .drop{animation:drop 2.4s ease-in infinite}
+.slide.active .bounce{animation:bounce 1.2s ease-in-out infinite}
+.slide.active .cyc{animation:cyc 6s infinite;animation-delay:var(--d,0s)}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeup{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes growx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes growy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes updown{0%,100%{transform:translateY(0)}50%{transform:translateY(22px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes drop{0%{transform:translateY(0);opacity:0}10%{opacity:1}80%{opacity:1}100%{transform:translateY(46px);opacity:0}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes cyc{0%,22%{opacity:1}26%,100%{opacity:.28}}
+
+/* last resort when a page cannot fit at a readable size: the page body scrolls,
+   the Back/Next bar stays pinned, and a fade hints at more below */
+.slide.scrolly{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.slide.scrolly .si{height:auto;min-height:100%;justify-content:flex-start}
+#stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;pointer-events:none;background:linear-gradient(rgba(255,255,255,0),#fff);opacity:0;transition:opacity .2s}
+#stage.more::after{opacity:1}
+.ph-step.scrolly{overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ph-step.scrolly .ph-in{height:auto;min-height:100%;justify-content:flex-start}
+@media (max-height:700px){footer{display:none}}
+@media (prefers-reduced-motion: reduce){
+  .slide.active *{animation:none!important;opacity:1!important;stroke-dashoffset:0!important;transform:none!important}
+}
+
+
+/* ---------- additions for this explainer ---------- */
+.pt-open{display:inline-flex;align-items:center;gap:.45em;background:#fff;border:1.5px solid var(--accent);color:var(--accent-dark);font:700 .84rem 'DM Sans',sans-serif;padding:.42em .95em;border-radius:100px;cursor:pointer;margin:.1em 0 .5em}
+.pt-open svg{width:1.05em;height:1.05em}
+.toggle-wrap.opt .toggle-btn .tag{font-size:.7em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--eyebrow);margin-right:.5em}
+.toggle-wrap.opt{border-style:dashed}
+.clo{display:inline-block;font-size:.72em;font-weight:700;color:var(--accent-dark);background:var(--g-bg);border-radius:100px;padding:.1em .55em;margin-left:.3em;vertical-align:.1em}
+.sim{border:1px solid var(--rule);border-radius:var(--radius);padding:.55em .75em;margin:.5em 0}
+.sim .range{margin:.2em 0}
+.sim-out{font-size:.88em;margin-top:.3em}
+.sim svg{width:100%;height:auto;display:block}
+.chips2{display:flex;flex-wrap:wrap;gap:.3em;margin:.3em 0}
+.chip2{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .8em 'DM Sans',sans-serif;padding:.3em .7em;border-radius:100px;cursor:pointer}
+.chip2.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.plates{display:flex;gap:.6em;justify-content:center;margin:.3em 0}
+.plates svg{width:7.5em;height:auto}
+.cmp td:first-child{white-space:nowrap}
+/* locked contents rows and certificate */
+.toc button.lockd{color:var(--muted);opacity:.45;cursor:default}
+.cert-img{display:block;width:100%;max-width:560px;height:auto;border:1px solid var(--rule);border-radius:8px;margin:.5em 0}
+.cert-dl{display:inline-block;text-decoration:none}
+/* animations */
+.anim{display:flex;flex-direction:column;gap:.3em;min-width:0}
+.a-tabs{display:flex;flex-wrap:wrap;gap:.3em;justify-content:center}
+.a-ui{display:flex;align-items:center;gap:.4em}
+.a-ui button{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .78em 'DM Sans',sans-serif;padding:.32em .85em;cursor:pointer;white-space:nowrap}
+.a-ui .a-play{background:var(--ink);color:#fff;min-width:7.2em}
+.a-bar{flex:1;height:4px;background:var(--rule);border-radius:4px;overflow:hidden}
+.a-fill{height:100%;width:0;background:var(--accent)}
+.anim-cap{font-size:.82em;min-height:4.1em;margin:0;line-height:1.4;color:var(--ink)}
+.ill .anim-svg{background:#fbfcfb;border-radius:12px}
+@media (max-height:700px){.anim-cap{min-height:3em}}
+/* embedded lab */
+.si.lab-si{justify-content:flex-start;gap:.35em;max-width:860px}
+.lab-head{flex:0 0 auto}
+.lab-head h2{margin-bottom:.15em}
+.lab-head p{margin-bottom:.2em}
+.lab-frame{flex:1 1 auto;min-height:300px;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#fff}
+.lab-frame iframe{width:100%;height:100%;border:0;display:block}
+.lab-launch{display:none;height:100%;flex-direction:column;align-items:center;justify-content:center;gap:.6em;padding:1em;text-align:center;font-size:.92em}
+.lab-frame.launch iframe{display:none}
+.lab-frame.launch .lab-launch{display:flex}
+.lab-launch a{background:var(--accent);color:#fff;text-decoration:none;font-weight:700;padding:.6em 1.3em;border-radius:100px}
+
+/* ---------- additions for the QC practice explainer ---------- */
+.feedback.miss{border-color:var(--orange);background:var(--o-bg)}
+.choice.wrong{cursor:default}
+.given-box{background:#f6f7f5;border-radius:8px;padding:.4em .7em;margin:.2em 0 .5em;line-height:1.55}
+.given-box b{white-space:nowrap}
+.forms2{grid-template-columns:repeat(2,1fr)}
+@media (max-width:520px){.forms2{grid-template-columns:1fr}.forms2 .form{display:block}}
+.sim .chips2{justify-content:center}
+.choice-set + .choice-set{margin-top:0}
+.lab-status{font-size:.82em;font-weight:700;color:#a85f10;margin:.15em 0 0}
+.lab-status.ok{color:var(--accent-dark)}
+.rgrid.ghs{grid-template-columns:repeat(auto-fit,minmax(8em,1fr))}
+.rgrid.ghs .rcard svg{height:3.4em}
+.layer .clo{margin-left:.2em}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ar-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#c0392b"/></marker>
+    <marker id="ar-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#d9821f"/></marker>
+    <pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#5a2a08" stroke-width="1.6" stroke-opacity=".6"/></pattern>
+  </defs>
+</svg>
+<script>
+/* Size the page to the visible screen. 100vh/100dvh are unreliable on many
+   Android and in-app browsers (they include the area behind the toolbar). */
+(function(){
+  function setH(){ document.documentElement.style.setProperty('--app-h', window.innerHeight + 'px'); }
+  setH();
+  window.addEventListener('resize', setH);
+  window.addEventListener('orientationchange', function(){ setTimeout(setH, 250); });
+  window.addEventListener('pageshow', setH);
+})();
+</script>
+<div id="shell">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <a class="icon-btn back-kompas" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+      <button class="icon-btn" id="btn-toc" data-umami-event="open-contents">Contents</button>
+      <span id="progress-label">1 / 42</span>
+    </div>
+  </nav>
+  <div id="progress-track"><div id="progress-fill"></div></div>
+
+  <div id="stage">
+
+<!-- ================= INTRODUCTION ================= -->
+
+<section class="slide active" data-sec="intro" data-title="Start here">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 230" role="img" aria-label="The dissolution formula from the chlorpheniramine STP, with the standard's weight and potency highlighted">
+    <rect x="10" y="20" width="380" height="104" rx="12" class="fgr"/>
+    <text class="tx b" x="24" y="44">% dissolved =</text>
+    <text class="tx" x="24" y="70">(A<tspan font-size="8" dy="3">spl</tspan><tspan dy="-3"> ÷ A</tspan><tspan font-size="8" dy="3">std</tspan><tspan dy="-3">) ×</tspan></text>
+    <rect class="fade" x="122" y="54" width="94" height="24" rx="6" fill="#fdf3e6" stroke="#d9821f" style="--d:.6s"/>
+    <text class="tx o" x="128" y="70">(Std Wt ÷ 100)</text>
+    <text class="tx" x="222" y="70">× (4 ÷ 100) × 500</text>
+    <rect class="fade" x="22" y="84" width="74" height="24" rx="6" fill="#fdf3e6" stroke="#d9821f" style="--d:.9s"/>
+    <text class="tx o" x="28" y="100">× (P ÷ 100)</text>
+    <text class="tx" x="102" y="100">× (100 ÷ 4)</text>
+    <path class="ln o draw" d="M170 82 C175 140 150 150 120 166" marker-end="url(#ar-o)" style="--d:1.2s"/>
+    <path class="ln o draw" d="M60 110 C60 140 80 156 100 166" marker-end="url(#ar-o)" style="--d:1.3s"/>
+    <g class="fade" style="--d:1.6s">
+     <rect x="90" y="166" width="220" height="50" rx="10" class="fg"/>
+     <text class="tx g mid" x="200" y="187">the reference standard</text>
+     <text class="tx s mid" x="200" y="205">weighed with care, potency known, stored right</text>
+    </g>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Start here</div>
+   <h1>Every result rests <span class="ac">on a standard.</span></h1>
+   <p>In your chlorpheniramine STP, every result is worked out against a <b>working standard</b> (WS): its weight (Std Wt) and its potency (P).</p>
+   <p>If the standard was stored badly, weighed carelessly or recorded wrongly, every result is wrong, and nobody may notice. This chapter covers how labs prevent that.</p>
+   <p class="small">Written for Diploma in Pharmacy students. Use Next to move through the pages. A periodic table is in Contents.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="intro" data-title="What you will learn">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Map of this chapter</div>
+   <h2>Right standard, right lab, <span class="ac">right record.</span></h2>
+   <div class="stack stagger">
+    <div class="layer"><div class="ln">1</div><div><b>Reference standards <span class="clo">CLO1</span> <span class="clo">CLO3</span></b>What they are, their types, and how they are filled, packaged and stored.</div></div>
+    <div class="layer"><div class="ln">2</div><div><b>Good laboratory practice <span class="clo">CLO1</span> <span class="clo">CLO3</span></b>GLP, and how a QC lab manages personnel, premises, equipment and documents.</div></div>
+    <div class="layer"><div class="ln">3</div><div><b>Safety and technique <span class="clo">CLO2</span> <span class="clo">CLO3</span></b>Working safely with chemicals, weighing and diluting correctly.</div></div>
+   </div>
+   <p class="small">One virtual lab, <b>QC Lab Day</b>, puts it all together. Main references: NPRA, the PIC/S GMP Guide used in Malaysia, OECD GLP, WHO guidance and ISO standards.</p>
+  </div>
+ </div>
+</section>
+
+<!-- ================= REFERENCE STANDARDS ================= -->
+
+<section class="slide" data-sec="rs" data-title="What is a reference standard?">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Reference standards</div>
+   <h2>A substance you can <span class="ac">trust completely.</span></h2>
+   <p>The USP describes reference standards as highly characterised substances used to confirm the identity, strength, quality and purity of medicines.</p>
+   <p>In short: a sample of the drug whose identity and content are <b>known and documented</b>, so you can compare your sample with it.</p>
+   <div class="callout">Example: to prove a Panadol tablet contains paracetamol, run it by HPLC beside a <b>paracetamol reference standard</b>. Same retention time: same compound.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="rs" data-title="What standards are used for">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Reference standards · tap each card</div>
+   <h2>Five jobs <span class="ac">in the QC lab.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Identification</span><span class="rb">Same Rf, retention time or IR spectrum as the standard.</span></button>
+     <button class="rcard"><span class="rt">Assay</span><span class="rb">How much drug is present, worked out against the standard’s known content.</span></button>
+     <button class="rcard"><span class="rt">Limit tests</span><span class="rb">Impurities and related substances compared with a standard spot or peak.</span></button>
+     <button class="rcard"><span class="rt">System suitability</span><span class="rb">Proves the HPLC or GC system is working before results count.</span></button>
+     <button class="rcard"><span class="rt">Physical tests</span><span class="rb">For example melting point, checked against the standard.</span></button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="rs" data-title="Primary and secondary">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Reference standards</div>
+   <h2>The official one, <span class="ac">and the everyday one.</span></h2>
+   <div class="tiles">
+    <div class="tile"><div class="n">Primary</div><div class="l">Widely accepted as right for its purpose. Its assigned content is used <b>without</b> comparing it with anything else. Example: a pharmacopoeial standard (CRS).</div></div>
+    <div class="tile"><div class="n">Secondary</div><div class="l">Its content is assigned by <b>comparison with a primary</b> standard. Also called a working standard (WS). Used for routine tests.</div></div>
+   </div>
+   <p>Why both? Primary standards are expensive and scarce. Labs buy a little, then qualify a larger batch of their own working standard against it.</p>
+   <p class="small">Source: WHO TRS 943 Annex 3 (glossary); PIC/S GMP Guide 6.20.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="rs" data-title="Types of standard">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Reference standards · tap each card</div>
+   <h2>Who makes them, <span class="ac">and how far you trust them.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Pharmacopoeial (CRS)</span><span class="rb">Issued by the BP, Ph. Eur. (EDQM) or USP for their monographs. The first choice as primary standards.</span></button>
+     <button class="rcard"><span class="rt">WHO ICRS</span><span class="rb">International Chemical Reference Substances for The International Pharmacopoeia.</span></button>
+     <button class="rcard"><span class="rt">Certified reference material</span><span class="rb">Made by a producer accredited to ISO 17034, with a certificate giving the value and its uncertainty.</span></button>
+     <button class="rcard"><span class="rt">Working standard (in-house)</span><span class="rb">Your own batch, qualified against a primary standard. Used day to day.</span></button>
+   </div>
+   <div class="callout">GMP: if a pharmacopoeial standard exists, use it as the primary standard unless there is a good reason not to. Secondary standards are allowed once their traceability to the primary is shown and documented. <span class="cite">(PIC/S GMP 6.20)</span></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="rs" data-title="Qualifying a working standard">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Reference standards</div>
+   <h2>Where your <span class="ac">“P” comes from.</span></h2>
+   <div class="flow">
+    <div class="node g">Primary CRS<small>content accepted as stated</small></div>
+    <div class="node">Candidate batch<small>pure drug substance</small></div>
+    <div class="node">Assay against the CRS<small>several replicates</small></div>
+    <div class="node g">Working standard<small>potency assigned, e.g. 99.6%</small></div>
+    <div class="node">Your result<small>uses that P</small></div>
+   </div>
+   <p>The assigned potency is the <b>P</b> in your STP formula. The working standard is re-tested on a schedule. If the primary batch is replaced, the working standard must be <b>recalibrated</b> against the new one. <span class="cite">(WHO TRS 943, B.6)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="rs" data-title="Check: standards">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Three quick <span class="ac">questions.</span></h2>
+   <p class="small">Choose the right answer to continue. A wrong choice tells you what to think about.</p>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">A working standard’s potency was assigned by assaying it against the Ph. Eur. CRS. It is a:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="A primary standard is used without comparison. This one got its value by comparison.">Primary standard</button><button class="choice" data-v="b">Secondary standard</button><button class="choice" data-v="c" data-fb="A CRM comes from an ISO 17034 producer with a certificate. This one was made in-house.">Certified reference material</button></div>
+      <div class="feedback">Secondary: its value comes from comparison with a primary standard.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">Which job checks that an HPLC system is working before results are accepted?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Identification asks “is it the right drug?”. The question is about the system itself.">Identification</button><button class="choice" data-v="b" data-fb="An assay measures the sample. The question is about checking the system first.">Assay</button><button class="choice" data-v="c">System suitability</button></div>
+      <div class="feedback">System suitability: no result counts until it passes.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">The lab receives a new batch of the primary CRS. What happens to the working standard?</div>
+      <div class="choices"><button class="choice" data-v="a">Recalibrate it against the new CRS batch</button><button class="choice" data-v="b" data-fb="Its value was traced to the old batch. WHO says it must be recalibrated against the new one.">Nothing: keep its potency</button><button class="choice" data-v="c" data-fb="It does not have to be thrown away. Its value is checked against the new batch.">Discard it</button></div>
+      <div class="feedback">Its value depends on the primary, so it is recalibrated against the new batch.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= FILLING, PACKAGING, STORAGE ================= -->
+
+<section class="slide" data-sec="rh" data-title="Filling and packaging">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 210" role="img" aria-label="An amber glass ampoule and a single-use vial, protected from moisture, light and oxygen">
+    <g class="fade" style="--d:.1s"><path d="M70 40 h20 v18 q14 8 14 26 v80 q0 14 -14 14 h-20 q-14 0 -14 -14 v-80 q0 -18 14 -26 z" fill="#b5651d" opacity=".85" stroke="#7a3f0f" stroke-width="2"/><rect x="66" y="110" width="28" height="40" rx="3" fill="#fff" opacity=".9"/><text class="tx s mid" x="80" y="134">CRS</text><text class="tx b mid" x="80" y="200">ampoule</text></g>
+    <g class="fade" style="--d:.3s"><rect x="160" y="70" width="44" height="110" rx="8" fill="#b5651d" opacity=".85" stroke="#7a3f0f" stroke-width="2"/><rect x="164" y="52" width="36" height="22" rx="4" fill="#5c665f"/><rect x="166" y="112" width="32" height="36" rx="3" fill="#fff" opacity=".9"/><text class="tx s mid" x="182" y="134">WS</text><text class="tx b mid" x="182" y="200">single-use vial</text></g>
+    <g class="fade" style="--d:.6s">
+     <text class="tx r" x="250" y="62">✕ moisture</text><text class="tx r" x="250" y="92">✕ light</text><text class="tx r" x="250" y="122">✕ oxygen</text>
+     <text class="tx g" x="250" y="160">inert gas if needed</text><text class="tx g" x="250" y="182">only what one test needs</text>
+    </g>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Filling, packaging and storage</div>
+   <h2>Seal out moisture, <span class="ac">light and air.</span></h2>
+   <p>Containers must protect the standard from <b>moisture, light and oxygen</b>. Sealed glass ampoules keep it most stable. <span class="cite">(WHO TRS 943, A.6.1)</span></p>
+   <p>Fill each container with only what a test needs, ideally <b>single-use</b>. Some standards are filled under inert gas or in controlled humidity, in a glovebox.</p>
+   <p>Every packaging step is defined and controlled, and the person filling is protected from the substance’s hazards.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="rh" data-title="The label">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Filling, packaging and storage · tap each card</div>
+   <h2>What the label <span class="ac">and certificate tell you.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">On the label</span><span class="rb">Name, issuing body, approximate quantity, batch (lot) number.</span></button>
+     <button class="rcard"><span class="rt">In the documents</span><span class="rb">Storage conditions, intended use, how to handle it, health hazards.</span></button>
+     <button class="rcard"><span class="rt">Assigned value</span><span class="rb">The content or potency you need for your calculation.</span></button>
+     <button class="rcard"><span class="rt">In your lab</span><span class="rb">Write the date received and date opened on the container, and sign it. <span class="cite">(GMP 6.21–6.22)</span></span></button>
+   </div>
+   <p class="small">Pharmacopoeial standards usually carry no expiry date in the usual sense; the issuing body tells you which batch is current. <span class="cite">(WHO TRS 943, A.6.4–A.6.6)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="rh" data-title="Storage">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Filling, packaging and storage</div>
+   <h2>Follow the label, <span class="ac">not a habit.</span></h2>
+   <ol class="steps stagger">
+    <li><span class="n">1</span><span><b>Original, tightly closed container.</b> Moisture undoes the benefit of cold storage.</span></li>
+    <li><span class="n">2</span><span><b>The temperature on the label.</b> About 5 °C suits most standards; a few need a freezer, some room temperature. Freezing can harm standards that contain water.</span></li>
+    <li><span class="n">3</span><span><b>Dry and dark.</b> A desiccator for hygroscopic standards; amber glass or a closed box against light.</span></li>
+    <li><span class="n">4</span><span><b>Warm up before opening.</b> Let a cold vial reach room temperature first, or water condenses inside.</span></li>
+   </ol>
+   <p class="small">Source: WHO TRS 943, A.6.2. Lecture-note correction: “below 4 °C” is not a rule for every standard; always use the stated storage condition.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="rh" data-title="Using a standard">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Filling, packaging and storage · tap each card</div>
+   <h2>Small habits <span class="ac">that protect it.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Buy little</span><span class="rb">Get only what you need soon. Avoid keeping opened containers for a long time.</span></button>
+     <button class="rcard"><span class="rt">Never put back</span><span class="rb">Weigh out what you need. Material that left the container does not go back in.</span></button>
+     <button class="rcard"><span class="rt">Logbook</span><span class="rb">Record receipt, opening, each use and who used it.</span></button>
+     <button class="rcard"><span class="rt">Re-test</span><span class="rb">Working standards are re-tested on a schedule. A change in appearance means replace it.</span></button>
+   </div>
+   <p class="small">Source: WHO TRS 943, A.6.3, A.6.6 and B.6.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="rh" data-title="Handling materials">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Handling materials and substances · tap each card</div>
+   <h2>No mix-ups, <span class="ac">no cross-contamination.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Packing and labelling</span><span class="rb">Correct labels and records for every lot, to prevent mix-ups.</span></button>
+     <button class="rcard"><span class="rt">Line clearance</span><span class="rb">Clear the line of the last product’s materials and have it inspected before starting.</span></button>
+     <button class="rcard"><span class="rt">Status</span><span class="rb">Separate and label: to be sampled, under test (quarantine), approved, rejected.</span></button>
+     <button class="rcard"><span class="rt">Warehouse</span><span class="rb">Racks off the floor, right temperature and humidity, first in first out, pest control, fire equipment.</span></button>
+     <button class="rcard"><span class="rt">Returned goods</span><span class="rb">Isolated, labelled and kept apart until QC decides.</span></button>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="rh" data-title="Check: storage">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Three quick <span class="ac">questions.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="c">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">You take a standard out of the 5 °C fridge. Before opening it you:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Opening a cold vial makes water condense on the powder.">Open it at once, before it warms up</button><button class="choice" data-v="b" data-fb="Heating can degrade it. It only needs to reach room temperature.">Warm it in a water bath</button><button class="choice" data-v="c">Let it reach room temperature</button></div>
+      <div class="feedback">Otherwise moisture condenses inside the vial.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">You weighed out too much standard. The extra:</div>
+      <div class="choices"><button class="choice" data-v="a">Is not returned to the container</button><button class="choice" data-v="b" data-fb="Returning it risks contaminating the whole container.">Goes back into the container</button><button class="choice" data-v="c" data-fb="Mixing it into another container is just as risky. It is not returned.">Goes into a new container for later</button></div>
+      <div class="feedback">It may be contaminated or wet. Dispose of it as the SOP says.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">A raw material is waiting for its QC result. Its status is:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Approved comes only after QC passes it.">Approved</button><button class="choice" data-v="b">Quarantine</button><button class="choice" data-v="c" data-fb="Rejected means it failed. It has not been tested yet.">Rejected</button></div>
+      <div class="feedback">Quarantine until QC approves or rejects it.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= GLP ================= -->
+
+<section class="slide" data-sec="glp" data-title="What GLP is">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Good laboratory practice</div>
+   <h2>A quality system <span class="ac">for safety studies.</span></h2>
+   <p><b>Good Laboratory Practice (GLP)</b> is a quality system for how <b>non-clinical health and environmental safety studies</b> are planned, performed, monitored, recorded, archived and reported. <span class="cite">(OECD GLP Principles)</span></p>
+   <p>In Malaysia, <b>NPRA</b> and the <b>Department of Standards Malaysia</b> are the GLP Compliance Monitoring Authorities. Malaysia has adhered to the OECD Mutual Acceptance of Data (MAD) system for GLP since 2013, so its GLP study data are accepted abroad. <span class="cite">(NPRA)</span></p>
+   <div class="callout">Its aims: premises fit for the work, staff who are trained and capable, and data of high quality, because testing, recording, reporting and archiving follow a sound approach.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="glp" data-title="Which rules for which lab">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Good laboratory practice</div>
+   <h2>Same habits, <span class="ac">three rulebooks.</span></h2>
+   <table class="data-table">
+    <tr><th>Lab</th><th>Main rulebook</th><th>Checked by</th></tr>
+    <tr><td>Non-clinical safety study (e.g. toxicology)</td><td>OECD GLP</td><td>NPRA, Standards Malaysia</td></tr>
+    <tr class="hl"><td>QC lab in a pharmaceutical factory</td><td>PIC/S GMP Guide, Chapter 6</td><td>NPRA GMP inspectors</td></tr>
+    <tr><td>Accredited testing lab</td><td>ISO/IEC 17025</td><td>Standards Malaysia (SAMM)</td></tr>
+   </table>
+   <p>Malaysia has been a PIC/S member since 2002, and NPRA uses the PIC/S GMP Guide to inspect manufacturers. <span class="cite">(NPRA)</span></p>
+   <p class="small">In this chapter, “good laboratory practice” means the shared habits all three demand: trained people, suitable premises, controlled equipment, and trustworthy records.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="glp" data-title="The GLP principles">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Good laboratory practice</div>
+   <h2>Ten areas <span class="ac">a GLP facility controls.</span></h2>
+   <div class="map3 stagger">
+    <div class="box"><h3>People</h3>Organisation and personnel · quality assurance programme</div>
+    <div class="box"><h3>Place and things</h3>Facilities · apparatus, materials and reagents · test systems · <b>test and reference items</b></div>
+    <div class="box"><h3>Paper</h3>SOPs · performing the study · reporting results · storing records and materials</div>
+   </div>
+   <p class="small">Source: OECD Principles of GLP (1997). Note “reference items”: reference standards are part of GLP too.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="glp" data-title="Quality assurance">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Good laboratory practice</div>
+   <h2>Someone who checks, <span class="ac">and is not checked by the work.</span></h2>
+   <p><b>Quality Assurance (QA)</b> assures management that GLP and GMP are being followed through the whole process.</p>
+   <div class="tiles">
+    <div class="tile"><div class="n">Independent</div><div class="l">QA is separate from the people doing the work, so it can judge them fairly.</div></div>
+    <div class="tile"><div class="n">Witness and enforcer</div><div class="l">QA inspects, audits and reports. It does not run the tests itself.</div></div>
+   </div>
+   <p>Goal: medicines that reach patients safely and work as intended. Likewise, GMP requires Quality Control to be independent from Production. <span class="cite">(PIC/S GMP Ch. 6)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="glp" data-title="Check: GLP">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Two quick <span class="ac">questions.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 2</div>
+      <div class="choice-q">A tablet factory’s QC lab is mainly inspected against:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="OECD GLP is for non-clinical safety studies, such as toxicology.">OECD GLP</button><button class="choice" data-v="b">The PIC/S GMP Guide, Chapter 6</button><button class="choice" data-v="c" data-fb="ISO/IEC 17025 is for accreditation of testing labs. GMP inspections use the PIC/S GMP Guide.">ISO 17034</button></div>
+      <div class="feedback">NPRA inspects manufacturers, including their QC labs, against the PIC/S GMP Guide.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 2</div>
+      <div class="choice-q">Why must QA be independent of the people doing the tests?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Speed is not the reason. Think about who checks the work.">So tests run faster</button><button class="choice" data-v="b" data-fb="QA does not do the testing. It checks it.">So QA can do the tests</button><button class="choice" data-v="c">So its checks are fair</button></div>
+      <div class="feedback">People cannot fairly audit their own work.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= PERSONNEL, PREMISES, EQUIPMENT ================= -->
+
+<section class="slide" data-sec="ppe" data-title="Personnel and training">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Personnel, premises and equipment · tap each card</div>
+   <h2>Trained, supervised, <span class="ac">then trusted.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Qualified</span><span class="rb">Education, training and experience that fit the job.</span></button>
+     <button class="rcard"><span class="rt">Supervised first</span><span class="rb">New analysts show they can do a method under supervision before working alone.</span></button>
+     <button class="rcard"><span class="rt">Training never ends</span><span class="rb">GMP and safety training at the start and repeated regularly, with records kept.</span></button>
+     <button class="rcard"><span class="rt">Health</span><span class="rb">Medical checks before employment and regularly after.</span></button>
+   </div>
+   <p class="small">Source: PIC/S GMP Ch. 2; lecture notes.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="ppe" data-title="Hygiene and clothing">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 220" role="img" aria-label="An analyst in a lab coat, hairnet, safety glasses and gloves, with no jewellery">
+    <g class="fade" style="--d:.1s">
+     <path d="M150 210 Q148 120 200 116 Q252 120 250 210 Z" fill="#fff" stroke="#b9c2bc" stroke-width="2"/>
+     <path d="M186 118 L200 140 L214 118" fill="none" stroke="#2d6a4f" stroke-width="3"/>
+     <ellipse cx="200" cy="82" rx="26" ry="30" fill="#e3b48c"/>
+     <path d="M172 72 Q174 44 200 44 Q226 44 228 72 Q214 60 200 60 Q186 60 172 72 Z" fill="#cfe0f2" stroke="#8fb3c9"/>
+     <rect x="180" y="78" width="16" height="10" rx="3" fill="#e8effc" stroke="#3a6bd1"/><rect x="204" y="78" width="16" height="10" rx="3" fill="#e8effc" stroke="#3a6bd1"/><path d="M196 83 h8" stroke="#3a6bd1"/>
+     <path d="M188 98 Q200 106 212 98" fill="#cfe0f2" stroke="#8fb3c9"/>
+     <ellipse cx="146" cy="196" rx="12" ry="9" fill="#a8c6f0"/><ellipse cx="254" cy="196" rx="12" ry="9" fill="#a8c6f0"/>
+    </g>
+    <g class="fade" style="--d:.5s">
+     <text class="tx g" x="250" y="52">hairnet</text><text class="tx g" x="252" y="84">safety glasses</text><text class="tx g" x="250" y="110">mask</text><text class="tx g" x="268" y="160">lab coat</text><text class="tx g" x="272" y="200">gloves</text>
+     <text class="tx r" x="20" y="60">✕ jewellery</text><text class="tx r" x="20" y="90">✕ food, drink</text><text class="tx r" x="20" y="120">✕ street clothes</text>
+    </g>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Personnel, premises and equipment</div>
+   <h2>People are the biggest <span class="ac">source of contamination.</span></h2>
+   <p>Wash hands often. Tie long hair back under a hairnet. No jewellery. No eating, drinking or smoking where work is done. <span class="cite">(PIC/S GMP Ch. 2)</span></p>
+   <p><b>Protective clothing</b> protects the analyst <b>and</b> the product. No exposed street clothes in the lab, and lab clothing is not worn outside it.</p>
+   <p class="small">Management must enforce these rules for everyone who enters, visitors included.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="ppe" data-title="Premises">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Personnel, premises and equipment · tap each card</div>
+   <h2>A lab built <span class="ac">for its work.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Apart from production</span><span class="rb">QC labs are normally separated from production areas.</span></button>
+     <button class="rcard"><span class="rt">Enough space</span><span class="rb">Room to avoid mix-ups and cross-contamination, and to store samples, standards and records.</span></button>
+     <button class="rcard"><span class="rt">Separate labs</span><span class="rb">Chemical, biological and microbiological work kept apart.</span></button>
+     <button class="rcard"><span class="rt">Sensitive instruments</span><span class="rb">Balances and HPLCs protected from vibration, draughts, humidity and electrical interference.</span></button>
+     <button class="rcard"><span class="rt">Waste</span><span class="rb">A proper route for disposing of chemical waste.</span></button>
+   </div>
+   <p class="small">Source: PIC/S GMP Ch. 3 (Quality Control areas); lecture notes.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="ppe" data-title="Equipment">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Personnel, premises and equipment</div>
+   <h2>Calibrated, maintained, <span class="ac">and labelled.</span></h2>
+   <ol class="steps stagger">
+    <li><span class="n">1</span><span><b>Qualified</b> before use: it works as intended where it is installed.</span></li>
+    <li><span class="n">2</span><span><b>Calibrated and checked at defined intervals</b>, set by a written procedure. The interval depends on the instrument and how it is used.</span></li>
+    <li><span class="n">3</span><span><b>Status labelled:</b> calibration due date; faulty equipment clearly marked “out of use”.</span></li>
+    <li><span class="n">4</span><span><b>Instructions and logbook</b> at each instrument: use, cleaning, maintenance, faults.</span></li>
+   </ol>
+   <p class="small">Source: PIC/S GMP Ch. 3. Lecture-note correction: “twice a year” is one possible schedule, not a fixed rule. A balance, for example, also gets a quick check every day it is used.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="ppe" data-title="Check: people and places">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Two quick <span class="ac">questions.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="a">
+      <div class="step-count">QUESTION 1 OF 2</div>
+      <div class="choice-q">A new analyst has read the HPLC SOP. Before running samples alone, she must:</div>
+      <div class="choices"><button class="choice" data-v="a">Show she can do it under supervision</button><button class="choice" data-v="b" data-fb="Reading is not enough. Competence must be shown and recorded.">Nothing more: she has read it</button><button class="choice" data-v="c" data-fb="Watching alone is not enough. She must perform it while supervised.">Watch a colleague once</button></div>
+      <div class="feedback">Competence is shown, then recorded in her training file.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 2</div>
+      <div class="choice-q">How often must a pH meter be calibrated?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="No single interval fits every instrument. GMP asks for defined intervals.">Exactly twice a year</button><button class="choice" data-v="b" data-fb="Waiting for a fault is too late. Results before the fault might be wrong.">Only when it breaks</button><button class="choice" data-v="c">At the interval set in the written procedure</button></div>
+      <div class="feedback">Many labs calibrate a pH meter every day it is used; the SOP sets it.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= DOCUMENTATION ================= -->
+
+<section class="slide" data-sec="doc" data-title="If it isn’t written">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Documentation</div>
+   <h2>Not written down, <span class="ac">not done.</span></h2>
+   <p>An inspector cannot see your work, only your records. So every step must leave a trace.</p>
+   <div class="map3 stagger">
+    <div class="box"><h3>Instructions</h3>SOPs and test methods (your STP): what to do.</div>
+    <div class="box"><h3>Records</h3>Worksheets, notebooks, logbooks, printouts: what was done, by whom, when.</div>
+    <div class="box"><h3>Raw data</h3>The first record of an observation, such as a balance printout. Kept and available. <span class="cite">(GMP 6.10)</span></div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="doc" data-title="ALCOA+">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Documentation · tap each card</div>
+   <h2>Data you can <span class="ac">trust: ALCOA+.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Attributable</span><span class="rb">Who did it, and when.</span></button>
+     <button class="rcard"><span class="rt">Legible</span><span class="rb">Readable and permanent: ink, not pencil.</span></button>
+     <button class="rcard"><span class="rt">Contemporaneous</span><span class="rb">Written at the time, not later from memory.</span></button>
+     <button class="rcard"><span class="rt">Original</span><span class="rb">The first record, or a certified true copy. Not a sticky note copied later.</span></button>
+     <button class="rcard"><span class="rt">Accurate</span><span class="rb">True to what happened.</span></button>
+     <button class="rcard"><span class="rt">+ Complete, Consistent, Enduring, Available</span><span class="rb">Nothing missing, in order, lasting, and retrievable for review.</span></button>
+   </div>
+   <p class="small">Source: MHRA GxP Data Integrity Guidance (2018); WHO and PIC/S use the same terms.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="doc" data-title="Correcting a mistake">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 200" role="img" aria-label="A correct correction: one line through 20.81, the original still readable, new value 20.18, initials, date and reason">
+    <rect x="20" y="20" width="360" height="160" rx="10" fill="#fffef8" stroke="#d9d4c7"/>
+    <text class="tx s" x="36" y="48">Weight of WS (mg)</text>
+    <text class="tx b" x="190" y="48" font-size="15">20.81</text>
+    <path class="ln r draw" d="M186 43 H232" style="--d:.4s"/>
+    <text class="tx g fade" x="244" y="48" font-size="15" style="--d:.9s">20.18</text>
+    <text class="tx s fade" x="36" y="84" style="--d:1.2s">AH 10/11/26 · transcription error</text>
+    <path class="ln g thin fade" d="M36 100 H360" style="--d:1.2s"/>
+    <text class="tx r fade" x="36" y="130" style="--d:1.6s">✕ correction fluid · ✕ scribbled out · ✕ overwritten</text>
+    <text class="tx r fade" x="36" y="156" style="--d:1.8s">✕ pencil · ✕ no initials or date</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Documentation</div>
+   <h2>One line, <span class="ac">still readable.</span></h2>
+   <p>Draw <b>one line</b> through the wrong entry so it can still be read. Write the correct value beside it, with your <b>initials, the date</b> and, where needed, the <b>reason</b>. <span class="cite">(PIC/S GMP Ch. 4)</span></p>
+   <p>Never use correction fluid, scribble over, or write a new number on top of the old one. Hiding the original destroys the record.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="doc" data-title="Check: records">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Three quick <span class="ac">questions.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">An analyst notes a weight on a sticky note, then copies it into the worksheet an hour later. Which ALCOA principles are broken?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="The writing may be perfectly clear. Think about when and where it was first recorded.">Legible and Accurate</button><button class="choice" data-v="b">Original and Contemporaneous</button><button class="choice" data-v="c" data-fb="The analyst’s name may still be there. The problem is the first record and the timing.">Attributable only</button></div>
+      <div class="feedback">The sticky note was the original, and the worksheet entry was not made at the time.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">You wrote 98.3% but the result is 99.3%. You:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Correction fluid hides the original entry.">Cover it with correction fluid and rewrite</button><button class="choice" data-v="b" data-fb="Writing over the figure makes both values unreadable.">Turn the 8 into a 9</button><button class="choice" data-v="c">Strike it through once, write 99.3%, initial, date and give the reason</button></div>
+      <div class="feedback">The original stays readable and the change is traceable.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">Which is raw data?</div>
+      <div class="choices"><button class="choice" data-v="a">The balance printout</button><button class="choice" data-v="b" data-fb="A report is built from raw data. It is not the first record.">The final certificate of analysis</button><button class="choice" data-v="c" data-fb="An SOP is an instruction, not a record of what happened.">The SOP</button></div>
+      <div class="feedback">The first record of the observation. It must be kept with the worksheet.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= SAFETY ================= -->
+
+<section class="slide" data-sec="safe" data-title="Hazard and risk">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Laboratory safety</div>
+   <h2>Hazard is the danger; <span class="ac">risk is the chance.</span></h2>
+   <div class="tiles">
+    <div class="tile"><div class="n">Hazard</div><div class="l">What can cause harm. Chloroform is toxic if inhaled: that never changes.</div></div>
+    <div class="tile"><div class="n">Risk</div><div class="l">How likely harm is, and how bad. Chloroform in a closed bottle in a fume hood: low risk.</div></div>
+   </div>
+   <p>Safety work lowers <b>risk</b>. In Malaysia, the <b>Occupational Safety and Health Act 1994</b> sets the duty. The <b>USECHH Regulations 2000</b> control exposure to chemicals hazardous to health, and the <b>CLASS Regulations 2013</b> bring in GHS labels and safety data sheets. <span class="cite">(DOSH)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="safe" data-title="GHS pictograms">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Laboratory safety · tap each card</div>
+   <h2>Read the label <span class="ac">in one glance.</span></h2>
+   <div class="rgrid ghs">
+     <button class="rcard"><span class="rt">Toxic</span><svg data-ghs="skull" viewBox="0 0 60 60" aria-hidden="true"></svg><span class="rb">Can kill or poison in small amounts. Example: chloroform (if inhaled).</span></button>
+     <button class="rcard"><span class="rt">Health hazard</span><svg data-ghs="health" viewBox="0 0 60 60" aria-hidden="true"></svg><span class="rb">Long-term harm: cancer, organ damage, reproduction. Example: chloroform.</span></button>
+     <button class="rcard"><span class="rt">Flammable</span><svg data-ghs="flame" viewBox="0 0 60 60" aria-hidden="true"></svg><span class="rb">Catches fire easily. Example: methanol, ethyl acetate.</span></button>
+     <button class="rcard"><span class="rt">Corrosive</span><svg data-ghs="corrosive" viewBox="0 0 60 60" aria-hidden="true"></svg><span class="rb">Burns skin and eyes, eats metal. Example: concentrated acids.</span></button>
+     <button class="rcard"><span class="rt">Irritant</span><svg data-ghs="excl" viewBox="0 0 60 60" aria-hidden="true"></svg><span class="rb">Irritates skin or eyes, harmful in larger amounts.</span></button>
+     <button class="rcard"><span class="rt">Environment</span><svg data-ghs="env" viewBox="0 0 60 60" aria-hidden="true"></svg><span class="rb">Toxic to aquatic life. Never down the sink.</span></button>
+   </div>
+   <p class="small">Signal words: <b>Danger</b> (more severe) or <b>Warning</b>. Pictograms drawn in simplified form.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="safe" data-title="The safety data sheet">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Laboratory safety</div>
+   <h2>Sixteen sections, <span class="ac">four you use most.</span></h2>
+   <p>Every hazardous chemical comes with a safety data sheet (SDS) in a fixed 16-section order, in Bahasa Malaysia and English. <span class="cite">(CLASS Regulations 2013)</span></p>
+   <table class="data-table">
+    <tr><th>Section</th><th>Tells you</th></tr>
+    <tr><td>2 · Hazards</td><td>Pictograms, signal word, hazard statements</td></tr>
+    <tr><td>6 · Accidental release</td><td>What to do about a spill</td></tr>
+    <tr><td>7 · Handling and storage</td><td>How to use and store it safely</td></tr>
+    <tr class="hl"><td>8 · Exposure controls / PPE</td><td>Ventilation, gloves, eye protection</td></tr>
+    <tr><td>13 · Disposal</td><td>How to get rid of it</td></tr>
+   </table>
+   <p class="small">Read the SDS <b>before</b> first use, not after an accident.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="safe" data-title="Controls and spills">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Laboratory safety</div>
+   <h2>Remove the danger first; <span class="ac">PPE comes last.</span></h2>
+   <div class="flow">
+    <div class="node g">Eliminate<small>do you need it?</small></div>
+    <div class="node g">Substitute<small>a safer solvent</small></div>
+    <div class="node">Engineering<small>fume hood</small></div>
+    <div class="node">Administrative<small>SOPs, training</small></div>
+    <div class="node o">PPE<small>gloves, goggles, coat</small></div>
+   </div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>Storing chemicals</span><span class="hint">Open</span></button><div class="toggle-body"><p>Keep incompatible chemicals apart (acids from bases, oxidisers from flammables). Flammables in a flammables cabinet. Keep stock small, labelled and dated.</p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>A spill</span><span class="hint">Open</span></button><div class="toggle-body"><p>Warn others and keep them away. Ventilate. Put on the PPE from SDS Section 8 and use the spill kit as Section 6 says. Report it. Large or toxic spills: evacuate and call the emergency team.</p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>Waste</span><span class="hint">Open</span></button><div class="toggle-body"><p>Segregate: halogenated solvents (chloroform) apart from other solvents, in labelled, closed containers. Nothing hazardous down the sink.</p></div></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="safe" data-title="Check: safety">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Three quick <span class="ac">questions.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">Which SDS section tells you which gloves to wear?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Section 2 lists the hazards. Protective equipment has its own section.">Section 2</button><button class="choice" data-v="b">Section 8</button><button class="choice" data-v="c" data-fb="Section 13 is disposal.">Section 13</button></div>
+      <div class="feedback">Section 8: exposure controls and personal protection.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">You must evaporate a chloroform extract. The best control is:</div>
+      <div class="choices"><button class="choice" data-v="a">Work in a fume hood</button><button class="choice" data-v="b" data-fb="A mask is PPE, the last line of defence. Contain the vapour first.">Wear a face mask on the open bench</button><button class="choice" data-v="c" data-fb="Opening a window does not reliably remove a toxic vapour from your breathing zone.">Open the window</button></div>
+      <div class="feedback">An engineering control removes the vapour at the source.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">Used chloroform goes into:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Never pour hazardous solvents down the sink.">The sink, with plenty of water</button><button class="choice" data-v="b" data-fb="Halogenated solvents are kept apart from other solvents.">The general solvent waste bottle</button><button class="choice" data-v="c">The labelled halogenated waste container</button></div>
+      <div class="feedback">Chloroform is halogenated and is collected separately.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= TECHNIQUE ================= -->
+
+<section class="slide" data-sec="tech" data-title="The analytical balance">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="anim" data-anim="weigh"><svg class="anim-svg" viewBox="0 0 400 230" role="img" aria-label="Animation: weighing by difference. The vial is weighed, some powder is tipped into a flask, the vial is weighed again"></svg><div class="a-ui"><button type="button" class="a-play">▶ Play</button><button type="button" class="a-replay">↺ Replay</button><div class="a-bar"><div class="a-fill"></div></div></div><p class="anim-cap" aria-live="polite"></p></div>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Practical technique · watch</div>
+   <h2>Weigh by <span class="ac">difference.</span></h2>
+   <ol class="steps">
+    <li><span class="n">1</span><span>Check the balance is <b>level</b>, clean and has passed its daily check.</span></li>
+    <li><span class="n">2</span><span>Close the draught shield; wait for a <b>stable</b> reading.</span></li>
+    <li><span class="n">3</span><span>Weigh the vial, tip powder into the flask, weigh the vial again. <b>Mass transferred = before − after.</b></span></li>
+   </ol>
+   <p class="small">Weighing by difference counts only what actually went into the flask, even if a few grains stick to the vial.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="tech" data-title="Minimum weight">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Practical technique · try it</div>
+   <h2>Too little powder, <span class="ac">too big an error.</span></h2>
+   <p>Every balance wobbles a little. Weigh one test weight 10 times; the spread is the standard deviation (s). USP &lt;41&gt;: 2 × s must be no more than 0.10% of what you weigh, so the <b>minimum weight = 2000 × s</b>.</p>
+   <div class="calc">
+    <div class="calc-row"><label>Standard deviation, s (mg)<input id="mw-s" type="text" inputmode="decimal" value="0.008"></label><label>You plan to weigh (mg)<input id="mw-m" type="text" inputmode="decimal" value="20"></label></div>
+    <div class="calc-out" id="mw-out" aria-live="polite"></div>
+   </div>
+   <p class="small">If s is smaller than 0.41 × the balance’s readability (d), use 0.41d instead. <span class="cite">(USP &lt;41&gt;)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="tech" data-title="Volumetric glassware">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 220" role="img" aria-label="Reading a meniscus: the bottom of the curve sits on the line, with the eye level with it">
+    <g class="fade" style="--d:.1s">
+     <path d="M150 30 V120 Q110 140 110 175 Q110 210 200 210 Q290 210 290 175 Q290 140 250 120 V30" fill="none" stroke="#5c665f" stroke-width="2.4"/>
+     <path d="M152 92 Q200 110 248 92 V120 Q290 140 288 175 Q288 208 200 208 Q112 208 112 175 Q110 140 152 120 Z" fill="#d7ebf7"/>
+     <path d="M150 100 H250" stroke="#c0392b" stroke-width="1.6"/>
+     <text class="tx r" x="256" y="118">calibration mark</text><path class="ln r thin" d="M254 114 L250 102"/>
+    </g>
+    <g class="fade" style="--d:.6s">
+     <circle cx="64" cy="100" r="9" fill="#1c2620"/><circle cx="66" cy="100" r="4" fill="#fff"/>
+     <path class="ln o dash" d="M76 100 H148"/>
+     <text class="tx o" x="20" y="130">eye level</text>
+     <text class="tx g" x="258" y="62">bottom of the</text><text class="tx g" x="258" y="78">meniscus</text><path class="ln g thin" d="M256 80 L204 98"/>
+    </g>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Practical technique</div>
+   <h2>Bottom of the curve, <span class="ac">at eye level.</span></h2>
+   <p>Use <b>Class A</b> glassware for standards. A 100 ml Class A flask holds 100 ml within ±0.10 ml. <span class="cite">(ISO 1042)</span></p>
+   <p>Make up to the mark so the <b>bottom of the meniscus</b> sits on the line, with your eye level with it. Looking from above or below gives the wrong volume.</p>
+   <p>Pipettes: rinse with the solution first, let it drain freely, and touch the tip to the wall. Do not blow out the last drop unless the pipette says so.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="tech" data-title="Making a standard solution">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Practical technique</div>
+   <h2>From powder <span class="ac">to labelled solution.</span></h2>
+   <div class="flow">
+    <div class="node">Weigh<small>by difference</small></div>
+    <div class="node">Dissolve<small>part of the solvent</small></div>
+    <div class="node">Make to volume<small>meniscus on the mark</small></div>
+    <div class="node">Mix<small>invert 10–20 times</small></div>
+    <div class="node g">Label and record<small>name, conc., date, initials</small></div>
+   </div>
+   <div class="calc">
+    <div class="calc-row"><label>WS weighed (mg)<input id="sc-w" type="text" inputmode="decimal" value="20.18"></label><label>Potency P (%)<input id="sc-p" type="text" inputmode="decimal" value="99.6"></label><label>Made up to (ml)<input id="sc-v" type="text" inputmode="decimal" value="100"></label></div>
+    <div class="calc-out" id="sc-out" aria-live="polite"></div>
+   </div>
+   <p class="small">Concentration of drug = weight × (P ÷ 100) ÷ volume. This is the stock in your STP before the 4 → 100 ml dilution.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="tech" data-title="Check: technique">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Three quick <span class="ac">questions.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">The vial weighed 1234.56 mg before and 1214.38 mg after. How much went into the flask?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="You added the two weights. Mass transferred = before − after.">2448.94 mg</button><button class="choice" data-v="b">20.18 mg</button><button class="choice" data-v="c" data-fb="Check the subtraction: 1234.56 − 1214.38.">21.18 mg</button></div>
+      <div class="feedback">1234.56 − 1214.38 = 20.18 mg.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">A balance has s = 0.009 mg. Can you weigh 15 mg of standard on it?</div>
+      <div class="choices"><button class="choice" data-v="a">No: the minimum weight is 18 mg</button><button class="choice" data-v="b" data-fb="Minimum weight = 2000 × 0.009 mg. Compare it with 15 mg.">Yes: 15 mg is plenty</button><button class="choice" data-v="c" data-fb="Readability alone does not decide it. Use 2000 × s.">Yes, if the display shows 5 decimals</button></div>
+      <div class="feedback">2000 × 0.009 = 18 mg, so 15 mg is below the minimum. Weigh more and dilute further.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">Making up to volume, you should read:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="The top edge is not used for clear aqueous solutions.">The top edge of the meniscus</button><button class="choice" data-v="b" data-fb="Looking from above makes you overshoot or undershoot. The eye must be level.">The bottom of the meniscus, from above</button><button class="choice" data-v="c">The bottom of the meniscus, at eye level</button></div>
+      <div class="feedback">Bottom of the meniscus on the mark, eye level with it.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="qclab" data-title="QC Lab Day (lab)">
+ <div class="si lab-si">
+  <div class="lab-head">
+   <div class="eyebrow">Interactive lab · all topics</div>
+   <h2>QC Lab Day: <span class="ac">standard in, result out.</span></h2>
+   <p class="small">Receive the standards, prepare a working-standard solution, work safely with chloroform and review the worksheet. Four scenarios. <a href="lab.html" target="_blank" rel="noopener" data-umami-event="lab-open-full">Open full screen ↗</a></p>
+   <p class="lab-status task" data-lab="qc-lab" aria-live="polite">Finish one full round of QC Lab Day (all 4 steps) to unlock Next.</p>
+  </div>
+  <div class="lab-frame"><iframe data-src="lab.html?embed=1" title="QC Lab Day interactive lab" loading="lazy"></iframe><div class="lab-launch"><span>Your screen is too short to use the lab here.</span><a href="lab.html" target="_blank" rel="noopener" data-umami-event="lab-launch-small">Open the lab ↗</a></div></div>
+ </div>
+</section>
+
+<!-- ================= WRAP-UP ================= -->
+
+<section class="slide" data-sec="end" data-title="Quick quiz">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check your understanding</div>
+   <h2>Five questions, <span class="ac">no marks recorded.</span></h2>
+   <div class="stepper quiz">
+    <div class="choice-set cur" data-answer="a">
+      <div class="step-count">QUESTION 1 OF 5</div>
+      <div class="choice-q">A standard whose content is accepted without comparison with another substance is:</div>
+      <div class="choices"><button class="choice" data-v="a">A primary standard</button><button class="choice" data-v="b" data-fb="A secondary standard gets its value by comparison.">A secondary standard</button><button class="choice" data-v="c" data-fb="A working standard is a secondary standard.">A working standard</button></div>
+      <div class="feedback">Primary: accepted as it is, e.g. a pharmacopoeial CRS.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 5</div>
+      <div class="choice-q">The storage temperature for a reference standard is set by:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Not every standard belongs below 4 °C. Some need a freezer, some room temperature.">A rule: always below 4 °C</button><button class="choice" data-v="b" data-fb="Convenience is not a storage condition.">Whatever fridge has space</button><button class="choice" data-v="c">Its label and accompanying documents</button></div>
+      <div class="feedback">Always follow the stated storage condition.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 3 OF 5</div>
+      <div class="choice-q">In Malaysia, OECD GLP compliance is monitored by:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="DOSH enforces occupational safety, not GLP.">DOSH</button><button class="choice" data-v="b">NPRA and the Department of Standards Malaysia</button><button class="choice" data-v="c" data-fb="PIC/S is an international GMP scheme, not Malaysia’s GLP monitor.">PIC/S</button></div>
+      <div class="feedback">They are the two Compliance Monitoring Authorities.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 4 OF 5</div>
+      <div class="choice-q">“Contemporaneous” means a record is made:</div>
+      <div class="choices"><button class="choice" data-v="a">At the time the work is done</button><button class="choice" data-v="b" data-fb="That is Legible.">In readable, permanent ink</button><button class="choice" data-v="c" data-fb="That is Attributable.">With the analyst’s name</button></div>
+      <div class="feedback">Written at the time, not from memory later.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 5 OF 5</div>
+      <div class="choice-q">In the hierarchy of controls, PPE is:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Elimination comes first. PPE protects only the wearer and only if worn correctly.">The first choice</button><button class="choice" data-v="b" data-fb="Engineering controls such as a fume hood come before PPE.">Better than a fume hood</button><button class="choice" data-v="c">The last line of defence</button></div>
+      <div class="feedback">Remove or contain the hazard first; PPE comes last.</div>
+      <p class="score" id="quiz-score"></p>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="end" data-title="Summary">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Take home</div>
+   <h2>Right standard, right lab, <span class="ac">right record.</span></h2>
+   <div class="cards stagger">
+     <div class="card"><div class="cn">1</div><div>A reference standard is a fully characterised comparison sample. Primary (e.g. CRS) is accepted as is; secondary (WS) is qualified against it and gives you P.</div></div>
+     <div class="card"><div class="cn">2</div><div>Protect standards from moisture, light and oxygen. Store as labelled, warm before opening, never return material, log every use.</div></div>
+     <div class="card"><div class="cn">3</div><div>OECD GLP covers safety studies; QC labs follow GMP Chapter 6 and often ISO/IEC 17025. All need trained people, fit premises, calibrated equipment and ALCOA+ records.</div></div>
+     <div class="card"><div class="cn">4</div><div>Read the SDS first; contain hazards before relying on PPE. Weigh above the minimum weight, by difference; read the meniscus at eye level.</div></div>
+   </div>
+   <div style="margin:.6em 0"><button class="btn solid" id="btn-refs" data-umami-event="open-sources">Sources and further reading (13) →</button></div>
+   <div class="madeby">
+     <p><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Lab scenarios and values are simulated. Not a substitute for the current guidelines, a product’s own specification or your lab’s SOPs.</p>
+     <div class="socials">
+       <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Website</a>
+       <a href="https://www.linkedin.com/in/aufbinali/" target="_blank" rel="noopener" data-umami-event="link-linkedin">LinkedIn</a>
+       <a href="https://aufthority.substack.com/" target="_blank" rel="noopener" data-umami-event="link-substack">Substack</a>
+       <a href="https://www.instagram.com/aufthority/" target="_blank" rel="noopener" data-umami-event="link-instagram">Instagram</a>
+       <a href="https://www.tiktok.com/@aufthority" target="_blank" rel="noopener" data-umami-event="link-tiktok">TikTok</a>
+       <a href="https://www.threads.com/@aufthority" target="_blank" rel="noopener" data-umami-event="link-threads">Threads</a>
+       <a href="mailto:the.aufthority@gmail.com" data-umami-event="link-email">the.aufthority@gmail.com</a>
+     </div>
+   </div>
+  </div>
+ </div>
+</section>
+<section class="slide" data-sec="end" data-title="Your certificate">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Well done</div>
+   <h2>You finished. <span class="ac">Take your certificate.</span></h2>
+   <p>You worked through every page of <b>Reference Standards and GLP, Explained</b>.</p>
+   <div class="calc" id="cert-box"><p class="small" style="margin:0">Checking your Kompas Semester sign-in…</p></div>
+   <div id="cert-out"></div>
+   <div class="calc" id="cert-check" hidden>
+    <div class="calc-row"><label>Educators: check a certificate serial<input id="cert-serial" type="text" maxlength="20" autocomplete="off" placeholder="KS-QCP-26-XXXXXX"></label></div>
+    <button class="btn" id="cert-lookup" type="button">Check serial</button>
+    <div id="cert-check-out"></div>
+   </div>
+   <p class="small">Each certificate has a serial number recorded by Kompas Semester. It is a record of completion, not an official KPJ Healthcare University award.</p>
+  </div>
+ </div>
+</section>
+
+
+  </div><!-- /stage -->
+
+  <div id="bottom">
+    <div id="gate-hint"></div>
+    <div id="nav-wrap">
+      <button id="btn-back" class="nav-btn" disabled data-umami-event="nav-back">← Back</button>
+      <button id="btn-next" class="nav-btn" data-umami-event="nav-next">Next →</button>
+    </div>
+    <footer>Informed decisions, better health.</footer>
+  </div>
+</div>
+
+<div class="overlay" id="toc-overlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <div class="panel-head"><h3>Contents</h3><button class="icon-btn close-ov">Close</button></div>
+    <button type="button" class="pt-open" id="btn-pt" data-umami-event="open-periodic-table"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3h4v4H2zM14 3h4v4h-4zM2 8h4v4H2zM7 8h3v4H7zM11 8h3v4h-3zM14 8h4v4h-4zM2 13h4v4H2zM7 13h3v4H7zM11 13h3v4h-3zM14 13h4v4h-4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Periodic table</button>
+    <ul class="toc" id="toc-list"></ul>
+  </div>
+</div>
+
+<div class="overlay" id="refs-overlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <div class="panel-head"><h3>Sources and further reading</h3><button class="icon-btn close-ov">Close</button></div>
+    <ol class="refs">
+      <li>Department of Occupational Safety and Health Malaysia. (2013). <i>Occupational Safety and Health (Classification, Labelling and Safety Data Sheet of Hazardous Chemicals) Regulations 2013</i>. <a href="https://www.dosh.gov.my/" target="_blank" rel="noopener">dosh.gov.my</a></li>
+      <li>Department of Occupational Safety and Health Malaysia. (2000). <i>Occupational Safety and Health (Use and Standards of Exposure of Chemicals Hazardous to Health) Regulations 2000</i>. <a href="https://www.dosh.gov.my/" target="_blank" rel="noopener">dosh.gov.my</a></li>
+      <li>International Organization for Standardization. (2016). <i>ISO 17034: General requirements for the competence of reference material producers</i>. ISO.</li>
+      <li>International Organization for Standardization. (2017). <i>ISO/IEC 17025: General requirements for the competence of testing and calibration laboratories</i>. ISO.</li>
+      <li>International Organization for Standardization. (1983). <i>ISO 1042: Laboratory glassware — One-mark volumetric flasks</i>. ISO.</li>
+      <li>Lecture notes. (n.d.). <i>Chapter 7: Reference standard; procedure on materials and substances</i> and <i>Chapter 8: Good laboratory practice</i> [Course material, Diploma in Pharmacy].</li>
+      <li>Medicines and Healthcare products Regulatory Agency. (2018). <i>‘GXP’ data integrity guidance and definitions</i> (Rev. 1). <a href="https://www.gov.uk/government/publications/guidance-on-gxp-data-integrity" target="_blank" rel="noopener">gov.uk</a></li>
+      <li>National Pharmaceutical Regulatory Agency. (n.d.). <i>Good Laboratory Practice (GLP) compliance programme</i>. Ministry of Health Malaysia. <a href="https://www.npra.gov.my/" target="_blank" rel="noopener">npra.gov.my</a></li>
+      <li>Organisation for Economic Co-operation and Development. (1998). <i>OECD principles on good laboratory practice</i> (as revised in 1997; Series on Principles of GLP and Compliance Monitoring, No. 1). OECD. <a href="https://www.oecd.org/chemicalsafety/testing/good-laboratory-practiceglp.htm" target="_blank" rel="noopener">oecd.org</a></li>
+      <li>Pharmaceutical Inspection Co-operation Scheme. (2023). <i>Guide to good manufacturing practice for medicinal products, Part I</i> (PE 009-17), Chapters 2, 3, 4 and 6. PIC/S. <a href="https://picscheme.org/en/publications" target="_blank" rel="noopener">picscheme.org</a></li>
+      <li>Manufacturer’s standard test procedure. (n.d.). <i>Chlorpheniramine maleate tablets 4 mg</i> [Internal QC document; used for the working-standard preparation].</li>
+      <li>United States Pharmacopeial Convention. (n.d.). &lt;41&gt; Balances. In <i>United States Pharmacopeia–National Formulary</i>. USP.</li>
+      <li>World Health Organization. (2007). General guidelines for the establishment, maintenance and distribution of chemical reference substances (Annex 3). In <i>WHO Expert Committee on Specifications for Pharmaceutical Preparations: Forty-first report</i> (WHO Technical Report Series No. 943). WHO. <a href="https://www.who.int/publications" target="_blank" rel="noopener">who.int</a></li>
+    </ol>
+  </div>
+</div>
+<div class="overlay" id="video-overlay" role="dialog" aria-modal="true" aria-labelledby="video-title">
+  <div class="panel">
+    <div class="panel-head"><h3 id="video-title">Video</h3><button class="icon-btn close-ov">Close</button></div>
+    <div class="vid-frame" id="video-frame"></div>
+    <p class="vid-note">A demonstration from YouTube. <a id="video-link" href="#" target="_blank" rel="noopener">Open it on YouTube</a> if it does not play here.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  const slides   = document.querySelectorAll('.slide');
+  const TOTAL    = slides.length;
+  /* progress is remembered on this device; a returning student resumes where they left off */
+  const PKEY='kompas.qc-practice.progress';
+  let maxReached=1, isEducator=false, profileName='', signedIn=false, authSb=null;
+  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.max>=1) maxReached=Math.min(sv.max, document.querySelectorAll('.slide').length); }catch(_){}
+  let current = 1;
+  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.last>=1 && sv.last<=maxReached) current=sv.last; }catch(_){}
+  const btnBack  = document.getElementById('btn-back');
+  const btnNext  = document.getElementById('btn-next');
+  const progFill = document.getElementById('progress-fill');
+  const progLbl  = document.getElementById('progress-label');
+  const hint     = document.getElementById('gate-hint');
+  const NS = 'http://www.w3.org/2000/svg';
+
+  document.querySelectorAll('.stagger').forEach(c=>{
+    [...c.children].forEach((e,i)=>e.style.setProperty('--d',(0.1 + i*0.11).toFixed(2)+'s'));
+  });
+
+  /* =====================================================================
+     REFERENCE STANDARDS AND GLP: page-specific drawings, calculators, animation
+     ===================================================================== */
+  function el(tag, attrs, text){
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  const RMO = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const ANIM={};
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  const ease=x=>{ x=clamp(x,0,1); return x*x*(3-2*x); };
+  const fx=n=>n.toFixed(1);
+  function E(tag,attrs,parent,text){ const e=el(tag,attrs,text); parent.appendChild(e); return e; }
+  function at(g,x,y){ g.setAttribute('transform','translate('+fx(x)+' '+fx(y)+')'); }
+  const FONT='DM Sans,system-ui,sans-serif';
+  const COL={g:'#2d6a4f', r:'#c0392b', o:'#d9821f', b:'#3a6bd1', ink:'#1c2620', muted:'#6f7771', rule:'#e4e6e3'};
+  function txt(parent,x,y,s,extra){ return E('text',Object.assign({x:x,y:y,'font-family':FONT,'font-size':11,fill:COL.muted},extra||{}),parent,s); }
+  function buildCharts(){}
+  const num=v=>parseFloat(String(v||'').replace(',','.'));
+
+  /* ---------- GHS pictograms (simplified drawings; red diamond, black symbol) ---------- */
+  const GHS={
+    skull:g=>{ E('ellipse',{cx:30,cy:25,rx:8,ry:8.5},g); E('rect',{x:25,y:29,width:10,height:6,rx:1.5},g);
+      E('circle',{cx:27,cy:24,r:2.2,fill:'#fff'},g); E('circle',{cx:33,cy:24,r:2.2,fill:'#fff'},g);
+      E('path',{d:'M19 36 L41 44 M41 36 L19 44',stroke:'#111','stroke-width':3.2,'stroke-linecap':'round'},g); },
+    health:g=>{ E('circle',{cx:30,cy:20,r:5},g); E('path',{d:'M20 44 Q20 28 30 28 Q40 28 40 44 Z'},g);
+      E('path',{d:'M30 31 l1.6 3.4 3.6 .5 -2.6 2.5 .6 3.6 -3.2-1.7 -3.2 1.7 .6-3.6 -2.6-2.5 3.6-.5 z',fill:'#fff'},g); },
+    flame:g=>{ E('path',{d:'M30 14 C36 22 40 26 38 34 C37 40 33 42 30 42 C25 42 21 38 22 32 C23 27 27 26 27 20 C29 23 30 26 30 28 C33 24 32 19 30 14 Z'},g);
+      E('rect',{x:20,y:43,width:20,height:3},g); },
+    corrosive:g=>{ E('path',{d:'M18 18 l8 4 -2 3 -8 -4 z'},g); E('path',{d:'M36 18 l8 4 -2 3 -8 -4 z'},g);
+      E('circle',{cx:24,cy:29,r:1.5},g); E('circle',{cx:40,cy:29,r:1.5},g);
+      E('rect',{x:17,y:36,width:12,height:6,rx:1},g); E('path',{d:'M33 42 h12 v-6 h-5 l-2 -2 -2 2 h-3 z'},g); },
+    excl:g=>{ E('path',{d:'M27.5 15 h5 l-1 18 h-3 z'},g); E('circle',{cx:30,cy:39,r:2.8},g); },
+    env:g=>{ E('path',{d:'M22 14 L22 30 M22 18 l-5 4 M22 21 l5 -4',stroke:'#111','stroke-width':2.2,fill:'none'},g);
+      E('path',{d:'M16 41 h28',stroke:'#111','stroke-width':2},g);
+      E('path',{d:'M28 36 q7 -6 14 0 q-7 6 -14 0 z M28 36 l-4 -3 v6 z'},g); E('circle',{cx:38,cy:35,r:.9,fill:'#fff'},g); }
+  };
+  document.querySelectorAll('svg[data-ghs]').forEach(svg=>{
+    E('path',{d:'M30 3 L57 30 L30 57 L3 30 Z',fill:'#fff',stroke:'#d81e05','stroke-width':4.5,'stroke-linejoin':'round'},svg);
+    const g=E('g',{fill:'#111'},svg); (GHS[svg.dataset.ghs]||(()=>{}))(g);
+  });
+
+  /* ---------- minimum weight (USP <41>): Mmin = 2 × s ÷ 0.10% = 2000 × s ---------- */
+  const mwS=document.getElementById('mw-s'), mwM=document.getElementById('mw-m'), mwO=document.getElementById('mw-out');
+  function calcMw(){
+    const s=num(mwS.value), m=num(mwM.value);
+    if(!(s>0)||!(m>0)){ mwO.className='calc-out'; mwO.textContent='Enter the standard deviation and the amount you plan to weigh.'; return; }
+    const mm=2000*s, ok=m>=mm;
+    mwO.className='calc-out'+(ok?'':' fail');
+    mwO.innerHTML='Minimum weight = 2000 × '+s+' = <b>'+(+mm.toPrecision(3))+' mg</b>. '+(ok?'Weighing <b>'+m+' mg</b> is fine.':'<b>'+m+' mg</b> is too little: weigh more, or use a better balance.');
+  }
+  mwS.addEventListener('input',calcMw); mwM.addEventListener('input',calcMw); calcMw();
+
+  /* ---------- standard solution concentration ---------- */
+  const scW=document.getElementById('sc-w'), scP=document.getElementById('sc-p'), scV=document.getElementById('sc-v'), scO=document.getElementById('sc-out');
+  function calcSc(){
+    const w=num(scW.value), p=num(scP.value), v=num(scV.value);
+    if(!(w>0)||!(p>0)||!(v>0)){ scO.className='calc-out'; scO.textContent='Enter the weight, potency and volume.'; return; }
+    const pure=w*p/100, c=pure/v;
+    scO.className='calc-out'+(p>100.5?' fail':'');
+    scO.innerHTML=w+' mg × '+p+'% = <b>'+pure.toFixed(2)+' mg</b> of drug in '+v+' ml = <b>'+c.toFixed(4)+' mg/ml</b>'+(p>100.5?'<br>A potency above 100% is not possible. Check the certificate.':'');
+  }
+  [scW,scP,scV].forEach(i=>i.addEventListener('input',calcSc)); calcSc();
+  if(window.umami){ [mwS,mwM].forEach(i=>i.addEventListener('change',()=>umami.track('calc-minweight'))); [scW,scP,scV].forEach(i=>i.addEventListener('change',()=>umami.track('calc-stdsoln'))); }
+
+  /* ---------- ANIMATION: weighing by difference ---------- */
+  ANIM.weigh=function(svg){
+    E('rect',{width:400,height:230,rx:12,fill:'#fbfcfb'},svg);
+    /* balance */
+    E('rect',{x:30,y:160,width:190,height:44,rx:8,fill:'#e4e6e3',stroke:'#9aa39d'},svg);
+    E('rect',{x:46,y:172,width:96,height:22,rx:4,fill:'#1c2620'},svg);
+    const disp=txt(svg,136,188,'',{'text-anchor':'end','font-family':'ui-monospace,monospace','font-size':13,fill:'#8fe3b0','font-weight':700});
+    E('rect',{x:70,y:150,width:110,height:8,rx:3,fill:'#b9c2bc'},svg);
+    E('path',{d:'M36 152 V60 H214 V152',fill:'none',stroke:'#b8cfe0','stroke-width':2,'stroke-dasharray':'5 3'},svg);
+    txt(svg,125,54,'draught shield',{'text-anchor':'middle'});
+    /* flask */
+    const fl=E('g',{},svg);
+    E('path',{d:'M318 120 V150 Q284 166 284 186 Q284 206 330 206 Q376 206 376 186 Q376 166 342 150 V120 Z',fill:'#fff',stroke:'#5c665f','stroke-width':2},fl);
+    E('path',{d:'M314 132 H346',stroke:COL.r,'stroke-width':1.4},fl);
+    const pile=E('path',{d:'',fill:'#f2ead2',stroke:'#c9b98a'},fl);
+    txt(svg,330,222,'100 ml flask',{'text-anchor':'middle'});
+    /* vial (drawn round its own origin) */
+    const vial=E('g',{},svg);
+    E('rect',{x:-11,y:-34,width:22,height:34,rx:4,fill:'#d9a066',opacity:.9,stroke:'#7a3f0f'},vial);
+    const pw=E('rect',{x:-9,y:-14,width:18,height:12,fill:'#f2ead2'},vial);
+    const cap=E('rect',{x:-9,y:-42,width:18,height:8,rx:2,fill:'#5c665f'},vial);
+    const grains=E('g',{fill:'#e3d6aa'},svg); const gr=[]; for(let i=0;i<8;i++) gr.push(E('circle',{r:1.6},grains));
+    const W1=1234.56, W2=1214.38;
+    return {dur:12, caps:[[0,'Level, clean, daily check passed. Close the shield and wait for a stable reading.'],[1.6,'Weigh the closed vial with the standard: <b>1234.56 mg</b>.'],[4,'Take the vial out and tip the powder into the flask. Do not use the spatula over the balance.'],[7.4,'Weigh the vial again: <b>1214.38 mg</b>.'],[9.6,'Mass in the flask = 1234.56 − 1214.38 = <b>20.18 mg</b>. Record both readings, not just the answer.']],
+      draw(t){
+        /* vial path: on pan → up and over the flask → tip → back to pan */
+        let x=125,y=150,rot=0, frac=0;
+        if(t>=3.6&&t<5){ const p=ease((t-3.6)/1.4); x=125+(305-125)*p; y=150-60*Math.sin(p*Math.PI)-30*p; }
+        else if(t>=5&&t<6.6){ x=305; y=120; rot=-110*ease((t-5)/0.6); frac=clamp((t-5.4)/1.1,0,1); if(t>6.1) rot=-110*(1-ease((t-6.1)/0.5)); }
+        else if(t>=6.6&&t<7.6){ const p=ease((t-6.6)/1); x=305+(125-305)*p; y=120+30*p-50*Math.sin(p*Math.PI); }
+        if(t>=5) frac=Math.max(frac,t>=6.5?1:frac);
+        vial.setAttribute('transform','translate('+fx(x)+' '+fx(y)+') rotate('+fx(rot)+')');
+        cap.setAttribute('opacity',t>=4.6&&t<7.2?0:1);
+        pw.setAttribute('height',fx(12*(1-0.82*frac))); pw.setAttribute('y',fx(-2-12*(1-0.82*frac)));
+        const h=10*frac; pile.setAttribute('d',frac>0?'M'+fx(330-26*frac)+' 205 Q330 '+fx(205-h*2)+' '+fx(330+26*frac)+' 205 Z':'');
+        gr.forEach((c,i)=>{ const on=t>5.4&&t<6.4; const f=((t*3+i/8)%1); c.setAttribute('opacity',on?1:0); c.setAttribute('cx',fx(296+i*1.5+f*6)); c.setAttribute('cy',fx(124+f*70)); });
+        const onPan=(t<3.6)||(t>=7.6);
+        let r='';
+        if(t>=0.8&&t<1.6) r=(W1-0.03+0.06*Math.random()).toFixed(2);
+        else if(t>=1.6&&t<3.6) r=W1.toFixed(2);
+        else if(!onPan) r='0.00';
+        else if(t>=7.6&&t<8.2) r=(W2-0.03+0.06*Math.random()).toFixed(2);
+        else if(t>=8.2) r=W2.toFixed(2);
+        else r='0.00';
+        if(t<0.8) r='0.00';
+        disp.textContent=r+' mg';
+      }};
+  };
+
+  /* ---------- player ---------- */
+  const players=[];
+  document.querySelectorAll('.anim').forEach(host=>{
+    const svg=host.querySelector('.anim-svg'), cap=host.querySelector('.anim-cap'), bP=host.querySelector('.a-play'), bR=host.querySelector('.a-replay'), fill=host.querySelector('.a-fill');
+    let A=null, t=0, playing=false, last=0, raf=0, opts={};
+    host.querySelectorAll('.a-tab').forEach(tb=>{ if(tb.classList.contains('on')) Object.assign(opts,JSON.parse(tb.dataset.o)); });
+    if(host.dataset.o) Object.assign(opts,JSON.parse(host.dataset.o));
+    function build(){ while(svg.firstChild) svg.removeChild(svg.firstChild); A=ANIM[host.dataset.anim](svg,opts); t=0; draw(); }
+    function draw(){ A.draw(t); fill.style.width=(t/A.dur*100).toFixed(1)+'%'; if(cap){ let c=A.caps[0][1]; A.caps.forEach(x=>{ if(t>=x[0]) c=x[1]; }); if(cap.innerHTML!==c) cap.innerHTML=c; } }
+    function ui(){ bP.textContent=playing?'❚❚ Pause':(t>=A.dur?'▶ Play again':(t>0?'▶ Resume':'▶ Play')); bP.setAttribute('aria-pressed',playing?'true':'false'); }
+    function frame(now){ if(!playing) return; t=Math.min(A.dur,t+(now-last)/1000); last=now; draw();
+      if(t>=A.dur){ playing=false; ui(); if(window.umami) umami.track('anim-complete',{anim:host.dataset.anim}); return; } raf=requestAnimationFrame(frame); }
+    function play(){ if(!A) build(); if(t>=A.dur) t=0; playing=true; last=performance.now(); ui(); cancelAnimationFrame(raf); raf=requestAnimationFrame(frame); }
+    function pause(){ playing=false; cancelAnimationFrame(raf); if(A) ui(); }
+    bP.addEventListener('click',()=>{ if(playing) pause(); else { play(); if(window.umami) umami.track('anim-play',{anim:host.dataset.anim}); } });
+    bR.addEventListener('click',()=>{ pause(); t=0; play(); if(window.umami) umami.track('anim-replay',{anim:host.dataset.anim}); });
+    host.querySelectorAll('.a-tab').forEach(tb=>tb.addEventListener('click',()=>{
+      host.querySelectorAll('.a-tab').forEach(x=>{ x.classList.toggle('on',x===tb); x.setAttribute('aria-pressed',x===tb?'true':'false'); });
+      opts=Object.assign({},JSON.parse(tb.dataset.o)); pause(); build(); play(); if(window.umami) umami.track('anim-tab',{anim:host.dataset.anim, tab:tb.textContent});
+    }));
+    players.push({host:host,
+      enter(){ build(); if(RMO){ t=A.dur; draw(); ui(); } else play(); },
+      leave(){ pause(); }});
+  });
+  function animsFor(n){ const s=slides[n-1]; players.forEach(p=>{ if(s.contains(p.host)) p.enter(); else p.leave(); }); }
+
+  /* ---------- AUTO-FIT: shrink a page until it fits without scrolling ---------- */
+  const MIN_K = 0.8;   /* never shrink text below 80% of normal */
+  const stageEl = document.getElementById('stage');
+  function updateMore(){
+    const s = slides[current-1];
+    const more = s && s.classList.contains('scrolly') && (s.scrollTop + s.clientHeight < s.scrollHeight - 4);
+    stageEl.classList.toggle('more', !!more);
+  }
+  /* ---------- FLOW CHARTS: straight row if it fits, otherwise snake ---------- */
+  document.querySelectorAll('.flow').forEach(f=>{
+    f._items=[...f.children].filter(c=>!c.classList.contains('arr')).map(c=>c.outerHTML);
+    f._sig=''; f._nat=0;
+  });
+  function flowDelays(f){ [...f.children].forEach((e,i)=>e.style.setProperty('--d',(0.1+i*0.08).toFixed(2)+'s')); }
+  function renderRow(f){
+    f.classList.remove('snake'); f.classList.add('row'); f.style.gridTemplateColumns='';
+    f.innerHTML=f._items.join('<span class="arr" aria-hidden="true">→</span>'); flowDelays(f);
+  }
+  function renderSnake(f,cols){
+    const it=f._items, n=it.length; let h='';
+    f.classList.remove('row'); f.classList.add('snake');
+    f.style.gridTemplateColumns=Array(cols).fill('minmax(0,1fr)').join(' 1.5em ');
+    for(let i=0;i<n;i++){
+      const r=Math.floor(i/cols), p=i%cols, rev=r%2===1;
+      const c=rev?cols-1-p:p, gr=2*r+1, gc=2*c+1;
+      h+='<div class="cell" style="grid-row:'+gr+';grid-column:'+gc+'">'+it[i]+'</div>';
+      if(i<n-1){
+        if(p<cols-1) h+='<span class="arr" aria-hidden="true" style="grid-row:'+gr+';grid-column:'+(rev?gc-1:gc+1)+'">'+(rev?'←':'→')+'</span>';
+        else h+='<span class="arr down" aria-hidden="true" style="grid-row:'+(gr+1)+';grid-column:'+gc+'">↓</span>';
+      }
+    }
+    f.innerHTML=h; flowDelays(f);
+  }
+  function layoutFlow(f,k){
+    const w=f.clientWidth; if(!w) return;
+    if(!f._nat){ renderRow(f); f._sig='row'; f._nat=f.scrollWidth/k; }
+    const fs=parseFloat(getComputedStyle(f).fontSize)||16;
+    const fitsRow=f._nat*k<=w+1;
+    const cols=Math.min(f._items.length,Math.max(2,Math.min(3,Math.floor(w/(9*fs)))));
+    const sig=fitsRow?'row':'s'+cols;
+    if(sig===f._sig) return;      /* unchanged: don't rebuild (avoids replaying animations) */
+    f._sig=sig; fitsRow?renderRow(f):renderSnake(f,cols);
+  }
+
+  function fit(slide){
+    if(!slide) return;
+    const si=slide.querySelector('.si');
+    const flows=[...slide.querySelectorAll('.flow')];
+    slide.classList.remove('scrolly'); slide.scrollTop = 0;
+    let k=1; slide.style.setProperty('--k',k); flows.forEach(f=>layoutFlow(f,k));
+    let g=0;
+    const over = () => si.scrollHeight>slide.clientHeight+1 || si.scrollWidth>slide.clientWidth+1;
+    while(g++<16 && over() && k>MIN_K){
+      k=+(k-0.03).toFixed(2); slide.style.setProperty('--k',k); flows.forEach(f=>layoutFlow(f,k));
+    }
+    if (over()) slide.classList.add('scrolly');
+    updateMore();
+  }
+  slides.forEach(s=>s.addEventListener('scroll', updateMore, {passive:true}));
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>fit(slides[current-1]),120); });
+
+  /* ---------- GATING ---------- */
+  function pending(slide){
+    let n=0;
+    slide.querySelectorAll('.toggle-wrap:not(.opt)').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
+    slide.querySelectorAll('.rcard').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
+    slide.querySelectorAll('.choice-set').forEach(s=>{ if(!s.dataset.done) n++; });
+    slide.querySelectorAll('.task').forEach(t=>{ if(!t.dataset.done) n++; });
+    return n;
+  }
+  function updateGate(alert){
+    const s=slides[current-1], n=(isEducator||current<maxReached)?0:pending(s);
+    btnNext.classList.toggle('locked', n>0);
+    if(n===0){ hint.className=''; hint.textContent=''; return; }
+    hint.className=alert?'alert':'';
+    const what=n===1?'1 item':n+' items';
+    hint.textContent=alert
+      ? 'Please finish the questions or open the sections on this page first ('+what+' left).'
+      : 'Finish '+what+' on this page to continue.';
+  }
+  function flagPending(slide){
+    [...slide.querySelectorAll('.toggle-wrap:not(.seen):not(.opt), .rcard:not(.seen), .choice-set:not([data-done]), .task:not([data-done])')]
+      .filter(e=>e.offsetParent!==null)
+      .forEach(e=>{ e.classList.remove('pulse'); void e.offsetWidth; e.classList.add('pulse'); });
+  }
+
+  function show(n){
+    slides.forEach((s,i)=>s.classList.toggle('active',i+1===n));
+    progFill.style.width=((n/TOTAL)*100)+'%';
+    progLbl.textContent=n+' / '+TOTAL;
+    btnBack.disabled=n===1;
+    btnNext.textContent=n===TOTAL?'Done':'Next →';
+    btnNext.setAttribute('data-umami-event',n===TOTAL?'carousel-selesai':'nav-next');
+    buildCharts(n);
+    fit(slides[n-1]);
+    requestAnimationFrame(()=>fit(slides[n-1]));
+    labFrame(slides[n-1]);
+    animsFor(n);
+    updateGate(false);
+    saveProgress();
+    if(window.umami) umami.track('slide-view',{slide:n});
+  }
+
+  /* NAV BUTTONS ONLY — no swipe, no keyboard */
+  btnNext.addEventListener('click',()=>{
+    const s=slides[current-1];
+    if(!isEducator && current>=maxReached && pending(s)>0){ updateGate(true); flagPending(s); if(window.umami) umami.track('gate-blocked',{slide:current}); return; }
+    if(current<TOTAL){ current++; reach(current); show(current); } else openOv('refs-overlay');
+  });
+  btnBack.addEventListener('click',()=>{ if(current>1){ current--; show(current); } });
+
+  document.querySelectorAll('.toggle-btn').forEach(b=>b.addEventListener('click',()=>{
+    const w=b.parentElement; w.classList.toggle('open'); w.classList.add('seen'); fit(slides[current-1]); updateGate(false);
+    if(window.umami) umami.track('toggle',{label:b.textContent.trim().slice(0,40)});
+  }));
+  document.querySelectorAll('.rcard').forEach(c=>c.addEventListener('click',()=>{ c.classList.add('seen'); fit(slides[current-1]); updateGate(false); }));
+
+  /* questions: a wrong choice is marked and explained; the student keeps going until right.
+     The right answer is never shown before it is chosen. First-try results feed the quiz score. */
+  document.querySelectorAll('.choice-set').forEach(set=>{
+    const ans=set.dataset.answer, fb=set.querySelector('.feedback');
+    const miss=document.createElement('div'); miss.className='feedback miss'; miss.setAttribute('aria-live','polite'); fb.parentNode.insertBefore(miss,fb);
+    set.querySelectorAll('.choice').forEach(c=>c.addEventListener('click',()=>{
+      if(set.dataset.done || c.classList.contains('wrong')) return;
+      const ok=c.dataset.v===ans;
+      if(set.dataset.first===undefined) set.dataset.first=ok?'1':'0';
+      if(ok){
+        set.dataset.done='1'; set.classList.add('done'); c.classList.add('right');
+        miss.classList.remove('show'); fb.classList.add('show');
+      } else {
+        c.classList.add('wrong'); c.setAttribute('aria-disabled','true');
+        miss.innerHTML='<b>Not quite.</b> '+(c.dataset.fb||'Think again, then choose another answer.'); miss.classList.add('show');
+      }
+      if(window.umami) umami.track('choice',{correct:ok, first:set.dataset.first==='1'});
+      updateScore(); fit(slides[current-1]); updateGate(false);
+    }));
+    const nx=set.querySelector('.next-q');
+    if(nx) nx.addEventListener('click',()=>{
+      const nxt=set.nextElementSibling;
+      if(nxt&&nxt.classList.contains('choice-set')){ set.classList.remove('cur'); nxt.classList.add('cur'); fit(slides[current-1]); }
+    });
+  });
+  function updateScore(){
+    const q=document.querySelectorAll('.quiz .choice-set'), done=[...q].filter(s=>s.dataset.done);
+    if(done.length<q.length) return;
+    document.getElementById('quiz-score').textContent='Right first time: '+done.filter(s=>s.dataset.first==='1').length+' / '+q.length;
+  }
+  function openOv(id){ if(id==='toc-overlay') buildToc(); document.getElementById(id).classList.add('open'); }
+  document.querySelectorAll('.overlay').forEach(o=>{
+    o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
+    o.querySelector('.close-ov').addEventListener('click',()=>o.classList.remove('open'));
+  });
+  /* demonstration videos: load the player only when opened, unload on close so it stops */
+  const vOv=document.getElementById('video-overlay'), vFrame=document.getElementById('video-frame');
+  function closeVid(){ vOv.classList.remove('open'); vFrame.innerHTML=''; }
+  document.querySelectorAll('.vid-btn').forEach(b=>b.addEventListener('click',()=>{
+    const id=b.dataset.yt;
+    document.getElementById('video-title').textContent=b.dataset.ytitle;
+    document.getElementById('video-link').href='https://www.youtube.com/watch?v='+id;
+    vFrame.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?rel=0&autoplay=1" title="'+b.dataset.ytitle.replace(/"/g,'&quot;')+'" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+    vOv.classList.add('open');
+  }));
+  vOv.addEventListener('click',e=>{ if(e.target===vOv) closeVid(); });
+  vOv.querySelector('.close-ov').addEventListener('click',closeVid);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && vOv.classList.contains('open')) closeVid(); });
+  document.getElementById('btn-toc').addEventListener('click',()=>openOv('toc-overlay'));
+  document.getElementById('btn-refs').addEventListener('click',()=>openOv('refs-overlay'));
+  document.getElementById('btn-pt').addEventListener('click',()=>{
+    document.getElementById('toc-overlay').classList.remove('open');
+    if(window.KompasPT) KompasPT.open();
+  });
+
+  /* contents: students can revisit any page they have already reached;
+     a signed-in Kompas educator can open every page */
+  const secNames={intro:'Introduction',rs:'1 · Reference standards',rh:'2 · Filling, packaging and storage',glp:'3 · Good laboratory practice',ppe:'4 · Personnel, premises and equipment',doc:'5 · Documentation',safe:'6 · Laboratory safety',tech:'7 · Practical technique',qclab:'Lab · QC Lab Day',end:'Wrap-up'};
+  function buildToc(){
+    const ul=document.getElementById('toc-list'); ul.innerHTML=''; let last='';
+    slides.forEach((s,i)=>{
+      if(s.dataset.sec!==last){ const h=document.createElement('li'); h.className='sec'; h.textContent=secNames[s.dataset.sec]; ul.appendChild(h); last=s.dataset.sec; }
+      const li=document.createElement('li'), b=document.createElement('button');
+      b.innerHTML='<span>'+(i+1)+'</span>'+s.dataset.title;
+      if(i+1===current) b.className='cur';
+      const open=isEducator || i+1<=maxReached;
+      if(!open){ b.classList.add('lockd'); b.disabled=true; b.setAttribute('aria-disabled','true'); }
+      b.addEventListener('click',()=>{ if(!(isEducator || i+1<=maxReached)) return; current=i+1; show(current); document.getElementById('toc-overlay').classList.remove('open'); if(window.umami) umami.track('toc-jump',{slide:current}); });
+      li.appendChild(b); ul.appendChild(li);
+    });
+  }
+
+  /* the labs need about 480 px of height to show each step without scrolling;
+     on shorter screens offer a full-screen link instead of a cramped frame */
+  function labFrame(slide){
+    const fr=slide && slide.querySelector('iframe[data-src]'); if(!fr) return;
+    const box=fr.parentElement, small=box.clientHeight<480;
+    box.classList.toggle('launch',small);
+    if(!small && !fr.src){ fr.src=fr.dataset.src; if(window.umami) umami.track('lab-embed-open',{lab:fr.dataset.src.split('.')[0]}); }
+  }
+  window.addEventListener('resize',()=>setTimeout(()=>labFrame(slides[current-1]),200));
+
+  /* the embedded labs report finished rounds */
+  window.addEventListener('message',e=>{
+    if(e.origin!==location.origin && location.origin!=='null') return;
+    const d=e.data||{};
+    if(d.type==='qc-lab' && window.umami) umami.track(d.type+'-'+d.event,{scenario:d.reaction||''});
+    if(d.type==='qc-lab' && d.event==='round-complete') markLab(d.type);
+  });
+  /* a lab page stays locked until that bench has one completed round. The bench also records
+     the round on this device, so a round finished full screen (another tab) unlocks it too. */
+  const LABKEY=l=>'kompas.qc-practice.'+l+'.done';
+  function markLab(l){
+    document.querySelectorAll('.lab-status[data-lab="'+l+'"]').forEach(t=>{ if(t.dataset.done) return; t.dataset.done='1'; t.classList.add('ok'); t.innerHTML='Lab round complete. Press Next to continue.'; });
+    updateGate(false);
+  }
+  ['qc-lab'].forEach(l=>{ try{ if(localStorage.getItem(LABKEY(l))) markLab(l); }catch(_){} });
+  window.addEventListener('storage',e=>{ const m=/^kompas\.qc-practice\.(qc-lab)\.done$/.exec(e.key||''); if(m && e.newValue) markLab(m[1]); });
+
+  /* Back to Kompas: return to the exact course view the student came from
+     (it always opens Kompas at the Interactive labs list). */
+  document.getElementById('btn-kompas').addEventListener('click',e=>{
+    try{
+      if (document.referrer && new URL(document.referrer).origin===location.origin && history.length>1){
+        e.preventDefault(); location.assign(e.currentTarget.href);
+      }
+    }catch(_){}
+  });
+
+  /* ---------- progress: furthest page reached, remembered on this device ---------- */
+  function reach(n){ if(n>maxReached){ maxReached=n; } }
+  function saveProgress(){ try{ localStorage.setItem(PKEY, JSON.stringify({max:maxReached, last:current})); }catch(_){} }
+
+  /* ---------- Kompas sign-in: read the user's own role (RLS allows only their own row) ---------- */
+  window.addEventListener('DOMContentLoaded',async()=>{
+    try{
+      if(!window.supabase){ renderCertBox(); return; }
+      const sb=window.supabase.createClient('https://jtkskwopnprgmxlhppro.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0a3Nrd29wbnByZ214bGhwcHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDU0NDQsImV4cCI6MjEwMjUyMTQ0NH0.MVvaIH6fPhzC0aRk8XIZMU1OrAZYNbsT9V1diP8fuGw',{auth:{detectSessionInUrl:false}});
+      authSb=sb;
+      const {data:{session}}=await sb.auth.getSession(); if(!session){ renderCertBox(); return; }
+      const {data}=await sb.from('profiles').select('role, full_name').eq('id',session.user.id).single();
+      if(!data){ renderCertBox(); return; }
+      signedIn=true; isEducator=data.role==='educator'; profileName=(data.full_name||'').trim();
+      buildToc(); renderCertBox(); updateGate(false);
+    }catch(_){ renderCertBox(); }
+  });
+
+  /* ---------- certificate of completion ---------- */
+  const certBox=document.getElementById('cert-box'), certOut=document.getElementById('cert-out');
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function renderCertBox(){
+    if(!certBox) return;
+    if(!signedIn){
+      certBox.innerHTML='<p style="margin:0 0 .4em">Sign in to <b>Kompas Semester</b> to get your certificate. It is issued in your registered name with a serial number.</p><a class="btn solid cert-dl" href="../../index.html" data-umami-event="certificate-signin">Open Kompas Semester</a><p class="small" style="margin:.4em 0 0">Then come back to this page.</p>';
+    } else if(!profileName){
+      certBox.innerHTML='<p style="margin:0">Your Kompas Semester profile has no name yet. Add it in your Kompas account, then come back.</p>';
+    } else {
+      certBox.innerHTML='<p style="margin:0 0 .4em">Name on your certificate: <b>'+esc(profileName)+'</b><br><span class="small">From your Kompas Semester account.</span></p><button class="btn solid" id="cert-make" type="button">Create certificate</button>';
+      document.getElementById('cert-make').addEventListener('click',makeCert);
+    }
+    document.getElementById('cert-check').hidden=!isEducator;
+    if(slides[current-1].contains(certBox)) fit(slides[current-1]);
+  }
+  async function makeCert(){
+    const btn=document.getElementById('cert-make'); btn.disabled=true; btn.textContent='Issuing…';
+    try{
+      const {data,error}=await authSb.rpc('issue_certificate',{p_explainer:'qc-practice'});
+      if(error||!data||!data.length) throw error||new Error('No certificate returned');
+      const c=data[0], cv=await drawCert(c.name_on_certificate, c.serial, c.issued_at);
+      /* Blob URL, not a data: URL — browsers block top-level navigation to data: URLs */
+      const blob=await new Promise((res,rej)=>cv.toBlob(b=>b?res(b):rej(new Error('PNG failed')),'image/png'));
+      if(window._certURL) URL.revokeObjectURL(window._certURL);
+      const url=window._certURL=URL.createObjectURL(blob), fname='qc-practice-certificate-'+c.serial+'.png';
+      certOut.innerHTML='<img class="cert-img" alt="Certificate of completion, serial '+esc(c.serial)+'" src="'+url+'"><p class="small" style="margin:.2em 0">Serial <b>'+esc(c.serial)+'</b></p><button class="btn solid" id="cert-dl" type="button">Download certificate (PNG)</button><p class="small" style="margin:.4em 0 0">On a phone, if nothing downloads, press and hold the certificate image and choose <b>Save image</b>.</p>';
+      /* plain button with no data-umami-event: Umami intercepts tagged links and ignores the download attribute */
+      document.getElementById('cert-dl').addEventListener('click',()=>{
+        const a=document.createElement('a'); a.href=url; a.download=fname; a.style.display='none';
+        document.body.appendChild(a); a.click(); a.remove();
+        if(window.umami) umami.track('certificate-download');
+      });
+      if(window.umami) umami.track('certificate-create');
+    }catch(err){
+      console.warn('Certificate not issued:', err);
+      certOut.innerHTML='<p class="calc-out fail">Could not issue your certificate. Check that you are signed in to Kompas Semester and online, then try again.</p>';
+    }
+    btn.disabled=false; btn.textContent='Create certificate'; fit(slides[current-1]);
+  }
+  const lookBtn=document.getElementById('cert-lookup');
+  if(lookBtn) lookBtn.addEventListener('click',async()=>{
+    const out=document.getElementById('cert-check-out'), sn=(document.getElementById('cert-serial').value||'').trim().toUpperCase();
+    if(!sn){ out.innerHTML='<p class="calc-out fail">Type a serial first.</p>'; fit(slides[current-1]); return; }
+    out.innerHTML='<p class="small">Checking…</p>';
+    try{
+      const {data,error}=await authSb.from('certificates').select('serial, explainer, name_on_certificate, issued_at').eq('serial',sn).maybeSingle();
+      if(error) throw error;
+      out.innerHTML=data
+        ? '<p class="calc-out"><b>Genuine.</b> '+esc(data.name_on_certificate)+' · '+esc(data.explainer)+' · issued '+new Date(data.issued_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Kuala_Lumpur'})+'</p>'
+        : '<p class="calc-out fail"><b>No certificate has this serial.</b> Treat the certificate as not genuine.</p>';
+      if(window.umami) umami.track('certificate-check');
+    }catch(_){ out.innerHTML='<p class="calc-out fail">Could not check right now. Try again.</p>'; }
+    fit(slides[current-1]);
+  });
+  function wrapLines(ctx,text,maxW){ const words=text.split(' '), lines=[]; let line=''; words.forEach(w=>{ const t=line?line+' '+w:w; if(ctx.measureText(t).width>maxW && line){ lines.push(line); line=w; } else line=t; }); if(line) lines.push(line); return lines; }
+  async function drawCert(name, serial, issuedAt){
+    try{ await Promise.all(['800 60px "DM Sans"','700 30px "DM Sans"','500 30px "DM Sans"'].map(f=>document.fonts.load(f))); }catch(_){}
+    const W=2000, H=1414, c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+    const F=(w,sz)=>w+' '+sz+'px "DM Sans", system-ui, sans-serif';
+    x.fillStyle='#ffffff'; x.fillRect(0,0,W,H);
+    x.strokeStyle='#2d6a4f'; x.lineWidth=14; x.strokeRect(50,50,W-100,H-100);
+    x.strokeStyle='#cfe6d9'; x.lineWidth=4; x.strokeRect(84,84,W-168,H-168);
+    /* motif */
+    x.strokeStyle='#cfe6d9'; x.lineWidth=6; x.beginPath();
+    for(let i=0;i<=400;i++){ const t=i/400, X=1280+t*600, y=1220-(220*Math.exp(-Math.pow((t-.3)/.035,2))+150*Math.exp(-Math.pow((t-.68)/.04,2))); i?x.lineTo(X,y):x.moveTo(X,y); } x.stroke();
+    x.textAlign='center'; x.fillStyle='#8a5d14'; x.font=F(700,30);
+    x.fillText('KOMPAS SEMESTER  ·  AUFTHORITY EDU',W/2,200);
+    x.fillStyle='#1c2620'; x.font=F(800,92); x.fillText('Certificate of Completion',W/2,320);
+    x.fillStyle='#3f4742'; x.font=F(500,38); x.fillText('This certifies that',W/2,430);
+    let sz=104; x.font=F(800,sz); while(x.measureText(name).width>1500 && sz>56){ sz-=4; x.font=F(800,sz); }
+    x.fillStyle='#2d6a4f'; x.fillText(name,W/2,560);
+    x.strokeStyle='#c9cec9'; x.lineWidth=3; x.beginPath(); x.moveTo(W/2-620,600); x.lineTo(W/2+620,600); x.stroke();
+    x.fillStyle='#3f4742'; x.font=F(500,38); x.fillText('has completed every page of the interactive explainer',W/2,680);
+    x.fillStyle='#1c2620'; x.font=F(800,60); x.fillText('Reference Standards and GLP, Explained',W/2,775);
+    x.fillStyle='#636b65'; x.font=F(500,32); x.fillText('Reference standards · Good laboratory practice · Safety · Technique',W/2,835);
+    x.textAlign='left'; x.font=F(500,30); x.fillStyle='#3f4742';
+    const outcomes=['Define reference standards, their types, and how they are filled, packaged and stored.','Describe GLP requirements for personnel, premises, equipment and documentation.','Apply QC laboratory safety and core technique: weighing and standard solutions.'];
+    let y=930; outcomes.forEach(o=>{ x.fillStyle='#2d6a4f'; x.beginPath(); x.arc(300,y-10,9,0,Math.PI*2); x.fill(); x.fillStyle='#3f4742'; wrapLines(x,o,1300).forEach(l=>{ x.fillText(l,330,y); y+=44; }); y+=6; });
+    const day=new Date(issuedAt).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Kuala_Lumpur'});
+    x.font=F(700,32); x.fillStyle='#1c2620'; x.fillText('Issued: '+day,260,1180);
+    x.fillText('Serial: '+serial,260,1232);
+    x.font=F(500,24); x.fillStyle='#636b65'; x.textAlign='center';
+    x.fillText('Recorded by Kompas Semester; educators can check this serial. A record of completion, not an official KPJ Healthcare University award.',W/2,1316);
+    return c;
+  }
+
+
+  buildToc();
+  show(current);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fit(slides[current-1]));
+})();
+</script>
+</body>
+</html>
