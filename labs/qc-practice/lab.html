@@ -235,6 +235,8 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
 .wsheet .blank{display:inline-block;width:6em;border-bottom:1.5px solid #9aa39d;height:1em}
 .chips.multi .chip.on::before{content:"✓ "}
 .today{font-weight:700;color:var(--ink)}
+.num-in.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red)}
+.num-in.wrong + .unit::after{content:" ✕ check this";color:var(--red);font-weight:700}
 </style>
 </head>
 <body>
@@ -545,7 +547,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       '<div class="q">e. Drug in the 100 ml stock (4 decimal places)</div><div class="calc-in">'+numIn('e2',R.ans2.e)+'<span class="unit">mg/ml</span></div>'+
       '<div class="q">f. Final standard solution (2 decimal places)</div><div class="calc-in">'+numIn('f2',R.ans2.f)+'<span class="unit">µg/ml</span></div>';
     ask(qb,'g. Making up to volume, you read:', o.g,'g',R.ans2,2);
-    [['a2','a'],['d2','d'],['e2','e'],['f2','f']].forEach(([id,k])=>{ const i=$('#'+id); if(i) i.addEventListener('input',()=>{ R.ans2[k]=i.value; unsolveFrom(2); }); });
+    [['a2','a'],['d2','d'],['e2','e'],['f2','f']].forEach(([id,k])=>{ const i=$('#'+id); if(i) i.addEventListener('input',()=>{ i.classList.remove('wrong'); R.ans2[k]=i.value; unsolveFrom(2); }); });
   }
   $('#chk2').addEventListener('click',()=>{
     const lines=[]; let miss=0; const o=q2Opts();
@@ -581,6 +583,8 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       else lines.push(mixLine('M11','stock (mg/ml) × 4 ÷ 100 × 1000.',2));
     }
     if(R.ans2.g==null) miss++; else { const c=o.g[R.ans2.g]; if(!c[1]) lines.push(mixLine(c[3],c[2],2)); }
+    const bad={a2:a!=null&&!close(a,M,.01,.05), d2:d!=null&&!close(d,R.m,0,.005), e2:e!=null&&!close(e,S,.002,.00006), f2:f!=null&&!close(f,F,.002,.006)};
+    Object.keys(bad).forEach(id=>{ const el=$('#'+id); if(el) el.classList.toggle('wrong',bad[id]); });
     if(lines.length) return msg(2,'bad',lines.join(''));
     if(miss) return msg(2,'near','Answer every part first (parts a to c are on the '+(innerWidth>=900?'left':'previous screen')+').');
     msg(2,'good','<b>Right.</b> Minimum weight '+(+M.toPrecision(3))+' mg. '+R.m.toFixed(2)+' mg × '+R.P.toFixed(1)+'% ÷ 100 ml = '+S.toFixed(4)+' mg/ml; after 4 → 100 ml: <b>'+F.toFixed(2)+' µg/ml</b>.'); solve(2);
