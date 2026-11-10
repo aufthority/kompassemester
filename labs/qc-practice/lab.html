@@ -459,6 +459,9 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     const m=$('#m'+n); m.className='msg '+cls;
     const tmp=document.createElement('div'); tmp.innerHTML=html; const ps=tmp.querySelectorAll(':scope > p');
     if(ps.length>2){ for(let i=2;i<ps.length;i++) ps[i].remove(); tmp.insertAdjacentHTML('beforeend','<p>…and '+(ps.length-2)+' more. Fix these first.</p>'); }
+    /* after 3 wrong tries on a step, point the student to the method and the idea (never to the answer) */
+    if(cls==='bad'){ R.tries=R.tries||[]; R.tries[n]=(R.tries[n]||0)+1;
+      if(R.tries[n]>=3) tmp.insertAdjacentHTML('beforeend','<p class="stuck"><b>Stuck?</b> Tap <b>'+(($('#stp-btn')||{}).textContent||'STP')+'</b> (top right) to read the method for this step, and <b>Hints</b> for the idea behind it. Then fix one point at a time.</p>'); }
     m.innerHTML=tmp.innerHTML;
     track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); fitPage();
   }

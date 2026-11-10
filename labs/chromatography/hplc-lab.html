@@ -251,7 +251,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       <div class="btns" style="margin-top:0"><button class="btn solid" id="inject1" type="button">Inject the standard</button></div>
       <div id="chrom1"></div>
       <div id="k1"></div>
-      <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button><button class="btn ghost" id="rev1" type="button" hidden>Show the working</button><button class="btn ghost" id="reset1" type="button" title="Clear the chromatogram and inject again">Reset</button></div>
+      <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button><button class="btn ghost" id="reset1" type="button" title="Clear the chromatogram and inject again">Reset</button></div>
       <div class="msg" id="m1">Choose the settings, make a prediction, then inject.</div>
       <div class="work" id="w1"></div>
     </section>
@@ -262,7 +262,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     </section>
     <section class="scr" data-step="2" data-pane="b" data-title="Pass or stop?">
       <div id="q2"></div>
-      <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button><button class="btn ghost" id="rev2" type="button" hidden>Show the working</button></div>
+      <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button></div>
       <div class="msg" id="m2">Compare every value with its limit, then decide.</div>
       <div class="work" id="w2"></div>
     </section>
@@ -272,14 +272,14 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     </section>
     <section class="scr" data-step="3" data-pane="b" data-title="Calculate">
       <div id="s3b"></div>
-      <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button><button class="btn ghost" id="rev3" type="button" hidden>Show the working</button></div>
+      <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button></div>
       <div class="msg" id="m3">Answer part a, then give R2 to 1 decimal place.</div>
       <div class="work" id="w3"></div>
     </section>
 
     <section class="scr" data-step="4" data-title="Decide">
       <div id="q4"></div>
-      <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button><button class="btn ghost" id="rev4" type="button" hidden>Show the working</button></div>
+      <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button></div>
       <div class="msg" id="m4">Compare your result with the right limits.</div>
       <div class="btns" id="endrow" hidden><button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New values</button><button class="btn ghost" id="btn-next" type="button">Next scenario →</button></div>
     </section>
@@ -497,14 +497,14 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     return g;
   }
   /* feedback: at most two points, so a page never overflows.
-     A wrong Check counts as a try; "Show the working" appears after 3 tries on that step. */
+     A wrong Check counts as a try; after 3 tries on a step the student is pointed to the STP and Hints. */
   function msg(n,cls,html){
     const m=$('#m'+n); m.className='msg '+cls;
     const tmp=document.createElement('div'); tmp.innerHTML=html; const ps=tmp.querySelectorAll(':scope > p');
     if(ps.length>2){ for(let i=2;i<ps.length;i++) ps[i].remove(); tmp.insertAdjacentHTML('beforeend','<p>…and '+(ps.length-2)+' more. Fix these first.</p>'); }
     if(cls==='bad'){
       R.tries[n]=(R.tries[n]||0)+1;
-      if(R.tries[n]>=3){ const rv=$('#rev'+n); if(rv.hidden){ rv.hidden=false; track('lab-step'+n+'-working-offered',{scenario:R.S.id}); } tmp.insertAdjacentHTML('beforeend','<p class="stuck">Stuck? <b>Show the working</b> is now available.</p>'); }
+      if(R.tries[n]>=3) tmp.insertAdjacentHTML('beforeend','<p class="stuck"><b>Stuck?</b> Tap <b>'+(($('#stp-btn')||{}).textContent||'STP')+'</b> (top right) to read the method for this step, and <b>Hints</b> for the idea behind it. Then fix one point at a time.</p>');
     }
     m.innerHTML=tmp.innerHTML;
     track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); fitPage();
@@ -531,7 +531,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     R.beat=0; R.storyDone=false; renderStory();
     renderSet(); renderPred(); $('#chrom1').innerHTML=''; $('#k1').innerHTML='';
     $('#ss').innerHTML=''; $('#q2').innerHTML=''; $('#s3a').innerHTML=''; $('#s3b').innerHTML=''; $('#q4').innerHTML='';
-    [1,2,3,4].forEach(n=>{ clearMsg(n); $('#rev'+n).hidden=true; }); $('#endrow').hidden=true; setLocks();
+    [1,2,3,4].forEach(n=>{ clearMsg(n); }); $('#endrow').hidden=true; setLocks();
   }
 
   /* ---------- chromatogram drawing ---------- */
@@ -594,7 +594,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   $('#reset1').addEventListener('click',()=>{
     R.ans1.k=null; R.ssFixed=false; R.ans2={}; R.ans3={}; R.ans4={};
     ['#ss','#q2','#s3a','#s3b','#q4'].forEach(s=>{ $(s).innerHTML=''; });
-    [2,3,4].forEach(n=>{ $('#rev'+n).hidden=true; R.tries[n]=0; });
+    [2,3,4].forEach(n=>{ R.tries[n]=0; });
     invalidate1();
   });
   function invalidate1(){ R.inj=null; $('#chrom1').innerHTML=''; $('#k1').innerHTML=''; unsolveFrom(1); clearMsg(1); fitPage(); }
@@ -639,19 +639,6 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     }
     msg(1,'good','<b>Right.</b> k′ = '+want.toFixed(2)+' (limit: at least 2.0). The method uses methanol 55%, the value in the STP.');
     solve(1);
-  });
-  $('#rev1').addEventListener('click',()=>{
-    R.set={col:0, ip:0, meoh:55, wl:0}; R.pred=0; renderSet(); renderPred();
-    $('#inject1').click();
-    const want=(R.inj.tR-R.t0)/R.t0; R.ans1.k=want.toFixed(2); $('#kk').value=R.ans1.k;
-    const w=$('#w1'); w.className='work show';
-    w.innerHTML='<table class="w"><tr><th>Setting</th><th>Why</th></tr>'+
-      '<tr><td>C18 (ODS) column</td><td>Reverse phase: holds the non-polar part of the drug.</td></tr>'+
-      '<tr><td>Hexanesulfonate, pH 3.6</td><td>The drug is protonated at pH 3.6. The sulfonate forms an ion pair that sticks to C18.</td></tr>'+
-      '<tr><td>Methanol 55%</td><td>Gives k′ ≥ 2 and a peak within about 10 min.</td></tr>'+
-      '<tr><td>254 nm</td><td>The drug absorbs UV here.</td></tr>'+
-      '<tr><td>k′</td><td>('+R.inj.tR.toFixed(2)+' − '+R.t0.toFixed(2)+') ÷ '+R.t0.toFixed(2)+' = <b>'+want.toFixed(2)+'</b></td></tr></table>';
-    msg(1,'near','Method set to the STP conditions.'); track('lab-step1-reveal',{scenario:R.S.id}); solve(1);
   });
 
   /* ---------- step 2: system suitability ---------- */
@@ -708,17 +695,6 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     }
     msg(2,'good','<b>Right.</b> Every value is within its limit, so the system can be trusted and the samples can be injected.'); solve(2);
   });
-  $('#rev2').addEventListener('click',()=>{
-    let pre='';
-    if(!R.ssFixed && R.failMode){ const P=ssPass(R.ss); pre='<p class="small">First set: '+(R.failMode==='precision'?'RSD of area '+P.rsdA.toFixed(2)+'% (above 2.0%)':'tailing factor '+R.ss.T.toFixed(2)+' (above 2.0)')+'. '+fixText()+'</p>'; R.ssFixed=true; R.ss2=R.ss2||buildSS(false); }
-    const ss=ssNow(), P=ssPass(ss), m=mean(ss.areas), s=sd(ss.areas);
-    R.ans2={dec:0}; renderSS();
-    const rows=[['Tailing factor',ss.T.toFixed(2),'≤ 2.0'],['Plate count',ss.N.toLocaleString('en-US'),'≥ 1500'],['RSD of tR',P.rsdT.toFixed(2)+'%','≤ 1.0%'],['k′',ss.k.toFixed(2),'≥ 2.0'],['RSD of area',P.rsdA.toFixed(2)+'%','≤ 2.0%']];
-    const w=$('#w2'); w.className='work show';
-    w.innerHTML=pre+'<table class="w"><tr><th>Parameter</th><th>Result</th><th>Limit</th></tr>'+rows.map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+' ✓</td></tr>').join('')+'</table>'+
-      '<p class="small">RSD = spread of the five areas ÷ their average × 100 = '+fmtA(s)+' ÷ '+fmtA(m)+' × 100. The data system does this for you.</p>';
-    msg(2,'near','All limits met on this set: inject the samples.'); track('lab-step2-reveal',{scenario:R.S.id}); solve(2);
-  });
 
   /* ---------- step 3: assay ---------- */
   function assay(){
@@ -766,13 +742,6 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     if(miss) return msg(3,'near','Answer both parts.');
     msg(3,'good','<b>Right.</b> '+a.R1.toFixed(2)+' mg per tablet = '+a.R2.toFixed(1)+'% of label claim.'); solve(3);
   });
-  $('#rev3').addEventListener('click',()=>{
-    const a=assay(); R.ans3={why:q3Opts().findIndex(o=>o[1]), r2:a.R2.toFixed(1)}; renderStep3();
-    const w=$('#w3'); w.className='work show';
-    const rows=[['Spl Area ÷ Std Area','Compares the sample peak with the standard peak'],['Std Wt ÷ 50 × 4 ÷ 50','How much drug is in each ml of the standard'],['× 25','The sample was made up to 25 ml'],['ATW ÷ Spl Wt','Scales the powder weighed up to one whole tablet'],['P ÷ 100','Allows for the purity of the standard'],['R2',a.R1.toFixed(2)+' ÷ 4 × 100 = <b>'+a.R2.toFixed(1)+'%</b>']];
-    w.innerHTML='<table class="w"><tr><th>Term</th><th>What it does</th></tr>'+rows.map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td></tr>').join('')+'</table>';
-    msg(3,'near','Working shown.'); track('lab-step3-reveal',{scenario:R.S.id}); solve(3);
-  });
 
   /* ---------- step 4: decide ---------- */
   function q4Def(){
@@ -799,10 +768,6 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     if(miss) return msg(4,'near','Answer both parts.');
     if(lines.length) return msg(4,'bad',lines.join(''));
     msg(4,'good','<b>Round complete.</b> '+summary4()); solve(4);
-  });
-  $('#rev4').addEventListener('click',()=>{
-    R.q4=null; const Q=q4Def(); Q.forEach((q,k)=>{ R.ans4[k]=q.o.findIndex(o=>o[1]); }); renderStep4();
-    msg(4,'near',summary4()); track('lab-step4-reveal',{scenario:R.S.id}); solve(4);
   });
 
   function solve(k){

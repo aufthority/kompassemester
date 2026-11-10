@@ -240,7 +240,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     </section>
     <section class="scr" data-step="1" data-pane="b" data-title="Extract">
       <div id="q1b"></div>
-      <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button><button class="btn ghost" id="rev1" type="button" hidden>Show the working</button></div>
+      <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button></div>
       <div class="msg" id="m1">Answer every part, then check.</div>
       <div class="work" id="w1"></div>
     </section>
@@ -256,7 +256,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     </section>
     <section class="scr" data-step="2" data-pane="b" data-title="Look at the plate">
       <div id="obs"></div>
-      <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button><button class="btn ghost" id="rev2" type="button" hidden>Show the working</button><button class="btn ghost" id="reset2" type="button" title="Clear the plate and run it again">Reset</button></div>
+      <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button><button class="btn ghost" id="reset2" type="button" title="Clear the plate and run it again">Reset</button></div>
       <div class="msg" id="m2">Run the plate, then answer the questions.</div>
       <div class="work" id="w2"></div>
     </section>
@@ -267,14 +267,14 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     </section>
     <section class="scr" data-step="3" data-pane="b" data-title="Calculate Rf">
       <div id="q3"></div>
-      <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button><button class="btn ghost" id="rev3" type="button" hidden>Show the working</button></div>
+      <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button></div>
       <div class="msg" id="m3">Rf = spot distance ÷ solvent front distance. Give 2 decimal places.</div>
       <div class="work" id="w3"></div>
     </section>
 
     <section class="scr" data-step="4" data-title="Decide">
       <div id="q4"></div>
-      <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button><button class="btn ghost" id="rev4" type="button" hidden>Show the working</button></div>
+      <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button></div>
       <div class="msg" id="m4">Compare with the specification.</div>
       <div class="btns" id="endrow" hidden><button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New values</button><button class="btn ghost" id="btn-next" type="button">Next scenario →</button></div>
     </section>
@@ -489,14 +489,14 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     return g;
   }
   /* feedback: at most two points, so a page never overflows.
-     A wrong Check counts as a try; "Show the working" appears after 3 tries on that step. */
+     A wrong Check counts as a try; after 3 tries on a step the student is pointed to the STP and Hints. */
   function msg(n,cls,html){
     const m=$('#m'+n); m.className='msg '+cls;
     const tmp=document.createElement('div'); tmp.innerHTML=html; const ps=tmp.querySelectorAll(':scope > p');
     if(ps.length>2){ for(let i=2;i<ps.length;i++) ps[i].remove(); tmp.insertAdjacentHTML('beforeend','<p>…and '+(ps.length-2)+' more. Fix these first.</p>'); }
     if(cls==='bad'){
       R.tries[n]=(R.tries[n]||0)+1;
-      if(R.tries[n]>=3){ const rv=$('#rev'+n); if(rv.hidden){ rv.hidden=false; track('lab-step'+n+'-working-offered',{scenario:R.S.id}); } tmp.insertAdjacentHTML('beforeend','<p class="stuck">Stuck? <b>Show the working</b> is now available.</p>'); }
+      if(R.tries[n]>=3) tmp.insertAdjacentHTML('beforeend','<p class="stuck"><b>Stuck?</b> Tap <b>'+(($('#stp-btn')||{}).textContent||'STP')+'</b> (top right) to read the method for this step, and <b>Hints</b> for the idea behind it. Then fix one point at a time.</p>');
     }
     m.innerHTML=tmp.innerHTML;
     track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); fitPage();
@@ -521,7 +521,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
       b.addEventListener('click',()=>{ if(i===sc) return; sc=i; track('lab-pick',{scenario:s.id}); newRound(); }); sc0.appendChild(b); });
     R.beat=0; R.storyDone=false; renderStory();
     renderQ1(); renderPhase(); drawPlate(); renderObs(); $('#dist').innerHTML=''; $('#q3').innerHTML=''; $('#q4').innerHTML=''; $('#plate3').innerHTML='';
-    [1,2,3,4].forEach(n=>{ clearMsg(n); $('#rev'+n).hidden=true; }); $('#endrow').hidden=true; setLocks();
+    [1,2,3,4].forEach(n=>{ clearMsg(n); }); $('#endrow').hidden=true; setLocks();
   }
 
   /* ---------- step 1: prepare ---------- */
@@ -561,16 +561,6 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     if(lines.length) return msg(1,'bad',lines.join(''));
     if(miss) return msg(1,'near','Answer every part first (part a is on the previous screen).');
     msg(1,'good','<b>Right.</b> Weigh '+r2(W).toFixed(2)+' mg of powder.'); solve(1);
-  });
-  $('#rev1').addEventListener('click',()=>{
-    const W=want1(); R.ans1.a=r2(W).toFixed(2); R.ans1.b=q1Opts().findIndex(o=>o[1]); if(R.test==='rs') R.ans1.c='0.2';
-    renderQ1();
-    const w=$('#w1'); w.className='work show';
-    w.innerHTML='<table class="w"><tr><th>Part</th><th>Working</th></tr>'+
-      '<tr><td>a</td><td>'+R.want+' mg × '+R.atw.toFixed(1)+' mg ÷ 4 mg = <b>'+r2(W).toFixed(2)+' mg</b></td></tr>'+
-      '<tr><td>b</td><td>The drug dissolves; the filler does not and stays on the filter.</td></tr>'+
-      (R.test==='rs'?'<tr><td>c</td><td>1 ÷ 500 × 100 = <b>0.2%</b></td></tr>':'')+'</table>';
-    msg(1,'near','Working shown. Continue to the plate.'); track('lab-step1-reveal',{scenario:R.S.id}); solve(1);
   });
 
   /* ---------- step 2: the plate ---------- */
@@ -668,7 +658,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     if(R.badPh){ R.phase=R.badPh; buildRun(R.badPh); R.stage=3; R.trainee=true; } else { R.stage=0; R.run=null; }
     R.ans3=null; R.ans4={};
     ['#dist','#q3','#plate3','#q4'].forEach(s=>{ $(s).innerHTML=''; });
-    [3,4].forEach(n=>{ $('#rev'+n).hidden=true; R.tries[n]=0; });
+    [3,4].forEach(n=>{ R.tries[n]=0; });
     unsolveFrom(2); clearMsg(2); renderPhase(); drawPlate(); renderObs(); fitPage();
   });
 
@@ -725,19 +715,6 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     msg(2,'good','<b>Right.</b> '+(R.test==='id'?(R.fake?'Lane (1) has one UV spot and nothing turns orange.':'Two UV spots in each lane: chlorpheniramine (orange after spraying) and maleic acid.'):'Maleic acid stays on the origin in this basic mobile phase, so it is disregarded.'));
     solve(2);
   });
-  $('#rev2').addEventListener('click',()=>{
-    if(busy) return msg(2,'near','Wait for the plate to finish developing.');
-    R.trainee=false; R.phase=R.test; buildRun(R.test); R.stage=R.test==='id'?4:3; R.oq=null;
-    const qs=obsQs(); qs.forEach(q=>{ R.ans2[q.key]=q.o.findIndex(o=>o[1]); });
-    renderPhase(); drawPlate(); renderObs();
-    const w=$('#w2'); w.className='work show';
-    w.innerHTML='<table class="w"><tr><th>Stage</th><th>What it shows</th></tr>'+
-      (R.badPh?'<tr><td>Trainee</td><td>'+(R.badPh==='hex'?'Hexane is too weak: spots stay on the origin.':'Methanol is too strong: spots run to the front.')+'</td></tr>':'')+
-      '<tr><td>Mobile phase</td><td>'+PH[R.test].t+'</td></tr><tr><td>Daylight</td><td>Blank: the spots are colourless.</td></tr>'+
-      (R.test==='id'?'<tr><td>UV 254</td><td>'+(R.fake?'Lane (1): one spot. Lane (2): two spots.':'Two spots per lane.')+'</td></tr><tr><td>Spray</td><td>Only the amine (chlorpheniramine) turns orange.</td></tr>'
-                    :'<tr><td>UV 254</td><td>Origin spot (maleic acid, disregard), main spot, one secondary spot.</td></tr>')+'</table>';
-    msg(2,'near','Plate run with the correct mobile phase.'); track('lab-step2-reveal',{scenario:R.S.id}); solve(2);
-  });
 
   /* ---------- step 3: Rf ---------- */
   function targets3(){
@@ -775,12 +752,6 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     if(miss) return msg(3,'near','Enter both Rf values.');
     msg(3,'good','<b>Right.</b> '+T.map(t=>t.s.letter+': '+(t.s.dist/R.front).toFixed(2)).join(' · ')); solve(3);
   });
-  $('#rev3').addEventListener('click',()=>{
-    const T=targets3(); R.ans3=T.map(t=>(t.s.dist/R.front).toFixed(2)); renderStep3();
-    const w=$('#w3'); w.className='work show';
-    w.innerHTML='<table class="w"><tr><th>Spot</th><th>Working</th><th>Rf</th></tr>'+T.map(t=>'<tr><td><b>'+t.s.letter+'</b></td><td>'+t.s.dist.toFixed(1)+' ÷ '+R.front.toFixed(1)+'</td><td><b>'+(t.s.dist/R.front).toFixed(2)+'</b></td></tr>').join('')+'</table>';
-    msg(3,'near','Rf = spot distance ÷ front distance.'); track('lab-step3-reveal',{scenario:R.S.id}); solve(3);
-  });
 
   /* ---------- step 4: decide ---------- */
   function q4Def(){
@@ -815,10 +786,6 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     if(R.test==='id') return R.fake?'Report: does not comply with identification. Quarantine the sample and report it to the regulator (in Malaysia, NPRA) as a suspected counterfeit.':'Report: identification complies with BP.';
     return R.impHigh?'Report: does not comply. The batch cannot be released until the impurity is investigated.':'Report: related substances comply (no secondary spot above 0.2%).';
   }
-  $('#rev4').addEventListener('click',()=>{
-    const Q=q4Def(); Q.forEach((q,k)=>{ R.ans4[k]=q.o.findIndex(o=>o[1]); }); renderStep4();
-    msg(4,'near',summary4()); track('lab-step4-reveal',{scenario:R.S.id}); solve(4);
-  });
 
   function solve(k){
     solved[k-1]=true; track('lab-step'+k+'-solved',{scenario:R.S.id}); /* one event name per step: Umami funnels match names */
