@@ -361,7 +361,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <nav>
     <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
     <div class="nav-right">
-      <a class="icon-btn back-kompas" id="btn-kompas" href="../../index.html" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+      <a class="icon-btn back-kompas" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
       <button class="icon-btn" id="btn-toc" data-umami-event="open-contents">Contents</button>
       <span id="progress-label">1 / 44</span>
     </div>
@@ -2037,11 +2037,11 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   window.addEventListener('storage',e=>{ const m=/^kompas\.chromatography\.(tlc-lab|hplc-lab)\.done$/.exec(e.key||''); if(m && e.newValue) markLab(m[1]); });
 
   /* Back to Kompas: return to the exact course view the student came from
-     (history.back keeps Kompas's state); otherwise open the Kompas home page. */
+     (it always opens Kompas at the Interactive labs list). */
   document.getElementById('btn-kompas').addEventListener('click',e=>{
     try{
       if (document.referrer && new URL(document.referrer).origin===location.origin && history.length>1){
-        e.preventDefault(); history.back();
+        e.preventDefault(); location.assign(e.currentTarget.href);
       }
     }catch(_){}
   });

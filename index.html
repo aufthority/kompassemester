@@ -701,22 +701,54 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
         <div class="modal-title" id="tour-title">Take a tour</div>
         <button class="modal-close" id="tour-close" type="button" aria-label="Close"><svg class="icon icon-x" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg></button>
       </div>
-      <div class="meta">Try a few of the labs Kompas Semester students use. No account needed.</div>
+      <div class="meta">Try the labs and explainers Kompas Semester students use. No account needed.</div>
       <div class="tour-list">
-        <a class="card glass lab-card" href="labs/chromatography/index.html" data-tour="chromatography">
-          <div><h3>Chromatography Explainer</h3><div class="meta">Extraction, TLC, HPLC and GC, with animations of why compounds separate.</div></div>
+        <a class="card glass lab-card" href="labs/orbitals.html" data-tour="orbitals">
+          <div><h3>Atomic Orbital Lab</h3><div class="meta">See s, p and d orbitals in 3D, from hydrogen to krypton.</div></div>
           <span class="lab-card-go">Open</span>
         </a>
         <a class="card glass lab-card" href="labs/atomic-structure.html" data-tour="atomic-structure">
           <div><h3>Atomic Structure Explorer</h3><div class="meta">Build an atom and see how its electrons are arranged.</div></div>
           <span class="lab-card-go">Open</span>
         </a>
+        <a class="card glass lab-card" href="labs/trends.html" data-tour="trends">
+          <div><h3>Periodic Trends Lab</h3><div class="meta">Atomic size, ionisation energy and electronegativity across the table.</div></div>
+          <span class="lab-card-go">Open</span>
+        </a>
+        <a class="card glass lab-card" href="labs/periodic-trends/index.html" data-tour="periodic-trends">
+          <div><h3>Periodic Trends Explainer</h3><div class="meta">The same trends page by page, with quick checks.</div></div>
+          <span class="lab-card-go">Open</span>
+        </a>
+        <a class="card glass lab-card" href="labs/chemical-bonding/index.html" data-tour="chemical-bonding">
+          <div><h3>Chemical Bonding Explainer</h3><div class="meta">Lewis structures, VSEPR shapes, polarity and bond type.</div></div>
+          <span class="lab-card-go">Open</span>
+        </a>
+        <a class="card glass lab-card" href="labs/stoichiometry/index.html" data-tour="stoichiometry">
+          <div><h3>Mole and Stoichiometry Explainer</h3><div class="meta">The mole, balancing equations, limiting reagent and yield.</div></div>
+          <span class="lab-card-go">Open</span>
+        </a>
         <a class="card glass lab-card" href="labs/acidbase.html" data-tour="acidbase">
           <div><h3>Acid–Base Lab</h3><div class="meta">Strong and weak acids, pH and titration curves.</div></div>
           <span class="lab-card-go">Open</span>
         </a>
+        <a class="card glass lab-card" href="labs/titration.html" data-tour="titration">
+          <div><h3>Titration &amp; Gravimetry Lab</h3><div class="meta">Acid–base, precipitation, redox and EDTA titrations, plus gravimetry.</div></div>
+          <span class="lab-card-go">Open</span>
+        </a>
         <a class="card glass lab-card" href="labs/osd/index.html" data-tour="osd">
           <div><h3>Oral Solid Doses Lab</h3><div class="meta">How tablets and capsules are designed and made.</div></div>
+          <span class="lab-card-go">Open</span>
+        </a>
+        <a class="card glass lab-card" href="labs/hydrocarbons/index.html" data-tour="hydrocarbons">
+          <div><h3>Hydrocarbons Lab</h3><div class="meta">Name and draw alkanes and alkenes; see combustion and cracking.</div></div>
+          <span class="lab-card-go">Open</span>
+        </a>
+        <a class="card glass lab-card" href="labs/chromatography/index.html" data-tour="chromatography">
+          <div><h3>Chromatography Explainer</h3><div class="meta">Extraction, TLC, HPLC and GC, with animations of why compounds separate.</div></div>
+          <span class="lab-card-go">Open</span>
+        </a>
+        <a class="card glass lab-card" href="labs/spectroscopy/index.html" data-tour="spectroscopy">
+          <div><h3>Spectroscopy Explainer</h3><div class="meta">UV/visible and IR spectroscopy, with UV and IR lab benches.</div></div>
           <span class="lab-card-go">Open</span>
         </a>
       </div>
@@ -729,6 +761,7 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
   const open = () => { ov.classList.add('open'); document.getElementById('tour-close').focus(); };
   const close = () => { ov.classList.remove('open'); document.getElementById('show-tour').focus(); };
   document.getElementById('show-tour').addEventListener('click', open);
+  window.kompasOpenTour = open;   /* used when a signed-out visitor comes back from a lab */
   document.getElementById('tour-close').addEventListener('click', close);
   ov.addEventListener('click', e => { if (e.target === ov) close(); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && ov.classList.contains('open')) close(); });
@@ -1600,7 +1633,7 @@ async function boot(opts = {}) {
     document.getElementById('educator-bottomnav').style.display = '';
     document.getElementById('add-course-row').style.display = '';
     await loadEducatorCourses();
-    showView('courses');
+    if (!(location.hash === '#labs' && await previewAtLabs())) showView('courses');
     setupUploads();
   } else {
     document.getElementById('enroll-more-row').style.display = '';
@@ -1802,9 +1835,22 @@ function setNavForPreview(on) {
 async function openPreviewCourse(courseId) {
   currentCourse = myCourses.find(c => c.id === courseId);
   if (!currentCourse) return;
+  try { sessionStorage.setItem('kompas.previewCourse', String(currentCourse.id)); } catch (_) {}
   document.getElementById('preview-banner-text').textContent = 'Student preview of ' + currentCourse.code + ': nothing you do here is saved.';
   await loadStudentData();
   showView('home');
+}
+
+/* Back from a lab as an educator: return to student preview (the course last
+   previewed in this tab, otherwise the first course) at the Interactive labs list. */
+async function previewAtLabs() {
+  let id = null; try { id = sessionStorage.getItem('kompas.previewCourse'); } catch (_) {}
+  const c = myCourses.find(x => String(x.id) === id) || myCourses[0];
+  if (!c) return false;
+  currentCourse = c;
+  await enterPreview();
+  showLabs();
+  return true;
 }
 
 async function enterPreview() {
@@ -1821,6 +1867,7 @@ async function enterPreview() {
 
 async function exitPreview() {
   previewMode = false;
+  try { sessionStorage.removeItem('kompas.previewCourse'); } catch (_) {}
   closeActivityModal();
   setNavForPreview(false);
   document.getElementById('preview-banner').hidden = true;
@@ -4448,6 +4495,7 @@ document.getElementById('add-course-btn').addEventListener('click', () => openCo
 (async function init() {
   const { data: { session } } = await sb.auth.getSession();
   if (session) await boot();
+  else if (location.hash === '#labs' && window.kompasOpenTour) window.kompasOpenTour();
 })();
 </script>
 

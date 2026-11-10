@@ -346,7 +346,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <nav>
     <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
     <div class="nav-right">
-      <a class="back-pill" id="btn-kompas" href="../../index.html" data-umami-event="back-to-kompas"><span class="l">← Back to Kompas</span><span class="s">← Kompas</span></a>
+      <a class="back-pill" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas"><span class="l">← Back to Kompas</span><span class="s">← Kompas</span></a>
       <button class="icon-btn" id="btn-toc" data-umami-event="open-contents">Contents</button>
       <span id="progress-label">1 / 29</span>
     </div>
@@ -1161,7 +1161,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   /* ---------- BACK TO KOMPAS: return to the exact course view when possible ---------- */
   document.getElementById('btn-kompas').addEventListener('click',e=>{
     let same=false; try{ same=!!document.referrer && new URL(document.referrer).origin===location.origin; }catch(_){}
-    if(same && history.length>1){ e.preventDefault(); history.back(); }
+    if(same && history.length>1){ e.preventDefault(); location.assign(e.currentTarget.href); }
   });
 
   document.querySelectorAll('.stagger').forEach(c=>{

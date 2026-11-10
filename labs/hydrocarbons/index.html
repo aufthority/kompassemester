@@ -2178,11 +2178,11 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   });
 
   /* Back to Kompas: return to the exact course view the student came from
-     (history.back keeps Kompas's state); otherwise open the Kompas home page. */
+     (it always opens Kompas at the Interactive labs list). */
   document.getElementById('btn-kompas').addEventListener('click',e=>{
     try{
       if (document.referrer && new URL(document.referrer).origin===location.origin && history.length>1){
-        e.preventDefault(); history.back();
+        e.preventDefault(); location.assign(e.currentTarget.href);
       }
     }catch(_){}
   });

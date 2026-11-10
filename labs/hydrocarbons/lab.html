@@ -1104,7 +1104,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
   $('#btn-new').addEventListener('click',()=>{ newRound(); goPage(firstPageOfStep(1)); });
   $('#btn-next').addEventListener('click',()=>{ sc=(sc+1)%SCEN.length; track('lab-pick',{scenario:SCEN[sc].id}); newRound(); goPage(0); });
   $('#btn-pt').addEventListener('click',()=>{ if(window.KompasPT) KompasPT.open(); });
-  $('#btn-kompas').addEventListener('click',e=>{ if(history.length>1 && document.referrer && document.referrer.indexOf(location.host)>-1){ e.preventDefault(); history.back(); } });
+  $('#btn-kompas').addEventListener('click',e=>{ if(history.length>1 && document.referrer && document.referrer.indexOf(location.host)>-1){ e.preventDefault(); location.assign(e.currentTarget.href); } });
 
 
   /* ---------- STORY: three tap-through beats that set the problem ----------

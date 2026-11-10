@@ -152,7 +152,7 @@ table.w tr.hl td{background:var(--g-bg)}
     <div class="nav-right">
       <button type="button" class="pillbtn" id="btn-pt" data-umami-event="open-periodic-table"><span class="ptl">Periodic table</span><span class="pts">Table</span></button>
       <a class="pillbtn" href="index.html" data-umami-event="lab-to-explainer">Explainer</a>
-      <a class="pillbtn" id="btn-kompas" href="../../index.html" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+      <a class="pillbtn" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
     </div>
   </nav>
 
@@ -469,7 +469,7 @@ table.w tr.hl td{background:var(--g-bg)}
 
   $('btn-pt').addEventListener('click',()=>{ if(window.KompasPT) KompasPT.open(); });
   $('btn-kompas').addEventListener('click',e=>{
-    try{ if(document.referrer && new URL(document.referrer).origin===location.origin && history.length>1){ e.preventDefault(); history.back(); } }catch(_){}
+    try{ if(document.referrer && new URL(document.referrer).origin===location.origin && history.length>1){ e.preventDefault(); location.assign(e.currentTarget.href); } }catch(_){}
   });
 
   pick(0);
