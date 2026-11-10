@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>UV Bench — Aufthority</title>
+<meta name="description" content="Interactive lab: run the UV dissolution test for chlorpheniramine maleate tablets, step by step.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="website">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="UV Bench: a UV/visible spectroscopy lab">
+<meta property="og:description"  content="Prepare the standard, set λmax, measure six vessels and decide: does the batch dissolve?">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:locale"       content="en_MY">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<script>
+/* Embedded inside the explainer? Then hide the page chrome and skip analytics
+   (the explainer already tracks the visit). */
+(function(){
+  var emb = /[?&]embed=1/.test(location.search) || window.self !== window.top;
+  document.documentElement.classList.toggle('embedded', emb);
+  if(!emb){
+    var s=document.createElement('script'); s.defer=true; s.src='https://cloud.umami.is/script.js';
+    s.setAttribute('data-website-id','f79c60f1-f9e7-4170-a979-f357ba756a18'); document.head.appendChild(s);
+  }
+})();
+</script>
+<script src="../shared/periodic-table.js" defer></script>
+
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#636b65;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#8a5d14;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--arrow:#b25f0c;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.45;-webkit-text-size-adjust:100%;font-size:16px;overflow:hidden}
+@media (min-width:900px) and (min-height:700px){.scr{font-size:calc(var(--k,1)*18px)}}
+b,strong{color:var(--ink);font-weight:700}
+a{color:var(--accent)}
+
+/* one screen, no page scroll: top bar, stage, footer */
+#app{height:100vh;height:var(--app-h,100dvh);max-width:1040px;margin:0 auto;padding:0 14px;display:flex;flex-direction:column}
+.embedded #app{padding:0 10px}
+
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0 6px;border-bottom:1px solid var(--rule)}
+.embedded nav{display:none}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;gap:8px}
+.pillbtn{cursor:pointer;text-decoration:none;color:var(--accent-dark);border:1px solid var(--g-line);background:var(--g-bg);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;white-space:nowrap}
+@media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
+.pts{display:none}
+@media (max-width:340px){.logo{font-size:.92rem}.nav-right{gap:4px}.pillbtn{padding:4px 7px!important;font-size:.74rem}}
+@media (max-width:400px){.ptl{display:none}.pts{display:inline}.nav-right{gap:6px}.pillbtn{padding:5px 9px}}
+
+#bar{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:7px 0 5px}
+#bar-lbl{flex:1;min-width:0;font-size:.8rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar-lbl span{color:var(--eyebrow);letter-spacing:.06em;text-transform:uppercase;font-size:.9em;margin-right:.35em}
+#hints-btn{flex:0 0 auto}
+#track{flex:0 0 3px;background:var(--rule);border-radius:3px;margin-bottom:6px}
+#fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;gap:.35em;font-size:calc(var(--k,1)*16px);overflow:hidden;padding:2px 1px 4px}
+.scr.on{display:flex}
+.scr.scrolly{overflow-y:auto}
+.scr.half-l{right:calc(50% + 8px)}
+.scr.half-r{left:calc(50% + 8px)}
+/* wider screens: every pane is a card; two panes share the width equally, a single pane is one centred card */
+#stage.roomy .scr.on{border:1px solid var(--rule);border-radius:14px;padding:14px 18px;background:#fff}
+#stage.roomy .scr.single{left:max(0px,calc(50% - 340px));right:max(0px,calc(50% - 340px));top:50%;bottom:auto;transform:translateY(-50%);max-height:100%}
+#stage.roomy .scr.single .madeby{margin-top:.8em}
+@media (max-height:600px){#stage.roomy .scr.on{padding:8px 12px}}
+.grow{flex:1 1 auto;min-height:0}
+
+#foot{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 0 10px;border-top:1px solid var(--rule)}
+#gate{flex:1;text-align:center;font-size:.74rem;color:var(--muted);line-height:1.25}
+#foot .btn{min-width:6.2em}
+#next.ready{animation:nudge 1.6s ease-in-out 2}
+@keyframes nudge{0%,100%{transform:none}50%{transform:translateX(3px)}}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.15em}
+h1{color:var(--ink);font-weight:800;line-height:1.1;letter-spacing:-.025em;font-size:1.6em;margin-bottom:.2em}
+h1 .ac{color:var(--accent)}
+p{margin-bottom:.4em;font-size:.95em}
+.small{font-size:.82em;color:var(--muted)}
+.madeby{margin-top:auto;border-top:1px solid var(--rule);padding-top:.5em;font-size:.78em;color:var(--muted)}
+
+.chips{display:flex;flex-wrap:wrap;gap:.3em;margin:.15em 0 .35em}
+.chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .82em 'DM Sans',sans-serif;padding:.32em .75em;border-radius:100px;cursor:pointer;text-align:left;line-height:1.3}
+.chip:hover{border-color:var(--ink)}
+.chip.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.chip .tick{margin-left:.3em;color:var(--accent)}
+.chips.col{flex-direction:column;align-items:stretch}
+.chips.col .chip{border-radius:8px}
+.ctx{font-size:.9em;color:var(--body);margin:0}
+
+.msg{font-size:.84em;padding:.35em .65em;border-left:3px solid var(--rule);border-radius:0 8px 8px 0}
+.msg.good{border-color:var(--accent);background:var(--g-bg)}
+.msg.near{border-color:var(--orange);background:var(--o-bg)}
+.msg.bad{border-color:var(--red);background:var(--r-bg)}
+.msg p{margin:0;font-size:1em}.msg p+p{margin-top:.25em}
+.q{font-weight:700;color:var(--ink);font-size:.92em;margin:.3em 0 .2em}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .86em 'DM Sans',sans-serif;padding:.42em 1em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{border-color:var(--rule);color:var(--body);font-weight:600}
+.btn:disabled{opacity:.4;cursor:default}
+.btns{display:flex;flex-wrap:wrap;gap:.4em;margin-top:.2em}
+.work{display:none}
+.work.show{display:block}
+table.w{width:100%;border-collapse:collapse;font-size:.8em}
+table.w th,table.w td{border-bottom:1px solid var(--rule);padding:.25em .4em;text-align:left;vertical-align:top}
+table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+/* story */
+#story{display:flex;flex-direction:column;gap:.3em;min-height:0}
+.story-head{display:flex;align-items:center;justify-content:space-between}
+.dots{display:flex;gap:5px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--rule)}.dots i.on{background:var(--accent)}
+.scene{display:block;width:100%;border:0;padding:0;background:none;cursor:pointer;border-radius:10px}
+.scene svg{display:block;width:100%;height:auto;max-height:13em}
+.say{font-size:.9em;margin:0;background:var(--g-bg);border-radius:10px;padding:.5em .75em;color:var(--ink);line-height:1.4}
+.story-nav{display:flex;align-items:center;justify-content:space-between;gap:.5em}
+.bob{animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:none}50%{transform:translateY(-1.5px)}}
+.blink{animation:blink 4s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes blink{0%,92%,100%{transform:none}95%{transform:scaleY(.1)}}
+.pulse{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.spin{animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sorange{fill:#e2852b}.sorange-h{opacity:1}
+.sclear{fill:#eef3f4}.sclear-h{opacity:0}
+.sclear-anim{fill:#e2852b;animation:toclear 1s 1.6s forwards}.sclear-anim-h{animation:hatchoff 1s 1.6s forwards}
+@keyframes toclear{to{fill:#eef3f4}}@keyframes hatchoff{to{opacity:0}}
+.sdrop{opacity:0;animation:sdrop .7s ease-in .2s 2}
+@keyframes sdrop{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(34px)}}
+.slbl{opacity:0;animation:fadein .5s 2.7s forwards}
+@keyframes fadein{to{opacity:1}}
+.ondark path{stroke:#c9d1cb}
+.ondark .tl1,.ondark .tl2{fill:#f2f4f2}.onlight .tl1{fill:#1c2620}.onlight .tl2{fill:#8a4f0c}
+/* hints overlay */
+#hints,#brief,#stp{position:fixed;inset:0;background:rgba(28,38,32,.45);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
+#hints.open,#brief.open,#stp.open{display:flex}
+#hints .box,#brief .box,#stp .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:14px 16px;max-height:100%;overflow:auto}
+#hints .top,#brief .top,#stp .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5em}
+.ideas{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
+.idea{font-size:.86em;line-height:1.35;text-align:center}
+.idea svg{display:block;width:100%;height:46px;margin-bottom:.2em}
+.term{background:none;border:none;border-bottom:1.5px dotted var(--accent);color:inherit;font:inherit;padding:0;cursor:help}
+.def{display:block;margin:.2em 0 .3em;padding:.3em .6em;background:var(--g-bg);border-radius:6px;font-size:.92em;color:var(--accent-dark);font-weight:500}
+
+
+/* ---------- shared bench styles (from the TLC bench) ---------- */
+.calc-in{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .6em;margin:.1em 0}
+.num-in{font:600 1em 'DM Sans',sans-serif;width:6.5em;padding:.28em .5em;border:1.5px solid var(--rule);border-radius:8px;color:var(--ink);background:#fff}
+.num-in:focus{outline:none;border-color:var(--accent)}
+.unit{font-size:.84em;color:var(--muted)}
+.given{background:#f6f7f5;border-radius:8px;padding:.4em .65em;font-size:.86em;margin:.1em 0 .2em}
+.given b{white-space:nowrap}
+.plate-box{flex:1 1 auto;min-height:9em;background:#f4f5f2;border:1px solid var(--rule);border-radius:10px;padding:4px;display:flex;justify-content:center}
+.plate-box svg{height:100%;width:100%;max-width:300px;display:block}
+.runrow{display:flex;flex-wrap:wrap;gap:.3em;align-items:center}
+.runrow .btn{font-size:.78em;padding:.34em .75em}
+.runrow .btn.doneb{border-color:var(--g-line);color:var(--accent-dark);background:var(--g-bg)}
+.pstate{font-size:.8em;color:var(--muted);line-height:1.3}
+.words-box{display:none;font-size:.8em;background:#f6f7f5;border-radius:8px;padding:.35em .6em;color:var(--ink)}
+.words .words-box{display:block}
+.trainee{font-weight:700;color:var(--red)}
+.ptx{font:600 9.5px 'DM Sans',sans-serif;fill:#5c665f}
+.ptx.s{font-size:8.5px;font-weight:500}
+.pen{fill:none;stroke:#7b827d;stroke-width:1;stroke-dasharray:2.5 2}
+.lane-lbl{font:700 10px 'DM Sans',sans-serif;fill:var(--ink);text-anchor:middle}
+.spot-lt{font:700 10px 'DM Sans',sans-serif;fill:var(--accent-dark)}
+.wait-note{font-size:.84em;color:var(--muted);background:#f6f7f5;border-radius:8px;padding:.4em .65em}
+.stuck{font-size:.92em;color:var(--accent-dark)}
+@media (prefers-reduced-motion: reduce){ #plate *{transition:none!important} }
+/* step guide: the footer names the next move; the matching control glows */
+#gate.go{color:#a85f10;font-weight:700}
+.guide{box-shadow:0 0 0 3px rgba(217,130,31,.8);animation:guide 1.4s ease-in-out infinite}
+.chips.guide,.slrow.guide,.btns.guide{border-radius:10px}
+@keyframes guide{0%,100%{box-shadow:0 0 0 2px rgba(217,130,31,.25)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.9)}}
+.sop{padding-left:1.3em;font-size:.9em;margin:.3em 0 .6em}.sop li{margin-bottom:.3em}
+/* STP: the lab's controlled method document */
+#stp .box{max-width:720px;padding-top:0}
+#stp .top{position:sticky;top:0;background:#fff;padding:12px 0 8px;margin-bottom:.2em;z-index:1;border-bottom:1px solid var(--rule)}
+#stp-btn.sec{color:#a85f10;border-color:#efc58f;background:var(--o-bg)}
+.stp-doc{font-size:.86em;color:var(--body)}
+.stp-stamp{display:inline-block;border:2px solid var(--red);color:var(--red);font-weight:800;font-size:.72em;letter-spacing:.1em;text-transform:uppercase;padding:.15em .5em;border-radius:4px;transform:rotate(-2deg);margin:.5em 0}
+.stp-head{width:100%;border-collapse:collapse;margin-bottom:.6em}
+.stp-head th,.stp-head td{border:1px solid var(--ink);padding:.3em .5em;text-align:left;vertical-align:top}
+.stp-head th{background:var(--ink);color:#fff;letter-spacing:.04em}
+.stp-head td:first-child{width:36%;color:var(--muted);font-weight:600}
+.stp-sec{border-top:1px solid var(--rule);padding:.5em .35em .3em;scroll-margin-top:3.4em;border-radius:6px;transition:background .6s}
+.stp-sec.hit{background:var(--o-bg)}
+.stp-sec h3{font-size:1em;color:var(--ink);margin-bottom:.3em}
+.stp-sec p,.stp-sec li{font-size:1em;margin-bottom:.3em}
+.stp-sec ol,.stp-sec ul{padding-left:1.3em;margin-bottom:.3em}
+.stp-t{width:100%;border-collapse:collapse;margin:.2em 0 .4em}
+.stp-t th,.stp-t td{border:1px solid var(--rule);padding:.25em .45em;text-align:left;vertical-align:top}
+.stp-t th{background:#f6f7f5}
+.stp-f{background:#f6f7f5;border-radius:6px;padding:.4em .6em;font-weight:700;color:var(--ink);margin:.2em 0 .4em;overflow-x:auto}
+.tn{border-left:3px solid var(--accent);background:var(--g-bg);color:var(--accent-dark);border-radius:0 6px 6px 0;padding:.3em .6em;margin:.3em 0}
+.tn b{color:var(--accent-dark)}
+
+/* ---------- additions for the UV bench ---------- */
+.spec-box{flex:1 1 auto;min-height:8.5em;background:#f4f5f2;border:1px solid var(--rule);border-radius:10px;padding:4px;display:flex;justify-content:center}
+.spec-box svg{height:100%;width:100%;display:block}
+.slrow{display:flex;align-items:center;gap:.5em;font-size:.86em}
+.slrow input[type=range]{flex:1;accent-color:var(--accent)}
+.readout{font:700 1.05em 'DM Sans',sans-serif;color:var(--ink);background:#f6f7f5;border-radius:8px;padding:.25em .6em;white-space:nowrap}
+table.vt{width:100%;border-collapse:collapse;font-size:.84em}
+table.vt th,table.vt td{border-bottom:1px solid var(--rule);padding:.22em .4em;text-align:center}
+table.vt th{font-size:.8em;color:var(--muted)}
+table.vt td.lo{color:var(--red);font-weight:700}
+table.vt tr.hl td{background:var(--o-bg)}
+.vessels{display:flex;gap:.35em;justify-content:center;margin:.2em 0}
+.vessels svg{width:100%;max-width:420px;height:auto}
+.fw{font-family:'DM Sans',sans-serif}
+</style>
+</head>
+<body>
+<div id="app">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <button type="button" class="pillbtn" id="btn-pt" data-umami-event="open-periodic-table"><span class="ptl">Periodic table</span><span class="pts">Table</span></button>
+      <a class="pillbtn" href="index.html" data-umami-event="lab-to-explainer">Explainer</a>
+      <a class="pillbtn" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+    </div>
+  </nav>
+  <div id="bar"><div id="bar-lbl"></div><button type="button" class="pillbtn" id="stp-btn" aria-haspopup="dialog" title="Standard test procedure">STP</button><button type="button" class="pillbtn" id="hints-btn" aria-haspopup="dialog">Hints</button></div>
+  <div id="track"><div id="fill"></div></div>
+
+  <main id="stage">
+    <section class="scr" id="s0" data-step="0" data-title="Start">
+      <div class="eyebrow" style="margin:0">Choose a scenario <span class="small" style="text-transform:none;letter-spacing:0;font-weight:500">· rounds completed: <span id="rounds">0</span></span></div>
+      <div class="chips" id="scen-chips"></div>
+      <div id="story"></div>
+    </section>
+
+    <section class="scr" data-step="1" data-pane="a" data-title="Standard">
+      <div id="q1a"></div>
+    </section>
+    <section class="scr" data-step="1" data-pane="b" data-title="Cell and blank">
+      <div id="q1b"></div>
+      <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button></div>
+      <div class="msg" id="m1">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="2" data-pane="a" data-title="Scan">
+      <div class="runrow" id="scanbtns"></div>
+      <div class="pstate" id="sstate" aria-live="polite"></div>
+      <div class="spec-box"><svg id="spec" viewBox="0 0 320 190" role="img" aria-label="UV spectrum"></svg></div>
+      <div class="slrow" id="wlrow"><span>Wavelength</span><input type="range" id="wl" min="230" max="330" step="1" value="240" aria-label="Wavelength in nm"><span class="readout" id="wlread">240 nm</span></div>
+      <div class="words-box" id="words-box" aria-live="polite"></div>
+      <label class="wordsw"><input type="checkbox" id="words"> Describe the spectrum in words</label>
+    </section>
+    <section class="scr" data-step="2" data-pane="b" data-title="Set λmax">
+      <div id="obs"></div>
+      <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button></div>
+      <div class="msg" id="m2">Scan the standard, set the wavelength, then check.</div>
+    </section>
+
+    <section class="scr" data-step="3" data-pane="a" data-title="Measure">
+      <div id="meas"></div>
+    </section>
+    <section class="scr" data-step="3" data-pane="b" data-title="Calculate">
+      <div id="q3"></div>
+      <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button></div>
+      <div class="msg" id="m3">Use the STP formula. Give 1 decimal place.</div>
+    </section>
+
+    <section class="scr" data-step="4" data-title="Decide">
+      <div id="q4"></div>
+      <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button></div>
+      <div class="msg" id="m4">Compare every vessel with the limit.</div>
+      <div class="btns" id="endrow" hidden><button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New values</button><button class="btn ghost" id="btn-next" type="button">Next scenario →</button></div>
+    </section>
+  </main>
+
+  <div id="foot">
+    <button class="btn" id="back" type="button">← Back</button>
+    <div id="gate" aria-live="polite"></div>
+    <button class="btn solid" id="next" type="button">Continue →</button>
+  </div>
+</div>
+
+<div id="stp" role="dialog" aria-modal="true" aria-labelledby="stp-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="stp-title">Standard test procedure</div><button type="button" class="btn ghost" id="stp-close">Close</button></div>
+    <div class="stp-doc">
+      <div class="stp-stamp">Uncontrolled copy · for training only</div>
+      <table class="stp-head">
+        <tr><th colspan="2">Aufthority Lab · Quality Control</th></tr>
+        <tr><td>Product</td><td><b>Chlorpheniramine Maleate Tablets 4 mg</b></td></tr>
+        <tr><td>Test</td><td>Dissolution, by UV spectrophotometry</td></tr>
+        <tr><td>Document no.</td><td>STP-AL/CPM/07 · Revision 02</td></tr>
+        <tr><td>Prepared · Checked · Approved</td><td>QC Analyst · QC Executive · QA Manager</td></tr>
+      </table>
+      <section class="stp-sec" id="stp-1"><h3>1 · Purpose and scope</h3>
+        <p>To show that chlorpheniramine maleate is released from the tablets in 30 minutes.</p></section>
+      <section class="stp-sec" id="stp-2"><h3>2 · Specification (USP)</h3>
+        <p>Not less than <b>80% (Q)</b> of the labelled amount of chlorpheniramine maleate is dissolved in 30 minutes.</p>
+        <table class="stp-t"><tr><th>Stage</th><th>Tested</th><th>Acceptance</th></tr>
+          <tr><td>S1</td><td>6</td><td>Each unit not less than Q + 5% (85%).</td></tr>
+          <tr><td>S2</td><td>6 more</td><td>Average of 12 not less than Q (80%); no unit less than Q − 15% (65%).</td></tr>
+          <tr><td>S3</td><td>12 more</td><td>Average of 24 not less than Q; not more than 2 units below Q − 15%; no unit below Q − 25% (55%).</td></tr></table>
+        <p class="tn"><b>Trainer’s note:</b> failing S1 is not a batch failure. It means you test more tablets.</p></section>
+      <section class="stp-sec" id="stp-3"><h3>3 · Dissolution conditions</h3>
+        <table class="stp-t">
+          <tr><td>Apparatus</td><td>2 (paddle), 50 rpm</td></tr>
+          <tr><td>Medium</td><td>0.01 N hydrochloric acid, 500 ml, at 37.0 ± 0.5 °C. Dilute 0.85 ml of hydrochloric acid to 1000 ml with water.</td></tr>
+          <tr><td>Time</td><td>30 minutes</td></tr>
+          <tr><td>Wavelength</td><td>265 nm (λmax), quartz cells, medium as blank</td></tr></table></section>
+      <section class="stp-sec" id="stp-4"><h3>4 · Standard solution</h3>
+        <ol><li>Weigh accurately about 20 mg of chlorpheniramine maleate working standard (WS) into a 100 ml volumetric flask.</li>
+          <li>Dissolve in about 30 ml of medium and dilute to volume with medium.</li>
+          <li>Dilute 4 ml of this solution to 100 ml with medium. Filter.</li></ol>
+        <p>Final concentration: about <b>0.008 mg/ml</b>.</p>
+        <p class="tn"><b>Trainer’s note:</b> there are two dilutions. Use the weight you actually weighed, not “20 mg”.</p></section>
+      <section class="stp-sec" id="stp-5"><h3>5 · Test solution and measurement</h3>
+        <ol><li>Place one tablet in each of six vessels and start the apparatus.</li>
+          <li>After 30 minutes, withdraw 25 ml from each vessel and filter through a membrane filter.</li>
+          <li>Measure the absorbance of the standard and of each test solution at 265 nm, against medium.</li></ol>
+        <p>Final concentration for full release: 4 mg in 500 ml = <b>0.008 mg/ml</b>.</p></section>
+      <section class="stp-sec" id="stp-6"><h3>6 · Calculation</h3>
+        <div class="stp-f">% dissolved = (A<sub>spl</sub> ÷ A<sub>std</sub>) × (Std wt ÷ 100) × (4 ÷ 100) × 500 × (P ÷ 100) × (100 ÷ 4)</div>
+        <p>A<sub>spl</sub>, A<sub>std</sub>: absorbance of the test and standard solutions. Std wt: weight of WS (mg). P: % potency of the WS (as is). 500: volume of medium (ml). The last 4: label claim (mg).</p>
+        <p class="tn"><b>Trainer’s note:</b> with 20.0 mg of a 100.0% WS, the formula is simply (A<sub>spl</sub> ÷ A<sub>std</sub>) × 100.</p></section>
+      <section class="stp-sec" id="stp-7"><h3>7 · Linearity check (training)</h3>
+        <p>Dilute 2, 4, 6, 8 and 10 ml of the 100 ml WS solution to 100 ml with medium. Read each at 265 nm and fit a straight line A = m·c + b. The line is acceptable if r² is at least 0.999.</p>
+        <p>Concentration of a test solution: c = (A − b) ÷ m. % dissolved = c × 500 ÷ 4 × 100.</p>
+        <p class="tn"><b>Trainer’s note:</b> this section is a training exercise to show the Beer–Lambert law. Routine release uses the single standard in section 4.</p></section>
+    </div>
+  </div>
+</div>
+<div id="brief" role="dialog" aria-modal="true" aria-labelledby="brief-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="brief-title">Before you start: today’s procedure</div></div>
+    <div id="brief-body"></div>
+    <p class="small">The line at the bottom of the screen and the glowing box show your next move. <b>STP</b>, beside Hints, is the method you work from: it opens at the section you need now. <b>Hints</b> explains the ideas behind each step.</p>
+    <div class="btns"><button type="button" class="btn solid" id="brief-go">Start the lab</button><button type="button" class="btn ghost" id="brief-stp">Read the STP</button></div>
+  </div>
+</div>
+<div id="hints" role="dialog" aria-modal="true" aria-labelledby="hints-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="hints-title">Hints: four ideas</div><button type="button" class="btn ghost" id="hints-close">Close</button></div>
+    <div class="ideas">
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><path d="M8 38 C30 38 40 6 60 6 C80 6 90 38 112 38" fill="none" stroke="#2d6a4f" stroke-width="2"/><path d="M60 6 V40" stroke="#d9821f" stroke-dasharray="3 2"/></svg>Measure at <b>λmax</b>: the top of the peak, about 265 nm.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><path d="M10 38 L110 8" stroke="#2d6a4f" stroke-width="2"/><circle cx="35" cy="30.5" r="3" fill="#1c2620"/><circle cx="60" cy="23" r="3" fill="#1c2620"/><circle cx="85" cy="15.5" r="3" fill="#1c2620"/></svg><b>Beer–Lambert:</b> absorbance is proportional to concentration.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><rect x="40" y="4" width="18" height="36" rx="2" fill="#fff" stroke="#3a6bd1"/><rect x="66" y="4" width="18" height="36" rx="2" fill="#fff" stroke="#9aa39d"/><text x="49" y="26" font-size="8" text-anchor="middle" fill="#1c2620">Q</text><text x="75" y="26" font-size="8" text-anchor="middle" fill="#1c2620">G</text></svg><b>Quartz</b> lets UV through; glass blocks it below about 320 nm.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="18" font-size="11" text-anchor="middle" fill="#1c2620" font-weight="700">A spl ÷ A std</text><text x="60" y="36" font-size="9" text-anchor="middle" fill="#636b65">× the dilutions</text></svg>Compare each sample with the <b>standard</b> read beside it.</div>
+    </div>
+    <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. The method follows a manufacturer's STP for chlorpheniramine maleate 4 mg tablets. Spectra and absorbances are simulated.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const $ = s=>document.querySelector(s);
+  const NS='http://www.w3.org/2000/svg';
+  const track=(e,d)=>{ try{ if(window.umami) umami.track(e,d); }catch(_){} };
+  const shuffle=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const r1=x=>Math.round(x*10)/10, r3=x=>Math.round(x*1000)/1000;
+  const coin=()=>Math.random()<.5;
+  const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  function el(tag, attrs, text){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(text!==undefined) e.textContent=text; return e; }
+  const fx=n=>n.toFixed(1);
+
+  /* ---------- tap-to-define terms ---------- */
+  const GLOSS={
+    ws:'Working standard (WS): pure chlorpheniramine maleate of known potency, used for comparison.',
+    potency:'Potency (as is): how much of the WS is really the drug, e.g. 99.6%.',
+    blank:'The blank: the medium with no drug. The instrument is zeroed on it.',
+    lmax:'λmax: the wavelength where absorbance is highest.',
+    q:'Q: the amount that must dissolve, as a % of the label claim. Here Q = 80%.',
+    medium:'Medium: the liquid in the vessel, here 0.01 N hydrochloric acid.'
+  };
+  document.addEventListener('click',e=>{
+    const t=e.target.closest('.term'); if(!t) return;
+    const nx=t.nextElementSibling; if(nx && nx.classList.contains('def')){ nx.remove(); fitPage(); return; }
+    const d=document.createElement('span'); d.className='def'; d.textContent=GLOSS[t.dataset.t]||''; t.after(d); track('lab-term',{t:t.dataset.t}); fitPage();
+  });
+  const term=(k,txt)=>'<button type="button" class="term" data-t="'+k+'">'+txt+'</button>';
+
+  /* ---------- misconceptions: every wrong answer names one ---------- */
+  const MIX={
+    M1:'There are two dilutions.',
+    M2:'Quartz for UV.',
+    M3:'Zero on the medium.',
+    M4:'Measure at λmax.',
+    M5:'Divide sample by standard.',
+    M6:'Every unit counts at S1.',
+    M7:'Failing S1 is not a failed batch.',
+    M8:'Scattering looks like absorbance.',
+    M9:'Glass absorbs UV.',
+    M10:'Use the line, not one point.',
+    M11:'Use the weight you weighed.'
+  };
+  function mixLine(m,text,step){ track('lab-mix-'+m,{step:step, scenario:R.S.id}); return '<p><b>'+MIX[m]+'</b> '+text+'</p>'; }
+
+  /* ---------- the drug's simulated spectrum ----------
+     Absorbance per mg/ml at 265 nm = 21.2 (A(1%, 1 cm) about 212; brompheniramine's BP value of 199 scaled by molar mass gives about 222). */
+  const K265=21.2;
+  const shape=l=>Math.exp(-0.5*Math.pow((l-265)/9.5,2)) + (l>222?1.6*Math.exp(-(l-222)/9):1.6);
+  const absAt=(l,c)=>K265*c*shape(l);                      /* c in mg/ml */
+  const scatterAt=l=>Math.pow(300/l,4);                    /* scattering rises steeply at short wavelengths */
+
+  /* ---------- scenarios ---------- */
+  const SCEN=[
+   {id:'routine', chip:'1 · Routine batch'},
+   {id:'slow', chip:'2 · Slow batch'},
+   {id:'trainee', chip:'3 · Trainee’s readings'},
+   {id:'linear', chip:'4 · Calibration line'}
+  ];
+
+  /* ---------- state ---------- */
+  let sc=0, R=null, solved=[false,false,false,false], rounds=0, busy=0;
+  const done=new Set();
+  const DEFAULT={}; [1,2,3,4].forEach(n=>DEFAULT[n]=$('#m'+n).innerHTML);
+
+  function newRound(){
+    let r, g=0;
+    do{ r=roll(); }while(g++<50 && !rollOk(r));
+    R=r; solved=[false,false,false,false];
+    render();
+  }
+  /* re-roll cases that sit too close to the 85% line, so the decision is never a coin toss */
+  function rollOk(r){
+    const P=(r.S.id==='linear'?r.A.map(a=>(a-r.b)/r.m*500/4*100):r.pct).map(x=>Math.round(x*10)/10), low=Math.min(...P);
+    if(r.S.id==='linear' && r.r2<0.999) return false;
+    if(Math.max(...P)>104) return false;
+    return r.S.id==='slow' ? (low>=72 && low<=83.5) : low>=86;
+  }
+  function roll(){
+    const S=SCEN[sc], r={S:S};
+    r.w=r1(rnd(19.6,20.4));                 /* mg of WS weighed */
+    r.P=r1(rnd(99.0,100.0));                /* % potency, as is */
+    r.cstd=r.w/100*4/100;                   /* mg/ml, nominal */
+    r.Astd=r3(absAt(265,r.cstd*r.P/100)*(1+rnd(-.003,.003)));
+    /* release in each vessel (% of label, true) */
+    const content=rnd(97,103);
+    let f;
+    if(S.id==='slow'){ f=[rnd(88,96),rnd(88,96),rnd(76,84),rnd(87,95),rnd(86,94),rnd(88,96)]; if(coin()) f[4]=rnd(78,84); f=shuffle(f); }
+    else f=[0,0,0,0,0,0].map(()=>rnd(87,99));
+    r.trueRel=f.map(x=>x*content/100);
+    r.A=r.trueRel.map(x=>r3(absAt(265,4*x/100/500)*(1+rnd(-.004,.004))));
+    r.pct=r.A.map(a=>pctFrom(a,r));
+    r.k=S.id==='slow'?r.pct.indexOf(Math.min(...r.pct)):Math.floor(Math.random()*6);   /* the vessel the student calculates */
+    r.mistake=S.id==='trainee'?(coin()?'glass':'cloudy'):null;
+    if(S.id==='linear'){
+      r.vols=[2,4,6,8,10];
+      r.stds=r.vols.map(v=>({v:v, c:r.w/100*v/100, A:r3(absAt(265,r.w/100*v/100*r.P/100)*(1+rnd(-.006,.006))+rnd(-.001,.001))}));
+      fitLine(r);
+      r.vol3=r.vols[1+Math.floor(Math.random()*3)];
+    }
+    r.ans1={}; r.ans2={}; r.ans4={}; r.ans3={};
+    r.scanned=false; r.zeroed=false; r.wl=240; r.mine=r.mistake?false:true; r.measured=false;
+    return r;
+  }
+  function pctFrom(a,r){ return a/r.Astd*(r.w/100)*(4/100)*500*(r.P/100)*(100/4); }
+  function fitLine(r){
+    const xs=r.stds.map(s=>s.c), ys=r.stds.map(s=>s.A), n=xs.length, mx=xs.reduce((a,b)=>a+b)/n, my=ys.reduce((a,b)=>a+b)/n;
+    let sxy=0,sxx=0,syy=0; for(let i=0;i<n;i++){ sxy+=(xs[i]-mx)*(ys[i]-my); sxx+=(xs[i]-mx)**2; syy+=(ys[i]-my)**2; }
+    const m=sxy/sxx, b=my-m*mx;
+    r.m=Math.round(m*100)/100; r.b=Math.round(b*10000)/10000; r.r2=Math.min(0.99999,(sxy*sxy)/(sxx*syy));
+  }
+  /* answers derived from the numbers the student sees */
+  const want1=()=>R.S.id==='linear' ? R.w/100*R.vol3/100 : R.w/100*4/100;
+  function want3(){
+    if(R.S.id==='linear'){ const c=(R.A[R.k]-R.b)/R.m; return {c:c, pct:c*500/4*100}; }
+    return {pct:pctFrom(R.A[R.k],R)};
+  }
+
+  function chipGroup(opts,sel,cb,col){
+    const g=document.createElement('div'); g.className='chips'+(col?' col':''); g.setAttribute('role','group');
+    opts.forEach((o,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(sel===i?' on':''); b.innerHTML=o; b.setAttribute('aria-pressed',sel===i?'true':'false');
+      b.addEventListener('click',()=>{ g.querySelectorAll('.chip').forEach(c=>{ c.classList.remove('on'); c.setAttribute('aria-pressed','false'); }); b.classList.add('on'); b.setAttribute('aria-pressed','true'); cb(i); }); g.appendChild(b); });
+    return g;
+  }
+  /* feedback: at most two points, so a page never overflows. Students keep trying until the step is right. */
+  function msg(n,cls,html){
+    const m=$('#m'+n); m.className='msg '+cls;
+    const tmp=document.createElement('div'); tmp.innerHTML=html; const ps=tmp.querySelectorAll(':scope > p');
+    if(ps.length>2){ for(let i=2;i<ps.length;i++) ps[i].remove(); tmp.insertAdjacentHTML('beforeend','<p>…and '+(ps.length-2)+' more. Fix these first.</p>'); }
+    m.innerHTML=tmp.innerHTML;
+    track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); fitPage();
+  }
+  function clearMsg(n){ const m=$('#m'+n); m.className='msg'; m.innerHTML=DEFAULT[n]; }
+  function unsolveFrom(k){
+    let changed=false;
+    for(let j=k;j<=4;j++){ if(solved[j-1]){ solved[j-1]=false; changed=true; } if(j>k) clearMsg(j); }
+    if(changed){ $('#endrow').hidden=true; updatePager(); }
+  }
+  const numIn=(id,val)=>'<input class="num-in" id="'+id+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':val)+'">';
+  const readNum=id=>{ const e=$('#'+id); if(!e) return null; const v=(e.value||'').replace(',','.').trim(); return v===''?null:parseFloat(v); };
+  const close=(a,b,rel,abs)=>a!=null && Math.abs(a-b)<=Math.max(Math.abs(b)*rel, abs||0);
+
+  function render(){
+    const sc0=$('#scen-chips'); sc0.innerHTML='';
+    SCEN.forEach((s,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(i===sc?' on':''); b.innerHTML=s.chip+(done.has(s.id)?'<span class="tick">✓</span>':'');
+      b.addEventListener('click',()=>{ if(i===sc) return; sc=i; track('lab-pick',{scenario:s.id}); newRound(); }); sc0.appendChild(b); });
+    R.beat=0; R.storyDone=false; renderStory();
+    renderQ1(); drawSpec(); renderScanBtns(); renderObs(); $('#meas').innerHTML=''; $('#q3').innerHTML=''; $('#q4').innerHTML='';
+    [1,2,3,4].forEach(clearMsg); $('#endrow').hidden=true; updatePager();
+  }
+
+  /* ---------- step 1: prepare ---------- */
+  function q1Opts(){
+    if(!R.q1o) R.q1o={
+      cell:shuffle([['Quartz',1],['Glass',0,'Glass blocks UV light below about 320 nm. At 265 nm it would absorb as well as the drug.','M9'],['Plastic',0,'Ordinary plastic cells are for visible light only. 265 nm is in the UV.','M2']]),
+      blank:shuffle([['0.01 N hydrochloric acid (the medium)',1],['Purified water',0,'The blank must be the same liquid the drug is dissolved in: the medium.','M3'],['The standard solution',0,'Zeroing on the standard would set its own absorbance to 0. Zero on the medium, which has no drug.','M3']])};
+    return R.q1o;
+  }
+  function renderQ1(){
+    const qa=$('#q1a'), qb=$('#q1b'), r=R, lin=r.S.id==='linear';
+    qa.innerHTML='<div class="given">'+term('ws','Working standard')+' weighed: <b>'+r.w.toFixed(1)+' mg</b> into a <b>100 ml</b> flask, made to volume with '+term('medium','medium')+'. '+
+      (lin?'Standard '+((r.vol3/2))+' of the line: <b>'+r.vol3+' ml</b> of that solution diluted to <b>100 ml</b>.':'Then <b>4 ml</b> of that solution is diluted to <b>100 ml</b>.')+'</div>'+
+      '<div class="q">a. What is the concentration of '+(lin?'this standard':'the final standard solution')+'?</div>'+
+      '<div class="calc-in">'+numIn('a1',r.ans1.a)+'<span class="unit">mg/ml</span></div><p class="small">Give 5 decimal places, e.g. 0.00800.</p>';
+    qb.innerHTML='<div class="q" style="margin-top:0">b. Which cell do you use at 265 nm?</div>';
+    qb.appendChild(chipGroup(q1Opts().cell.map(o=>o[0]), r.ans1.b, i=>{ r.ans1.b=i; unsolveFrom(1); }));
+    const d=document.createElement('div'); d.innerHTML='<div class="q">c. What do you zero the instrument on (the '+term('blank','blank')+')?</div>'; qb.appendChild(d);
+    qb.appendChild(chipGroup(q1Opts().blank.map(o=>o[0]), r.ans1.c, i=>{ r.ans1.c=i; unsolveFrom(1); }, true));
+    qa.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{ r.ans1.a=$('#a1').value; unsolveFrom(1); }));
+  }
+  $('#chk1').addEventListener('click',()=>{
+    const a=readNum('a1'), lines=[]; let miss=0; const W=want1(), v2=R.S.id==='linear'?R.vol3:4;
+    if(a==null) miss++;
+    else if(!close(a,W,.01,.000002)){
+      if(close(a,R.w/100,.01)) lines.push(mixLine('M1','You stopped after the first flask. Now dilute '+v2+' ml to 100 ml: × '+v2+' ÷ 100.',1));
+      else if(close(a,W*1000,.01)) lines.push(mixLine('M1','That is in µg/ml. The answer is asked in mg/ml: divide by 1000.',1));
+      else if(close(a,(R.S.id==='linear'?20/100*v2/100:0.008),.002) && Math.abs(R.w-20)>0.05) lines.push(mixLine('M11','You used 20 mg. Use the weight on the balance: '+R.w.toFixed(1)+' mg.',1));
+      else lines.push(mixLine('M1',R.w.toFixed(1)+' mg ÷ 100 ml, then × '+v2+' ÷ 100.',1));
+    }
+    const o=q1Opts();
+    if(R.ans1.b==null) miss++; else { const c=o.cell[R.ans1.b]; if(!c[1]) lines.push(mixLine(c[3],c[2],1)); }
+    if(R.ans1.c==null) miss++; else { const c=o.blank[R.ans1.c]; if(!c[1]) lines.push(mixLine(c[3],c[2],1)); }
+    if(lines.length) return msg(1,'bad',lines.join(''));
+    if(miss) return msg(1,'near','Answer every part first (part a is on the previous screen).');
+    msg(1,'good','<b>Right.</b> Standard: '+W.toFixed(5)+' mg/ml, in a quartz cell, zeroed on the medium.'); solve(1);
+  });
+
+  /* ---------- step 2: scan and set λmax ---------- */
+  const SP={L:34,R:312,T:14,B:160};
+  function spX(l){ return SP.L+(l-230)/100*(SP.R-SP.L); }
+  function spY(a,amax){ return SP.B-Math.min(a,amax)/amax*(SP.B-SP.T); }
+  /* what the trace shows: Aina's faulty scan, or the analyst's own scan of the standard */
+  function traceA(l){
+    const c=R.cstd*R.P/100;
+    if(!R.mine && R.mistake==='glass') return l<322 ? 2.6+0.25*Math.sin(l*1.7)+0.1*Math.sin(l*5.3) : absAt(l,c)+ (l<334? (334-l)*0.2 : 0);
+    if(!R.mine && R.mistake==='cloudy') return absAt(l,c)+0.06*scatterAt(l);
+    return absAt(l,c);
+  }
+  function drawSpec(){
+    const svg=$('#spec'); while(svg.firstChild) svg.removeChild(svg.firstChild);
+    const amax=(!R.mine && R.mistake==='glass')?3:0.5;
+    svg.appendChild(el('path',{d:'M'+SP.L+' '+SP.T+' V'+SP.B+' H'+SP.R,fill:'none',stroke:'#c9cdca'}));
+    [230,250,270,290,310,330].forEach(l=>{ svg.appendChild(el('path',{d:'M'+fx(spX(l))+' '+SP.B+' v4',stroke:'#c9cdca'})); svg.appendChild(el('text',{class:'ptx s',x:fx(spX(l)),y:SP.B+13,'text-anchor':'middle'},l)); });
+    (amax===3?[0,1,2,3]:[0,.1,.2,.3,.4,.5]).forEach(a=>svg.appendChild(el('text',{class:'ptx s',x:SP.L-4,y:fx(spY(a,amax)+3),'text-anchor':'end'},a)));
+    svg.appendChild(el('text',{class:'ptx s',x:SP.L+2,y:SP.T-3},'A'));
+    svg.appendChild(el('text',{class:'ptx s',x:SP.R,y:SP.B+25,'text-anchor':'end'},'nm'));
+    if(R.scanned || !R.mine){
+      let d=''; for(let l=230;l<=330;l+=1) d+=(d?'L':'M')+fx(spX(l))+' '+fx(spY(traceA(l),amax))+' ';
+      svg.appendChild(el('path',{d:d,fill:'none',stroke:R.mine?'#2d6a4f':'#c0392b','stroke-width':2}));
+      if(!R.mine) svg.appendChild(el('text',{class:'ptx',x:SP.R-4,y:SP.T+10,'text-anchor':'end',fill:'#c0392b'},'Aina’s scan of a test solution'));
+    }
+    if(R.mine && R.scanned){
+      const x=spX(R.wl), a=traceA(R.wl);
+      svg.appendChild(el('path',{d:'M'+fx(x)+' '+SP.T+' V'+SP.B,stroke:'#d9821f','stroke-dasharray':'3 2'}));
+      svg.appendChild(el('circle',{cx:fx(x),cy:fx(spY(a,amax)),r:3.5,fill:'#d9821f'}));
+    }
+    $('#wlrow').style.display=(R.mine&&R.scanned)?'flex':'none';
+    $('#wl').value=R.wl; $('#wlread').textContent=R.wl+' nm · A = '+traceA(R.wl).toFixed(3);
+    $('#sstate').innerHTML=!R.mine?'<span class="trainee">Aina’s readings.</span> Something is wrong. Look at the scan.':(R.scanned?'Standard scanned against the medium. Drag the wavelength to the top of the peak.':'Cell filled with the standard. Zero on the medium, then scan.');
+    describe(); renderScanBtns();
+  }
+  function describe(){
+    const b=$('#words-box');
+    if(!R.mine && R.mistake==='glass'){ b.textContent='Below about 320 nm the trace jumps to an absorbance near 3 and is noisy. No peak can be seen.'; return; }
+    if(!R.mine && R.mistake==='cloudy'){ b.textContent='A peak near 265 nm, but the whole trace sits higher than it should, even at 330 nm where the drug does not absorb. It rises steeply towards short wavelengths.'; return; }
+    if(!R.scanned){ b.textContent='No scan yet.'; return; }
+    b.textContent='One broad peak with its top at 265 nm (A = '+traceA(265).toFixed(3)+'). Absorbance rises again below 240 nm. At 330 nm the absorbance is close to 0. The marker is at '+R.wl+' nm.';
+  }
+  $('#words').addEventListener('change',()=>{ $('#app').classList.toggle('words',$('#words').checked); track('lab-words',{on:$('#words').checked}); fitPage(); });
+  $('#wl').addEventListener('input',()=>{ R.wl=+$('#wl').value; R.ans2.wl=R.wl; drawSpec(); const n=$('#wlnow'); if(n) n.textContent=R.wl+' nm'; unsolveFrom(2); });
+  function renderScanBtns(){
+    const box=$('#scanbtns'); box.innerHTML='';
+    if(!R.mine) return;
+    [['Zero on medium','z'],['Scan 230–330 nm','s']].forEach(([t,k])=>{ const b=document.createElement('button'); b.type='button';
+      const isDone=k==='z'?R.zeroed:R.scanned, ready=k==='z'?!R.zeroed:(R.zeroed&&!R.scanned);
+      b.className='btn'+(isDone?' doneb':(ready?' solid':'')); b.textContent=(isDone?'✓ ':'')+t; b.disabled=busy||!ready;
+      b.addEventListener('click',()=>runScan(k)); box.appendChild(b); });
+  }
+  async function runScan(k){
+    if(busy) return;
+    if(k==='z'){ R.zeroed=true; drawSpec(); renderObs(); fitPage(); return; }
+    busy++; renderScanBtns(); R.scanned=true; R.wl=240;
+    if(!RM){ const svg=$('#spec'); drawSpec(); const p=svg.querySelector('path[stroke="#2d6a4f"]'); if(p){ const L=p.getTotalLength(); p.style.strokeDasharray=L; p.style.strokeDashoffset=L; p.getBoundingClientRect(); p.style.transition='stroke-dashoffset 1.6s linear'; p.style.strokeDashoffset=0; await new Promise(r=>setTimeout(r,1650)); } }
+    busy--; drawSpec(); renderObs(); fitPage(); track('lab-scan',{scenario:R.S.id});
+  }
+  function obsQs(){
+    if(R.oq) return R.oq;
+    const qs=[];
+    if(R.mistake){
+      const g=R.mistake==='glass';
+      qs.push({key:'why', p:'What went wrong with Aina’s readings?', o:shuffle([
+        ['She used a glass cell',g?1:0,g?'':'A glass cell would block everything below about 320 nm. This trace still shows the peak.',g?'M9':'M8'],
+        ['Her test solution was not filtered (cloudy)',g?0:1,g?'Cloudiness raises the trace, but the drug’s peak would still show. Here nothing below 320 nm gets through.':'',g?'M9':'M8'],
+        ['She zeroed on the wrong blank',0,'The medium hardly absorbs at 265 nm, so the blank would not cause this shape.',g?'M9':'M8']])});
+    }
+    qs.push({key:'why2', needs:1, p:'Why measure at λmax?', o:shuffle([
+      ['The reading is largest and a small wavelength error changes it least',1],
+      ['Only λmax obeys the Beer–Lambert law',0,'The law holds at any wavelength the drug absorbs. λmax is chosen for a large, stable reading.','M4'],
+      ['The blank absorbs most there',0,'The blank is chosen because it hardly absorbs. λmax is about the drug’s peak.','M4']])});
+    R.oq=qs; return qs;
+  }
+  function renderObs(){
+    const box=$('#obs'); box.innerHTML=''; let shown=0;
+    obsQs().forEach(q=>{
+      const avail=q.key==='why' ? !R.mine : (R.mine && R.scanned);
+      if(!avail) return; shown++;
+      const d=document.createElement('div'); d.innerHTML='<div class="q"'+(shown===1?' style="margin-top:0"':'')+'>'+q.p+'</div>';
+      d.appendChild(chipGroup(q.o.map(o=>o[0]), R.ans2[q.key], i=>{ R.ans2[q.key]=i; unsolveFrom(2); }, true)); box.appendChild(d);
+    });
+    if(R.mine && R.scanned){ box.insertAdjacentHTML('beforeend','<div class="q">Set '+term('lmax','λmax')+'</div><p class="small" style="margin:0">Drag the wavelength'+(innerWidth>=900?' (left)':' (previous screen)')+' to the top of the peak. Now: <b id="wlnow">'+R.wl+' nm</b>.</p>'); }
+    const need=!R.mine?'':(!R.scanned?'Zero and scan the standard'+(innerWidth>=900?' (left).':' (previous screen).'):'');
+    if(need) box.insertAdjacentHTML('beforeend','<p class="wait-note">'+need+'</p>');
+  }
+  $('#chk2').addEventListener('click',()=>{
+    if(busy) return msg(2,'near','Wait for the scan to finish.');
+    const qs=obsQs(), lines=[];
+    if(!R.mine){
+      const q=qs[0], a=R.ans2.why; if(a==null) return msg(2,'near','First say what went wrong with Aina’s readings.');
+      const o=q.o[a]; if(!o[1]) return msg(2,'bad',mixLine(o[3],o[2],2));
+      R.mine=true; R.zeroed=false; R.scanned=false; drawSpec(); renderObs();
+      return msg(2,'good','<b>Right.</b> '+(R.mistake==='glass'?'Glass absorbs the UV light itself.':'Particles scatter light, so the readings are too high.')+' Now set up your own run: zero, scan and set λmax'+(innerWidth>=900?' (left).':' (previous screen).'));
+    }
+    if(!R.zeroed||!R.scanned) return msg(2,'near','Zero on the medium, then scan the standard.');
+    const q=qs.find(x=>x.key==='why2'), a=R.ans2.why2;
+    if(Math.abs(R.wl-265)>1){ lines.push(mixLine('M4','The marker is at '+R.wl+' nm. Move it to the highest point of the peak.',2)); }
+    if(a==null){ if(!lines.length) return msg(2,'near','Answer why you measure at λmax.'); }
+    else if(!q.o[a][1]) lines.push(mixLine(q.o[a][3],q.o[a][2],2));
+    if(lines.length) return msg(2,'bad',lines.join(''));
+    msg(2,'good','<b>Right.</b> λmax = '+R.wl+' nm. Standard A = <b>'+R.Astd.toFixed(3)+'</b>.'); solve(2);
+  });
+
+  /* ---------- step 3: measure and calculate ---------- */
+  function renderMeas(){
+    const m=$('#meas'), lin=R.S.id==='linear';
+    let h='';
+    if(lin){
+      h+='<div class="q" style="margin-top:0">Calibration standards at 265 nm</div><table class="vt"><tr><th>ml to 100 ml</th>'+R.stds.map(s=>'<td>'+s.v+'</td>').join('')+'</tr><tr><th>c (mg/ml)</th>'+R.stds.map(s=>'<td>'+s.c.toFixed(5)+'</td>').join('')+'</tr><tr><th>A</th>'+R.stds.map(s=>'<td>'+s.A.toFixed(3)+'</td>').join('')+'</tr></table>'+
+         '<div class="spec-box" style="min-height:7em"><svg id="cal" viewBox="0 0 320 150" role="img" aria-label="Calibration line"></svg></div>'+
+         '<div class="given">Software fit: <b>A = '+R.m.toFixed(2)+' × c '+(R.b<0?'− ':'+ ')+Math.abs(R.b).toFixed(4)+'</b> · r² = <b>'+R.r2.toFixed(4)+'</b></div>';
+    } else {
+      h+='<div class="vessels"><svg viewBox="0 0 420 70" role="img" aria-label="Six dissolution vessels">'+[0,1,2,3,4,5].map(i=>'<g transform="translate('+(14+i*68)+' 6)"><path d="M0 0 V46 Q0 58 12 58 H40 Q52 58 52 46 V0" fill="#eef5fb" stroke="#8fb3c9" stroke-width="1.5"/><path d="M26 -2 V34 M16 38 H36" stroke="#5c665f" stroke-width="2"/><text x="26" y="52" text-anchor="middle" class="ptx">'+(i+1)+'</text></g>').join('')+'</svg></div>'+
+         '<p class="small" style="margin:0">Paddle, 50 rpm, 500 ml 0.01 N HCl, 37.0 °C, 30 minutes. Each sample filtered.</p>';
+    }
+    h+='<div class="q">Absorbance at 265 nm</div><table class="vt"><tr><th>Vessel</th>'+[1,2,3,4,5,6].map(i=>'<th>'+i+'</th>').join('')+'</tr><tr><td><b>A</b></td>'+R.A.map((a,i)=>'<td>'+a.toFixed(3)+'</td>').join('')+'</tr>'+
+       (solved[2]?'<tr><td><b>%</b></td>'+R.pct.map((p,i)=>'<td'+(p<85?' class="lo"':'')+'>'+(lin?(((R.A[i]-R.b)/R.m)*500/4*100):p).toFixed(1)+'</td>').join('')+'</tr>':'')+'</table>'+
+       (lin?'':'<div class="given">Standard: <b>'+R.w.toFixed(1)+' mg</b> WS, '+term('potency','potency')+' <b>'+R.P.toFixed(1)+'%</b>, A<sub>std</sub> = <b>'+R.Astd.toFixed(3)+'</b></div>');
+    m.innerHTML=h;
+    if(lin) drawCal();
+  }
+  function drawCal(){
+    const svg=$('#cal'); if(!svg) return; const L=40,Rr=310,T=10,B=124, cmax=R.stds[4].c*1.1, amax=R.stds[4].A*1.15;
+    const X=c=>L+c/cmax*(Rr-L), Y=a=>B-a/amax*(B-T);
+    svg.appendChild(el('path',{d:'M'+L+' '+T+' V'+B+' H'+Rr,fill:'none',stroke:'#c9cdca'}));
+    svg.appendChild(el('path',{d:'M'+fx(X(0))+' '+fx(Y(R.b))+' L'+fx(X(cmax))+' '+fx(Y(R.m*cmax+R.b)),stroke:'#2d6a4f','stroke-width':1.6}));
+    R.stds.forEach(s=>svg.appendChild(el('circle',{cx:fx(X(s.c)),cy:fx(Y(s.A)),r:3.2,fill:'#1c2620'})));
+    svg.appendChild(el('text',{class:'ptx s',x:Rr,y:B+14,'text-anchor':'end'},'c (mg/ml)'));
+    svg.appendChild(el('text',{class:'ptx s',x:L+3,y:T+8},'A'));
+    [0,R.stds[4].c].forEach(c=>svg.appendChild(el('text',{class:'ptx s',x:fx(X(c)),y:B+14,'text-anchor':'middle'},c?c.toFixed(4):'0')));
+  }
+  function renderStep3(){
+    renderMeas();
+    const k=R.k+1, lin=R.S.id==='linear';
+    let h='';
+    if(lin) h+='<div class="q" style="margin-top:0">a. Concentration in vessel '+k+' from the line</div><div class="calc-in">'+numIn('c3',R.ans3.c)+'<span class="unit">mg/ml</span></div><p class="small" style="margin:0">c = (A − b) ÷ m. Give 5 decimal places.</p>';
+    h+='<div class="q"'+(lin?'':' style="margin-top:0"')+'>'+(lin?'b. ':'')+'% dissolved in vessel <b>'+k+'</b></div><div class="calc-in">'+numIn('p3',R.ans3.p)+'<span class="unit">% of label claim</span></div>';
+    h+='<p class="small">'+(lin?'% = c × 500 ÷ 4 × 100. ':'Use the STP formula with A = '+R.A[R.k].toFixed(3)+'. ')+'Readings are '+(innerWidth>=900?'on the left':'on the previous screen')+'.</p>';
+    $('#q3').innerHTML=h;
+    $('#q3').querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{ R.ans3={c:$('#c3')?$('#c3').value:null, p:$('#p3').value}; unsolveFrom(3); }));
+  }
+  $('#chk3').addEventListener('click',()=>{
+    const W=want3(), lines=[]; let miss=0, lin=R.S.id==='linear';
+    if(lin){ const c=readNum('c3');
+      if(c==null) miss++;
+      else if(!close(c,W.c,.01,.000002)){
+        if(close(c,R.A[R.k]/R.m,.01)) lines.push(mixLine('M10','You left out b. Take b away from A first: (A − b) ÷ m.',3));
+        else if(close(c,R.A[R.k]*R.m+R.b,.02)) lines.push(mixLine('M10','Rearrange the line: c = (A − b) ÷ m. You multiplied by m.',3));
+        else lines.push(mixLine('M10','c = ('+R.A[R.k].toFixed(3)+' − '+R.b.toFixed(4)+') ÷ '+R.m.toFixed(2)+'.',3));
+      }
+    }
+    const p=readNum('p3');
+    if(p==null) miss++;
+    else if(!close(p,W.pct,0,.5)){
+      const ratio=R.A[R.k]/R.Astd;
+      if(!lin && close(p,R.Astd/R.A[R.k]*100,0,.6)) lines.push(mixLine('M5','You divided the standard by the sample. Use A<sub>spl</sub> ÷ A<sub>std</sub>.',3));
+      else if(!lin && close(p,ratio*100,0,.4) && !close(W.pct,ratio*100,0,.5)) lines.push(mixLine('M11','A<sub>spl</sub> ÷ A<sub>std</sub> × 100 assumes 20.0 mg of a 100% standard. Include the weight ('+R.w.toFixed(1)+' mg) and the potency ('+R.P.toFixed(1)+'%).',3));
+      else if(!lin && close(p,W.pct*R.P/100*R.P/100,0,.4)) lines.push(mixLine('M11','Multiply by P ÷ 100 once only.',3));
+      else if(lin) lines.push(mixLine('M10','% = c × 500 ml ÷ 4 mg × 100.',3));
+      else lines.push(mixLine('M5','Work through the STP formula term by term: ('+R.A[R.k].toFixed(3)+' ÷ '+R.Astd.toFixed(3)+') × ('+R.w.toFixed(1)+' ÷ 100) × (4 ÷ 100) × 500 × ('+R.P.toFixed(1)+' ÷ 100) × (100 ÷ 4).',3));
+    }
+    if(lines.length) return msg(3,'bad',lines.join(''));
+    if(miss) return msg(3,'near',lin?'Enter both answers.':'Enter the % dissolved.');
+    msg(3,'good','<b>Right.</b> Vessel '+(R.k+1)+': '+W.pct.toFixed(1)+'%. The software now shows all six results.'); solve(3);
+  });
+
+  /* ---------- step 4: decide ---------- */
+  const pctList=()=>R.S.id==='linear'?R.A.map(a=>(a-R.b)/R.m*500/4*100):R.pct;
+  function q4Def(){
+    if(R.q4) return R.q4;
+    const P=pctList().map(x=>Math.round(x*10)/10), low=Math.min(...P), pass=low>=85;
+    const q=[];
+    if(R.S.id==='linear') q.push({p:'Is the calibration line good enough to use?', o:[['Yes: r² is at least 0.999',1],['No: the line does not pass through 0',0,'A small intercept b is normal. The STP limit is on r².','M10']]});
+    q.push({p:'Lowest result: <b>'+low.toFixed(1)+'%</b>. Q = 80%. Stage 1 result:', o:[
+      ['Passes S1: every vessel is at least 85%',pass?1:0,'At S1 each vessel needs Q + 5% = 85%. '+low.toFixed(1)+'% is below that.','M6'],
+      ['Does not pass S1: test 6 more tablets (S2)',pass?0:1,'Every vessel is at least 85%, so S1 is met. No more testing is needed.','M6'],
+      ['Fails: reject the batch',0,pass?'Every vessel is at least 85%: S1 is met.':'Not meeting S1 does not reject a batch. You go on to S2.','M7']]});
+    R.q4=q; return q;
+  }
+  function renderStep4(){
+    const box=$('#q4'), P=pctList();
+    box.innerHTML='<table class="vt" style="margin-bottom:.2em"><tr><th>Vessel</th>'+[1,2,3,4,5,6].map(i=>'<th>'+i+'</th>').join('')+'</tr><tr><td><b>%</b></td>'+P.map(p=>'<td'+(p<85?' class="lo"':'')+'>'+p.toFixed(1)+'</td>').join('')+'</tr></table>';
+    q4Def().forEach((q,k)=>{ const d=document.createElement('div'); d.innerHTML='<div class="q">'+q.p+'</div>';
+      d.appendChild(chipGroup(q.o.map(o=>o[0]), R.ans4[k], i=>{ R.ans4[k]=i; unsolveFrom(4); }, true)); box.appendChild(d); });
+  }
+  $('#chk4').addEventListener('click',()=>{
+    const Q=q4Def(), lines=[]; let miss=0;
+    Q.forEach((q,k)=>{ const a=R.ans4[k]; if(a==null){ miss++; return; } const o=q.o[a]; if(!o[1]) lines.push(mixLine(o[3],o[2],4)); });
+    if(miss) return msg(4,'near','Answer '+(Q.length>1?'both parts':'the question')+'.');
+    if(lines.length) return msg(4,'bad',lines.join(''));
+    const low=Math.min(...pctList());
+    msg(4,'good','<b>Round complete.</b> '+(low>=85?'Report: dissolution complies at S1.':'Report: S1 not met. Six more tablets go to S2: the average of 12 must be at least 80% and none below 65%.')); solve(4);
+  });
+
+  function solve(k){
+    solved[k-1]=true; track('lab-step'+k+'-solved',{scenario:R.S.id});
+    if(k===2) renderStep3();
+    if(k===3){ renderMeas(); renderStep4(); }
+    if(k===4){ roundComplete(); $('#endrow').hidden=false; }
+    updatePager(); fitPage();
+  }
+  function roundComplete(){
+    rounds++; $('#rounds').textContent=rounds; done.add(R.S.id);
+    const c=$('#scen-chips').children[sc]; if(c && !c.querySelector('.tick')) c.insertAdjacentHTML('beforeend','<span class="tick">✓</span>');
+    track('lab-round-complete',{scenario:R.S.id});
+    try{ if(window.parent!==window){ const o=location.origin; window.parent.postMessage({type:'uv-lab', event:'round-complete', reaction:R.S.id}, (o&&o!=='null')?o:'*'); } }catch(_){}
+  }
+  $('#btn-new').addEventListener('click',()=>{ newRound(); goPage(firstPageOfStep(1)); });
+  $('#btn-next').addEventListener('click',()=>{ sc=(sc+1)%SCEN.length; track('lab-pick',{scenario:SCEN[sc].id}); newRound(); goPage(0); });
+  $('#btn-pt').addEventListener('click',()=>{ if(window.KompasPT) KompasPT.open(); });
+  $('#btn-kompas').addEventListener('click',e=>{ if(history.length>1 && document.referrer && document.referrer.indexOf(location.host)>-1){ e.preventDefault(); history.back(); } });
+
+  /* ---------- STORY: three tap-through beats that set the problem ----------
+     Recurring characters: Aina (trainee pharmacist) and Ravi (senior pharmacist). */
+  function person(who,x,y,s,mirror){
+    const skin=who==='aina'?'#e3b48c':'#a9714b';
+    let g='<g class="who-'+who+'" transform="translate('+x+' '+y+') scale('+(mirror?-s:s)+' '+s+')"><g class="bob">';
+    g+='<path d="M-22 0 Q-23 -33 0 -35 Q23 -33 22 0 Z" fill="#fff" stroke="#b9c2bc" stroke-width="1.5"/>';
+    g+='<path d="M-8 -34 L0 -21 L8 -34" fill="none" stroke="#2d6a4f" stroke-width="2.4" stroke-linejoin="round"/>';
+    g+='<rect x="7" y="-25" width="8" height="5" rx="1" fill="#2d6a4f"/>';
+    if(who==='aina'){
+      g+='<path d="M-15 -47 Q-16 -68 0 -68 Q16 -68 15 -47 Q15 -33 0 -31 Q-15 -33 -15 -47 Z" fill="#3f7d63"/>';
+      g+='<ellipse cx="0" cy="-49" rx="10" ry="11.5" fill="'+skin+'"/>';
+    } else {
+      g+='<rect x="-4" y="-40" width="8" height="6" fill="'+skin+'"/>';
+      g+='<circle cx="0" cy="-51" r="12.5" fill="'+skin+'"/>';
+      g+='<path d="M-12.5 -54 Q-12 -66 0 -66 Q12 -66 12.5 -54 Q8 -60 0 -60 Q-7 -60 -12.5 -54 Z" fill="#26201c"/>';
+      g+='<g fill="none" stroke="#26201c" stroke-width="1.3"><circle cx="-4.6" cy="-51" r="3.4"/><circle cx="4.6" cy="-51" r="3.4"/><path d="M-1.2 -51 H1.2"/></g>';
+    }
+    g+='<g class="blink"><circle cx="-4.4" cy="-51" r="1.4" fill="#1c2620"/><circle cx="4.4" cy="-51" r="1.4" fill="#1c2620"/></g>';
+    g+='<path d="M-3.5 -45.5 Q0 -42.5 3.5 -45.5" fill="none" stroke="#1c2620" stroke-width="1.3" stroke-linecap="round"/>';
+    return g+'</g></g>';
+  }
+  function vessel(x,y,lvl){ return '<g transform="translate('+x+' '+y+')"><path d="M-18 -50 V-8 Q-18 0 -8 0 H8 Q18 0 18 -8 V-50" fill="#eef5fb" stroke="#8fb3c9" stroke-width="1.6"/><rect x="-16" y="'+(-46+lvl)+'" width="32" height="'+(44-lvl)+'" fill="#d7ebf7" opacity=".8"/><path d="M0 -58 V-14 M-9 -12 H9" stroke="#5c665f" stroke-width="2"/></g>'; }
+  function cuvette(x,y,cloudy){ return '<g transform="translate('+x+' '+y+')"><rect x="-9" y="-40" width="18" height="40" rx="2" fill="#fff" stroke="#3a6bd1" stroke-width="1.5"/><rect x="-7.5" y="-26" width="15" height="24.5" fill="'+(cloudy?'#e1dfd5':'#e2d6f3')+'"/></g>'; }
+  const STORY={
+    routine:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'This batch of chlorpheniramine 4 mg tablets needs its dissolution test before release. Does the drug come out of the tablet in 30 minutes?',
+      know:'You decide correctly whether the batch meets Stage 1.',
+      scene:()=>vessel(190,124,12)+vessel(240,124,12)+vessel(290,124,12)+'<text class="pulse" x="240" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5d14">80% in 30 minutes?</text>'},
+    slow:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'A batch made after a change of granulator. Production says the tablets look harder. Check that they still dissolve.',
+      know:'You find any slow tablet and say what happens next.',
+      scene:()=>vessel(200,124,12)+vessel(260,124,26)+'<text class="pulse" x="230" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5d14">Any slow tablets?</text>'},
+    trainee:{who:'aina', name:'Aina', role:'trainee pharmacist',
+      problem:'My dissolution readings look strange. Can you look at my scan before I report it?',
+      know:'You find Aina’s mistake, redo the run properly and decide.',
+      scene:()=>cuvette(215,120,R&&R.mistake==='cloudy')+cuvette(255,120,false)+'<text class="pulse" x="235" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5d14">Strange readings?</text>'},
+    linear:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'Before we trust a single standard, let’s prove the Beer–Lambert law holds: five standards, one straight line.',
+      know:'You read concentrations from the line and judge the batch.',
+      scene:()=>'<g transform="translate(180 128)"><path d="M0 0 H120 M0 0 V-90" stroke="#5c665f" stroke-width="1.5"/><path d="M0 -2 L115 -84" stroke="#2d6a4f" stroke-width="2"/>'+[1,2,3,4,5].map(i=>'<circle cx="'+(i*22)+'" cy="'+(-2-i*16.3)+'" r="3.5" fill="#1c2620"/>').join('')+'</g><text class="pulse" x="240" y="24" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5d14">A straight line?</text>'}
+  };
+  const SCENE_W=320, SCENE_H=150;
+  function sceneFor(beat){
+    const st=STORY[R.S.id], who=st.who;
+    let s='<svg viewBox="0 0 '+SCENE_W+' '+SCENE_H+'" role="img" aria-label="'+(['The problem','The method','Your goal'][beat])+'"><rect width="320" height="150" rx="10" fill="#f4f7f5"/>';
+    if(beat===0) s+=st.scene()+person(who,72,140,1.45);
+    if(beat===1){
+      s+='<g transform="translate(160 70)"><rect x="0" y="0" width="140" height="56" rx="8" fill="#fff" stroke="#9aa39d" stroke-width="1.5"/><rect x="12" y="12" width="34" height="22" rx="3" fill="#e9f4ee" stroke="#2d6a4f"/><text x="29" y="27" text-anchor="middle" font-size="9" font-weight="700" fill="#1c2620">265</text><rect x="62" y="14" width="14" height="28" rx="2" fill="#fff" stroke="#3a6bd1"/><rect x="88" y="14" width="40" height="28" rx="3" fill="#f4f5f2" stroke="#9aa39d"/><path d="M92 36 C100 36 104 18 108 18 C112 18 116 36 124 36" fill="none" stroke="#2d6a4f" stroke-width="1.5"/></g><text x="230" y="144" text-anchor="middle" font-size="9" font-weight="700" fill="#1c2620">UV spectrophotometer</text>';
+      s+=person(who==='aina'?'ravi':'aina',70,140,1.45);
+    }
+    if(beat===2){
+      s+=person('aina',58,140,1.35)+person('ravi',118,140,1.35,true);
+      s+='<g transform="translate(176 22)"><rect width="128" height="108" rx="8" fill="#fff" stroke="#cfe6d9" stroke-width="2"/>';
+      STEP_NAMES.slice(1).forEach((t,i)=>{ s+='<circle cx="16" cy="'+(20+i*24)+'" r="8" fill="#2d6a4f"/><text x="16" y="'+(23.5+i*24)+'" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">'+(i+1)+'</text><text x="30" y="'+(23.5+i*24)+'" font-size="10" font-weight="700" fill="#1c2620">'+t+'</text>'; });
+      s+='</g>';
+    }
+    return s+'</svg>';
+  }
+  const BEAT_TITLE=['1 · The problem','2 · The method','3 · Your goal'];
+  function renderStory(){
+    const st=STORY[R.S.id], b=R.beat||0, box=$('#story');
+    let text='';
+    if(b===0) text='<p class="say"><b>'+st.name+'</b> <span class="small">('+st.role+')</span><br>'+st.problem+'</p>';
+    if(b===1) text='<p class="say">'+(R.S.id==='linear'?'Prepare five standards from the '+term('ws','working standard')+', read them at <b>265 nm</b> and fit a line. Then read the six vessels.':'Dissolve one tablet in each of six vessels of 0.01 N HCl. After 30 minutes, read each filtered sample at <b>265 nm</b> beside a '+term('ws','working standard')+'.')+'</p>';
+    if(b===2) text='<p class="say"><b>Objective:</b> measure how much chlorpheniramine dissolved, by UV.<br><b>You succeed when:</b> '+st.know+'</p>';
+    box.innerHTML='<div class="story-head"><span class="eyebrow" style="margin:0">'+BEAT_TITLE[b]+'</span><span class="dots">'+[0,1,2].map(i=>'<i class="'+(i<=b?'on':'')+'"></i>').join('')+'</span></div>'+
+      '<button type="button" class="scene" id="scene" aria-label="Next part of the story">'+sceneFor(b)+'</button>'+text+
+      '<div class="story-nav">'+(b>0?'<button type="button" class="btn ghost" id="story-back">‹ Back</button>':'<span></span>')+
+      (b<2?'<button type="button" class="btn solid" id="story-next">Tap to continue ›</button>':'<span class="small">Ready? Press <b>Continue</b> below.</span>')+'</div>';
+    const nx=$('#story-next'); if(nx) nx.addEventListener('click',storyNext);
+    $('#scene').addEventListener('click',storyNext);
+    const bk=$('#story-back'); if(bk) bk.addEventListener('click',()=>{ R.beat=Math.max(0,b-1); renderStory(); });
+    if(b===2 && !R.storyDone){ R.storyDone=true; track('lab-story-done',{scenario:R.S.id}); }
+    updatePager(); fitPage();
+  }
+  function storyNext(){ if((R.beat||0)<2){ R.beat=(R.beat||0)+1; track('lab-story-beat',{scenario:R.S.id, beat:R.beat}); renderStory(); } }
+
+  /* ---------- hints ---------- */
+  const hints=$('#hints');
+  $('#hints-btn').addEventListener('click',()=>{ hints.classList.add('open'); $('#hints-close').focus(); track('lab-hints',{page:page}); });
+  $('#hints-close').addEventListener('click',()=>{ hints.classList.remove('open'); $('#hints-btn').focus(); });
+  hints.addEventListener('click',e=>{ if(e.target===hints) hints.classList.remove('open'); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') hints.classList.remove('open'); });
+
+  /* ---------- pager: one screen at a time ----------
+     Narrow screens show one pane per page; wide screens show both panes of a step side by side. */
+  const SCR=[...document.querySelectorAll('.scr')];
+  const STEP_NAMES=['UV Bench','Prepare','Set up','Measure','Decide'];
+  let pages=[], page=0, wide=null;
+  function isWide(){ return innerWidth>=900 && innerHeight>=560; }
+  function buildPages(){
+    const w=isWide(); if(w===wide && pages.length) return; wide=w;
+    const cur=pages.length?pages[page][0]:SCR[0];
+    pages=[];
+    SCR.forEach(s=>{ const last=pages[pages.length-1];
+      if(w && last && s.dataset.pane==='b' && last[0].dataset.step===s.dataset.step) last.push(s); else pages.push([s]); });
+    page=Math.max(0,pages.findIndex(p=>p.includes(cur)));
+  }
+  const stepOf=p=>+pages[p][0].dataset.step;
+  const firstPageOfStep=k=>pages.findIndex(p=>+p[0].dataset.step===k);
+  function lastPaneOfStep(p){ const k=stepOf(p); return p+1>=pages.length || stepOf(p+1)!==k; }
+  function canLeave(p){ const k=stepOf(p); if(k===0) return !!(R&&R.storyDone); if(!lastPaneOfStep(p)) return true; return solved[k-1]; }
+  function goPage(n){
+    page=Math.max(0,Math.min(pages.length-1,n));
+    SCR.forEach(s=>{ s.classList.remove('on','half-l','half-r','single','scrolly'); s.style.setProperty('--k',1); });
+    $('#stage').classList.toggle('roomy', innerWidth>=640);
+    const P=pages[page]; P.forEach((s,i)=>{ s.classList.add('on'); if(P.length===2) s.classList.add(i?'half-r':'half-l'); else s.classList.add('single'); });
+    updatePager(); fitPage();
+    if(stepOf(page)===1 && R && !briefed.has(R.S.id)) openBrief();
+    if(stepOf(page)===2) renderObs();
+    if(stepOf(page)===3 && solved[1]) renderStep3();
+    track('lab-page',{page:STEP_NAMES[stepOf(page)]+(P.length===1&&P[0].dataset.pane?' '+P[0].dataset.pane:'')});
+  }
+  function updatePager(){
+    if(!pages.length) return;
+    const k=stepOf(page), P=pages[page], same=pages.filter(p=>stepOf(pages.indexOf(p))===k);
+    const part=(P.length===1 && same.length>1)?' ('+(same.indexOf(P)+1)+'/'+same.length+')':'';
+    $('#bar-lbl').innerHTML=(k?'<span>Step '+k+' of 4</span>':'')+STEP_NAMES[k]+part;
+    $('#fill').style.width=(page/(pages.length-1)*100)+'%';
+    $('#back').disabled=page===0;
+    const last=page===pages.length-1, ok=canLeave(page), nx=$('#next');
+    nx.textContent=last?(solved[3]?'New round ↺':'Continue →'):'Continue →';
+    nx.disabled=!ok || (last && !solved[3]);
+    nx.classList.toggle('ready', ok && k>0 && lastPaneOfStep(page) && solved[k-1]);
+    guide();
+  }
+  $('#back').addEventListener('click',()=>goPage(page-1));
+  $('#next').addEventListener('click',()=>{ if(page===pages.length-1){ if(solved[3]){ newRound(); goPage(firstPageOfStep(1)); } return; } if(canLeave(page)) goPage(page+1); });
+
+  /* fit: shrink the text slightly if a page is too tall; scroll only as a last resort (logged) */
+  function fitPage(){
+    if(!pages.length) return;
+    pages[page].forEach(s=>{
+      s.classList.remove('scrolly'); let k=1; s.style.setProperty('--k',k);
+      const over=()=>s.scrollHeight>s.clientHeight+1;
+      let g=0; while(over() && k>0.8 && g++<10){ k=+(k-0.04).toFixed(2); s.style.setProperty('--k',k); }
+      if(over()){ s.classList.add('scrolly'); track('lab-overflow',{page:s.dataset.title, w:innerWidth, h:innerHeight}); }
+      s.dataset.k=k;
+    });
+    guide();
+  }
+  function setAppH(){ document.documentElement.style.setProperty('--app-h', innerHeight+'px'); }
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ setAppH(); buildPages(); goPage(page); },120); });
+
+  /* ---------- step guide: the footer names the next move and the matching control glows ----------
+     It only ever points at the next empty input or button, never at the right answer. */
+  const briefed=new Set(); let glowEl=null;
+  const empty=id=>{ const e=$('#'+id); return !e || !e.value.trim(); };
+  const checkMove=n=>({t:$('#m'+n).classList.contains('bad')?'Fix what the feedback says, then press Check again':'Press Check', e:$('#chk'+n)});
+  const storyMove=()=>R.storyDone?{t:'Press Continue to start the lab',e:$('#next')}:{t:'Tap the picture to read the story',e:$('#story-next')};
+  const doneMove=k=>k<4?{t:'Step done. Press Continue',e:$('#next')}:{t:'Round complete. Try new values or the next scenario',e:$('#endrow')};
+  function guide(){
+    if(!pages.length || !R) return;
+    const g=nextMove(); let t=g.t||'', e=g.e||null;
+    if(e){ const s=e.closest('.scr'); if(s && !pages[page].includes(s)){ const j=pages.findIndex(p=>p.includes(s));
+      if(j>page){ t='Next screen: '+t; e=$('#next'); } else { t='Back a screen: '+t; e=$('#back'); } } }
+    const gate=$('#gate'); gate.textContent=t; gate.classList.toggle('go',!!t);
+    if(glowEl!==e){ if(glowEl) glowEl.classList.remove('guide'); glowEl=e; if(e) e.classList.add('guide'); }
+    const sb=$('#stp-btn'), sl=g.s?'STP §'+g.s:'STP';
+    if(sb.textContent!==sl){ sb.textContent=sl; sb.classList.toggle('sec',!!g.s); sb.dataset.s=g.s||''; }
+  }
+  function openBrief(){ briefed.add(R.S.id); $('#brief-body').innerHTML=briefHTML(); $('#brief').classList.add('open'); $('#brief-go').focus(); }
+  function closeBrief(){ $('#brief').classList.remove('open'); guide(); }
+  $('#brief-go').addEventListener('click',closeBrief);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#brief').classList.contains('open')) closeBrief(); });
+  document.addEventListener('click',()=>setTimeout(guide,0));
+  document.addEventListener('input',()=>guide());
+  function nextMove(){
+    const k=stepOf(page), lin=R.S.id==='linear';
+    if(k===0) return storyMove();
+    if(solved[k-1]) return doneMove(k);
+    if(k===1){
+      if(empty('a1')) return {t:'a. Work out the standard’s concentration',e:$('#a1'),s:lin?7:4};
+      if(R.ans1.b==null) return {t:'b. Choose the cell',e:$('#q1b .chips'),s:3};
+      if(R.ans1.c==null) return {t:'c. Choose the blank',e:$('#q1b .chips.col'),s:3};
+      return Object.assign(checkMove(1),{s:4});
+    }
+    if(k===2){
+      if(busy) return {t:'Wait while the instrument scans'};
+      const obs=$('#obs').querySelectorAll('.chips');
+      if(!R.mine){ if(R.ans2.why==null) return {t:'Look at Aina’s scan. What went wrong?',e:obs[0],s:3}; return checkMove(2); }
+      if(!R.zeroed) return {t:'Zero the instrument on the medium',e:$('#scanbtns .btn:not(:disabled)'),s:3};
+      if(!R.scanned) return {t:'Scan the standard from 230 to 330 nm',e:$('#scanbtns .btn:not(:disabled)'),s:3};
+      if(R.ans2.wl==null) return {t:'Drag the wavelength to the top of the peak',e:$('#wlrow'),s:3};
+      if(R.ans2.why2==null) return {t:'Say why you measure at λmax',e:obs[obs.length-1],s:3};
+      return Object.assign(checkMove(2),{s:3});
+    }
+    if(k===3){
+      if(lin && empty('c3')) return {t:'a. Read the concentration from the line',e:$('#c3'),s:7};
+      if(empty('p3')) return {t:'Work out the % dissolved for vessel '+(R.k+1),e:$('#p3'),s:lin?7:6};
+      return Object.assign(checkMove(3),{s:lin?7:6});
+    }
+    const g=$('#q4').querySelectorAll('.chips');
+    for(let i=0;i<g.length;i++) if(R.ans4[i]==null) return {t:i===g.length-1?'Judge Stage 1':'Judge the calibration line',e:g[i],s:i===g.length-1?2:7};
+    return Object.assign(checkMove(4),{s:2});
+  }
+  function briefHTML(){
+    const lin=R.S.id==='linear';
+    return (R.S.id==='trainee'?'<p class="small" style="margin:0">First find what went wrong with Aina’s readings, then run it properly yourself.</p>':'')+'<ol class="sop">'+
+      '<li><b>Prepare.</b> Work out the concentration of the '+(lin?'calibration standard':'working standard')+'. Choose the cell and the blank.</li>'+
+      '<li><b>Set up.</b> Zero on the medium, scan the standard and set λmax.</li>'+
+      '<li><b>Measure.</b> '+(lin?'Read the concentration from the calibration line, then the % dissolved.':'Calculate the % dissolved for one vessel with the STP formula.')+'</li>'+
+      '<li><b>Decide.</b> Compare all six vessels with the Stage 1 limit.</li></ol>';
+  }
+
+  /* ---------- STP: opens at the section the current move needs ---------- */
+  function openSTP(s){
+    const d=$('#stp'); d.classList.add('open');
+    d.querySelectorAll('.stp-sec.hit').forEach(x=>x.classList.remove('hit'));
+    const sec=s?$('#stp-'+s):null;
+    if(sec){ sec.scrollIntoView({block:'start'}); sec.classList.add('hit'); } else d.querySelector('.box').scrollTop=0;
+    $('#stp-close').focus({preventScroll:true});
+  }
+  function closeSTP(){ $('#stp').classList.remove('open'); $('#stp-btn').focus({preventScroll:true}); }
+  $('#stp-btn').addEventListener('click',()=>openSTP($('#stp-btn').dataset.s));
+  $('#stp-close').addEventListener('click',closeSTP);
+  $('#stp').addEventListener('click',e=>{ if(e.target.id==='stp') closeSTP(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#stp').classList.contains('open')) closeSTP(); });
+  $('#brief-stp').addEventListener('click',()=>{ closeBrief(); openSTP(''); });
+
+  /* test hook: lets the automated checks read the round (no effect for students) */
+  window.__lab={get R(){ return R; }, want1:()=>want1(), want3:()=>want3(), pct:()=>pctList()};
+
+  setAppH(); buildPages(); newRound(); goPage(0);
+})();
+</script>
+</body>
+</html>

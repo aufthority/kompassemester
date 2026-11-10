@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>IR Bench — Aufthority</title>
+<meta name="description" content="Interactive lab: identify chlorpheniramine maleate by IR, from disc preparation to the fingerprint match, step by step.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="website">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="IR Bench: an infrared identification lab">
+<meta property="og:description"  content="Prepare the disc, check the instrument, read the bands and match the fingerprint: is it really chlorpheniramine?">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:locale"       content="en_MY">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<script>
+/* Embedded inside the explainer? Then hide the page chrome and skip analytics
+   (the explainer already tracks the visit). */
+(function(){
+  var emb = /[?&]embed=1/.test(location.search) || window.self !== window.top;
+  document.documentElement.classList.toggle('embedded', emb);
+  if(!emb){
+    var s=document.createElement('script'); s.defer=true; s.src='https://cloud.umami.is/script.js';
+    s.setAttribute('data-website-id','f79c60f1-f9e7-4170-a979-f357ba756a18'); document.head.appendChild(s);
+  }
+})();
+</script>
+<script src="../shared/periodic-table.js" defer></script>
+
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#636b65;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#8a5d14;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--arrow:#b25f0c;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.45;-webkit-text-size-adjust:100%;font-size:16px;overflow:hidden}
+@media (min-width:900px) and (min-height:700px){.scr{font-size:calc(var(--k,1)*18px)}}
+b,strong{color:var(--ink);font-weight:700}
+a{color:var(--accent)}
+
+/* one screen, no page scroll: top bar, stage, footer */
+#app{height:100vh;height:var(--app-h,100dvh);max-width:1040px;margin:0 auto;padding:0 14px;display:flex;flex-direction:column}
+.embedded #app{padding:0 10px}
+
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0 6px;border-bottom:1px solid var(--rule)}
+.embedded nav{display:none}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;gap:8px}
+.pillbtn{cursor:pointer;text-decoration:none;color:var(--accent-dark);border:1px solid var(--g-line);background:var(--g-bg);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;white-space:nowrap}
+@media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
+.pts{display:none}
+@media (max-width:340px){.logo{font-size:.92rem}.nav-right{gap:4px}.pillbtn{padding:4px 7px!important;font-size:.74rem}}
+@media (max-width:400px){.ptl{display:none}.pts{display:inline}.nav-right{gap:6px}.pillbtn{padding:5px 9px}}
+
+#bar{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:7px 0 5px}
+#bar-lbl{flex:1;min-width:0;font-size:.8rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar-lbl span{color:var(--eyebrow);letter-spacing:.06em;text-transform:uppercase;font-size:.9em;margin-right:.35em}
+#hints-btn{flex:0 0 auto}
+#track{flex:0 0 3px;background:var(--rule);border-radius:3px;margin-bottom:6px}
+#fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;gap:.35em;font-size:calc(var(--k,1)*16px);overflow:hidden;padding:2px 1px 4px}
+.scr.on{display:flex}
+.scr.scrolly{overflow-y:auto}
+.scr.half-l{right:calc(50% + 8px)}
+.scr.half-r{left:calc(50% + 8px)}
+/* wider screens: every pane is a card; two panes share the width equally, a single pane is one centred card */
+#stage.roomy .scr.on{border:1px solid var(--rule);border-radius:14px;padding:14px 18px;background:#fff}
+#stage.roomy .scr.single{left:max(0px,calc(50% - 340px));right:max(0px,calc(50% - 340px));top:50%;bottom:auto;transform:translateY(-50%);max-height:100%}
+#stage.roomy .scr.single .madeby{margin-top:.8em}
+@media (max-height:600px){#stage.roomy .scr.on{padding:8px 12px}}
+.grow{flex:1 1 auto;min-height:0}
+
+#foot{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 0 10px;border-top:1px solid var(--rule)}
+#gate{flex:1;text-align:center;font-size:.74rem;color:var(--muted);line-height:1.25}
+#foot .btn{min-width:6.2em}
+#next.ready{animation:nudge 1.6s ease-in-out 2}
+@keyframes nudge{0%,100%{transform:none}50%{transform:translateX(3px)}}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.15em}
+h1{color:var(--ink);font-weight:800;line-height:1.1;letter-spacing:-.025em;font-size:1.6em;margin-bottom:.2em}
+h1 .ac{color:var(--accent)}
+p{margin-bottom:.4em;font-size:.95em}
+.small{font-size:.82em;color:var(--muted)}
+.madeby{margin-top:auto;border-top:1px solid var(--rule);padding-top:.5em;font-size:.78em;color:var(--muted)}
+
+.chips{display:flex;flex-wrap:wrap;gap:.3em;margin:.15em 0 .35em}
+.chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .82em 'DM Sans',sans-serif;padding:.32em .75em;border-radius:100px;cursor:pointer;text-align:left;line-height:1.3}
+.chip:hover{border-color:var(--ink)}
+.chip.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.chip .tick{margin-left:.3em;color:var(--accent)}
+.chips.col{flex-direction:column;align-items:stretch}
+.chips.col .chip{border-radius:8px}
+.ctx{font-size:.9em;color:var(--body);margin:0}
+
+.msg{font-size:.84em;padding:.35em .65em;border-left:3px solid var(--rule);border-radius:0 8px 8px 0}
+.msg.good{border-color:var(--accent);background:var(--g-bg)}
+.msg.near{border-color:var(--orange);background:var(--o-bg)}
+.msg.bad{border-color:var(--red);background:var(--r-bg)}
+.msg p{margin:0;font-size:1em}.msg p+p{margin-top:.25em}
+.q{font-weight:700;color:var(--ink);font-size:.92em;margin:.3em 0 .2em}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .86em 'DM Sans',sans-serif;padding:.42em 1em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{border-color:var(--rule);color:var(--body);font-weight:600}
+.btn:disabled{opacity:.4;cursor:default}
+.btns{display:flex;flex-wrap:wrap;gap:.4em;margin-top:.2em}
+.work{display:none}
+.work.show{display:block}
+table.w{width:100%;border-collapse:collapse;font-size:.8em}
+table.w th,table.w td{border-bottom:1px solid var(--rule);padding:.25em .4em;text-align:left;vertical-align:top}
+table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+/* story */
+#story{display:flex;flex-direction:column;gap:.3em;min-height:0}
+.story-head{display:flex;align-items:center;justify-content:space-between}
+.dots{display:flex;gap:5px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--rule)}.dots i.on{background:var(--accent)}
+.scene{display:block;width:100%;border:0;padding:0;background:none;cursor:pointer;border-radius:10px}
+.scene svg{display:block;width:100%;height:auto;max-height:13em}
+.say{font-size:.9em;margin:0;background:var(--g-bg);border-radius:10px;padding:.5em .75em;color:var(--ink);line-height:1.4}
+.story-nav{display:flex;align-items:center;justify-content:space-between;gap:.5em}
+.bob{animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:none}50%{transform:translateY(-1.5px)}}
+.blink{animation:blink 4s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes blink{0%,92%,100%{transform:none}95%{transform:scaleY(.1)}}
+.pulse{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.spin{animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sorange{fill:#e2852b}.sorange-h{opacity:1}
+.sclear{fill:#eef3f4}.sclear-h{opacity:0}
+.sclear-anim{fill:#e2852b;animation:toclear 1s 1.6s forwards}.sclear-anim-h{animation:hatchoff 1s 1.6s forwards}
+@keyframes toclear{to{fill:#eef3f4}}@keyframes hatchoff{to{opacity:0}}
+.sdrop{opacity:0;animation:sdrop .7s ease-in .2s 2}
+@keyframes sdrop{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(34px)}}
+.slbl{opacity:0;animation:fadein .5s 2.7s forwards}
+@keyframes fadein{to{opacity:1}}
+.ondark path{stroke:#c9d1cb}
+.ondark .tl1,.ondark .tl2{fill:#f2f4f2}.onlight .tl1{fill:#1c2620}.onlight .tl2{fill:#8a4f0c}
+/* hints overlay */
+#hints,#brief,#stp{position:fixed;inset:0;background:rgba(28,38,32,.45);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
+#hints.open,#brief.open,#stp.open{display:flex}
+#hints .box,#brief .box,#stp .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:14px 16px;max-height:100%;overflow:auto}
+#hints .top,#brief .top,#stp .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5em}
+.ideas{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
+.idea{font-size:.86em;line-height:1.35;text-align:center}
+.idea svg{display:block;width:100%;height:46px;margin-bottom:.2em}
+.term{background:none;border:none;border-bottom:1.5px dotted var(--accent);color:inherit;font:inherit;padding:0;cursor:help}
+.def{display:block;margin:.2em 0 .3em;padding:.3em .6em;background:var(--g-bg);border-radius:6px;font-size:.92em;color:var(--accent-dark);font-weight:500}
+
+
+/* ---------- shared bench styles (from the TLC bench) ---------- */
+.calc-in{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .6em;margin:.1em 0}
+.num-in{font:600 1em 'DM Sans',sans-serif;width:6.5em;padding:.28em .5em;border:1.5px solid var(--rule);border-radius:8px;color:var(--ink);background:#fff}
+.num-in:focus{outline:none;border-color:var(--accent)}
+.unit{font-size:.84em;color:var(--muted)}
+.given{background:#f6f7f5;border-radius:8px;padding:.4em .65em;font-size:.86em;margin:.1em 0 .2em}
+.given b{white-space:nowrap}
+.plate-box{flex:1 1 auto;min-height:9em;background:#f4f5f2;border:1px solid var(--rule);border-radius:10px;padding:4px;display:flex;justify-content:center}
+.plate-box svg{height:100%;width:100%;max-width:300px;display:block}
+.runrow{display:flex;flex-wrap:wrap;gap:.3em;align-items:center}
+.runrow .btn{font-size:.78em;padding:.34em .75em}
+.runrow .btn.doneb{border-color:var(--g-line);color:var(--accent-dark);background:var(--g-bg)}
+.pstate{font-size:.8em;color:var(--muted);line-height:1.3}
+.words-box{display:none;font-size:.8em;background:#f6f7f5;border-radius:8px;padding:.35em .6em;color:var(--ink)}
+.words .words-box{display:block}
+.trainee{font-weight:700;color:var(--red)}
+.ptx{font:600 9.5px 'DM Sans',sans-serif;fill:#5c665f}
+.ptx.s{font-size:8.5px;font-weight:500}
+.pen{fill:none;stroke:#7b827d;stroke-width:1;stroke-dasharray:2.5 2}
+.lane-lbl{font:700 10px 'DM Sans',sans-serif;fill:var(--ink);text-anchor:middle}
+.spot-lt{font:700 10px 'DM Sans',sans-serif;fill:var(--accent-dark)}
+.wait-note{font-size:.84em;color:var(--muted);background:#f6f7f5;border-radius:8px;padding:.4em .65em}
+.stuck{font-size:.92em;color:var(--accent-dark)}
+@media (prefers-reduced-motion: reduce){ #plate *{transition:none!important} }
+/* step guide: the footer names the next move; the matching control glows */
+#gate.go{color:#a85f10;font-weight:700}
+.guide{box-shadow:0 0 0 3px rgba(217,130,31,.8);animation:guide 1.4s ease-in-out infinite}
+.chips.guide,.slrow.guide,.btns.guide{border-radius:10px}
+@keyframes guide{0%,100%{box-shadow:0 0 0 2px rgba(217,130,31,.25)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.9)}}
+.sop{padding-left:1.3em;font-size:.9em;margin:.3em 0 .6em}.sop li{margin-bottom:.3em}
+/* STP: the lab's controlled method document */
+#stp .box{max-width:720px;padding-top:0}
+#stp .top{position:sticky;top:0;background:#fff;padding:12px 0 8px;margin-bottom:.2em;z-index:1;border-bottom:1px solid var(--rule)}
+#stp-btn.sec{color:#a85f10;border-color:#efc58f;background:var(--o-bg)}
+.stp-doc{font-size:.86em;color:var(--body)}
+.stp-stamp{display:inline-block;border:2px solid var(--red);color:var(--red);font-weight:800;font-size:.72em;letter-spacing:.1em;text-transform:uppercase;padding:.15em .5em;border-radius:4px;transform:rotate(-2deg);margin:.5em 0}
+.stp-head{width:100%;border-collapse:collapse;margin-bottom:.6em}
+.stp-head th,.stp-head td{border:1px solid var(--ink);padding:.3em .5em;text-align:left;vertical-align:top}
+.stp-head th{background:var(--ink);color:#fff;letter-spacing:.04em}
+.stp-head td:first-child{width:36%;color:var(--muted);font-weight:600}
+.stp-sec{border-top:1px solid var(--rule);padding:.5em .35em .3em;scroll-margin-top:3.4em;border-radius:6px;transition:background .6s}
+.stp-sec.hit{background:var(--o-bg)}
+.stp-sec h3{font-size:1em;color:var(--ink);margin-bottom:.3em}
+.stp-sec p,.stp-sec li{font-size:1em;margin-bottom:.3em}
+.stp-sec ol,.stp-sec ul{padding-left:1.3em;margin-bottom:.3em}
+.stp-t{width:100%;border-collapse:collapse;margin:.2em 0 .4em}
+.stp-t th,.stp-t td{border:1px solid var(--rule);padding:.25em .45em;text-align:left;vertical-align:top}
+.stp-t th{background:#f6f7f5}
+.stp-f{background:#f6f7f5;border-radius:6px;padding:.4em .6em;font-weight:700;color:var(--ink);margin:.2em 0 .4em;overflow-x:auto}
+.tn{border-left:3px solid var(--accent);background:var(--g-bg);color:var(--accent-dark);border-radius:0 6px 6px 0;padding:.3em .6em;margin:.3em 0}
+.tn b{color:var(--accent-dark)}
+
+/* ---------- additions for the IR bench ---------- */
+.spec-box{flex:1 1 auto;min-height:8.5em;background:#f4f5f2;border:1px solid var(--rule);border-radius:10px;padding:4px;display:flex;justify-content:center}
+.spec-box svg{height:100%;width:100%;display:block}
+.readout{font:700 .95em 'DM Sans',sans-serif;color:var(--ink);background:#f6f7f5;border-radius:8px;padding:.3em .6em;margin:.15em 0}
+.readout .lo{color:var(--red)}
+.legend{font-size:.78em;color:var(--muted);margin:0}
+.legend i{display:inline-block;width:1.6em;height:0;border-top:2px solid var(--accent);vertical-align:middle;margin-right:.3em}
+.legend i.s{border-top:2px dashed var(--orange)}
+</style>
+</head>
+<body>
+<div id="app">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <button type="button" class="pillbtn" id="btn-pt" data-umami-event="open-periodic-table"><span class="ptl">Periodic table</span><span class="pts">Table</span></button>
+      <a class="pillbtn" href="index.html" data-umami-event="lab-to-explainer">Explainer</a>
+      <a class="pillbtn" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+    </div>
+  </nav>
+  <div id="bar"><div id="bar-lbl"></div><button type="button" class="pillbtn" id="stp-btn" aria-haspopup="dialog" title="Standard test procedure">STP</button><button type="button" class="pillbtn" id="hints-btn" aria-haspopup="dialog">Hints</button></div>
+  <div id="track"><div id="fill"></div></div>
+
+  <main id="stage">
+    <section class="scr" id="s0" data-step="0" data-title="Start">
+      <div class="eyebrow" style="margin:0">Choose a scenario <span class="small" style="text-transform:none;letter-spacing:0;font-weight:500">· rounds completed: <span id="rounds">0</span></span></div>
+      <div class="chips" id="scen-chips"></div>
+      <div id="story"></div>
+    </section>
+
+    <section class="scr" data-step="1" data-pane="a" data-title="Weigh">
+      <div id="q1a"></div>
+    </section>
+    <section class="scr" data-step="1" data-pane="b" data-title="Method">
+      <div id="q1b"></div>
+      <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button></div>
+      <div class="msg" id="m1">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="2" data-pane="a" data-title="Instrument and disc">
+      <div class="runrow" id="chkbtns"></div>
+      <div id="chkout"></div>
+      <div class="spec-box" id="discbox" hidden><svg id="disc" viewBox="0 0 320 180" role="img" aria-label="Quick scan of the disc"></svg></div>
+    </section>
+    <section class="scr" data-step="2" data-pane="b" data-title="Judge the checks">
+      <div id="obs"></div>
+      <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button></div>
+      <div class="msg" id="m2">Run both checks, then judge them.</div>
+    </section>
+
+    <section class="scr" data-step="3" data-pane="a" data-title="Record">
+      <div class="runrow" id="recbtns"></div>
+      <div class="spec-box"><svg id="spec" viewBox="0 0 320 190" role="img" aria-label="IR spectrum of the sample"></svg></div>
+      <div class="words-box" id="words-box" aria-live="polite"></div>
+      <label class="wordsw"><input type="checkbox" id="words"> Describe the spectrum in words</label>
+    </section>
+    <section class="scr" data-step="3" data-pane="b" data-title="Assign bands">
+      <div id="q3"></div>
+      <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button></div>
+      <div class="msg" id="m3">Name the bond behind each marked band.</div>
+    </section>
+
+    <section class="scr" data-step="4" data-pane="a" data-title="Overlay">
+      <div class="spec-box"><svg id="ovl" viewBox="0 0 320 190" role="img" aria-label="Sample spectrum overlaid on the reference spectrum"></svg></div>
+      <p class="legend"><i></i>reference (CRS) &nbsp; <i class="s"></i>sample</p>
+    </section>
+    <section class="scr" data-step="4" data-pane="b" data-title="Decide">
+      <div id="q4"></div>
+      <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button></div>
+      <div class="msg" id="m4">Compare the sample with the reference.</div>
+      <div class="btns" id="endrow" hidden><button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New values</button><button class="btn ghost" id="btn-next" type="button">Next scenario →</button></div>
+    </section>
+  </main>
+
+  <div id="foot">
+    <button class="btn" id="back" type="button">← Back</button>
+    <div id="gate" aria-live="polite"></div>
+    <button class="btn solid" id="next" type="button">Continue →</button>
+  </div>
+</div>
+
+<div id="stp" role="dialog" aria-modal="true" aria-labelledby="stp-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="stp-title">Standard test procedure</div><button type="button" class="btn ghost" id="stp-close">Close</button></div>
+    <div class="stp-doc">
+      <div class="stp-stamp">Uncontrolled copy · for training only</div>
+      <table class="stp-head">
+        <tr><th colspan="2">Aufthority Lab · Quality Control</th></tr>
+        <tr><td>Product</td><td><b>Chlorpheniramine maleate</b> (raw material and 4 mg tablets)</td></tr>
+        <tr><td>Test</td><td>Identification by infrared absorption spectrophotometry</td></tr>
+        <tr><td>Based on</td><td>Ph. Eur. 2.2.24 (BP Appendix II A), Ph. Eur. monograph 0386, USP tablet monograph</td></tr>
+        <tr><td>Prepared · Checked · Approved</td><td>QC Analyst · QC Executive · QA Manager</td></tr>
+      </table>
+      <section class="stp-sec" id="stp-1"><h3>1 · Purpose and scope</h3>
+        <p>To confirm the identity of chlorpheniramine maleate in incoming raw material and in tablets, by comparing its IR spectrum with that of chlorphenamine maleate CRS.</p></section>
+      <section class="stp-sec" id="stp-2"><h3>2 · Specification</h3>
+        <p>The spectrum of the sample shows absorption maxima at the same wavenumbers, and of similar relative size, as the spectrum of the reference prepared and recorded the same way.</p>
+        <p class="tn"><b>Trainer’s note:</b> judge the whole spectrum, especially the fingerprint region below 1500 cm<sup>−1</sup>. Matching groups above 1500 is not enough.</p></section>
+      <section class="stp-sec" id="stp-3"><h3>3 · Raw material: KBr disc</h3>
+        <ol><li>Dry potassium bromide (KBr) before use.</li>
+          <li>Grind 1–2 mg of the substance with 300–400 mg of dry KBr. Weigh the sample as 0.5% of the KBr weight.</li>
+          <li>Press into a disc under vacuum.</li>
+          <li>Prepare a disc of chlorphenamine maleate CRS in the same way.</li></ol>
+        <p class="tn"><b>Trainer’s note:</b> KCl is used for hydrochlorides. Chlorpheniramine is a maleate, so KBr is fine.</p></section>
+      <section class="stp-sec" id="stp-4"><h3>4 · Tablets: extract first</h3>
+        <ol><li>Weigh tablet powder equivalent to about 25 mg of chlorpheniramine maleate (one average tablet weight holds 4 mg).</li>
+          <li>Disperse in 20 ml of dilute hydrochloric acid (1 in 100). Make alkaline (about pH 11) with sodium hydroxide solution.</li>
+          <li>Extract with two 50 ml portions of hexane. Evaporate the hexane to dryness.</li>
+          <li>Make a mull of the residue in mineral oil (Nujol). Treat 25 mg of the reference standard in the same way.</li></ol>
+        <p class="tn"><b>Trainer’s note:</b> Nujol adds its own C–H bands near 2920, 2850, 1460 and 1377 cm<sup>−1</sup>. They appear in both spectra; ignore them.</p></section>
+      <section class="stp-sec" id="stp-5"><h3>5 · System and disc checks</h3>
+        <p><b>Wavenumber scale:</b> record polystyrene film. 1601.2 cm<sup>−1</sup> and 1028.3 cm<sup>−1</sup> must each read within ±1.0 cm<sup>−1</sup>.</p>
+        <p><b>Disc:</b> reject a disc that is not evenly clear, or whose transmittance at about 2000 cm<sup>−1</sup> (no band there) is below 60%.</p>
+        <p class="tn"><b>Trainer’s note:</b> water in the KBr shows as a broad band near 3400 cm<sup>−1</sup> and another near 1640 cm<sup>−1</sup>.</p></section>
+      <section class="stp-sec" id="stp-6"><h3>6 · Reading the bands</h3>
+        <table class="stp-t"><tr><th>Region (cm<sup>−1</sup>)</th><th>Typical bonds</th></tr>
+          <tr><td>3200–3550 (broad)</td><td>O–H stretch</td></tr><tr><td>2850–3100</td><td>C–H stretch</td></tr>
+          <tr><td>1650–1770 (strong)</td><td>C=O stretch</td></tr><tr><td>about 1600 and 1500</td><td>aromatic C=C stretch</td></tr>
+          <tr><td>600–800</td><td>C–Cl stretch</td></tr></table></section>
+    </div>
+  </div>
+</div>
+<div id="brief" role="dialog" aria-modal="true" aria-labelledby="brief-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="brief-title">Before you start: today’s procedure</div></div>
+    <div id="brief-body"></div>
+    <p class="small">The line at the bottom of the screen and the glowing box show your next move. <b>STP</b>, beside Hints, is the method you work from: it opens at the section you need now. <b>Hints</b> explains the ideas behind each step.</p>
+    <div class="btns"><button type="button" class="btn solid" id="brief-go">Start the lab</button><button type="button" class="btn ghost" id="brief-stp">Read the STP</button></div>
+  </div>
+</div>
+<div id="hints" role="dialog" aria-modal="true" aria-labelledby="hints-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="hints-title">Hints: four ideas</div><button type="button" class="btn ghost" id="hints-close">Close</button></div>
+    <div class="ideas">
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><circle cx="38" cy="22" r="9" fill="#3f4742"/><circle cx="84" cy="22" r="5" fill="#9aa39d"/><path d="M47 22 l4 -5 l4 10 l4 -10 l4 10 l4 -10 l4 10 l4 -5" fill="none" stroke="#6f7771" stroke-width="1.5"/></svg>Light atoms and strong bonds absorb at <b>high wavenumbers</b>.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><rect x="6" y="8" width="54" height="30" fill="#e8effc"/><rect x="60" y="8" width="54" height="30" fill="#e9f4ee"/><text x="33" y="27" font-size="8" text-anchor="middle" fill="#1c2620">groups</text><text x="87" y="27" font-size="8" text-anchor="middle" fill="#1c2620">fingerprint</text></svg>Below <b>1500 cm⁻¹</b> is the fingerprint: unique to each compound.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><circle cx="60" cy="22" r="17" fill="#f4f5f2" stroke="#9aa39d" stroke-width="2"/><circle cx="60" cy="22" r="11" fill="#fff" stroke="#cfe6d9"/></svg>A good <b>KBr disc</b> is dry and clear: at least 60% light through at 2000 cm⁻¹.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><path d="M6 10 L30 10 L34 34 L40 12 L70 12 L74 30 L80 12 L114 12" fill="none" stroke="#2d6a4f" stroke-width="2"/><path d="M6 13 L30 13 L34 37 L40 15 L70 15 L74 33 L80 15 L114 15" fill="none" stroke="#d9821f" stroke-width="1.6" stroke-dasharray="3 2"/></svg>Identity: every band of the sample lines up with the <b>reference</b>.</div>
+    </div>
+    <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. The method follows Ph. Eur. and USP identification by IR. Spectra are simulated.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const $ = s=>document.querySelector(s);
+  const NS='http://www.w3.org/2000/svg';
+  const track=(e,d)=>{ try{ if(window.umami) umami.track(e,d); }catch(_){} };
+  const shuffle=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const r1=x=>Math.round(x*10)/10;
+  const RM = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  function el(tag, attrs, text){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(text!==undefined) e.textContent=text; return e; }
+  const fx=n=>n.toFixed(1);
+
+  /* ---------- tap-to-define terms ---------- */
+  const GLOSS={
+    crs:'CRS (chemical reference substance): the pharmacopoeia’s own pure sample, used for comparison.',
+    kbr:'KBr: potassium bromide, a salt that lets IR light through. The drug is ground into it and pressed into a disc.',
+    nujol:'Nujol: liquid paraffin (mineral oil). A paste of drug in Nujol is a mull.',
+    atw:'Average tablet weight: the mean weight of one whole tablet. Only 4 mg of it is the drug.',
+    fp:'Fingerprint region: below about 1500 cm⁻¹. Complex, but unique to each compound.'
+  };
+  document.addEventListener('click',e=>{
+    const t=e.target.closest('.term'); if(!t) return;
+    const nx=t.nextElementSibling; if(nx && nx.classList.contains('def')){ nx.remove(); fitPage(); return; }
+    const d=document.createElement('span'); d.className='def'; d.textContent=GLOSS[t.dataset.t]||''; t.after(d); track('lab-term',{t:t.dataset.t}); fitPage();
+  });
+  const term=(k,txt)=>'<button type="button" class="term" data-t="'+k+'">'+txt+'</button>';
+
+  /* ---------- misconceptions: every wrong answer names one ---------- */
+  const MIX={
+    M1:'Sample = 0.5% of the KBr weight.',
+    M2:'KCl is for hydrochlorides.',
+    M3:'Remove excipients first.',
+    M4:'Water dissolves salt plates.',
+    M5:'Dry KBr.',
+    M6:'Within ±1.0 cm⁻¹ passes.',
+    M7:'Reject a disc below 60%.',
+    M8:'X–H bands sit high.',
+    M9:'C=O is strong, above 1650.',
+    M10:'Identity needs the fingerprint.',
+    M11:'Treat sample and reference the same way.',
+    M12:'Use the tablet weight.'
+  };
+  function mixLine(m,text,step){ track('lab-mix-'+m,{step:step, scenario:R.S.id}); return '<p><b>'+MIX[m]+'</b> '+text+'</p>'; }
+
+  /* ---------- simulated spectra (% transmittance) ----------
+     Chlorpheniramine maleate: a teaching spectrum built on published assignments
+     (C–H ~2900–3050, C=O ~1700, C=C ~1600, C–O ~1100, C–H bend ~880; Phechkrajang et al. 2022). */
+  const lor=(x,c,w,h)=>h/(1+Math.pow((x-c)/w,2));
+  function irT(nu,bands,base){ let A=0; for(const b of bands) A+=lor(nu,b[0],b[2],b[1]); return (base||92)*Math.pow(10,-A); }
+  const IR_CPM=[[3035,.22,22],[2960,.28,26],[2860,.18,22],[2560,.22,150],[1702,.95,14],[1588,.9,11],[1572,.55,8],[1478,.8,10],[1432,.55,9],[1356,.95,10],[1305,.35,8],[1198,.45,9],[1092,.6,9],[1015,.55,8],[868,.85,9],[808,.4,7],[765,.5,8],[712,.4,8],[562,.35,10]];
+  const OTHER=[[3030,.2,22],[2960,.3,26],[2870,.2,22],[1740,1.0,13],[1702,.45,14],[1600,.75,10],[1505,.85,10],[1440,.5,9],[1380,.6,9],[1290,.7,9],[1240,.8,9],[1160,.5,9],[1045,.65,8],[930,.4,8],[830,.75,8],[750,.45,8],[690,.35,8]];
+  const WATER=[[3420,.5,150],[1640,.28,22]];
+  const NUJOL=[[2924,1.05,14],[2853,.8,10],[1462,.6,9],[1377,.4,7],[722,.15,6]];
+  const LACTOSE=[[3350,.9,170],[2900,.3,40],[1650,.15,30],[1420,.3,20],[1260,.35,20],[1160,.75,25],[1070,1.0,30],[1030,.95,25],[900,.4,15],[780,.25,15]];
+  const SPX={L:30,R:312,T:12,B:160};
+  const X=nu=>SPX.L+(4000-nu)/3600*(SPX.R-SPX.L), Y=t=>SPX.B-(t/100)*(SPX.B-SPX.T);
+  function axes(svg){
+    svg.appendChild(el('path',{d:'M'+SPX.L+' '+SPX.T+' V'+SPX.B+' H'+SPX.R,fill:'none',stroke:'#c9cdca'}));
+    [4000,3000,2000,1500,1000,500].forEach(nu=>{ svg.appendChild(el('path',{d:'M'+fx(X(nu))+' '+SPX.B+' v4',stroke:'#c9cdca'})); svg.appendChild(el('text',{class:'ptx s',x:fx(X(nu)),y:SPX.B+13,'text-anchor':'middle'},nu)); });
+    [0,50,100].forEach(t=>svg.appendChild(el('text',{class:'ptx s',x:SPX.L-4,y:fx(Y(t)+3),'text-anchor':'end'},t)));
+    svg.appendChild(el('text',{class:'ptx s',x:SPX.L+2,y:SPX.T-2},'% T'));
+    svg.appendChild(el('text',{class:'ptx s',x:SPX.R,y:SPX.B+25,'text-anchor':'end'},'cm⁻¹'));
+  }
+  function path(fn,step){ let d=''; for(let nu=4000;nu>=400;nu-=step||3) d+=(d?'L':'M')+fx(X(nu))+' '+fx(Y(fn(nu)))+' '; return d; }
+
+  /* ---------- scenarios ---------- */
+  const SCEN=[
+   {id:'raw', chip:'1 · Incoming raw material'},
+   {id:'drum', chip:'2 · Mislabelled drum'},
+   {id:'trainee', chip:'3 · Trainee’s disc'},
+   {id:'tablet', chip:'4 · Tablet extract'}
+  ];
+
+  /* ---------- state ---------- */
+  let sc=0, R=null, solved=[false,false,false,false], rounds=0, busy=0;
+  const done=new Set();
+  const DEFAULT={}; [1,2,3,4].forEach(n=>DEFAULT[n]=$('#m'+n).innerHTML);
+
+  function newRound(){
+    const S=SCEN[sc], r={S:S};
+    r.tab=S.id==='tablet';
+    r.kbr=Math.round(rnd(300,400));                    /* mg of KBr */
+    r.atw=r1(rnd(87,93));                              /* mg, average tablet weight */
+    r.ps=[r1(1601.2+rnd(-.7,.7)), r1(1028.3+rnd(-.7,.7))];
+    r.wet=S.id==='trainee';                            /* Aina's disc picked up water */
+    r.discT=r.wet?Math.round(rnd(42,55)):Math.round(rnd(72,88));
+    r.same=S.id!=='drum';
+    const jit=()=>rnd(-1.5,1.5);
+    r.sample=(r.same?IR_CPM:OTHER).map(b=>[b[0]+jit(),b[1]*rnd(.93,1.05),b[2]]);
+    r.ans1={}; r.ans2={}; r.ans3={}; r.ans4={};
+    r.psRun=false; r.discRun=false; r.recorded=false; r.remade=false;
+    R=r; solved=[false,false,false,false];
+    render();
+  }
+  /* what is in the beam */
+  const sampleBands=()=>R.sample.concat(R.tab?NUJOL:[]).concat(R.wet&&!R.remade?WATER:[]);
+  const refBands=()=>IR_CPM.concat(R.tab?NUJOL:[]);
+  const want1=()=>R.tab ? 25*R.atw/4 : 0.005*R.kbr;
+
+  function chipGroup(opts,sel,cb,col){
+    const g=document.createElement('div'); g.className='chips'+(col?' col':''); g.setAttribute('role','group');
+    opts.forEach((o,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(sel===i?' on':''); b.innerHTML=o; b.setAttribute('aria-pressed',sel===i?'true':'false');
+      b.addEventListener('click',()=>{ g.querySelectorAll('.chip').forEach(c=>{ c.classList.remove('on'); c.setAttribute('aria-pressed','false'); }); b.classList.add('on'); b.setAttribute('aria-pressed','true'); cb(i); }); g.appendChild(b); });
+    return g;
+  }
+  /* feedback: at most two points, so a page never overflows. Students keep trying until the step is right. */
+  function msg(n,cls,html){
+    const m=$('#m'+n); m.className='msg '+cls;
+    const tmp=document.createElement('div'); tmp.innerHTML=html; const ps=tmp.querySelectorAll(':scope > p');
+    if(ps.length>2){ for(let i=2;i<ps.length;i++) ps[i].remove(); tmp.insertAdjacentHTML('beforeend','<p>…and '+(ps.length-2)+' more. Fix these first.</p>'); }
+    m.innerHTML=tmp.innerHTML;
+    track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); fitPage();
+  }
+  function clearMsg(n){ const m=$('#m'+n); m.className='msg'; m.innerHTML=DEFAULT[n]; }
+  function unsolveFrom(k){
+    let changed=false;
+    for(let j=k;j<=4;j++){ if(solved[j-1]){ solved[j-1]=false; changed=true; } if(j>k) clearMsg(j); }
+    if(changed){ $('#endrow').hidden=true; updatePager(); }
+  }
+  const numIn=(id,val)=>'<input class="num-in" id="'+id+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':val)+'">';
+  const readNum=id=>{ const e=$('#'+id); if(!e) return null; const v=(e.value||'').replace(',','.').trim(); return v===''?null:parseFloat(v); };
+  const close=(a,b,rel,abs)=>a!=null && Math.abs(a-b)<=Math.max(Math.abs(b)*rel, abs||0);
+
+
+  function render(){
+    const sc0=$('#scen-chips'); sc0.innerHTML='';
+    SCEN.forEach((s,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(i===sc?' on':''); b.innerHTML=s.chip+(done.has(s.id)?'<span class="tick">✓</span>':'');
+      b.addEventListener('click',()=>{ if(i===sc) return; sc=i; track('lab-pick',{scenario:s.id}); newRound(); }); sc0.appendChild(b); });
+    R.beat=0; R.storyDone=false; renderStory();
+    renderQ1(); renderChecks(); renderObs(); drawSpec(); $('#q3').innerHTML=''; $('#q4').innerHTML=''; $('#ovl').innerHTML='';
+    [1,2,3,4].forEach(clearMsg); $('#endrow').hidden=true; updatePager();
+  }
+
+  /* ---------- step 1: prepare ---------- */
+  function q1Opts(){
+    if(R.q1o) return R.q1o;
+    R.q1o = R.tab ? {
+      meth:shuffle([['Extract the drug base into hexane, evaporate, and make a Nujol mull of the residue',1],
+        ['Press the tablet powder straight into a KBr disc',0,'The powder is mostly filler such as lactose. Its bands would swamp the drug’s. Extract the drug first.','M3'],
+        ['Dissolve the powder in water and run it in a NaCl cell',0,'Water dissolves NaCl plates, and the filler would still be there.','M4']]),
+      ref:shuffle([['Extract and mull it the same way as the sample',1],
+        ['Press it into a KBr disc',0,'A mull and a disc give slightly different spectra. Treat the reference exactly like the sample.','M11'],
+        ['No reference is needed: use a printed spectrum',0,'The STP compares the sample with the reference prepared the same way, on the same instrument.','M11']])}
+    : {
+      meth:shuffle([['KBr disc',1],['KCl disc',0,'KCl is used for hydrochlorides, to avoid halide exchange. Chlorpheniramine is a maleate.','M2'],['Film between NaCl plates',0,'Films are for liquids. This is a solid powder.','M2']]),
+      ref:shuffle([['Dried first, because water adds bands to the spectrum',1],['Slightly damp, so the disc holds together',0,'Water adds broad bands near 3400 and 1640 cm⁻¹ and clouds the disc.','M5'],['Mixed with Nujol before pressing',0,'Nujol is for mulls, not discs, and it adds its own bands.','M5']])};
+    return R.q1o;
+  }
+  function renderQ1(){
+    const qa=$('#q1a'), qb=$('#q1b'), r=R;
+    if(r.tab) qa.innerHTML='<div class="given">'+term('atw','Average tablet weight')+': <b>'+r.atw.toFixed(1)+' mg</b>, which holds <b>4 mg</b> of chlorpheniramine maleate. The STP needs powder equivalent to <b>25 mg</b> of drug.</div>'+
+      '<div class="q">a. How much tablet powder do you weigh?</div><div class="calc-in">'+numIn('a1',r.ans1.a)+'<span class="unit">mg of powder</span></div>';
+    else qa.innerHTML='<div class="given">You have weighed <b>'+r.kbr+' mg</b> of dry '+term('kbr','KBr')+'. The sample should be <b>0.5%</b> of the KBr weight.</div>'+
+      '<div class="q">a. How much sample do you weigh?</div><div class="calc-in">'+numIn('a1',r.ans1.a)+'<span class="unit">mg of sample</span></div><p class="small">Give 2 decimal places. The STP asks for 1–2 mg.</p>';
+    qb.innerHTML='<div class="q" style="margin-top:0">b. '+(r.tab?'How do you prepare the tablet sample?':'Which sample preparation?')+'</div>';
+    qb.appendChild(chipGroup(q1Opts().meth.map(o=>o[0]), r.ans1.b, i=>{ r.ans1.b=i; unsolveFrom(1); }, true));
+    const d=document.createElement('div'); d.innerHTML='<div class="q">c. '+(r.tab?'And the reference standard ('+term('crs','CRS')+')?':'The KBr must be:')+'</div>'; qb.appendChild(d);
+    qb.appendChild(chipGroup(q1Opts().ref.map(o=>o[0]), r.ans1.c, i=>{ r.ans1.c=i; unsolveFrom(1); }, true));
+    qa.querySelectorAll('input').forEach(i=>i.addEventListener('input',()=>{ r.ans1.a=$('#a1').value; unsolveFrom(1); }));
+  }
+  $('#chk1').addEventListener('click',()=>{
+    const a=readNum('a1'), lines=[]; let miss=0; const W=want1();
+    if(a==null) miss++;
+    else if(!close(a,W,.01,.01)){
+      if(R.tab){
+        if(close(a,25*4/R.atw,.02)) lines.push(mixLine('M12','You divided the wrong way round. Every '+R.atw.toFixed(1)+' mg of powder holds 4 mg, so multiply 25 by the tablet weight, then divide by 4.',1));
+        else if(close(a,25,.01)) lines.push(mixLine('M12','25 mg is the drug, not the powder. The powder is mostly filler.',1));
+        else lines.push(mixLine('M12','25 × tablet weight ÷ 4.',1));
+      } else {
+        if(close(a,W*10,.01)) lines.push(mixLine('M1','That is 5%, not 0.5%. 0.5% = 0.5 ÷ 100 = 0.005.',1));
+        else if(close(a,W/10,.01)) lines.push(mixLine('M1','That is 0.05%. 0.5% of '+R.kbr+' mg = 0.005 × '+R.kbr+'.',1));
+        else lines.push(mixLine('M1','0.005 × '+R.kbr+' mg.',1));
+      }
+    }
+    const o=q1Opts();
+    if(R.ans1.b==null) miss++; else { const c=o.meth[R.ans1.b]; if(!c[1]) lines.push(mixLine(c[3],c[2],1)); }
+    if(R.ans1.c==null) miss++; else { const c=o.ref[R.ans1.c]; if(!c[1]) lines.push(mixLine(c[3],c[2],1)); }
+    if(lines.length) return msg(1,'bad',lines.join(''));
+    if(miss) return msg(1,'near','Answer every part first (part a is on the previous screen).');
+    msg(1,'good','<b>Right.</b> '+(R.tab?'Weigh '+W.toFixed(0)+' mg of powder, extract, and mull the residue.':'Weigh '+W.toFixed(2)+' mg of sample into the dry KBr and press the disc.')); solve(1);
+  });
+
+  /* ---------- step 2: instrument and disc checks ---------- */
+  function renderChecks(){
+    const box=$('#chkbtns'); box.innerHTML='';
+    const items=[['Polystyrene check','ps',!R.psRun]];
+    if(!R.tab) items.push([R.wet&&R.remade?'Check the new disc':'Check the disc','disc',R.psRun&&!R.discRun]);
+    items.forEach(([t,k,ready])=>{ const b=document.createElement('button'); b.type='button'; const isDone=k==='ps'?R.psRun:R.discRun;
+      b.className='btn'+(isDone?' doneb':(ready?' solid':'')); b.textContent=(isDone?'✓ ':'')+t; b.disabled=busy||!ready;
+      b.addEventListener('click',()=>{ if(k==='ps') R.psRun=true; else R.discRun=true; track('lab-check-'+k,{scenario:R.S.id}); renderChecks(); renderObs(); fitPage(); }); box.appendChild(b); });
+    let h='';
+    if(R.psRun) h+='<div class="readout">Polystyrene: <b>'+R.ps[0].toFixed(1)+'</b> (expected 1601.2) and <b>'+R.ps[1].toFixed(1)+'</b> cm⁻¹ (expected 1028.3)</div>';
+    if(R.tab) h+='<p class="small" style="margin:.2em 0">A mull has no disc to check. Run the polystyrene check.</p>';
+    if(R.discRun) h+='<div class="readout">Disc: transmittance at 2000 cm⁻¹ = <b'+(R.discT<60?' class="lo"':'')+'>'+R.discT+'%</b>'+(R.discT<60?' · the disc looks cloudy':'')+'</div>';
+    $('#chkout').innerHTML=h;
+    const db=$('#discbox'); db.hidden=!R.discRun;
+    if(R.discRun){ const svg=$('#disc'); svg.innerHTML=''; axes(svg); const sc=R.discT/88;
+      svg.appendChild(el('path',{d:path(nu=>irT(nu,sampleBands(),92)*sc),fill:'none',stroke:R.discT<60?'#c0392b':'#2d6a4f','stroke-width':1.6}));
+      svg.appendChild(el('path',{d:'M'+fx(X(2000))+' '+SPX.T+' V'+SPX.B,stroke:'#d9821f','stroke-dasharray':'3 2'}));
+      if(R.wet&&!R.remade){ [[3420,'broad 3400'],[1640,'1640']].forEach(m=>svg.appendChild(el('text',{class:'ptx',x:fx(X(m[0])),y:fx(Y(irT(m[0],sampleBands(),92)*sc)+14),'text-anchor':'middle',fill:'#c0392b'},m[1]))); }
+    }
+  }
+  function obsQs(){
+    if(R.oq) return R.oq;
+    const ok=true, qs=[];
+    qs.push({key:'ps', needs:'ps', p:'Is the wavenumber scale fit to use?', o:[['Yes: both readings are within ±1.0 cm⁻¹',1],['No: the readings are not exact',0,'Small differences are allowed. Work out each difference: both are 1.0 or less.','M6']]});
+    if(!R.tab) qs.push({key:'disc', needs:'disc', p:'Is the disc acceptable?', o:null});
+    if(R.wet) qs.push({key:'why', needs:'disc', p:'What caused the broad band near 3400 cm⁻¹ and the band near 1640 cm⁻¹?', o:shuffle([['Water in the KBr',1],['The drug’s N–H groups',0,'Chlorpheniramine has no N–H in its structure. The bands come with a cloudy disc.','M5'],['Nujol',0,'This is a KBr disc, not a mull. Nujol gives sharp C–H bands near 2900.','M5']])});
+    R.oq=qs; return qs;
+  }
+  function discOpts(){ const ok=R.discT>=60;
+    return [['Yes: transmittance is at least 60%',ok?1:0,'Below 60% at 2000 cm⁻¹ means the disc must be rejected.','M7'],['No: reject it and press a new disc with dried KBr',ok?0:1,'The disc is clear, with at least 60% light through at 2000 cm⁻¹.','M7']]; }
+  function renderObs(){
+    const box=$('#obs'); box.innerHTML=''; let shown=0;
+    obsQs().forEach(q=>{
+      const avail=q.needs==='ps'?R.psRun:R.discRun; if(!avail) return;
+      if(q.key==='why' && R.remade) return;
+      shown++; const opts=q.key==='disc'?discOpts():q.o;
+      const d=document.createElement('div'); d.innerHTML='<div class="q"'+(shown===1?' style="margin-top:0"':'')+'>'+q.p+'</div>';
+      d.appendChild(chipGroup(opts.map(o=>o[0]), R.ans2[q.key], i=>{ R.ans2[q.key]=i; unsolveFrom(2); }, true)); box.appendChild(d);
+    });
+    const need=!R.psRun?'Run the polystyrene check':(!R.tab&&!R.discRun?'Now check the disc':'');
+    if(need) box.insertAdjacentHTML('beforeend','<p class="wait-note">'+need+(innerWidth>=900?' (left).':' (previous screen).')+'</p>');
+  }
+  $('#chk2').addEventListener('click',()=>{
+    const qs=obsQs(), lines=[]; let miss=0;
+    if(!R.psRun || (!R.tab && !R.discRun)) return msg(2,'near','Run '+(R.tab?'the polystyrene check':'both checks')+' first.');
+    qs.forEach(q=>{ if(q.key==='why' && R.remade) return; const a=R.ans2[q.key]; if(a==null){ miss++; return; } const o=(q.key==='disc'?discOpts():q.o)[a]; if(!o[1]) lines.push(mixLine(o[3],o[2],2)); });
+    if(lines.length) return msg(2,'bad',lines.join(''));
+    if(miss) return msg(2,'near','Answer every question about the checks.');
+    if(R.wet && !R.remade){
+      R.remade=true; R.discT=Math.round(rnd(76,86)); R.discRun=false; R.ans2.disc=null; R.oq=null;
+      renderChecks(); renderObs(); fitPage();
+      return msg(2,'good','<b>Right.</b> Aina’s disc is rejected. You dried the KBr and pressed a new disc. Check the new disc'+(innerWidth>=900?' (left).':' (previous screen).'));
+    }
+    msg(2,'good','<b>Right.</b> '+(R.tab?'The scale is fit to use.':'The scale is fit to use and the disc is acceptable.')); solve(2);
+  });
+
+  /* ---------- step 3: record and assign ---------- */
+  function marks(){
+    const s=R.same, b2=s?1702:1740, b3=s?1588:1600;
+    return [{id:'a', nu:3035}, {id:'b', nu:b2}, {id:'c', nu:b3}];
+  }
+  function drawSpec(){
+    const svg=$('#spec'); svg.innerHTML=''; axes(svg);
+    const box=$('#recbtns'); box.innerHTML='';
+    const b=document.createElement('button'); b.type='button'; b.className='btn'+(R.recorded?' doneb':' solid'); b.textContent=(R.recorded?'✓ ':'')+'Record spectrum'; b.disabled=busy||R.recorded||!solved[1];
+    b.addEventListener('click',recordSpec); box.appendChild(b);
+    if(!R.recorded){ $('#words-box').textContent='No spectrum yet.'; return; }
+    svg.appendChild(el('path',{d:path(nu=>irT(nu,sampleBands())),fill:'none',stroke:'#d9821f','stroke-width':1.6,id:'sp-line'}));
+    marks().forEach(m=>{ const y=Y(irT(m.nu,sampleBands())); svg.appendChild(el('text',{class:'spot-lt',x:fx(X(m.nu)+(m.id==='b'?-6:m.id==='c'?6:0)),y:fx(Math.min(y+13,SPX.B-2)),'text-anchor':'middle'},m.id)); });
+    if(R.tab) [2924,1462,1377].forEach(nu=>{ const y=Y(irT(nu,sampleBands())); svg.appendChild(el('text',{class:'ptx',x:fx(X(nu)),y:fx(Math.min(y+12,SPX.B-2)),'text-anchor':'middle',fill:'#636b65'},'n')); });
+    const M=marks();
+    $('#words-box').textContent='Band a at '+Math.round(M[0].nu)+' cm⁻¹ is weak and sharp. Band b at '+Math.round(M[1].nu)+' cm⁻¹ is strong and sharp. Band c at '+Math.round(M[2].nu)+' cm⁻¹ is strong. '+(R.tab?'Bands marked n sit at 2920, 2850, 1460 and 1377 cm⁻¹. ':'')+'Below 1500 cm⁻¹ there are many bands of different sizes.';
+  }
+  async function recordSpec(){
+    if(busy) return; busy++; R.recorded=true; drawSpec();
+    if(!RM){ const p=$('#sp-line'); if(p){ const L=p.getTotalLength(); p.style.strokeDasharray=L; p.style.strokeDashoffset=L; p.getBoundingClientRect(); p.style.transition='stroke-dashoffset 1.2s linear'; p.style.strokeDashoffset=0; await new Promise(r=>setTimeout(r,1250)); } }
+    busy--; drawSpec(); renderStep3(); fitPage(); track('lab-record',{scenario:R.S.id});
+  }
+  const BONDS=['C–H stretch','O–H stretch','C=O stretch','Aromatic C=C stretch','C–Cl stretch'];
+  function q3Def(){
+    if(R.q3) return R.q3;
+    const M=marks(), wrong={
+      'O–H stretch':['O–H bands are broad and sit at 3200–3550 cm⁻¹.','M8'],
+      'C–H stretch':['C–H stretches sit at 2850–3100 cm⁻¹.','M8'],
+      'C=O stretch':['C=O bands are strong and sit at 1650–1770 cm⁻¹.','M9'],
+      'Aromatic C=C stretch':['Aromatic C=C sits near 1600 and 1500 cm⁻¹.','M9'],
+      'C–Cl stretch':['C–Cl sits low, at 600–800 cm⁻¹.','M8']};
+    const right=['C–H stretch','C=O stretch','Aromatic C=C stretch'];
+    R.q3=M.map((m,i)=>{ const pool=BONDS.filter(b=>b!==right[i]); const pick=shuffle(pool).slice(0,2);
+      return {p:'Band <b>'+m.id+'</b> at '+Math.round(m.nu)+' cm⁻¹', o:shuffle([[right[i],1]].concat(pick.map(w=>[w,0,'Band '+m.id+': '+wrong[w][0],wrong[w][1]])))}; });
+    if(R.tab) R.q3.push({p:'The bands marked <b>n</b> come from:', o:shuffle([['Nujol (the mull)',1],['Chlorpheniramine',0,'They sit exactly where liquid paraffin absorbs, and they are in the reference mull too.','M11'],['Lactose left in the extract',0,'Lactose is not extracted into hexane. These sharp C–H bands come from the mull.','M3']])});
+    return R.q3;
+  }
+  function renderStep3(){
+    const box=$('#q3'); box.innerHTML='';
+    if(!R.recorded){ box.innerHTML='<p class="wait-note">Record the spectrum'+(innerWidth>=900?' (left).':' (previous screen).')+'</p>'; return; }
+    q3Def().forEach((q,k)=>{ const d=document.createElement('div'); d.innerHTML='<div class="q"'+(k?'':' style="margin-top:0"')+'>'+q.p+'</div>';
+      d.appendChild(chipGroup(q.o.map(o=>o[0]), R.ans3[k], i=>{ R.ans3[k]=i; unsolveFrom(3); })); box.appendChild(d); });
+  }
+  $('#chk3').addEventListener('click',()=>{
+    if(!R.recorded) return msg(3,'near','Record the spectrum first.');
+    const Q=q3Def(), lines=[]; let miss=0;
+    Q.forEach((q,k)=>{ const a=R.ans3[k]; if(a==null){ miss++; return; } const o=q.o[a]; if(!o[1]) lines.push(mixLine(o[3],o[2],3)); });
+    if(lines.length) return msg(3,'bad',lines.join(''));
+    if(miss) return msg(3,'near','Name every marked band.');
+    msg(3,'good','<b>Right.</b> a: C–H, b: C=O, c: aromatic C=C. Now compare the whole spectrum with the reference.'); solve(3);
+  });
+
+  /* ---------- step 4: overlay and decide ---------- */
+  function drawOvl(){
+    const svg=$('#ovl'); svg.innerHTML=''; axes(svg);
+    svg.appendChild(el('rect',{x:fx(X(1500)),y:SPX.T,width:fx(X(400)-X(1500)),height:SPX.B-SPX.T,fill:'#e9f4ee',opacity:.6}));
+    svg.appendChild(el('text',{class:'ptx s',x:fx((X(1500)+X(400))/2),y:SPX.T+9,'text-anchor':'middle'},'fingerprint'));
+    svg.appendChild(el('path',{d:path(nu=>irT(nu,refBands())),fill:'none',stroke:'#2d6a4f','stroke-width':2,opacity:.85}));
+    svg.appendChild(el('path',{d:path(nu=>irT(nu,sampleBands(),89)),fill:'none',stroke:'#d9821f','stroke-width':1.5,'stroke-dasharray':'4 2.5'}));
+  }
+  function q4Def(){
+    if(R.q4) return R.q4;
+    const ok=R.same;
+    R.q4=[{p:'Do the sample’s bands line up with the reference, including the '+term('fp','fingerprint region')+'?', o:[['Yes, band for band',ok?1:0,'Look near 1740 cm⁻¹ and below 1500 cm⁻¹: the sample has bands the reference does not.','M10'],['No, they differ',ok?0:1,'Every band in the sample sits at a reference band, with a similar size.','M10']]},
+      {p:'Result:', o:[['Complies: identity confirmed, release for use',ok?1:0,'The spectra do not match, so identity is not confirmed.','M10'],['Does not comply: quarantine and investigate',ok?0:1,'The spectra match, so the identity test is passed.','M10']]}];
+    return R.q4;
+  }
+  function renderStep4(){
+    drawOvl();
+    const box=$('#q4'); box.innerHTML='';
+    q4Def().forEach((q,k)=>{ const d=document.createElement('div'); d.innerHTML='<div class="q"'+(k?'':' style="margin-top:0"')+'>'+q.p+'</div>';
+      d.appendChild(chipGroup(q.o.map(o=>o[0]), R.ans4[k], i=>{ R.ans4[k]=i; unsolveFrom(4); }, true)); box.appendChild(d); });
+  }
+  $('#chk4').addEventListener('click',()=>{
+    const Q=q4Def(), lines=[]; let miss=0;
+    Q.forEach((q,k)=>{ const a=R.ans4[k]; if(a==null){ miss++; return; } const o=q.o[a]; if(!o[1]) lines.push(mixLine(o[3],o[2],4)); });
+    if(miss) return msg(4,'near','Answer both parts.');
+    if(lines.length) return msg(4,'bad',lines.join(''));
+    msg(4,'good','<b>Round complete.</b> '+(R.same?'Report: identification by IR complies.':'Report: does not comply. The drum is quarantined; QA investigates the supplier and the label.')); solve(4);
+  });
+
+  function solve(k){
+    solved[k-1]=true; track('lab-step'+k+'-solved',{scenario:R.S.id});
+    if(k===1) drawSpec();
+    if(k===2){ drawSpec(); renderStep3(); }
+    if(k===3) renderStep4();
+    if(k===4){ roundComplete(); $('#endrow').hidden=false; }
+    updatePager(); fitPage();
+  }
+  function roundComplete(){
+    rounds++; $('#rounds').textContent=rounds; done.add(R.S.id);
+    const c=$('#scen-chips').children[sc]; if(c && !c.querySelector('.tick')) c.insertAdjacentHTML('beforeend','<span class="tick">✓</span>');
+    track('lab-round-complete',{scenario:R.S.id});
+    try{ if(window.parent!==window){ const o=location.origin; window.parent.postMessage({type:'ir-lab', event:'round-complete', reaction:R.S.id}, (o&&o!=='null')?o:'*'); } }catch(_){}
+  }
+  $('#btn-new').addEventListener('click',()=>{ newRound(); goPage(firstPageOfStep(1)); });
+  $('#btn-next').addEventListener('click',()=>{ sc=(sc+1)%SCEN.length; track('lab-pick',{scenario:SCEN[sc].id}); newRound(); goPage(0); });
+  $('#btn-pt').addEventListener('click',()=>{ if(window.KompasPT) KompasPT.open(); });
+  $('#btn-kompas').addEventListener('click',e=>{ if(history.length>1 && document.referrer && document.referrer.indexOf(location.host)>-1){ e.preventDefault(); history.back(); } });
+  $('#words').addEventListener('change',()=>{ $('#app').classList.toggle('words',$('#words').checked); track('lab-words',{on:$('#words').checked}); fitPage(); });
+
+  /* ---------- STORY ---------- */
+  function person(who,x,y,s,mirror){
+    const skin=who==='aina'?'#e3b48c':'#a9714b';
+    let g='<g class="who-'+who+'" transform="translate('+x+' '+y+') scale('+(mirror?-s:s)+' '+s+')"><g class="bob">';
+    g+='<path d="M-22 0 Q-23 -33 0 -35 Q23 -33 22 0 Z" fill="#fff" stroke="#b9c2bc" stroke-width="1.5"/>';
+    g+='<path d="M-8 -34 L0 -21 L8 -34" fill="none" stroke="#2d6a4f" stroke-width="2.4" stroke-linejoin="round"/>';
+    g+='<rect x="7" y="-25" width="8" height="5" rx="1" fill="#2d6a4f"/>';
+    if(who==='aina'){
+      g+='<path d="M-15 -47 Q-16 -68 0 -68 Q16 -68 15 -47 Q15 -33 0 -31 Q-15 -33 -15 -47 Z" fill="#3f7d63"/>';
+      g+='<ellipse cx="0" cy="-49" rx="10" ry="11.5" fill="'+skin+'"/>';
+    } else {
+      g+='<rect x="-4" y="-40" width="8" height="6" fill="'+skin+'"/>';
+      g+='<circle cx="0" cy="-51" r="12.5" fill="'+skin+'"/>';
+      g+='<path d="M-12.5 -54 Q-12 -66 0 -66 Q12 -66 12.5 -54 Q8 -60 0 -60 Q-7 -60 -12.5 -54 Z" fill="#26201c"/>';
+      g+='<g fill="none" stroke="#26201c" stroke-width="1.3"><circle cx="-4.6" cy="-51" r="3.4"/><circle cx="4.6" cy="-51" r="3.4"/><path d="M-1.2 -51 H1.2"/></g>';
+    }
+    g+='<g class="blink"><circle cx="-4.4" cy="-51" r="1.4" fill="#1c2620"/><circle cx="4.4" cy="-51" r="1.4" fill="#1c2620"/></g>';
+    g+='<path d="M-3.5 -45.5 Q0 -42.5 3.5 -45.5" fill="none" stroke="#1c2620" stroke-width="1.3" stroke-linecap="round"/>';
+    return g+'</g></g>';
+  }
+
+  function drum(x,y,lbl,col){ return '<g transform="translate('+x+' '+y+')"><rect x="-26" y="-62" width="52" height="62" rx="6" fill="'+(col||'#dfe7ef')+'" stroke="#7d8b96" stroke-width="1.6"/><path d="M-26 -46 H26 M-26 -16 H26" stroke="#7d8b96" stroke-width="1.2"/><rect x="-20" y="-40" width="40" height="18" rx="2" fill="#fff" stroke="#9aa39d"/><text x="0" y="-28" text-anchor="middle" font-size="7.5" font-weight="800" fill="#1c2620">'+lbl+'</text></g>'; }
+  function disc(x,y,cloudy){ return '<g transform="translate('+x+' '+y+')"><circle r="24" fill="#c9cfd2" stroke="#7d8b96" stroke-width="1.6"/><circle r="15" fill="'+(cloudy?'#e9e4d6':'#fbfcfb')+'" stroke="#cfe6d9"/>'+(cloudy?'<circle cx="-4" cy="-3" r="5" fill="#d8d1bd" opacity=".8"/><circle cx="5" cy="4" r="4" fill="#d8d1bd" opacity=".8"/>':'')+'</g>'; }
+  const STORY={
+    raw:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'A new drum of chlorpheniramine maleate arrived from the supplier. Before production can use it, we must prove what it is.',
+      know:'You decide correctly whether the raw material passes identification.',
+      scene:()=>drum(200,128,'CPM maleate')+drum(262,128,'CPM maleate')+'<text class="pulse" x="231" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5d14">Is it really CPM?</text>'},
+    drum:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'The warehouse found a drum whose label looks re-printed. It says chlorpheniramine maleate. Check it before anyone opens another.',
+      know:'You decide whether the drum’s contents are what the label says.',
+      scene:()=>drum(230,128,'CPM maleate?','#f6e7e4')+'<text class="pulse" x="230" y="40" text-anchor="middle" font-size="16" font-weight="800" fill="#c0392b">?</text>'},
+    trainee:{who:'aina', name:'Aina', role:'trainee pharmacist',
+      problem:'I pressed a KBr disc, but it looks cloudy and the spectrum has strange broad bands. Is the sample bad?',
+      know:'You find what went wrong with the disc, fix it and decide.',
+      scene:()=>disc(230,92,true)+'<text class="pulse" x="230" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5d14">Cloudy disc?</text>'},
+    tablet:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'A pharmacy sent back some chlorpheniramine 4 mg tablets. Identify the drug in the tablets themselves, not just the raw material.',
+      know:'You prepare the tablets correctly and decide whether they contain chlorpheniramine.',
+      scene:()=>'<circle cx="215" cy="100" r="18" fill="#f6e7a6" stroke="#c9a93a" stroke-width="1.6"/><circle cx="255" cy="104" r="18" fill="#f6e7a6" stroke="#c9a93a" stroke-width="1.6"/><text class="pulse" x="235" y="40" text-anchor="middle" font-size="12" font-weight="700" fill="#8a5d14">4 mg in 90 mg of filler</text>'}
+  };
+  const SCENE_W=320, SCENE_H=150;
+  function sceneFor(beat){
+    const st=STORY[R.S.id], who=st.who;
+    let s='<svg viewBox="0 0 '+SCENE_W+' '+SCENE_H+'" role="img" aria-label="'+(['The problem','The method','Your goal'][beat])+'"><rect width="320" height="150" rx="10" fill="#f4f7f5"/>';
+    if(beat===0) s+=st.scene()+person(who,72,140,1.45);
+    if(beat===1){
+      s+=(R.tab?'<g transform="translate(200 92)"><path d="M-18 -30 H18 L10 20 H-10 Z" fill="#eef5fb" stroke="#8fb3c9" stroke-width="1.5"/><text x="0" y="40" text-anchor="middle" font-size="9" font-weight="700" fill="#1c2620">extract</text></g>':disc(200,92,false))+
+         '<g transform="translate(270 92)"><rect x="-26" y="-26" width="52" height="40" rx="6" fill="#fff" stroke="#9aa39d"/><path d="M-20 0 L-12 0 L-9 -14 L-5 0 L4 0 L7 -18 L11 0 L20 0" fill="none" stroke="#2d6a4f" stroke-width="1.5"/><text x="0" y="30" text-anchor="middle" font-size="9" font-weight="700" fill="#1c2620">FTIR</text></g>';
+      s+=person(who==='aina'?'ravi':'aina',70,140,1.45);
+    }
+    if(beat===2){
+      s+=person('aina',58,140,1.35)+person('ravi',118,140,1.35,true);
+      s+='<g transform="translate(176 22)"><rect width="128" height="108" rx="8" fill="#fff" stroke="#cfe6d9" stroke-width="2"/>';
+      STEP_NAMES.slice(1).forEach((t,i)=>{ s+='<circle cx="16" cy="'+(20+i*24)+'" r="8" fill="#2d6a4f"/><text x="16" y="'+(23.5+i*24)+'" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">'+(i+1)+'</text><text x="30" y="'+(23.5+i*24)+'" font-size="10" font-weight="700" fill="#1c2620">'+t+'</text>'; });
+      s+='</g>';
+    }
+    return s+'</svg>';
+  }
+  const BEAT_TITLE=['1 · The problem','2 · The method','3 · Your goal'];
+  function renderStory(){
+    const st=STORY[R.S.id], b=R.beat||0, box=$('#story');
+    let text='';
+    if(b===0) text='<p class="say"><b>'+st.name+'</b> <span class="small">('+st.role+')</span><br>'+st.problem+'</p>';
+    if(b===1) text='<p class="say">'+(R.tab?'Extract the drug from the tablet powder and make a '+term('nujol','Nujol')+' mull.':'Grind the sample into dry '+term('kbr','KBr')+' and press a disc.')+' Check the instrument, record the spectrum and compare it with the '+term('crs','CRS')+'.</p>';
+    if(b===2) text='<p class="say"><b>Objective:</b> identify chlorpheniramine maleate by IR.<br><b>You succeed when:</b> '+st.know+'</p>';
+    box.innerHTML='<div class="story-head"><span class="eyebrow" style="margin:0">'+BEAT_TITLE[b]+'</span><span class="dots">'+[0,1,2].map(i=>'<i class="'+(i<=b?'on':'')+'"></i>').join('')+'</span></div>'+
+      '<button type="button" class="scene" id="scene" aria-label="Next part of the story">'+sceneFor(b)+'</button>'+text+
+      '<div class="story-nav">'+(b>0?'<button type="button" class="btn ghost" id="story-back">‹ Back</button>':'<span></span>')+
+      (b<2?'<button type="button" class="btn solid" id="story-next">Tap to continue ›</button>':'<span class="small">Ready? Press <b>Continue</b> below.</span>')+'</div>';
+    const nx=$('#story-next'); if(nx) nx.addEventListener('click',storyNext);
+    $('#scene').addEventListener('click',storyNext);
+    const bk=$('#story-back'); if(bk) bk.addEventListener('click',()=>{ R.beat=Math.max(0,b-1); renderStory(); });
+    if(b===2 && !R.storyDone){ R.storyDone=true; track('lab-story-done',{scenario:R.S.id}); }
+    updatePager(); fitPage();
+  }
+  function storyNext(){ if((R.beat||0)<2){ R.beat=(R.beat||0)+1; track('lab-story-beat',{scenario:R.S.id, beat:R.beat}); renderStory(); } }
+
+  /* ---------- hints ---------- */
+  const hints=$('#hints');
+  $('#hints-btn').addEventListener('click',()=>{ hints.classList.add('open'); $('#hints-close').focus(); track('lab-hints',{page:page}); });
+  $('#hints-close').addEventListener('click',()=>{ hints.classList.remove('open'); $('#hints-btn').focus(); });
+  hints.addEventListener('click',e=>{ if(e.target===hints) hints.classList.remove('open'); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') hints.classList.remove('open'); });
+
+  /* ---------- pager: one screen at a time ----------
+     Narrow screens show one pane per page; wide screens show both panes of a step side by side. */
+  const SCR=[...document.querySelectorAll('.scr')];
+  const STEP_NAMES=['IR Bench','Prepare','Check','Read','Decide'];
+  let pages=[], page=0, wide=null;
+  function isWide(){ return innerWidth>=900 && innerHeight>=560; }
+  function buildPages(){
+    const w=isWide(); if(w===wide && pages.length) return; wide=w;
+    const cur=pages.length?pages[page][0]:SCR[0];
+    pages=[];
+    SCR.forEach(s=>{ const last=pages[pages.length-1];
+      if(w && last && s.dataset.pane==='b' && last[0].dataset.step===s.dataset.step) last.push(s); else pages.push([s]); });
+    page=Math.max(0,pages.findIndex(p=>p.includes(cur)));
+  }
+  const stepOf=p=>+pages[p][0].dataset.step;
+  const firstPageOfStep=k=>pages.findIndex(p=>+p[0].dataset.step===k);
+  function lastPaneOfStep(p){ const k=stepOf(p); return p+1>=pages.length || stepOf(p+1)!==k; }
+  function canLeave(p){ const k=stepOf(p); if(k===0) return !!(R&&R.storyDone); if(!lastPaneOfStep(p)) return true; return solved[k-1]; }
+  function goPage(n){
+    page=Math.max(0,Math.min(pages.length-1,n));
+    SCR.forEach(s=>{ s.classList.remove('on','half-l','half-r','single','scrolly'); s.style.setProperty('--k',1); });
+    $('#stage').classList.toggle('roomy', innerWidth>=640);
+    const P=pages[page]; P.forEach((s,i)=>{ s.classList.add('on'); if(P.length===2) s.classList.add(i?'half-r':'half-l'); else s.classList.add('single'); });
+    updatePager(); fitPage();
+    if(stepOf(page)===1 && R && !briefed.has(R.S.id)) openBrief();
+    if(stepOf(page)===2) renderObs();
+    if(stepOf(page)===3 && solved[1]) renderStep3();
+    track('lab-page',{page:STEP_NAMES[stepOf(page)]+(P.length===1&&P[0].dataset.pane?' '+P[0].dataset.pane:'')});
+  }
+  function updatePager(){
+    if(!pages.length) return;
+    const k=stepOf(page), P=pages[page], same=pages.filter(p=>stepOf(pages.indexOf(p))===k);
+    const part=(P.length===1 && same.length>1)?' ('+(same.indexOf(P)+1)+'/'+same.length+')':'';
+    $('#bar-lbl').innerHTML=(k?'<span>Step '+k+' of 4</span>':'')+STEP_NAMES[k]+part;
+    $('#fill').style.width=(page/(pages.length-1)*100)+'%';
+    $('#back').disabled=page===0;
+    const last=page===pages.length-1, ok=canLeave(page), nx=$('#next');
+    nx.textContent=last?(solved[3]?'New round ↺':'Continue →'):'Continue →';
+    nx.disabled=!ok || (last && !solved[3]);
+    nx.classList.toggle('ready', ok && k>0 && lastPaneOfStep(page) && solved[k-1]);
+    guide();
+  }
+  $('#back').addEventListener('click',()=>goPage(page-1));
+  $('#next').addEventListener('click',()=>{ if(page===pages.length-1){ if(solved[3]){ newRound(); goPage(firstPageOfStep(1)); } return; } if(canLeave(page)) goPage(page+1); });
+
+  /* fit: shrink the text slightly if a page is too tall; scroll only as a last resort (logged) */
+  function fitPage(){
+    if(!pages.length) return;
+    pages[page].forEach(s=>{
+      s.classList.remove('scrolly'); let k=1; s.style.setProperty('--k',k);
+      const over=()=>s.scrollHeight>s.clientHeight+1;
+      let g=0; while(over() && k>0.8 && g++<10){ k=+(k-0.04).toFixed(2); s.style.setProperty('--k',k); }
+      if(over()){ s.classList.add('scrolly'); track('lab-overflow',{page:s.dataset.title, w:innerWidth, h:innerHeight}); }
+      s.dataset.k=k;
+    });
+    guide();
+  }
+  function setAppH(){ document.documentElement.style.setProperty('--app-h', innerHeight+'px'); }
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ setAppH(); buildPages(); goPage(page); },120); });
+
+  /* ---------- step guide: the footer names the next move and the matching control glows ----------
+     It only ever points at the next empty input or button, never at the right answer. */
+  const briefed=new Set(); let glowEl=null;
+  const empty=id=>{ const e=$('#'+id); return !e || !e.value.trim(); };
+  const checkMove=n=>({t:$('#m'+n).classList.contains('bad')?'Fix what the feedback says, then press Check again':'Press Check', e:$('#chk'+n)});
+  const storyMove=()=>R.storyDone?{t:'Press Continue to start the lab',e:$('#next')}:{t:'Tap the picture to read the story',e:$('#story-next')};
+  const doneMove=k=>k<4?{t:'Step done. Press Continue',e:$('#next')}:{t:'Round complete. Try new values or the next scenario',e:$('#endrow')};
+  function guide(){
+    if(!pages.length || !R) return;
+    const g=nextMove(); let t=g.t||'', e=g.e||null;
+    if(e){ const s=e.closest('.scr'); if(s && !pages[page].includes(s)){ const j=pages.findIndex(p=>p.includes(s));
+      if(j>page){ t='Next screen: '+t; e=$('#next'); } else { t='Back a screen: '+t; e=$('#back'); } } }
+    const gate=$('#gate'); gate.textContent=t; gate.classList.toggle('go',!!t);
+    if(glowEl!==e){ if(glowEl) glowEl.classList.remove('guide'); glowEl=e; if(e) e.classList.add('guide'); }
+    const sb=$('#stp-btn'), sl=g.s?'STP §'+g.s:'STP';
+    if(sb.textContent!==sl){ sb.textContent=sl; sb.classList.toggle('sec',!!g.s); sb.dataset.s=g.s||''; }
+  }
+  function openBrief(){ briefed.add(R.S.id); $('#brief-body').innerHTML=briefHTML(); $('#brief').classList.add('open'); $('#brief-go').focus(); }
+  function closeBrief(){ $('#brief').classList.remove('open'); guide(); }
+  $('#brief-go').addEventListener('click',closeBrief);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#brief').classList.contains('open')) closeBrief(); });
+  document.addEventListener('click',()=>setTimeout(guide,0));
+  document.addEventListener('input',()=>guide());
+
+  function nextMove(){
+    const k=stepOf(page);
+    if(k===0) return storyMove();
+    if(solved[k-1]) return doneMove(k);
+    if(k===1){
+      if(empty('a1')) return {t:R.tab?'a. Work out how much tablet powder to weigh':'a. Work out how much sample to weigh',e:$('#a1'),s:R.tab?4:3};
+      if(R.ans1.b==null) return {t:'b. Choose the sample preparation',e:$('#q1b .chips'),s:R.tab?4:3};
+      if(R.ans1.c==null) return {t:R.tab?'c. Choose how to treat the reference':'c. Say how the KBr must be',e:$('#q1b').querySelectorAll('.chips')[1],s:R.tab?4:3};
+      return Object.assign(checkMove(1),{s:R.tab?4:3});
+    }
+    if(k===2){
+      const obs=$('#obs').querySelectorAll('.chips');
+      if(!R.psRun) return {t:'Run the polystyrene check',e:$('#chkbtns .btn:not(:disabled)'),s:5};
+      if(!R.tab && !R.discRun) return {t:'Check the disc',e:$('#chkbtns .btn:not(:disabled)'),s:5};
+      const shown=obsQs().filter(q=>!(q.key==='why'&&R.remade)), i=shown.findIndex(q=>R.ans2[q.key]==null);
+      if(i>=0) return {t:'Judge the '+(shown[i].key==='ps'?'polystyrene check':shown[i].key==='disc'?'disc':'extra bands'),e:obs[i],s:5};
+      return Object.assign(checkMove(2),{s:5});
+    }
+    if(k===3){
+      if(busy) return {t:'Wait while the spectrum is recorded'};
+      if(!R.recorded) return {t:'Record the spectrum',e:$('#recbtns .btn'),s:6};
+      const g=$('#q3').querySelectorAll('.chips'); for(let i=0;i<g.length;i++) if(R.ans3[i]==null) return {t:i<3?'Name the bond behind band '+'abc'[i]:'Say where the n bands come from',e:g[i],s:i<3?6:4};
+      return Object.assign(checkMove(3),{s:6});
+    }
+    const g=$('#q4').querySelectorAll('.chips');
+    if(R.ans4[0]==null) return {t:'Compare the sample with the reference',e:g[0],s:2};
+    if(R.ans4[1]==null) return {t:'Give the result',e:g[1],s:2};
+    return Object.assign(checkMove(4),{s:2});
+  }
+  function briefHTML(){
+    return (R.S.id==='trainee'?'<p class="small" style="margin:0">First find out what went wrong with Aina’s disc, then fix it.</p>':'')+'<ol class="sop">'+
+      '<li><b>Prepare.</b> '+(R.tab?'Work out how much tablet powder to extract, and choose how to prepare the sample and the reference.':'Work out how much sample to grind into the KBr, and choose the preparation.')+'</li>'+
+      '<li><b>Check.</b> Run the polystyrene check'+(R.tab?'':' and check the disc')+'.</li>'+
+      '<li><b>Read.</b> Record the spectrum and name the marked bands.</li>'+
+      '<li><b>Decide.</b> Compare the whole spectrum with the reference.</li></ol>';
+  }
+  /* ---------- STP: opens at the section the current move needs ---------- */
+  function openSTP(s){
+    const d=$('#stp'); d.classList.add('open');
+    d.querySelectorAll('.stp-sec.hit').forEach(x=>x.classList.remove('hit'));
+    const sec=s?$('#stp-'+s):null;
+    if(sec){ sec.scrollIntoView({block:'start'}); sec.classList.add('hit'); } else d.querySelector('.box').scrollTop=0;
+    $('#stp-close').focus({preventScroll:true});
+  }
+  function closeSTP(){ $('#stp').classList.remove('open'); $('#stp-btn').focus({preventScroll:true}); }
+  $('#stp-btn').addEventListener('click',()=>openSTP($('#stp-btn').dataset.s));
+  $('#stp-close').addEventListener('click',closeSTP);
+  $('#stp').addEventListener('click',e=>{ if(e.target.id==='stp') closeSTP(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#stp').classList.contains('open')) closeSTP(); });
+  $('#brief-stp').addEventListener('click',()=>{ closeBrief(); openSTP(''); });
+
+
+  /* test hook: lets the automated checks read the round (no effect for students) */
+  window.__lab={get R(){ return R; }, want1:()=>want1()};
+
+  setAppH(); buildPages(); newRound(); goPage(0);
+})();
+</script>
+</body>
+</html>
