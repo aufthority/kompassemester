@@ -681,6 +681,7 @@ table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-sp
     rounds++; $('#rounds').textContent=rounds; done.add(R.S.id);
     const c=$('#scen-chips').children[sc]; if(c && !c.querySelector('.tick')) c.insertAdjacentHTML('beforeend','<span class="tick">✓</span>');
     track('lab-round-complete',{scenario:R.S.id});
+    try{ localStorage.setItem('kompas.spectroscopy.ir-lab.done', String(Date.now())); }catch(_){}
     try{ if(window.parent!==window){ const o=location.origin; window.parent.postMessage({type:'ir-lab', event:'round-complete', reaction:R.S.id}, (o&&o!=='null')?o:'*'); } }catch(_){}
   }
   $('#btn-new').addEventListener('click',()=>{ newRound(); goPage(firstPageOfStep(1)); });

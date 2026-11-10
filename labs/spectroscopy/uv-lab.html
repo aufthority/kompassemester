@@ -753,6 +753,7 @@ table.vt tr.hl td{background:var(--o-bg)}
     rounds++; $('#rounds').textContent=rounds; done.add(R.S.id);
     const c=$('#scen-chips').children[sc]; if(c && !c.querySelector('.tick')) c.insertAdjacentHTML('beforeend','<span class="tick">✓</span>');
     track('lab-round-complete',{scenario:R.S.id});
+    try{ localStorage.setItem('kompas.spectroscopy.uv-lab.done', String(Date.now())); }catch(_){}
     try{ if(window.parent!==window){ const o=location.origin; window.parent.postMessage({type:'uv-lab', event:'round-complete', reaction:R.S.id}, (o&&o!=='null')?o:'*'); } }catch(_){}
   }
   $('#btn-new').addEventListener('click',()=>{ newRound(); goPage(firstPageOfStep(1)); });
