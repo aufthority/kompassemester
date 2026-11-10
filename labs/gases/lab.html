@@ -1,0 +1,953 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Gas Bench — Aufthority</title>
+<meta name="description" content="Interactive lab: five hospital pharmacy gas stations. Boyle’s law for an oxygen cylinder, a spray can in a hot car, a propellant’s molar mass, hydrogen peroxide by gas collection, and real gases.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="website">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="Gas Bench: gas laws in the pharmacy">
+<meta property="og:description"  content="Will the oxygen last the trip? Five gas stations for pharmacy students.">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:locale"       content="en_MY">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<script>
+/* Embedded inside the explainer? Then hide the page chrome and skip analytics
+   (the explainer already tracks the visit). */
+(function(){
+  var emb = /[?&]embed=1/.test(location.search) || window.self !== window.top;
+  document.documentElement.classList.toggle('embedded', emb);
+  if(!emb){
+    var s=document.createElement('script'); s.defer=true; s.src='https://cloud.umami.is/script.js';
+    s.setAttribute('data-website-id','f79c60f1-f9e7-4170-a979-f357ba756a18'); document.head.appendChild(s);
+  }
+})();
+</script>
+<script src="../shared/periodic-table.js" defer></script>
+
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#636b65;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#8a5d14;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--arrow:#b25f0c;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.45;-webkit-text-size-adjust:100%;font-size:16px;overflow:hidden}
+@media (min-width:900px) and (min-height:700px){.scr{font-size:calc(var(--k,1)*18px)}}
+b,strong{color:var(--ink);font-weight:700}
+a{color:var(--accent)}
+
+/* one screen, no page scroll: top bar, stage, footer */
+#app{height:100vh;height:var(--app-h,100dvh);max-width:1040px;margin:0 auto;padding:0 14px;display:flex;flex-direction:column}
+.embedded #app{padding:0 10px}
+
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0 6px;border-bottom:1px solid var(--rule)}
+.embedded nav{display:none}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;gap:8px}
+.pillbtn{cursor:pointer;text-decoration:none;color:var(--accent-dark);border:1px solid var(--g-line);background:var(--g-bg);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;white-space:nowrap}
+@media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
+.pts{display:none}
+@media (max-width:340px){.logo{font-size:.92rem}.nav-right{gap:4px}.pillbtn{padding:4px 7px!important;font-size:.74rem}}
+@media (max-width:400px){.ptl{display:none}.pts{display:inline}.nav-right{gap:6px}.pillbtn{padding:5px 9px}}
+
+#bar{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:7px 0 5px}
+#bar-lbl{flex:1;min-width:0;font-size:.8rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar-lbl span{color:var(--eyebrow);letter-spacing:.06em;text-transform:uppercase;font-size:.9em;margin-right:.35em}
+#hints-btn{flex:0 0 auto}
+#track{flex:0 0 3px;background:var(--rule);border-radius:3px;margin-bottom:6px}
+#fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;gap:.35em;font-size:calc(var(--k,1)*16px);overflow:hidden;padding:2px 1px 4px}
+.scr.on{display:flex}
+.scr.scrolly{overflow-y:auto}
+.scr.half-l{right:calc(50% + 8px)}
+.scr.half-r{left:calc(50% + 8px)}
+/* wider screens: every pane is a card; two panes share the width equally, a single pane is one centred card */
+#stage.roomy .scr.on{border:1px solid var(--rule);border-radius:14px;padding:14px 18px;background:#fff}
+#stage.roomy .scr.single{left:max(0px,calc(50% - 340px));right:max(0px,calc(50% - 340px));top:50%;bottom:auto;transform:translateY(-50%);max-height:100%}
+#stage.roomy .scr.single .madeby{margin-top:.8em}
+@media (max-height:600px){#stage.roomy .scr.on{padding:8px 12px}}
+.grow{flex:1 1 auto;min-height:0}
+
+#foot{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 0 10px;border-top:1px solid var(--rule)}
+#gate{flex:1;text-align:center;font-size:.74rem;color:var(--muted);line-height:1.25}
+#foot .btn{min-width:6.2em}
+#next.ready{animation:nudge 1.6s ease-in-out 2}
+@keyframes nudge{0%,100%{transform:none}50%{transform:translateX(3px)}}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.15em}
+h1{color:var(--ink);font-weight:800;line-height:1.1;letter-spacing:-.025em;font-size:1.6em;margin-bottom:.2em}
+h1 .ac{color:var(--accent)}
+p{margin-bottom:.4em;font-size:.95em}
+.small{font-size:.82em;color:var(--muted)}
+.madeby{margin-top:auto;border-top:1px solid var(--rule);padding-top:.5em;font-size:.78em;color:var(--muted)}
+
+.chips{display:flex;flex-wrap:wrap;gap:.3em;margin:.15em 0 .35em}
+.chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .82em 'DM Sans',sans-serif;padding:.32em .75em;border-radius:100px;cursor:pointer;text-align:left;line-height:1.3}
+.chip:hover{border-color:var(--ink)}
+.chip.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.chip .tick{margin-left:.3em;color:var(--accent)}
+.chips.col{flex-direction:column;align-items:stretch}
+.chips.col .chip{border-radius:8px}
+.ctx{font-size:.9em;color:var(--body);margin:0}
+
+.msg{font-size:.84em;padding:.35em .65em;border-left:3px solid var(--rule);border-radius:0 8px 8px 0}
+.msg.good{border-color:var(--accent);background:var(--g-bg)}
+.msg.near{border-color:var(--orange);background:var(--o-bg)}
+.msg.bad{border-color:var(--red);background:var(--r-bg)}
+.msg p{margin:0;font-size:1em}.msg p+p{margin-top:.25em}
+.q{font-weight:700;color:var(--ink);font-size:.92em;margin:.3em 0 .2em}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .86em 'DM Sans',sans-serif;padding:.42em 1em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{border-color:var(--rule);color:var(--body);font-weight:600}
+.btn:disabled{opacity:.4;cursor:default}
+.btns{display:flex;flex-wrap:wrap;gap:.4em;margin-top:.2em}
+.work{display:none}
+.work.show{display:block}
+table.w{width:100%;border-collapse:collapse;font-size:.8em}
+table.w th,table.w td{border-bottom:1px solid var(--rule);padding:.25em .4em;text-align:left;vertical-align:top}
+table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+/* story */
+#story{display:flex;flex-direction:column;gap:.3em;min-height:0}
+.story-head{display:flex;align-items:center;justify-content:space-between}
+.dots{display:flex;gap:5px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--rule)}.dots i.on{background:var(--accent)}
+.scene{display:block;width:100%;border:0;padding:0;background:none;cursor:pointer;border-radius:10px}
+.scene svg{display:block;width:100%;height:auto;max-height:13em}
+.say{font-size:.9em;margin:0;background:var(--g-bg);border-radius:10px;padding:.5em .75em;color:var(--ink);line-height:1.4}
+.story-nav{display:flex;align-items:center;justify-content:space-between;gap:.5em}
+.bob{animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:none}50%{transform:translateY(-1.5px)}}
+.blink{animation:blink 4s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes blink{0%,92%,100%{transform:none}95%{transform:scaleY(.1)}}
+.pulse{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.spin{animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sorange{fill:#e2852b}.sorange-h{opacity:1}
+.sclear{fill:#eef3f4}.sclear-h{opacity:0}
+.sclear-anim{fill:#e2852b;animation:toclear 1s 1.6s forwards}.sclear-anim-h{animation:hatchoff 1s 1.6s forwards}
+@keyframes toclear{to{fill:#eef3f4}}@keyframes hatchoff{to{opacity:0}}
+.sdrop{opacity:0;animation:sdrop .7s ease-in .2s 2}
+@keyframes sdrop{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(34px)}}
+.slbl{opacity:0;animation:fadein .5s 2.7s forwards}
+@keyframes fadein{to{opacity:1}}
+.ondark path{stroke:#c9d1cb}
+.ondark .tl1,.ondark .tl2{fill:#f2f4f2}.onlight .tl1{fill:#1c2620}.onlight .tl2{fill:#8a4f0c}
+/* hints overlay */
+#hints,#brief,#stp{position:fixed;inset:0;background:rgba(28,38,32,.45);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
+#hints.open,#brief.open,#stp.open{display:flex}
+#hints .box,#brief .box,#stp .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:14px 16px;max-height:100%;overflow:auto}
+#hints .top,#brief .top,#stp .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5em}
+.ideas{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
+.idea{font-size:.86em;line-height:1.35;text-align:center}
+.idea svg{display:block;width:100%;height:46px;margin-bottom:.2em}
+.term{background:none;border:none;border-bottom:1.5px dotted var(--accent);color:inherit;font:inherit;padding:0;cursor:help}
+.def{display:block;margin:.2em 0 .3em;padding:.3em .6em;background:var(--g-bg);border-radius:6px;font-size:.92em;color:var(--accent-dark);font-weight:500}
+
+
+/* ---------- shared bench styles (from the TLC bench) ---------- */
+.calc-in{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .6em;margin:.1em 0}
+.num-in{font:600 1em 'DM Sans',sans-serif;width:6.5em;padding:.28em .5em;border:1.5px solid var(--rule);border-radius:8px;color:var(--ink);background:#fff}
+.num-in:focus{outline:none;border-color:var(--accent)}
+.num-in.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red)}
+.num-in.wrong + .unit::after{content:" ✕ check this";color:var(--red);font-weight:700}
+.unit{font-size:.84em;color:var(--muted)}
+.given{background:#f6f7f5;border-radius:8px;padding:.4em .65em;font-size:.86em;margin:.1em 0 .2em}
+.given b{white-space:nowrap}
+.plate-box{flex:1 1 auto;min-height:9em;background:#f4f5f2;border:1px solid var(--rule);border-radius:10px;padding:4px;display:flex;justify-content:center}
+.plate-box svg{height:100%;width:100%;max-width:300px;display:block}
+.runrow{display:flex;flex-wrap:wrap;gap:.3em;align-items:center}
+.runrow .btn{font-size:.78em;padding:.34em .75em}
+.runrow .btn.doneb{border-color:var(--g-line);color:var(--accent-dark);background:var(--g-bg)}
+.pstate{font-size:.8em;color:var(--muted);line-height:1.3}
+.words-box{display:none;font-size:.8em;background:#f6f7f5;border-radius:8px;padding:.35em .6em;color:var(--ink)}
+.words .words-box{display:block}
+.trainee{font-weight:700;color:var(--red)}
+.ptx{font:600 9.5px 'DM Sans',sans-serif;fill:#5c665f}
+.ptx.s{font-size:8.5px;font-weight:500}
+.pen{fill:none;stroke:#7b827d;stroke-width:1;stroke-dasharray:2.5 2}
+.lane-lbl{font:700 10px 'DM Sans',sans-serif;fill:var(--ink);text-anchor:middle}
+.spot-lt{font:700 10px 'DM Sans',sans-serif;fill:var(--accent-dark)}
+.wait-note{font-size:.84em;color:var(--muted);background:#f6f7f5;border-radius:8px;padding:.4em .65em}
+.stuck{font-size:.92em;color:var(--accent-dark)}
+@media (prefers-reduced-motion: reduce){ #plate *{transition:none!important} }
+/* step guide: the footer names the next move; the matching control glows */
+#gate.go{color:#a85f10;font-weight:700}
+.guide{box-shadow:0 0 0 3px rgba(217,130,31,.8);animation:guide 1.4s ease-in-out infinite}
+.chips.guide,.slrow.guide,.btns.guide{border-radius:10px}
+@keyframes guide{0%,100%{box-shadow:0 0 0 2px rgba(217,130,31,.25)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.9)}}
+.sop{padding-left:1.3em;font-size:.9em;margin:.3em 0 .6em}.sop li{margin-bottom:.3em}
+/* STP: the lab's controlled method document */
+#stp .box{max-width:720px;padding-top:0}
+#stp .top{position:sticky;top:0;background:#fff;padding:12px 0 8px;margin-bottom:.2em;z-index:1;border-bottom:1px solid var(--rule)}
+#stp-btn.sec{color:#a85f10;border-color:#efc58f;background:var(--o-bg)}
+.stp-doc{font-size:.86em;color:var(--body)}
+.stp-stamp{display:inline-block;border:2px solid var(--red);color:var(--red);font-weight:800;font-size:.72em;letter-spacing:.1em;text-transform:uppercase;padding:.15em .5em;border-radius:4px;transform:rotate(-2deg);margin:.5em 0}
+.stp-head{width:100%;border-collapse:collapse;margin-bottom:.6em}
+.stp-head th,.stp-head td{border:1px solid var(--ink);padding:.3em .5em;text-align:left;vertical-align:top}
+.stp-head th{background:var(--ink);color:#fff;letter-spacing:.04em}
+.stp-head td:first-child{width:36%;color:var(--muted);font-weight:600}
+.stp-sec{border-top:1px solid var(--rule);padding:.5em .35em .3em;scroll-margin-top:3.4em;border-radius:6px;transition:background .6s}
+.stp-sec.hit{background:var(--o-bg)}
+.stp-sec h3{font-size:1em;color:var(--ink);margin-bottom:.3em}
+.stp-sec p,.stp-sec li{font-size:1em;margin-bottom:.3em}
+.stp-sec ol,.stp-sec ul{padding-left:1.3em;margin-bottom:.3em}
+.stp-t{width:100%;border-collapse:collapse;margin:.2em 0 .4em}
+.stp-t th,.stp-t td{border:1px solid var(--rule);padding:.25em .45em;text-align:left;vertical-align:top}
+.stp-t th{background:#f6f7f5}
+.stp-f{background:#f6f7f5;border-radius:6px;padding:.4em .6em;font-weight:700;color:var(--ink);margin:.2em 0 .4em;overflow-x:auto}
+.tn{border-left:3px solid var(--accent);background:var(--g-bg);color:var(--accent-dark);border-radius:0 6px 6px 0;padding:.3em .6em;margin:.3em 0}
+.tn b{color:var(--accent-dark)}
+
+
+/* ---------- additions for Gas Bench ---------- */
+.rig{display:block;width:100%;max-width:380px;height:auto;max-height:calc(var(--k,1)*8.2em);margin:.15em auto .2em}
+.today{font-weight:700;color:var(--ink)}
+</style>
+</head>
+<body>
+<div id="app">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <button type="button" class="pillbtn" id="btn-pt" data-umami-event="open-periodic-table"><span class="ptl">Periodic table</span><span class="pts">Table</span></button>
+      <a class="pillbtn" href="index.html" data-umami-event="lab-to-explainer">Explainer</a>
+      <a class="pillbtn" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+    </div>
+  </nav>
+  <div id="bar"><div id="bar-lbl"></div><button type="button" class="pillbtn" id="stp-btn" aria-haspopup="dialog" title="Bench card: the equations for each station">Card</button><button type="button" class="pillbtn" id="hints-btn" aria-haspopup="dialog">Hints</button></div>
+  <div id="track"><div id="fill"></div></div>
+
+  <main id="stage">
+    <section class="scr" id="s0" data-step="0" data-title="Start">
+      <div class="eyebrow" style="margin:0">Choose a scenario <span class="small" style="text-transform:none;letter-spacing:0;font-weight:500">· rounds completed: <span id="rounds">0</span></span></div>
+      <div class="chips" id="scen-chips"></div>
+      <div id="story"></div>
+    </section>
+
+    <section class="scr" data-step="1" data-pane="a" data-title="The cylinder"><div id="q1a"></div></section>
+    <section class="scr" data-step="1" data-pane="b" data-title="How long?">
+      <div id="q1b"></div>
+      <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button></div>
+      <div class="msg" id="m1">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="2" data-pane="a" data-title="The can"><div id="q2a"></div></section>
+    <section class="scr" data-step="2" data-pane="b" data-title="In the hot car">
+      <div id="q2b"></div>
+      <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button></div>
+      <div class="msg" id="m2">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="3" data-pane="a" data-title="The bulb"><div id="q3a"></div></section>
+    <section class="scr" data-step="3" data-pane="b" data-title="Name the gas">
+      <div id="q3b"></div>
+      <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button></div>
+      <div class="msg" id="m3">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="4" data-pane="a" data-title="Collect the oxygen"><div id="q4a"></div></section>
+    <section class="scr" data-step="4" data-pane="b" data-title="Strength">
+      <div id="q4b"></div>
+      <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button></div>
+      <div class="msg" id="m4">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="5" data-pane="a" data-title="Ideal or real"><div id="q5a"></div></section>
+    <section class="scr" data-step="5" data-pane="b" data-title="Interpret">
+      <div id="q5b"></div>
+      <div class="btns"><button class="btn solid" id="chk5" type="button">Check</button></div>
+      <div class="msg" id="m5">Answer every part, then check.</div>
+      <div class="btns" id="endrow" hidden><button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New values</button><button class="btn ghost" id="btn-next" type="button">Next scenario →</button></div>
+    </section>
+  </main>
+
+  <div id="foot">
+    <button class="btn" id="back" type="button">← Back</button>
+    <div id="gate" aria-live="polite"></div>
+    <button class="btn solid" id="next" type="button">Continue →</button>
+  </div>
+</div>
+
+<div id="stp" role="dialog" aria-modal="true" aria-labelledby="stp-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="stp-title">Bench card: the equations</div><button type="button" class="btn ghost" id="stp-close">Close</button></div>
+    <div class="stp-doc">
+      <table class="stp-head">
+        <tr><th colspan="2">Gas Bench · Pharmacy</th></tr>
+        <tr><td>Units</td><td>P in atm, V in L, n in mol, T in K</td></tr>
+        <tr><td>Constants</td><td>R = 0.0821 L·atm/(K·mol) · 1 atm = 760 mmHg · T (K) = t (°C) + 273</td></tr>
+        <tr><td>Based on</td><td>Chang, <i>Chemistry</i> (10th ed.), Chapter 5</td></tr>
+      </table>
+      <section class="stp-sec" id="stp-1"><h3>1 · Cylinder: Boyle’s law</h3>
+        <div class="stp-f">P₁V₁ = P₂V₂ &nbsp;(T and n constant)</div>
+        <ol><li>The gauge shows pressure <b>above</b> the air. True (absolute) pressure = gauge + 1 atm.</li>
+          <li>Gas the cylinder holds, at 1 atm: V₂ = P₁V₁ ÷ 1 atm.</li>
+          <li>When “empty”, the cylinder still holds its own volume of gas at 1 atm. Usable gas = total − cylinder volume.</li>
+          <li>Minutes = usable litres ÷ flow (L/min).</li></ol></section>
+      <section class="stp-sec" id="stp-2"><h3>2 · Hot can: pressure and temperature</h3>
+        <div class="stp-f">P₁ ÷ T₁ = P₂ ÷ T₂ &nbsp;(V and n constant)</div>
+        <ol><li>Change every temperature to kelvin first: T = t + 273.</li>
+          <li>P₂ = P₁ × T₂ ÷ T₁.</li></ol>
+        <p class="tn">Label: <i>Pressurised container: protect from sunlight and do not expose to temperatures exceeding 50 °C.</i></p></section>
+      <section class="stp-sec" id="stp-3"><h3>3 · Propellant: PV = nRT and molar mass</h3>
+        <div class="stp-f">n = PV ÷ RT &nbsp;&nbsp; ℳ = mass ÷ n</div>
+        <ol><li>Change mmHg to atm: ÷ 760. Change ml to L: ÷ 1000.</li>
+          <li>Find n, then ℳ. Compare with the table.</li></ol>
+        <table class="stp-t"><tr><th>Propellant</th><th>Formula</th><th>ℳ (g/mol)</th></tr>
+          <tr><td>Isobutane</td><td>C₄H₁₀</td><td>58.12</td></tr>
+          <tr><td>HFA-134a (norflurane)</td><td>C₂H₂F₄</td><td>102.03</td></tr>
+          <tr><td>HFA-227ea (apaflurane)</td><td>C₃HF₇</td><td>170.03</td></tr></table>
+        <p>Air: ℳ ≈ 29 g/mol. A gas with a larger ℳ is denser than air.</p></section>
+      <section class="stp-sec" id="stp-4"><h3>4 · Peroxide: gas collected over water</h3>
+        <div class="stp-f">2H₂O₂ → 2H₂O + O₂ &nbsp;&nbsp; P(O₂) = P(atm) − P(H₂O)</div>
+        <ol><li>Subtract the water vapour pressure at the water’s temperature.</li>
+          <li>n(O₂) = PV ÷ RT, with P in atm and V in L. ×1000 for mmol.</li>
+          <li>n(H₂O₂) = 2 × n(O₂).</li>
+          <li>% w/v = grams of H₂O₂ in the sample ÷ ml of sample × 100. ℳ(H₂O₂) = 34.01 g/mol.</li></ol>
+        <table class="stp-t"><tr><th>t (°C)</th><th>20</th><th>25</th><th>30</th></tr><tr><td>P(H₂O), mmHg</td><td>17.54</td><td>23.76</td><td>31.82</td></tr></table>
+        <p class="tn">Specification (simulated): Hydrogen peroxide solution 3%: 2.5–3.5% w/v.</p></section>
+      <section class="stp-sec" id="stp-5"><h3>5 · Real cylinder: van der Waals</h3>
+        <div class="stp-f">Ideal: P = nRT ÷ V &nbsp;&nbsp; Real: P = nRT ÷ (V − nb) − an²/V²</div>
+        <table class="stp-t"><tr><th>Gas</th><th>a (atm·L²/mol²)</th><th>b (L/mol)</th></tr>
+          <tr><td>He</td><td>0.034</td><td>0.0237</td></tr><tr><td>O₂</td><td>1.36</td><td>0.0318</td></tr><tr><td>N₂O</td><td>(liquefies)</td><td>—</td></tr></table>
+        <ol><li>Real P lower than ideal: attractions (a) win. Real P higher: molecular volume (b) wins.</li>
+          <li>Filled to a set pressure: if attractions win, the cylinder holds <b>more</b> gas than PV = nRT predicts.</li></ol></section>
+    </div>
+  </div>
+</div>
+<div id="brief" role="dialog" aria-modal="true" aria-labelledby="brief-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="brief-title">Before you start: today’s stations</div></div>
+    <div id="brief-body"></div>
+    <p class="small">The line at the bottom of the screen and the glowing box show your next move. <b>Card</b>, beside Hints, holds the equations: it opens at the station you are on. <b>Hints</b> explains the ideas.</p>
+    <div class="btns"><button type="button" class="btn solid" id="brief-go">Start the lab</button><button type="button" class="btn ghost" id="brief-stp">Read the card</button></div>
+  </div>
+</div>
+<div id="hints" role="dialog" aria-modal="true" aria-labelledby="hints-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="hints-title">Hints: four ideas</div><button type="button" class="btn ghost" id="hints-close">Close</button></div>
+    <div class="ideas">
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="18" font-size="10" text-anchor="middle" fill="#c0392b" font-weight="800">25 °C ✕</text><text x="60" y="36" font-size="10" text-anchor="middle" fill="#2d6a4f" font-weight="800">298 K ✓</text></svg>Gas laws work only in <b>kelvin</b>: add 273.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><circle cx="30" cy="22" r="16" fill="#fff" stroke="#1c2620" stroke-width="2"/><line x1="30" y1="22" x2="40" y2="13" stroke="#c0392b" stroke-width="2"/><text x="82" y="26" font-size="10" text-anchor="middle" fill="#1c2620" font-weight="700">+ 1 atm</text></svg>A gauge reads <b>above</b> the air. Add 1 atm for the true pressure.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="26" font-size="11" text-anchor="middle" fill="#1c2620" font-weight="800">P(O₂) = P − P(H₂O)</text></svg>Gas over water also holds <b>water vapour</b>. Subtract it.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="18" font-size="9" text-anchor="middle" fill="#c0392b" font-weight="700">real &lt; ideal: attractions</text><text x="60" y="36" font-size="9" text-anchor="middle" fill="#3a6bd1" font-weight="700">real &gt; ideal: volume</text></svg>Compare real with ideal to see which <b>correction</b> wins.</div>
+    </div>
+    <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Cylinders, cans, readings and specifications are simulated for training. Always use the supplier’s data and your hospital’s medical gas policy.</div>
+  </div>
+</div>
+
+<script>
+(function(){
+  'use strict';
+  const $ = s=>document.querySelector(s);
+  const track=(e,d)=>{ try{ if(window.umami) umami.track(e,d); }catch(_){} };
+  const shuffle=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  const rd=(x,d)=>Math.round(x*Math.pow(10,d))/Math.pow(10,d);
+  const sig=(x,d)=>(+x.toPrecision(d||3)).toString();
+  const RG=0.0821;
+
+  /* ---------- tap-to-define terms ---------- */
+  const GLOSS={
+    gauge:'Gauge pressure: the pressure above the surrounding air. True (absolute) pressure = gauge + 1 atm.',
+    wc:'Water capacity: the inside volume of the cylinder, in litres (how much water it would hold).',
+    kel:'Kelvin: the absolute temperature scale. T (K) = t (°C) + 273. Zero kelvin is absolute zero.',
+    bov:'Bag-on-valve: the saline sits in a bag; compressed nitrogen around the bag pushes it out. The nitrogen is a gas, not a liquid.',
+    dumas:'Gas bulb: a glass bulb of known volume, weighed empty and then full of gas at a known T and P.',
+    vp:'Water vapour pressure: the pressure of water vapour above liquid water. It depends only on temperature.',
+    wv:'% w/v: grams of solute in 100 ml of solution.',
+    vdw:'Van der Waals equation: (P + an²/V²)(V − nb) = nRT. a corrects for attractions, b for the molecules’ own volume.'
+  };
+  document.addEventListener('click',e=>{
+    const t=e.target.closest('.term'); if(!t) return;
+    const nx=t.nextElementSibling; if(nx && nx.classList.contains('def')){ nx.remove(); fitPage(); return; }
+    const d=document.createElement('span'); d.className='def'; d.textContent=GLOSS[t.dataset.t]||''; t.after(d); track('lab-term',{t:t.dataset.t}); fitPage();
+  });
+  const term=(k,txt)=>'<button type="button" class="term" data-t="'+k+'">'+txt+'</button>';
+
+  /* ---------- misconceptions: every wrong answer names one ---------- */
+  const MIX={
+    M1:'Use the true (absolute) pressure.', M2:'Boyle: P₁V₁ = P₂V₂.', M3:'Some gas always stays inside.', M4:'Minutes = litres ÷ flow.',
+    M5:'Use kelvin.', M6:'P ∝ T in a closed can.', M7:'A closed can still heats up.',
+    M8:'mmHg → atm: ÷ 760.', M9:'n = PV ÷ RT.', M10:'ℳ = mass ÷ moles.', M11:'Heavier than air sinks.',
+    M12:'Subtract the water vapour.', M13:'2 H₂O₂ give 1 O₂.', M14:'% w/v = g per 100 ml.', M15:'Compare with the specification.',
+    M16:'Ideal: P = nRT ÷ V.', M17:'Van der Waals: P = nRT ÷ (V − nb) − an²/V².', M18:'Real vs ideal shows which correction wins.',
+    K1:'Pressure = molecules hitting the walls.', K2:'Higher T, faster molecules.', K3:'Gases act independently.', K4:'Postulates fail at high P.'
+  };
+  function mixLine(m,text,step){ track('lab-mix-'+m,{step:step, scenario:R.S.id}); return '<p><b>'+MIX[m]+'</b> '+text+'</p>'; }
+
+  /* ---------- scenarios ---------- */
+  const SCEN=[
+   {id:'routine', chip:'1 · Ward day'},
+   {id:'heat', chip:'2 · Heatwave'},
+   {id:'trainee', chip:'3 · Aina’s bench'},
+   {id:'transfer', chip:'4 · Patient transfer'}
+  ];
+  const STEPS=5;
+  const STEP_NAMES=['Gas Bench','Cylinder','Hot can','Propellant','Peroxide','Real gas'];
+  /* where each station is taught in the explainer (for the Stuck? line) */
+  const EXP_PAGE=['','Changing conditions','Gay-Lussac’s law','Density and molar mass','Collecting gas over water','Ideal or real? Try it'];
+
+  /* ---------- state ---------- */
+  let sc=0, R=null, solved=Array(STEPS).fill(false), rounds=0;
+  const done=new Set();
+  const DEFAULT={}; for(let n=1;n<=STEPS;n++) DEFAULT[n]=$('#m'+n).innerHTML;
+  const PROP=[['Isobutane','C₄H₁₀',58.12],['HFA-134a (norflurane)','C₂H₂F₄',102.03],['HFA-227ea (apaflurane)','C₃HF₇',170.03]];
+  const VP={20:17.54,25:23.76,30:31.82};
+  const GAS={O2:{name:'oxygen',f:'O₂',a:1.36,b:0.0318},He:{name:'helium',f:'He',a:0.034,b:0.0237}};
+
+  function newRound(){
+    const S=SCEN[sc], r={S:S};
+    r.heat=S.id==='heat'; r.tr=S.id==='trainee'; r.tx=S.id==='transfer';
+    /* 1 · cylinder */
+    r.Vc=pick(r.tx?[2.3,4.7]:[4.7,10.0]);
+    r.Pg=Math.round(rnd(r.tx?50:60, r.tx?110:135));
+    r.F=pick(r.tx?[4,6]:[2,4]);
+    r.need=r.tx?Math.round(rnd(80,130)/5)*5:Math.round(rnd(60,240)/30)*30;
+    /* 2 · hot can */
+    r.P1=rd(rnd(6.0,9.0),1); r.t1=pick([20,25,30]); r.t2=r.heat?pick([65,70]):pick([55,60]);
+    /* 3 · propellant */
+    r.prop=Math.floor(rnd(0,3)); r.Vb=pick([0.250,0.500]); r.tb=pick([22,25,27]); r.Pmm=Math.round(rnd(748,768));
+    { const n=(r.Pmm/760)*r.Vb/(RG*(r.tb+273)); r.mg=rd(n*PROP[r.prop][2],3); }
+    /* 4 · peroxide */
+    r.tw=r.heat?30:pick([20,25]); r.Patm=Math.round(rnd(750,766)); r.Vs=pick([1.00,2.00]);
+    do{ r.trueW=rd(rnd(2.3,3.7),2); }while(Math.abs(r.trueW-2.5)<0.06||Math.abs(r.trueW-3.5)<0.06);
+    { const nH=r.trueW/100*r.Vs/34.01, nO=nH/2, P=(r.Patm-VP[r.tw])/760; r.Vg=rd(nO*RG*(r.tw+273)/P*1000,1); }
+    /* 5 · real gas */
+    r.gas=r.tx?'He':'O2'; r.n5=Math.round(rnd(40,60)); r.V5=10.0; r.t5=r.heat?35:15;
+    r.ans={}; for(let k=1;k<=STEPS;k++) r.ans[k]={};
+    R=r; solved=Array(STEPS).fill(false);
+    render();
+  }
+  /* expected answers */
+  const X={
+    pabs:()=>R.Pg+1, tot:()=>(R.Pg+1)*R.Vc, use:()=>R.Pg*R.Vc, mins:()=>R.Pg*R.Vc/R.F,
+    T1:()=>R.t1+273, T2:()=>R.t2+273, P2:()=>R.P1*(R.t2+273)/(R.t1+273),
+    patm:()=>R.Pmm/760, nb:()=>(R.Pmm/760)*R.Vb/(RG*(R.tb+273)), M:()=>R.mg/X.nb(),
+    po2:()=>R.Patm-VP[R.tw], no2:()=>X.po2()/760*(R.Vg/1000)/(RG*(R.tw+273))*1000, nh:()=>2*X.no2(), w:()=>X.nh()/1000*34.01/R.Vs*100,
+    pid:()=>R.n5*RG*(R.t5+273)/R.V5, pvw:()=>{ const g=GAS[R.gas]; return R.n5*RG*(R.t5+273)/(R.V5-R.n5*g.b)-g.a*R.n5*R.n5/(R.V5*R.V5); }
+  };
+
+  function chipGroup(opts,sel,cb,col){
+    const g=document.createElement('div'); g.className='chips'+(col?' col':''); g.setAttribute('role','group');
+    opts.forEach((o,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(sel===i?' on':''); b.innerHTML=o; b.setAttribute('aria-pressed',sel===i?'true':'false');
+      b.addEventListener('click',()=>{ g.querySelectorAll('.chip').forEach(c=>{ c.classList.remove('on'); c.setAttribute('aria-pressed','false'); }); b.classList.add('on'); b.setAttribute('aria-pressed','true'); cb(i); }); g.appendChild(b); });
+    return g;
+  }
+  /* feedback: at most two points, so a page never overflows. Students keep trying until the step is right. */
+  function msg(n,cls,html){
+    const m=$('#m'+n); m.className='msg '+cls;
+    const tmp=document.createElement('div'); tmp.innerHTML=html; const ps=tmp.querySelectorAll(':scope > p');
+    if(ps.length>2){ for(let i=2;i<ps.length;i++) ps[i].remove(); tmp.insertAdjacentHTML('beforeend','<p>…and '+(ps.length-2)+' more. Fix these first.</p>'); }
+    /* after 3 wrong tries on a step, point to the bench card and the explainer (never to the answer) */
+    if(cls==='bad'){ R.tries=R.tries||[]; R.tries[n]=(R.tries[n]||0)+1;
+      if(R.tries[n]>=3) tmp.insertAdjacentHTML('beforeend','<p class="stuck"><b>Stuck?</b> Tap <b>Card §'+n+'</b> (top right) for the equations of this station, and <b>Hints</b> for the ideas. The explainer page <b>'+EXP_PAGE[n]+'</b> works an example. Then fix one point at a time.</p>'); }
+    m.innerHTML=tmp.innerHTML;
+    track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); fitPage();
+  }
+  function clearMsg(n){ const m=$('#m'+n); m.className='msg'; m.innerHTML=DEFAULT[n]; }
+  function unsolveFrom(k){
+    let changed=false;
+    for(let j=k;j<=STEPS;j++){ if(solved[j-1]){ solved[j-1]=false; changed=true; } if(j>k) clearMsg(j); }
+    if(changed){ $('#endrow').hidden=true; updatePager(); }
+  }
+  const numIn=(id,val)=>'<input class="num-in" id="'+id+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':val)+'">';
+  const readNum=id=>{ const e=$('#'+id); if(!e) return null; const v=(e.value||'').replace(',','.').replace(/\s/g,'').trim(); return v===''?null:parseFloat(v); };
+  /* a wrong number box turns red when Check is pressed; editing it clears the mark */
+  const markNum=(id,bad)=>{ const e=$('#'+id); if(e) e.classList.toggle('wrong',!!bad); };
+  document.addEventListener('input',e=>{ const t=e.target; if(t && t.classList && t.classList.contains('num-in')) t.classList.remove('wrong'); });
+  const close=(a,b,rel,abs)=>a!=null && !isNaN(a) && Math.abs(a-b)<=Math.max(Math.abs(b)*rel, abs||0);
+  const numRow=(lbl,id,unit,k,first)=>'<div class="q"'+(first?' style="margin-top:0"':'')+'>'+lbl+'</div><div class="calc-in">'+numIn(id,R.ans[k][id])+'<span class="unit">'+unit+'</span></div>';
+  function wire(k,ids){ ids.forEach(id=>{ const i=$('#'+id); if(i) i.addEventListener('input',()=>{ i.classList.remove('wrong'); R.ans[k][id]=i.value; unsolveFrom(k); }); }); }
+
+  function render(){
+    const sc0=$('#scen-chips'); sc0.innerHTML='';
+    SCEN.forEach((s,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(i===sc?' on':''); b.innerHTML=s.chip+(done.has(s.id)?'<span class="tick">✓</span>':'');
+      b.addEventListener('click',()=>{ if(i===sc) return; sc=i; track('lab-pick',{scenario:s.id}); newRound(); }); sc0.appendChild(b); });
+    R.beat=0; R.storyDone=false; renderStory();
+    renderQ1(); renderQ2(); renderQ3(); renderQ4(); renderQ5();
+    for(let n=1;n<=STEPS;n++) clearMsg(n); $('#endrow').hidden=true; updatePager();
+  }
+  /* a chip question built from [text, right?, feedback, misconception] options */
+  function ask(box,label,opts,key,store,step,first,row){
+    const d=document.createElement('div'); d.innerHTML='<div class="q"'+(first?' style="margin-top:0"':'')+'>'+label+'</div>';
+    d.appendChild(chipGroup(opts.map(o=>o[0]), store[key], i=>{ store[key]=i; unsolveFrom(step); }, !row)); box.appendChild(d);
+  }
+  function judgeChips(defs,store,step,lines){
+    let miss=0;
+    defs.forEach(q=>{ const a=store[q.k]; if(a==null){ miss++; return; } const o=q.o[a]; if(!o[1]) lines.push(mixLine(o[3],o[2],step)); });
+    return miss;
+  }
+  function chipDefs(k,make){ R.q=R.q||{}; if(!R.q[k]) R.q[k]=make(); return R.q[k]; }
+
+  /* ---------- drawings ---------- */
+  function cylSVG(label,gaugeTxt,frac,col){
+    const a=-210+240*frac, rad=a*Math.PI/180, nx=60+20*Math.cos(rad), ny=34+20*Math.sin(rad);
+    return '<svg viewBox="0 0 260 120" class="rig" aria-hidden="true"><rect width="260" height="120" rx="10" fill="#f4f7f5"/>'+
+      '<rect x="20" y="40" width="44" height="74" rx="14" fill="#e9ecea" stroke="#5c665f" stroke-width="1.6"/><path d="M20 54 Q20 40 42 40 Q64 40 64 54 Z" fill="#fff" stroke="#5c665f" stroke-width="1.6"/>'+
+      '<rect x="36" y="30" width="12" height="11" rx="2" fill="#9aa39d"/><text x="42" y="86" text-anchor="middle" font-size="12" font-weight="800" fill="'+(col||'#1c2620')+'">'+label+'</text>'+
+      '<line x1="48" y1="34" x2="60" y2="34" stroke="#9aa39d" stroke-width="3"/><circle cx="60" cy="34" r="0" />'+
+      '<g transform="translate(40 0)"><circle cx="60" cy="34" r="25" fill="#fff" stroke="#1c2620" stroke-width="1.6"/><line x1="60" y1="34" x2="'+nx.toFixed(1)+'" y2="'+ny.toFixed(1)+'" stroke="#c0392b" stroke-width="2.4" stroke-linecap="round"/><circle cx="60" cy="34" r="2.5" fill="#1c2620"/><text x="60" y="52" text-anchor="middle" font-size="8.5" font-weight="800" fill="#1c2620">'+gaugeTxt+'</text></g>'+
+      '<g transform="translate(140 18)"><rect width="110" height="84" rx="8" fill="#fff" stroke="#cfe6d9"/><text x="55" y="20" text-anchor="middle" font-size="9" fill="#636b65">flow meter</text><rect x="47" y="28" width="16" height="48" rx="6" fill="#eef5fb" stroke="#8fb3c9"/><circle cx="55" cy="'+(70-8*R.F/2).toFixed(0)+'" r="5" fill="#2d6a4f"/><text x="80" y="58" font-size="11" font-weight="800" fill="#2d6a4f">'+R.F+' L/min</text></g></svg>';
+  }
+  function canSVG(hot){
+    return '<svg viewBox="0 0 260 120" class="rig" aria-hidden="true"><rect width="260" height="120" rx="10" fill="'+(hot?'#fdf3e6':'#f4f7f5')+'"/>'+
+      '<rect x="40" y="30" width="44" height="82" rx="8" fill="#fff" stroke="#5c665f" stroke-width="1.6"/><rect x="54" y="18" width="16" height="13" rx="3" fill="#9aa39d"/>'+
+      '<path d="M50 50 q12 -8 24 0 v46 q-12 8 -24 0 z" fill="#d9ecf7" stroke="#8fb3c9"/><text x="62" y="78" text-anchor="middle" font-size="7.5" font-weight="700" fill="#1f3a8a">saline</text>'+
+      '<g fill="#3a6bd1">'+[[46,42],[78,46],[45,100],[80,92],[47,70],[78,70]].map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="2.2"/>').join('')+'</g>'+
+      '<text x="62" y="12" text-anchor="middle" font-size="8.5" fill="#636b65">N₂ around the bag</text>'+
+      '<g transform="translate(150 16)"><rect x="0" y="0" width="12" height="80" rx="6" fill="#fff" stroke="#5c665f"/><rect x="3" y="'+(hot?14:44)+'" width="6" height="'+(hot?62:32)+'" rx="3" fill="#c0392b"/><circle cx="6" cy="84" r="9" fill="#c0392b"/>'+
+      '<text x="24" y="30" font-size="12" font-weight="800" fill="'+(hot?'#c0392b':'#1c2620')+'">'+(hot?R.t2:R.t1)+' °C</text><text x="24" y="46" font-size="9" fill="#636b65">'+(hot?'car at noon':'pharmacy')+'</text></g></svg>';
+  }
+  function bulbSVG(){
+    return '<svg viewBox="0 0 260 120" class="rig" aria-hidden="true"><rect width="260" height="120" rx="10" fill="#f4f7f5"/>'+
+      '<rect x="20" y="88" width="120" height="22" rx="5" fill="#e4e6e3" stroke="#9aa39d"/><rect x="34" y="94" width="58" height="12" rx="2" fill="#1c2620"/><text x="88" y="103.5" text-anchor="end" font-family="ui-monospace,monospace" font-size="8.5" font-weight="700" fill="#8fe3b0">+'+R.mg.toFixed(3)+' g</text>'+
+      '<rect x="44" y="82" width="72" height="5" rx="2" fill="#b9c2bc"/><circle cx="80" cy="52" r="26" fill="#eef5fb" stroke="#5c665f" stroke-width="1.6"/><rect x="76" y="14" width="8" height="14" fill="#fff" stroke="#5c665f"/><rect x="72" y="8" width="16" height="7" rx="2" fill="#9aa39d"/>'+
+      '<text x="80" y="56" text-anchor="middle" font-size="9" font-weight="700" fill="#1c2620">'+(R.Vb*1000)+' ml</text>'+
+      '<text x="160" y="40" font-size="10" fill="#1c2620" font-weight="700">'+R.tb+' °C</text><text x="160" y="58" font-size="10" fill="#1c2620" font-weight="700">'+R.Pmm+' mmHg</text><text x="160" y="80" font-size="8.5" fill="#636b65">gas mass, after taring</text><text x="160" y="92" font-size="8.5" fill="#636b65">the empty bulb</text></svg>';
+  }
+  function eudSVG(){
+    const h=Math.min(70,R.Vg*1.6);
+    return '<svg viewBox="0 0 260 120" class="rig" aria-hidden="true"><rect width="260" height="120" rx="10" fill="#f4f7f5"/>'+
+      '<path d="M16 60 v44 q0 6 6 6 h40 q6 0 6 -6 v-44" fill="#eef5fb" stroke="#5c665f" stroke-width="1.6"/><rect x="18" y="80" width="48" height="24" fill="#d9ecf7"/><text x="42" y="96" text-anchor="middle" font-size="7.5" fill="#1f3a8a">H₂O₂ + MnO₂</text>'+
+      '<path d="M42 60 V40 H128 V96" fill="none" stroke="#5c665f" stroke-width="2.4"/><rect x="96" y="90" width="110" height="24" rx="4" fill="#d9ecf7" stroke="#5c665f"/>'+
+      '<rect x="116" y="10" width="24" height="98" rx="4" fill="#d9ecf7" stroke="#5c665f" stroke-width="1.6"/><rect x="118" y="12" width="20" height="'+h.toFixed(0)+'" fill="#fff"/>'+
+      '<text x="150" y="66" font-size="9" font-weight="800" fill="#2d6a4f">O₂ + vapour: '+R.Vg+' ml</text><text x="150" y="30" font-size="9" fill="#1c2620" font-weight="700">water '+R.tw+' °C</text><text x="150" y="46" font-size="9" fill="#1c2620" font-weight="700">room '+R.Patm+' mmHg</text></svg>';
+  }
+
+  function realSVG(){
+    const he=R.gas==='He', dots=[];
+    let seed=R.n5*7+1; const rr=()=>{ seed=(seed*9301+49297)%233280; return seed/233280; };
+    for(let i=0;i<34;i++) dots.push('<circle cx="'+(28+rr()*40).toFixed(1)+'" cy="'+(50+rr()*58).toFixed(1)+'" r="'+(he?2.4:3.6)+'" fill="'+(he?'#d9821f':'#2d6a4f')+'" opacity=".85"/>');
+    return '<svg viewBox="0 0 260 120" class="rig" aria-hidden="true"><rect width="260" height="120" rx="10" fill="#f4f7f5"/>'+
+      '<rect x="20" y="40" width="56" height="74" rx="16" fill="#fff" stroke="#5c665f" stroke-width="1.6"/><rect x="40" y="28" width="16" height="13" rx="2" fill="#9aa39d"/>'+dots.join('')+
+      '<text x="48" y="22" text-anchor="middle" font-size="11" font-weight="800" fill="#1c2620">'+GAS[R.gas].f+'</text>'+
+      '<g transform="translate(96 30)"><rect width="150" height="70" rx="8" fill="#fff" stroke="#cfe6d9"/><text x="75" y="20" text-anchor="middle" font-size="10" font-weight="800" fill="#1c2620">crowded molecules</text>'+
+      '<text x="12" y="40" font-size="9.5" fill="#c0392b" font-weight="700">a: attractions → lower P</text><text x="12" y="58" font-size="9.5" fill="#3a6bd1" font-weight="700">b: own volume → higher P</text></g></svg>';
+  }
+
+  /* ---------- station 1 · cylinder (Boyle) ---------- */
+  function renderQ1(){
+    const qa=$('#q1a'), qb=$('#q1b');
+    qa.innerHTML='<div class="given">'+(R.tx?'Transfer: <b>'+R.need+' min</b> by ambulance, oxygen at <b>'+R.F+' L/min</b>.':'A ward patient needs oxygen at <b>'+R.F+' L/min</b> for about <b>'+R.need+' min</b>.')+
+      ' Cylinder '+term('wc','water capacity')+' <b>'+R.Vc.toFixed(1)+' L</b>; '+term('gauge','gauge')+' reads <b>'+R.Pg+' atm</b>. Temperature stays the same.</div>'+
+      cylSVG('O₂',R.Pg+' atm',R.Pg/140)+
+      numRow('a. True (absolute) pressure in the cylinder','p1a','atm',1)+
+      numRow('b. Total gas it holds at 1 atm (Boyle’s law)','p1b','L',1);
+    qb.innerHTML=numRow('c. Gas you can actually use','p1c','L',1,true)+numRow('d. How long it lasts at '+R.F+' L/min','p1d','min',1);
+    const D=q1Def();
+    D.forEach(q=>ask(qb,q.p,q.o,q.k,R.ans[1],1,false,q.row));
+    wire(1,['p1a','p1b','p1c','p1d']);
+  }
+  function q1Def(){ return chipDefs(1,()=>{
+    const ok=X.mins()>=R.need;
+    return [
+      {k:'e', row:true, p:'e. Is it enough for '+R.need+' minutes?', o:[['Yes',ok?1:0,'Compare your minutes in part d with '+R.need+' minutes.','M4'],['No: take a fuller or larger cylinder',ok?0:1,'Compare your minutes in part d with '+R.need+' minutes.','M4']]},
+      {k:'f', p:'f. Why does the gauge reading fall as oxygen is used?', o:shuffle([['Fewer molecules are left to hit the walls',1],['The molecules slow down as they leave',0,'The temperature stays the same, so their speed does too.','K1'],['The molecules get smaller',0,'Molecules do not shrink. Count how many are left.','K1']])}
+    ]; }); }
+  $('#chk1').addEventListener('click',()=>{
+    const lines=[]; let miss=0;
+    const a=readNum('p1a'), b=readNum('p1b'), c=readNum('p1c'), d=readNum('p1d');
+    const bad={p1a:false,p1b:false,p1c:false,p1d:false};
+    if(a==null) miss++; else if(!close(a,X.pabs(),0,0.05)){ bad.p1a=true;
+      lines.push(close(a,R.Pg,0,.01)?mixLine('M1','The gauge reads above the air. Add 1 atm.',1):mixLine('M1','Gauge + 1 atm.',1)); }
+    if(b==null) miss++; else if(!close(b,X.tot(),.01,.5)){ bad.p1b=true;
+      if(close(b,R.Pg*R.Vc,.01)) lines.push(mixLine('M1','You used the gauge reading. Boyle’s law needs the true pressure: (gauge + 1) × '+R.Vc.toFixed(1)+' L.',1));
+      else if(close(b,X.pabs()/R.Vc,.01)||close(b,R.Vc/X.pabs(),.02)) lines.push(mixLine('M2','Multiply: V₂ = P₁ × V₁ ÷ 1 atm.',1));
+      else lines.push(mixLine('M2','V₂ = P₁V₁ ÷ P₂, with P₂ = 1 atm.',1)); }
+    if(c==null) miss++; else if(!close(c,X.use(),.01,.5)){ bad.p1c=true;
+      lines.push(close(c,X.tot(),.005)?mixLine('M3','When “empty”, '+R.Vc.toFixed(1)+' L of gas stays inside at 1 atm. Subtract it.',1):mixLine('M3','Total − '+R.Vc.toFixed(1)+' L that stays inside.',1)); }
+    if(d==null) miss++; else { const dm=(c!=null&&!bad.p1c)?c:X.use(); if(!close(d,dm/R.F,.01,.5)){ bad.p1d=true;
+      lines.push(close(d,dm*R.F,.01)?mixLine('M4','Divide the litres by the flow, don’t multiply.',1):mixLine('M4','usable litres ÷ '+R.F+' L/min.',1)); } }
+    Object.keys(bad).forEach(id=>markNum(id,bad[id]));
+    miss+=judgeChips(q1Def(),R.ans[1],1,lines);
+    if(lines.length) return msg(1,'bad',lines.join(''));
+    if(miss) return msg(1,'near','Answer every part first (parts a and b are on the '+(innerWidth>=900?'left':'previous screen')+').');
+    const ok=X.mins()>=R.need;
+    msg(1,'good','<b>Right.</b> '+X.pabs()+' atm × '+R.Vc.toFixed(1)+' L = '+sig(X.tot(),4)+' L; usable '+sig(X.use(),4)+' L; '+sig(X.mins(),3)+' min. '+(ok?'Enough for '+R.need+' min.':'<b>Not enough</b> for '+R.need+' min: change the cylinder first.')); solve(1);
+  });
+
+  /* ---------- station 2 · hot can (P ∝ T) ---------- */
+  function renderQ2(){
+    const qa=$('#q2a'), qb=$('#q2b');
+    qa.innerHTML='<div class="given">A '+term('bov','bag-on-valve')+' saline wound-wash spray. The nitrogen inside is at <b>'+R.P1.toFixed(1)+' atm</b> at <b>'+R.t1+' °C</b>. '+(R.heat?'During a heatwave, the':'The')+' patient leaves it in the car: <b>'+R.t2+' °C</b>. The can’s volume does not change.</div>'+
+      canSVG(true)+numRow('a. Starting temperature in '+term('kel','kelvin'),'p2a','K',2)+numRow('b. Car temperature in kelvin','p2b','K',2);
+    qb.innerHTML=numRow('c. Pressure in the can at '+R.t2+' °C','p2c','atm',2,true);
+    q2Def().forEach(q=>ask(qb,q.p,q.o,q.k,R.ans[2],2,false,q.row));
+    wire(2,['p2a','p2b','p2c']);
+  }
+  function q2Def(){ return chipDefs(2,()=>{
+    const q=[
+      {k:'d', p:'d. What do you tell the patient?', o:shuffle([['Keep it out of the hot car; store below 50 °C',1],['It is safe while the cap stays on',0,'Closed or not, the gas inside heats up and its pressure rises.','M7'],['Keep it in the freezer instead',0,'Too cold is not needed. The label asks for below 50 °C and out of sunlight.','M7']])},
+      {k:'e', p:'e. Why does the pressure rise when the can gets hot?', o:shuffle([['Faster molecules hit the walls harder and more often',1],['The molecules get bigger',0,'Heat changes how fast the molecules move, not their size.','K2'],['More nitrogen molecules form',0,'The can is sealed: the number of molecules stays the same.','K2']])}
+    ];
+    if(R.tr){ const wrong=rd(R.P1*R.t2/R.t1,1);
+      q.push({k:'f', p:'f. Aina wrote: P₂ = '+R.P1.toFixed(1)+' × '+R.t2+' ÷ '+R.t1+' = '+wrong+' atm. What went wrong?', o:shuffle([['She used °C, not kelvin',1],['She should divide by T₂',0,'Her arrangement is right: P₂ = P₁ × T₂ ÷ T₁. Look at the temperature units.','M5'],['Nothing: her answer is right',0,'Compare her answer with yours.','M5']])}); }
+    return q; }); }
+  $('#chk2').addEventListener('click',()=>{
+    const lines=[]; let miss=0;
+    const a=readNum('p2a'), b=readNum('p2b'), c=readNum('p2c');
+    const bad={p2a:false,p2b:false,p2c:false};
+    if(a==null) miss++; else if(!close(a,X.T1(),0,0.2)){ bad.p2a=true; lines.push(mixLine('M5','T (K) = '+R.t1+' + 273.',2)); }
+    if(b==null) miss++; else if(!close(b,X.T2(),0,0.2)){ bad.p2b=true; lines.push(mixLine('M5','T (K) = '+R.t2+' + 273.',2)); }
+    if(c==null) miss++; else if(!close(c,X.P2(),.01,.02)){ bad.p2c=true;
+      if(close(c,R.P1*R.t2/R.t1,.02)) lines.push(mixLine('M5','You used °C. Use the kelvin values from parts a and b.',2));
+      else if(close(c,R.P1*X.T1()/X.T2(),.01)) lines.push(mixLine('M6','Hotter gas, higher pressure: P₂ = P₁ × T₂ ÷ T₁.',2));
+      else lines.push(mixLine('M6','P₂ = '+R.P1.toFixed(1)+' × T₂ ÷ T₁, in kelvin.',2)); }
+    Object.keys(bad).forEach(id=>markNum(id,bad[id]));
+    miss+=judgeChips(q2Def(),R.ans[2],2,lines);
+    if(lines.length) return msg(2,'bad',lines.join(''));
+    if(miss) return msg(2,'near','Answer every part first (parts a and b are on the '+(innerWidth>=900?'left':'previous screen')+').');
+    msg(2,'good','<b>Right.</b> '+R.P1.toFixed(1)+' × '+X.T2()+' ÷ '+X.T1()+' = <b>'+X.P2().toFixed(2)+' atm</b>: '+Math.round((X.P2()/R.P1-1)*100)+'% higher, at '+R.t2+' °C, above the label’s 50 °C limit.'); solve(2);
+  });
+
+  /* ---------- station 3 · propellant (PV = nRT, molar mass) ---------- */
+  function renderQ3(){
+    const qa=$('#q3a'), qb=$('#q3b');
+    qa.innerHTML='<div class="given">An unlabelled can of inhaler propellant is found in the store. You fill a '+term('dumas','gas bulb')+' of <b>'+(R.Vb*1000)+' ml</b> with its gas at <b>'+R.tb+' °C</b> and <b>'+R.Pmm+' mmHg</b>. The gas weighs <b>'+R.mg.toFixed(3)+' g</b>.</div>'+
+      bulbSVG()+numRow('a. Pressure in atm (3 decimal places)','p3a','atm',3)+numRow('b. Moles of gas in the bulb (4 significant figures)','p3b','mol',3);
+    qb.innerHTML=numRow('c. Molar mass of the gas','p3c','g/mol',3,true);
+    q3Def().forEach(q=>ask(qb,q.p,q.o,q.k,R.ans[3],3,false,q.row));
+    wire(3,['p3a','p3b','p3c']);
+  }
+  function q3Def(){ return chipDefs(3,()=>[
+    {k:'d', p:'d. The propellant is:', o:PROP.map((p,i)=>[p[0]+' ('+p[2]+')',i===R.prop?1:0,'Compare your molar mass from part c with the table on the Card.','M10'])},
+    {k:'e', p:'e. If this can leaks in a closed store room, where does the gas collect?', o:shuffle([['Near the floor: it is denser than air',1],['Near the ceiling: gases rise',0,'Compare its molar mass with air (about 29 g/mol). Heavier gas is denser.','M11'],['Evenly through the room at once',0,'It mixes slowly; until then the denser gas stays low.','M11']])}
+  ]); }
+  $('#chk3').addEventListener('click',()=>{
+    const lines=[]; let miss=0;
+    const a=readNum('p3a'), b=readNum('p3b'), c=readNum('p3c');
+    const bad={p3a:false,p3b:false,p3c:false};
+    if(a==null) miss++; else if(!close(a,X.patm(),.002,.001)){ bad.p3a=true;
+      lines.push(close(a,R.Pmm*760,.01)?mixLine('M8','Divide by 760, don’t multiply.',3):mixLine('M8',R.Pmm+' ÷ 760.',3)); }
+    if(b==null) miss++; else if(!close(b,X.nb(),.01)){ bad.p3b=true;
+      if(close(b,X.patm()*R.Vb*1000/(RG*(R.tb+273)),.02)) lines.push(mixLine('M9','Use the volume in litres: '+(R.Vb*1000)+' ml = '+R.Vb.toFixed(3)+' L.',3));
+      else if(close(b,X.patm()*R.Vb/(RG*R.tb),.02)) lines.push(mixLine('M5','Use kelvin: '+R.tb+' + 273.',3));
+      else lines.push(mixLine('M9','n = PV ÷ RT = P × '+R.Vb.toFixed(3)+' ÷ (0.0821 × T).',3)); }
+    if(c==null) miss++; else { const nn=(b!=null&&!bad.p3b)?b:X.nb(); if(!close(c,R.mg/nn,.015)){ bad.p3c=true;
+      lines.push(close(c,nn/R.mg,.02)?mixLine('M10','Mass ÷ moles, not moles ÷ mass.',3):mixLine('M10',R.mg.toFixed(3)+' g ÷ your moles.',3)); } }
+    Object.keys(bad).forEach(id=>markNum(id,bad[id]));
+    miss+=judgeChips(q3Def(),R.ans[3],3,lines);
+    if(lines.length) return msg(3,'bad',lines.join(''));
+    if(miss) return msg(3,'near','Answer every part first (parts a and b are on the '+(innerWidth>=900?'left':'previous screen')+').');
+    msg(3,'good','<b>Right.</b> ℳ = '+R.mg.toFixed(3)+' ÷ '+sig(X.nb(),4)+' = <b>'+X.M().toFixed(1)+' g/mol</b>: '+PROP[R.prop][0]+'. Label it and report the unlabelled can.'); solve(3);
+  });
+
+  /* ---------- station 4 · peroxide (stoichiometry + Dalton) ---------- */
+  function renderQ4(){
+    const qa=$('#q4a'), qb=$('#q4b');
+    qa.innerHTML='<div class="given">Check a bottle labelled <b>Hydrogen peroxide solution 3%</b>. Add <b>'+R.Vs.toFixed(2)+' ml</b> to MnO₂; all the H₂O₂ breaks down: 2H₂O₂ → 2H₂O + O₂. The O₂ is collected over water: <b>'+R.Vg+' ml</b>. Water '+R.tw+' °C ('+term('vp','vapour pressure')+' <b>'+VP[R.tw]+' mmHg</b>); room <b>'+R.Patm+' mmHg</b>.</div>'+
+      eudSVG()+numRow('a. Pressure of the O₂ alone','p4a','mmHg',4)+numRow('b. Moles of O₂ collected','p4b','mmol',4);
+    qb.innerHTML=numRow('c. Moles of H₂O₂ in the sample','p4c','mmol',4,true)+numRow('d. Strength of the solution','p4d','% '+term('wv','w/v'),4);
+    q4Def().forEach(q=>ask(qb,q.p,q.o,q.k,R.ans[4],4,false,q.row));
+    wire(4,['p4a','p4b','p4c','p4d']);
+  }
+  function q4Def(){ return chipDefs(4,()=>{
+    const pass=X.w()>=2.5&&X.w()<=3.5;
+    const q=[
+      {k:'e', row:true, p:'e. Specification 2.5–3.5% w/v. The bottle:', o:[['Passes',pass?1:0,'Compare part d with 2.5–3.5%.','M15'],['Fails',pass?0:1,'Compare part d with 2.5–3.5%.','M15']]},
+      {k:'f', p:'f. Why can you simply subtract the water vapour pressure?', o:shuffle([['Each gas hits the walls as if it were alone',1],['Water vapour pushes the O₂ out of the tube',0,'Both gases share the tube. Think about Dalton’s law.','K3'],['O₂ dissolves in the water vapour',0,'Gases mix; they don’t dissolve in each other. Each gives its own pressure.','K3']])}
+    ];
+    if(R.tr) q.push({k:'g', p:'g. Aina used '+R.Patm+' mmHg for the O₂, without subtracting the water vapour. Her strength is:', o:shuffle([['Too high',1],['Too low',0,'A higher pressure gives more moles of O₂, so more H₂O₂.','M12'],['The same',0,'Water vapour changes the pressure, so it changes the moles.','M12']])});
+    return q; }); }
+  $('#chk4').addEventListener('click',()=>{
+    const lines=[]; let miss=0;
+    const a=readNum('p4a'), b=readNum('p4b'), c=readNum('p4c'), d=readNum('p4d');
+    const bad={p4a:false,p4b:false,p4c:false,p4d:false};
+    if(a==null) miss++; else if(!close(a,X.po2(),0,0.05)){ bad.p4a=true;
+      lines.push(close(a,R.Patm,0,.05)?mixLine('M12','The tube also holds water vapour: subtract '+VP[R.tw]+' mmHg.',4):close(a,R.Patm+VP[R.tw],0,.05)?mixLine('M12','Subtract the water vapour, don’t add it.',4):mixLine('M12',R.Patm+' − '+VP[R.tw]+'.',4)); }
+    if(b==null) miss++; else { const pm=(a!=null&&!bad.p4a)?a:X.po2(), nb=pm/760*(R.Vg/1000)/(RG*(R.tw+273))*1000;
+      if(!close(b,nb,.012)){ bad.p4b=true;
+        if(close(b,nb/1000,.02)) lines.push(mixLine('M9','That is in mol. The box asks for mmol: × 1000.',4));
+        else if(close(b,pm*(R.Vg/1000)/(RG*(R.tw+273))*1000,.02)) lines.push(mixLine('M8','Change mmHg to atm first: ÷ 760.',4));
+        else if(close(b,nb*1000,.02)) lines.push(mixLine('M9','Use litres: '+R.Vg+' ml = '+(R.Vg/1000)+' L.',4));
+        else lines.push(mixLine('M9','n = PV ÷ RT, with P in atm, V in L, T in K; then × 1000.',4)); } }
+    if(c==null) miss++; else { const bb=(b!=null&&!bad.p4b)?b:X.no2(); if(!close(c,2*bb,.012)){ bad.p4c=true;
+      lines.push(close(c,bb/2,.02)?mixLine('M13','2 mol H₂O₂ make 1 mol O₂: multiply by 2.',4):mixLine('M13','n(H₂O₂) = 2 × n(O₂).',4)); } }
+    if(d==null) miss++; else { const cc=(c!=null&&!bad.p4c)?c:X.nh(), w=cc/1000*34.01/R.Vs*100; if(!close(d,w,.015)){ bad.p4d=true;
+      lines.push(close(d,w/100,.03)?mixLine('M14','Per 100 ml: × 100 at the end.',4):close(d,w*R.Vs,.02)&&R.Vs!==1?mixLine('M14','Divide by the '+R.Vs.toFixed(2)+' ml sample.',4):mixLine('M14','mmol ÷ 1000 × 34.01 g/mol ÷ '+R.Vs.toFixed(2)+' ml × 100.',4)); } }
+    Object.keys(bad).forEach(id=>markNum(id,bad[id]));
+    miss+=judgeChips(q4Def(),R.ans[4],4,lines);
+    if(lines.length) return msg(4,'bad',lines.join(''));
+    if(miss) return msg(4,'near','Answer every part first (parts a and b are on the '+(innerWidth>=900?'left':'previous screen')+').');
+    const pass=X.w()>=2.5&&X.w()<=3.5;
+    msg(4,'good','<b>Right.</b> '+sig(X.no2(),3)+' mmol O₂ → '+sig(X.nh(),3)+' mmol H₂O₂ → <b>'+X.w().toFixed(2)+'% w/v</b>. '+(pass?'Within 2.5–3.5%: it passes.':'<b>Outside 2.5–3.5%: it fails.</b> Quarantine the bottle and report it.')); solve(4);
+  });
+
+  /* ---------- station 5 · real gas (van der Waals) ---------- */
+  function renderQ5(){
+    const g=GAS[R.gas], qa=$('#q5a'), qb=$('#q5b');
+    qa.innerHTML='<div class="given">'+(R.tx?'The transfer team also carries a <b>helium</b> cylinder for heliox.':'A full medical <b>oxygen</b> cylinder.')+' It holds <b>'+R.n5+' mol</b> of '+g.f+' in <b>'+R.V5.toFixed(1)+' L</b> at <b>'+R.t5+' °C</b>. For '+g.f+': a = <b>'+g.a+'</b> atm·L²/mol², b = <b>'+g.b+'</b> L/mol.</div>'+
+      realSVG()+
+      numRow('a. Pressure if '+g.f+' were ideal','p5a','atm',5)+numRow('b. Pressure from the '+term('vdw','van der Waals equation'),'p5b','atm',5);
+    qb.innerHTML='';
+    q5Def().forEach((q,i)=>ask(qb,q.p,q.o,q.k,R.ans[5],5,i===0,q.row));
+    wire(5,['p5a','p5b']);
+  }
+  function q5Def(){ return chipDefs(5,()=>{
+    const att=X.pvw()<X.pid();
+    return [
+      {k:'c', p:'c. Which correction wins for '+GAS[R.gas].f+' here?', o:[['Attractions (a): real P is lower than ideal',att?1:0,'Compare part b with part a: is the real pressure lower or higher?','M18'],['Molecular volume (b): real P is higher than ideal',att?0:1,'Compare part b with part a: is the real pressure lower or higher?','M18']]},
+      {k:'d', p:'d. So, filled to a set pressure, this cylinder holds:', o:[['More gas than PV = nRT predicts',att?1:0,att?'':'With volume winning, each mole pushes harder than ideal, so fewer moles fit.','M18'],['Less gas than PV = nRT predicts',att?0:1,att?'Attractions lower the pressure of each mole, so more moles fit before the set pressure is reached.':'','M18']]},
+      {k:'e', p:'e. Which kinetic-theory postulates fail inside this cylinder?', o:shuffle([['Negligible molecular volume, and no forces between molecules',1],['Molecules are in constant random motion',0,'They still move randomly at high pressure.','K4'],['Average kinetic energy ∝ T',0,'That still holds. At high pressure the molecules are crowded together.','K4']])}
+    ]; }); }
+  $('#chk5').addEventListener('click',()=>{
+    const lines=[]; let miss=0, g=GAS[R.gas];
+    const a=readNum('p5a'), b=readNum('p5b');
+    const bad={p5a:false,p5b:false};
+    if(a==null) miss++; else if(!close(a,X.pid(),.01)){ bad.p5a=true;
+      lines.push(close(a,R.n5*RG*R.t5/R.V5,.02)?mixLine('M5','Use kelvin: '+R.t5+' + 273.',5):mixLine('M16','P = nRT ÷ V = '+R.n5+' × 0.0821 × T ÷ '+R.V5.toFixed(1)+'.',5)); }
+    if(b==null) miss++; else if(!close(b,X.pvw(),.015)){ bad.p5b=true;
+      const T=R.t5+273, noA=R.n5*RG*T/(R.V5-R.n5*g.b), plusA=noA+g.a*R.n5*R.n5/(R.V5*R.V5), noB=R.n5*RG*T/R.V5-g.a*R.n5*R.n5/(R.V5*R.V5);
+      if(close(b,noA,.01)) lines.push(mixLine('M17','You left out the attraction term: subtract an²/V².',5));
+      else if(close(b,plusA,.01)) lines.push(mixLine('M17','Subtract an²/V²; don’t add it.',5));
+      else if(close(b,noB,.01)) lines.push(mixLine('M17','Use the free volume V − nb in the first term.',5));
+      else lines.push(mixLine('M17','Work out nb and an²/V² first, then P = nRT ÷ (V − nb) − an²/V².',5)); }
+    Object.keys(bad).forEach(id=>markNum(id,bad[id]));
+    miss+=judgeChips(q5Def(),R.ans[5],5,lines);
+    if(lines.length) return msg(5,'bad',lines.join(''));
+    if(miss) return msg(5,'near','Answer every part first (parts a and b are on the '+(innerWidth>=900?'left':'previous screen')+').');
+    const att=X.pvw()<X.pid();
+    msg(5,'good','<b>Round complete.</b> Ideal '+X.pid().toFixed(1)+' atm, real '+X.pvw().toFixed(1)+' atm: '+(att?'attractions win, so a full O₂ cylinder holds more gas than PV = nRT predicts.':'helium barely attracts, so its molecular volume wins and it holds slightly less than predicted.')); solve(5);
+  });
+
+  function solve(k){
+    solved[k-1]=true; track('lab-step'+k+'-solved',{scenario:R.S.id});
+    if(k===STEPS){ roundComplete(); $('#endrow').hidden=false; }
+    updatePager(); fitPage();
+  }
+  function roundComplete(){
+    rounds++; $('#rounds').textContent=rounds; done.add(R.S.id);
+    const c=$('#scen-chips').children[sc]; if(c && !c.querySelector('.tick')) c.insertAdjacentHTML('beforeend','<span class="tick">✓</span>');
+    track('lab-round-complete',{scenario:R.S.id});
+    try{ localStorage.setItem('kompas.gases.gas-lab.done', String(Date.now())); }catch(_){}
+    try{ if(window.parent!==window){ const o=location.origin; window.parent.postMessage({type:'gas-lab', event:'round-complete', reaction:R.S.id}, (o&&o!=='null')?o:'*'); } }catch(_){}
+  }
+  $('#btn-new').addEventListener('click',()=>{ newRound(); goPage(firstPageOfStep(1)); });
+  $('#btn-next').addEventListener('click',()=>{ sc=(sc+1)%SCEN.length; track('lab-pick',{scenario:SCEN[sc].id}); newRound(); goPage(0); });
+  $('#btn-pt').addEventListener('click',()=>{ if(window.KompasPT) KompasPT.open(); });
+  $('#btn-kompas').addEventListener('click',e=>{ if(history.length>1 && document.referrer && document.referrer.indexOf(location.host)>-1){ e.preventDefault(); location.assign(e.currentTarget.href); } });
+
+  /* ---------- STORY ---------- */
+  function person(who,x,y,s,mirror){
+    const skin=who==='aina'?'#e3b48c':'#a9714b';
+    let g='<g class="who-'+who+'" transform="translate('+x+' '+y+') scale('+(mirror?-s:s)+' '+s+')"><g class="bob">';
+    g+='<path d="M-22 0 Q-23 -33 0 -35 Q23 -33 22 0 Z" fill="#fff" stroke="#b9c2bc" stroke-width="1.5"/>';
+    g+='<path d="M-8 -34 L0 -21 L8 -34" fill="none" stroke="#2d6a4f" stroke-width="2.4" stroke-linejoin="round"/>';
+    g+='<rect x="7" y="-25" width="8" height="5" rx="1" fill="#2d6a4f"/>';
+    if(who==='aina'){
+      g+='<path d="M-15 -47 Q-16 -68 0 -68 Q16 -68 15 -47 Q15 -33 0 -31 Q-15 -33 -15 -47 Z" fill="#3f7d63"/>';
+      g+='<ellipse cx="0" cy="-49" rx="10" ry="11.5" fill="'+skin+'"/>';
+    } else {
+      g+='<rect x="-4" y="-40" width="8" height="6" fill="'+skin+'"/>';
+      g+='<circle cx="0" cy="-51" r="12.5" fill="'+skin+'"/>';
+      g+='<path d="M-12.5 -54 Q-12 -66 0 -66 Q12 -66 12.5 -54 Q8 -60 0 -60 Q-7 -60 -12.5 -54 Z" fill="#26201c"/>';
+      g+='<g fill="none" stroke="#26201c" stroke-width="1.3"><circle cx="-4.6" cy="-51" r="3.4"/><circle cx="4.6" cy="-51" r="3.4"/><path d="M-1.2 -51 H1.2"/></g>';
+    }
+    g+='<g class="blink"><circle cx="-4.4" cy="-51" r="1.4" fill="#1c2620"/><circle cx="4.4" cy="-51" r="1.4" fill="#1c2620"/></g>';
+    g+='<path d="M-3.5 -45.5 Q0 -42.5 3.5 -45.5" fill="none" stroke="#1c2620" stroke-width="1.3" stroke-linecap="round"/>';
+    return g+'</g></g>';
+  }
+  const cyl=(x,y,l)=>'<g transform="translate('+x+' '+y+')"><rect x="-14" y="-62" width="28" height="62" rx="10" fill="#e9ecea" stroke="#5c665f" stroke-width="1.4"/><path d="M-14 -52 Q-14 -62 0 -62 Q14 -62 14 -52 Z" fill="#fff" stroke="#5c665f" stroke-width="1.4"/><rect x="-4" y="-70" width="8" height="8" rx="1.5" fill="#9aa39d"/><text x="0" y="-24" text-anchor="middle" font-size="9" font-weight="800" fill="#1c2620">'+l+'</text></g>';
+  const can=(x,y)=>'<g transform="translate('+x+' '+y+')"><rect x="-12" y="-50" width="24" height="50" rx="5" fill="#fff" stroke="#5c665f" stroke-width="1.4"/><rect x="-5" y="-58" width="10" height="8" rx="2" fill="#9aa39d"/><text x="0" y="-22" text-anchor="middle" font-size="7" font-weight="700" fill="#1f3a8a">saline</text></g>';
+  const sun='<g transform="translate(250 36)" class="spin"><circle r="11" fill="#f2b33d"/>'+[0,45,90,135,180,225,270,315].map(a=>'<line x1="0" y1="-15" x2="0" y2="-20" stroke="#f2b33d" stroke-width="3" stroke-linecap="round" transform="rotate('+a+')"/>').join('')+'</g>';
+  const amb='<g transform="translate(200 84)"><rect x="0" y="0" width="80" height="36" rx="6" fill="#fff" stroke="#c0392b" stroke-width="1.6"/><rect x="58" y="6" width="18" height="14" rx="2" fill="#d9ecf7"/><path d="M24 8 v20 M14 18 h20" stroke="#c0392b" stroke-width="5"/><circle cx="18" cy="38" r="6" fill="#1c2620"/><circle cx="64" cy="38" r="6" fill="#1c2620"/></g>';
+  const STORY={
+    routine:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'Busy ward day. Five gas questions from the wards and the store. Can you answer each one at the bench?',
+      know:'Each answer is right, with a reason a nurse or patient could follow.',
+      scene:()=>cyl(190,128,'O₂')+can(232,128)+cyl(272,128,'He')},
+    heat:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'A heatwave: 38 °C outside, and cars much hotter. Patients are asking about sprays and cylinders left in cars.',
+      know:'You show what heat does to a closed container, and give safe advice.',
+      scene:()=>sun+can(210,128)+cyl(250,128,'O₂')},
+    trainee:{who:'aina', name:'Aina', role:'trainee pharmacist',
+      problem:'I did the gas sums last night. Can you check them with me? I think something is off with my temperatures and my peroxide.',
+      know:'You find Aina’s mistakes and explain how to fix them.',
+      scene:()=>'<g transform="translate(230 110)"><rect x="-44" y="-58" width="88" height="66" rx="5" fill="#fffef8" stroke="#b9b29c"/><path d="M-34 -42 h52 M-34 -30 h60 M-34 -18 h40" stroke="#1f3a8a" stroke-width="1.3"/><text x="30" y="-4" font-size="14" font-weight="800" fill="#c0392b" class="pulse">?</text></g>'},
+    transfer:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'A patient is moving to another hospital by ambulance. The team wants to know: is the oxygen enough, and what about the helium cylinder?',
+      know:'The patient never runs out of oxygen on the way.',
+      scene:()=>amb+cyl(180,128,'O₂')}
+  };
+  const SCENE_W=320, SCENE_H=150;
+  function sceneFor(beat){
+    const st=STORY[R.S.id], who=st.who;
+    let s='<svg viewBox="0 0 '+SCENE_W+' '+SCENE_H+'" role="img" aria-label="'+(['The problem','The method','Your goal'][beat])+'"><rect width="320" height="150" rx="10" fill="#f4f7f5"/>';
+    if(beat===0) s+=st.scene()+person(who,72,140,1.45);
+    if(beat===1){
+      s+='<g transform="translate(170 20)"><rect width="130" height="110" rx="8" fill="#fff" stroke="#cfe6d9" stroke-width="2"/><text x="65" y="32" text-anchor="middle" font-size="15" font-weight="800" fill="#2d6a4f">PV = nRT</text><text x="65" y="54" text-anchor="middle" font-size="9.5" fill="#636b65">R = 0.0821 L·atm/(K·mol)</text><text x="65" y="76" text-anchor="middle" font-size="9.5" fill="#636b65">T (K) = t (°C) + 273</text><text x="65" y="96" text-anchor="middle" font-size="9.5" fill="#636b65">1 atm = 760 mmHg</text></g>';
+      s+=person(who==='aina'?'ravi':'aina',70,140,1.45);
+    }
+    if(beat===2){
+      s+=person('aina',58,140,1.35)+person('ravi',118,140,1.35,true);
+      s+='<g transform="translate(170 10)"><rect width="140" height="130" rx="8" fill="#fff" stroke="#cfe6d9" stroke-width="2"/>';
+      STEP_NAMES.slice(1).forEach((t,i)=>{ s+='<circle cx="16" cy="'+(18+i*24)+'" r="8" fill="#2d6a4f"/><text x="16" y="'+(21.5+i*24)+'" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">'+(i+1)+'</text><text x="30" y="'+(21.5+i*24)+'" font-size="10" font-weight="700" fill="#1c2620">'+t+'</text>'; });
+      s+='</g>';
+    }
+    return s+'</svg>';
+  }
+  const BEAT_TITLE=['1 · The problem','2 · The method','3 · Your goal'];
+  function renderStory(){
+    const st=STORY[R.S.id], b=R.beat||0, box=$('#story');
+    let text='';
+    if(b===0) text='<p class="say"><b>'+st.name+'</b> <span class="small">('+st.role+')</span><br>'+st.problem+'</p>';
+    if(b===1) text='<p class="say">Five stations: an oxygen cylinder, a spray can in a hot car, an unknown propellant, a hydrogen peroxide bottle and a real high-pressure cylinder. Each uses one gas law. Use '+term('kel','kelvin')+' and true pressures.</p>';
+    if(b===2) text='<p class="say"><b>Objective:</b> a safe, correct answer at every station.<br><b>You succeed when:</b> '+st.know+'</p>';
+    box.innerHTML='<div class="story-head"><span class="eyebrow" style="margin:0">'+BEAT_TITLE[b]+'</span><span class="dots">'+[0,1,2].map(i=>'<i class="'+(i<=b?'on':'')+'"></i>').join('')+'</span></div>'+
+      '<button type="button" class="scene" id="scene" aria-label="Next part of the story">'+sceneFor(b)+'</button>'+text+
+      '<div class="story-nav">'+(b>0?'<button type="button" class="btn ghost" id="story-back">‹ Back</button>':'<span></span>')+
+      (b<2?'<button type="button" class="btn solid" id="story-next">Tap to continue ›</button>':'<span class="small">Ready? Press <b>Continue</b> below.</span>')+'</div>';
+    const nx=$('#story-next'); if(nx) nx.addEventListener('click',storyNext);
+    $('#scene').addEventListener('click',storyNext);
+    const bk=$('#story-back'); if(bk) bk.addEventListener('click',()=>{ R.beat=Math.max(0,b-1); renderStory(); });
+    if(b===2 && !R.storyDone){ R.storyDone=true; track('lab-story-done',{scenario:R.S.id}); }
+    updatePager(); fitPage();
+  }
+  function storyNext(){ if((R.beat||0)<2){ R.beat=(R.beat||0)+1; track('lab-story-beat',{scenario:R.S.id, beat:R.beat}); renderStory(); } }
+
+  /* ---------- hints ---------- */
+  const hints=$('#hints');
+  $('#hints-btn').addEventListener('click',()=>{ hints.classList.add('open'); $('#hints-close').focus(); track('lab-hints',{page:page}); });
+  $('#hints-close').addEventListener('click',()=>{ hints.classList.remove('open'); $('#hints-btn').focus(); });
+  hints.addEventListener('click',e=>{ if(e.target===hints) hints.classList.remove('open'); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') hints.classList.remove('open'); });
+
+  /* ---------- pager: one screen at a time ----------
+     Narrow screens show one pane per page; wide screens show both panes of a step side by side. */
+  const SCR=[...document.querySelectorAll('.scr')];
+  let pages=[], page=0, wide=null;
+  function isWide(){ return innerWidth>=900 && innerHeight>=560; }
+  function buildPages(){
+    const w=isWide(); if(w===wide && pages.length) return; wide=w;
+    const cur=pages.length?pages[page][0]:SCR[0];
+    pages=[];
+    SCR.forEach(s=>{ const last=pages[pages.length-1];
+      if(w && last && s.dataset.pane==='b' && last[0].dataset.step===s.dataset.step) last.push(s); else pages.push([s]); });
+    page=Math.max(0,pages.findIndex(p=>p.includes(cur)));
+  }
+  const stepOf=p=>+pages[p][0].dataset.step;
+  const firstPageOfStep=k=>pages.findIndex(p=>+p[0].dataset.step===k);
+  function lastPaneOfStep(p){ const k=stepOf(p); return p+1>=pages.length || stepOf(p+1)!==k; }
+  function canLeave(p){ const k=stepOf(p); if(k===0) return !!(R&&R.storyDone); if(!lastPaneOfStep(p)) return true; return solved[k-1]; }
+  function goPage(n){
+    page=Math.max(0,Math.min(pages.length-1,n));
+    SCR.forEach(s=>{ s.classList.remove('on','half-l','half-r','single','scrolly'); s.style.setProperty('--k',1); });
+    $('#stage').classList.toggle('roomy', innerWidth>=640);
+    const P=pages[page]; P.forEach((s,i)=>{ s.classList.add('on'); if(P.length===2) s.classList.add(i?'half-r':'half-l'); else s.classList.add('single'); });
+    updatePager(); fitPage();
+    if(stepOf(page)===1 && R && !briefed.has(R.S.id)) openBrief();
+    track('lab-page',{page:STEP_NAMES[stepOf(page)]+(P.length===1&&P[0].dataset.pane?' '+P[0].dataset.pane:'')});
+  }
+  function updatePager(){
+    if(!pages.length) return;
+    const k=stepOf(page), P=pages[page], same=pages.filter(p=>stepOf(pages.indexOf(p))===k);
+    const part=(P.length===1 && same.length>1)?' ('+(same.indexOf(P)+1)+'/'+same.length+')':'';
+    $('#bar-lbl').innerHTML=(k?'<span>Station '+k+' of '+STEPS+'</span>':'')+STEP_NAMES[k]+part;
+    $('#fill').style.width=(page/(pages.length-1)*100)+'%';
+    $('#back').disabled=page===0;
+    const last=page===pages.length-1, ok=canLeave(page), nx=$('#next');
+    nx.textContent=last?(solved[STEPS-1]?'New round ↺':'Continue →'):'Continue →';
+    nx.disabled=!ok || (last && !solved[STEPS-1]);
+    nx.classList.toggle('ready', ok && k>0 && lastPaneOfStep(page) && solved[k-1]);
+    guide();
+  }
+  $('#back').addEventListener('click',()=>goPage(page-1));
+  $('#next').addEventListener('click',()=>{ if(page===pages.length-1){ if(solved[STEPS-1]){ newRound(); goPage(firstPageOfStep(1)); } return; } if(canLeave(page)) goPage(page+1); });
+
+  /* fit: shrink the text slightly if a page is too tall; scroll only as a last resort (logged) */
+  function fitPage(){
+    if(!pages.length) return;
+    pages[page].forEach(s=>{
+      s.classList.remove('scrolly'); let k=1; s.style.setProperty('--k',k);
+      const over=()=>s.scrollHeight>s.clientHeight+1;
+      let g=0; while(over() && k>0.8 && g++<10){ k=+(k-0.04).toFixed(2); s.style.setProperty('--k',k); }
+      if(over()){ s.classList.add('scrolly'); track('lab-overflow',{page:s.dataset.title, w:innerWidth, h:innerHeight}); }
+      s.dataset.k=k;
+    });
+    guide();
+  }
+  function setAppH(){ document.documentElement.style.setProperty('--app-h', innerHeight+'px'); }
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ setAppH(); buildPages(); goPage(page); },120); });
+
+  /* ---------- step guide: the footer names the next move and the matching control glows ----------
+     It only ever points at the next empty input or button, never at the right answer. */
+  const briefed=new Set(); let glowEl=null;
+  const empty=id=>{ const e=$('#'+id); return !e || !e.value.trim(); };
+  const checkMove=n=>({t:$('#m'+n).classList.contains('bad')?'Fix what the feedback says, then press Check again':'Press Check', e:$('#chk'+n)});
+  const storyMove=()=>R.storyDone?{t:'Press Continue to start the lab',e:$('#next')}:{t:'Tap the picture to read the story',e:$('#story-next')};
+  const doneMove=k=>k<STEPS?{t:'Station done. Press Continue',e:$('#next')}:{t:'Round complete. Try new values or the next scenario',e:$('#endrow')};
+  function guide(){
+    if(!pages.length || !R) return;
+    const g=nextMove(); let t=g.t||'', e=g.e||null;
+    if(e){ const s=e.closest('.scr'); if(s && !pages[page].includes(s)){ const j=pages.findIndex(p=>p.includes(s));
+      if(j>page){ t='Next screen: '+t; e=$('#next'); } else { t='Back a screen: '+t; e=$('#back'); } } }
+    const gate=$('#gate'); gate.textContent=t; gate.classList.toggle('go',!!t);
+    if(glowEl!==e){ if(glowEl) glowEl.classList.remove('guide'); glowEl=e; if(e) e.classList.add('guide'); }
+    const sb=$('#stp-btn'), sl=g.s?'Card §'+g.s:'Card';
+    if(sb.textContent!==sl){ sb.textContent=sl; sb.classList.toggle('sec',!!g.s); sb.dataset.s=g.s||''; }
+  }
+  function openBrief(){ briefed.add(R.S.id); $('#brief-body').innerHTML=briefHTML(); $('#brief').classList.add('open'); $('#brief-go').focus(); }
+  function closeBrief(){ $('#brief').classList.remove('open'); guide(); }
+  $('#brief-go').addEventListener('click',closeBrief);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#brief').classList.contains('open')) closeBrief(); });
+  document.addEventListener('click',()=>setTimeout(guide,0));
+  document.addEventListener('input',()=>guide());
+
+  const NUMS={1:[['p1a','a. Work out the true pressure'],['p1b','b. Use Boyle’s law for the total gas'],['p1c','c. Work out the usable gas'],['p1d','d. Work out the minutes']],
+    2:[['p2a','a. Change the start temperature to kelvin'],['p2b','b. Change the car temperature to kelvin'],['p2c','c. Work out the new pressure']],
+    3:[['p3a','a. Change mmHg to atm'],['p3b','b. Work out the moles'],['p3c','c. Work out the molar mass']],
+    4:[['p4a','a. Work out the O₂ pressure'],['p4b','b. Work out mmol of O₂'],['p4c','c. Work out mmol of H₂O₂'],['p4d','d. Work out the % w/v']],
+    5:[['p5a','a. Work out the ideal pressure'],['p5b','b. Work out the van der Waals pressure']]};
+  const DEFS={1:q1Def,2:q2Def,3:q3Def,4:q4Def,5:q5Def};
+  function nextMove(){
+    const k=stepOf(page);
+    if(k===0) return storyMove();
+    if(solved[k-1]) return doneMove(k);
+    for(const [id,t] of NUMS[k]) if(empty(id)) return {t:t,e:$('#'+id),s:k};
+    const D=DEFS[k](), groups=$('#q'+k+'b').querySelectorAll('.chips');
+    for(let i=0;i<D.length;i++) if(R.ans[k][D[i].k]==null) return {t:D[i].k+'. Choose an answer',e:groups[i],s:k};
+    return Object.assign(checkMove(k),{s:k});
+  }
+  function briefHTML(){
+    return (R.heat?'<p class="small" style="margin:0">A heatwave: watch the temperatures.</p>':R.tr?'<p class="small" style="margin:0">Aina is checking her working with you. Find her mistakes.</p>':R.tx?'<p class="small" style="margin:0">A patient transfer: the oxygen must last the trip.</p>':'')+'<ol class="sop">'+
+      '<li><b>Cylinder.</b> Boyle’s law: how long will the oxygen last?</li>'+
+      '<li><b>Hot can.</b> Pressure and temperature in a closed can.</li>'+
+      '<li><b>Propellant.</b> PV = nRT and molar mass: name the gas.</li>'+
+      '<li><b>Peroxide.</b> Gas collected over water: is the solution in specification?</li>'+
+      '<li><b>Real gas.</b> Ideal vs van der Waals: what do the corrections mean?</li></ol>';
+  }
+  /* ---------- Bench card: opens at the section the current move needs ---------- */
+  function openSTP(s){
+    const d=$('#stp'); d.classList.add('open');
+    d.querySelectorAll('.stp-sec.hit').forEach(x=>x.classList.remove('hit'));
+    const sec=s?$('#stp-'+s):null;
+    if(sec){ sec.scrollIntoView({block:'start'}); sec.classList.add('hit'); } else d.querySelector('.box').scrollTop=0;
+    $('#stp-close').focus({preventScroll:true}); track('lab-card',{s:s||''});
+  }
+  function closeSTP(){ $('#stp').classList.remove('open'); $('#stp-btn').focus({preventScroll:true}); }
+  $('#stp-btn').addEventListener('click',()=>openSTP($('#stp-btn').dataset.s));
+  $('#stp-close').addEventListener('click',closeSTP);
+  $('#stp').addEventListener('click',e=>{ if(e.target.id==='stp') closeSTP(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#stp').classList.contains('open')) closeSTP(); });
+  $('#brief-stp').addEventListener('click',()=>{ closeBrief(); openSTP(''); });
+
+  /* test hook: lets the automated checks read the round (no effect for students) */
+  window.__lab={get R(){ return R; }, X:X, defs:DEFS};
+
+  setAppH(); buildPages(); newRound(); goPage(0);
+})();
+</script>
+</body>
+</html>

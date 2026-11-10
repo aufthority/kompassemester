@@ -1,0 +1,1866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Gases, Explained — Aufthority</title>
+<script defer src="https://cloud.umami.is/script.js"
+  data-website-id="f79c60f1-f9e7-4170-a979-f357ba756a18"></script>
+<meta name="description" content="The gas laws, the ideal gas equation, kinetic molecular theory and real gases for pharmacy students, with a five-station virtual gas lab built on hospital pharmacy cases.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="article">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="Gases, Explained">
+<meta property="og:description"  content="Will the oxygen last the trip? The gas laws, PV = nRT, kinetic theory and real gases for pharmacy students.">
+<meta property="og:url"          content="https://kompassemester.aufthority.com/labs/gases/">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale"       content="en_MY">
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:site"        content="@theaufthority">
+<meta name="twitter:title"       content="Gases, Explained">
+<meta name="twitter:description" content="The gas laws, PV = nRT, kinetic theory and real gases for pharmacy students.">
+<meta name="twitter:image"       content="https://www.aufthority.com/preview_v2.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<script src="../shared/periodic-table.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#6f7771;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#9a6a1c;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;--k:1;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;overflow:hidden;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+b,strong{color:var(--ink);font-weight:700}
+
+#shell{height:100vh;height:var(--app-h,100dvh);max-width:1120px;margin:0 auto;padding:0 16px;display:flex;flex-direction:column}
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 8px}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-kompas{text-decoration:none;color:var(--accent-dark);border-color:var(--g-line);background:var(--g-bg)}
+@media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
+.icon-btn{background:#fff;border:1px solid var(--rule);color:var(--body);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;cursor:pointer}
+#progress-label{font-size:.78rem;color:var(--muted);min-width:44px;text-align:right}
+#progress-track{flex:0 0 3px;background:var(--rule);border-radius:3px}
+#progress-fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.slide{position:absolute;inset:0;display:none;overflow:hidden;font-size:calc(var(--k) * 16px)}
+.slide.active{display:block}
+.si{height:100%;display:flex;flex-direction:column;justify-content:center;gap:.7em;padding:.8em 0 .4em;max-width:720px;margin:0 auto}
+.si.has-ill{max-width:none}
+.ill{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;align-items:stretch;min-height:0}
+.ill svg{width:100%;height:calc(var(--k) * 29vh);height:calc(var(--k) * 29dvh);display:block}
+.ill figcaption{font-size:.72em;color:var(--muted);text-align:center;margin-top:.25em}
+.txt{flex:0 0 auto;min-width:0}
+@media (min-width:760px) and (orientation:landscape){
+  .slide{font-size:calc(var(--k) * 17px)}
+  .si.has-ill{flex-direction:row;align-items:center;gap:2.4em;padding:1em 0}
+  .si.has-ill .ill{flex:0 0 46%}
+  .si.has-ill .ill svg{height:auto;max-height:calc(var(--k) * 64vh);max-height:calc(var(--k) * 64dvh)}
+  .si.has-ill .txt{flex:1 1 auto}
+}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.45em}
+h1,h2{color:var(--ink);font-weight:800;line-height:1.08;letter-spacing:-.025em;margin-bottom:.45em}
+h1{font-size:2.05em}
+h2{font-size:1.65em}
+@media (min-width:760px){h1{font-size:2.4em}h2{font-size:1.9em}}
+h1 .ac,h2 .ac{color:var(--accent)}
+p{margin-bottom:.6em;font-size:.97em}
+.small{font-size:.82em;color:var(--muted)}
+.cite{font-size:.78em;color:var(--muted);white-space:nowrap}
+.cite a{color:var(--muted)}
+.callout{border-left:3px solid var(--accent);background:var(--g-bg);padding:.5em .85em;margin:.55em 0;font-size:.92em;border-radius:0 8px 8px 0}
+.callout.warn{border-color:var(--red);background:var(--r-bg)}
+.callout.note{border-color:var(--orange);background:var(--o-bg)}
+.pill-list{display:flex;flex-wrap:wrap;gap:.4em;margin:.55em 0}
+.pill{background:var(--g-bg);color:var(--accent-dark);padding:.3em .8em;font-size:.82em;font-weight:500;border-radius:100px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:.5em;margin:.55em 0}
+.tile{border:1px solid var(--rule);border-radius:var(--radius);padding:.55em .75em}
+.tile .n{font-size:1.3em;font-weight:800;color:var(--accent);line-height:1.15;letter-spacing:-.02em;margin-bottom:.15em}
+.tile .l{font-size:.84em;color:var(--body)}
+.steps{list-style:none;margin:.55em 0;display:flex;flex-direction:column;gap:.45em}
+.steps li{display:flex;gap:.65em;align-items:flex-start;font-size:.92em}
+.steps .n{flex:0 0 1.65em;height:1.65em;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82em;margin-top:.05em}
+.data-table{width:100%;border-collapse:collapse;font-size:.84em;margin:.45em 0}
+.data-table th,.data-table td{border-bottom:1px solid var(--rule);padding:.4em .55em;text-align:left;vertical-align:top}
+.data-table th{font-weight:700;color:var(--muted);font-size:.8em;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid var(--rule)}
+.data-table td:first-child{color:var(--ink);font-weight:500}
+.data-table tr.hl td{background:var(--g-bg)}
+.map3{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.55em 0}
+.box{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .75em;font-size:.86em}
+.box h3{font-size:1.1em;font-weight:800;color:var(--accent);margin-bottom:.15em}
+.box .q{font-size:.9em;color:var(--muted);margin-bottom:.3em}
+.box ul{padding-left:1.1em}
+
+/* HTML diagrams */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.4em;margin:.6em 0}
+.node{border:1.5px solid var(--ink);border-radius:8px;padding:.35em .65em;font-size:.84em;font-weight:500;color:var(--ink);background:#fff;text-align:center}
+.node small{display:block;font-weight:400;color:var(--muted);font-size:.85em}
+.node.g{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.node.o{border-color:var(--orange);background:var(--o-bg)}
+.node.r{border-color:var(--red);background:var(--r-bg)}
+.node.ghost{border-style:dashed;color:var(--muted)}
+.arr{color:var(--orange);font-weight:800;font-size:1em}
+.node-group{display:flex;align-items:center;gap:.35em}
+.node-group .or{color:var(--muted);font-size:.84em}
+/* flows: one straight row when it fits, otherwise a snake (→ row, turn down, ← row, turn down …) */
+.flow.row{flex-wrap:nowrap}
+.flow.row > *{flex:0 0 auto}
+.flow.snake{display:grid;align-items:stretch;gap:0}
+.flow.snake .cell{display:flex;min-width:0}
+.flow.snake .cell > .node{flex:1;display:flex;flex-direction:column;justify-content:center}
+.flow.snake .cell > .node-group{flex:1}
+.flow.snake .cell > .node-group > .node{flex:1}
+.flow.snake .arr{align-self:center;text-align:center;line-height:1}
+.flow.snake .arr.down{padding:.2em 0}
+.lane{display:grid;grid-template-columns:8.5em 1fr;gap:.6em;align-items:center;padding:.45em 0;border-bottom:1px solid var(--rule)}
+.lane:last-of-type{border-bottom:none}
+.lane .lname{font-weight:800;color:var(--ink);font-size:.9em;line-height:1.2}
+.lane .lname small{display:block;font-weight:500;color:var(--muted);font-size:.8em}
+.lane .flow{margin:0}
+.stack{display:flex;flex-direction:column;gap:.4em;margin:.6em 0}
+.layer{display:grid;grid-template-columns:2.2em 1fr;gap:.6em;align-items:center;border:1px solid var(--g-line);background:var(--g-bg);border-radius:var(--radius);padding:.5em .7em;font-size:.88em}
+.layer .ln{width:2.2em;height:2.2em;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+.layer > div > b:first-child{display:block;margin-bottom:.1em}
+.htl{display:grid;grid-template-columns:repeat(4,1fr);gap:.6em;margin:.6em 0}
+.htl .ev{border-top:3px solid var(--accent);padding-top:.4em;font-size:.86em}
+.htl .yr{font-weight:800;color:var(--accent);font-size:1.25em;letter-spacing:-.02em;display:block}
+@media (max-width:520px){.htl{grid-template-columns:1fr 1fr}.map3{grid-template-columns:1fr}.lane{grid-template-columns:1fr;gap:.25em}}
+.eq{display:flex;align-items:center;justify-content:center;gap:.6em;flex-wrap:wrap;margin:.6em 0}
+.eq .term{text-align:center;font-size:.82em;color:var(--ink);font-weight:500}
+.eq .term svg{width:5.2em;height:auto;display:block;margin:0 auto .25em}
+.eq .op{font-size:1.6em;font-weight:800;color:var(--orange)}
+.forms{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.6em 0}
+.form{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .7em;font-size:.86em}
+.form svg{width:100%;height:3.4em;display:block;margin-bottom:.3em}
+.form h3{font-size:1.05em;font-weight:800;color:var(--ink);margin-bottom:.1em}
+@media (max-width:520px){.forms{grid-template-columns:1fr}.form{display:grid;grid-template-columns:4.5em 1fr;gap:.6em;align-items:center}.form svg{height:2.6em;margin:0}}
+
+/* interactions */
+.toggle-wrap{border:1px solid var(--rule);border-radius:var(--radius);margin:.45em 0;overflow:hidden}
+.toggle-btn{width:100%;background:#fff;border:none;color:var(--ink);font:600 .92em 'DM Sans',sans-serif;text-align:left;padding:.6em .85em;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:.6em}
+.toggle-btn .hint{font-weight:600;color:var(--accent);font-size:.8em;white-space:nowrap}
+.toggle-btn .hint::after{content:" +"}
+.toggle-wrap.open .toggle-btn .hint::after{content:" −"}
+.toggle-wrap.seen{border-color:var(--g-line)}
+.toggle-body{display:none;padding:0 .85em .7em;font-size:.9em}
+.toggle-wrap.open .toggle-body{display:block}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5em,1fr));gap:.45em;margin:.55em 0}
+.rcard{border:1px solid var(--rule);border-radius:var(--radius);background:#fff;text-align:left;padding:.55em .7em;cursor:pointer;font:400 .84em 'DM Sans',sans-serif;color:var(--body);display:block}
+.rcard .rt{font-weight:800;color:var(--ink);display:flex;justify-content:space-between;gap:.4em}
+.rcard .rt::after{content:"Tap";font-weight:600;font-size:.8em;color:var(--accent)}
+.rcard .rb{display:none;margin-top:.3em}
+.rcard.seen{border-color:var(--accent);background:var(--g-bg)}
+.rcard.seen .rt::after{content:""}
+.rcard.seen .rb{display:block}
+.rcard svg{width:100%;height:3.2em;display:block;margin:.2em 0}
+.choice-q{font-weight:700;color:var(--ink);font-size:.95em;margin-bottom:.45em}
+.choices{display:flex;flex-wrap:wrap;gap:.4em}
+.choice{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:500 .88em 'DM Sans',sans-serif;padding:.45em .85em;border-radius:100px;cursor:pointer}
+.choice:hover{border-color:var(--ink)}
+.choice.right{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.choice.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red);text-decoration:line-through}
+.feedback{display:none;font-size:.88em;margin-top:.5em;padding:.45em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.feedback.show{display:block}
+.stepper .choice-set{display:none}
+.stepper .choice-set.cur{display:block}
+.step-count{font-size:.75em;font-weight:700;color:var(--eyebrow);letter-spacing:.08em;margin-bottom:.3em}
+.next-q{margin-top:.55em;background:#fff;border:1.5px solid var(--ink);border-radius:100px;font:600 .84em 'DM Sans',sans-serif;padding:.38em .9em;cursor:pointer;display:none}
+.choice-set.done .next-q{display:inline-block}
+.calc{border:1px solid var(--rule);border-radius:var(--radius);padding:.65em .75em;margin:.55em 0}
+.calc-row{display:flex;gap:.6em;margin-bottom:.5em;flex-wrap:wrap}
+.calc label{font-size:.76em;font-weight:600;color:var(--muted);display:flex;flex-direction:column;gap:.2em;flex:1;min-width:8em}
+.calc input,.calc select{font:500 1.05em 'DM Sans',sans-serif;padding:.32em .45em;border:1px solid var(--rule);border-radius:6px;background:#fff;color:var(--ink);width:100%}
+.calc-out{font-size:.9em;padding:.45em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.calc-out.fail{border-color:var(--red);background:var(--r-bg)}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:600 .84em 'DM Sans',sans-serif;padding:.4em .95em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.range{width:100%;accent-color:var(--accent);margin:.4em 0}
+.scale-lbl{display:flex;justify-content:space-between;font-size:.74em;color:var(--muted);font-weight:600}
+.coa{display:flex;flex-direction:column;gap:.3em;margin:.45em 0}
+.coa-row{display:grid;grid-template-columns:1fr 1.3fr 4.8em;gap:.5em;align-items:center;background:#fff;border:1px solid var(--rule);border-radius:8px;color:var(--ink);font:400 .82em 'DM Sans',sans-serif;text-align:left;padding:.42em .65em;cursor:pointer}
+.coa-row b{font-weight:700}
+.coa-row .v{text-align:right;font-weight:700;color:var(--muted)}
+.coa-row.pass{border-color:var(--accent)}.coa-row.pass .v{color:var(--accent)}
+.coa-row.fail{border-color:var(--red);background:var(--r-bg)}.coa-row.fail .v{color:var(--red)}
+.coa-row.next{border-color:var(--orange);background:var(--o-bg)}.coa-row.next .v{color:var(--orange)}
+#coa-exp{min-height:2.7em;font-size:.86em;border-left:3px solid var(--rule);padding:.35em .65em}
+.coa-decision{display:none;margin-top:.5em}
+.coa-decision.show{display:block}
+.cards{display:flex;flex-direction:column;gap:.4em;margin:.55em 0}
+.card{display:flex;gap:.75em;border:1px solid var(--rule);border-radius:var(--radius);padding:.5em .75em;font-size:.88em}
+.card .cn{font-size:1.35em;font-weight:800;color:var(--accent);line-height:1}
+.madeby{border-top:1px solid var(--rule);padding-top:.6em;margin-top:.3em}
+.madeby p{font-size:.82em;color:var(--muted);margin-bottom:.45em}
+.madeby p b,.madeby p b a{color:var(--ink)}
+.socials{display:flex;flex-wrap:wrap;gap:.35em}
+.socials a{font-size:.8em;font-weight:600;color:var(--accent-dark);background:var(--g-bg);padding:.28em .75em;border-radius:100px;text-decoration:none}
+.socials a:hover{background:var(--g-line)}
+.score{font-size:1.25em;font-weight:800;color:var(--accent);margin-top:.5em}
+.pulse{animation:pulse 1s ease 2}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,130,31,0)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.45)}}
+
+#bottom{flex:0 0 auto;padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+#gate-hint{font-size:.78rem;color:var(--muted);text-align:center;min-height:1.2em;margin-bottom:5px}
+#gate-hint.alert{color:var(--orange);font-weight:600}
+#gate-hint button{background:none;border:none;color:var(--accent);text-decoration:underline;font:inherit;font-weight:600;cursor:pointer;padding:0}
+#nav-wrap{display:flex;justify-content:space-between;gap:10px}
+.nav-btn{flex:1;max-width:200px;background:#fff;border:1.5px solid var(--ink);color:var(--ink);font:700 .92rem 'DM Sans',sans-serif;padding:10px 14px;border-radius:100px;cursor:pointer}
+#btn-next{background:var(--ink);color:#fff;margin-left:auto}
+#btn-next.locked{background:#fff;color:var(--muted);border-color:var(--rule)}
+.nav-btn:disabled{opacity:.3;cursor:default}
+footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
+
+.overlay{display:none;position:fixed;inset:0;z-index:50;background:rgba(20,30,25,.35);padding:16px;overflow-y:auto}
+.overlay.open{display:block}
+.panel{max-width:620px;margin:16px auto;background:#fff;border-radius:14px;padding:18px 20px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.vid-row{margin:.55em 0 .2em}
+.vid-btn{display:inline-flex;align-items:center;gap:.45em}
+.vid-btn span{font-size:.8em}
+#video-overlay .panel{max-width:880px}
+.vid-frame{position:relative;width:100%;aspect-ratio:16/9;background:#111;border-radius:10px;overflow:hidden}
+.vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vid-note{margin:.6em 0 0;font-size:.85em;color:var(--muted,#5b6660)}
+.panel-head h3{font-weight:800;color:var(--ink);font-size:1.3rem;letter-spacing:-.02em}
+.toc-note{font-size:.82rem;color:var(--muted);margin-bottom:8px}
+.toc{list-style:none}
+.toc li{border-bottom:1px solid var(--rule)}
+.toc button{background:none;border:none;color:var(--ink);font:400 .9rem 'DM Sans',sans-serif;padding:7px 0;width:100%;text-align:left;cursor:pointer;display:flex;gap:10px}
+.toc button span{color:var(--muted);min-width:22px}
+.toc button.cur{color:var(--accent);font-weight:700}
+.toc .sec{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;padding:12px 0 3px;border:none}
+.refs{padding-left:20px;font-size:.82rem;color:var(--body)}
+.refs li{margin-bottom:7px;word-break:break-word}
+
+/* ---------- SVG diagram + chart styling ---------- */
+.ln{fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ln.thin{stroke-width:1.2}
+.ln.g{stroke:var(--accent)}.ln.r{stroke:var(--red)}.ln.o{stroke:var(--orange)}.ln.b{stroke:var(--blue)}.ln.m{stroke:#a3aaa5}
+.dash{stroke-dasharray:4 4}
+.fg{fill:var(--g-bg)}.fgs{fill:var(--accent)}.fb{fill:var(--b-bg)}.fr{fill:var(--r-bg)}.frs{fill:var(--red)}.fo{fill:var(--o-bg)}.fos{fill:var(--orange)}.fw{fill:#fff}.fk{fill:var(--ink)}.fgr{fill:#eef0ee}.fpow{fill:#d9d4c7}
+.tx{font-family:'DM Sans',sans-serif;font-size:12px;fill:var(--body)}
+.tx.s{font-size:10.5px;fill:var(--muted)}
+.tx.b{font-weight:700;fill:var(--ink)}
+.tx.g{fill:var(--accent-dark);font-weight:700}.tx.r{fill:var(--red);font-weight:700}.tx.o{fill:#a85f10;font-weight:700}.tx.bl{fill:var(--blue);font-weight:700}
+.tx.mid{text-anchor:middle}.tx.end{text-anchor:end}
+.bar{fill:var(--accent)}.bar.hl{fill:var(--red)}
+.axis{stroke:#c9cdca;stroke-width:1;fill:none}
+.grid{stroke:#eceeec;stroke-width:1}
+
+/* animations run only on the active slide, restart on every visit */
+.slide.active .draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.1s ease-out forwards;animation-delay:var(--d,0s)}
+.slide.active .fade{opacity:0;animation:fadeup .5s ease-out forwards;animation-delay:var(--d,.3s)}
+.slide.active .stagger > *{opacity:0;animation:fadeup .45s ease-out forwards;animation-delay:var(--d,0s)}
+.slide.active .grow-x{transform-box:fill-box;transform-origin:left center;animation:growx .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
+.slide.active .grow-y{transform-box:fill-box;transform-origin:center bottom;animation:growy .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
+.slide.active .updown{animation:updown 2s ease-in-out infinite}
+.slide.active .spin{transform-box:view-box;animation:spin 6s linear infinite}
+.slide.active .spin-r{transform-box:view-box;animation:spin 6s linear infinite reverse}
+.slide.active .drop{animation:drop 2.4s ease-in infinite}
+.slide.active .bounce{animation:bounce 1.2s ease-in-out infinite}
+.slide.active .cyc{animation:cyc 6s infinite;animation-delay:var(--d,0s)}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeup{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes growx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes growy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes updown{0%,100%{transform:translateY(0)}50%{transform:translateY(22px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes drop{0%{transform:translateY(0);opacity:0}10%{opacity:1}80%{opacity:1}100%{transform:translateY(46px);opacity:0}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes cyc{0%,22%{opacity:1}26%,100%{opacity:.28}}
+
+/* last resort when a page cannot fit at a readable size: the page body scrolls,
+   the Back/Next bar stays pinned, and a fade hints at more below */
+.slide.scrolly{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.slide.scrolly .si{height:auto;min-height:100%;justify-content:flex-start}
+#stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;pointer-events:none;background:linear-gradient(rgba(255,255,255,0),#fff);opacity:0;transition:opacity .2s}
+#stage.more::after{opacity:1}
+.ph-step.scrolly{overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ph-step.scrolly .ph-in{height:auto;min-height:100%;justify-content:flex-start}
+@media (max-height:700px){footer{display:none}}
+@media (prefers-reduced-motion: reduce){
+  .slide.active *{animation:none!important;opacity:1!important;stroke-dashoffset:0!important;transform:none!important}
+}
+
+
+/* ---------- additions for this explainer ---------- */
+.pt-open{display:inline-flex;align-items:center;gap:.45em;background:#fff;border:1.5px solid var(--accent);color:var(--accent-dark);font:700 .84rem 'DM Sans',sans-serif;padding:.42em .95em;border-radius:100px;cursor:pointer;margin:.1em 0 .5em}
+.pt-open svg{width:1.05em;height:1.05em}
+.toggle-wrap.opt .toggle-btn .tag{font-size:.7em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--eyebrow);margin-right:.5em}
+.toggle-wrap.opt{border-style:dashed}
+.clo{display:inline-block;font-size:.72em;font-weight:700;color:var(--accent-dark);background:var(--g-bg);border-radius:100px;padding:.1em .55em;margin-left:.3em;vertical-align:.1em}
+.sim{border:1px solid var(--rule);border-radius:var(--radius);padding:.55em .75em;margin:.5em 0}
+.sim .range{margin:.2em 0}
+.sim-out{font-size:.88em;margin-top:.3em}
+.sim svg{width:100%;height:auto;display:block}
+.chips2{display:flex;flex-wrap:wrap;gap:.3em;margin:.3em 0}
+.chip2{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .8em 'DM Sans',sans-serif;padding:.3em .7em;border-radius:100px;cursor:pointer}
+.chip2.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.plates{display:flex;gap:.6em;justify-content:center;margin:.3em 0}
+.plates svg{width:7.5em;height:auto}
+.cmp td:first-child{white-space:nowrap}
+/* locked contents rows and certificate */
+.toc button.lockd{color:var(--muted);opacity:.45;cursor:default}
+.cert-img{display:block;width:100%;max-width:560px;height:auto;border:1px solid var(--rule);border-radius:8px;margin:.5em 0}
+.cert-dl{display:inline-block;text-decoration:none}
+/* animations */
+.anim{display:flex;flex-direction:column;gap:.3em;min-width:0}
+.a-tabs{display:flex;flex-wrap:wrap;gap:.3em;justify-content:center}
+.a-ui{display:flex;align-items:center;gap:.4em}
+.a-ui button{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .78em 'DM Sans',sans-serif;padding:.32em .85em;cursor:pointer;white-space:nowrap}
+.a-ui .a-play{background:var(--ink);color:#fff;min-width:7.2em}
+.a-bar{flex:1;height:4px;background:var(--rule);border-radius:4px;overflow:hidden}
+.a-fill{height:100%;width:0;background:var(--accent)}
+.anim-cap{font-size:.82em;min-height:4.1em;margin:0;line-height:1.4;color:var(--ink)}
+.ill .anim-svg{background:#fbfcfb;border-radius:12px}
+@media (max-height:700px){.anim-cap{min-height:3em}}
+/* embedded lab */
+.si.lab-si{justify-content:flex-start;gap:.35em;max-width:860px}
+.lab-head{flex:0 0 auto}
+.lab-head h2{margin-bottom:.15em}
+.lab-head p{margin-bottom:.2em}
+.lab-frame{flex:1 1 auto;min-height:300px;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#fff}
+.lab-frame iframe{width:100%;height:100%;border:0;display:block}
+.lab-launch{display:none;height:100%;flex-direction:column;align-items:center;justify-content:center;gap:.6em;padding:1em;text-align:center;font-size:.92em}
+.lab-frame.launch iframe{display:none}
+.lab-frame.launch .lab-launch{display:flex}
+.lab-launch a{background:var(--accent);color:#fff;text-decoration:none;font-weight:700;padding:.6em 1.3em;border-radius:100px}
+
+/* ---------- additions for the QC practice explainer ---------- */
+.feedback.miss{border-color:var(--orange);background:var(--o-bg)}
+.choice.wrong{cursor:default}
+.given-box{background:#f6f7f5;border-radius:8px;padding:.4em .7em;margin:.2em 0 .5em;line-height:1.55}
+.given-box b{white-space:nowrap}
+.forms2{grid-template-columns:repeat(2,1fr)}
+@media (max-width:520px){.forms2{grid-template-columns:1fr}.forms2 .form{display:block}}
+.sim .chips2{justify-content:center}
+.choice-set + .choice-set{margin-top:0}
+.lab-status{font-size:.82em;font-weight:700;color:#a85f10;margin:.15em 0 0}
+.lab-status.ok{color:var(--accent-dark)}
+.rgrid.ghs{grid-template-columns:repeat(auto-fit,minmax(8em,1fr))}
+.rgrid.ghs .rcard svg{height:3.4em}
+.layer .clo{margin-left:.2em}
+
+/* ---- gases additions ---- */
+.eq-box{text-align:center;font-weight:800;color:var(--ink);font-size:1.12em;background:#f6f7f5;border-radius:8px;padding:.35em .6em;margin:.45em 0}
+.eq-box.big{font-size:1.9em;color:var(--accent);letter-spacing:.02em}
+.eq-box .small{font-weight:400;font-size:.7em}
+.ticks{list-style:none;margin:.45em 0;display:flex;flex-direction:column;gap:.35em}
+.ticks li{position:relative;padding-left:1.15em;font-size:.92em}
+.ticks li::before{content:"";position:absolute;left:.15em;top:.52em;width:.45em;height:.45em;border-radius:50%;background:var(--accent)}
+.poll{border:1px dashed var(--g-line);background:#fbfdfc;border-radius:var(--radius);padding:.5em .7em;margin:.5em 0}
+.poll .calc-out{margin-top:.35em}
+.ill .chips2{justify-content:center}
+.ill .sim{margin:0}
+#pv-box{max-height:calc(var(--k) * 90px)}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ar-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#c0392b"/></marker>
+    <marker id="ar-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#d9821f"/></marker>
+    <pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#5a2a08" stroke-width="1.6" stroke-opacity=".6"/></pattern>
+  </defs>
+</svg>
+<script>
+/* Size the page to the visible screen. 100vh/100dvh are unreliable on many
+   Android and in-app browsers (they include the area behind the toolbar). */
+(function(){
+  function setH(){ document.documentElement.style.setProperty('--app-h', window.innerHeight + 'px'); }
+  setH();
+  window.addEventListener('resize', setH);
+  window.addEventListener('orientationchange', function(){ setTimeout(setH, 250); });
+  window.addEventListener('pageshow', setH);
+})();
+</script>
+<div id="shell">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <a class="icon-btn back-kompas" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+      <button class="icon-btn" id="btn-toc" data-umami-event="open-contents">Contents</button>
+      <span id="progress-label">1 / 33</span>
+    </div>
+  </nav>
+  <div id="progress-track"><div id="progress-fill"></div></div>
+
+  <div id="stage">
+
+<!-- ================= INTRODUCTION ================= -->
+
+<section class="slide active" data-sec="intro" data-title="Start here">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 230" role="img" aria-label="A portable oxygen cylinder with its gauge reading 60 atm, and a patient transfer that takes 90 minutes">
+    <rect x="0" y="0" width="400" height="230" rx="12" fill="#f4f7f5"/>
+    <!-- cylinder -->
+    <rect x="70" y="70" width="64" height="140" rx="22" fill="#e9ecea" stroke="#5c665f" stroke-width="2"/>
+    <path d="M70 92 Q70 70 102 70 Q134 70 134 92 Z" fill="#fff" stroke="#5c665f" stroke-width="2"/>
+    <rect x="94" y="52" width="16" height="20" rx="3" fill="#9aa39d"/>
+    <text class="tx b mid" x="102" y="150">O₂</text>
+    <text class="tx s mid" x="102" y="168">4.7 L</text>
+    <!-- gauge -->
+    <line x1="110" y1="58" x2="150" y2="44" stroke="#9aa39d" stroke-width="4"/>
+    <circle cx="170" cy="40" r="26" fill="#fff" stroke="#1c2620" stroke-width="2"/>
+    <path d="M152 52 A22 22 0 1 1 188 52" fill="none" stroke="#e4e6e3" stroke-width="5"/>
+    <path d="M152 52 A22 22 0 0 1 154 26" fill="none" stroke="#c0392b" stroke-width="5"/>
+    <line class="fade" x1="170" y1="40" x2="155" y2="30" stroke="#c0392b" stroke-width="2.5" stroke-linecap="round" style="--d:.5s"/>
+    <circle cx="170" cy="40" r="3" fill="#1c2620"/>
+    <text class="tx b mid" x="170" y="60" font-size="9">60 atm</text>
+    <!-- ambulance route -->
+    <g class="fade" style="--d:.9s">
+     <path class="ln m" d="M200 150 H360" stroke-dasharray="5 5"/>
+     <circle cx="200" cy="150" r="6" class="fgs"/>
+     <circle cx="360" cy="150" r="6" class="frs"/>
+     <text class="tx s mid" x="200" y="172">Hospital A</text>
+     <text class="tx s mid" x="360" y="172">Hospital B</text>
+     <text class="tx b mid" x="280" y="138">90 minutes</text>
+    </g>
+    <g class="fade" style="--d:1.3s">
+     <rect x="208" y="186" width="148" height="30" rx="8" class="fo"/>
+     <text class="tx o mid" x="282" y="205">4 L/min of oxygen</text>
+    </g>
+    <text class="tx b mid fade" x="280" y="92" font-size="20" fill="#c0392b" style="--d:1.7s">Enough?</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Start here</div>
+   <h1>Will the oxygen <span class="ac">last the trip?</span></h1>
+   <p>A patient on <b>4 L/min</b> of oxygen moves to another hospital: a <b>90-minute</b> trip. The portable cylinder holds <b>4.7 L</b>. Its gauge reads <b>60 atm</b>.</p>
+   <div class="poll" id="poll-hook">
+    <p class="small" style="margin:0 0 .25em"><b>Your guess?</b> There is no wrong answer yet.</p>
+    <div class="chips2"><button type="button" class="chip2" data-v="y">Yes, it lasts</button><button type="button" class="chip2" data-v="n">No, it runs out</button><button type="button" class="chip2" data-v="u">I can’t tell</button></div>
+    <p class="calc-out" id="poll-out" hidden></p>
+   </div>
+   <p class="small">Pharmacists supply, store and check medical gases. This chapter gives you the laws to answer questions like this one. Use Next to move through the pages.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="intro" data-title="What you will learn">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Map of this chapter</div>
+   <h2>Squeeze it, heat it, <span class="ac">count it.</span></h2>
+   <div class="stack stagger">
+    <div class="layer"><div class="ln">1</div><div><b>Pressure and the gas laws <span class="clo">C1</span></b>What pressure is, and how pressure, volume, temperature and amount affect each other.</div></div>
+    <div class="layer"><div class="ln">2</div><div><b>The ideal gas equation <span class="clo">C2</span></b>PV = nRT for cylinders, sprays, propellants and gas mixtures.</div></div>
+    <div class="layer"><div class="ln">3</div><div><b>Kinetic molecular theory <span class="clo">C1</span></b>Why gases behave this way: molecules in constant motion.</div></div>
+    <div class="layer"><div class="ln">4</div><div><b>Real gases <span class="clo">C3</span></b>When PV = nRT fails, and how the van der Waals equation explains why.</div></div>
+   </div>
+   <p class="small">One virtual lab, <b>Gas Bench</b>, puts it all together in five hospital pharmacy stations. Main reference: Chang, <i>Chemistry</i> (10th ed.), Chapter 5, with Silberberg and Averill.</p>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 1 · PRESSURE ================= -->
+
+<section class="slide" data-sec="pres" data-title="What makes a gas a gas">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Gases and pressure · tap each card</div>
+   <h2>Four things <span class="ac">every gas does.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Fills its container</span><span class="rb">A gas takes the volume and shape of whatever holds it.</span></button>
+     <button class="rcard"><span class="rt">Squeezes easily</span><span class="rb">Gases are the most compressible state. That is why a small cylinder holds hundreds of litres of oxygen.</span></button>
+     <button class="rcard"><span class="rt">Mixes completely</span><span class="rb">Two gases in one container mix evenly. Air and Entonox are gas mixtures.</span></button>
+     <button class="rcard"><span class="rt">Low density</span><span class="rb">Much lower than liquids and solids. Densities of gases are given in g/L, not g/ml.</span></button>
+   </div>
+   <p class="small">Only 11 elements are gases at 25 °C and 1 atm, for example H₂, N₂, O₂ and the noble gases. Many small molecules are gases too: CO₂, N₂O, NH₃. <span class="cite">(Chang 5.1)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="pres" data-title="Pressure and its units">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Gases and pressure</div>
+   <h2>Pressure = force <span class="ac">÷ area.</span></h2>
+   <p>Gas molecules hit every surface around them. The force of these hits on each unit of area is the <b>pressure</b>. The SI unit is the <b>pascal</b>: 1 Pa = 1 N/m².</p>
+   <div class="tiles">
+    <div class="tile"><div class="n">1 atm</div><div class="l">One standard atmosphere: air pressure at sea level. Used in this chapter, as in Chang.</div></div>
+    <div class="tile"><div class="n">760 mmHg</div><div class="l">= 1 atm. The height of a mercury column the air can hold up. 1 mmHg = 1 torr.</div></div>
+    <div class="tile"><div class="n">101 325 Pa</div><div class="l">= 1 atm = 101.325 kPa.</div></div>
+    <div class="tile"><div class="n">1.013 bar</div><div class="l">= 1 atm. Cylinder labels often use bar.</div></div>
+   </div>
+   <div class="callout">Blood pressure is still written in mmHg: 120/80 mmHg. To change mmHg to atm, divide by 760.</div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="pres" data-title="Measuring pressure">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 230" role="img" aria-label="A mercury barometer with a 760 mm column, and a cylinder gauge that reads pressure above the atmosphere">
+    <rect x="0" y="0" width="400" height="230" rx="12" fill="#fbfcfb"/>
+    <!-- barometer -->
+    <rect x="40" y="180" width="120" height="30" rx="4" fill="#cfd6e0" stroke="#5c665f"/>
+    <rect x="88" y="30" width="24" height="170" rx="4" fill="#fff" stroke="#5c665f" stroke-width="2"/>
+    <rect class="fade" x="91" y="70" width="18" height="128" fill="#9aa8b8" style="--d:.4s"/>
+    <text class="tx s" x="118" y="56">vacuum</text>
+    <path class="ln o" d="M122 72 V196" marker-end="url(#ar-o)"/>
+    <text class="tx o" x="128" y="140">760 mm</text>
+    <path class="ln b draw" pathLength="1" d="M20 150 Q40 150 52 176" marker-end="url(#ar-o)" style="--d:.8s"/>
+    <text class="tx bl" x="12" y="140">air pushes</text>
+    <text class="tx b mid" x="100" y="226">Barometer: 1 atm</text>
+    <!-- gauge -->
+    <g class="fade" style="--d:1.1s">
+     <circle cx="300" cy="95" r="52" fill="#fff" stroke="#1c2620" stroke-width="2"/>
+     <path d="M263 132 A52 52 0 1 1 337 132" fill="none" stroke="#e4e6e3" stroke-width="7" transform="translate(0 -6) scale(1)"/>
+     <line x1="300" y1="95" x2="330" y2="70" stroke="#c0392b" stroke-width="3" stroke-linecap="round"/>
+     <circle cx="300" cy="95" r="4" fill="#1c2620"/>
+     <text class="tx b mid" x="300" y="130">gauge</text>
+     <rect x="215" y="166" width="170" height="52" rx="10" class="fg"/>
+     <text class="tx g mid" x="300" y="186">true (absolute) pressure</text>
+     <text class="tx mid" x="300" y="206">= gauge reading + 1 atm</text>
+    </g>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Gases and pressure · open each one</div>
+   <h2>Two ways <span class="ac">to measure it.</span></h2>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>Barometer</span><span class="hint">Open</span></button><div class="toggle-body"><p>Measures air pressure. At sea level the air holds up a mercury column 760 mm high: 1 atm. <span class="cite">(Chang 5.2)</span></p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>Manometer and gauges</span><span class="hint">Open</span></button><div class="toggle-body"><p>A manometer compares a gas with another pressure. Most cylinder and tyre gauges show pressure <b>above</b> the air around them (gauge pressure). An “empty” cylinder still holds gas at 1 atm.</p></div></div>
+   <div class="callout note">The gas laws need the <b>true (absolute) pressure</b>: gauge reading + about 1 atm.</div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 2 · THE GAS LAWS ================= -->
+
+<section class="slide" data-sec="laws" data-title="Boyle’s law">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="anim" data-anim="boyle"><svg class="anim-svg" viewBox="0 0 400 230" role="img" aria-label="Animation: a sealed syringe is pushed in. The volume halves and the pressure doubles, so P times V stays the same"></svg><div class="a-ui"><button type="button" class="a-play">▶ Play</button><button type="button" class="a-replay">↺ Replay</button><div class="a-bar"><div class="a-fill"></div></div></div><p class="anim-cap" aria-live="polite"></p></div>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">The gas laws · watch</div>
+   <h2>Squeeze it: <span class="ac">pressure goes up.</span></h2>
+   <p><b>Boyle’s law:</b> at constant temperature and amount, the volume of a gas is inversely proportional to its pressure.</p>
+   <div class="eq-box">P₁V₁ = P₂V₂ <span class="small">(T and n constant)</span></div>
+   <p>Halve the volume and the pressure doubles. This is why a 4.7 L cylinder at 135 atm can give about 135 × 4.7 ≈ <b>630 L</b> of oxygen at 1 atm.</p>
+   <p class="small">Source: Chang 5.3.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="laws" data-title="Charles’s law">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 230" role="img" aria-label="Graph of gas volume against temperature. The straight lines for different pressures all extend back to minus 273.15 degrees Celsius, absolute zero">
+    <rect x="0" y="0" width="400" height="230" rx="12" fill="#fbfcfb"/>
+    <path class="ln" d="M40 190 H385"/><path class="ln" d="M330 200 V20"/>
+    <text class="tx s" x="336" y="30">V</text>
+    <text class="tx s end" x="388" y="182">t (°C)</text>
+    <text class="tx s mid" x="330" y="206">0</text>
+    <text class="tx s mid" x="372" y="206">100</text>
+    <text class="tx r mid" x="52" y="206">−273.15</text>
+    <path class="ln g draw" pathLength="1" d="M330 128 L380 105" style="--d:.3s"/>
+    <path class="ln g draw" pathLength="1" d="M330 92 L380 60" style="--d:.5s"/>
+    <path class="ln b draw" pathLength="1" d="M330 150 L380 136" style="--d:.7s"/>
+    <path class="ln m fade" d="M52 190 L330 128" stroke-dasharray="5 4" style="--d:1s"/>
+    <path class="ln m fade" d="M52 190 L330 92" stroke-dasharray="5 4" style="--d:1.1s"/>
+    <path class="ln m fade" d="M52 190 L330 150" stroke-dasharray="5 4" style="--d:1.2s"/>
+    <circle class="fade" cx="52" cy="190" r="5" fill="#c0392b" style="--d:1.6s"/>
+    <g class="fade" style="--d:1.8s"><rect x="60" y="30" width="190" height="52" rx="10" class="fr"/>
+     <text class="tx r mid" x="155" y="51">absolute zero: 0 K</text>
+     <text class="tx s mid" x="155" y="70">where every line meets</text></g>
+   </svg>
+   <figcaption>Measured lines (solid) at three pressures, extended (dashed). Sketch after Chang Figure 5.9.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">The gas laws</div>
+   <h2>Heat it: <span class="ac">it expands.</span></h2>
+   <p><b>Charles’s law:</b> at constant pressure and amount, volume is directly proportional to the <b>absolute temperature</b>.</p>
+   <div class="eq-box">V₁ ÷ T₁ = V₂ ÷ T₂ <span class="small">(P and n constant)</span></div>
+   <p>Temperatures in gas laws are always in <b>kelvin</b>: T (K) = t (°C) + 273. In °C the law does not work: 0 °C is not “no temperature”.</p>
+   <p class="small">Chang uses 273 for routine sums and 273.15 for precise work. <span class="cite">(Chang 5.3)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="laws" data-title="Gay-Lussac’s law">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">The gas laws · try it</div>
+   <h2>Heat a closed can: <span class="ac">pressure rises.</span></h2>
+   <p>In a rigid container the volume cannot change. So at constant volume and amount, <b>pressure is proportional to absolute temperature</b>: P₁ ÷ T₁ = P₂ ÷ T₂.</p>
+   <div class="calc">
+    <div class="calc-row"><label>Can pressure at start (atm)<input id="gl-p" type="text" inputmode="decimal" value="8.0"></label><label>Start (°C)<input id="gl-t1" type="text" inputmode="decimal" value="25"></label><label>In a hot car (°C)<input id="gl-t2" type="text" inputmode="decimal" value="60"></label></div>
+    <div class="calc-out" id="gl-out" aria-live="polite"></div>
+   </div>
+   <p class="small">That is why spray cans say: <i>“Pressurised container: protect from sunlight and do not expose to temperatures exceeding 50 °C.”</i> Many courses call this <b>Gay-Lussac’s law</b>. Chang treats it as a form of Charles’s law; Silberberg calls it Amontons’s law.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="laws" data-title="Avogadro’s law">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 230" role="img" aria-label="Three equal boxes of helium, oxygen and carbon dioxide at the same temperature and pressure. Each holds the same number of molecules but a different mass">
+    <rect x="0" y="0" width="400" height="230" rx="12" fill="#fbfcfb"/>
+    <g id="avo-boxes"></g>
+    <text class="tx b mid" x="200" y="214">Same T and P, same volume → same number of molecules</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">The gas laws</div>
+   <h2>More gas, <span class="ac">more volume.</span></h2>
+   <p><b>Avogadro’s law:</b> at constant pressure and temperature, volume is directly proportional to the number of moles: V ∝ n.</p>
+   <p>Equal volumes of different gases at the same temperature and pressure hold the <b>same number of molecules</b>, whatever the gas.</p>
+   <div class="callout">At <b>STP</b> (standard temperature and pressure: 0 °C and 1 atm), 1 mole of any ideal gas takes up <b>22.41 L</b>. <span class="cite">(Chang 5.4)</span></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="laws" data-title="Check: the gas laws">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Three quick <span class="ac">questions.</span></h2>
+   <p class="small">Choose the right answer to continue. A wrong choice tells you what to think about.</p>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">A sealed syringe holds 40 ml of air at 1.0 atm. You push it to 20 ml at the same temperature. The pressure is now:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Pressure and volume change in opposite directions (Boyle’s law).">0.5 atm</button><button class="choice" data-v="b">2.0 atm</button><button class="choice" data-v="c" data-fb="The volume changed, so the pressure must change too.">1.0 atm</button></div>
+      <div class="feedback">Half the volume, double the pressure: P₁V₁ = P₂V₂.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">A student heats a gas from 20 °C to 40 °C at constant pressure and says the volume doubles. Why is that wrong?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Volume does change with temperature at constant pressure: that is Charles’s law.">Volume does not depend on temperature</button><button class="choice" data-v="b" data-fb="Heating makes a gas expand, not shrink.">The volume halves instead</button><button class="choice" data-v="c">Use kelvin: 293 K → 313 K is only about 7% more</button></div>
+      <div class="feedback">Gas laws use absolute temperature. 313 ÷ 293 = 1.07.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">A blood pressure reading of 120 mmHg is how many atm?</div>
+      <div class="choices"><button class="choice" data-v="a">0.158 atm</button><button class="choice" data-v="b" data-fb="Divide by 760, not multiply.">91 200 atm</button><button class="choice" data-v="c" data-fb="1 atm = 760 mmHg, not 101.325 mmHg.">1.18 atm</button></div>
+      <div class="feedback">120 ÷ 760 = 0.158 atm.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 3 · THE IDEAL GAS EQUATION ================= -->
+
+<section class="slide" data-sec="ideal" data-title="One equation">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">The ideal gas equation · try it</div>
+   <h2>Four laws, <span class="ac">one equation.</span></h2>
+   <div class="eq-box big">PV = nRT</div>
+   <p class="small" style="text-align:center">P in atm, V in L, n in mol, T in K. <b>R = 0.0821 L·atm/(K·mol)</b> <span class="cite">(Chang 5.4)</span></p>
+   <div class="sim" id="pv-sim">
+    <svg id="pv-box" viewBox="0 0 320 90" aria-hidden="true"></svg>
+    <label class="small">Amount, n: <b id="pv-nv"></b><input class="range" id="pv-n" type="range" min="0.5" max="2" step="0.25" value="1"></label>
+    <label class="small">Temperature, T: <b id="pv-tv"></b><input class="range" id="pv-t" type="range" min="200" max="400" step="10" value="300"></label>
+    <label class="small">Volume, V: <b id="pv-vv"></b><input class="range" id="pv-v" type="range" min="10" max="40" step="2" value="24"></label>
+    <div class="sim-out" id="pv-out" aria-live="polite"></div>
+   </div>
+   <p class="small">Hold any two of P, V, T or n constant and one of the four laws appears. A gas that obeys PV = nRT exactly is an <b>ideal gas</b>.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="ideal" data-title="Standard conditions">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">The ideal gas equation · try it</div>
+   <h2>STP: a fixed point <span class="ac">to compare gases.</span></h2>
+   <p>Gas volumes change with T and P, so we compare them at <b>standard temperature and pressure (STP)</b>: <b>0 °C (273.15 K) and 1 atm</b>. One mole of an ideal gas at STP:</p>
+   <p style="text-align:center">V = nRT ÷ P = 1 × 0.0821 × 273.15 ÷ 1 = <b>22.41 L</b></p>
+   <div class="calc">
+    <div class="calc-row"><label>Moles, n<input id="vm-n" type="text" inputmode="decimal" value="1"></label><label>Temperature (°C)<input id="vm-t" type="text" inputmode="decimal" value="0"></label><label>Pressure (atm)<input id="vm-p" type="text" inputmode="decimal" value="1"></label></div>
+    <div class="calc-out" id="vm-out" aria-live="polite"></div>
+   </div>
+   <p class="small">Try 25 °C: the same mole now fills about 24.5 L. Always check which conditions a volume refers to. <span class="cite">(Chang 5.4; Silberberg 5.3)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="ideal" data-title="Changing conditions">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">The ideal gas equation · open each one</div>
+   <h2>Before and after: <span class="ac">the combined law.</span></h2>
+   <p>When the amount of gas stays the same, PV ÷ T is constant:</p>
+   <div class="eq-box">P₁V₁ ÷ T₁ = P₂V₂ ÷ T₂</div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>A syringe of air into the body</span><span class="hint">Open</span></button><div class="toggle-body"><p>40.0 ml at 1.00 atm and 20 °C goes to 37 °C and 1.20 atm.<br>V₂ = 40.0 × (1.00 ÷ 1.20) × (310 ÷ 293) = <b>35.3 ml</b>.</p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>Back to the transfer: will the oxygen last?</span><span class="hint">Open</span></button><div class="toggle-body"><p>T is constant, so Boyle’s law: the 4.7 L cylinder at 60 atm (gauge) gives <b>60 × 4.7 = 282 L</b> at 1 atm. The last 4.7 L stays inside at 1 atm, which is why the <i>gauge</i> reading is used.</p><p>282 L ÷ 4 L/min = <b>about 70 minutes</b>. Not enough for 90 minutes: take a full cylinder.</p></div></div>
+   <p class="small">You will do this with new numbers at Gas Bench station 1.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="ideal" data-title="Density and molar mass">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">The ideal gas equation</div>
+   <h2>Weigh a gas, <span class="ac">name the gas.</span></h2>
+   <p>Rearranging PV = nRT, with n = mass ÷ molar mass (ℳ):</p>
+   <div class="tiles">
+    <div class="tile"><div class="n">d = Pℳ ÷ RT</div><div class="l">Density of a gas, in g/L. Heavier molecules, denser gas.</div></div>
+    <div class="tile"><div class="n">ℳ = dRT ÷ P</div><div class="l">Measure the density, get the molar mass, identify the gas.</div></div>
+   </div>
+   <div class="callout warn">Medicines and vaccines are often shipped on dry ice. Its CO₂ (ℳ = 44.01) has a density of 1.80 g/L at 25 °C and 1 atm, against 1.18 g/L for air. CO₂ sinks and collects near the floor of closed rooms and vans. Ventilate before entering.</div>
+   <p class="small">At Gas Bench station 3 you identify an inhaler propellant this way. <span class="cite">(Chang 5.4)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="ideal" data-title="Gas stoichiometry">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">The ideal gas equation</div>
+   <h2>How much gas <span class="ac">does a reaction make?</span></h2>
+   <p>An effervescent tablet fizzes because sodium bicarbonate reacts with citric acid:</p>
+   <p style="text-align:center;font-size:.92em">3NaHCO₃ + C₆H₈O₇ → Na₃C₆H₅O₇ + 3H₂O + <b>3CO₂</b></p>
+   <div class="flow">
+    <div class="node">1.00 g NaHCO₃<small>÷ 84.01 g/mol</small></div>
+    <div class="node">0.0119 mol NaHCO₃<small>3 : 3 ratio</small></div>
+    <div class="node">0.0119 mol CO₂<small>V = nRT ÷ P</small></div>
+    <div class="node g">0.291 L CO₂<small>at 25 °C, 1 atm</small></div>
+   </div>
+   <p>Grams → moles → mole ratio → moles of gas → volume (with PV = nRT, or 22.41 L/mol at STP only).</p>
+   <p class="small">That is why effervescent tablets are packed in tightly closed, dry tubes: moisture starts the reaction early. <span class="cite">(Chang 5.5)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="ideal" data-title="Check: calculations">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Three quick <span class="ac">calculations.</span></h2>
+   <p class="small">R = 0.0821 L·atm/(K·mol). Choose the right answer to continue.</p>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="a">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">0.500 mol of O₂ at 27 °C in a 10.0 L container. The pressure is:</div>
+      <div class="choices"><button class="choice" data-v="a">1.23 atm</button><button class="choice" data-v="b" data-fb="You used 27 °C. Change to kelvin: 27 + 273 = 300 K.">0.111 atm</button><button class="choice" data-v="c" data-fb="P = nRT ÷ V. Check that you divided by the volume.">12.3 atm</button></div>
+      <div class="feedback">P = 0.500 × 0.0821 × 300 ÷ 10.0 = 1.23 atm.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">How much space does 0.250 mol of N₂O take up at STP?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Multiply moles by the molar volume, don’t divide.">89.6 L</button><button class="choice" data-v="b" data-fb="22.4 L is for 1 mole. This is a quarter of a mole.">22.4 L</button><button class="choice" data-v="c">5.60 L</button></div>
+      <div class="feedback">0.250 × 22.41 = 5.60 L.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">A gas has a density of 1.25 g/L at STP. Its molar mass is about:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="ℳ = dRT ÷ P. Multiply by RT; you divided.">0.056 g/mol</button><button class="choice" data-v="b">28.0 g/mol (N₂ or CO)</button><button class="choice" data-v="c" data-fb="Use 273 K at STP, not 0.">0 g/mol</button></div>
+      <div class="feedback">1.25 × 0.0821 × 273 ÷ 1 = 28.0 g/mol.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 4 · MIXTURES ================= -->
+
+<section class="slide" data-sec="mix" data-title="Partial pressures">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 230" role="img" aria-label="Entonox: an equal mixture of nitrous oxide and oxygen. Each gas gives half of the total pressure">
+    <rect x="0" y="0" width="400" height="230" rx="12" fill="#fbfcfb"/>
+    <g id="dal-boxes"></g>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Gas mixtures</div>
+   <h2>Each gas pushes <span class="ac">on its own.</span></h2>
+   <p><b>Dalton’s law:</b> the total pressure of a mixture is the sum of the pressures each gas would have alone.</p>
+   <div class="eq-box">P<sub>T</sub> = P₁ + P₂ + …&nbsp;&nbsp; and &nbsp;&nbsp;P<sub>i</sub> = X<sub>i</sub> P<sub>T</sub></div>
+   <p>X is the <b>mole fraction</b>: moles of that gas ÷ total moles.</p>
+   <div class="callout">Entonox (pain relief in labour and ambulances) is 50% N₂O and 50% O₂. Each gas gives half the total pressure. Air is about 21% O₂: at 1 atm, P<sub>O₂</sub> ≈ 0.21 atm. <span class="cite">(Chang 5.6)</span></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="mix" data-title="Collecting gas over water">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 230" role="img" aria-label="Oxygen from hydrogen peroxide is collected in an upside-down tube over water. The gas in the tube is oxygen plus water vapour">
+    <rect x="0" y="0" width="400" height="230" rx="12" fill="#fbfcfb"/>
+    <path d="M30 120 v70 q0 10 10 10 h60 q10 0 10 -10 v-70" fill="#eef5fb" stroke="#5c665f" stroke-width="2"/>
+    <rect x="32" y="150" width="76" height="46" fill="#d9ecf7"/>
+    <text class="tx s mid" x="70" y="178">H₂O₂ + MnO₂</text>
+    <path class="ln" d="M70 120 V90 H230 V160" stroke-width="3"/>
+    <rect x="180" y="150" width="190" height="60" rx="6" fill="#d9ecf7" stroke="#5c665f"/>
+    <rect x="215" y="30" width="34" height="160" rx="5" fill="#fff" stroke="#5c665f" stroke-width="2"/>
+    <rect class="fade" x="217" y="32" width="30" height="86" fill="#eaf4ee" style="--d:.5s"/>
+    <rect x="217" y="118" width="30" height="70" fill="#d9ecf7"/>
+    <g class="fade" style="--d:1s">
+     <circle cx="226" cy="56" r="4" class="fgs"/><circle cx="238" cy="72" r="4" class="fgs"/><circle cx="228" cy="94" r="4" class="fgs"/>
+     <circle cx="238" cy="104" r="3" fill="#3a6bd1"/>
+     <rect x="266" y="40" width="124" height="60" rx="10" class="fg"/>
+     <text class="tx g mid" x="328" y="62">P(total) =</text>
+     <text class="tx mid" x="328" y="84">P(O₂) + P(H₂O)</text>
+    </g>
+    <text class="tx s mid" x="70" y="216">reaction flask</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Gas mixtures</div>
+   <h2>Don’t forget <span class="ac">the water vapour.</span></h2>
+   <p>Hydrogen peroxide breaks down to oxygen: <b>2H₂O₂ → 2H₂O + O₂</b>. Collected over water, the tube holds O₂ <b>and</b> water vapour.</p>
+   <div class="eq-box">P<sub>O₂</sub> = P<sub>atm</sub> − P<sub>H₂O</sub></div>
+   <p>Water vapour pressure depends only on temperature: <b>23.76 mmHg</b> at 25 °C <span class="cite">(Chang Table 5.3)</span>. Subtract it before using PV = nRT.</p>
+   <p class="small">You will check a hydrogen peroxide solution this way at Gas Bench station 4.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="mix" data-title="Check: mixtures">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Two quick <span class="ac">questions.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 2</div>
+      <div class="choice-q">An Entonox cylinder (50% N₂O, 50% O₂) delivers gas at 1.0 atm. The partial pressure of O₂ is:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Only half of the molecules are O₂. Use P(O₂) = X × P(total).">1.0 atm</button><button class="choice" data-v="b">0.50 atm</button><button class="choice" data-v="c" data-fb="0.21 is the mole fraction of O₂ in air, not in Entonox.">0.21 atm</button></div>
+      <div class="feedback">X(O₂) = 0.50, so P(O₂) = 0.50 × 1.0 = 0.50 atm.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 2</div>
+      <div class="choice-q">O₂ is collected over water at 25 °C. The room pressure is 760 mmHg. The pressure of the O₂ alone is:</div>
+      <div class="choices"><button class="choice" data-v="a">736 mmHg</button><button class="choice" data-v="b" data-fb="The tube also holds water vapour. Subtract its pressure.">760 mmHg</button><button class="choice" data-v="c" data-fb="Subtract the water vapour pressure; don’t add it.">784 mmHg</button></div>
+      <div class="feedback">760 − 23.76 = 736 mmHg.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 5 · KINETIC MOLECULAR THEORY ================= -->
+
+<section class="slide" data-sec="kmt" data-title="The kinetic theory">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="sim kmt-box"><svg id="kmt-svg" viewBox="0 0 320 180" role="img" aria-label="Moving gas molecules bouncing off the walls of a box"></svg>
+    <div class="chips2" id="kmt-t"><button type="button" class="chip2 on" data-t="1">Cool</button><button type="button" class="chip2" data-t="1.8">Hot</button></div>
+    <p class="sim-out small" id="kmt-out" aria-live="polite">Wall hits per second: counting…</p></div>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Kinetic molecular theory · tap each card</div>
+   <h2>A gas is molecules <span class="ac">in motion.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">1 · Far apart</span><span class="rb">Molecules are far apart compared with their size. Treat them as points: mass, but negligible volume.</span></button>
+     <button class="rcard"><span class="rt">2 · Always moving</span><span class="rb">Constant, random motion. Collisions are elastic: energy passes between molecules, but the total stays the same.</span></button>
+     <button class="rcard"><span class="rt">3 · No forces</span><span class="rb">Gas molecules neither attract nor repel each other.</span></button>
+     <button class="rcard"><span class="rt">4 · Energy ∝ T</span><span class="rb">Average kinetic energy is proportional to the temperature in kelvin. Two gases at the same T have the same average kinetic energy.</span></button>
+   </div>
+   <p class="small">Chang lists four postulates; Silberberg groups them into three. <span class="cite">(Chang 5.7)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="kmt" data-title="Theory explains the laws">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Kinetic molecular theory · open each one</div>
+   <h2>Why the laws <span class="ac">work.</span></h2>
+   <p>Pressure is molecules hitting the walls: <b>how often</b> and <b>how hard</b> they hit.</p>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>Boyle: squeeze it</span><span class="hint">Open</span></button><div class="toggle-body"><p>Less volume, more molecules in each ml: they hit the walls more often, so pressure rises.</p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>Charles and Gay-Lussac: heat it</span><span class="hint">Open</span></button><div class="toggle-body"><p>Higher T, faster molecules: they hit harder and more often. In a closed can the pressure rises; with a free piston the gas expands until the pressures balance.</p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>Avogadro: add gas</span><span class="hint">Open</span></button><div class="toggle-body"><p>More molecules, more hits. To keep the same pressure, the volume must grow.</p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>Dalton: mix gases</span><span class="hint">Open</span></button><div class="toggle-body"><p>Molecules don’t attract or repel (postulate 3), so each gas hits the walls as if it were alone. Their pressures simply add up.</p></div></div>
+   <p class="small"><span class="cite">(Chang 5.7)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="kmt" data-title="Temperature and speed">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="mb-svg" viewBox="0 0 400 230" role="img" aria-label="Molecular speed distributions: at higher temperature, and for lighter molecules, the curve is wider and moves to higher speeds"></svg>
+   <div class="chips2" id="mb-chips"><button type="button" class="chip2 on" data-m="t">Two temperatures</button><button type="button" class="chip2" data-m="g">Two gases</button></div>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Kinetic molecular theory · compare</div>
+   <h2>Hotter or lighter: <span class="ac">faster.</span></h2>
+   <p>Molecules in a gas move at many different speeds. Two simple rules:</p>
+   <ul class="ticks">
+    <li><b>Higher temperature</b>: more energy, so molecules move faster on average.</li>
+    <li><b>Same temperature, lighter molecules</b>: same average energy, so they move faster than heavy ones.</li>
+   </ul>
+   <div class="callout">So light gases spread (diffuse) faster. <b>Heliox</b> (helium with oxygen) flows through a narrowed airway more easily than air, because helium is so light. <span class="cite">(Chang 5.7)</span></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="kmt" data-title="Check: kinetic theory">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Three quick <span class="ac">questions.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="c">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">Why does an oxygen cylinder’s pressure fall as it is used?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="The temperature stays about the same. Something else changes.">The molecules slow down</button><button class="choice" data-v="b" data-fb="Molecules don’t shrink. Think about how many are left.">The molecules get smaller</button><button class="choice" data-v="c">Fewer molecules are left to hit the walls</button></div>
+      <div class="feedback">Fewer molecules, fewer hits each second, lower pressure.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">Helium and nitrogen are both at 25 °C. Which statement is true?</div>
+      <div class="choices"><button class="choice" data-v="a">Same average kinetic energy; helium moves faster</button><button class="choice" data-v="b" data-fb="At the same temperature the average kinetic energy is the same (postulate 4).">Helium has more kinetic energy</button><button class="choice" data-v="c" data-fb="Same energy but a smaller mass means a higher speed.">They move at the same speed</button></div>
+      <div class="feedback">Same T, same average energy; lighter molecules move faster.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">Which postulate explains why gases are easy to compress?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="That explains Dalton’s law, not compressibility.">No forces between molecules</button><button class="choice" data-v="b">Molecules are far apart</button><button class="choice" data-v="c" data-fb="That explains the link to temperature.">Kinetic energy ∝ T</button></div>
+      <div class="feedback">Mostly empty space between molecules, so there is room to squeeze.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 6 · REAL GASES ================= -->
+
+<section class="slide" data-sec="real" data-title="When gases are not ideal">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="z-svg" viewBox="0 0 400 230" role="img" aria-label="PV/RT plotted against pressure for 1 mole of gas at 0 degrees Celsius. The ideal gas stays at 1. Real gases leave the line at high pressure"></svg>
+   <figcaption>PV/RT for 1 mol at 0 °C. Sketch after Chang Figure 5.22.</figcaption>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Real gases</div>
+   <h2>PV = nRT <span class="ac">is a model.</span></h2>
+   <p>For 1 mol of an ideal gas, PV/RT = 1 at every pressure. Real gases stay close to 1 only at <b>low pressure</b> (about 5 atm or less) and high temperature.</p>
+   <p>Deviations grow when:</p>
+   <ul class="ticks">
+    <li><b>Pressure is high</b>: molecules are crowded, so their size and attractions matter.</li>
+    <li><b>Temperature is low</b>: slow molecules are held back by attractions. Without attractions, gases could never condense to liquids.</li>
+   </ul>
+   <p class="small">Medical cylinders work at about 135 atm: well outside the ideal range. <span class="cite">(Chang 5.8)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="real" data-title="The van der Waals equation">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 230" role="img" aria-label="Two corrections: neighbours pull a molecule back as it hits the wall, so the pressure is lower; and the molecules themselves take up space, so the free volume is smaller">
+    <rect x="0" y="0" width="400" height="230" rx="12" fill="#fbfcfb"/>
+    <rect x="16" y="20" width="176" height="150" rx="6" fill="#fff" stroke="#5c665f" stroke-width="2"/>
+    <path class="ln" d="M180 20 V170" stroke-width="5"/>
+    <circle cx="160" cy="95" r="10" fill="#c0392b"/>
+    <path class="ln r draw" pathLength="1" d="M150 95 H120" marker-end="url(#ar-r)" style="--d:.4s"/>
+    <circle cx="96" cy="78" r="10" fill="#9aa39d"/><circle cx="104" cy="118" r="10" fill="#9aa39d"/><circle cx="60" cy="96" r="10" fill="#9aa39d"/>
+    <path class="ln m thin" d="M150 92 L106 80 M150 99 L113 116" stroke-dasharray="3 3"/>
+    <text class="tx r mid" x="104" y="190">a: attractions</text>
+    <text class="tx s mid" x="104" y="208">softer hits, lower P</text>
+    <rect x="212" y="20" width="176" height="150" rx="6" fill="#fff" stroke="#5c665f" stroke-width="2"/>
+    <g fill="#3a6bd1" opacity=".8"><circle cx="240" cy="50" r="14"/><circle cx="300" cy="70" r="14"/><circle cx="350" cy="44" r="14"/><circle cx="262" cy="120" r="14"/><circle cx="330" cy="130" r="14"/><circle cx="360" cy="96" r="14"/></g>
+    <text class="tx bl mid" x="300" y="190">b: molecules’ own volume</text>
+    <text class="tx s mid" x="300" y="208">less free space</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Real gases</div>
+   <h2>Two corrections <span class="ac">to PV = nRT.</span></h2>
+   <div class="eq-box">(P + an²/V²)(V − nb) = nRT</div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>+ an²/V²: the attraction correction</span><span class="hint">Open</span></button><div class="toggle-body"><p>Neighbours pull each molecule back as it hits the wall, so the <b>measured pressure is lower</b> than ideal. The term adds this back. <b>a</b> shows how strongly the molecules attract each other.</p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>− nb: the volume correction</span><span class="hint">Open</span></button><div class="toggle-body"><p>Molecules take up some space, so the <b>free volume is smaller</b> than the container. <b>b</b> roughly reflects molecular size.</p></div></div>
+   <p class="small">P is the measured pressure and V the container’s volume. <span class="cite">(Chang 5.8)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="real" data-title="Reading a and b">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Real gases · interpret</div>
+   <h2>What the constants <span class="ac">tell you.</span></h2>
+   <table class="data-table">
+    <tr><th>Gas</th><th>a (atm·L²/mol²)</th><th>b (L/mol)</th><th>Reading</th></tr>
+    <tr><td>He</td><td>0.034</td><td>0.0237</td><td>Hardly any attraction</td></tr>
+    <tr><td>N₂</td><td>1.39</td><td>0.0391</td><td>Weak attraction</td></tr>
+    <tr><td>O₂</td><td>1.36</td><td>0.0318</td><td>Weak attraction</td></tr>
+    <tr><td>CO₂</td><td>3.59</td><td>0.0427</td><td>Stronger attraction</td></tr>
+    <tr><td>NH₃</td><td>4.17</td><td>0.0371</td><td>Strong (polar, H-bonding)</td></tr>
+    <tr><td>H₂O</td><td>5.46</td><td>0.0305</td><td>Strongest here</td></tr>
+   </table>
+   <ul class="ticks">
+    <li><b>Large a</b>: strong attractions. The gas is easier to liquefy and its pressure falls below ideal.</li>
+    <li><b>Larger b</b>: bigger molecules (a rough link only).</li>
+   </ul>
+   <p class="small">Values from Chang Table 5.4.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="real" data-title="Ideal or real? Try it">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Real gases · try it</div>
+   <h2>Which correction <span class="ac">wins?</span></h2>
+   <div class="calc">
+    <div class="calc-row"><label>Gas<select id="vw-g"><option value="He">He</option><option value="N2">N₂</option><option value="O2" selected>O₂</option><option value="CO2">CO₂</option><option value="NH3">NH₃</option></select></label><label>Moles, n<input id="vw-n" type="text" inputmode="decimal" value="55"></label><label>Volume (L)<input id="vw-v" type="text" inputmode="decimal" value="10"></label><label>Temperature (°C)<input id="vw-t" type="text" inputmode="decimal" value="15"></label></div>
+    <div class="calc-out" id="vw-out" aria-live="polite"></div>
+   </div>
+   <p class="small">Try O₂ at 55 mol, then helium, then 3.50 mol of NH₃ in 5.20 L at 47 °C (Chang Example 5.18: 17.7 atm ideal, 16.2 atm real). The equation itself is an approximation: at cylinder pressures it shows the direction, not the exact value.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="real" data-title="Liquefied gases">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Real gases · in the pharmacy</div>
+   <h2>Some cylinders hold <span class="ac">a liquid.</span></h2>
+   <p>Gases with strong attractions (large <b>a</b>) turn liquid when squeezed at room temperature. N₂O and CO₂ cylinders hold <b>liquid with gas above it</b>.</p>
+   <div class="tiles">
+    <div class="tile"><div class="n">O₂, air</div><div class="l">Gas only. The gauge falls steadily as gas is used, so pressure shows the contents.</div></div>
+    <div class="tile"><div class="n">N₂O, CO₂</div><div class="l">Liquid + gas. The gauge stays steady until the liquid is gone, so <b>weigh</b> the cylinder to know the contents.</div></div>
+   </div>
+   <div class="callout note">An N₂O cylinder’s gauge reads “full” until only about a quarter of its contents is left. A steady gauge does not mean a full cylinder.</div>
+   <p class="small">The pressure above a liquid depends only on temperature (vapour pressure), not on how much liquid is left.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="real" data-title="Check: real gases">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Four questions <span class="ac">to interpret.</span></h2>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="c">
+      <div class="step-count">QUESTION 1 OF 4</div>
+      <div class="choice-q">Under which conditions does a gas behave most ideally?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="High pressure crowds the molecules together. That is when deviations grow.">High pressure, low temperature</button><button class="choice" data-v="b" data-fb="Low temperature lets attractions take over.">Low pressure, low temperature</button><button class="choice" data-v="c">Low pressure, high temperature</button></div>
+      <div class="feedback">Molecules far apart and moving fast: their size and attractions hardly matter.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 4</div>
+      <div class="choice-q">For O₂ in a full cylinder, the van der Waals pressure is lower than the ideal pressure. This means:</div>
+      <div class="choices"><button class="choice" data-v="a">Attractions matter more than the molecules’ volume</button><button class="choice" data-v="b" data-fb="If the volume correction won, the real pressure would be higher than ideal.">The molecules’ volume matters more</button><button class="choice" data-v="c" data-fb="The two pressures differ, so it is not behaving ideally.">O₂ is ideal here</button></div>
+      <div class="feedback">The a-term lowered the pressure more than the b-term raised it.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 3 OF 4</div>
+      <div class="choice-q">Helium (a = 0.034) at high pressure gives a pressure slightly <i>above</i> ideal. Why?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Helium’s a is tiny: attractions are almost zero.">Helium attracts strongly</button><button class="choice" data-v="b">Attractions are tiny, so the volume correction wins</button><button class="choice" data-v="c" data-fb="Helium does follow van der Waals; its corrections are just unequal.">Helium has no volume</button></div>
+      <div class="feedback">With almost no attraction, only the molecules’ volume shows: P is higher than ideal.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 4 OF 4</div>
+      <div class="choice-q">An N₂O cylinder gauge shows the same pressure as yesterday, after a day of use. You should:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Liquid N₂O keeps the pressure steady while the contents fall.">Record it as still full</button><button class="choice" data-v="b" data-fb="It is not faulty: the pressure above a liquid stays steady.">Report the gauge as faulty</button><button class="choice" data-v="c">Weigh it to find the contents</button></div>
+      <div class="feedback">For liquefied gases, weight shows the contents; the gauge does not.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= LAB ================= -->
+
+<section class="slide" data-sec="gaslab" data-title="Gas Bench (lab)">
+ <div class="si lab-si">
+  <div class="lab-head">
+   <div class="eyebrow">Interactive lab · all topics</div>
+   <h2>Gas Bench: <span class="ac">five stations, one pharmacy.</span></h2>
+   <p class="small">Check an oxygen cylinder, a spray can in a hot car, an inhaler propellant, a hydrogen peroxide solution and a real cylinder. Four scenarios. <a href="lab.html" target="_blank" rel="noopener" data-umami-event="lab-open-full">Open full screen ↗</a></p>
+   <p class="lab-status task" data-lab="gas-lab" aria-live="polite">Finish one full round of Gas Bench (all 5 stations) to unlock Next.</p>
+  </div>
+  <div class="lab-frame"><iframe data-src="lab.html?embed=1" title="Gas Bench interactive lab" loading="lazy"></iframe><div class="lab-launch"><span>Your screen is too short to use the lab here.</span><a href="lab.html" target="_blank" rel="noopener" data-umami-event="lab-launch-small">Open the lab ↗</a></div></div>
+ </div>
+</section>
+
+<!-- ================= WRAP-UP ================= -->
+
+<section class="slide" data-sec="end" data-title="Quick quiz">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check your understanding</div>
+   <h2>Five questions, <span class="ac">no marks recorded.</span></h2>
+   <div class="stepper quiz">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 5</div>
+      <div class="choice-q">Which law says V ∝ T at constant P and n?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Boyle’s law links P and V at constant T.">Boyle’s law</button><button class="choice" data-v="b">Charles’s law</button><button class="choice" data-v="c" data-fb="Avogadro’s law links V and n.">Avogadro’s law</button></div>
+      <div class="feedback">Charles’s law: volume is proportional to absolute temperature.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 5</div>
+      <div class="choice-q">A 4.7 L cylinder’s gauge reads 100 atm. About how much oxygen can it give at 1 atm?</div>
+      <div class="choices"><button class="choice" data-v="a">470 L</button><button class="choice" data-v="b" data-fb="Pressure and volume are inversely related: the gas expands when released.">0.047 L</button><button class="choice" data-v="c" data-fb="The cylinder’s own volume is only what stays inside at the end.">4.7 L</button></div>
+      <div class="feedback">Boyle: 100 × 4.7 = 470 L.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 3 OF 5</div>
+      <div class="choice-q">At STP, 1 mol of an ideal gas occupies:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="That is about the volume at 25 °C, not 0 °C.">24.5 L</button><button class="choice" data-v="b" data-fb="R is 0.0821; the molar volume is much larger.">0.0821 L</button><button class="choice" data-v="c">22.41 L</button></div>
+      <div class="feedback">0 °C and 1 atm: 22.41 L.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 4 OF 5</div>
+      <div class="choice-q">The kinetic theory says the average kinetic energy of gas molecules depends on:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="At the same T, all gases have the same average kinetic energy.">The type of gas</button><button class="choice" data-v="b">The absolute temperature only</button><button class="choice" data-v="c" data-fb="Pressure does not set the energy; temperature does.">The pressure</button></div>
+      <div class="feedback">Average kinetic energy ∝ T (in kelvin).</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 5 OF 5</div>
+      <div class="choice-q">In the van der Waals equation, the constant a corrects for:</div>
+      <div class="choices"><button class="choice" data-v="a">Attractions between molecules</button><button class="choice" data-v="b" data-fb="That is b.">The volume of the molecules</button><button class="choice" data-v="c" data-fb="Temperature is in nRT, unchanged.">The temperature of the gas</button></div>
+      <div class="feedback">a: attractions, which lower the measured pressure.</div>
+      <p class="score" id="quiz-score"></p>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="end" data-title="Summary">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Take home</div>
+   <h2>Squeeze it, heat it, <span class="ac">count it.</span></h2>
+   <div class="cards stagger">
+     <div class="card"><div class="cn">1</div><div>Boyle P₁V₁ = P₂V₂; Charles V ∝ T; Gay-Lussac P ∝ T; Avogadro V ∝ n. Always use kelvin and absolute pressure.</div></div>
+     <div class="card"><div class="cn">2</div><div>PV = nRT with R = 0.0821 L·atm/(K·mol). STP is 0 °C and 1 atm: 22.41 L/mol. d = Pℳ ÷ RT. Dalton: P<sub>i</sub> = X<sub>i</sub>P<sub>T</sub>; subtract water vapour.</div></div>
+     <div class="card"><div class="cn">3</div><div>Kinetic theory: far-apart molecules in random motion, no forces, average kinetic energy ∝ T. Pressure is molecules hitting the walls.</div></div>
+     <div class="card"><div class="cn">4</div><div>Real gases deviate at high P and low T. Van der Waals: a for attractions (lower P), b for molecular volume. Weigh liquefied-gas cylinders.</div></div>
+   </div>
+   <div style="margin:.6em 0"><button class="btn solid" id="btn-refs" data-umami-event="open-sources">Sources and further reading (7) →</button></div>
+   <div class="madeby">
+     <p><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Lab scenarios and values are simulated. Always follow the supplier’s cylinder data and your hospital’s medical gas policy.</p>
+     <div class="socials">
+       <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Website</a>
+       <a href="https://www.linkedin.com/in/aufbinali/" target="_blank" rel="noopener" data-umami-event="link-linkedin">LinkedIn</a>
+       <a href="https://aufthority.substack.com/" target="_blank" rel="noopener" data-umami-event="link-substack">Substack</a>
+       <a href="https://www.instagram.com/aufthority/" target="_blank" rel="noopener" data-umami-event="link-instagram">Instagram</a>
+       <a href="https://www.tiktok.com/@aufthority" target="_blank" rel="noopener" data-umami-event="link-tiktok">TikTok</a>
+       <a href="https://www.threads.com/@aufthority" target="_blank" rel="noopener" data-umami-event="link-threads">Threads</a>
+       <a href="mailto:the.aufthority@gmail.com" data-umami-event="link-email">the.aufthority@gmail.com</a>
+     </div>
+   </div>
+  </div>
+ </div>
+</section>
+<section class="slide" data-sec="end" data-title="Your certificate">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Well done</div>
+   <h2>You finished. <span class="ac">Take your certificate.</span></h2>
+   <p>You worked through every page of <b>Gases, Explained</b>.</p>
+   <div class="calc" id="cert-box"><p class="small" style="margin:0">Checking your Kompas Semester sign-in…</p></div>
+   <div id="cert-out"></div>
+   <div class="calc" id="cert-check" hidden>
+    <div class="calc-row"><label>Educators: check a certificate serial<input id="cert-serial" type="text" maxlength="20" autocomplete="off" placeholder="KS-GAS-26-XXXXXX"></label></div>
+    <button class="btn" id="cert-lookup" type="button">Check serial</button>
+    <div id="cert-check-out"></div>
+   </div>
+   <p class="small">Each certificate has a serial number recorded by Kompas Semester. It is a record of completion, not an official KPJ Healthcare University award.</p>
+  </div>
+ </div>
+</section>
+
+
+  </div><!-- /stage -->
+
+  <div id="bottom">
+    <div id="gate-hint"></div>
+    <div id="nav-wrap">
+      <button id="btn-back" class="nav-btn" disabled data-umami-event="nav-back">← Back</button>
+      <button id="btn-next" class="nav-btn" data-umami-event="nav-next">Next →</button>
+    </div>
+    <footer>Informed decisions, better health.</footer>
+  </div>
+</div>
+
+<div class="overlay" id="toc-overlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <div class="panel-head"><h3>Contents</h3><button class="icon-btn close-ov">Close</button></div>
+    <button type="button" class="pt-open" id="btn-pt" data-umami-event="open-periodic-table"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3h4v4H2zM14 3h4v4h-4zM2 8h4v4H2zM7 8h3v4H7zM11 8h3v4h-3zM14 8h4v4h-4zM2 13h4v4H2zM7 13h3v4H7zM11 13h3v4h-3zM14 13h4v4h-4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Periodic table</button>
+    <ul class="toc" id="toc-list"></ul>
+  </div>
+</div>
+
+<div class="overlay" id="refs-overlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <div class="panel-head"><h3>Sources and further reading</h3><button class="icon-btn close-ov">Close</button></div>
+    <ol class="refs">
+      <li>Averill, B., &amp; Eldredge, P. (n.d.). <i>General chemistry: Principles, patterns, and applications</i> (Chapter 10: Gases). LibreTexts. <a href="https://chem.libretexts.org/" target="_blank" rel="noopener">chem.libretexts.org</a></li>
+      <li>BOC Healthcare. (2022). <i>Medical gas cylinder data chart</i>. BOC.</li>
+      <li>Chang, R. (2010). <i>Chemistry</i> (10th ed., Chapter 5: Gases). McGraw-Hill.</li>
+      <li>CK-12. (n.d.). <i>Introductory chemistry</i> (Chapters 13–14). LibreTexts. <a href="https://chem.libretexts.org/" target="_blank" rel="noopener">chem.libretexts.org</a></li>
+      <li>European Commission. (2016). Commission Directive (EU) 2016/2037 amending Council Directive 75/324/EEC on aerosol dispensers. <i>Official Journal of the European Union</i>, L 314, 11–14.</li>
+      <li>Silberberg, M. S. (2013). <i>Principles of general chemistry</i> (3rd ed., Chapter 5: Gases and the kinetic-molecular theory). McGraw-Hill.</li>
+      <li>StatPearls. (2023). <i>Gas cylinders</i>. StatPearls Publishing. <a href="https://www.ncbi.nlm.nih.gov/books/NBK555924/" target="_blank" rel="noopener">ncbi.nlm.nih.gov</a></li>
+    </ol>
+  </div>
+</div>
+<div class="overlay" id="video-overlay" role="dialog" aria-modal="true" aria-labelledby="video-title">
+  <div class="panel">
+    <div class="panel-head"><h3 id="video-title">Video</h3><button class="icon-btn close-ov">Close</button></div>
+    <div class="vid-frame" id="video-frame"></div>
+    <p class="vid-note">A demonstration from YouTube. <a id="video-link" href="#" target="_blank" rel="noopener">Open it on YouTube</a> if it does not play here.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  const slides   = document.querySelectorAll('.slide');
+  const TOTAL    = slides.length;
+  /* progress is remembered on this device; a returning student resumes where they left off */
+  const PKEY='kompas.gases.progress';
+  let maxReached=1, isEducator=false, profileName='', signedIn=false, authSb=null;
+  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.max>=1) maxReached=Math.min(sv.max, document.querySelectorAll('.slide').length); }catch(_){}
+  let current = 1;
+  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.last>=1 && sv.last<=maxReached) current=sv.last; }catch(_){}
+  const btnBack  = document.getElementById('btn-back');
+  const btnNext  = document.getElementById('btn-next');
+  const progFill = document.getElementById('progress-fill');
+  const progLbl  = document.getElementById('progress-label');
+  const hint     = document.getElementById('gate-hint');
+  const NS = 'http://www.w3.org/2000/svg';
+
+  document.querySelectorAll('.stagger').forEach(c=>{
+    [...c.children].forEach((e,i)=>e.style.setProperty('--d',(0.1 + i*0.11).toFixed(2)+'s'));
+  });
+
+  /* =====================================================================
+     GASES: page-specific drawings, calculators, animation and simulations
+     Units follow Chang: atm, L, mol, K; R = 0.0821 L·atm/(K·mol)
+     ===================================================================== */
+  function el(tag, attrs, text){
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  const RMO = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const ANIM={};
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  const ease=x=>{ x=clamp(x,0,1); return x*x*(3-2*x); };
+  const fx=n=>n.toFixed(1);
+  function E(tag,attrs,parent,text){ const e=el(tag,attrs,text); parent.appendChild(e); return e; }
+  const FONT='DM Sans,system-ui,sans-serif';
+  const COL={g:'#2d6a4f', r:'#c0392b', o:'#d9821f', b:'#3a6bd1', ink:'#1c2620', muted:'#6f7771', rule:'#e4e6e3'};
+  function txt(parent,x,y,s,extra){ return E('text',Object.assign({x:x,y:y,'font-family':FONT,'font-size':11,fill:COL.muted},extra||{}),parent,s); }
+  const num=v=>parseFloat(String(v||'').replace(',','.'));
+  const RG=0.0821;
+  const sig=(x,d)=>(+x.toPrecision(d||3)).toString();
+  const trk=(e,d)=>{ try{ if(window.umami) umami.track(e,d); }catch(_){} };
+
+  /* ---------- hook poll (page 1): any answer is fine; it does not gate ---------- */
+  (function(){
+    const box=document.getElementById('poll-hook'); if(!box) return;
+    const out=document.getElementById('poll-out');
+    const say={y:'Maybe. A small cylinder holds far more gas than it looks.',n:'Maybe. It depends on how much gas is squeezed inside.',u:'Fair: you need a gas law to know.'};
+    box.querySelectorAll('.chip2').forEach(b=>b.addEventListener('click',()=>{
+      box.querySelectorAll('.chip2').forEach(x=>x.classList.toggle('on',x===b));
+      out.hidden=false; out.innerHTML=say[b.dataset.v]+' Hold your guess: you will work it out on the page <b>Changing conditions</b>, and again at Gas Bench station 1.';
+      trk('hook-guess',{v:b.dataset.v}); fit(slides[current-1]);
+    }));
+  })();
+
+  /* ---------- ANIMATION: Boyle's law in a sealed syringe ---------- */
+  ANIM.boyle=function(svg){
+    E('rect',{width:400,height:230,rx:12,fill:'#fbfcfb'},svg);
+    const x0=40, y0=70, L=240, H=60;
+    E('rect',{x:x0,y:y0,width:L,height:H,rx:6,fill:'#fff',stroke:'#5c665f','stroke-width':2},svg);
+    E('rect',{x:x0-12,y:y0+H/2-5,width:12,height:10,fill:'#9aa39d'},svg);
+    for(let i=0;i<=8;i++) E('line',{x1:x0+30*i,y1:y0,x2:x0+30*i,y2:y0+8,stroke:'#9aa39d'},svg);
+    const gas=E('rect',{x:x0+2,y:y0+2,height:H-4,fill:'#eaf4ee'},svg);
+    const dots=E('g',{fill:COL.g},svg); const P=[];
+    for(let i=0;i<18;i++) P.push({e:E('circle',{r:3},dots),u:Math.random(),v:Math.random(),du:(Math.random()-.5)*.9,dv:(Math.random()-.5)*.9});
+    const plunger=E('g',{},svg);
+    E('rect',{x:0,y:y0+4,width:8,height:H-8,rx:2,fill:'#5c665f'},plunger);
+    E('rect',{x:8,y:y0+H/2-4,width:120,height:8,fill:'#9aa39d'},plunger);
+    E('rect',{x:128,y:y0+8,width:8,height:H-16,rx:2,fill:'#5c665f'},plunger);
+    const tP=txt(svg,40,170,'',{'font-size':15,'font-weight':700,fill:COL.r});
+    const tV=txt(svg,40,192,'',{'font-size':15,'font-weight':700,fill:COL.b});
+    const tPV=txt(svg,250,182,'',{'font-size':15,'font-weight':800,fill:COL.g});
+    txt(svg,250,202,'stays the same',{'font-size':11});
+    let last=0;
+    return {dur:11, caps:[[0,'A sealed syringe: 40 ml of air at 1.0 atm. Temperature stays the same.'],[2,'Push the plunger in slowly…'],[4.6,'Half the volume (20 ml): the molecules hit the walls twice as often. Pressure 2.0 atm.'],[7,'Push again to 10 ml: pressure 4.0 atm.'],[9.2,'P × V = 40 every time. That is Boyle’s law.']],
+      draw(t){
+        let V=40;
+        if(t>=2&&t<4.4) V=40-20*ease((t-2)/2.4); else if(t>=4.4&&t<6.6) V=20; else if(t>=6.6&&t<8.6) V=20-10*ease((t-6.6)/2); else if(t>=8.6) V=10;
+        const w=L*V/40; gas.setAttribute('width',fx(w-4)); plunger.setAttribute('transform','translate('+fx(x0+w)+' 0)');
+        const dt=Math.min(.05,Math.max(0,t-last)); last=t;
+        P.forEach(p=>{ p.u+=p.du*dt*3; p.v+=p.dv*dt*3; if(p.u<0||p.u>1){p.du=-p.du;p.u=clamp(p.u,0,1);} if(p.v<0||p.v>1){p.dv=-p.dv;p.v=clamp(p.v,0,1);}
+          p.e.setAttribute('cx',fx(x0+6+p.u*(w-12))); p.e.setAttribute('cy',fx(y0+6+p.v*(H-12))); });
+        const Pp=40/V; tP.textContent='P = '+Pp.toFixed(1)+' atm'; tV.textContent='V = '+V.toFixed(0)+' ml';
+        tPV.textContent='P × V = '+(Pp*V).toFixed(0);
+      }};
+  };
+
+  /* ---------- Gay-Lussac: spray can in a hot car (shows the °C mistake) ---------- */
+  (function(){
+    const p=document.getElementById('gl-p'), a=document.getElementById('gl-t1'), b=document.getElementById('gl-t2'), o=document.getElementById('gl-out');
+    if(!p) return;
+    function go(){
+      const P1=num(p.value), t1=num(a.value), t2=num(b.value);
+      if(!(P1>0)||isNaN(t1)||isNaN(t2)||t1<=-273||t2<=-273){ o.className='calc-out'; o.textContent='Enter a pressure and two temperatures.'; return; }
+      const T1=t1+273, T2=t2+273, P2=P1*T2/T1;
+      o.className='calc-out'+(t2>50?' fail':'');
+      o.innerHTML='P₂ = '+P1+' × ('+T2+' K ÷ '+T1+' K) = <b>'+P2.toFixed(2)+' atm</b>'+(t2>50?' Above 50 °C: outside the label’s limit.':'')+
+        (t1>0&&t2>0?'<br><span class="small">Wrong way, in °C: '+P1+' × '+t2+' ÷ '+t1+' = '+(P1*t2/t1).toFixed(1)+' atm. Far too high, because °C does not start at zero energy.</span>':'');
+    }
+    [p,a,b].forEach(i=>i.addEventListener('input',go)); go();
+    [p,a,b].forEach(i=>i.addEventListener('change',()=>trk('calc-gaylussac')));
+  })();
+
+  /* ---------- Avogadro boxes and Dalton boxes (static drawings, random dots) ---------- */
+  function dotsIn(g,x,y,w,h,n,col,r,seed){
+    let s=seed||1; const rnd=()=>{ s=(s*9301+49297)%233280; return s/233280; };
+    for(let i=0;i<n;i++) E('circle',{cx:fx(x+8+rnd()*(w-16)),cy:fx(y+8+rnd()*(h-16)),r:r,fill:col},g);
+  }
+  (function(){
+    const g=document.getElementById('avo-boxes'); if(!g) return;
+    [['He','4.00 g',COL.o,3],['O₂','32.00 g',COL.g,4.5],['CO₂','44.01 g',COL.r,5]].forEach((d,i)=>{
+      const x=22+i*126;
+      E('rect',{x:x,y:40,width:110,height:110,rx:8,fill:'#fff',stroke:'#5c665f','stroke-width':2},g);
+      dotsIn(g,x,40,110,110,10,d[2],d[3],7+i*13);
+      txt(g,x+55,30,d[0],{'text-anchor':'middle','font-size':14,'font-weight':800,fill:COL.ink});
+      txt(g,x+55,170,'1 mol · 22.41 L',{'text-anchor':'middle','font-size':11,'font-weight':700,fill:COL.g});
+      txt(g,x+55,188,d[1],{'text-anchor':'middle','font-size':11});
+    });
+  })();
+  (function(){
+    const g=document.getElementById('dal-boxes'); if(!g) return;
+    const box=(x,lab,parts,P)=>{ E('rect',{x:x,y:30,width:104,height:110,rx:8,fill:'#fff',stroke:'#5c665f','stroke-width':2},g);
+      parts.forEach(p=>dotsIn(g,x,30,104,110,p[0],p[1],4,p[2]));
+      txt(g,x+52,22,lab,{'text-anchor':'middle','font-size':12,'font-weight':800,fill:COL.ink});
+      txt(g,x+52,162,P,{'text-anchor':'middle','font-size':12,'font-weight':700,fill:COL.g}); };
+    box(16,'N₂O alone',[[6,COL.b,3]],'0.5 atm');
+    txt(g,136,95,'+',{'font-size':26,'font-weight':800,fill:COL.o,'text-anchor':'middle'});
+    box(148,'O₂ alone',[[6,COL.r,5]],'0.5 atm');
+    txt(g,268,95,'=',{'font-size':26,'font-weight':800,fill:COL.o,'text-anchor':'middle'});
+    box(280,'Entonox',[[6,COL.b,3],[6,COL.r,5]],'1.0 atm');
+    txt(g,200,200,'Same container, same temperature: the pressures add up.',{'text-anchor':'middle','font-size':12,'font-weight':700,fill:COL.ink});
+  })();
+
+  /* ---------- PV = nRT simulator ---------- */
+  (function(){
+    const n=document.getElementById('pv-n'); if(!n) return;
+    const T=document.getElementById('pv-t'), V=document.getElementById('pv-v'), o=document.getElementById('pv-out'), svg=document.getElementById('pv-box');
+    function go(){
+      const nv=+n.value, tv=+T.value, vv=+V.value, P=nv*RG*tv/vv;
+      document.getElementById('pv-nv').textContent=nv+' mol'; document.getElementById('pv-tv').textContent=tv+' K ('+(tv-273)+' °C)'; document.getElementById('pv-vv').textContent=vv+' L';
+      while(svg.firstChild) svg.removeChild(svg.firstChild);
+      const w=60+vv*6;
+      E('rect',{x:4,y:6,width:w,height:76,rx:6,fill:tv>320?'#fdf3e6':'#eef5fb',stroke:'#5c665f','stroke-width':1.6},svg);
+      dotsIn(svg,4,6,w,76,Math.round(nv*12),COL.g,3,Math.round(nv*40));
+      const gx=Math.min(300,w+40); E('rect',{x:gx-26,y:20,width:52,height:44,rx:6,fill:'#fff',stroke:'#1c2620'},svg);
+      txt(svg,gx,40,P.toFixed(2),{'text-anchor':'middle','font-size':13,'font-weight':800,fill:COL.r}); txt(svg,gx,56,'atm',{'text-anchor':'middle','font-size':10});
+      o.innerHTML='P = nRT ÷ V = '+nv+' × 0.0821 × '+tv+' ÷ '+vv+' = <b>'+P.toFixed(2)+' atm</b>';
+    }
+    [n,T,V].forEach(i=>{ i.addEventListener('input',go); i.addEventListener('change',()=>trk('sim-pvnrt')); }); go();
+  })();
+
+  /* ---------- molar volume at any T, P ---------- */
+  (function(){
+    const n=document.getElementById('vm-n'); if(!n) return;
+    const t=document.getElementById('vm-t'), p=document.getElementById('vm-p'), o=document.getElementById('vm-out');
+    function go(){
+      const nv=num(n.value), tc=num(t.value), pv=num(p.value);
+      if(!(nv>0)||!(pv>0)||isNaN(tc)||tc<=-273.15){ o.className='calc-out'; o.textContent='Enter moles, temperature and pressure.'; return; }
+      const TK=tc+273.15, V=nv*RG*TK/pv;
+      o.className='calc-out'; o.innerHTML='V = '+nv+' × 0.0821 × '+TK.toFixed(2)+' K ÷ '+pv+' atm = <b>'+V.toFixed(2)+' L</b>'+(Math.abs(tc)<1e-9&&Math.abs(pv-1)<1e-9?' (STP)':'');
+    }
+    [n,t,p].forEach(i=>{ i.addEventListener('input',go); i.addEventListener('change',()=>trk('calc-molarvolume')); }); go();
+  })();
+
+  /* ---------- kinetic theory box: molecules move, wall hits are counted ---------- */
+  (function(){
+    const svg=document.getElementById('kmt-svg'); if(!svg) return;
+    const out=document.getElementById('kmt-out');
+    E('rect',{x:2,y:2,width:316,height:176,rx:8,fill:'#fff',stroke:'#5c665f','stroke-width':2},svg);
+    const M=[]; let speed=1, hits=0, t0=0, raf=0, last=0, rate=0;
+    for(let i=0;i<22;i++){ const a=Math.random()*Math.PI*2, s=40+Math.random()*60;
+      M.push({x:20+Math.random()*280,y:20+Math.random()*140,vx:Math.cos(a)*s,vy:Math.sin(a)*s,e:E('circle',{r:5,fill:COL.g},svg)}); }
+    const flash=E('rect',{x:2,y:2,width:316,height:176,rx:8,fill:'none',stroke:COL.r,'stroke-width':4,opacity:0},svg);
+    function frame(now){
+      const host=svg.closest('.slide'); if(!host||!host.classList.contains('active')){ raf=0; return; }
+      const dt=Math.min(.05,(now-last)/1000||0); last=now; let h=0;
+      M.forEach(m=>{ m.x+=m.vx*dt*speed; m.y+=m.vy*dt*speed;
+        if(m.x<8){m.x=8;m.vx=-m.vx;h++;} if(m.x>312){m.x=312;m.vx=-m.vx;h++;}
+        if(m.y<8){m.y=8;m.vy=-m.vy;h++;} if(m.y>172){m.y=172;m.vy=-m.vy;h++;}
+        m.e.setAttribute('cx',fx(m.x)); m.e.setAttribute('cy',fx(m.y)); });
+      hits+=h; if(h) flash.setAttribute('opacity','.35'); else flash.setAttribute('opacity','0');
+      if(now-t0>1500){ rate=Math.round(hits/((now-t0)/1000)); hits=0; t0=now;
+        out.innerHTML='Wall hits per second: <b>'+rate+'</b>. '+(speed>1?'Hot: faster molecules hit more often and harder, so pressure is higher.':'Cool: slower molecules, fewer and softer hits.'); }
+      raf=requestAnimationFrame(frame);
+    }
+    function start(){ if(raf||RMO) return; last=performance.now(); t0=last; hits=0; raf=requestAnimationFrame(frame); }
+    if(RMO) out.textContent='Animation is off (reduced motion). Hotter molecules move faster and hit the walls more often.';
+    document.querySelectorAll('#kmt-t .chip2').forEach(b=>b.addEventListener('click',()=>{
+      document.querySelectorAll('#kmt-t .chip2').forEach(x=>x.classList.toggle('on',x===b));
+      speed=+b.dataset.t; M.forEach(m=>m.e.setAttribute('fill',speed>1?COL.r:COL.g)); trk('sim-kmt',{t:b.textContent}); start();
+    }));
+    window.__kmtStart=start;
+  })();
+
+  /* ---------- speed distribution (schematic Maxwell curves) ---------- */
+  function drawMB(mode){
+    const svg=document.getElementById('mb-svg'); if(!svg) return;
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    E('rect',{width:400,height:230,rx:12,fill:'#fbfcfb'},svg);
+    const X0=40,Y0=180,W=340,Hh=135;
+    E('path',{d:'M'+X0+' '+Y0+' H'+(X0+W)+' M'+X0+' '+Y0+' V30',stroke:COL.ink,'stroke-width':1.6,fill:'none'},svg);
+    txt(svg,X0+W,Y0+16,'molecular speed →',{'text-anchor':'end'}); txt(svg,X0+6,22,'number of molecules',{});
+    const curve=(k,col,lab,lx)=>{ /* f(v) ∝ v² exp(−v²/k²), peak at v = k */
+      let d='', peak=0; const pts=[]; for(let i=0;i<=120;i++){ const v=i/120*3.2; const f=v*v*Math.exp(-v*v/(k*k))/(k*k*k); pts.push([v,f]); peak=Math.max(peak,f); }
+      return {pts:pts,peak:peak,col:col,lab:lab,lx:lx};
+    };
+    const sets=mode==='g'?[curve(.75,COL.b,'N₂ (heavier)'),curve(1.6,COL.o,'He (lighter)')]:[curve(.8,COL.b,'25 °C'),curve(1.25,COL.r,'200 °C')];
+    const top=Math.max(...sets.map(s=>s.peak));
+    sets.forEach((s,j)=>{ let d=''; s.pts.forEach((p,i)=>{ const x=X0+p[0]/3.2*W, y=Y0-p[1]/top*Hh; d+=(i?'L':'M')+fx(x)+' '+fx(y); });
+      E('path',{d:d,fill:'none',stroke:s.col,'stroke-width':2.6,pathLength:1,class:'draw',style:'--d:'+(.2+j*.3)+'s'},svg);
+      const pk=s.pts.reduce((a,b)=>b[1]>a[1]?b:a); txt(svg,X0+pk[0]/3.2*W+6,Y0-pk[1]/top*Hh-6,s.lab,{'font-size':12,'font-weight':700,fill:s.col}); });
+    txt(svg,200,220,mode==='g'?'Same temperature: the lighter gas has more fast molecules.':'Same gas: at higher T the curve flattens and moves right.',{'text-anchor':'middle','font-size':11,'font-weight':700,fill:COL.ink});
+  }
+  document.querySelectorAll('#mb-chips .chip2').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('#mb-chips .chip2').forEach(x=>x.classList.toggle('on',x===b)); drawMB(b.dataset.m); trk('chart-speeds',{m:b.dataset.m});
+  }));
+
+  /* ---------- PV/RT against P (schematic after Chang Fig. 5.22) ---------- */
+  function drawZ(){
+    const svg=document.getElementById('z-svg'); if(!svg||svg.childNodes.length) return;
+    E('rect',{width:400,height:230,rx:12,fill:'#fbfcfb'},svg);
+    const X0=50,Y0=190,W=330,H=160, xp=p=>X0+p/1200*W, yz=z=>Y0-z/2.2*H;
+    E('path',{d:'M'+X0+' '+Y0+' H'+(X0+W)+' M'+X0+' '+Y0+' V20',stroke:COL.ink,'stroke-width':1.6,fill:'none'},svg);
+    [0,400,800,1200].forEach(p=>txt(svg,xp(p),Y0+16,String(p),{'text-anchor':'middle','font-size':10}));
+    txt(svg,X0+W,Y0+30,'P (atm)',{'text-anchor':'end','font-size':10});
+    [1,2].forEach(z=>txt(svg,X0-8,yz(z)+4,String(z),{'text-anchor':'end','font-size':10}));
+    txt(svg,X0-30,yz(1.6),'PV/RT',{'font-size':10,'font-weight':700,fill:COL.ink,transform:'rotate(-90 '+(X0-30)+' '+yz(1.6)+')'});
+    const line=(f,col,lab,lp,dl)=>{ let d=''; for(let i=0;i<=60;i++){ const p=i/60*1200; d+=(i?'L':'M')+fx(xp(p))+' '+fx(yz(f(p))); }
+      E('path',{d:d,fill:'none',stroke:col,'stroke-width':2.4,pathLength:1,class:'draw',style:'--d:'+dl+'s'},svg); txt(svg,xp(lp)+4,yz(f(lp))-6,lab,{'font-size':11,'font-weight':700,fill:col}); };
+    line(()=>1,COL.g,'ideal gas',1000,.1);
+    line(p=>1+0.00062*p,COL.o,'H₂',700,.4);
+    line(p=>1-0.00075*p+0.0000011*p*p,COL.b,'CH₄',900,.7);
+    line(p=>{ const z=1-0.0021*p+0.0000024*p*p; return Math.max(z,.2); },COL.r,'NH₃',520,1);
+    E('rect',{x:xp(0),y:yz(1.08),width:xp(60)-xp(0),height:yz(0.92)-yz(1.08),fill:COL.g,opacity:.15},svg);
+    txt(svg,xp(470),yz(.3),'below 1: attractions win',{'font-size':10,fill:COL.r});
+    txt(svg,xp(70),yz(1.85),'above 1: molecular volume wins',{'font-size':10,fill:COL.o});
+  }
+
+  /* ---------- van der Waals vs ideal ---------- */
+  const VDW={He:[0.034,0.0237],N2:[1.39,0.0391],O2:[1.36,0.0318],CO2:[3.59,0.0427],NH3:[4.17,0.0371]};
+  (function(){
+    const g=document.getElementById('vw-g'); if(!g) return;
+    const n=document.getElementById('vw-n'), v=document.getElementById('vw-v'), t=document.getElementById('vw-t'), o=document.getElementById('vw-out');
+    function go(){
+      const nv=num(n.value), V=num(v.value), tc=num(t.value), ab=VDW[g.value];
+      if(!(nv>0)||!(V>0)||isNaN(tc)||tc<=-273){ o.className='calc-out'; o.textContent='Enter moles, volume and temperature.'; return; }
+      const T=tc+273, nb=nv*ab[1];
+      if(nb>=V*0.9){ o.className='calc-out fail'; o.textContent='Too much gas for this volume: the molecules alone would nearly fill it.'; return; }
+      const Pi=nv*RG*T/V, att=ab[0]*nv*nv/(V*V), Pv=nv*RG*T/(V-nb)-att, dif=(Pv-Pi)/Pi*100;
+      o.className='calc-out';
+      o.innerHTML='Ideal: P = nRT ÷ V = <b>'+sig(Pi)+' atm</b><br>Van der Waals: nb = '+sig(nb)+' L; an²/V² = '+sig(att)+' atm → P = <b>'+sig(Pv)+' atm</b> ('+(dif>=0?'+':'')+dif.toFixed(1)+'%)<br>'+
+        (Math.abs(dif)<1?'Almost ideal: both corrections are small here.':dif<0?'<b>Attractions win:</b> the real pressure is lower than ideal. Filled to a set pressure, the cylinder holds <i>more</i> gas than PV = nRT predicts.':'<b>Molecular volume wins:</b> the real pressure is higher than ideal.');
+    }
+    [g,n,v,t].forEach(i=>{ i.addEventListener('input',go); i.addEventListener('change',()=>trk('calc-vdw',{gas:g.value})); }); go();
+  })();
+
+  function buildCharts(n){
+    const s=slides[n-1]; if(!s) return;
+    if(s.querySelector('#mb-svg') && !document.getElementById('mb-svg').childNodes.length) drawMB('t');
+    if(s.querySelector('#z-svg')) drawZ();
+    if(s.querySelector('#kmt-svg') && window.__kmtStart) window.__kmtStart();
+  }
+
+
+  /* ---------- player ---------- */
+  const players=[];
+  document.querySelectorAll('.anim').forEach(host=>{
+    const svg=host.querySelector('.anim-svg'), cap=host.querySelector('.anim-cap'), bP=host.querySelector('.a-play'), bR=host.querySelector('.a-replay'), fill=host.querySelector('.a-fill');
+    let A=null, t=0, playing=false, last=0, raf=0, opts={};
+    host.querySelectorAll('.a-tab').forEach(tb=>{ if(tb.classList.contains('on')) Object.assign(opts,JSON.parse(tb.dataset.o)); });
+    if(host.dataset.o) Object.assign(opts,JSON.parse(host.dataset.o));
+    function build(){ while(svg.firstChild) svg.removeChild(svg.firstChild); A=ANIM[host.dataset.anim](svg,opts); t=0; draw(); }
+    function draw(){ A.draw(t); fill.style.width=(t/A.dur*100).toFixed(1)+'%'; if(cap){ let c=A.caps[0][1]; A.caps.forEach(x=>{ if(t>=x[0]) c=x[1]; }); if(cap.innerHTML!==c) cap.innerHTML=c; } }
+    function ui(){ bP.textContent=playing?'❚❚ Pause':(t>=A.dur?'▶ Play again':(t>0?'▶ Resume':'▶ Play')); bP.setAttribute('aria-pressed',playing?'true':'false'); }
+    function frame(now){ if(!playing) return; t=Math.min(A.dur,t+(now-last)/1000); last=now; draw();
+      if(t>=A.dur){ playing=false; ui(); if(window.umami) umami.track('anim-complete',{anim:host.dataset.anim}); return; } raf=requestAnimationFrame(frame); }
+    function play(){ if(!A) build(); if(t>=A.dur) t=0; playing=true; last=performance.now(); ui(); cancelAnimationFrame(raf); raf=requestAnimationFrame(frame); }
+    function pause(){ playing=false; cancelAnimationFrame(raf); if(A) ui(); }
+    bP.addEventListener('click',()=>{ if(playing) pause(); else { play(); if(window.umami) umami.track('anim-play',{anim:host.dataset.anim}); } });
+    bR.addEventListener('click',()=>{ pause(); t=0; play(); if(window.umami) umami.track('anim-replay',{anim:host.dataset.anim}); });
+    host.querySelectorAll('.a-tab').forEach(tb=>tb.addEventListener('click',()=>{
+      host.querySelectorAll('.a-tab').forEach(x=>{ x.classList.toggle('on',x===tb); x.setAttribute('aria-pressed',x===tb?'true':'false'); });
+      opts=Object.assign({},JSON.parse(tb.dataset.o)); pause(); build(); play(); if(window.umami) umami.track('anim-tab',{anim:host.dataset.anim, tab:tb.textContent});
+    }));
+    players.push({host:host,
+      enter(){ build(); if(RMO){ t=A.dur; draw(); ui(); } else play(); },
+      leave(){ pause(); }});
+  });
+  function animsFor(n){ const s=slides[n-1]; players.forEach(p=>{ if(s.contains(p.host)) p.enter(); else p.leave(); }); }
+
+  /* ---------- AUTO-FIT: shrink a page until it fits without scrolling ---------- */
+  const MIN_K = 0.8;   /* never shrink text below 80% of normal */
+  const stageEl = document.getElementById('stage');
+  function updateMore(){
+    const s = slides[current-1];
+    const more = s && s.classList.contains('scrolly') && (s.scrollTop + s.clientHeight < s.scrollHeight - 4);
+    stageEl.classList.toggle('more', !!more);
+  }
+  /* ---------- FLOW CHARTS: straight row if it fits, otherwise snake ---------- */
+  document.querySelectorAll('.flow').forEach(f=>{
+    f._items=[...f.children].filter(c=>!c.classList.contains('arr')).map(c=>c.outerHTML);
+    f._sig=''; f._nat=0;
+  });
+  function flowDelays(f){ [...f.children].forEach((e,i)=>e.style.setProperty('--d',(0.1+i*0.08).toFixed(2)+'s')); }
+  function renderRow(f){
+    f.classList.remove('snake'); f.classList.add('row'); f.style.gridTemplateColumns='';
+    f.innerHTML=f._items.join('<span class="arr" aria-hidden="true">→</span>'); flowDelays(f);
+  }
+  function renderSnake(f,cols){
+    const it=f._items, n=it.length; let h='';
+    f.classList.remove('row'); f.classList.add('snake');
+    f.style.gridTemplateColumns=Array(cols).fill('minmax(0,1fr)').join(' 1.5em ');
+    for(let i=0;i<n;i++){
+      const r=Math.floor(i/cols), p=i%cols, rev=r%2===1;
+      const c=rev?cols-1-p:p, gr=2*r+1, gc=2*c+1;
+      h+='<div class="cell" style="grid-row:'+gr+';grid-column:'+gc+'">'+it[i]+'</div>';
+      if(i<n-1){
+        if(p<cols-1) h+='<span class="arr" aria-hidden="true" style="grid-row:'+gr+';grid-column:'+(rev?gc-1:gc+1)+'">'+(rev?'←':'→')+'</span>';
+        else h+='<span class="arr down" aria-hidden="true" style="grid-row:'+(gr+1)+';grid-column:'+gc+'">↓</span>';
+      }
+    }
+    f.innerHTML=h; flowDelays(f);
+  }
+  function layoutFlow(f,k){
+    const w=f.clientWidth; if(!w) return;
+    if(!f._nat){ renderRow(f); f._sig='row'; f._nat=f.scrollWidth/k; }
+    const fs=parseFloat(getComputedStyle(f).fontSize)||16;
+    const fitsRow=f._nat*k<=w+1;
+    const cols=Math.min(f._items.length,Math.max(2,Math.min(3,Math.floor(w/(9*fs)))));
+    const sig=fitsRow?'row':'s'+cols;
+    if(sig===f._sig) return;      /* unchanged: don't rebuild (avoids replaying animations) */
+    f._sig=sig; fitsRow?renderRow(f):renderSnake(f,cols);
+  }
+
+  function fit(slide){
+    if(!slide) return;
+    const si=slide.querySelector('.si');
+    const flows=[...slide.querySelectorAll('.flow')];
+    slide.classList.remove('scrolly'); slide.scrollTop = 0;
+    let k=1; slide.style.setProperty('--k',k); flows.forEach(f=>layoutFlow(f,k));
+    let g=0;
+    const over = () => si.scrollHeight>slide.clientHeight+1 || si.scrollWidth>slide.clientWidth+1;
+    while(g++<16 && over() && k>MIN_K){
+      k=+(k-0.03).toFixed(2); slide.style.setProperty('--k',k); flows.forEach(f=>layoutFlow(f,k));
+    }
+    if (over()) slide.classList.add('scrolly');
+    updateMore();
+  }
+  slides.forEach(s=>s.addEventListener('scroll', updateMore, {passive:true}));
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>fit(slides[current-1]),120); });
+
+  /* ---------- GATING ---------- */
+  function pending(slide){
+    let n=0;
+    slide.querySelectorAll('.toggle-wrap:not(.opt)').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
+    slide.querySelectorAll('.rcard').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
+    slide.querySelectorAll('.choice-set').forEach(s=>{ if(!s.dataset.done) n++; });
+    slide.querySelectorAll('.task').forEach(t=>{ if(!t.dataset.done) n++; });
+    return n;
+  }
+  function updateGate(alert){
+    const s=slides[current-1], n=(isEducator||current<maxReached)?0:pending(s);
+    btnNext.classList.toggle('locked', n>0);
+    if(n===0){ hint.className=''; hint.textContent=''; return; }
+    hint.className=alert?'alert':'';
+    const what=n===1?'1 item':n+' items';
+    hint.textContent=alert
+      ? 'Please finish the questions or open the sections on this page first ('+what+' left).'
+      : 'Finish '+what+' on this page to continue.';
+  }
+  function flagPending(slide){
+    [...slide.querySelectorAll('.toggle-wrap:not(.seen):not(.opt), .rcard:not(.seen), .choice-set:not([data-done]), .task:not([data-done])')]
+      .filter(e=>e.offsetParent!==null)
+      .forEach(e=>{ e.classList.remove('pulse'); void e.offsetWidth; e.classList.add('pulse'); });
+  }
+
+  function show(n){
+    slides.forEach((s,i)=>s.classList.toggle('active',i+1===n));
+    progFill.style.width=((n/TOTAL)*100)+'%';
+    progLbl.textContent=n+' / '+TOTAL;
+    btnBack.disabled=n===1;
+    btnNext.textContent=n===TOTAL?'Done':'Next →';
+    btnNext.setAttribute('data-umami-event',n===TOTAL?'carousel-selesai':'nav-next');
+    buildCharts(n);
+    fit(slides[n-1]);
+    requestAnimationFrame(()=>fit(slides[n-1]));
+    labFrame(slides[n-1]);
+    animsFor(n);
+    updateGate(false);
+    saveProgress();
+    if(window.umami) umami.track('slide-view',{slide:n});
+  }
+
+  /* NAV BUTTONS ONLY — no swipe, no keyboard */
+  btnNext.addEventListener('click',()=>{
+    const s=slides[current-1];
+    if(!isEducator && current>=maxReached && pending(s)>0){ updateGate(true); flagPending(s); if(window.umami) umami.track('gate-blocked',{slide:current}); return; }
+    if(current<TOTAL){ current++; reach(current); show(current); } else openOv('refs-overlay');
+  });
+  btnBack.addEventListener('click',()=>{ if(current>1){ current--; show(current); } });
+
+  document.querySelectorAll('.toggle-btn').forEach(b=>b.addEventListener('click',()=>{
+    const w=b.parentElement; w.classList.toggle('open'); w.classList.add('seen'); fit(slides[current-1]); updateGate(false);
+    if(window.umami) umami.track('toggle',{label:b.textContent.trim().slice(0,40)});
+  }));
+  document.querySelectorAll('.rcard').forEach(c=>c.addEventListener('click',()=>{ c.classList.add('seen'); fit(slides[current-1]); updateGate(false); }));
+
+  /* questions: a wrong choice is marked and explained; the student keeps going until right.
+     The right answer is never shown before it is chosen. First-try results feed the quiz score. */
+  document.querySelectorAll('.choice-set').forEach(set=>{
+    const ans=set.dataset.answer, fb=set.querySelector('.feedback');
+    const miss=document.createElement('div'); miss.className='feedback miss'; miss.setAttribute('aria-live','polite'); fb.parentNode.insertBefore(miss,fb);
+    set.querySelectorAll('.choice').forEach(c=>c.addEventListener('click',()=>{
+      if(set.dataset.done || c.classList.contains('wrong')) return;
+      const ok=c.dataset.v===ans;
+      if(set.dataset.first===undefined) set.dataset.first=ok?'1':'0';
+      if(ok){
+        set.dataset.done='1'; set.classList.add('done'); c.classList.add('right');
+        miss.classList.remove('show'); fb.classList.add('show');
+      } else {
+        c.classList.add('wrong'); c.setAttribute('aria-disabled','true');
+        miss.innerHTML='<b>Not quite.</b> '+(c.dataset.fb||'Think again, then choose another answer.'); miss.classList.add('show');
+      }
+      if(window.umami) umami.track('choice',{correct:ok, first:set.dataset.first==='1'});
+      updateScore(); fit(slides[current-1]); updateGate(false);
+    }));
+    const nx=set.querySelector('.next-q');
+    if(nx) nx.addEventListener('click',()=>{
+      const nxt=set.nextElementSibling;
+      if(nxt&&nxt.classList.contains('choice-set')){ set.classList.remove('cur'); nxt.classList.add('cur'); fit(slides[current-1]); }
+    });
+  });
+  function updateScore(){
+    const q=document.querySelectorAll('.quiz .choice-set'), done=[...q].filter(s=>s.dataset.done);
+    if(done.length<q.length) return;
+    document.getElementById('quiz-score').textContent='Right first time: '+done.filter(s=>s.dataset.first==='1').length+' / '+q.length;
+  }
+  function openOv(id){ if(id==='toc-overlay') buildToc(); document.getElementById(id).classList.add('open'); }
+  document.querySelectorAll('.overlay').forEach(o=>{
+    o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
+    o.querySelector('.close-ov').addEventListener('click',()=>o.classList.remove('open'));
+  });
+  /* demonstration videos: load the player only when opened, unload on close so it stops */
+  const vOv=document.getElementById('video-overlay'), vFrame=document.getElementById('video-frame');
+  function closeVid(){ vOv.classList.remove('open'); vFrame.innerHTML=''; }
+  document.querySelectorAll('.vid-btn').forEach(b=>b.addEventListener('click',()=>{
+    const id=b.dataset.yt;
+    document.getElementById('video-title').textContent=b.dataset.ytitle;
+    document.getElementById('video-link').href='https://www.youtube.com/watch?v='+id;
+    vFrame.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?rel=0&autoplay=1" title="'+b.dataset.ytitle.replace(/"/g,'&quot;')+'" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+    vOv.classList.add('open');
+  }));
+  vOv.addEventListener('click',e=>{ if(e.target===vOv) closeVid(); });
+  vOv.querySelector('.close-ov').addEventListener('click',closeVid);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && vOv.classList.contains('open')) closeVid(); });
+  document.getElementById('btn-toc').addEventListener('click',()=>openOv('toc-overlay'));
+  document.getElementById('btn-refs').addEventListener('click',()=>openOv('refs-overlay'));
+  document.getElementById('btn-pt').addEventListener('click',()=>{
+    document.getElementById('toc-overlay').classList.remove('open');
+    if(window.KompasPT) KompasPT.open();
+  });
+
+  /* contents: students can revisit any page they have already reached;
+     a signed-in Kompas educator can open every page */
+  const secNames={intro:'Introduction',pres:'1 · Gases and pressure',laws:'2 · The gas laws',ideal:'3 · The ideal gas equation',mix:'4 · Gas mixtures',kmt:'5 · Kinetic molecular theory',real:'6 · Real gases',gaslab:'Lab · Gas Bench',end:'Wrap-up'};
+  function buildToc(){
+    const ul=document.getElementById('toc-list'); ul.innerHTML=''; let last='';
+    slides.forEach((s,i)=>{
+      if(s.dataset.sec!==last){ const h=document.createElement('li'); h.className='sec'; h.textContent=secNames[s.dataset.sec]; ul.appendChild(h); last=s.dataset.sec; }
+      const li=document.createElement('li'), b=document.createElement('button');
+      b.innerHTML='<span>'+(i+1)+'</span>'+s.dataset.title;
+      if(i+1===current) b.className='cur';
+      const open=isEducator || i+1<=maxReached;
+      if(!open){ b.classList.add('lockd'); b.disabled=true; b.setAttribute('aria-disabled','true'); }
+      b.addEventListener('click',()=>{ if(!(isEducator || i+1<=maxReached)) return; current=i+1; show(current); document.getElementById('toc-overlay').classList.remove('open'); if(window.umami) umami.track('toc-jump',{slide:current}); });
+      li.appendChild(b); ul.appendChild(li);
+    });
+  }
+
+  /* the labs need about 480 px of height to show each step without scrolling;
+     on shorter screens offer a full-screen link instead of a cramped frame */
+  function labFrame(slide){
+    const fr=slide && slide.querySelector('iframe[data-src]'); if(!fr) return;
+    const box=fr.parentElement, small=box.clientHeight<480;
+    box.classList.toggle('launch',small);
+    if(!small && !fr.src){ fr.src=fr.dataset.src; if(window.umami) umami.track('lab-embed-open',{lab:fr.dataset.src.split('.')[0]}); }
+  }
+  window.addEventListener('resize',()=>setTimeout(()=>labFrame(slides[current-1]),200));
+
+  /* the embedded labs report finished rounds */
+  window.addEventListener('message',e=>{
+    if(e.origin!==location.origin && location.origin!=='null') return;
+    const d=e.data||{};
+    if(d.type==='gas-lab' && window.umami) umami.track(d.type+'-'+d.event,{scenario:d.reaction||''});
+    if(d.type==='gas-lab' && d.event==='round-complete') markLab(d.type);
+  });
+  /* a lab page stays locked until that bench has one completed round. The bench also records
+     the round on this device, so a round finished full screen (another tab) unlocks it too. */
+  const LABKEY=l=>'kompas.gases.'+l+'.done';
+  function markLab(l){
+    document.querySelectorAll('.lab-status[data-lab="'+l+'"]').forEach(t=>{ if(t.dataset.done) return; t.dataset.done='1'; t.classList.add('ok'); t.innerHTML='Lab round complete. Press Next to continue.'; });
+    updateGate(false);
+  }
+  ['gas-lab'].forEach(l=>{ try{ if(localStorage.getItem(LABKEY(l))) markLab(l); }catch(_){} });
+  window.addEventListener('storage',e=>{ const m=/^kompas\.gases\.(gas-lab)\.done$/.exec(e.key||''); if(m && e.newValue) markLab(m[1]); });
+
+  /* Back to Kompas: return to the exact course view the student came from
+     (it always opens Kompas at the Interactive labs list). */
+  document.getElementById('btn-kompas').addEventListener('click',e=>{
+    try{
+      if (document.referrer && new URL(document.referrer).origin===location.origin && history.length>1){
+        e.preventDefault(); location.assign(e.currentTarget.href);
+      }
+    }catch(_){}
+  });
+
+  /* ---------- progress: furthest page reached, remembered on this device ---------- */
+  function reach(n){ if(n>maxReached){ maxReached=n; } }
+  function saveProgress(){ try{ localStorage.setItem(PKEY, JSON.stringify({max:maxReached, last:current})); }catch(_){} }
+
+  /* ---------- Kompas sign-in: read the user's own role (RLS allows only their own row) ---------- */
+  window.addEventListener('DOMContentLoaded',async()=>{
+    try{
+      if(!window.supabase){ renderCertBox(); return; }
+      const sb=window.supabase.createClient('https://jtkskwopnprgmxlhppro.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0a3Nrd29wbnByZ214bGhwcHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDU0NDQsImV4cCI6MjEwMjUyMTQ0NH0.MVvaIH6fPhzC0aRk8XIZMU1OrAZYNbsT9V1diP8fuGw',{auth:{detectSessionInUrl:false}});
+      authSb=sb;
+      const {data:{session}}=await sb.auth.getSession(); if(!session){ renderCertBox(); return; }
+      const {data}=await sb.from('profiles').select('role, full_name').eq('id',session.user.id).single();
+      if(!data){ renderCertBox(); return; }
+      signedIn=true; isEducator=data.role==='educator'; profileName=(data.full_name||'').trim();
+      buildToc(); renderCertBox(); updateGate(false);
+    }catch(_){ renderCertBox(); }
+  });
+
+  /* ---------- certificate of completion ---------- */
+  const certBox=document.getElementById('cert-box'), certOut=document.getElementById('cert-out');
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function renderCertBox(){
+    if(!certBox) return;
+    if(!signedIn){
+      certBox.innerHTML='<p style="margin:0 0 .4em">Sign in to <b>Kompas Semester</b> to get your certificate. It is issued in your registered name with a serial number.</p><a class="btn solid cert-dl" href="../../index.html" data-umami-event="certificate-signin">Open Kompas Semester</a><p class="small" style="margin:.4em 0 0">Then come back to this page.</p>';
+    } else if(!profileName){
+      certBox.innerHTML='<p style="margin:0">Your Kompas Semester profile has no name yet. Add it in your Kompas account, then come back.</p>';
+    } else {
+      certBox.innerHTML='<p style="margin:0 0 .4em">Name on your certificate: <b>'+esc(profileName)+'</b><br><span class="small">From your Kompas Semester account.</span></p><button class="btn solid" id="cert-make" type="button">Create certificate</button>';
+      document.getElementById('cert-make').addEventListener('click',makeCert);
+    }
+    document.getElementById('cert-check').hidden=!isEducator;
+    if(slides[current-1].contains(certBox)) fit(slides[current-1]);
+  }
+  async function makeCert(){
+    const btn=document.getElementById('cert-make'); btn.disabled=true; btn.textContent='Issuing…';
+    try{
+      const {data,error}=await authSb.rpc('issue_certificate',{p_explainer:'gases'});
+      if(error||!data||!data.length) throw error||new Error('No certificate returned');
+      const c=data[0], cv=await drawCert(c.name_on_certificate, c.serial, c.issued_at);
+      /* Blob URL, not a data: URL — browsers block top-level navigation to data: URLs */
+      const blob=await new Promise((res,rej)=>cv.toBlob(b=>b?res(b):rej(new Error('PNG failed')),'image/png'));
+      if(window._certURL) URL.revokeObjectURL(window._certURL);
+      const url=window._certURL=URL.createObjectURL(blob), fname='gases-certificate-'+c.serial+'.png';
+      certOut.innerHTML='<img class="cert-img" alt="Certificate of completion, serial '+esc(c.serial)+'" src="'+url+'"><p class="small" style="margin:.2em 0">Serial <b>'+esc(c.serial)+'</b></p><button class="btn solid" id="cert-dl" type="button">Download certificate (PNG)</button><p class="small" style="margin:.4em 0 0">On a phone, if nothing downloads, press and hold the certificate image and choose <b>Save image</b>.</p>';
+      /* plain button with no data-umami-event: Umami intercepts tagged links and ignores the download attribute */
+      document.getElementById('cert-dl').addEventListener('click',()=>{
+        const a=document.createElement('a'); a.href=url; a.download=fname; a.style.display='none';
+        document.body.appendChild(a); a.click(); a.remove();
+        if(window.umami) umami.track('certificate-download');
+      });
+      if(window.umami) umami.track('certificate-create');
+    }catch(err){
+      console.warn('Certificate not issued:', err);
+      certOut.innerHTML='<p class="calc-out fail">Could not issue your certificate. Check that you are signed in to Kompas Semester and online, then try again.</p>';
+    }
+    btn.disabled=false; btn.textContent='Create certificate'; fit(slides[current-1]);
+  }
+  const lookBtn=document.getElementById('cert-lookup');
+  if(lookBtn) lookBtn.addEventListener('click',async()=>{
+    const out=document.getElementById('cert-check-out'), sn=(document.getElementById('cert-serial').value||'').trim().toUpperCase();
+    if(!sn){ out.innerHTML='<p class="calc-out fail">Type a serial first.</p>'; fit(slides[current-1]); return; }
+    out.innerHTML='<p class="small">Checking…</p>';
+    try{
+      const {data,error}=await authSb.from('certificates').select('serial, explainer, name_on_certificate, issued_at').eq('serial',sn).maybeSingle();
+      if(error) throw error;
+      out.innerHTML=data
+        ? '<p class="calc-out"><b>Genuine.</b> '+esc(data.name_on_certificate)+' · '+esc(data.explainer)+' · issued '+new Date(data.issued_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Kuala_Lumpur'})+'</p>'
+        : '<p class="calc-out fail"><b>No certificate has this serial.</b> Treat the certificate as not genuine.</p>';
+      if(window.umami) umami.track('certificate-check');
+    }catch(_){ out.innerHTML='<p class="calc-out fail">Could not check right now. Try again.</p>'; }
+    fit(slides[current-1]);
+  });
+  function wrapLines(ctx,text,maxW){ const words=text.split(' '), lines=[]; let line=''; words.forEach(w=>{ const t=line?line+' '+w:w; if(ctx.measureText(t).width>maxW && line){ lines.push(line); line=w; } else line=t; }); if(line) lines.push(line); return lines; }
+  async function drawCert(name, serial, issuedAt){
+    try{ await Promise.all(['800 60px "DM Sans"','700 30px "DM Sans"','500 30px "DM Sans"'].map(f=>document.fonts.load(f))); }catch(_){}
+    const W=2000, H=1414, c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+    const F=(w,sz)=>w+' '+sz+'px "DM Sans", system-ui, sans-serif';
+    x.fillStyle='#ffffff'; x.fillRect(0,0,W,H);
+    x.strokeStyle='#2d6a4f'; x.lineWidth=14; x.strokeRect(50,50,W-100,H-100);
+    x.strokeStyle='#cfe6d9'; x.lineWidth=4; x.strokeRect(84,84,W-168,H-168);
+    /* motif */
+    x.strokeStyle='#cfe6d9'; x.lineWidth=6; x.beginPath();
+    for(let i=0;i<=400;i++){ const t=i/400, X=1280+t*600, y=1220-(220*Math.exp(-Math.pow((t-.3)/.035,2))+150*Math.exp(-Math.pow((t-.68)/.04,2))); i?x.lineTo(X,y):x.moveTo(X,y); } x.stroke();
+    x.textAlign='center'; x.fillStyle='#8a5d14'; x.font=F(700,30);
+    x.fillText('KOMPAS SEMESTER  ·  AUFTHORITY EDU',W/2,200);
+    x.fillStyle='#1c2620'; x.font=F(800,92); x.fillText('Certificate of Completion',W/2,320);
+    x.fillStyle='#3f4742'; x.font=F(500,38); x.fillText('This certifies that',W/2,430);
+    let sz=104; x.font=F(800,sz); while(x.measureText(name).width>1500 && sz>56){ sz-=4; x.font=F(800,sz); }
+    x.fillStyle='#2d6a4f'; x.fillText(name,W/2,560);
+    x.strokeStyle='#c9cec9'; x.lineWidth=3; x.beginPath(); x.moveTo(W/2-620,600); x.lineTo(W/2+620,600); x.stroke();
+    x.fillStyle='#3f4742'; x.font=F(500,38); x.fillText('has completed every page of the interactive explainer',W/2,680);
+    x.fillStyle='#1c2620'; x.font=F(800,60); x.fillText('Gases, Explained',W/2,775);
+    x.fillStyle='#636b65'; x.font=F(500,32); x.fillText('Gas laws · Ideal gas equation · Kinetic theory · Real gases',W/2,835);
+    x.textAlign='left'; x.font=F(500,30); x.fillStyle='#3f4742';
+    const outcomes=['State the gas laws and describe the postulates of the kinetic theory of gases.','Apply the ideal gas equation and the gas laws to problems on pressure, volume, temperature and moles.','Analyse deviations from ideal behaviour using the van der Waals equation.'];
+    let y=930; outcomes.forEach(o=>{ x.fillStyle='#2d6a4f'; x.beginPath(); x.arc(300,y-10,9,0,Math.PI*2); x.fill(); x.fillStyle='#3f4742'; wrapLines(x,o,1300).forEach(l=>{ x.fillText(l,330,y); y+=44; }); y+=6; });
+    const day=new Date(issuedAt).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Kuala_Lumpur'});
+    x.font=F(700,32); x.fillStyle='#1c2620'; x.fillText('Issued: '+day,260,1180);
+    x.fillText('Serial: '+serial,260,1232);
+    x.font=F(500,24); x.fillStyle='#636b65'; x.textAlign='center';
+    x.fillText('Recorded by Kompas Semester; educators can check this serial. A record of completion, not an official KPJ Healthcare University award.',W/2,1316);
+    return c;
+  }
+
+
+  buildToc();
+  show(current);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fit(slides[current-1]));
+})();
+</script>
+</body>
+</html>

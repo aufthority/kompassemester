@@ -727,6 +727,10 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
           <div><h3>Mole and Stoichiometry Explainer</h3><div class="meta">The mole, balancing equations, limiting reagent and yield.</div></div>
           <span class="lab-card-go">Open</span>
         </a>
+        <a class="card glass lab-card" href="labs/gases/index.html" data-tour="gases">
+          <div><h3>Gases Explainer</h3><div class="meta">The gas laws, PV = nRT, kinetic theory and real gases, with the Gas Bench lab.</div></div>
+          <span class="lab-card-go">Open</span>
+        </a>
         <a class="card glass lab-card" href="labs/acidbase.html" data-tour="acidbase">
           <div><h3>Acid–Base Lab</h3><div class="meta">Strong and weak acids, pH and titration curves.</div></div>
           <span class="lab-card-go">Open</span>
@@ -942,6 +946,13 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
           <div>
             <h3>Mole and Stoichiometry Explainer</h3>
             <div class="meta">The mole, types of reaction and balancing equations, then limiting reagent and percentage yield, with the Reaction Bench lab and a periodic table to calculate with.</div>
+          </div>
+          <span class="lab-card-go">Open</span>
+        </a>
+        <a class="card glass fade-up lab-card" id="lab-gases-link" href="labs/gases/index.html">
+          <div>
+            <h3>Gases Explainer</h3>
+            <div class="meta">Pressure, the gas laws, the ideal gas equation, gas mixtures, kinetic molecular theory and real gases (van der Waals), with the five-station Gas Bench lab, and a certificate when you finish.</div>
           </div>
           <span class="lab-card-go">Open</span>
         </a>
@@ -2151,7 +2162,7 @@ async function logEngagementEvent(eventType, { topicId = null, metadata = {} } =
 /* Interactive labs: log the open, then go. Waits at most 700 ms for the
    insert so leaving the page doesn't cancel it; a slow or failed log never
    blocks the student. */
-['orbitals', 'atomic-structure', 'trends', 'periodic-trends', 'acidbase', 'titration', 'osd', 'hydrocarbons', 'chemical-bonding', 'stoichiometry', 'chromatography', 'spectroscopy', 'qc-practice'].forEach(lab => {
+['orbitals', 'atomic-structure', 'trends', 'periodic-trends', 'acidbase', 'titration', 'osd', 'hydrocarbons', 'chemical-bonding', 'stoichiometry', 'gases', 'chromatography', 'spectroscopy', 'qc-practice'].forEach(lab => {
   document.getElementById('lab-' + lab + '-link').addEventListener('click', async e => {
     e.preventDefault();
     const href = e.currentTarget.getAttribute('href');
