@@ -1393,7 +1393,10 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   const slides   = document.querySelectorAll('.slide');
   const TOTAL    = slides.length;
   /* progress is remembered on this device; a returning student resumes where they left off */
-  const PKEY='kompas.chromatography.progress';
+  /* progress is kept per person: signed-in students under their own id, visitors under a device key.
+     Educators: nothing saved. In Kompas student preview the gates are on and nothing is saved. */
+  let PKEY='kompas.chromatography.progress.v2', saveOn=true, previewOn=false;
+  try{ localStorage.removeItem('kompas.chromatography.progress'); }catch(_){}
   let maxReached=1, isEducator=false, profileName='', signedIn=false, authSb=null;
   try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.max>=1) maxReached=Math.min(sv.max, document.querySelectorAll('.slide').length); }catch(_){}
   let current = 1;
@@ -1899,7 +1902,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   function updateGate(alert){
     const s=slides[current-1], n=(isEducator||current<maxReached)?0:pending(s);
     btnNext.classList.toggle('locked', n>0);
-    if(n===0){ hint.className=''; hint.textContent=''; return; }
+    if(n===0){ hint.className=''; hint.textContent=isEducator?'Educator view: nothing is locked. To test the locks, use “View as student” in Kompas.':(previewOn?'Student preview: questions lock Next, and nothing is saved.':''); return; }
     hint.className=alert?'alert':'';
     const what=n===1?'1 item':n+' items';
     hint.textContent=alert
@@ -2048,7 +2051,13 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 
   /* ---------- progress: furthest page reached, remembered on this device ---------- */
   function reach(n){ if(n>maxReached){ maxReached=n; } }
-  function saveProgress(){ try{ localStorage.setItem(PKEY, JSON.stringify({max:maxReached, last:current})); }catch(_){} }
+  function saveProgress(){ if(!saveOn) return; try{ localStorage.setItem(PKEY, JSON.stringify({max:maxReached, last:current})); }catch(_){} }
+  function loadProgress(){
+    maxReached=1; current=1;
+    try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null');
+      if(sv && sv.max>=1) maxReached=Math.min(sv.max, TOTAL);
+      if(sv && sv.last>=1 && sv.last<=maxReached) current=sv.last; }catch(_){}
+  }
 
   /* ---------- Kompas sign-in: read the user's own role (RLS allows only their own row) ---------- */
   window.addEventListener('DOMContentLoaded',async()=>{
@@ -2059,8 +2068,12 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
       const {data:{session}}=await sb.auth.getSession(); if(!session){ renderCertBox(); return; }
       const {data}=await sb.from('profiles').select('role, full_name').eq('id',session.user.id).single();
       if(!data){ renderCertBox(); return; }
-      signedIn=true; isEducator=data.role==='educator'; profileName=(data.full_name||'').trim();
-      buildToc(); renderCertBox(); updateGate(false);
+      signedIn=true; profileName=(data.full_name||'').trim();
+      try{ previewOn=data.role==='educator' && !!sessionStorage.getItem('kompas.previewCourse'); }catch(_){ previewOn=false; }
+      isEducator=data.role==='educator' && !previewOn;
+      if(data.role==='educator'){ saveOn=false; if(previewOn){ maxReached=1; current=1; } }
+      else { PKEY='kompas.chromatography.progress.u.'+session.user.id; loadProgress(); }
+      show(current); buildToc(); renderCertBox(); updateGate(false);
     }catch(_){ renderCertBox(); }
   });
 
