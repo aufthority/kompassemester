@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Molecule Bench — Aufthority</title>
-<meta name="description" content="Interactive lab: one molecule, six stations. Lewis count, VSEPR shape in 3D, bond type, polarity, intermolecular forces, then a pharmacy decision: residual solvents by GC, formulation, boiling points or a leak in the store.">
+<meta name="description" content="Interactive lab: one molecule, five stations. Lewis count, VSEPR shape in 3D, bond type, polarity and the forces between molecules.">
 <meta name="theme-color" content="#ffffff">
 <meta property="og:type"         content="website">
 <meta property="og:site_name"    content="Aufthority">
-<meta property="og:title"        content="Molecule Bench: from Lewis structure to pharmacy decision">
-<meta property="og:description"  content="Count the electrons, see the shape in 3D, and decide how a molecule behaves.">
+<meta property="og:title"        content="Molecule Bench: from Lewis structure to intermolecular forces">
+<meta property="og:description"  content="Count the electrons, see the shape in 3D, and find the forces between molecules.">
 <meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
 <meta property="og:locale"       content="en_MY">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
@@ -275,13 +275,6 @@ canvas.stage:active{cursor:grabbing}
       <div id="q5b"></div>
       <div class="btns"><button class="btn solid" id="chk5" type="button">Check</button></div>
       <div class="msg" id="m5">Answer every part, then check.</div>
-    </section>
-
-    <section class="scr" data-step="6" data-pane="a" data-title="Decision"><div id="q6a"></div></section>
-    <section class="scr" data-step="6" data-pane="b" data-title="The decision">
-      <div id="q6b"></div>
-      <div class="btns"><button class="btn solid" id="chk6" type="button">Check</button></div>
-      <div class="msg" id="m6">Answer every part, then check.</div>
       <div class="btns" id="endrow" hidden><button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New molecule</button><button class="btn ghost" id="btn-next" type="button">Next scenario →</button></div>
     </section>
 
@@ -302,8 +295,7 @@ canvas.stage:active{cursor:grabbing}
         <tr><th colspan="2">Molecule Bench · Pharmacy</th></tr>
         <tr><td>Valence electrons</td><td>H 1, C 4, N 5, O 6, S 6, Cl 7 (the last digit of the group number)</td></tr>
         <tr><td>Electronegativity (Chang)</td><td>H 2.1, C 2.5, S 2.5, N 3.0, Cl 3.0, O 3.5</td></tr>
-        <tr><td>Relative atomic masses</td><td>H 1, C 12, N 14, O 16, S 32, Cl 35.5</td></tr>
-        <tr><td>Based on</td><td>Chang, <i>Chemistry</i> (10th ed.), Chapters 9–11</td></tr>
+                <tr><td>Based on</td><td>Chang, <i>Chemistry</i> (10th ed.), Chapters 9–11</td></tr>
       </table>
       <section class="stp-sec" id="stp-1"><h3>1 · Count: the Lewis structure</h3>
         <ol><li>Total valence electrons = the central atom + every outer atom.</li>
@@ -325,8 +317,6 @@ canvas.stage:active{cursor:grabbing}
         <ol><li>No polar bonds: non-polar.</li><li>Polar bonds in a symmetric shape, identical outer atoms, no lone pairs on the centre: the dipoles cancel, non-polar.</li><li>Otherwise: polar.</li></ol></section>
       <section class="stp-sec" id="stp-5"><h3>5 · Forces between molecules</h3>
         <ol><li>London dispersion: in every molecule; stronger with more electrons.</li><li>Dipole–dipole: polar molecules.</li><li>Hydrogen bonding: H bonded to N, O or F (donor) meets a lone pair on N, O or F (acceptor).</li></ol></section>
-      <section class="stp-sec" id="stp-6"><h3>6 · Decision</h3>
-        <ol><li>GC, non-polar column: lower boiling point, earlier peak.</li><li>Solubility: like dissolves like. Molecules that hydrogen-bond with water mix with it.</li><li>Boiling point: stronger forces, higher boiling point. Hydrogen bonding raises it most.</li><li>Leaks: molar mass below 29 g/mol rises; above 29 sinks.</li></ol></section>
       <div class="stp-stamp">Training document</div>
     </div>
   </div>
@@ -348,7 +338,7 @@ canvas.stage:active{cursor:grabbing}
       <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="18" font-size="9.5" text-anchor="middle" fill="#1c2620" font-weight="700">polar bonds +</text><text x="60" y="36" font-size="9.5" text-anchor="middle" fill="#2d6a4f" font-weight="800">no cancelling = polar</text></svg>Shape decides whether bond dipoles <b>cancel</b>.</div>
       <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="26" font-size="10" text-anchor="middle" fill="#3a6bd1" font-weight="800">H on N, O, F</text></svg>Hydrogen bonding needs H on <b>N, O or F</b>.</div>
     </div>
-    <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Scenarios are simulated for training; boiling points are from PubChem and electronegativities from Chang. Molecules are drawn from their real bond angles; sizes are not to scale.</div>
+    <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Scenarios are simulated for training; electronegativities are from Chang. Molecules are drawn from their real bond angles; sizes are not to scale.</div>
   </div>
 </div>
 
@@ -411,10 +401,7 @@ canvas.stage:active{cursor:grabbing}
     pi:'π bond: the second (and third) bond in a double (or triple) bond, from side-on overlap of p orbitals.',
     den:'ΔEN: the larger electronegativity minus the smaller one. Chang’s values are on the Card.',
     don:'Hydrogen-bond donor: a hydrogen bonded directly to N, O or F.',
-    acc:'Hydrogen-bond acceptor: a lone pair on N, O or F.',
-    rs:'Residual solvents: traces of solvent left in a medicine from its manufacture. Pharmacopoeias set limits and test them by gas chromatography (GC).',
-    np:'Non-polar GC column: separates mainly by volatility, so lower-boiling compounds come out first.',
-    air:'Air is about 78% N₂ and 21% O₂. Its average molar mass is about 29 g/mol.'
+    acc:'Hydrogen-bond acceptor: a lone pair on N, O or F.'
   };
   document.addEventListener('click',e=>{
     const t=e.target.closest('.term'); if(!t) return;
@@ -429,22 +416,21 @@ canvas.stage:active{cursor:grabbing}
     V1:'A multiple bond is one domain.', V2:'Lone pairs are domains too.', V3:'Name the shape from the atoms.', V4:'Lone pairs squeeze the angle.', V5:'Domains set the hybridisation.', V6:'Each double bond has one π bond.',
     E1:'ΔEN = larger − smaller.', E2:'Below 0.5 non-polar; 0.5 to 2.0 polar; 2.0 or more ionic.',
     P1:'Polar bonds need ΔEN of 0.5 or more.', P2:'Symmetry decides whether dipoles cancel.', P3:'Polar bonds that do not cancel make a polar molecule.',
-    F1:'H on N, O or F gives hydrogen bonding.', F2:'Polar molecules add dipole–dipole forces.', F3:'London forces act between all molecules.', F4:'Donor: H on N, O or F.', F5:'Acceptor: a lone pair on N, O or F.',
-    D1:'Non-polar column: lower boiling point, earlier peak.', D2:'Like dissolves like.', D3:'Compare the molar mass with air (29 g/mol).', D4:'Hydrogen bonding raises the boiling point most.'
+    F1:'H on N, O or F gives hydrogen bonding.', F2:'Polar molecules add dipole–dipole forces.', F3:'London forces act between all molecules.', F4:'Donor: H on N, O or F.', F5:'Acceptor: a lone pair on N, O or F.'
   };
   function mixLine(m,text,step){ track('lab-mix-'+m,{step:step, scenario:R.S.id}); return '<p><b>'+MIX[m]+'</b> '+text+'</p>'; }
 
   /* ---------- scenarios ---------- */
   const SCEN=[
-   {id:'gc', chip:'1 · Residual solvents', pool:['ch2cl2','chcl3','ccl4','cs2']},
+   {id:'solv', chip:'1 · Solvent cupboard', pool:['ch2cl2','chcl3','ccl4','cs2']},
    {id:'form', chip:'2 · Formulation bench', pool:['nh3','h2co','ch2cl2','chcl3','ccl4','cs2']},
    {id:'trainee', chip:'3 · Aina’s bench', pool:['h2o','h2co','ch4']},
    {id:'store', chip:'4 · Store and gases', pool:['nh3','ch4','co2','ch2cl2','chcl3','ccl4']}
   ];
-  const STEPS=6;
-  const STEP_NAMES=['Molecule Bench','Count','Shape','Bond','Polarity','Forces','Decision'];
+  const STEPS=5;
+  const STEP_NAMES=['Molecule Bench','Count','Shape','Bond','Polarity','Forces'];
   /* where each station is taught in the explainer (for the Stuck? line) */
-  const EXP_PAGE=['','Five steps to a Lewis structure','All the shapes in one table','ΔEN decides the bond type','A quick polarity test','Four intermolecular forces','Solvents, solubility and GC'];
+  const EXP_PAGE=['','Five steps to a Lewis structure','All the shapes in one table','ΔEN decides the bond type','A quick polarity test','Four intermolecular forces'];
 
   /* ---------- state ---------- */
   let sc=0, R=null, solved=Array(STEPS).fill(false), rounds=0, lastMol={};
@@ -457,25 +443,12 @@ canvas.stage:active{cursor:grabbing}
     /* a different molecule from last time in this scenario, when possible */
     let id; do{ id=pick(S.pool); }while(S.pool.length>1 && id===lastMol[S.id]); lastMol[S.id]=id;
     r.m=MOL[id];
-    /* station 6: the molecule plus two others */
-    if(S.id==='gc') r.trio=shuffle([id].concat(shuffle(S.pool.filter(x=>x!==id)).slice(0,2)));
-    else if(S.id==='form'){ const hb=['nh3','h2co'], no=['ch2cl2','chcl3','ccl4','cs2'];
-      const a=hb.includes(id)?id:pick(hb), rest=no.includes(id)?[id].concat(shuffle(no.filter(x=>x!==id)).slice(0,1)):shuffle(no).slice(0,2);
-      r.trio=shuffle([a].concat(rest)); }
-    else if(S.id==='trainee') r.trio=shuffle(['h2o','h2co','ch4']);
-    else r.trio=[id];
     r.ans={}; for(let k=1;k<=STEPS;k++) r.ans[k]={};
     r.at={}; r.yaw=-0.6; r.pitch=0.3;
     R=r; solved=Array(STEPS).fill(false);
     render();
   }
-  const X={
-    first:()=>R.trio.slice().sort((a,b)=>MOL[a].bp-MOL[b].bp)[0],
-    last:()=>R.trio.slice().sort((a,b)=>MOL[b].bp-MOL[a].bp)[0],
-    water:()=>R.trio.find(x=>MOL[x].donor||MOL[x].acceptor&&MOL[x].polar),
-    high:()=>R.trio.slice().sort((a,b)=>MOL[b].bp-MOL[a].bp)[0],
-    heavy:()=>R.trio.slice().sort((a,b)=>MOL[b].M-MOL[a].M)[0]
-  };
+  const X={};
   function chipGroup(opts,sel,cb,col){
     const g=document.createElement('div'); g.className='chips'+(col?' col':''); g.setAttribute('role','group');
     opts.forEach((o,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(sel===i?' on':''); b.innerHTML=o; b.setAttribute('aria-pressed',sel===i?'true':'false');
@@ -539,7 +512,7 @@ canvas.stage:active{cursor:grabbing}
     c.beginPath(); c.arc(x,y,r,0,Math.PI*2); c.fillStyle=dark(fill); c.fill();
     c.save(); c.beginPath(); c.arc(x,y,r,0,Math.PI*2); c.clip(); c.beginPath(); c.arc(x-r*.16,y-r*.2,r*.94,0,Math.PI*2); c.fillStyle=fill; c.fill(); c.restore();
     if(r>5){ c.beginPath(); c.ellipse(x-r*.38,y-r*.44,r*.26,r*.14,-.6,0,Math.PI*2); c.fillStyle='rgba(255,255,255,.75)'; c.fill(); }
-    jPath(c,circPts(x,y,r),true,Math.min(1,r/14)); inkStroke(c,r<8?1.2:1.8);
+    if(o.steady){ c.beginPath(); c.arc(x,y,r,0,Math.PI*2); } else jPath(c,circPts(x,y,r),true,Math.min(1,r/14)); inkStroke(c,r<8?1.2:1.8);
     if(lab && r>6.5) txt(c,lab,x,y+.5,{s:Math.max(7,r*.78),w:800,c:lumi(fill)>.62?OUT:'#ffffff'});
     c.restore(); }
   /* boxed sign: mono text, ink outline, hard offset shadow */
@@ -556,11 +529,11 @@ canvas.stage:active{cursor:grabbing}
   /* ---------- vessels: one per scenario ---------- */
   function vessel(c,kind,amb){
     const gas=['nh3','ch4','co2'].includes(R.m.id);
-    if(kind==='gc'){ /* GC headspace vial on a small tray */
+    if(kind==='solv'){ /* solvent vials on a small tray */
       rrect(c,48,196,88,9,3); c.fillStyle='#c9d4cf'; c.fill(); inkStroke(c,1.6);
       [62,92,122].forEach((x,i)=>{ const hl=i===1; rrect(c,x-11,138,22,58,4); c.fillStyle=TP.glass; c.fill(); rrect(c,x-11,172,22,24,3); c.fillStyle=hl?'#f3e7c4':'#eef0ea'; c.fill(); jPath(c,[[x-11,138],[x-11,196],[x+11,196],[x+11,138]],true,.6); inkStroke(c,1.8);
         rrect(c,x-12,128,24,11,2); c.fillStyle=hl?'#c0392b':'#9aa39d'; c.fill(); inkStroke(c,1.6); });
-      sign(c,'GC',92,112,{fs:8}); return [92,182]; }
+      sign(c,'solvents',92,112,{fs:8}); return [92,182]; }
     if(kind==='form'){ /* beaker of water */
       const x0=56,x1=128,top=118,by=204,sy=146+Math.sin(amb*2)*1.2;
       c.save(); c.fillStyle=TP.glass; c.fillRect(x0,top,x1-x0,by-top); c.fillStyle='#bcd9f2'; c.fillRect(x0,sy,x1-x0,by-sy); c.restore();
@@ -620,18 +593,23 @@ canvas.stage:active{cursor:grabbing}
   function drawMol(c,m,P,S,o){
     const g=geom(m,o.morph), A=g.pos.map(p=>P(p)), els=[m.c].concat(m.out), q=deltas(m), items=[];
     const k=S/30;
-    m.out.forEach((a,i)=>{ const p=A[0], r=A[i+1]; items.push({z:(p[2]+r[2])/2, f:()=>{
-      if(o.bonds<=0.01) return;
-      const d=Math.abs(EN[m.c]-EN[a]), n=m.ord[i], dx=r[0]-p[0], dy=r[1]-p[1], Ln=Math.hypot(dx,dy)||1, nx=-dy/Ln, ny=dx/Ln;
+    /* each bond is drawn as two halves, each tucked just behind its own atom, so a bond can never
+       jump in front of the atom at its far end while the molecule turns */
+    m.out.forEach((a,i)=>{ if(o.bonds<=0.01) return;
+      const p=A[0], r=A[i+1], d=Math.abs(EN[m.c]-EN[a]), n=m.ord[i], dx=r[0]-p[0], dy=r[1]-p[1], Ln=Math.hypot(dx,dy)||1, nx=-dy/Ln, ny=dx/Ln;
+      const mx=(p[0]+r[0])/2, my=(p[1]+r[1])/2;
       let col=OUT;
       if(o.pol>0 && d>=0.5){ const lo=EN[a]>EN[m.c]?p:r, hi=lo===p?r:p, gr=c.createLinearGradient(lo[0],lo[1],hi[0],hi[1]);
         gr.addColorStop(0,mixHex(OUT,'#3a6bd1',o.pol)); gr.addColorStop(.5,mixHex(OUT,'#9aa39d',o.pol)); gr.addColorStop(1,mixHex(OUT,'#c0392b',o.pol)); col=gr; }
-      c.save(); c.globalAlpha*=o.bonds; c.strokeStyle=col; c.lineCap='round';
-      for(let j=0;j<n;j++){ const off=(j-(n-1)/2)*3.6*k; c.lineWidth=(n>1?2.6:3.8)*k; c.beginPath(); c.moveTo(p[0]+nx*off,p[1]+ny*off); c.lineTo(r[0]+nx*off,r[1]+ny*off); c.stroke(); }
-      /* shared pairs: two dots per pair at the middle of the bond */
-      if(o.pairs>0.01){ const mx=(p[0]+r[0])/2, my=(p[1]+r[1])/2, ux=dx/Ln, uy=dy/Ln; c.globalAlpha=o.pairs; c.fillStyle='#b25f0c';
-        for(let j=0;j<n;j++){ const off=(j-(n-1)/2)*8*k+ (n===1?0:0); [-1,1].forEach(sg=>{ c.beginPath(); c.arc(mx+nx*(off+6*k)+ux*sg*2.6*k,my+ny*(off+6*k)+uy*sg*2.6*k,1.9*k,0,7); c.fill(); }); } }
-      c.restore(); }});
+      const half=from=>()=>{ c.save(); c.globalAlpha*=o.bonds; c.strokeStyle=col; c.lineCap='round';
+        for(let j=0;j<n;j++){ const off=(j-(n-1)/2)*3.6*k; c.lineWidth=(n>1?2.6:3.8)*k; c.beginPath(); c.moveTo(from[0]+nx*off,from[1]+ny*off); c.lineTo(mx+nx*off,my+ny*off); c.stroke(); }
+        c.restore(); };
+      items.push({z:p[2]+1e-3, f:half(p)});
+      items.push({z:r[2]+1e-3, f:half(r)});
+      /* shared pairs: two dots per pair beside the middle of the bond */
+      if(o.pairs>0.01) items.push({z:Math.min(p[2],r[2])-1e-3, f:()=>{ const ux=dx/Ln, uy=dy/Ln; c.save(); c.globalAlpha*=o.pairs*o.bonds; c.fillStyle='#b25f0c';
+        for(let j=0;j<n;j++){ const off=(j-(n-1)/2)*8*k; [-1,1].forEach(sg=>{ c.beginPath(); c.arc(mx+nx*(off+6*k)+ux*sg*2.6*k,my+ny*(off+6*k)+uy*sg*2.6*k,1.9*k,0,7); c.fill(); }); }
+        c.restore(); }});
     });
     /* lone pairs on the central atom: orange lobes with two electrons */
     if(o.lobes>0.01) g.lp.forEach(d=>{ const cpos=g.pos[0], tip=P(add(cpos,mul(d,0.62))), base=A[0]; items.push({z:tip[2]-0.05, f:()=>{
@@ -640,7 +618,7 @@ canvas.stage:active{cursor:grabbing}
       c.beginPath(); c.ellipse(0,0,rx,ry,0,0,7); c.fillStyle='rgba(238,138,69,.55)'; c.fill(); c.lineWidth=1.3; c.strokeStyle=OUT; c.stroke();
       c.fillStyle=OUT; [-1,1].forEach(sg=>{ c.beginPath(); c.arc(rx*.15,sg*ry*.38,1.7*k,0,7); c.fill(); });
       c.restore(); }}); });
-    els.forEach((e,i)=>items.push({z:A[i][2], f:()=>{ ball(c,A[i][0],A[i][1],RADL[e]*k*A[i][3],ELC[e],o.labels===false?'':e,{al:o.atoms??1}); }}));
+    els.forEach((e,i)=>items.push({z:A[i][2], f:()=>{ ball(c,A[i][0],A[i][1],RADL[e]*k*A[i][3],ELC[e],o.labels===false?'':e,{al:o.atoms??1,steady:true}); }}));
     items.sort((a,b)=>b.z-a.z).forEach(it=>it.f());
     /* δ labels */
     if(o.delta>0.01) els.forEach((e,i)=>{ if(!q[i]) return; const pp=A[i], rr=RADL[e]*k*pp[3];
@@ -718,28 +696,9 @@ canvas.stage:active{cursor:grabbing}
         else cap('what holds them together?');
         return;
       }
-      /* station 6 */
-      const u=uAt(6), sid=R.S.id;
-      if(sid==='store'){ const light=m.M<29, n=8, pts=scatter(n,11,58,30);
-        pts.forEach((p,i)=>{ const drift=u*(light?-1:1)*(38+((i*13)%14)), y=cl(p[1]+drift,-74,74), P=projector(R.yaw+i,R.pitch,12,p[0],y);
-          drawMol(c,m,P,12,{morph:1,bonds:1,pairs:0,lobes:0,pol:0,delta:0,arrows:-1,labels:false}); });
-        for(let i=0;i<6;i++){ const a=rnd(i+40)*6.28, r=rnd(i+50)*70, x=Math.cos(a)*r, y=Math.sin(a)*r; ball(c,x-3,y,4,'#c9ced0',''); ball(c,x+3,y,4,'#c9ced0',''); }
-        cap(solved[5]?(light?'lighter than air: rises':'heavier than air: sinks'):'grey pairs: air (N₂, O₂)',solved[5]?(light?'#e8effc':'#fdf3e6'):TP.cream);
-        return; }
-      const ids=R.trio, order=ids.slice().sort((a,b)=>sid==='gc'?MOL[a].bp-MOL[b].bp:0);
-      ids.forEach((id,i)=>{ const mm=MOL[id], j=sid==='gc'?order.indexOf(id):i, x=L(-62+i*62,-62+j*62,sid==='gc'?ez(u):0);
-        const P=projector(R.yaw+i*.8,R.pitch,16,x,-6); drawMol(c,mm,P,16,{morph:1,bonds:1,pairs:0,lobes:0,pol:0,delta:0,arrows:-1,labels:false});
-        sign(c,sub(mm.f),x,38,{fs:8.5,bg:id===m.id?'#fdf3e6':TP.cream});
-        if(u>0.3){ const al=(u-.3)/.7;
-          if(sid==='gc'){ sign(c,['1st','2nd','3rd'][j],x,58,{fs:7.5,al:al,bg:'#e9f4ee'}); txt(c,mm.bp+' °C',x,74,{s:8,w:700,al:al}); }
-          if(sid==='form') sign(c,id===X.water()?'mixes':'separates',x,58,{fs:7.5,al:al,bg:id===X.water()?'#e8effc':'#eef0ea'});
-          if(sid==='trainee') sign(c,mm.bp+' °C',x,58,{fs:7.5,al:al,bg:id===X.high()?'#e9f4ee':'#eef0ea'}); } });
-      if(sid==='gc') cap(u>0.3?'elution order on a non-polar column':'three solvents in the sample');
-      if(sid==='form') cap('which one mixes with water?');
-      if(sid==='trainee') cap('which boils highest?');
     };
   }
-  const LABELS=['','particle view','particle view','particle view','particle view','particle view: many molecules','particle view'];
+  const LABELS=['','particle view','particle view','particle view','particle view','particle view: many molecules'];
   function drawStage(cv,k,t){
     const ctx=cv.getContext('2d'), dpr=Math.min(2,window.devicePixelRatio||1), w=cv.clientWidth, h=cv.clientHeight; if(!w||!h) return;
     if(cv.width!==Math.round(w*dpr)||cv.height!==Math.round(h*dpr)){ cv.width=Math.round(w*dpr); cv.height=Math.round(h*dpr); }
@@ -770,7 +729,7 @@ canvas.stage:active{cursor:grabbing}
     SCEN.forEach((s,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(i===sc?' on':''); b.innerHTML=s.chip+(done.has(s.id)?'<span class="tick">✓</span>':'');
       b.addEventListener('click',()=>{ if(i===sc) return; sc=i; track('lab-pick',{scenario:s.id}); newRound(); }); sc0.appendChild(b); });
     R.beat=0; R.storyDone=false; renderStory();
-    renderQ1(); renderQ2(); renderQ3(); renderQ4(); renderQ5(); renderQ6();
+    renderQ1(); renderQ2(); renderQ3(); renderQ4(); renderQ5();
     document.querySelectorAll('canvas.stage').forEach(wireStage);
     for(let n=1;n<=STEPS;n++) clearMsg(n); $('#endrow').hidden=true; updatePager();
   }
@@ -788,10 +747,10 @@ canvas.stage:active{cursor:grabbing}
   const nearMsg=n=>msg(n,'near','Answer every part first (the first parts are on the '+(innerWidth>=900?'left':'previous screen')+').');
   const F=()=>sub(R.m.f), NM=()=>R.m.name;
   const given=(where,html)=>'<div class="eyebrow">'+where+'</div><div class="given">'+html+'</div>';
-  const ctxLine=()=>({gc:'A drug sample may hold traces of <b>'+NM()+'</b> ('+F()+'), a '+term('rs','residual solvent')+'.',
+  const ctxLine=()=>({solv:'The QC lab’s solvent cupboard holds <b>'+NM()+'</b> ('+F()+'). Before it is used, work out how its molecules behave.',
     form:'You are choosing a vehicle. One candidate ingredient is <b>'+NM()+'</b> ('+F()+').',
     trainee:'Aina worked through <b>'+NM()+'</b> ('+F()+') last night. Check each step with her.',
-    store:'The store holds <b>'+NM()+'</b> ('+F()+'). Before stocking it, you check how it behaves.'})[R.S.id];
+    store:'New stock for the store: <b>'+NM()+'</b> ('+F()+'). Before shelving it, work out how its molecules behave.'})[R.S.id];
 
   /* ---------- station 1 · count (Lewis) ---------- */
   function renderQ1(){
@@ -934,57 +893,7 @@ canvas.stage:active{cursor:grabbing}
     const m=R.m, lines=[], miss=judgeChips(q5Def(),R.ans[5],5,lines);
     if(lines.length) return msg(5,'bad',lines.join(''));
     if(miss) return nearMsg(5);
-    msg(5,'good','<b>Right.</b> '+['Only London forces hold '+F()+' molecules together.','Dipole–dipole forces (plus London) hold '+F()+' molecules together.','Hydrogen bonds (plus dipole and London forces) hold '+F()+' molecules together.'][m.imf]+' The particle view now shows them.'); solve(5);
-  });
-
-  /* ---------- station 6 · the pharmacy decision ---------- */
-  function renderQ6(){
-    const m=R.m, qa=$('#q6a'), qb=$('#q6b'), sid=R.S.id;
-    const trio=R.trio.map(id=>'<b>'+sub(MOL[id].f)+'</b>'+(sid==='gc'?' (bp '+MOL[id].bp+' °C)':'')).join(', ');
-    const g={gc:'The QC lab runs the residual-solvent test on a '+term('np','non-polar GC column')+'. The sample holds '+trio+'.',
-      form:'Three candidate ingredients: '+trio+'. The product is a water-based solution.',
-      trainee:'Aina ranked '+trio+' by boiling point. She put <b>'+sub(MOL[X.heavy()].f)+'</b> highest, because it is the heaviest.',
-      store:'A container of '+F()+' leaks in a closed store room. '+term('air','Air')+' has an average molar mass of about 29 g/mol.'}[sid];
-    qa.innerHTML=given('Station 6 · Decision',g)+stageHTML(6)+(sid==='store'?numRow('a. Molar mass of '+F(),'p6a','g/mol',6,false,'a. Work out the molar mass'):'');
-    qb.innerHTML=''; q6Def().forEach((q,i)=>ask(qb,q.p,q.o,q.k,R.ans[6],6,i===0,q.row));
-    if(sid==='store') wire(6,['p6a']);
-  }
-  function q6Def(){ return chipDefs(6,()=>{ const sid=R.S.id, m=R.m, T=R.trio, f=id=>sub(MOL[id].f);
-    if(sid==='gc') return [
-      {k:'b', row:true, p:'b. Which peak comes out first?', o:T.map(id=>[f(id),id===X.first()?1:0,'On a non-polar column, the most volatile compound (lowest boiling point) leaves first.','D1'])},
-      {k:'c', row:true, p:'c. Which comes out last?', o:T.map(id=>[f(id),id===X.last()?1:0,'The highest boiling point is held longest.','D1'])},
-      {k:'d', p:'d. CCl₄ is non-polar, yet it boils higher than polar CH₂Cl₂. Why?', o:shuffle([
-        ['It is bigger, with more electrons, so its London forces are stronger',1],
-        ['Non-polar molecules always boil higher',0,'CH₄ is non-polar and boils at −161.5 °C. Size matters.','F3'],
-        ['It forms hydrogen bonds',0,'CCl₄ has no H at all.','F1']])}];
-    if(sid==='form') return [
-      {k:'b', row:true, p:'b. Which one mixes best with water?', o:T.map(id=>[f(id),id===X.water()?1:0,'Like dissolves like: look for one that can hydrogen-bond with water.','D2'])},
-      {k:'c', p:'c. Why?', o:shuffle([
-        ['It can form hydrogen bonds with water molecules',1],
-        ['It is the lightest of the three',0,'Mass does not decide solubility. Look at the forces.','D2'],
-        ['It is non-polar, like water',0,'Water is polar and hydrogen-bonded.','D2']])}];
-    if(sid==='trainee') return [
-      {k:'b', row:true, p:'b. Which actually has the highest boiling point?', o:T.map(id=>[f(id),id===X.high()?1:0,'Find the strongest intermolecular force among the three.','D4'])},
-      {k:'c', p:'c. What did Aina miss?', o:shuffle([
-        ['Hydrogen bonding, which is much stronger than the other forces',1],
-        ['Nothing: the heaviest always boils highest',0,'Water (18 g/mol) boils at 100 °C. Mass is not the whole story.','D4'],
-        ['That polar molecules boil lower',0,'Polarity adds attractions, which raise the boiling point.','D4']])}];
-    const light=m.M<29; return [
-      {k:'b', row:true, p:'b. Where does the leak collect?', o:[['Near the ceiling',light?1:0,'Compare your molar mass with air (29 g/mol): heavier sinks, lighter rises.','D3'],['Near the floor',light?0:1,'Compare your molar mass with air (29 g/mol): heavier sinks, lighter rises.','D3']]},
-      {k:'c', row:true, p:'c. Where should the gas or vapour detector go?', o:[['High on the wall',light?1:0,'Put the detector where the gas collects.','D3'],['Low, near the floor',light?0:1,'Put the detector where the gas collects.','D3']]}];
-  }); }
-  $('#chk6').addEventListener('click',()=>{
-    const m=R.m, sid=R.S.id, lines=[]; let miss=0;
-    if(sid==='store'){ const a=readNum('p6a'), bad=a!=null&&!close(a,m.M,0,0.05); markNum('p6a',bad);
-      if(a==null) miss++; else if(bad) lines.push(mixLine('D3','Add the atomic masses: '+[m.c].concat(m.out).filter((x,i,a2)=>a2.indexOf(x)===i).map(e=>e+' '+AM[e]).join(', ')+'.',6)); }
-    miss+=judgeChips(q6Def(),R.ans[6],6,lines);
-    if(lines.length) return msg(6,'bad',lines.join(''));
-    if(miss) return nearMsg(6);
-    const out=({gc:()=>'Order: '+R.trio.slice().sort((a,b)=>MOL[a].bp-MOL[b].bp).map(id=>sub(MOL[id].f)).join(' → ')+'. Lower boiling point, earlier peak.',
-      form:()=>sub(MOL[X.water()].f)+' can hydrogen-bond with water, so it mixes. The others form a separate layer.',
-      trainee:()=>'Water boils at 100 °C: hydrogen bonds hold its molecules together far more strongly than '+sub(MOL[X.heavy()].f)+'’s forces.',
-      store:()=>F()+' ('+fmt(m.M,1)+' g/mol) is '+(m.M<29?'lighter than air: it rises, so ventilate and detect high up.':'heavier than air: it sinks, so ventilate and detect low down.')})[sid]();
-    msg(6,'good','<b>Round complete.</b> '+out); solve(6);
+    msg(5,'good','<b>Round complete.</b> '+['Only London forces hold '+F()+' molecules together.','Dipole–dipole forces (plus London) hold '+F()+' molecules together.','Hydrogen bonds (plus dipole and London forces) hold '+F()+' molecules together.'][m.imf]+' The particle view now shows them. Try a new molecule, or the next scenario.'); solve(5);
   });
 
   function solve(k){
@@ -1030,21 +939,21 @@ canvas.stage:active{cursor:grabbing}
   const shelf='<g transform="translate(176 40)"><rect x="0" y="0" width="120" height="90" rx="4" fill="#fff" stroke="#b9c2bc"/><line x1="0" y1="45" x2="120" y2="45" stroke="#b9c2bc"/><text x="60" y="30" text-anchor="middle" font-size="9" font-weight="800" fill="#c0392b" class="pulse">OUT OF STOCK</text></g>'+bottle(204,128,'KCl')+bottle(240,128,'ALT');
   const vial=(x,y,cap)=>'<g transform="translate('+x+' '+y+')"><rect x="-8" y="-40" width="16" height="40" rx="3" fill="#eaf4f3" stroke="#1f2422" stroke-width="1.4"/><rect x="-9" y="-48" width="18" height="9" rx="2" fill="'+(cap||'#9aa39d')+'" stroke="#1f2422" stroke-width="1.2"/></g>';
   const STORY={
-    gc:{who:'ravi', name:'Ravi', role:'senior pharmacist',
-      problem:'The QC lab is testing a drug sample for residual solvents. Before we read the chromatogram, work out how this solvent’s molecules behave.',
-      know:'you can predict where its peak comes out, and explain why.',
+    solv:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'The QC lab’s solvent cupboard needs checking. Pick one solvent and work out how its molecules are built and how they hold together.',
+      know:'you can explain its shape, its polarity and the forces between its molecules.',
       scene:()=>vial(200,128)+vial(236,128,'#c0392b')+vial(272,128)},
     form:{who:'ravi', name:'Ravi', role:'senior pharmacist',
-      problem:'We are making a water-based solution. Will this ingredient mix with water, or float off as a separate layer?',
-      know:'you choose the ingredient that mixes, and explain it with forces.',
+      problem:'We are making a water-based solution. To judge an ingredient, first understand its molecule: its shape, its polarity and its forces.',
+      know:'you can say whether it can hydrogen-bond, and why.',
       scene:()=>'<g transform="translate(236 128)"><path d="M-30 -60 v60 h60 v-60" fill="#eaf4f3" stroke="#1f2422" stroke-width="1.6"/><rect x="-30" y="-34" width="60" height="34" fill="#bcd9f2"/></g>'},
     trainee:{who:'aina', name:'Aina', role:'trainee pharmacist',
-      problem:'I worked through one molecule last night, from Lewis structure to boiling point. Can you check it with me? I think a few steps are off.',
+      problem:'I worked through one molecule last night, from its Lewis structure to its forces. Can you check it with me? I think a few steps are off.',
       know:'you find Aina’s mistakes and explain how to fix them.',
       scene:()=>'<g transform="translate(230 110)"><rect x="-44" y="-58" width="88" height="66" rx="5" fill="#fffef8" stroke="#b9b29c"/><path d="M-34 -42 h52 M-34 -30 h60 M-34 -18 h40" stroke="#1f3a8a" stroke-width="1.3"/><text x="30" y="-4" font-size="14" font-weight="800" fill="#c0392b" class="pulse">?</text></g>'},
     store:{who:'ravi', name:'Ravi', role:'senior pharmacist',
-      problem:'New stock for the store: gases and volatile solvents. If one leaks, where will it collect, and where should the detector go?',
-      know:'every leak is caught where it collects.',
+      problem:'New stock for the store: gases and volatile solvents. Before shelving each one, work out how its molecules behave.',
+      know:'you can explain the shape, polarity and forces of each one.',
       scene:()=>'<g transform="translate(232 128)"><rect x="-16" y="-80" width="32" height="80" rx="10" fill="#5d6a66" stroke="#1f2422" stroke-width="1.6"/><rect x="-6" y="-90" width="12" height="11" rx="2" fill="#9aa39d" stroke="#1f2422"/></g>'}
   };
   const SCENE_W=320, SCENE_H=150;
@@ -1070,8 +979,8 @@ canvas.stage:active{cursor:grabbing}
     const st=STORY[R.S.id], b=R.beat||0, box=$('#story');
     let text='';
     if(b===0) text='<p class="say"><b>'+st.name+'</b> <span class="small">('+st.role+')</span><br>'+st.problem+'</p>';
-    if(b===1) text='<p class="say">One molecule, six stations. Each answer feeds the next: electrons decide the <b>shape</b>, shape and bonds decide <b>polarity</b>, polarity decides the <b>forces</b>, and forces decide how it behaves. Drag the particle view to turn the molecule.</p>';
-    if(b===2) text='<p class="say"><b>Objective:</b> a correct answer at every station, and a sound pharmacy decision at the end.<br><b>You succeed when:</b> '+st.know+'</p>';
+    if(b===1) text='<p class="say">One molecule, five stations. Each answer feeds the next: electrons decide the <b>shape</b>, shape and bonds decide <b>polarity</b>, and polarity decides the <b>forces</b> between molecules. Drag the particle view to turn the molecule.</p>';
+    if(b===2) text='<p class="say"><b>Objective:</b> a correct answer at every station.<br><b>You succeed when:</b> '+st.know+'</p>';
     box.innerHTML='<div class="story-head"><span class="eyebrow" style="margin:0">'+BEAT_TITLE[b]+'</span><span class="dots">'+[0,1,2].map(i=>'<i class="'+(i<=b?'on':'')+'"></i>').join('')+'</span></div>'+
       '<button type="button" class="scene" id="scene" aria-label="Next part of the story">'+sceneFor(b)+'</button>'+text+
       '<div class="story-nav">'+(b>0?'<button type="button" class="btn ghost" id="story-back">‹ Back</button>':'<span></span>')+
@@ -1174,7 +1083,7 @@ canvas.stage:active{cursor:grabbing}
 
 
   /* the next empty box or unanswered question, in screen order; never the answer */
-  const DEFS={1:q1Def,2:q2Def,3:q3Def,4:q4Def,5:q5Def,6:q6Def};
+  const DEFS={1:q1Def,2:q2Def,3:q3Def,4:q4Def,5:q5Def};
   function nextMove(){
     const k=stepOf(page);
     if(k===0) return storyMove();
@@ -1192,8 +1101,7 @@ canvas.stage:active{cursor:grabbing}
       '<li><b>Shape.</b> Domains, shape, angle, hybridisation and π bonds.</li>'+
       '<li><b>Bond.</b> ΔEN and bond type.</li>'+
       '<li><b>Polarity.</b> Do the bond dipoles cancel?</li>'+
-      '<li><b>Forces.</b> The strongest force between molecules.</li>'+
-      '<li><b>Decision.</b> Use it all for a pharmacy question.</li></ol>';
+      '<li><b>Forces.</b> The strongest force between molecules.</li></ol>';
   }
   /* ---------- Bench card: opens at the section the current move needs ---------- */
   function openSTP(s){
