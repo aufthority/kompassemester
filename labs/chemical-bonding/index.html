@@ -333,6 +333,15 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .lab-head p{margin-bottom:.2em}
 .lab-frame{flex:1 1 auto;min-height:0;border:1px solid var(--rule);border-radius:var(--radius);overflow:hidden;background:#fff}
 .lab-frame iframe{width:100%;height:100%;border:0;display:block}
+.lab-launch{display:none;height:100%;flex-direction:column;align-items:center;justify-content:center;gap:.6em;padding:1em;text-align:center;font-size:.92em}
+.lab-frame.launch iframe{display:none}
+.lab-frame.launch .lab-launch{display:flex}
+.lab-launch a{background:var(--accent);color:#fff;text-decoration:none;font-weight:700;padding:.6em 1.3em;border-radius:100px}
+.lab-status{font-size:.82em;font-weight:700;color:#a85f10;margin:.15em 0 0}
+.lab-status.ok{color:var(--accent-dark)}
+.feedback.miss{border-color:var(--orange);background:var(--o-bg)}
+.choice.wrong{cursor:default}
+.toc button.lockd{color:var(--muted);opacity:.45;cursor:default}
 .skill{display:inline-block;font-size:.92em;font-weight:700;letter-spacing:.02em;text-transform:none;color:#8a5410;background:var(--o-bg);border-radius:100px;padding:.12em .65em;margin-left:.6em;vertical-align:.05em}
 .skill-key{font-size:.82em;margin:.4em 0}
 .skill-key .skill{margin:0 .25em .25em 0}
@@ -442,6 +451,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 @media (min-width:760px) and (orientation:landscape){ .dq-3d .vz-stage canvas{height:calc(var(--k) * 46vh);height:calc(var(--k) * 46dvh)} }
 .lewis{font-family:'DM Sans',sans-serif}
 </style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 </head>
 <body>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -504,7 +514,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <h1>Lighter, yet it boils <span class="ac">160 degrees higher.</span></h1>
    <p>Water and hydrogen sulfide look like twins: each is one central atom from group 16 with two hydrogens. Hydrogen sulfide is almost twice as heavy, so you might expect it to boil at the higher temperature. It does the opposite. Water boils at <b>100 °C</b>; hydrogen sulfide boils at about <b>−60 °C</b>. <span class="cite">(<a href="https://pubchem.ncbi.nlm.nih.gov/" target="_blank" rel="noopener">PubChem</a>)</span></p>
    <p>If mass alone decided, water would be a gas in your dispensary, and there would be no injections, syrups or eye drops made with it. The difference comes from <b>how the atoms are bonded, what shape the molecule takes, and how the molecules attract each other</b>. That is this explainer.</p>
-   <p class="small">Written for Diploma in Pharmacy students. Use Next to move through the pages, or Contents to jump around. "Go deeper" sections are optional.</p>
+   <p class="small">Written for Diploma in Pharmacy students. Use Next to move through the pages. "Go deeper" sections are optional.</p>
   </div>
  </div>
 </section>
@@ -668,21 +678,21 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="b">
       <div class="step-count">QUESTION 1 OF 3</div>
       <div class="choice-q">Why does a covalent bond form between two atoms?</div>
-      <div class="choices"><button class="choice" data-v="a">The atoms collide hard enough</button><button class="choice" data-v="b">The bonded pair has lower energy than the separate atoms</button><button class="choice" data-v="c">Electrons always pair up</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Collisions bring atoms together, but they do not explain why they stay. Think about energy.">The atoms collide hard enough</button><button class="choice" data-v="b">The bonded pair has lower energy than the separate atoms</button><button class="choice" data-v="c" data-fb="Electrons do not always pair. What does bonding do to the energy?">Electrons always pair up</button></div>
       <div class="feedback">Bonding is favoured because it lowers the energy. The energy released is the bond enthalpy, and the same amount is needed to break the bond.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="c">
       <div class="step-count">QUESTION 2 OF 3</div>
       <div class="choice-q">On the energy curve, what does the distance at the lowest point represent?</div>
-      <div class="choices"><button class="choice" data-v="a">The atomic radius</button><button class="choice" data-v="b">The point where the atoms repel most</button><button class="choice" data-v="c">The bond length</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="The radius belongs to one atom. This distance is between two nuclei.">The atomic radius</button><button class="choice" data-v="b" data-fb="Repulsion is strongest at very short distances, on the left of the curve.">The point where the atoms repel most</button><button class="choice" data-v="c">The bond length</button></div>
       <div class="feedback">At the minimum, attraction and repulsion balance. That distance is the bond length: 74 pm for H–H. Repulsion is strongest further left, where the curve rises steeply.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 3 OF 3</div>
       <div class="choice-q">Magnesium (group 2) reacts with oxygen (group 16). What is most likely to happen to the electrons?</div>
-      <div class="choices"><button class="choice" data-v="a">Mg transfers 2 electrons to O</button><button class="choice" data-v="b">They share 6 pairs</button><button class="choice" data-v="c">O transfers 2 electrons to Mg</button></div>
+      <div class="choices"><button class="choice" data-v="a">Mg transfers 2 electrons to O</button><button class="choice" data-v="b" data-fb="A metal and a non-metal: think transfer, not sharing.">They share 6 pairs</button><button class="choice" data-v="c" data-fb="Which atom is the metal, and which gains electrons to fill its shell?">O transfers 2 electrons to Mg</button></div>
       <div class="feedback">Magnesium loses its 2 valence electrons and oxygen gains them, giving Mg²⁺ and O²⁻, each with a full octet. A metal with a non-metal usually means transfer, an ionic bond.</div>
     </div>
    </div>
@@ -763,28 +773,28 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="b">
       <div class="step-count">QUESTION 1 OF 4 · CO₂</div>
       <div class="choice-q">How many valence electrons does carbon dioxide have in total?</div>
-      <div class="choices"><button class="choice" data-v="a">12</button><button class="choice" data-v="b">16</button><button class="choice" data-v="c">22</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Count both oxygens.">12</button><button class="choice" data-v="b">16</button><button class="choice" data-v="c" data-fb="You added atomic numbers. Use valence electrons.">22</button></div>
       <div class="feedback">C has 4 and each O has 6: 4 + 2 × 6 = 16. If you got 22 you used the atomic numbers (6 + 8 + 8); only valence electrons count.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 2 OF 4 · CO₂</div>
       <div class="choice-q">You draw O–C–O with single bonds and give each O three lone pairs. All 16 electrons are used. How many electrons does carbon have around it?</div>
-      <div class="choices"><button class="choice" data-v="a">4, so it needs double bonds</button><button class="choice" data-v="b">8, so it is finished</button><button class="choice" data-v="c">16</button></div>
+      <div class="choices"><button class="choice" data-v="a">4, so it needs double bonds</button><button class="choice" data-v="b" data-fb="Check carbon’s count: it is short of an octet.">8, so it is finished</button><button class="choice" data-v="c" data-fb="Count only the electrons around carbon.">16</button></div>
       <div class="feedback">Carbon only has its two single bonds, 4 electrons. Step 5: move one lone pair from each O into the bond, giving O=C=O. Now every atom has an octet.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="c">
       <div class="step-count">QUESTION 3 OF 4 · HCN</div>
       <div class="choice-q">Hydrogen cyanide, HCN, has 10 valence electrons. Which structure gives every atom a full shell?</div>
-      <div class="choices"><button class="choice" data-v="a">H–C–N with lone pairs</button><button class="choice" data-v="b">H=C=N</button><button class="choice" data-v="c">H–C≡N with one lone pair on N</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Count the electrons around C and N: are both full?">H–C–N with lone pairs</button><button class="choice" data-v="b" data-fb="Hydrogen can hold only 2 electrons, so it makes only one bond.">H=C=N</button><button class="choice" data-v="c">H–C≡N with one lone pair on N</button></div>
       <div class="feedback">H–C≡N: H has 2, C has 2 + 6 = 8, N has 6 + 2 = 8. Total: 2 + 6 + 2 = 10 electrons. H=C=N fails because hydrogen can only form one bond.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="b">
       <div class="step-count">QUESTION 4 OF 4 · H₂O</div>
       <div class="choice-q">How many lone pairs sit on the oxygen atom in water?</div>
-      <div class="choices"><button class="choice" data-v="a">1</button><button class="choice" data-v="b">2</button><button class="choice" data-v="c">3</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Oxygen has 6 valence electrons and uses 2 in bonds.">1</button><button class="choice" data-v="b">2</button><button class="choice" data-v="c" data-fb="Oxygen has 6 valence electrons and uses 2 in bonds.">3</button></div>
       <div class="feedback">8 valence electrons: two O–H bonds use 4, and the remaining 4 sit on O as 2 lone pairs. Those two lone pairs bend the molecule.</div>
     </div>
    </div>
@@ -849,21 +859,21 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="b">
       <div class="step-count">QUESTION 1 OF 3</div>
       <div class="choice-q">How many valence electrons does sulfur dioxide, SO₂, have?</div>
-      <div class="choices"><button class="choice" data-v="a">16</button><button class="choice" data-v="b">18</button><button class="choice" data-v="c">32</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="S and O are both in group 16.">16</button><button class="choice" data-v="b">18</button><button class="choice" data-v="c" data-fb="You added atomic numbers. Use valence electrons.">32</button></div>
       <div class="feedback">S and O are both in group 16, so 6 + 6 + 6 = 18. If you got 32 you added atomic numbers (16 + 8 + 8).</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="c">
       <div class="step-count">QUESTION 2 OF 3</div>
       <div class="choice-q">In formaldehyde, H₂CO, which atom goes in the centre?</div>
-      <div class="choices"><button class="choice" data-v="a">H</button><button class="choice" data-v="b">O</button><button class="choice" data-v="c">C</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Hydrogen makes only one bond, so it is never central.">H</button><button class="choice" data-v="b" data-fb="Put the least electronegative atom (not H) in the centre.">O</button><button class="choice" data-v="c">C</button></div>
       <div class="feedback">Hydrogen can form only one bond, so it is never central. Between C and O, carbon is less electronegative (2.5 versus 3.5), so C is central: two H and one O (double bond) around it.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 3 OF 3</div>
       <div class="choice-q">Which molecule has an <b>incomplete</b> octet on its central atom?</div>
-      <div class="choices"><button class="choice" data-v="a">BCl₃</button><button class="choice" data-v="b">PCl₅</button><button class="choice" data-v="c">CCl₄</button></div>
+      <div class="choices"><button class="choice" data-v="a">BCl₃</button><button class="choice" data-v="b" data-fb="PCl₅ has more than eight around P, not fewer.">PCl₅</button><button class="choice" data-v="c" data-fb="Count the electrons around C in CCl₄.">CCl₄</button></div>
       <div class="feedback">Boron in BCl₃ has only 6 electrons around it. PCl₅ is the opposite case, an expanded octet (10). CCl₄ follows the octet rule exactly.</div>
     </div>
    </div>
@@ -1022,21 +1032,21 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="b">
       <div class="step-count">QUESTION 1 OF 3</div>
       <div class="choice-q">The triple bond in nitrogen gas, N≡N, consists of:</div>
-      <div class="choices"><button class="choice" data-v="a">3 σ bonds</button><button class="choice" data-v="b">1 σ and 2 π bonds</button><button class="choice" data-v="c">2 σ and 1 π bond</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Only one head-on overlap fits between two atoms.">3 σ bonds</button><button class="choice" data-v="b">1 σ and 2 π bonds</button><button class="choice" data-v="c" data-fb="Count how many bonds are σ: only one head-on overlap fits.">2 σ and 1 π bond</button></div>
       <div class="feedback">Only one head-on (σ) overlap is possible between two atoms. The second and third bonds come from side-on overlap of p orbitals, so they are π bonds.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 2 OF 3</div>
       <div class="choice-q">What is the hybridisation of carbon in CO₂ (O=C=O)?</div>
-      <div class="choices"><button class="choice" data-v="a">sp</button><button class="choice" data-v="b">sp²</button><button class="choice" data-v="c">sp³</button></div>
+      <div class="choices"><button class="choice" data-v="a">sp</button><button class="choice" data-v="b" data-fb="Count the electron domains on carbon. A double bond is one domain.">sp²</button><button class="choice" data-v="c" data-fb="Count the electron domains on carbon. A double bond is one domain.">sp³</button></div>
       <div class="feedback">Carbon has two electron domains (two double bonds, each counted once) and no lone pairs, so it is sp. Its two unhybridised p orbitals form the two π bonds.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="c">
       <div class="step-count">QUESTION 3 OF 3</div>
       <div class="choice-q">What is the hybridisation of oxygen in water?</div>
-      <div class="choices"><button class="choice" data-v="a">sp, because it bonds to two atoms</button><button class="choice" data-v="b">sp²</button><button class="choice" data-v="c">sp³</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Count the lone pairs too: they are domains.">sp, because it bonds to two atoms</button><button class="choice" data-v="b" data-fb="Count the lone pairs too: they are domains.">sp²</button><button class="choice" data-v="c">sp³</button></div>
       <div class="feedback">Oxygen has 2 bonding pairs and 2 lone pairs: 4 domains, so sp³. Counting only the bonded atoms (and answering sp) is the most common mistake; lone pairs count too.</div>
     </div>
    </div>
@@ -1157,28 +1167,28 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="c">
       <div class="step-count">QUESTION 1 OF 4</div>
       <div class="choice-q">What is the molecular shape of ammonia, NH₃?</div>
-      <div class="choices"><button class="choice" data-v="a">Trigonal planar</button><button class="choice" data-v="b">Tetrahedral</button><button class="choice" data-v="c">Trigonal pyramidal</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Count the lone pair on nitrogen.">Trigonal planar</button><button class="choice" data-v="b" data-fb="That is the electron geometry. Name the shape from the atoms.">Tetrahedral</button><button class="choice" data-v="c">Trigonal pyramidal</button></div>
       <div class="feedback">AX₃E: four domains (tetrahedral electron geometry), but one is a lone pair, so the shape is trigonal pyramidal. "Tetrahedral" names the electron geometry, not the shape; "trigonal planar" ignores the lone pair.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 2 OF 4</div>
       <div class="choice-q">Carbon dioxide has two C=O double bonds and no lone pairs on carbon. How many electron domains does carbon have?</div>
-      <div class="choices"><button class="choice" data-v="a">2</button><button class="choice" data-v="b">4</button><button class="choice" data-v="c">8</button></div>
+      <div class="choices"><button class="choice" data-v="a">2</button><button class="choice" data-v="b" data-fb="A double bond counts as one domain.">4</button><button class="choice" data-v="c" data-fb="Count domains, not electrons.">8</button></div>
       <div class="feedback">Each double bond counts as one domain, so CO₂ is AX₂: linear, 180°. Counting 4 (one per bond line) is the classic mistake.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="b">
       <div class="step-count">QUESTION 3 OF 4</div>
       <div class="choice-q">Sulfur dioxide is AX₂E. What is its shape?</div>
-      <div class="choices"><button class="choice" data-v="a">Linear</button><button class="choice" data-v="b">Bent</button><button class="choice" data-v="c">Trigonal planar</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="The lone pair on S pushes the bonds out of line.">Linear</button><button class="choice" data-v="b">Bent</button><button class="choice" data-v="c" data-fb="Name the shape from the atoms only.">Trigonal planar</button></div>
       <div class="feedback">Three domains give a trigonal planar arrangement, but one is a lone pair. The two O atoms and S form a bent shape, with an angle just under 120°.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="c">
       <div class="step-count">QUESTION 4 OF 4</div>
       <div class="choice-q">Sulfur hexafluoride, SF₆, has six S–F bonds and no lone pairs on S. What are its shape and bond angle?</div>
-      <div class="choices"><button class="choice" data-v="a">Hexagonal, 60°</button><button class="choice" data-v="b">Trigonal bipyramidal, 90° and 120°</button><button class="choice" data-v="c">Octahedral, 90°</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Six domains point to the corners of a 3D shape, not a flat ring.">Hexagonal, 60°</button><button class="choice" data-v="b" data-fb="That shape has five domains.">Trigonal bipyramidal, 90° and 120°</button><button class="choice" data-v="c">Octahedral, 90°</button></div>
       <div class="feedback">AX₆ is octahedral, with 90° between neighbouring bonds. A flat hexagon would put the bonds only 60° apart, far closer than they need to be.</div>
     </div>
    </div>
@@ -1289,21 +1299,21 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="b">
       <div class="step-count">QUESTION 1 OF 3</div>
       <div class="choice-q">The O–H bond in water is:</div>
-      <div class="choices"><button class="choice" data-v="a">Non-polar covalent</button><button class="choice" data-v="b">Polar covalent</button><button class="choice" data-v="c">Ionic</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Work out ΔEN: O 3.5, H 2.1.">Non-polar covalent</button><button class="choice" data-v="b">Polar covalent</button><button class="choice" data-v="c" data-fb="Work out ΔEN: O 3.5, H 2.1. Is it 2.0 or more?">Ionic</button></div>
       <div class="feedback">ΔEN = 3.5 − 2.1 = 1.4: between 0.5 and 2.0, so polar covalent. O is δ−, H is δ+.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="c">
       <div class="step-count">QUESTION 2 OF 3</div>
       <div class="choice-q">Potassium fluoride, K–F, is:</div>
-      <div class="choices"><button class="choice" data-v="a">Non-polar covalent</button><button class="choice" data-v="b">Polar covalent</button><button class="choice" data-v="c">Ionic</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Work out ΔEN: F 4.0, K 0.8.">Non-polar covalent</button><button class="choice" data-v="b" data-fb="Work out ΔEN: F 4.0, K 0.8. Is it 2.0 or more?">Polar covalent</button><button class="choice" data-v="c">Ionic</button></div>
       <div class="feedback">ΔEN = 4.0 − 0.8 = 3.2, well above 2.0: ionic (K⁺ F⁻). It is the largest difference on the scale page.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 3 OF 3</div>
       <div class="choice-q">The C–H bond, found in every drug molecule, is:</div>
-      <div class="choices"><button class="choice" data-v="a">Non-polar covalent</button><button class="choice" data-v="b">Polar covalent</button><button class="choice" data-v="c">Ionic</button></div>
+      <div class="choices"><button class="choice" data-v="a">Non-polar covalent</button><button class="choice" data-v="b" data-fb="Work out ΔEN: C 2.5, H 2.1. Is it 0.5 or more?">Polar covalent</button><button class="choice" data-v="c" data-fb="Work out ΔEN: C 2.5, H 2.1.">Ionic</button></div>
       <div class="feedback">ΔEN = 2.5 − 2.1 = 0.4, below 0.5: non-polar. That is why hydrocarbon parts of a molecule repel water. Picking "polar" because the two atoms differ is a common slip; any non-zero difference below 0.5 still counts as non-polar.</div>
     </div>
    </div>
@@ -1420,21 +1430,21 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="b">
       <div class="step-count">QUESTION 1 OF 3</div>
       <div class="choice-q">Carbon dioxide contains two polar C=O bonds. Is the molecule polar?</div>
-      <div class="choices"><button class="choice" data-v="a">Yes, it has polar bonds</button><button class="choice" data-v="b">No, the linear shape cancels the dipoles</button><button class="choice" data-v="c">Only when dissolved</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Polar bonds are not enough. Look at the shape.">Yes, it has polar bonds</button><button class="choice" data-v="b">No, the linear shape cancels the dipoles</button><button class="choice" data-v="c" data-fb="Polarity belongs to the molecule itself.">Only when dissolved</button></div>
       <div class="feedback">Polar bonds are necessary but not enough. In a linear O=C=O the two equal dipoles point in opposite directions and cancel, so μ = 0.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 2 OF 3</div>
       <div class="choice-q">Which of these is a polar molecule?</div>
-      <div class="choices"><button class="choice" data-v="a">CH₂Cl₂</button><button class="choice" data-v="b">CCl₄</button><button class="choice" data-v="c">CH₄</button></div>
+      <div class="choices"><button class="choice" data-v="a">CH₂Cl₂</button><button class="choice" data-v="b" data-fb="Four identical C–Cl dipoles in a tetrahedron cancel.">CCl₄</button><button class="choice" data-v="c" data-fb="C–H bonds count as non-polar.">CH₄</button></div>
       <div class="feedback">Dichloromethane has two different outer atoms (H and Cl) on a tetrahedral carbon, so its C–Cl dipoles are not balanced: polar (1.60 D). CCl₄ is symmetric; CH₄ has no polar bonds.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="c">
       <div class="step-count">QUESTION 3 OF 3</div>
       <div class="choice-q">Why is ammonia polar while boron trichloride is not?</div>
-      <div class="choices"><button class="choice" data-v="a">N–H bonds are more polar than B–Cl bonds</button><button class="choice" data-v="b">Ammonia is heavier</button><button class="choice" data-v="c">Ammonia's lone pair makes it pyramidal; BCl₃ is flat and symmetric</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Compare the shapes, not just the bonds.">N–H bonds are more polar than B–Cl bonds</button><button class="choice" data-v="b" data-fb="Mass does not decide polarity.">Ammonia is heavier</button><button class="choice" data-v="c">Ammonia's lone pair makes it pyramidal; BCl₃ is flat and symmetric</button></div>
       <div class="feedback">It is the shape. B–Cl (ΔEN 1.0) is actually slightly more polar than N–H (0.9), but BCl₃'s three dipoles cancel at 120°, while NH₃'s pyramidal shape lets them add.</div>
     </div>
    </div>
@@ -1592,21 +1602,21 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="a">
       <div class="step-count">QUESTION 1 OF 3</div>
       <div class="choice-q">On a non-polar GC column, in what order do the three solvents come off (first to last)?</div>
-      <div class="choices"><button class="choice" data-v="a">CH₂Cl₂, CHCl₃, CCl₄</button><button class="choice" data-v="b">CCl₄, CHCl₃, CH₂Cl₂</button><button class="choice" data-v="c">CHCl₃, CH₂Cl₂, CCl₄</button></div>
+      <div class="choices"><button class="choice" data-v="a">CH₂Cl₂, CHCl₃, CCl₄</button><button class="choice" data-v="b" data-fb="On a non-polar column, the lowest boiling point comes off first.">CCl₄, CHCl₃, CH₂Cl₂</button><button class="choice" data-v="c" data-fb="Check the boiling points: lowest first.">CHCl₃, CH₂Cl₂, CCl₄</button></div>
       <div class="feedback">On a non-polar column, separation follows volatility, so the lowest boiling point elutes first: CH₂Cl₂, then CHCl₃, then CCl₄. Putting CCl₄ first because it is non-polar overlooks its large size: its London forces give it the highest boiling point of the three.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="b">
       <div class="step-count">QUESTION 2 OF 3</div>
       <div class="choice-q">You switch to a polar column (a polyethylene glycol, "wax" phase). Which solvent is now held back more, relative to the others?</div>
-      <div class="choices"><button class="choice" data-v="a">CCl₄</button><button class="choice" data-v="b">CHCl₃</button><button class="choice" data-v="c">Neither; the order cannot change</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="A polar phase holds polar molecules longer. Is CCl₄ polar?">CCl₄</button><button class="choice" data-v="b">CHCl₃</button><button class="choice" data-v="c" data-fb="A polar phase adds dipole attractions. Polar solvents are held back more.">Neither; the order cannot change</button></div>
       <div class="feedback">Chloroform is polar (1.04 D), so it also attracts the polar stationary phase through dipole forces and is retained relatively longer. Non-polar CCl₄ gains nothing. Changing column polarity is how analysts pull apart peaks that overlap on one column.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="c">
       <div class="step-count">QUESTION 3 OF 3</div>
       <div class="choice-q">Headspace GC heats the sealed sample vial and injects only the vapour above it. Why does that suit residual solvents?</div>
-      <div class="choices"><button class="choice" data-v="a">Heating breaks the C–Cl bonds</button><button class="choice" data-v="b">The solvents are ionic</button><button class="choice" data-v="c">Weak intermolecular forces let the solvents escape into the vapour while the drug stays behind</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Heating a vial does not break covalent bonds.">Heating breaks the C–Cl bonds</button><button class="choice" data-v="b" data-fb="These solvents are covalent molecules.">The solvents are ionic</button><button class="choice" data-v="c">Weak intermolecular forces let the solvents escape into the vapour while the drug stays behind</button></div>
       <div class="feedback">Small solvent molecules held by weak intermolecular forces are volatile, so they move into the vapour; the drug substance and excipients, with much stronger forces between their particles, stay in the vial. No covalent bonds are broken.</div>
     </div>
    </div>
@@ -1651,21 +1661,21 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="b">
       <div class="step-count">QUESTION 1 OF 3</div>
       <div class="choice-q">How many hydrogen-bond donors does paracetamol have?</div>
-      <div class="choices"><button class="choice" data-v="a">1</button><button class="choice" data-v="b">2</button><button class="choice" data-v="c">9</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Count every H on N or O.">1</button><button class="choice" data-v="b">2</button><button class="choice" data-v="c" data-fb="Only H on N or O counts as a donor.">9</button></div>
       <div class="feedback">Two: the O–H and the N–H. The other seven hydrogens are bonded to carbon (C–H, ΔEN 0.4), which is not polar enough to donate. Answering 9 counts every hydrogen.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="b">
       <div class="step-count">QUESTION 2 OF 3</div>
       <div class="choice-q">Using Lipinski's count (every N and O atom), how many acceptors does it have?</div>
-      <div class="choices"><button class="choice" data-v="a">2</button><button class="choice" data-v="b">3</button><button class="choice" data-v="c">5</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Count every N and O atom.">2</button><button class="choice" data-v="b">3</button><button class="choice" data-v="c" data-fb="Count N and O atoms only.">5</button></div>
       <div class="feedback">Three: one N and two O (C₈H₉NO₂). With 2 donors and 3 acceptors, paracetamol sits comfortably within the rule of five, consistent with its good oral absorption.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 3 OF 3</div>
       <div class="choice-q">Paracetamol is only sparingly soluble in water: its flat, non-polar benzene ring limits it. A children's oral solution needs more dissolved per 5 mL. Which added solvent helps most?</div>
-      <div class="choices"><button class="choice" data-v="a">Propylene glycol</button><button class="choice" data-v="b">Liquid paraffin</button><button class="choice" data-v="c">More water, chilled</button></div>
+      <div class="choices"><button class="choice" data-v="a">Propylene glycol</button><button class="choice" data-v="b" data-fb="Like dissolves like: liquid paraffin is non-polar.">Liquid paraffin</button><button class="choice" data-v="c" data-fb="Cold water dissolves even less.">More water, chilled</button></div>
       <div class="feedback">Propylene glycol mixes with water, and its two O–H groups hydrogen bond with paracetamol while its carbon chain suits the ring: a co-solvent. Liquid paraffin is non-polar and does not even mix with water. Cooling usually lowers solubility. Bonding explains the choice, though a real formula also weighs dose, taste and safety.</div>
     </div>
    </div>
@@ -1682,21 +1692,21 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="b">
       <div class="step-count">QUESTION 1 OF 3</div>
       <div class="choice-q">What is the strongest intermolecular force between dichloromethane (CH₂Cl₂) molecules?</div>
-      <div class="choices"><button class="choice" data-v="a">London forces only</button><button class="choice" data-v="b">Dipole–dipole</button><button class="choice" data-v="c">Hydrogen bonding</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="CH₂Cl₂ is polar. What does that add?">London forces only</button><button class="choice" data-v="b">Dipole–dipole</button><button class="choice" data-v="c" data-fb="Its H atoms are on C, not N, O or F.">Hydrogen bonding</button></div>
       <div class="feedback">CH₂Cl₂ is polar, so dipole–dipole forces act (alongside London forces). Its hydrogens are bonded to carbon, so there is no hydrogen bonding.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="c">
       <div class="step-count">QUESTION 2 OF 3</div>
       <div class="choice-q">When water boils, what is overcome?</div>
-      <div class="choices"><button class="choice" data-v="a">The O–H covalent bonds</button><button class="choice" data-v="b">The ionic bonds</button><button class="choice" data-v="c">The hydrogen bonds between molecules</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Boiling does not break water molecules apart.">The O–H covalent bonds</button><button class="choice" data-v="b" data-fb="Water is covalent, not ionic.">The ionic bonds</button><button class="choice" data-v="c">The hydrogen bonds between molecules</button></div>
       <div class="feedback">Boiling separates molecules; it does not break them. Steam is still H₂O, so the O–H bonds survive. Only the intermolecular hydrogen bonds (and weaker forces) are overcome.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 3 OF 3</div>
       <div class="choice-q">Both are non-polar. Why does CCl₄ boil at 76.7 °C but CH₄ at −161.5 °C?</div>
-      <div class="choices"><button class="choice" data-v="a">CCl₄ has many more electrons, so stronger London forces</button><button class="choice" data-v="b">CCl₄ hydrogen bonds</button><button class="choice" data-v="c">C–Cl bonds are stronger than C–H bonds</button></div>
+      <div class="choices"><button class="choice" data-v="a">CCl₄ has many more electrons, so stronger London forces</button><button class="choice" data-v="b" data-fb="CCl₄ has no H at all.">CCl₄ hydrogen bonds</button><button class="choice" data-v="c" data-fb="Boiling separates molecules; it does not break bonds inside them.">C–Cl bonds are stronger than C–H bonds</button></div>
       <div class="feedback">With no dipole–dipole or hydrogen bonding in either, size decides. CCl₄ (74 electrons) is far more polarisable than CH₄ (10), so its London forces are much stronger. Bond strength inside the molecule is irrelevant to boiling.</div>
     </div>
    </div>
@@ -1706,14 +1716,15 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 
 <!-- ================= PRACTICE LAB ================= -->
 
-<section class="slide" data-sec="lab" data-title="Practice lab: coming soon">
- <div class="si">
-  <div class="txt">
-   <div class="eyebrow">Practice lab</div>
-   <h2>Molecule Bench: <span class="ac">coming soon.</span></h2>
-   <p>A practice lab for this chapter is being built. You will count electrons, predict shapes, classify bonds, and decide polarity and intermolecular forces for real molecules, then apply them to pharmacy questions.</p>
-   <p class="small">Until then, use the checks in each section and the quiz on the next page.</p>
+<section class="slide" data-sec="lab" data-title="Practice lab: Molecule Bench">
+ <div class="si lab-si">
+  <div class="lab-head">
+   <div class="eyebrow">Practice lab · all sections</div>
+   <h2>Molecule Bench: <span class="ac">one molecule, six stations.</span></h2>
+   <p class="small">Count, shape in 3D, bond, polarity, forces, then a pharmacy decision. Four scenarios. <a href="lab.html" target="_blank" rel="noopener" data-umami-event="lab-open-full">Open full screen ↗</a></p>
+   <p class="lab-status task" data-lab="molecule-lab" aria-live="polite">Finish one full round (all 6 stations) to unlock Next.</p>
   </div>
+  <div class="lab-frame"><iframe data-src="lab.html?embed=1" title="Molecule Bench practice lab" loading="lazy"></iframe><div class="lab-launch"><span>Your screen is too short to use the lab here.</span><a href="lab.html" target="_blank" rel="noopener" data-umami-event="lab-launch-small">Open the lab ↗</a></div></div>
  </div>
 </section>
 
@@ -1728,42 +1739,42 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="b">
       <div class="step-count">QUESTION 1 OF 6 · C1</div>
       <div class="choice-q">According to valence bond theory, a covalent bond forms when:</div>
-      <div class="choices"><button class="choice" data-v="a">one atom transfers an electron to another</button><button class="choice" data-v="b">half-filled orbitals on two atoms overlap and share a pair of opposite-spin electrons</button><button class="choice" data-v="c">two molecules attract through their dipoles</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="That is ionic bonding.">one atom transfers an electron to another</button><button class="choice" data-v="b">half-filled orbitals on two atoms overlap and share a pair of opposite-spin electrons</button><button class="choice" data-v="c" data-fb="That is an attraction between molecules, not a bond within one.">two molecules attract through their dipoles</button></div>
       <div class="feedback">VB theory places the shared pair in the overlap of two half-filled orbitals. Transfer describes ionic bonding, and dipole attraction between molecules is an intermolecular force, not a bond.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="c">
       <div class="step-count">QUESTION 2 OF 6 · C2</div>
       <div class="choice-q">Phosphorus trichloride, PCl₃, has 26 valence electrons. What is its molecular shape?</div>
-      <div class="choices"><button class="choice" data-v="a">Trigonal planar</button><button class="choice" data-v="b">Tetrahedral</button><button class="choice" data-v="c">Trigonal pyramidal</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Count the lone pair on P.">Trigonal planar</button><button class="choice" data-v="b" data-fb="That is the electron geometry. Name the shape from the atoms.">Tetrahedral</button><button class="choice" data-v="c">Trigonal pyramidal</button></div>
       <div class="feedback">Three P–Cl bonds use 6 electrons and the three Cl take 18 as lone pairs, leaving 2 on P: AX₃E, trigonal pyramidal, like NH₃. "Tetrahedral" is the electron-domain geometry; "trigonal planar" forgets the lone pair.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="b">
       <div class="step-count">QUESTION 3 OF 6 · C2</div>
       <div class="choice-q">Using Chang's values (Al 1.5, Cl 3.0), the Al–Cl bond is:</div>
-      <div class="choices"><button class="choice" data-v="a">Ionic, because Al is a metal</button><button class="choice" data-v="b">Polar covalent</button><button class="choice" data-v="c">Non-polar covalent</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Work out ΔEN: 3.0 − 1.5. Is it 2.0 or more?">Ionic, because Al is a metal</button><button class="choice" data-v="b">Polar covalent</button><button class="choice" data-v="c" data-fb="Work out ΔEN: 3.0 − 1.5. Is it below 0.5?">Non-polar covalent</button></div>
       <div class="feedback">ΔEN = 3.0 − 1.5 = 1.5, below 2.0: polar covalent. "Metal plus non-metal means ionic" is a first guess that ΔEN overrules here.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 4 OF 6 · C3</div>
       <div class="choice-q">Which molecule is polar?</div>
-      <div class="choices"><button class="choice" data-v="a">CHCl₃</button><button class="choice" data-v="b">CCl₄</button><button class="choice" data-v="c">CO₂</button></div>
+      <div class="choices"><button class="choice" data-v="a">CHCl₃</button><button class="choice" data-v="b" data-fb="Four identical dipoles in a tetrahedron cancel.">CCl₄</button><button class="choice" data-v="c" data-fb="The linear shape cancels the two dipoles.">CO₂</button></div>
       <div class="feedback">Chloroform's mix of H and Cl on a tetrahedral carbon leaves the dipoles unbalanced (1.04 D). CCl₄ and CO₂ have polar bonds arranged symmetrically, so their dipoles cancel.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="c">
       <div class="step-count">QUESTION 5 OF 6 · C3</div>
       <div class="choice-q">Ammonia (17 g/mol) boils at −33 °C; methane (16 g/mol) at −162 °C. Why the difference?</div>
-      <div class="choices"><button class="choice" data-v="a">Ammonia is heavier</button><button class="choice" data-v="b">N–H bonds are stronger than C–H bonds</button><button class="choice" data-v="c">Ammonia molecules hydrogen bond to each other</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="One gram per mole cannot explain 129 degrees.">Ammonia is heavier</button><button class="choice" data-v="b" data-fb="Boiling does not break bonds inside molecules.">N–H bonds are stronger than C–H bonds</button><button class="choice" data-v="c">Ammonia molecules hydrogen bond to each other</button></div>
       <div class="feedback">With almost the same mass, London forces are similar. Ammonia has H on N plus a lone pair, so its molecules hydrogen bond; methane has only London forces. Boiling does not break N–H or C–H bonds.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 6 OF 6 · C3 · FORMULATION</div>
       <div class="choice-q">Lidocaine base dissolves poorly in water, yet lidocaine hydrochloride is used in injections. Why does the salt dissolve better?</div>
-      <div class="choices"><button class="choice" data-v="a">It is ionic, so water molecules surround its ions through ion–dipole forces</button><button class="choice" data-v="b">Adding HCl makes the molecule lighter</button><button class="choice" data-v="c">The salt has more covalent bonds</button></div>
+      <div class="choices"><button class="choice" data-v="a">It is ionic, so water molecules surround its ions through ion–dipole forces</button><button class="choice" data-v="b" data-fb="The salt is heavier, not lighter.">Adding HCl makes the molecule lighter</button><button class="choice" data-v="c" data-fb="Water dissolves ions well. Think about forces with water.">The salt has more covalent bonds</button></div>
       <div class="feedback">The hydrochloride is made of ions (R₃NH⁺ and Cl⁻). Water's δ− oxygens and δ+ hydrogens surround them through ion–dipole forces, far stronger than anything the neutral base can form with water. The salt is actually heavier, not lighter.</div>
     </div>
     <div class="score" id="quiz-score"></div>
@@ -1815,7 +1826,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 <div class="overlay" id="toc-overlay" role="dialog" aria-modal="true">
   <div class="panel">
     <div class="panel-head"><h3>Contents</h3><button class="icon-btn close-ov">Close</button></div>
-    <p class="toc-note">You can jump to any page from here, even if a page's questions are not finished.</p>
+    <p class="toc-note">You can go back to any page you have reached. Finish a page's questions to move past it.</p>
     <button class="pt-open" id="btn-pt" data-umami-event="open-periodic-table"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="3" width="4" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="3" width="4" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="9" width="16" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="15" width="12" height="3" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>Periodic table of the elements</button>
     <ul class="toc" id="toc-list"></ul>
   </div>
@@ -1857,7 +1868,13 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 (function(){
   const slides   = document.querySelectorAll('.slide');
   const TOTAL    = slides.length;
+  /* progress is kept per person: signed-in students under their own id, visitors under a device key.
+     Educators: nothing saved. In Kompas student preview the gates are on and nothing is saved. */
+  let PKEY='kompas.chemical-bonding.progress.v2', saveOn=true, previewOn=false;
+  let maxReached=1, isEducator=false, signedIn=false;
+  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.max>=1) maxReached=Math.min(sv.max, document.querySelectorAll('.slide').length); }catch(_){}
   let current = 1;
+  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.last>=1 && sv.last<=maxReached) current=sv.last; }catch(_){}
   const btnBack  = document.getElementById('btn-back');
   const btnNext  = document.getElementById('btn-next');
   const progFill = document.getElementById('progress-fill');
@@ -2822,15 +2839,14 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     return n;
   }
   function updateGate(alert){
-    const s=slides[current-1], n=pending(s);
+    const s=slides[current-1], n=(isEducator||current<maxReached)?0:pending(s);
     btnNext.classList.toggle('locked', n>0);
-    if(n===0){ hint.className=''; hint.textContent=''; return; }
+    if(n===0){ hint.className=''; hint.textContent=isEducator?'Educator view: nothing is locked. To test the locks, use “View as student” in Kompas.':(previewOn?'Student preview: questions lock Next, and nothing is saved.':''); return; }
     hint.className=alert?'alert':'';
     const what=n===1?'1 item':n+' items';
-    hint.innerHTML=alert
-      ? 'Please finish the questions, cards or activity on this page first ('+what+' left). Or skip ahead using <button type="button" id="hint-toc">Contents</button>.'
-      : 'Finish '+what+' on this page to continue, or use <button type="button" id="hint-toc">Contents</button>';
-    document.getElementById('hint-toc').addEventListener('click',()=>openOv('toc-overlay'));
+    hint.textContent=alert
+      ? 'Please finish the questions, cards or activity on this page first ('+what+' left).'
+      : 'Finish '+what+' on this page to continue.';
   }
   function flagPending(slide){
     [...slide.querySelectorAll('.toggle-wrap:not(.seen):not(.opt), .rcard:not(.seen), .choice-set:not([data-done]), .task:not([data-done])')]
@@ -2845,21 +2861,21 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     btnBack.disabled=n===1;
     btnNext.textContent=n===TOTAL?'Done':'Next →';
     btnNext.setAttribute('data-umami-event',n===TOTAL?'carousel-selesai':'nav-next');
-    const fr=slides[n-1].querySelector('iframe[data-src]');
-    if(fr && !fr.getAttribute('src')){ fr.setAttribute('src',fr.dataset.src); track('lab-embed-load'); }
     VIZ.show(slides[n-1]); POL.show(slides[n-1]); DQ.show(slides[n-1]);
     buildCharts(n);
     fit(slides[n-1]);
     requestAnimationFrame(()=>fit(slides[n-1]));
+    labFrame(slides[n-1]);
     updateGate(false);
+    saveProgress();
     track('slide-view',{slide:n});
   }
 
   /* NAV BUTTONS ONLY — no swipe, no keyboard */
   btnNext.addEventListener('click',()=>{
     const s=slides[current-1];
-    if(pending(s)>0){ updateGate(true); flagPending(s); track('gate-blocked',{slide:current}); return; }
-    if(current<TOTAL){ current++; show(current); } else openOv('refs-overlay');
+    if(!isEducator && current>=maxReached && pending(s)>0){ updateGate(true); flagPending(s); track('gate-blocked',{slide:current}); return; }
+    if(current<TOTAL){ current++; reach(current); show(current); } else openOv('refs-overlay');
   });
   btnBack.addEventListener('click',()=>{ if(current>1){ current--; show(current); } });
 
@@ -2870,15 +2886,20 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   document.querySelectorAll('.rcard').forEach(c=>c.addEventListener('click',()=>{ c.classList.add('seen'); fit(slides[current-1]); updateGate(false); }));
 
   document.querySelectorAll('.choice-set').forEach(set=>{
-    const ans=set.dataset.answer;
+    const ans=set.dataset.answer, fb=set.querySelector('.feedback');
+    const miss=document.createElement('div'); miss.className='feedback miss'; miss.setAttribute('aria-live','polite'); fb.parentNode.insertBefore(miss,fb);
     set.querySelectorAll('.choice').forEach(c=>c.addEventListener('click',()=>{
-      if(set.dataset.done) return;
-      set.dataset.done='1'; set.classList.add('done');
-      const ok=c.dataset.v===ans; set.dataset.correct=ok?'1':'0';
-      set.querySelectorAll('.choice').forEach(x=>{ if(x.dataset.v===ans) x.classList.add('right'); });
-      if(!ok) c.classList.add('wrong');
-      set.querySelector('.feedback').classList.add('show');
-      track('choice',{correct:ok,slide:current});
+      if(set.dataset.done || c.classList.contains('wrong')) return;
+      const ok=c.dataset.v===ans;
+      if(set.dataset.first===undefined) set.dataset.first=ok?'1':'0';
+      if(ok){
+        set.dataset.done='1'; set.classList.add('done'); c.classList.add('right');
+        miss.classList.remove('show'); fb.classList.add('show');
+      } else {
+        c.classList.add('wrong'); c.setAttribute('aria-disabled','true');
+        miss.innerHTML='<b>Not quite.</b> '+(c.dataset.fb||'Think again, then choose another answer.'); miss.classList.add('show');
+      }
+      track('choice',{correct:ok, first:set.dataset.first==='1', slide:current});
       updateScore(); fit(slides[current-1]); updateGate(false);
     }));
     const nx=set.querySelector('.next-q');
@@ -2890,7 +2911,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   function updateScore(){
     const q=document.querySelectorAll('.quiz .choice-set'), done=[...q].filter(s=>s.dataset.done);
     if(done.length<q.length) return;
-    document.getElementById('quiz-score').textContent='Your score: '+done.filter(s=>s.dataset.correct==='1').length+' / '+q.length;
+    document.getElementById('quiz-score').textContent='Right first time: '+done.filter(s=>s.dataset.first==='1').length+' / '+q.length;
   }
 
   function openOv(id){ if(id==='toc-overlay') buildToc(); document.getElementById(id).classList.add('open'); }
@@ -2956,8 +2977,9 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     ptBuild(); document.getElementById('pt-overlay').classList.add('open');
   });
 
-  /* contents — bypasses gating */
-  const secNames={intro:'1 · Introduction',why:'2 · Why bonds form',lewis:'3 · Lewis structures',vb:'4 · Valence bond theory',vsepr:'5 · VSEPR: molecular shape',en:'6 · Electronegativity and bond type',pol:'7 · Polarity and dipole moment',imf:'8 · Intermolecular forces',lab:'Practice lab',end:'Wrap-up'};
+  /* contents: students can revisit any page they have already reached;
+     a signed-in Kompas educator can open every page */
+  const secNames={intro:'1 · Introduction',why:'2 · Why bonds form',lewis:'3 · Lewis structures',vb:'4 · Valence bond theory',vsepr:'5 · VSEPR: molecular shape',en:'6 · Electronegativity and bond type',pol:'7 · Polarity and dipole moment',imf:'8 · Intermolecular forces',lab:'Lab · Molecule Bench',end:'Wrap-up'};
   function buildToc(){
     const ul=document.getElementById('toc-list'); ul.innerHTML=''; let last='';
     slides.forEach((s,i)=>{
@@ -2965,17 +2987,39 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
       const li=document.createElement('li'), b=document.createElement('button');
       b.innerHTML='<span>'+(i+1)+'</span>'+s.dataset.title;
       if(i+1===current) b.className='cur';
-      b.addEventListener('click',()=>{ current=i+1; show(current); document.getElementById('toc-overlay').classList.remove('open'); track('toc-jump',{slide:current}); });
+      const open=isEducator || i+1<=maxReached;
+      if(!open){ b.classList.add('lockd'); b.disabled=true; b.setAttribute('aria-disabled','true'); }
+      b.addEventListener('click',()=>{ if(!(isEducator || i+1<=maxReached)) return; current=i+1; show(current); document.getElementById('toc-overlay').classList.remove('open'); track('toc-jump',{slide:current}); });
       li.appendChild(b); ul.appendChild(li);
     });
   }
 
-  /* events from the embedded Molecule Bench lab */
+  /* the lab needs about 480 px of height to show each step without scrolling;
+     on shorter screens offer a full-screen link instead of a cramped frame */
+  function labFrame(slide){
+    const fr=slide && slide.querySelector('iframe[data-src]'); if(!fr) return;
+    const box=fr.parentElement, small=box.clientHeight<480;
+    box.classList.toggle('launch',small);
+    if(!small && !fr.getAttribute('src')){ fr.setAttribute('src',fr.dataset.src); track('lab-embed-open',{lab:'molecule-lab'}); }
+  }
+  window.addEventListener('resize',()=>setTimeout(()=>labFrame(slides[current-1]),200));
+
+  /* the embedded Molecule Bench reports finished rounds */
   window.addEventListener('message',e=>{
     if(e.origin!==location.origin && location.origin!=='null') return;
-    const d=e.data; if(!d||d.type!=='bond-lab') return;
-    track('lab-'+d.event,{molecule:d.molecule||''});
+    const d=e.data||{}; if(d.type!=='molecule-lab') return;
+    track('lab-'+d.event,{scenario:d.reaction||''});
+    if(d.event==='round-complete') markLab(d.type);
   });
+  /* the lab page stays locked until the bench has one completed round. The bench also records
+     the round on this device, so a round finished full screen (another tab) unlocks it too. */
+  const LABKEY=l=>'kompas.chemical-bonding.'+l+'.done';
+  function markLab(l){
+    document.querySelectorAll('.lab-status[data-lab="'+l+'"]').forEach(t=>{ if(t.dataset.done) return; t.dataset.done='1'; t.classList.add('ok'); t.innerHTML='Lab round complete. Press Next to continue.'; });
+    updateGate(false);
+  }
+  ['molecule-lab'].forEach(l=>{ try{ if(localStorage.getItem(LABKEY(l))) markLab(l); }catch(_){} });
+  window.addEventListener('storage',e=>{ const m=/^kompas\.chemical-bonding\.(molecule-lab)\.done$/.exec(e.key||''); if(m && e.newValue) markLab(m[1]); });
 
   /* Back to Kompas: return to the exact course view the student came from
      (it always opens Kompas at the Interactive labs list). */
@@ -2987,8 +3031,35 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     }catch(_){}
   });
 
+  /* ---------- progress: furthest page reached ---------- */
+  function reach(n){ if(n>maxReached){ maxReached=n; } }
+  function saveProgress(){ if(!saveOn) return; try{ localStorage.setItem(PKEY, JSON.stringify({max:maxReached, last:current})); }catch(_){} }
+  function loadProgress(){
+    maxReached=1; current=1;
+    try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null');
+      if(sv && sv.max>=1) maxReached=Math.min(sv.max, TOTAL);
+      if(sv && sv.last>=1 && sv.last<=maxReached) current=sv.last; }catch(_){}
+  }
+
+  /* ---------- Kompas sign-in: read the user's own role (RLS allows only their own row) ---------- */
+  window.addEventListener('DOMContentLoaded',async()=>{
+    try{
+      if(!window.supabase) return;
+      const sb=window.supabase.createClient('https://jtkskwopnprgmxlhppro.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0a3Nrd29wbnByZ214bGhwcHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDU0NDQsImV4cCI6MjEwMjUyMTQ0NH0.MVvaIH6fPhzC0aRk8XIZMU1OrAZYNbsT9V1diP8fuGw',{auth:{detectSessionInUrl:false}});
+      const {data:{session}}=await sb.auth.getSession(); if(!session) return;
+      const {data}=await sb.from('profiles').select('role').eq('id',session.user.id).single();
+      if(!data) return;
+      signedIn=true;
+      try{ previewOn=data.role==='educator' && !!sessionStorage.getItem('kompas.previewCourse'); }catch(_){ previewOn=false; }
+      isEducator=data.role==='educator' && !previewOn;
+      if(data.role==='educator'){ saveOn=false; if(previewOn){ maxReached=1; current=1; } }
+      else { PKEY='kompas.chemical-bonding.progress.u.'+session.user.id; loadProgress(); }
+      show(current); buildToc(); updateGate(false);
+    }catch(_){}
+  });
+
   buildToc();
-  show(1);
+  show(current);
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fit(slides[current-1]));
 })();
 </script>
