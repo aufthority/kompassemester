@@ -1,0 +1,2005 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Arenes, Explained — Aufthority</title>
+<script defer src="https://cloud.umami.is/script.js"
+  data-website-id="f79c60f1-f9e7-4170-a979-f357ba756a18"></script>
+<meta name="description" content="Benzene and its compounds for pharmacy students: naming, aromaticity, stability and the substitution reactions of benzene, with a five-station virtual lab.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="article">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="Arenes, Explained">
+<meta property="og:description"  content="Three painkillers, one ring. Name it, test it, react it: benzene for pharmacy students.">
+<meta property="og:url"          content="https://kompassemester.aufthority.com/labs/arenes/">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:image:width"  content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale"       content="en_MY">
+<meta name="twitter:card"        content="summary_large_image">
+<meta name="twitter:site"        content="@theaufthority">
+<meta name="twitter:title"       content="Arenes, Explained">
+<meta name="twitter:description" content="Naming, aromaticity and the reactions of benzene for pharmacy students.">
+<meta name="twitter:image"       content="https://www.aufthority.com/preview_v2.png">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<script src="../shared/periodic-table.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#6f7771;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#9a6a1c;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;--k:1;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;overflow:hidden;-webkit-text-size-adjust:100%}
+a{color:var(--accent)}
+b,strong{color:var(--ink);font-weight:700}
+
+#shell{height:100vh;height:var(--app-h,100dvh);max-width:1120px;margin:0 auto;padding:0 16px;display:flex;flex-direction:column}
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 8px}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;align-items:center;gap:10px}
+.back-kompas{text-decoration:none;color:var(--accent-dark);border-color:var(--g-line);background:var(--g-bg)}
+@media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
+.icon-btn{background:#fff;border:1px solid var(--rule);color:var(--body);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;cursor:pointer}
+#progress-label{font-size:.78rem;color:var(--muted);min-width:44px;text-align:right}
+#progress-track{flex:0 0 3px;background:var(--rule);border-radius:3px}
+#progress-fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.slide{position:absolute;inset:0;display:none;overflow:hidden;font-size:calc(var(--k) * 16px)}
+.slide.active{display:block}
+.si{height:100%;display:flex;flex-direction:column;justify-content:center;gap:.7em;padding:.8em 0 .4em;max-width:720px;margin:0 auto}
+.si.has-ill{max-width:none}
+.ill{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;align-items:stretch;min-height:0}
+.ill svg{width:100%;height:calc(var(--k) * 29vh);height:calc(var(--k) * 29dvh);display:block}
+.ill figcaption{font-size:.72em;color:var(--muted);text-align:center;margin-top:.25em}
+.txt{flex:0 0 auto;min-width:0}
+@media (min-width:760px) and (orientation:landscape){
+  .slide{font-size:calc(var(--k) * 17px)}
+  .si.has-ill{flex-direction:row;align-items:center;gap:2.4em;padding:1em 0}
+  .si.has-ill .ill{flex:0 0 46%}
+  .si.has-ill .ill svg{height:auto;max-height:calc(var(--k) * 64vh);max-height:calc(var(--k) * 64dvh)}
+  .si.has-ill .txt{flex:1 1 auto}
+}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.45em}
+h1,h2{color:var(--ink);font-weight:800;line-height:1.08;letter-spacing:-.025em;margin-bottom:.45em}
+h1{font-size:2.05em}
+h2{font-size:1.65em}
+@media (min-width:760px){h1{font-size:2.4em}h2{font-size:1.9em}}
+h1 .ac,h2 .ac{color:var(--accent)}
+p{margin-bottom:.6em;font-size:.97em}
+.small{font-size:.82em;color:var(--muted)}
+.cite{font-size:.78em;color:var(--muted);white-space:nowrap}
+.cite a{color:var(--muted)}
+.callout{border-left:3px solid var(--accent);background:var(--g-bg);padding:.5em .85em;margin:.55em 0;font-size:.92em;border-radius:0 8px 8px 0}
+.callout.warn{border-color:var(--red);background:var(--r-bg)}
+.callout.note{border-color:var(--orange);background:var(--o-bg)}
+.pill-list{display:flex;flex-wrap:wrap;gap:.4em;margin:.55em 0}
+.pill{background:var(--g-bg);color:var(--accent-dark);padding:.3em .8em;font-size:.82em;font-weight:500;border-radius:100px}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:.5em;margin:.55em 0}
+.tile{border:1px solid var(--rule);border-radius:var(--radius);padding:.55em .75em}
+.tile .n{font-size:1.3em;font-weight:800;color:var(--accent);line-height:1.15;letter-spacing:-.02em;margin-bottom:.15em}
+.tile .l{font-size:.84em;color:var(--body)}
+.steps{list-style:none;margin:.55em 0;display:flex;flex-direction:column;gap:.45em}
+.steps li{display:flex;gap:.65em;align-items:flex-start;font-size:.92em}
+.steps .n{flex:0 0 1.65em;height:1.65em;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.82em;margin-top:.05em}
+.data-table{width:100%;border-collapse:collapse;font-size:.84em;margin:.45em 0}
+.data-table th,.data-table td{border-bottom:1px solid var(--rule);padding:.4em .55em;text-align:left;vertical-align:top}
+.data-table th{font-weight:700;color:var(--muted);font-size:.8em;text-transform:uppercase;letter-spacing:.06em;border-bottom:2px solid var(--rule)}
+.data-table td:first-child{color:var(--ink);font-weight:500}
+.data-table tr.hl td{background:var(--g-bg)}
+.map3{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.55em 0}
+.box{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .75em;font-size:.86em}
+.box h3{font-size:1.1em;font-weight:800;color:var(--accent);margin-bottom:.15em}
+.box .q{font-size:.9em;color:var(--muted);margin-bottom:.3em}
+.box ul{padding-left:1.1em}
+
+/* HTML diagrams */
+.flow{display:flex;flex-wrap:wrap;align-items:center;gap:.4em;margin:.6em 0}
+.node{border:1.5px solid var(--ink);border-radius:8px;padding:.35em .65em;font-size:.84em;font-weight:500;color:var(--ink);background:#fff;text-align:center}
+.node small{display:block;font-weight:400;color:var(--muted);font-size:.85em}
+.node.g{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.node.o{border-color:var(--orange);background:var(--o-bg)}
+.node.r{border-color:var(--red);background:var(--r-bg)}
+.node.ghost{border-style:dashed;color:var(--muted)}
+.arr{color:var(--orange);font-weight:800;font-size:1em}
+.node-group{display:flex;align-items:center;gap:.35em}
+.node-group .or{color:var(--muted);font-size:.84em}
+/* flows: one straight row when it fits, otherwise a snake (→ row, turn down, ← row, turn down …) */
+.flow.row{flex-wrap:nowrap}
+.flow.row > *{flex:0 0 auto}
+.flow.snake{display:grid;align-items:stretch;gap:0}
+.flow.snake .cell{display:flex;min-width:0}
+.flow.snake .cell > .node{flex:1;display:flex;flex-direction:column;justify-content:center}
+.flow.snake .cell > .node-group{flex:1}
+.flow.snake .cell > .node-group > .node{flex:1}
+.flow.snake .arr{align-self:center;text-align:center;line-height:1}
+.flow.snake .arr.down{padding:.2em 0}
+.lane{display:grid;grid-template-columns:8.5em 1fr;gap:.6em;align-items:center;padding:.45em 0;border-bottom:1px solid var(--rule)}
+.lane:last-of-type{border-bottom:none}
+.lane .lname{font-weight:800;color:var(--ink);font-size:.9em;line-height:1.2}
+.lane .lname small{display:block;font-weight:500;color:var(--muted);font-size:.8em}
+.lane .flow{margin:0}
+.stack{display:flex;flex-direction:column;gap:.4em;margin:.6em 0}
+.layer{display:grid;grid-template-columns:2.2em 1fr;gap:.6em;align-items:center;border:1px solid var(--g-line);background:var(--g-bg);border-radius:var(--radius);padding:.5em .7em;font-size:.88em}
+.layer .ln{width:2.2em;height:2.2em;border-radius:50%;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800}
+.layer > div > b:first-child{display:block;margin-bottom:.1em}
+.htl{display:grid;grid-template-columns:repeat(4,1fr);gap:.6em;margin:.6em 0}
+.htl .ev{border-top:3px solid var(--accent);padding-top:.4em;font-size:.86em}
+.htl .yr{font-weight:800;color:var(--accent);font-size:1.25em;letter-spacing:-.02em;display:block}
+@media (max-width:520px){.htl{grid-template-columns:1fr 1fr}.map3{grid-template-columns:1fr}.lane{grid-template-columns:1fr;gap:.25em}}
+.eq{display:flex;align-items:center;justify-content:center;gap:.6em;flex-wrap:wrap;margin:.6em 0}
+.eq .term{text-align:center;font-size:.82em;color:var(--ink);font-weight:500}
+.eq .term svg{width:5.2em;height:auto;display:block;margin:0 auto .25em}
+.eq .op{font-size:1.6em;font-weight:800;color:var(--orange)}
+.forms{display:grid;grid-template-columns:repeat(3,1fr);gap:.55em;margin:.6em 0}
+.form{border:1px solid var(--rule);border-radius:var(--radius);padding:.6em .7em;font-size:.86em}
+.form svg{width:100%;height:3.4em;display:block;margin-bottom:.3em}
+.form h3{font-size:1.05em;font-weight:800;color:var(--ink);margin-bottom:.1em}
+@media (max-width:520px){.forms{grid-template-columns:1fr}.form{display:grid;grid-template-columns:4.5em 1fr;gap:.6em;align-items:center}.form svg{height:2.6em;margin:0}}
+
+/* interactions */
+.toggle-wrap{border:1px solid var(--rule);border-radius:var(--radius);margin:.45em 0;overflow:hidden}
+.toggle-btn{width:100%;background:#fff;border:none;color:var(--ink);font:600 .92em 'DM Sans',sans-serif;text-align:left;padding:.6em .85em;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:.6em}
+.toggle-btn .hint{font-weight:600;color:var(--accent);font-size:.8em;white-space:nowrap}
+.toggle-btn .hint::after{content:" +"}
+.toggle-wrap.open .toggle-btn .hint::after{content:" −"}
+.toggle-wrap.seen{border-color:var(--g-line)}
+.toggle-body{display:none;padding:0 .85em .7em;font-size:.9em}
+.toggle-wrap.open .toggle-body{display:block}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(9.5em,1fr));gap:.45em;margin:.55em 0}
+.rcard{border:1px solid var(--rule);border-radius:var(--radius);background:#fff;text-align:left;padding:.55em .7em;cursor:pointer;font:400 .84em 'DM Sans',sans-serif;color:var(--body);display:block}
+.rcard .rt{font-weight:800;color:var(--ink);display:flex;justify-content:space-between;gap:.4em}
+.rcard .rt::after{content:"Tap";font-weight:600;font-size:.8em;color:var(--accent)}
+.rcard .rb{display:none;margin-top:.3em}
+.rcard.seen{border-color:var(--accent);background:var(--g-bg)}
+.rcard.seen .rt::after{content:""}
+.rcard.seen .rb{display:block}
+.rcard svg{width:100%;height:3.2em;display:block;margin:.2em 0}
+.choice-q{font-weight:700;color:var(--ink);font-size:.95em;margin-bottom:.45em}
+.choices{display:flex;flex-wrap:wrap;gap:.4em}
+.choice{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:500 .88em 'DM Sans',sans-serif;padding:.45em .85em;border-radius:100px;cursor:pointer}
+.choice:hover{border-color:var(--ink)}
+.choice.right{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.choice.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red);text-decoration:line-through}
+.feedback{display:none;font-size:.88em;margin-top:.5em;padding:.45em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.feedback.show{display:block}
+.stepper .choice-set{display:none}
+.stepper .choice-set.cur{display:block}
+.step-count{font-size:.75em;font-weight:700;color:var(--eyebrow);letter-spacing:.08em;margin-bottom:.3em}
+.next-q{margin-top:.55em;background:#fff;border:1.5px solid var(--ink);border-radius:100px;font:600 .84em 'DM Sans',sans-serif;padding:.38em .9em;cursor:pointer;display:none}
+.choice-set.done .next-q{display:inline-block}
+.calc{border:1px solid var(--rule);border-radius:var(--radius);padding:.65em .75em;margin:.55em 0}
+.calc-row{display:flex;gap:.6em;margin-bottom:.5em;flex-wrap:wrap}
+.calc label{font-size:.76em;font-weight:600;color:var(--muted);display:flex;flex-direction:column;gap:.2em;flex:1;min-width:8em}
+.calc input,.calc select{font:500 1.05em 'DM Sans',sans-serif;padding:.32em .45em;border:1px solid var(--rule);border-radius:6px;background:#fff;color:var(--ink);width:100%}
+.calc-out{font-size:.9em;padding:.45em .75em;border-left:3px solid var(--accent);background:var(--g-bg);border-radius:0 8px 8px 0}
+.calc-out.fail{border-color:var(--red);background:var(--r-bg)}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:600 .84em 'DM Sans',sans-serif;padding:.4em .95em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.range{width:100%;accent-color:var(--accent);margin:.4em 0}
+.scale-lbl{display:flex;justify-content:space-between;font-size:.74em;color:var(--muted);font-weight:600}
+.coa{display:flex;flex-direction:column;gap:.3em;margin:.45em 0}
+.coa-row{display:grid;grid-template-columns:1fr 1.3fr 4.8em;gap:.5em;align-items:center;background:#fff;border:1px solid var(--rule);border-radius:8px;color:var(--ink);font:400 .82em 'DM Sans',sans-serif;text-align:left;padding:.42em .65em;cursor:pointer}
+.coa-row b{font-weight:700}
+.coa-row .v{text-align:right;font-weight:700;color:var(--muted)}
+.coa-row.pass{border-color:var(--accent)}.coa-row.pass .v{color:var(--accent)}
+.coa-row.fail{border-color:var(--red);background:var(--r-bg)}.coa-row.fail .v{color:var(--red)}
+.coa-row.next{border-color:var(--orange);background:var(--o-bg)}.coa-row.next .v{color:var(--orange)}
+#coa-exp{min-height:2.7em;font-size:.86em;border-left:3px solid var(--rule);padding:.35em .65em}
+.coa-decision{display:none;margin-top:.5em}
+.coa-decision.show{display:block}
+.cards{display:flex;flex-direction:column;gap:.4em;margin:.55em 0}
+.card{display:flex;gap:.75em;border:1px solid var(--rule);border-radius:var(--radius);padding:.5em .75em;font-size:.88em}
+.card .cn{font-size:1.35em;font-weight:800;color:var(--accent);line-height:1}
+.madeby{border-top:1px solid var(--rule);padding-top:.6em;margin-top:.3em}
+.madeby p{font-size:.82em;color:var(--muted);margin-bottom:.45em}
+.madeby p b,.madeby p b a{color:var(--ink)}
+.socials{display:flex;flex-wrap:wrap;gap:.35em}
+.socials a{font-size:.8em;font-weight:600;color:var(--accent-dark);background:var(--g-bg);padding:.28em .75em;border-radius:100px;text-decoration:none}
+.socials a:hover{background:var(--g-line)}
+.score{font-size:1.25em;font-weight:800;color:var(--accent);margin-top:.5em}
+.pulse{animation:pulse 1s ease 2}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(217,130,31,0)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.45)}}
+
+#bottom{flex:0 0 auto;padding:6px 0 calc(8px + env(safe-area-inset-bottom))}
+#gate-hint{font-size:.78rem;color:var(--muted);text-align:center;min-height:1.2em;margin-bottom:5px}
+#gate-hint.alert{color:var(--orange);font-weight:600}
+#gate-hint button{background:none;border:none;color:var(--accent);text-decoration:underline;font:inherit;font-weight:600;cursor:pointer;padding:0}
+#nav-wrap{display:flex;justify-content:space-between;gap:10px}
+.nav-btn{flex:1;max-width:200px;background:#fff;border:1.5px solid var(--ink);color:var(--ink);font:700 .92rem 'DM Sans',sans-serif;padding:10px 14px;border-radius:100px;cursor:pointer}
+#btn-next{background:var(--ink);color:#fff;margin-left:auto}
+#btn-next.locked{background:#fff;color:var(--muted);border-color:var(--rule)}
+.nav-btn:disabled{opacity:.3;cursor:default}
+footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
+
+.overlay{display:none;position:fixed;inset:0;z-index:50;background:rgba(20,30,25,.35);padding:16px;overflow-y:auto}
+.overlay.open{display:block}
+.panel{max-width:620px;margin:16px auto;background:#fff;border-radius:14px;padding:18px 20px}
+.panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.vid-row{margin:.55em 0 .2em}
+.vid-btn{display:inline-flex;align-items:center;gap:.45em}
+.vid-btn span{font-size:.8em}
+#video-overlay .panel{max-width:880px}
+.vid-frame{position:relative;width:100%;aspect-ratio:16/9;background:#111;border-radius:10px;overflow:hidden}
+.vid-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.vid-note{margin:.6em 0 0;font-size:.85em;color:var(--muted,#5b6660)}
+.panel-head h3{font-weight:800;color:var(--ink);font-size:1.3rem;letter-spacing:-.02em}
+.toc-note{font-size:.82rem;color:var(--muted);margin-bottom:8px}
+.toc{list-style:none}
+.toc li{border-bottom:1px solid var(--rule)}
+.toc button{background:none;border:none;color:var(--ink);font:400 .9rem 'DM Sans',sans-serif;padding:7px 0;width:100%;text-align:left;cursor:pointer;display:flex;gap:10px}
+.toc button span{color:var(--muted);min-width:22px}
+.toc button.cur{color:var(--accent);font-weight:700}
+.toc .sec{font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;padding:12px 0 3px;border:none}
+.refs{padding-left:20px;font-size:.82rem;color:var(--body)}
+.refs li{margin-bottom:7px;word-break:break-word}
+
+/* ---------- SVG diagram + chart styling ---------- */
+.ln{fill:none;stroke:var(--ink);stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ln.thin{stroke-width:1.2}
+.ln.g{stroke:var(--accent)}.ln.r{stroke:var(--red)}.ln.o{stroke:var(--orange)}.ln.b{stroke:var(--blue)}.ln.m{stroke:#a3aaa5}
+.dash{stroke-dasharray:4 4}
+.fg{fill:var(--g-bg)}.fgs{fill:var(--accent)}.fb{fill:var(--b-bg)}.fr{fill:var(--r-bg)}.frs{fill:var(--red)}.fo{fill:var(--o-bg)}.fos{fill:var(--orange)}.fw{fill:#fff}.fk{fill:var(--ink)}.fgr{fill:#eef0ee}.fpow{fill:#d9d4c7}
+.tx{font-family:'DM Sans',sans-serif;font-size:12px;fill:var(--body)}
+.tx.s{font-size:10.5px;fill:var(--muted)}
+.tx.b{font-weight:700;fill:var(--ink)}
+.tx.g{fill:var(--accent-dark);font-weight:700}.tx.r{fill:var(--red);font-weight:700}.tx.o{fill:#a85f10;font-weight:700}.tx.bl{fill:var(--blue);font-weight:700}
+.tx.mid{text-anchor:middle}.tx.end{text-anchor:end}
+.bar{fill:var(--accent)}.bar.hl{fill:var(--red)}
+.axis{stroke:#c9cdca;stroke-width:1;fill:none}
+.grid{stroke:#eceeec;stroke-width:1}
+
+/* animations run only on the active slide, restart on every visit */
+.slide.active .draw{stroke-dasharray:1;stroke-dashoffset:1;animation:draw 1.1s ease-out forwards;animation-delay:var(--d,0s)}
+.slide.active .fade{opacity:0;animation:fadeup .5s ease-out forwards;animation-delay:var(--d,.3s)}
+.slide.active .stagger > *{opacity:0;animation:fadeup .45s ease-out forwards;animation-delay:var(--d,0s)}
+.slide.active .grow-x{transform-box:fill-box;transform-origin:left center;animation:growx .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
+.slide.active .grow-y{transform-box:fill-box;transform-origin:center bottom;animation:growy .8s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
+.slide.active .updown{animation:updown 2s ease-in-out infinite}
+.slide.active .spin{transform-box:view-box;animation:spin 6s linear infinite}
+.slide.active .spin-r{transform-box:view-box;animation:spin 6s linear infinite reverse}
+.slide.active .drop{animation:drop 2.4s ease-in infinite}
+.slide.active .bounce{animation:bounce 1.2s ease-in-out infinite}
+.slide.active .cyc{animation:cyc 6s infinite;animation-delay:var(--d,0s)}
+@keyframes draw{to{stroke-dashoffset:0}}
+@keyframes fadeup{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+@keyframes growx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes growy{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+@keyframes updown{0%,100%{transform:translateY(0)}50%{transform:translateY(22px)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes drop{0%{transform:translateY(0);opacity:0}10%{opacity:1}80%{opacity:1}100%{transform:translateY(46px);opacity:0}}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes cyc{0%,22%{opacity:1}26%,100%{opacity:.28}}
+
+/* last resort when a page cannot fit at a readable size: the page body scrolls,
+   the Back/Next bar stays pinned, and a fade hints at more below */
+.slide.scrolly{overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.slide.scrolly .si{height:auto;min-height:100%;justify-content:flex-start}
+#stage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34px;pointer-events:none;background:linear-gradient(rgba(255,255,255,0),#fff);opacity:0;transition:opacity .2s}
+#stage.more::after{opacity:1}
+.ph-step.scrolly{overflow-y:auto;-webkit-overflow-scrolling:touch}
+.ph-step.scrolly .ph-in{height:auto;min-height:100%;justify-content:flex-start}
+@media (max-height:700px){footer{display:none}}
+@media (prefers-reduced-motion: reduce){
+  .slide.active *{animation:none!important;opacity:1!important;stroke-dashoffset:0!important;transform:none!important}
+}
+
+
+/* ---------- additions for this explainer ---------- */
+.pt-open{display:inline-flex;align-items:center;gap:.45em;background:#fff;border:1.5px solid var(--accent);color:var(--accent-dark);font:700 .84rem 'DM Sans',sans-serif;padding:.42em .95em;border-radius:100px;cursor:pointer;margin:.1em 0 .5em}
+.pt-open svg{width:1.05em;height:1.05em}
+.toggle-wrap.opt .toggle-btn .tag{font-size:.7em;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--eyebrow);margin-right:.5em}
+.toggle-wrap.opt{border-style:dashed}
+.clo{display:inline-block;font-size:.72em;font-weight:700;color:var(--accent-dark);background:var(--g-bg);border-radius:100px;padding:.1em .55em;margin-left:.3em;vertical-align:.1em}
+.sim{border:1px solid var(--rule);border-radius:var(--radius);padding:.55em .75em;margin:.5em 0}
+.sim .range{margin:.2em 0}
+.sim-out{font-size:.88em;margin-top:.3em}
+.sim svg{width:100%;height:auto;display:block}
+.chips2{display:flex;flex-wrap:wrap;gap:.3em;margin:.3em 0}
+.chip2{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .8em 'DM Sans',sans-serif;padding:.3em .7em;border-radius:100px;cursor:pointer}
+.chip2.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.plates{display:flex;gap:.6em;justify-content:center;margin:.3em 0}
+.plates svg{width:7.5em;height:auto}
+.cmp td:first-child{white-space:nowrap}
+/* locked contents rows and certificate */
+.toc button.lockd{color:var(--muted);opacity:.45;cursor:default}
+.cert-img{display:block;width:100%;max-width:560px;height:auto;border:1px solid var(--rule);border-radius:8px;margin:.5em 0}
+.cert-dl{display:inline-block;text-decoration:none}
+/* animations */
+.anim{display:flex;flex-direction:column;gap:.3em;min-width:0}
+.a-tabs{display:flex;flex-wrap:wrap;gap:.3em;justify-content:center}
+.a-ui{display:flex;align-items:center;gap:.4em}
+.a-ui button{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .78em 'DM Sans',sans-serif;padding:.32em .85em;cursor:pointer;white-space:nowrap}
+.a-ui .a-play{background:var(--ink);color:#fff;min-width:7.2em}
+.a-bar{flex:1;height:4px;background:var(--rule);border-radius:4px;overflow:hidden}
+.a-fill{height:100%;width:0;background:var(--accent)}
+.anim-cap{font-size:.82em;min-height:4.1em;margin:0;line-height:1.4;color:var(--ink)}
+.ill .anim-svg{background:#fbfcfb;border-radius:12px}
+@media (max-height:700px){.anim-cap{min-height:3em}}
+/* embedded lab */
+.si.lab-si{justify-content:flex-start;gap:.35em;max-width:860px}
+.lab-head{flex:0 0 auto}
+.lab-head h2{margin-bottom:.15em}
+.lab-head p{margin-bottom:.2em}
+.lab-frame{flex:1 1 auto;min-height:300px;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#fff}
+.lab-frame iframe{width:100%;height:100%;border:0;display:block}
+.lab-launch{display:none;height:100%;flex-direction:column;align-items:center;justify-content:center;gap:.6em;padding:1em;text-align:center;font-size:.92em}
+.lab-frame.launch iframe{display:none}
+.lab-frame.launch .lab-launch{display:flex}
+.lab-launch a{background:var(--accent);color:#fff;text-decoration:none;font-weight:700;padding:.6em 1.3em;border-radius:100px}
+
+/* ---------- additions for the QC practice explainer ---------- */
+.feedback.miss{border-color:var(--orange);background:var(--o-bg)}
+.choice.wrong{cursor:default}
+.given-box{background:#f6f7f5;border-radius:8px;padding:.4em .7em;margin:.2em 0 .5em;line-height:1.55}
+.given-box b{white-space:nowrap}
+.forms2{grid-template-columns:repeat(2,1fr)}
+@media (max-width:520px){.forms2{grid-template-columns:1fr}.forms2 .form{display:block}}
+.sim .chips2{justify-content:center}
+.choice-set + .choice-set{margin-top:0}
+.lab-status{font-size:.82em;font-weight:700;color:#a85f10;margin:.15em 0 0}
+.lab-status.ok{color:var(--accent-dark)}
+.rgrid.ghs{grid-template-columns:repeat(auto-fit,minmax(8em,1fr))}
+.rgrid.ghs .rcard svg{height:3.4em}
+.layer .clo{margin-left:.2em}
+
+/* ---- arenes additions ---- */
+.eq-box{text-align:center;font-weight:800;color:var(--ink);font-size:1.12em;background:#f6f7f5;border-radius:8px;padding:.35em .6em;margin:.45em 0}
+.eq-box.big{font-size:1.9em;color:var(--accent);letter-spacing:.02em}
+.eq-box .small{font-weight:400;font-size:.7em}
+.ticks{list-style:none;margin:.45em 0;display:flex;flex-direction:column;gap:.35em}
+.ticks li{position:relative;padding-left:1.15em;font-size:.92em}
+.ticks li::before{content:"";position:absolute;left:.15em;top:.52em;width:.45em;height:.45em;border-radius:50%;background:var(--accent)}
+.poll{border:1px dashed var(--g-line);background:#fbfdfc;border-radius:var(--radius);padding:.5em .7em;margin:.5em 0}
+.poll .calc-out{margin-top:.35em}
+.ill .chips2{justify-content:center}
+.rcard .mini{display:block;width:100%;height:auto;max-height:calc(var(--k) * 4.6em);margin:0 0 .4em;pointer-events:none}
+.rgrid.g3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media (max-width:420px){.rgrid.g3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.task.ok{color:var(--accent-dark,#1f5139);font-weight:700}
+.chip2:disabled{opacity:.45;cursor:default}
+.steps-ol{margin:.35em 0 .35em 1.25em;padding:0;font-size:.92em}.steps-ol li{margin:.2em 0}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <marker id="ar-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#c0392b"/></marker>
+    <marker id="ar-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M1 1 L8 5 L1 9 Z" fill="#d9821f"/></marker>
+    <pattern id="hatch" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="5" stroke="#5a2a08" stroke-width="1.6" stroke-opacity=".6"/></pattern>
+  </defs>
+</svg>
+<script>
+/* Size the page to the visible screen. 100vh/100dvh are unreliable on many
+   Android and in-app browsers (they include the area behind the toolbar). */
+(function(){
+  function setH(){ document.documentElement.style.setProperty('--app-h', window.innerHeight + 'px'); }
+  setH();
+  window.addEventListener('resize', setH);
+  window.addEventListener('orientationchange', function(){ setTimeout(setH, 250); });
+  window.addEventListener('pageshow', setH);
+})();
+</script>
+<div id="shell">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <a class="icon-btn back-kompas" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+      <button class="icon-btn" id="btn-toc" data-umami-event="open-contents">Contents</button>
+      <span id="progress-label">1 / 33</span>
+    </div>
+  </nav>
+  <div id="progress-track"><div id="progress-fill"></div></div>
+
+  <div id="stage">
+
+<!-- ================= INTRODUCTION ================= -->
+
+<section class="slide active" data-sec="intro" data-title="Start here">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 230" role="img" aria-label="Aspirin, paracetamol and ibuprofen drawn as skeletal formulas. Each has one benzene ring, highlighted in green">
+    <rect x="0" y="0" width="400" height="230" rx="12" fill="#f4f7f5"/>
+    <g class="fade" style="--d:.2s"><g class="ringmol" data-ring='{"cx":70,"cy":112,"r":28,"g":{"0":"COOH","1":"OCOCH3"},"hl":1}'></g><text class="tx b mid" x="70" y="205">aspirin</text></g>
+    <g class="fade" style="--d:.6s"><g class="ringmol" data-ring='{"cx":200,"cy":112,"r":28,"g":{"0":"NHCOCH3","3":"OH"},"hl":1}'></g><text class="tx b mid" x="200" y="205">paracetamol</text></g>
+    <g class="fade" style="--d:1s"><g class="ringmol" data-ring='{"cx":330,"cy":112,"r":28,"g":{"0":"CH(CH3)COOH","3":"CH2CH(CH3)2"},"hl":1}'></g><text class="tx b mid" x="330" y="205">ibuprofen</text></g>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Start here</div>
+   <h1>Three painkillers, <span class="ac">one ring.</span></h1>
+   <p>Aspirin, paracetamol and ibuprofen are on every pharmacy shelf. Each one is built on the same six-carbon ring: <b>benzene</b>.</p>
+   <div class="poll" id="poll-hook">
+    <p class="small" style="margin:0 0 .25em"><b>Your guess:</b> what happens to that ring inside the body, or in a reaction flask?</p>
+    <div class="chips2"><button type="button" class="chip2" data-v="b">It breaks easily</button><button type="button" class="chip2" data-v="s">It stays whole</button><button type="button" class="chip2" data-v="u">I can’t tell</button></div>
+    <p class="calc-out" id="poll-out" hidden></p>
+   </div>
+   <p class="small">Compounds with a benzene ring are called <b>arenes</b> (aromatic hydrocarbons and their derivatives). Use Next to move through the pages. A periodic table is in Contents.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="intro" data-title="What you will learn">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Map of this chapter</div>
+   <h2>Name it, test it, <span class="ac">react it.</span></h2>
+   <div class="stack stagger">
+    <div class="layer"><div class="ln">1</div><div><b>Meet benzene</b>Where arenes come from, and the ring of shared electrons that makes benzene special.</div></div>
+    <div class="layer"><div class="ln">2</div><div><b>Naming <span class="clo">C2</span></b>Apply the naming rules to benzene compounds with one, two or three groups.</div></div>
+    <div class="layer"><div class="ln">3</div><div><b>Aromaticity and stability <span class="clo">C3</span></b>Decide whether a ring is aromatic, and measure how much extra stability it gives.</div></div>
+    <div class="layer"><div class="ln">4</div><div><b>How benzene reacts <span class="clo">C3</span></b>Predict the product of the five substitution reactions of benzene.</div></div>
+    <div class="layer"><div class="ln">5</div><div><b>Arenes in medicines</b>Rings in painkillers, and a safety lesson from rofecoxib.</div></div>
+   </div>
+   <p class="small">One virtual lab, <b>Ring Bench</b>, puts it all together in five stations. Main reference: Bruice, <i>Organic Chemistry</i> (4th ed.), Chapters 15 and 16, with the PHCH 4123 Unit 5 notes.</p>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 1 · MEET BENZENE ================= -->
+
+<section class="slide" data-sec="meet" data-title="Where arenes come from">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Meet benzene · tap each card</div>
+   <h2>From coal and oil <span class="ac">to the pharmacy.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Coal tar</span><span class="rb">Heating coal without air gives coal tar. <b>Fractional distillation</b> separates it into benzene, toluene, xylene, naphthalene, indene, biphenyl, anthracene and phenanthrene.</span></button>
+     <button class="rcard"><span class="rt">Petroleum</span><span class="rb">Today most benzene and toluene come from refining crude oil. They are starting materials for plastics, dyes and medicines.</span></button>
+     <button class="rcard"><span class="rt">“Aromatic”</span><span class="rb">The name first meant “sweet-smelling”. Today it means a special kind of stable ring, which you will test in section 3.</span></button>
+     <button class="rcard"><span class="rt">Handle with care</span><span class="rb">Long exposure to benzene can cause leukaemia, so labs now use toluene as a solvent wherever they can.</span></button>
+   </div>
+   <p class="small"><span class="cite">(Unit 5 notes; Bruice 15.1)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="meet" data-title="The benzene ring">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="anim" data-anim="kekule"><svg class="anim-svg" viewBox="0 0 400 230" role="img" aria-label="Animation: the two Kekulé structures of benzene, then the real molecule drawn with a circle inside the ring"></svg><div class="a-ui"><button type="button" class="a-play">▶ Play</button><button type="button" class="a-replay">↺ Replay</button><div class="a-bar"><div class="a-fill"></div></div></div><p class="anim-cap" aria-live="polite"></p></div>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Meet benzene · watch</div>
+   <h2>C₆H₆: six carbons, <span class="ac">six equal bonds.</span></h2>
+   <p>Benzene is a flat ring of six carbons, each with one H. Every carbon is <b>sp²</b>, and every bond angle is <b>120°</b>.</p>
+   <p>Kekulé drew it with three C=C double bonds. But all six C–C bonds are the <b>same length</b> (1.39 Å), between a single bond (1.54 Å) and a double bond (1.34 Å).</p>
+   <p class="small">So the real molecule is neither Kekulé drawing. We draw either one, or a circle inside the ring. <span class="cite">(Bruice 7.1, 15.1)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="meet" data-title="The π cloud">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 230" role="img" aria-label="Six p orbitals on the six ring carbons overlap side by side to make one ring of π electrons above and below the plane of the ring">
+    <rect x="0" y="0" width="400" height="230" rx="12" fill="#f4f7f5"/>
+    <text class="tx b mid" x="105" y="26">6 p orbitals</text>
+    <g id="pcl-left"></g>
+    <path d="M190 118 h26" stroke="#d9821f" stroke-width="2.5" marker-end="url(#ar-o)"/>
+    <text class="tx b mid" x="300" y="26">one π cloud</text>
+    <g class="fade" style="--d:.6s">
+     <ellipse cx="300" cy="96" rx="74" ry="22" fill="#dcefe4" stroke="#2d6a4f" stroke-width="1.5" opacity=".95"/>
+     <ellipse cx="300" cy="96" rx="40" ry="11" fill="#f4f7f5"/>
+     <ellipse cx="300" cy="146" rx="74" ry="22" fill="#dcefe4" stroke="#2d6a4f" stroke-width="1.5" opacity=".95"/>
+     <ellipse cx="300" cy="146" rx="40" ry="11" fill="#f4f7f5"/>
+     <ellipse cx="300" cy="121" rx="62" ry="17" fill="none" stroke="#1c2620" stroke-width="2.2"/>
+     <text class="tx s mid" x="300" y="190">6 π electrons spread above and</text>
+     <text class="tx s mid" x="300" y="205">below the ring: delocalised</text>
+    </g>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Meet benzene · tap each card</div>
+   <h2>Six electrons, <span class="ac">shared by six carbons.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">One p orbital each</span><span class="rb">Each sp² carbon keeps one p orbital, standing up from the flat ring.</span></button>
+     <button class="rcard"><span class="rt">Overlap all round</span><span class="rb">Each p orbital overlaps with both its neighbours, so the overlap goes right round the ring.</span></button>
+     <button class="rcard"><span class="rt">Delocalised</span><span class="rb">The 6 π electrons are not stuck in three double bonds. They move round the whole ring, above and below it.</span></button>
+   </div>
+   <p class="small">Sharing electrons over more atoms lowers their energy. That is where benzene’s extra stability comes from. <span class="cite">(Bruice 7.6, 15.1)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="meet" data-title="Check: meet benzene">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Two quick <span class="ac">questions.</span></h2>
+   <p class="small">Choose the right answer to continue. A wrong choice tells you what to think about.</p>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="c">
+      <div class="step-count">QUESTION 1 OF 2</div>
+      <div class="choice-q">The six C–C bonds in benzene are:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="If that were true, the bonds would have two different lengths. They don’t.">three single and three double bonds</button><button class="choice" data-v="b" data-fb="Single bonds are 1.54 Å; benzene’s bonds are shorter.">six single bonds</button><button class="choice" data-v="c">all the same length, between single and double</button></div>
+      <div class="feedback">All six are 1.39 Å: the π electrons are shared round the whole ring.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 2</div>
+      <div class="choice-q">How many π electrons does benzene have?</div>
+      <div class="choices"><button class="choice" data-v="a">6</button><button class="choice" data-v="b" data-fb="Count 2 for each C=C in a Kekulé drawing.">3</button><button class="choice" data-v="c" data-fb="12 counts the σ bonds of the ring as well. Count only π electrons.">12</button></div>
+      <div class="feedback">Three C=C in a Kekulé drawing × 2 = 6 π electrons.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 2 · NAMING ================= -->
+
+<section class="slide" data-sec="name" data-title="Names to learn">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Naming · tap each card</div>
+   <h2>Six common names <span class="ac">you must use.</span></h2>
+   <p>These groups give the whole compound a special name. Learn them like words.</p>
+   <div class="rgrid g3">
+     <button class="rcard"><svg class="mini ringmini" data-ring='{"g":{"0":"CH3"}}' viewBox="0 0 120 70" aria-hidden="true"></svg><span class="rt">–CH₃</span><span class="rb"><b>toluene</b></span></button>
+     <button class="rcard"><svg class="mini ringmini" data-ring='{"g":{"0":"OH"}}' viewBox="0 0 120 70" aria-hidden="true"></svg><span class="rt">–OH</span><span class="rb"><b>phenol</b></span></button>
+     <button class="rcard"><svg class="mini ringmini" data-ring='{"g":{"0":"NH2"}}' viewBox="0 0 120 70" aria-hidden="true"></svg><span class="rt">–NH₂</span><span class="rb"><b>aniline</b></span></button>
+     <button class="rcard"><svg class="mini ringmini" data-ring='{"g":{"0":"COOH"}}' viewBox="0 0 120 70" aria-hidden="true"></svg><span class="rt">–COOH</span><span class="rb"><b>benzoic acid</b></span></button>
+     <button class="rcard"><svg class="mini ringmini" data-ring='{"g":{"0":"CHO"}}' viewBox="0 0 120 70" aria-hidden="true"></svg><span class="rt">–CHO</span><span class="rb"><b>benzaldehyde</b></span></button>
+     <button class="rcard"><svg class="mini ringmini" data-ring='{"g":{"0":"CH=CH2"}}' viewBox="0 0 120 70" aria-hidden="true"></svg><span class="rt">–CH=CH₂</span><span class="rb"><b>styrene</b></span></button>
+   </div>
+   <p class="small">Not “hydroxybenzene” or “aminobenzene”: the common names are the accepted ones. <span class="cite">(Unit 5 notes; Bruice 15.7)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="name" data-title="One group on the ring">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Naming · open each one</div>
+   <h2>One group: <span class="ac">group name + benzene.</span></h2>
+   <p>Other single groups are named as a prefix in front of <b>benzene</b>. One group needs no number.</p>
+   <div class="eq-box">bromobenzene · chlorobenzene · nitrobenzene · ethylbenzene</div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>A chain on the ring: which is the parent?</span><span class="hint">Open</span></button><div class="toggle-body"><p>Compare the chain with the ring. <b>6 carbons or fewer:</b> benzene is the parent, e.g. propylbenzene. <b>7 or more:</b> the chain is the parent and the ring becomes a <b>phenyl</b> group (C₆H₅–), e.g. <b>2-phenylheptane</b>: the ring sits on C2 of a 7-carbon chain.</p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>Phenyl or benzyl?</span><span class="hint">Open</span></button><div class="toggle-body"><p><b>Phenyl</b> is the ring itself, C₆H₅–. <b>Benzyl</b> is the ring plus one CH₂, C₆H₅CH₂–, as in benzyl alcohol (C₆H₅CH₂OH), a preservative in injections.</p></div></div>
+   <p class="small"><span class="cite">(Unit 5 notes; Bruice 15.7)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="name" data-title="ortho, meta, para">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="omp-svg" viewBox="0 0 400 230" role="img" aria-label="A benzene ring with bromine on carbon 1. Tap another carbon to see whether it is ortho, meta or para"></svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Naming · tap the ring</div>
+   <h2>Two groups: <span class="ac">ortho, meta, para.</span></h2>
+   <p>With two groups, say where the second sits compared with the first:</p>
+   <div class="eq-box">ortho (o) = 1,2 · meta (m) = 1,3 · para (p) = 1,4</div>
+   <p class="task" id="omp-task">Tap a ring carbon to place a second Br. Find <b>ortho</b>, <b>meta</b> and <b>para</b>.</p>
+   <p class="calc-out" id="omp-out" hidden></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="name" data-title="Two or more groups on the ring">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Naming · open each example</div>
+   <h2>Numbers: <span class="ac">as low as possible.</span></h2>
+   <ol class="steps-ol">
+    <li>If a group has a common name (toluene, phenol, aniline, benzoic acid …), its carbon is <b>C1</b> and the name ends with that parent.</li>
+    <li>Number round the ring to give the <b>lowest set of numbers</b>.</li>
+    <li>List the groups in <b>alphabetical order</b> (ignore di-, tri-). If the numbers tie, the group first in the alphabet gets the lower number.</li>
+   </ol>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>Br and Cl, one carbon apart</span><span class="hint">Open</span></button><div class="toggle-body"><p>Both ways give 1,3. Tie: <b>b</b>romo comes before <b>c</b>hloro, so Br gets 1: <b>1-bromo-3-chlorobenzene</b> (or <i>m</i>-bromochlorobenzene).</p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>OH with three Br</span><span class="hint">Open</span></button><div class="toggle-body"><p>OH makes it a phenol, so OH is C1. The Br atoms sit on 2, 4 and 6: <b>2,4,6-tribromophenol</b>.</p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>NO₂, Br and Cl</span><span class="hint">Open</span></button><div class="toggle-body"><p>No common-name group. Try every start: the lowest set is 1,2,4. Alphabetical: <b>2-bromo-4-chloro-1-nitrobenzene</b>. “1-nitro-2-bromo-4-chloro…” has the right numbers but the wrong order.</p></div></div>
+   <p class="small"><span class="cite">(Unit 5 notes; Bruice 16.1)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="name" data-title="Name builder">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="nb-svg" viewBox="0 0 400 230" role="img" aria-label="A benzene ring. Choose a group, then tap a ring carbon to place it. The name appears below"></svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Naming · try it</div>
+   <h2>Build a compound, <span class="ac">read its name.</span></h2>
+   <p class="small" style="margin:.2em 0">1. Choose a group. 2. Tap a ring carbon to place it (tap again to remove).</p>
+   <div class="chips2" id="nb-groups"></div>
+   <div class="calc"><p class="calc-out" id="nb-out" style="margin:0">Place two or three groups.</p></div>
+   <p class="task small" id="nb-task">Build one compound with <b>two or more groups</b>, and read how its name is made.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="name" data-title="Check: naming">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Three quick <span class="ac">questions.</span></h2>
+   <p class="small">Choose the right answer to continue.</p>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">C₆H₅–NH₂ is called:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="NH₂ has a common name. Use it.">aminobenzene</button><button class="choice" data-v="b">aniline</button><button class="choice" data-v="c" data-fb="That is C₆H₅–NO₂. Read the group again.">nitrobenzene</button></div>
+      <div class="feedback">–NH₂ on benzene: aniline.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">A ring has CH₃ on C1 and Cl on the carbon opposite. Its name is:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Opposite is para (1,4), not meta.">3-chlorotoluene</button><button class="choice" data-v="b" data-fb="CH₃ makes it toluene, so CH₃ is C1. Count from there.">1-chlorotoluene</button><button class="choice" data-v="c">4-chlorotoluene</button></div>
+      <div class="feedback">Toluene’s CH₃ is C1; opposite is C4: 4-chlorotoluene (p-chlorotoluene).</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">A benzene ring sits on C3 of an 8-carbon chain. Its name is:</div>
+      <div class="choices"><button class="choice" data-v="a">3-phenyloctane</button><button class="choice" data-v="b" data-fb="7 or more carbons: the chain is the parent and the ring is phenyl.">3-octylbenzene</button><button class="choice" data-v="c" data-fb="Number the chain from the end nearer the ring.">6-phenyloctane</button></div>
+      <div class="feedback">The chain (8 C) is bigger than the ring: 3-phenyloctane.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+<!-- ================= 3 · AROMATICITY AND STABILITY ================= -->
+
+<section class="slide" data-sec="arom" data-title="Benzene is extra stable">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg viewBox="0 0 400 230" role="img" aria-label="Energy diagram. Adding hydrogen to cyclohexene releases 120 kJ/mol. Three separate C=C bonds would release 360 kJ/mol, but benzene releases only 208 kJ/mol. Benzene is 152 kJ/mol more stable than expected">
+    <rect x="0" y="0" width="400" height="230" rx="12" fill="#f4f7f5"/>
+    <line x1="40" y1="200" x2="360" y2="200" stroke="#1c2620" stroke-width="2"/>
+    <text class="tx s" x="44" y="216">cyclohexane (all C=C gone)</text>
+    <g class="fade" style="--d:.2s"><line x1="50" y1="164" x2="110" y2="164" stroke="#1c2620" stroke-width="2.5"/><text class="tx s mid" x="80" y="156">cyclohexene</text>
+     <path d="M80 168 V196" stroke="#2d6a4f" stroke-width="2" marker-end="url(#ar-r)"/><text class="tx b" x="86" y="186" fill="#2d6a4f">120</text></g>
+    <g class="fade" style="--d:.7s"><line x1="150" y1="44" x2="230" y2="44" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="6 4"/><text class="tx s mid" x="190" y="36">3 separate C=C (expected)</text>
+     <path d="M170 48 V196" stroke="#c0392b" stroke-width="2" stroke-dasharray="4 3" marker-end="url(#ar-r)"/><text class="tx b" x="128" y="130" fill="#c0392b">3 × 120</text><text class="tx b" x="128" y="146" fill="#c0392b">= 360</text></g>
+    <g class="fade" style="--d:1.2s"><line x1="250" y1="104" x2="330" y2="104" stroke="#2d6a4f" stroke-width="3"/><text class="tx b" x="300" y="122">benzene</text><text class="tx s" x="300" y="134">(measured)</text>
+     <path d="M290 108 V196" stroke="#2d6a4f" stroke-width="2" marker-end="url(#ar-r)"/><text class="tx b" x="268" y="166" fill="#2d6a4f">208</text></g>
+    <g class="fade" style="--d:1.7s"><path d="M240 46 V102" stroke="#d9821f" stroke-width="2.5" marker-end="url(#ar-o)"/><rect x="334" y="56" width="58" height="36" rx="6" fill="#fff4e6" stroke="#d9821f"/><text class="tx o mid" x="363" y="72">152</text><text class="tx s mid" x="363" y="86">more stable</text><path d="M334 74 H246" stroke="#d9821f" stroke-width="1.2" stroke-dasharray="3 3"/></g>
+    <text class="tx s" x="300" y="226" font-size="9">heat released, kJ/mol</text>
+   </svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Aromaticity and stability · open it</div>
+   <h2>Benzene keeps <span class="ac">152 kJ/mol back.</span></h2>
+   <p>Adding H₂ to one C=C (cyclohexene → cyclohexane) releases <b>120 kJ/mol</b> (28.6 kcal/mol). If benzene had three ordinary C=C bonds, it should release <b>3 × 120 = 360 kJ/mol</b>.</p>
+   <p>Benzene really releases only <b>208 kJ/mol</b> (49.8 kcal/mol). It started lower in energy.</p>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>Work out the extra stability</span><span class="hint">Open</span></button><div class="toggle-body"><p>Extra stability = expected − measured = 360 − 208 = <b>152 kJ/mol</b> (about <b>36 kcal/mol</b>). This is benzene’s <b>aromatic stabilisation</b>, from its delocalised π electrons.</p><p>Compare cyclohexa-1,3-diene: expected 2 × 120 = 240, measured 232, so only 8 kJ/mol extra. Conjugation helps a little; aromaticity helps a lot.</p></div></div>
+   <p class="small"><span class="cite">(Bruice 7.6; Unit 5 notes)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="arom" data-title="Four tests for aromatic">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Aromaticity · tap each test</div>
+   <h2>Aromatic? <span class="ac">Pass all four tests.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">1 · Cyclic</span><span class="rb">The π electrons must be in a ring.</span></button>
+     <button class="rcard"><span class="rt">2 · A p orbital on every ring atom</span><span class="rb">Every ring atom is sp² (or a charged carbon). One sp³ CH₂ breaks the π cloud.</span></button>
+     <button class="rcard"><span class="rt">3 · Flat</span><span class="rb">The ring must be planar so the p orbitals can overlap all round.</span></button>
+     <button class="rcard"><span class="rt">4 · 4n + 2 π electrons</span><span class="rb"><b>Hückel’s rule:</b> 2, 6, 10 … π electrons (n = 0, 1, 2 …). 4 and 8 do not pass.</span></button>
+   </div>
+   <p class="small">Tests 1 to 3 together give an unbroken ring of p orbitals (a cyclic π cloud). Test 4 counts the electrons in it. <span class="cite">(Bruice 15.1)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="arom" data-title="Counting π electrons">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Aromaticity · tap each card</div>
+   <h2>Count only <span class="ac">π electrons in the ring.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><svg class="mini ringmini" data-ring='{"n":6,"db":[0,2,4]}' viewBox="0 0 120 70" aria-hidden="true"></svg><span class="rt">Each C=C: 2</span><span class="rb">Benzene: 3 × 2 = <b>6</b>.</span></button>
+     <button class="rcard"><svg class="mini ringmini" data-ring='{"n":5,"db":[0,2],"neg":4}' viewBox="0 0 120 70" aria-hidden="true"></svg><span class="rt">Negative carbon: 2</span><span class="rb">Its lone pair sits in a p orbital. Cyclopentadienyl anion: 4 + 2 = <b>6</b>.</span></button>
+     <button class="rcard"><svg class="mini ringmini" data-ring='{"n":7,"db":[0,2,4],"pos":6}' viewBox="0 0 120 70" aria-hidden="true"></svg><span class="rt">Positive carbon: 0</span><span class="rb">It has an empty p orbital: it keeps the cloud unbroken but adds no electrons. Cycloheptatrienyl cation: <b>6</b>.</span></button>
+     <button class="rcard"><svg class="mini ringmini" data-ring='{"n":5,"db":[0,2],"ch2":[4]}' viewBox="0 0 120 70" aria-hidden="true"></svg><span class="rt">sp³ CH₂: stop</span><span class="rb">No p orbital, so the cloud is broken. Cyclopentadiene is <b>not aromatic</b>, whatever the count.</span></button>
+   </div>
+   <p class="small">A group outside the ring (the CH₃ of toluene) adds nothing to the count. <span class="cite">(Bruice 15.2)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="arom" data-title="Aromatic or not? Try it">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="ar-svg" viewBox="0 0 400 230" role="img" aria-label="A ring to judge as aromatic or not aromatic"></svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">Aromaticity · try it</div>
+   <h2>Five rings: <span class="ac">aromatic or not?</span></h2>
+   <p id="ar-q" class="small" style="margin:.2em 0"></p>
+   <div class="chips2" id="ar-btns"><button type="button" class="chip2" data-v="1">Aromatic</button><button type="button" class="chip2" data-v="0">Not aromatic</button></div>
+   <p class="calc-out" id="ar-out" hidden></p>
+   <p class="task small" id="ar-task">Judge all five rings correctly to continue.</p>
+   <div class="toggle-wrap opt"><button class="toggle-btn"><span>Pyridine: a ring with nitrogen <span class="tag">Go deeper</span></span><span class="hint">Open</span></button><div class="toggle-body"><p>Pyridine (C₅H₅N) is benzene with one CH swapped for N. N is sp²: its p orbital joins the cloud with 1 electron, and its lone pair sits in the plane of the ring, outside the cloud. So: 6 π electrons, aromatic. Many medicines contain it (for example isoniazid). <span class="cite">(Bruice 15.3)</span></p></div></div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="arom" data-title="Check: aromaticity">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Three quick <span class="ac">questions.</span></h2>
+   <p class="small">Choose the right answer to continue.</p>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">Cyclohexa-1,3-diene is expected to release 240 kJ/mol on hydrogenation and really releases 232. Its extra stability is:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Extra stability is expected − measured, not the measured value.">232 kJ/mol</button><button class="choice" data-v="b">8 kJ/mol</button><button class="choice" data-v="c" data-fb="Subtract, don’t add.">472 kJ/mol</button></div>
+      <div class="feedback">240 − 232 = 8 kJ/mol: conjugation only, not aromatic.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">Cyclobutadiene is flat, cyclic and every carbon has a p orbital. Why is it not aromatic?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="It has two C=C, so π electrons are there.">It has no π electrons</button><button class="choice" data-v="b" data-fb="Every carbon is sp², so the cloud is unbroken.">One carbon is sp³</button><button class="choice" data-v="c">4 π electrons is not a 4n + 2 number</button></div>
+      <div class="feedback">2 C=C × 2 = 4. Hückel numbers are 2, 6, 10: 4 fails.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">How many π electrons does the cyclopentadienyl <b>anion</b> have?</div>
+      <div class="choices"><button class="choice" data-v="a">6</button><button class="choice" data-v="b" data-fb="The negative carbon’s lone pair is in a p orbital: count it.">4</button><button class="choice" data-v="c" data-fb="Count 2 per C=C plus 2 for the lone pair, not 1 per carbon.">5</button></div>
+      <div class="feedback">2 C=C (4) + lone pair (2) = 6: aromatic.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 4 · HOW BENZENE REACTS ================= -->
+
+<section class="slide" data-sec="react" data-title="Bromine water: add or substitute?">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="bw-svg" viewBox="0 0 400 230" role="img" aria-label="Two test tubes, cyclohexene and benzene, with bromine water"></svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">How benzene reacts · try it</div>
+   <h2>Bromine water: <span class="ac">add or substitute?</span></h2>
+   <p>An alkene <b>adds</b> Br₂ across its C=C at once, so orange bromine water turns colourless. Benzene has three “C=C” in its drawing. Does it do the same?</p>
+   <div class="chips2" id="bw-btns"><button type="button" class="chip2" data-v="shake">1 · Shake both with bromine water</button><button type="button" class="chip2" data-v="fe" disabled>2 · Benzene + Br₂ with FeBr₃</button></div>
+   <p class="calc-out" id="bw-out" hidden></p>
+   <p class="task small" id="bw-task">Do both steps.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="react" data-title="Why substitution?">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">How benzene reacts · open each one</div>
+   <h2>Benzene <span class="ac">keeps its ring.</span></h2>
+   <p>In <b>electrophilic aromatic substitution</b>, an electrophile (E⁺, an electron-poor particle) replaces one H on the ring:</p>
+   <div class="eq-box">C₆H₆ + E⁺ → C₆H₅E + H⁺</div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>Why not addition, like an alkene?</span><span class="hint">Open</span></button><div class="toggle-body"><p>Addition would leave a ring with only two C=C: the 152 kJ/mol of aromatic stability would be lost. Substitution gives back an aromatic ring, so it wins.</p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>Why does benzene need a catalyst?</span><span class="hint">Open</span></button><div class="toggle-body"><p>Benzene’s π electrons are held more tightly than an alkene’s, so it reacts only with a strong electrophile. The catalyst (FeBr₃, AlCl₃, H₂SO₄) makes that strong electrophile.</p></div></div>
+   <p class="small"><span class="cite">(Bruice 15.8)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="react" data-title="Two steps">
+ <div class="si has-ill">
+  <figure class="ill">
+   <div class="anim" data-anim="eas"><svg class="anim-svg" viewBox="0 0 400 230" role="img" aria-label="Animation of electrophilic aromatic substitution in two steps: the ring attacks the electrophile and forms a carbocation, then loses H plus to become aromatic again"></svg><div class="a-ui"><button type="button" class="a-play">▶ Play</button><button type="button" class="a-replay">↺ Replay</button><div class="a-bar"><div class="a-fill"></div></div></div><p class="anim-cap" aria-live="polite"></p></div>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">How benzene reacts · watch</div>
+   <h2>Step 1 slow, <span class="ac">step 2 fast.</span></h2>
+   <p><b>Step 1 (slow):</b> two π electrons of the ring attack the electrophile. A new C–E bond forms, and the ring becomes a <b>carbocation</b>. It is no longer aromatic.</p>
+   <p><b>Step 2 (fast):</b> a base removes <b>H⁺</b> from the same carbon that gained E. Its electrons go back into the ring, which is aromatic again.</p>
+   <p class="small">All five reactions on the next page follow these two steps. Only the electrophile changes. <span class="cite">(Bruice 15.9)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="react" data-title="The five reactions">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">How benzene reacts · tap each card</div>
+   <h2>Five reactions, <span class="ac">one pattern.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Halogenation</span><span class="rb">Br₂ + FeBr₃ (or Cl₂ + FeCl₃). E⁺ = Br⁺. → <b>bromobenzene</b> + HBr.</span></button>
+     <button class="rcard"><span class="rt">Nitration</span><span class="rb">HNO₃ + H₂SO₄. E⁺ = NO₂⁺ (nitronium ion). → <b>nitrobenzene</b> + H₂O.</span></button>
+     <button class="rcard"><span class="rt">Sulfonation</span><span class="rb">Concentrated H₂SO₄, heat. E⁺ = ⁺SO₃H. → <b>benzenesulfonic acid</b> + H₂O.</span></button>
+     <button class="rcard"><span class="rt">Friedel–Crafts acylation</span><span class="rb">CH₃COCl + AlCl₃. E⁺ = CH₃CO⁺ (acylium ion). → <b>acetophenone</b> + HCl.</span></button>
+     <button class="rcard"><span class="rt">Friedel–Crafts alkylation</span><span class="rb">CH₃CH₂Cl + AlCl₃. E⁺ = CH₃CH₂⁺. → <b>ethylbenzene</b> + HCl.</span></button>
+   </div>
+   <p class="small">The by-product is always the H⁺ from the ring joined to what is left of the reagent. <span class="cite">(Bruice 15.10–15.14)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="react" data-title="Making the electrophile">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">How benzene reacts · open each one</div>
+   <h2>The catalyst <span class="ac">makes E⁺.</span></h2>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>FeBr₃ and Br₂</span><span class="hint">Open</span></button><div class="toggle-body"><p>FeBr₃ is a Lewis acid: it accepts a lone pair from one Br. That pulls the Br–Br bond apart, so the other Br acts as <b>Br⁺</b>. FeBr₃ comes back at the end.</p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>H₂SO₄ and HNO₃</span><span class="hint">Open</span></button><div class="toggle-body"><p>Sulfuric acid gives H⁺ to nitric acid. It loses water and leaves the <b>nitronium ion, NO₂⁺</b>.</p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>AlCl₃ and RCl or RCOCl</span><span class="hint">Open</span></button><div class="toggle-body"><p>AlCl₃ takes Cl⁻ from the reagent, leaving a carbocation <b>R⁺</b> (alkylation) or an acylium ion <b>RCO⁺</b> (acylation).</p></div></div>
+   <div class="toggle-wrap opt"><button class="toggle-btn"><span>A catch in alkylation <span class="tag">Go deeper</span></span><span class="hint">Open</span></button><div class="toggle-body"><p>A carbocation can rearrange to a more stable one before it attacks. 1-chloropropane with AlCl₃ gives mostly isopropylbenzene, not propylbenzene. Acylation has no such problem. <span class="cite">(Bruice 15.14)</span></p></div></div>
+   <p class="small"><span class="cite">(Bruice 15.10–15.14)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="react" data-title="Reaction builder">
+ <div class="si has-ill">
+  <figure class="ill">
+   <svg id="rb-svg" viewBox="0 0 400 230" role="img" aria-label="Benzene with the chosen reagent, the electrophile it makes, and the products"></svg>
+  </figure>
+  <div class="txt">
+   <div class="eyebrow">How benzene reacts · try it</div>
+   <h2>Pick a reagent, <span class="ac">see the product.</span></h2>
+   <div class="chips2" id="rb-chips"></div>
+   <p class="calc-out" id="rb-out" hidden></p>
+   <p class="task small" id="rb-task">Try <b>three</b> different reactions.</p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="react" data-title="Where the second group goes">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">How benzene reacts · optional</div>
+   <h2>A second group: <span class="ac">ortho/para or meta?</span></h2>
+   <p>When the ring already has a group, that group decides where the next one goes.</p>
+   <div class="toggle-wrap opt"><button class="toggle-btn"><span>ortho/para directors <span class="tag">Go deeper</span></span><span class="hint">Open</span></button><div class="toggle-body"><p>Groups that give electrons to the ring: <b>–CH₃, –OH, –NH₂</b> (and the halogens). The new group goes to <b>2</b> and <b>4</b>. Toluene + Br₂/FeBr₃ gives 2-bromotoluene and 4-bromotoluene.</p></div></div>
+   <div class="toggle-wrap opt"><button class="toggle-btn"><span>meta directors <span class="tag">Go deeper</span></span><span class="hint">Open</span></button><div class="toggle-body"><p>Groups that pull electrons from the ring: <b>–NO₂, –COOH, –CHO, –SO₃H</b>. The new group goes to <b>3</b>. Nitrobenzene + Br₂/FeBr₃ gives 1-bromo-3-nitrobenzene.</p></div></div>
+   <p class="small">This page is optional: the Ring Bench always starts from plain benzene. <span class="cite">(Bruice 16.3–16.4)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="react" data-title="Check: reactions">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check</div>
+   <h2>Three quick <span class="ac">questions.</span></h2>
+   <p class="small">Choose the right answer to continue.</p>
+   <div class="stepper">
+    <div class="choice-set cur" data-answer="b">
+      <div class="step-count">QUESTION 1 OF 3</div>
+      <div class="choice-q">Benzene + HNO₃ with H₂SO₄ gives:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Sulfonic acid comes from H₂SO₄ alone with heat. Here H₂SO₄ is the catalyst.">benzenesulfonic acid + H₂O</button><button class="choice" data-v="b">nitrobenzene + H₂O</button><button class="choice" data-v="c" data-fb="NO₂ replaces an H; NH₂ would need a reduction later.">aniline + H₂O</button></div>
+      <div class="feedback">NO₂⁺ replaces one H; the H⁺ joins OH from HNO₃ as water.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 3</div>
+      <div class="choice-q">Styrene (a benzene ring with –CH=CH₂) decolourises bromine water. Why?</div>
+      <div class="choices"><button class="choice" data-v="a">Its C=C outside the ring adds Br₂</button><button class="choice" data-v="b" data-fb="The ring stays aromatic; bromine water cannot add to it.">Its benzene ring adds Br₂</button><button class="choice" data-v="c" data-fb="Styrene has a benzene ring, so it is an arene.">Styrene is not an arene</button></div>
+      <div class="feedback">The side-chain C=C behaves like any alkene.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 3 OF 3</div>
+      <div class="choice-q">In step 2 of the mechanism, the carbocation:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="That is what an alkene’s carbocation does. Benzene keeps its ring aromatic.">adds a nucleophile</button><button class="choice" data-v="b" data-fb="E stays: it is the new group on the ring.">loses the electrophile again</button><button class="choice" data-v="c">loses H⁺ from the carbon that gained E</button></div>
+      <div class="feedback">Losing H⁺ puts the two electrons back into the ring: aromatic again.</div>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= 5 · ARENES IN MEDICINES ================= -->
+
+<section class="slide" data-sec="meds" data-title="Rings in your medicines">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Arenes in medicines · tap each card</div>
+   <h2>The ring behind <span class="ac">the painkillers.</span></h2>
+   <div class="rgrid">
+     <button class="rcard"><span class="rt">Aspirin</span><span class="rb">Willow bark was used for pain for centuries; its active substance, salicin, led to salicylic acid. Bayer sold acetylsalicylic acid as Aspirin from 1899.</span></button>
+     <button class="rcard"><span class="rt">Paracetamol</span><span class="rb">A ring with –OH and –NHCOCH₃ para to each other: chemically, 4-hydroxyacetanilide.</span></button>
+     <button class="rcard"><span class="rt">Ibuprofen</span><span class="rb">A benzene ring with two groups para to each other. Short-acting: taken three or four times a day.</span></button>
+     <button class="rcard"><span class="rt">Naproxen</span><span class="rb">Built on naphthalene (two fused benzene rings). Its half-life is 12 to 17 hours, so it is taken twice a day.</span></button>
+   </div>
+   <p class="small"><span class="cite">(Unit 5 notes; naproxen label, DailyMed)</span></p>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="meds" data-title="A safety lesson: rofecoxib">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Arenes in medicines · open each one</div>
+   <h2>A safety lesson: <span class="ac">rofecoxib.</span></h2>
+   <p>Celecoxib and rofecoxib were made to block only COX-2, to cause fewer stomach ulcers than older painkillers. Both are built on benzene rings.</p>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>What happened to rofecoxib (Vioxx)?</span><span class="hint">Open</span></button><div class="toggle-body"><p>On <b>30 September 2004</b>, Merck withdrew rofecoxib worldwide. A long trial (APPROVe) showed a higher risk of <b>heart attack and stroke</b> after 18 months of use. <span class="cite">(FDA, 2004)</span></p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>And celecoxib?</span><span class="hint">Open</span></button><div class="toggle-body"><p>Still in use, but its label carries a boxed warning about serious heart and blood-vessel (thrombotic) events, like other NSAIDs. <span class="cite">(Celecoxib label, DailyMed)</span></p></div></div>
+   <div class="toggle-wrap"><button class="toggle-btn"><span>The lesson for pharmacists</span><span class="hint">Open</span></button><div class="toggle-body"><p>Problems can appear only after years of wide use. Pharmacists help by checking risk factors, counselling patients and <b>reporting suspected side effects</b> (in Malaysia, to the NPRA).</p></div></div>
+  </div>
+ </div>
+</section>
+
+<!-- ================= LAB ================= -->
+
+<section class="slide" data-sec="ringlab" data-title="Ring Bench (lab)">
+ <div class="si lab-si">
+  <div class="lab-head">
+   <div class="eyebrow">Interactive lab · all topics</div>
+   <h2>Ring Bench: <span class="ac">five stations.</span></h2>
+   <p class="small">Name, test aromaticity, measure stability, run bromine water and predict a reaction. Practice rounds, plus the assessed round for PHCH 4123. <a href="lab.html" target="_blank" rel="noopener" data-umami-event="lab-open-full">Open full screen ↗</a></p>
+   <p class="lab-status task" data-lab="ring-lab" aria-live="polite">Finish one practice round of Ring Bench (all 5 stations) to unlock Next.</p>
+  </div>
+  <div class="lab-frame"><iframe data-src="lab.html?embed=1" title="Ring Bench interactive lab" loading="lazy"></iframe><div class="lab-launch"><span>Your screen is too short to use the lab here.</span><a href="lab.html" target="_blank" rel="noopener" data-umami-event="lab-launch-small">Open the lab ↗</a></div></div>
+ </div>
+</section>
+
+<!-- ================= WRAP-UP ================= -->
+
+<section class="slide" data-sec="end" data-title="Quick quiz">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Check your understanding</div>
+   <h2>Five questions, <span class="ac">no marks recorded.</span></h2>
+   <div class="stepper quiz">
+    <div class="choice-set cur" data-answer="c">
+      <div class="step-count">QUESTION 1 OF 5</div>
+      <div class="choice-q">A ring has Br and Cl two carbons apart (1,3). Its name is:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Groups are listed A to Z: bromo before chloro.">1-chloro-3-bromobenzene</button><button class="choice" data-v="b" data-fb="Numbers must be as low as possible: 1,3, not 1,5.">1-bromo-5-chlorobenzene</button><button class="choice" data-v="c">1-bromo-3-chlorobenzene</button></div>
+      <div class="feedback">Lowest numbers (1,3), alphabetical order, and on a tie the first in the alphabet gets 1.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 2 OF 5</div>
+      <div class="choice-q">Which ring is aromatic?</div>
+      <div class="choices"><button class="choice" data-v="a">cycloheptatrienyl cation (C₇H₇⁺)</button><button class="choice" data-v="b" data-fb="Its CH₂ is sp³: the π cloud is broken.">cycloheptatriene (C₇H₈)</button><button class="choice" data-v="c" data-fb="8 π electrons is not a 4n + 2 number.">cyclooctatetraene</button></div>
+      <div class="feedback">3 C=C = 6 π electrons, and the positive carbon has an empty p orbital: the cloud is unbroken.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="b">
+      <div class="step-count">QUESTION 3 OF 5</div>
+      <div class="choice-q">Benzene’s aromatic stabilisation, from heats of hydrogenation, is about:</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="That is the heat benzene releases, not its extra stability.">208 kJ/mol</button><button class="choice" data-v="b">152 kJ/mol (36 kcal/mol)</button><button class="choice" data-v="c" data-fb="That is the heat expected for three separate C=C bonds.">360 kJ/mol</button></div>
+      <div class="feedback">360 expected − 208 measured = 152 kJ/mol.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="c">
+      <div class="step-count">QUESTION 4 OF 5</div>
+      <div class="choice-q">Which reagents make acetophenone from benzene?</div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="That puts an ethyl group on: ethylbenzene.">CH₃CH₂Cl + AlCl₃</button><button class="choice" data-v="b" data-fb="Bromine water does not react with benzene.">bromine water</button><button class="choice" data-v="c">CH₃COCl + AlCl₃</button></div>
+      <div class="feedback">Friedel–Crafts acylation: the acylium ion CH₃CO⁺ is the electrophile.</div>
+      <button class="next-q">Next question →</button>
+    </div>
+    <div class="choice-set" data-answer="a">
+      <div class="step-count">QUESTION 5 OF 5</div>
+      <div class="choice-q">Why was rofecoxib withdrawn in 2004?</div>
+      <div class="choices"><button class="choice" data-v="a">A higher risk of heart attack and stroke</button><button class="choice" data-v="b" data-fb="It was designed to cause fewer stomach ulcers. The problem was elsewhere.">It caused stomach ulcers</button><button class="choice" data-v="c" data-fb="It did relieve pain. The problem was safety.">It did not relieve pain</button></div>
+      <div class="feedback">The APPROVe trial showed more heart attacks and strokes after 18 months.</div>
+      <p class="score" id="quiz-score"></p>
+    </div>
+   </div>
+  </div>
+ </div>
+</section>
+
+<section class="slide" data-sec="end" data-title="Summary">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Take home</div>
+   <h2>Name it, test it, <span class="ac">react it.</span></h2>
+   <div class="cards stagger">
+     <div class="card"><div class="cn">1</div><div>Benzene, C₆H₆: flat, six sp² carbons, six equal bonds, 6 delocalised π electrons. From coal tar and petroleum.</div></div>
+     <div class="card"><div class="cn">2</div><div>Names: toluene, phenol, aniline, benzoic acid, benzaldehyde, styrene; otherwise group + benzene. 7 or more chain carbons: phenylalkane. Lowest numbers, A to Z; o = 1,2, m = 1,3, p = 1,4.</div></div>
+     <div class="card"><div class="cn">3</div><div>Aromatic: cyclic, a p orbital on every ring atom, flat, 4n + 2 π electrons. Benzene is 152 kJ/mol (36 kcal/mol) more stable than three C=C.</div></div>
+     <div class="card"><div class="cn">4</div><div>Benzene substitutes, it does not add: halogenation, nitration, sulfonation, Friedel–Crafts acylation and alkylation. Step 1 slow (carbocation), step 2 fast (loses H⁺).</div></div>
+   </div>
+   <div style="margin:.6em 0"><button class="btn solid" id="btn-refs" data-umami-event="open-sources">Sources and further reading (7) →</button></div>
+   <div class="madeby">
+     <p><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Lab scenarios are simulated. Always follow your lab’s safety rules when handling benzene and bromine.</p>
+     <div class="socials">
+       <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Website</a>
+       <a href="https://www.linkedin.com/in/aufbinali/" target="_blank" rel="noopener" data-umami-event="link-linkedin">LinkedIn</a>
+       <a href="https://aufthority.substack.com/" target="_blank" rel="noopener" data-umami-event="link-substack">Substack</a>
+       <a href="https://www.instagram.com/aufthority/" target="_blank" rel="noopener" data-umami-event="link-instagram">Instagram</a>
+       <a href="https://www.tiktok.com/@aufthority" target="_blank" rel="noopener" data-umami-event="link-tiktok">TikTok</a>
+       <a href="https://www.threads.com/@aufthority" target="_blank" rel="noopener" data-umami-event="link-threads">Threads</a>
+       <a href="mailto:the.aufthority@gmail.com" data-umami-event="link-email">the.aufthority@gmail.com</a>
+     </div>
+   </div>
+  </div>
+ </div>
+</section>
+<section class="slide" data-sec="end" data-title="Your certificate">
+ <div class="si">
+  <div class="txt">
+   <div class="eyebrow">Well done</div>
+   <h2>You finished. <span class="ac">Take your certificate.</span></h2>
+   <p>You worked through every page of <b>Arenes, Explained</b>.</p>
+   <div class="calc" id="cert-box"><p class="small" style="margin:0">Checking your Kompas Semester sign-in…</p></div>
+   <div id="cert-out"></div>
+   <div class="calc" id="cert-check" hidden>
+    <div class="calc-row"><label>Educators: check a certificate serial<input id="cert-serial" type="text" maxlength="20" autocomplete="off" placeholder="KS-ARN-26-XXXXXX"></label></div>
+    <button class="btn" id="cert-lookup" type="button">Check serial</button>
+    <div id="cert-check-out"></div>
+   </div>
+   <p class="small">Each certificate has a serial number recorded by Kompas Semester. It is a record of completion, not an official KPJ Healthcare University award.</p>
+  </div>
+ </div>
+</section>
+
+
+  </div><!-- /stage -->
+
+  <div id="bottom">
+    <div id="gate-hint"></div>
+    <div id="nav-wrap">
+      <button id="btn-back" class="nav-btn" disabled data-umami-event="nav-back">← Back</button>
+      <button id="btn-next" class="nav-btn" data-umami-event="nav-next">Next →</button>
+    </div>
+    <footer>Informed decisions, better health.</footer>
+  </div>
+</div>
+
+<div class="overlay" id="toc-overlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <div class="panel-head"><h3>Contents</h3><button class="icon-btn close-ov">Close</button></div>
+    <button type="button" class="pt-open" id="btn-pt" data-umami-event="open-periodic-table"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3h4v4H2zM14 3h4v4h-4zM2 8h4v4H2zM7 8h3v4H7zM11 8h3v4h-3zM14 8h4v4h-4zM2 13h4v4H2zM7 13h3v4H7zM11 13h3v4h-3zM14 13h4v4h-4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Periodic table</button>
+    <ul class="toc" id="toc-list"></ul>
+  </div>
+</div>
+
+<div class="overlay" id="refs-overlay" role="dialog" aria-modal="true">
+  <div class="panel">
+    <div class="panel-head"><h3>Sources and further reading</h3><button class="icon-btn close-ov">Close</button></div>
+    <ol class="refs">
+      <li>Bruice, P. Y. (2004). <i>Organic chemistry</i> (4th ed., Chapter 7: Electron delocalization and resonance; Chapter 15: Aromaticity, reactions of benzene; Chapter 16: Reactions of substituted benzenes). Pearson Prentice Hall.</li>
+      <li>DailyMed. (n.d.). <i>Celecoxib capsules: Label</i>. U.S. National Library of Medicine. <a href="https://dailymed.nlm.nih.gov/" target="_blank" rel="noopener">dailymed.nlm.nih.gov</a></li>
+      <li>DailyMed. (n.d.). <i>Naproxen tablets: Label (clinical pharmacology)</i>. U.S. National Library of Medicine. <a href="https://dailymed.nlm.nih.gov/" target="_blank" rel="noopener">dailymed.nlm.nih.gov</a></li>
+      <li>Health Canada. (2004). <i>Frequently asked questions: Vioxx recall by Merck</i>. <a href="https://recalls-rappels.canada.ca/en/alert-recall/archive-frequently-asked-questions-vioxx-recall-merck" target="_blank" rel="noopener">recalls-rappels.canada.ca</a></li>
+      <li>Malta Medicines Authority. (2004). <i>Vioxx (rofecoxib) questions and answers</i>. <a href="https://medicinesauthority.gov.mt/file.aspx?f=419" target="_blank" rel="noopener">medicinesauthority.gov.mt</a></li>
+      <li>Tajuddin, Y. (n.d.). <i>Unit 5</i> [Lecture notes, PHCH 4123 Pharmaceutical Chemistry II]. KPJ Healthcare University.</li>
+      <li>U.S. Food and Drug Administration. (2004, September 30). <i>Vioxx (rofecoxib) questions and answers</i>. <a href="https://www.fda.gov/drugs/postmarket-drug-safety-information-patients-and-providers/vioxx-rofecoxib-questions-and-answers" target="_blank" rel="noopener">fda.gov</a></li>
+    </ol>
+  </div>
+</div>
+<div class="overlay" id="video-overlay" role="dialog" aria-modal="true" aria-labelledby="video-title">
+  <div class="panel">
+    <div class="panel-head"><h3 id="video-title">Video</h3><button class="icon-btn close-ov">Close</button></div>
+    <div class="vid-frame" id="video-frame"></div>
+    <p class="vid-note">A demonstration from YouTube. <a id="video-link" href="#" target="_blank" rel="noopener">Open it on YouTube</a> if it does not play here.</p>
+  </div>
+</div>
+
+<script>
+(function(){
+  const slides   = document.querySelectorAll('.slide');
+  const TOTAL    = slides.length;
+  /* progress is remembered on this device; a returning student resumes where they left off */
+  /* progress is kept per person: signed-in students under their own id, visitors under a device key.
+     Educators: nothing saved. In Kompas student preview the gates are on and nothing is saved. */
+  let PKEY='kompas.arenes.progress.v2', saveOn=true, previewOn=false;
+  try{ localStorage.removeItem('kompas.arenes.progress'); }catch(_){}
+  let maxReached=1, isEducator=false, profileName='', signedIn=false, authSb=null;
+  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.max>=1) maxReached=Math.min(sv.max, document.querySelectorAll('.slide').length); }catch(_){}
+  let current = 1;
+  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.last>=1 && sv.last<=maxReached) current=sv.last; }catch(_){}
+  const btnBack  = document.getElementById('btn-back');
+  const btnNext  = document.getElementById('btn-next');
+  const progFill = document.getElementById('progress-fill');
+  const progLbl  = document.getElementById('progress-label');
+  const hint     = document.getElementById('gate-hint');
+  const NS = 'http://www.w3.org/2000/svg';
+
+  document.querySelectorAll('.stagger').forEach(c=>{
+    [...c.children].forEach((e,i)=>e.style.setProperty('--d',(0.1 + i*0.11).toFixed(2)+'s'));
+  });
+
+  /* =====================================================================
+     GASES: page-specific drawings, calculators, animation and simulations
+     Units follow Chang: atm, L, mol, K; R = 0.0821 L·atm/(K·mol)
+     ===================================================================== */
+  function el(tag, attrs, text){
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    return e;
+  }
+  const RMO = !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+  const ANIM={};
+  const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
+  const ease=x=>{ x=clamp(x,0,1); return x*x*(3-2*x); };
+  const fx=n=>n.toFixed(1);
+  function E(tag,attrs,parent,text){ const e=el(tag,attrs,text); parent.appendChild(e); return e; }
+  const FONT='DM Sans,system-ui,sans-serif';
+  const COL={g:'#2d6a4f', r:'#c0392b', o:'#d9821f', b:'#3a6bd1', ink:'#1c2620', muted:'#6f7771', rule:'#e4e6e3'};
+  function txt(parent,x,y,s,extra){ return E('text',Object.assign({x:x,y:y,'font-family':FONT,'font-size':11,fill:COL.muted},extra||{}),parent,s); }
+  const num=v=>parseFloat(String(v||'').replace(',','.'));
+  const RG=0.0821;
+  const sig=(x,d)=>(+x.toPrecision(d||3)).toString();
+  const trk=(e,d)=>{ try{ if(window.umami) umami.track(e,d); }catch(_){} };
+
+  /* ================= ARENES: drawings and interactives ================= */
+/*CORE-START*/
+/* Ring Bench core: builds a round and checks answers. The same code runs in the
+   browser (practice rounds) and in the ring-bench edge function (assessed rounds,
+   whose answers never leave the server). Pure functions, no DOM. */
+function RingCore(){
+  'use strict';
+  /* seeded random numbers (mulberry32), so a round can be rebuilt from its seed */
+  function rng(seed){ let a=seed>>>0; return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+  const pickR=(r,a)=>a[Math.floor(r()*a.length)];
+  const shuf=(r,a)=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+
+  /* ---------- naming ---------- */
+  const G={
+    Br:{pre:'bromo',lab:'Br'}, Cl:{pre:'chloro',lab:'Cl'}, I:{pre:'iodo',lab:'I'}, NO2:{pre:'nitro',lab:'NO2'}, Et:{pre:'ethyl',lab:'CH2CH3'},
+    CH3:{par:'toluene',pre:'methyl',lab:'CH3'}, OH:{par:'phenol',pre:'hydroxy',lab:'OH'}, NH2:{par:'aniline',pre:'amino',lab:'NH2'},
+    COOH:{par:'benzoic acid',pre:'carboxy',lab:'COOH'}, CHO:{par:'benzaldehyde',pre:'formyl',lab:'CHO'}
+  };
+  const PAR_ORDER=['COOH','CHO','OH','NH2','CH3'];
+  const MULT=['','','di','tri','tetra'];
+  function locsFor(subs,s,dir){ const o={}; Object.keys(subs).forEach(p=>{ o[p]=(((+p-s)*dir)%6+6)%6+1; }); return o; }
+  /* build a name string from a numbering. useParent=false names a parent group as a prefix (a deliberate mistake) */
+  function nameFrom(subs,loc,parPos,order){
+    const items=[]; Object.keys(subs).forEach(p=>{ if(parPos!=null && +p===parPos) return; items.push({pre:G[subs[p]].pre, l:loc[p]}); });
+    const by={}; items.forEach(it=>{ (by[it.pre]=by[it.pre]||[]).push(it.l); });
+    let keys=Object.keys(by).sort(); if(order==='rev') keys=keys.reverse();
+    const parent=parPos!=null?G[subs[parPos]].par:'benzene';
+    if(!items.length) return parent;
+    const single=parPos==null && items.length===1;
+    const segs=keys.map(k=>{ const ls=by[k].sort((a,b)=>a-b); return (single?'':ls.join(',')+'-')+MULT[ls.length]+k; });
+    return segs.join('-')+parent;
+  }
+  const cmpArr=(a,b)=>{ for(let i=0;i<Math.max(a.length,b.length);i++){ if(a[i]!==b[i]) return (a[i]||0)-(b[i]||0); } return 0; };
+  function numberings(subs,parPos){
+    const occ=Object.keys(subs).map(Number), out=[];
+    (parPos!=null?[parPos]:occ).forEach(s=>[1,-1].forEach(d=>{ const loc=locsFor(subs,s,d);
+      const rest=Object.keys(subs).filter(p=>parPos==null || +p!==parPos);
+      const set=rest.map(p=>loc[p]).sort((a,b)=>a-b);
+      const alpha=rest.map(p=>({pre:G[subs[p]].pre,l:loc[p]})).sort((a,b)=>a.pre<b.pre?-1:a.pre>b.pre?1:a.l-b.l).map(x=>x.l);
+      out.push({s:s,d:d,loc:loc,set:set,alpha:alpha}); }));
+    out.sort((a,b)=>cmpArr(a.set,b.set)||cmpArr(a.alpha,b.alpha));
+    return out;
+  }
+  function parentPos(subs){ for(const g of PAR_ORDER){ const p=Object.keys(subs).find(k=>subs[k]===g); if(p!=null) return +p; } return null; }
+  function iupac(subs){ const pp=parentPos(subs), n=numberings(subs,pp); return nameFrom(subs,n[0].loc,pp); }
+  /* names that are also correct and so must never appear as a wrong option */
+  function validNames(subs){
+    const v=new Set([iupac(subs)]), pp=parentPos(subs);
+    if(pp!=null && subs[pp]==='CH3'){ const n=numberings(subs,null); v.add(nameFrom(subs,n[0].loc,null)); }
+    return v;
+  }
+  const OMP={2:'ortho',3:'meta',4:'para'};
+  /* wrong names for a two- or three-group ring, each tagged with the mistake it shows */
+  function wrongNames(subs,r){
+    const pp=parentPos(subs), valid=validNames(subs), right=iupac(subs), out=[], seen=new Set([...valid]);
+    const add=(name,code)=>{ if(!seen.has(name)){ seen.add(name); out.push([name,code]); } };
+    const ns=numberings(subs,pp), best=ns[0];
+    ns.slice(1).forEach(n=>{ const nm=nameFrom(subs,n.loc,pp); add(nm, cmpArr(n.set,best.set)?'N1':'N2'); });
+    if(Object.keys(by(subs,pp)).length>1) add(nameFrom(subs,best.loc,pp,'rev'),'N2');
+    if(pp!=null && subs[pp]!=='CH3'){ const n2=numberings(subs,null); add(nameFrom(subs,n2[0].loc,null),'N3'); }
+    const keys=Object.keys(subs);
+    if(keys.length===2){
+      const other=keys.find(p=>pp==null || +p!==pp), l=best.loc[other]+(pp!=null?0:0);
+      const rel=pp!=null?best.loc[other]:best.set[1];
+      const wrongW=Object.keys(OMP).map(Number).filter(x=>x!==rel);
+      wrongW.forEach(w=>{ const word=OMP[w];
+        if(pp!=null) add(word+'-'+G[subs[other]].pre+G[subs[pp]].par,'N4');
+        else { const pres=keys.map(p=>G[subs[p]].pre).sort(); add(word+'-'+(pres[0]===pres[1]?'di'+pres[0]:pres[0]+pres[1])+'benzene','N4'); } });
+    }
+    /* a different compound: one group moved one place round the ring */
+    keys.forEach(p=>{ if(pp!=null && +p===pp) return; [1,5].forEach(dp=>{ const q=(+p+dp)%6; if(subs[q]!=null) return; const s2={}; keys.forEach(k=>{ s2[+k===+p?q:k]=subs[k]; }); add(iupac(s2),'N8'); }); });
+    return out;
+  }
+  function by(subs,pp){ const o={}; Object.keys(subs).forEach(p=>{ if(pp!=null && +p===pp) return; o[G[subs[p]].pre]=1; }); return o; }
+
+  /* one group on the ring, or a chain: names to memorise and the phenyl rule */
+  const MONO=[
+    {g:'Br', name:'bromobenzene', w:[['1-bromobenzene','N6'],['chlorobenzene','G1'],['bromotoluene','G1']]},
+    {g:'Cl', name:'chlorobenzene', w:[['1-chlorobenzene','N6'],['bromobenzene','G1'],['chlorophenol','G1']]},
+    {g:'NO2', name:'nitrobenzene', w:[['1-nitrobenzene','N6'],['aniline','G1'],['phenol','G1']]},
+    {g:'Et', name:'ethylbenzene', w:[['toluene','G1'],['1-ethylbenzene','N6'],['phenylethane','N5']]},
+    {g:'Pr', name:'propylbenzene', lab:'CH2CH2CH3', w:[['1-phenylpropane','N5'],['1-propylbenzene','N6'],['ethylbenzene','G1']]},
+    {g:'OH', name:'phenol', w:[['hydroxybenzene','N7'],['benzoic acid','G1'],['aniline','G1']]},
+    {g:'NH2', name:'aniline', w:[['aminobenzene','N7'],['nitrobenzene','G1'],['phenol','G1']]},
+    {g:'COOH', name:'benzoic acid', w:[['benzaldehyde','G1'],['phenol','G1'],['carboxybenzene','N7']]},
+    {g:'CHO', name:'benzaldehyde', w:[['benzoic acid','G1'],['formylbenzene','N7'],['phenol','G1']]},
+    {g:'Vi', name:'styrene', lab:'CH=CH2', w:[['ethylbenzene','G1'],['toluene','G1'],['phenol','G1']]},
+    {g:'C7', name:'2-phenylheptane', chain:{n:7,at:2}, w:[['6-phenylheptane','N1'],['2-heptylbenzene','N5'],['heptylbenzene','N5']]},
+    {g:'C8', name:'3-phenyloctane', chain:{n:8,at:3}, w:[['6-phenyloctane','N1'],['3-octylbenzene','N5'],['octylbenzene','N5']]},
+    {g:'C7b', name:'3-phenylheptane', chain:{n:7,at:3}, w:[['5-phenylheptane','N1'],['3-heptylbenzene','N5'],['heptylbenzene','N5']]}
+  ];
+  /* two or three groups: positions 0 to 5 round the ring */
+  const MULTI=[
+    {0:'Br',1:'Br'},{0:'Cl',2:'Cl'},{0:'NO2',3:'NO2'},{0:'Br',2:'Cl'},{0:'Cl',2:'I'},{0:'Br',2:'NO2'},{0:'Cl',3:'Et'},{0:'Br',1:'Et'},{0:'Cl',1:'NO2'},{0:'I',3:'NO2'},
+    {0:'CH3',1:'Cl'},{0:'CH3',3:'NO2'},{0:'CH3',2:'Br'},{0:'OH',3:'NO2'},{0:'OH',1:'Cl'},{0:'OH',1:'Et'},{0:'NH2',3:'NO2'},{0:'NH2',2:'Br'},
+    {0:'COOH',3:'Cl'},{0:'COOH',2:'NO2'},{0:'CHO',2:'NO2'},{0:'CHO',3:'Br'},
+    {0:'OH',1:'Br',3:'Br',5:'Br'},{0:'NO2',1:'Br',3:'Cl'},{0:'Cl',3:'Br',1:'NO2'},{0:'Br',3:'Cl',1:'NO2'},
+    {0:'OH',2:'Br',3:'Cl'},{0:'NH2',1:'Et',3:'I'},{0:'CH3',2:'Br',5:'NO2'},{0:'Cl',1:'Cl',3:'NO2'}
+  ];
+  const MULTI_EASY=MULTI.filter(s=>Object.keys(s).length===2);
+
+  /* ---------- rings for the aromaticity test ----------
+     n atoms; db: double bonds as edges i→i+1; ch2: sp3 carbons; pos/neg: charged carbon; sub: a group outside the ring */
+  const RINGS={
+    benzene:{name:'benzene', n:6, db:[0,2,4]},
+    toluene:{name:'toluene', n:6, db:[0,2,4], sub:'CH3'},
+    chex:{name:'cyclohexene', n:6, db:[0], ch2:[2,3,4,5]},
+    chd:{name:'cyclohexa-1,3-diene', n:6, db:[0,2], ch2:[4,5]},
+    cpd:{name:'cyclopentadiene', n:5, db:[0,2], ch2:[4]},
+    cpa:{name:'cyclopentadienyl anion', n:5, db:[0,2], neg:4},
+    cpc:{name:'cyclopentadienyl cation', n:5, db:[0,2], pos:4},
+    cht:{name:'cycloheptatriene', n:7, db:[0,2,4], ch2:[6]},
+    trop:{name:'cycloheptatrienyl cation', n:7, db:[0,2,4], pos:6},
+    cbd:{name:'cyclobutadiene', n:4, db:[0,2]},
+    cot:{name:'cyclooctatetraene', n:8, db:[0,2,4,6]},
+    cpr:{name:'cyclopropenyl cation', n:3, db:[0], pos:2},
+    cpe:{name:'cyclopropene', n:3, db:[0], ch2:[2]}
+  };
+  Object.keys(RINGS).forEach(k=>{ const R=RINGS[k]; R.id=k; R.ch2=R.ch2||[]; R.pi=2*R.db.length+(R.neg!=null?2:0); R.p=R.ch2.length===0; R.h=(R.pi-2)%4===0; R.ar=R.p&&R.h; });
+  const RING_EASY=['benzene','toluene','chex','chd','cpd','cbd','cot','cht'];
+  const RING_ALL=Object.keys(RINGS);
+
+  /* ---------- heats of hydrogenation (Bruice): cyclohexene 120 kJ/mol ---------- */
+  const HYD={
+    benzene:{name:'benzene', nC:3, meas:208, kc:49.8},
+    chd:{name:'cyclohexa-1,3-diene', nC:2, meas:232, kc:55.4}
+  };
+
+  /* ---------- the five reactions ---------- */
+  const EAS={
+    brom:{reag:'Br2', cat:'FeBr3', E:'Br+', P:'bromobenzene', BP:'HBr', type:'Halogenation'},
+    chlor:{reag:'Cl2', cat:'FeCl3', E:'Cl+', P:'chlorobenzene', BP:'HCl', type:'Halogenation'},
+    nitr:{reag:'HNO3', cat:'H2SO4', E:'NO2+', P:'nitrobenzene', BP:'H2O', type:'Nitration'},
+    sulf:{reag:'H2SO4 (concentrated)', cat:'heat', E:'+SO3H', P:'benzenesulfonic acid', BP:'H2O', type:'Sulfonation'},
+    acyl:{reag:'CH3COCl', cat:'AlCl3', E:'CH3CO+', P:'acetophenone', BP:'HCl', type:'Friedel–Crafts acylation'},
+    alkE:{reag:'CH3CH2Cl', cat:'AlCl3', E:'CH3CH2+', P:'ethylbenzene', BP:'HCl', type:'Friedel–Crafts alkylation'},
+    alkM:{reag:'CH3Cl', cat:'AlCl3', E:'CH3+', P:'toluene', BP:'HCl', type:'Friedel–Crafts alkylation'}
+  };
+  const EAS_EASY=['brom','chlor','nitr'];
+  const EAS_ALL=Object.keys(EAS);
+
+  /* ---------- hint text for each mistake ---------- */
+  const T={
+    N1:'Number the ring the other way: the set of numbers must be as low as possible.',
+    N2:'When the numbers tie, the group that comes first in the alphabet gets the lower number, and groups are listed A to Z.',
+    N3:'This group gives the ring a special parent name. Its carbon is C1 and the name ends with that parent.',
+    N4:'ortho = 1,2 (next door), meta = 1,3 (one carbon between), para = 1,4 (opposite).',
+    N5:'Compare the chain with the ring: 6 carbons or fewer, benzene is the parent; 7 or more, the chain is the parent and the ring is “phenyl”.',
+    N6:'With only one group on the ring, no number is needed.',
+    N7:'This group has a common name that you must use for the whole compound.',
+    N8:'Count round the ring carefully: each number is one carbon further on.',
+    G1:'Look at the group again: it decides the name.',
+    A1:'Each C=C double bond holds 2 π electrons.',
+    A2:'A negative ring carbon has a lone pair in a p orbital: add 2 π electrons.',
+    A3:'A positive ring carbon has an empty p orbital: it adds no electrons.',
+    A4:'Count only the π electrons in the ring. Groups outside the ring do not count.',
+    A5:'An sp³ CH₂ in the ring has no p orbital, so the π cloud is broken.',
+    A6:'Charged ring carbons are sp²: each has a p orbital (empty for +, holding a pair for −).',
+    A7:'Hückel numbers are 2, 6, 10 (4n + 2). 4 and 8 are not.',
+    A8:'Aromatic needs both: a p orbital on every ring atom and 4n + 2 π electrons.',
+    S1:'Expected heat = (number of C=C) × 120 kJ/mol.',
+    S2:'Extra stability = expected heat − measured heat.',
+    S3:'Give the size of the difference as a positive number.',
+    S4:'Small extra stability comes from conjugation; a large one (over 100 kJ/mol) means aromatic.',
+    B1:'Alkenes add bromine at once and remove the orange colour. Benzene does not react with bromine water.',
+    B2:'The ring stays aromatic. Something else in styrene reacts with bromine water.',
+    B3:'Styrene has a benzene ring, so it is an arene.',
+    B4:'Benzene needs a stronger electrophile than bromine water gives. A Lewis-acid catalyst makes one.',
+    B5:'Substitution swaps an H for Br, so one product is H plus Br.',
+    B6:'Addition would destroy the aromatic ring, so benzene substitutes instead.',
+    R1:'The catalyst turns the reagent into the electrophile. Match the electrophile to this reagent.',
+    R2:'The electrophile replaces one H on the ring. Name the ring with that group.',
+    R3:'The H⁺ lost from the ring joins the leftover piece of the reagent.',
+    R4:'Adding a nucleophile would leave a non-aromatic ring. Benzene keeps its ring aromatic.',
+    R5:'The H⁺ leaves from the same carbon that gained the electrophile.',
+    D0:'Check your working against the method on the Card.'
+  };
+  const chip=(r,right,wrongs)=>{ /* wrongs: [[text,code],...] */
+    const all=shuf(r,[[right,null]].concat(wrongs.slice(0,3)));
+    const a=all.findIndex(x=>x[1]===null), w={};
+    all.forEach((x,i)=>{ if(x[1]) w[i]=[x[1],T[x[1]]]; });
+    return {pub:all.map(x=>x[0]), key:{t:'c', a:a, w:w}};
+  };
+  const num=(v,tol,wr,extra)=>({t:'n', v:v, tol:tol, alt:(extra||[]), w:wr.map(x=>[x[0],x[1],x[2],T[x[2]]]), d:['D0',T.D0]});
+
+  /* ---------- scenarios ---------- */
+  const SCEN={
+    store:{mono:true, multi:MULTI_EASY, rings:RING_EASY, eas:EAS_EASY},
+    ward:{multi:MULTI, rings:RING_EASY.concat(['cpa','trop']), eas:EAS_ALL},
+    aina:{multi:MULTI_EASY, rings:RING_EASY, eas:EAS_ALL, aina:true},
+    lab:{multi:MULTI, rings:RING_ALL, eas:EAS_ALL},
+    assess:{multi:MULTI, rings:RING_ALL, eas:EAS_ALL}
+  };
+
+  function makeRound(seed,scen){
+    const r=rng(seed), S=SCEN[scen]||SCEN.assess, st=[], key={};
+    const part=(st0,id,type,q,body,unit)=>{ const p={id:id,t:type,q:q}; if(type==='c') p.o=body.pub; else p.u=unit; st0.parts.push(p); key[id]=type==='c'?body.key:body; };
+    const aina=[]; /* Aina's wrong answers (one per station), shown in her scenario */
+    /* station 1 */
+    const m=pickR(r,MONO); let subs; let tries=0;
+    do{ subs=pickR(r,S.multi); tries++; }while(wrongNames(subs,r).length<3 && tries<50);
+    const rot=Math.floor(r()*6), flip=r()<0.5?1:-1;
+    const s1={n:1, mono:{g:m.g, lab:m.lab||null, chain:m.chain||null}, multi:{subs:subs, rot:rot, flip:flip}, parts:[]};
+    const wn=shuf(r,wrongNames(subs,r));
+    /* prefer different kinds of mistake */
+    const pickW=[]; const codes=new Set(); wn.forEach(x=>{ if(pickW.length<3 && !codes.has(x[1])){ pickW.push(x); codes.add(x[1]); } }); wn.forEach(x=>{ if(pickW.length<3 && !pickW.includes(x)) pickW.push(x); });
+    const cA=chip(r,m.name,shuf(r,m.w)), cB=chip(r,iupac(subs),pickW);
+    part(s1,'1a','c','a. Name compound A',cA); part(s1,'1b','c','b. Name compound B',cB);
+    aina.push('B is '+cB.pub[+Object.keys(cB.key.w)[0]]);
+    st.push(s1);
+    /* station 2 */
+    const R0=RINGS[pickR(r,S.rings)];
+    const s2={n:2, ring:{id:R0.id, name:R0.name, n:R0.n, db:R0.db, ch2:R0.ch2, pos:R0.pos, neg:R0.neg, sub:R0.sub||null}, parts:[]};
+    const piW=[[R0.db.length,0.01,'A1'],[R0.n,0.01,'A1']];
+    if(R0.neg!=null) piW.unshift([R0.pi-2,0.01,'A2']);
+    if(R0.pos!=null){ piW.unshift([R0.pi+2,0.01,'A3']); piW.unshift([R0.pi+1,0.01,'A3']); }
+    if(R0.sub) piW.unshift([R0.pi+2,0.01,'A4'],[R0.pi+1,0.01,'A4']);
+    const piW2=piW.filter(x=>x[0]!==R0.pi);
+    part(s2,'2a','n','a. π electrons in the ring',num(R0.pi,0.01,piW2),'electrons');
+    const pYes='Yes: every ring atom has a p orbital', pNo='No: at least one ring carbon is sp³ (no p orbital)';
+    part(s2,'2b','c','b. Does every ring atom have a p orbital?',chip(r,R0.p?pYes:pNo,[[R0.p?pNo:pYes,R0.p?'A6':'A5']]));
+    const hYes='Yes: it is a 4n + 2 number (2, 6, 10 …)', hNo='No: it is not a 4n + 2 number';
+    part(s2,'2c','c','c. Is the π count a Hückel number?',chip(r,R0.h?hYes:hNo,[[R0.h?hNo:hYes,'A7']]));
+    part(s2,'2d','c','d. So the ring is',chip(r,R0.ar?'Aromatic':'Not aromatic',[[R0.ar?'Not aromatic':'Aromatic','A8']]));
+    aina.push('this ring has '+(R0.neg!=null?R0.pi-2:R0.pos!=null?R0.pi+1:R0.db.length)+' π electrons');
+    st.push(s2);
+    /* station 3 */
+    const hk=pickR(r,Object.keys(HYD)), H=HYD[hk], exp=H.nC*120, ex=exp-H.meas;
+    const s3={n:3, hyd:{id:hk, name:H.name, nC:H.nC, meas:H.meas, kc:H.kc}, parts:[]};
+    const eW=[[120,0.5,'S1'],[H.nC===3?240:360,0.5,'S1'],[-exp,0.5,'S3']];
+    part(s3,'3a','n','a. Expected heat released if its C=C bonds acted alone',num(exp,0.5,eW),'kJ/mol');
+    const xW=[[H.meas,0.5,'S2'],[exp+H.meas,0.5,'S2'],[-ex,1,'S3'],[120-H.meas,0.5,'S1']];
+    part(s3,'3b','n','b. Extra stability (expected − measured)',num(ex,0.5,xW,hk==='benzene'?[[151,0.5]]:[]),'kJ/mol');
+    const why= hk==='benzene'
+      ? chip(r,'Its 6 π electrons are delocalised round the ring: it is aromatic',[['Its C=C bonds are only conjugated, a small effect','S4'],['It has no real extra stability','S4']])
+      : chip(r,'Its two C=C bonds are conjugated: a small extra stability, not aromatic',[['Its π electrons go right round the ring: it is aromatic','S4'],['It is as stable as benzene','S4']]);
+    part(s3,'3c','c','c. What does the extra stability tell you?',why);
+    aina.push('the extra stability is '+H.meas+' kJ/mol');
+    st.push(s3);
+    /* station 4 */
+    const arene=pickR(r,['benzene','toluene']), alk=pickR(r,['cyclohexene','hex-1-ene']);
+    const tubes=shuf(r,[{c:arene,keep:true},{c:alk,keep:false},{c:'styrene',keep:false}]);
+    const L=['Tube A','Tube B','Tube C'], ai=tubes.findIndex(t=>t.keep);
+    const s4={n:4, br:{arene:arene, list:[arene,alk,'styrene'], tubes:tubes.map(t=>t.keep)}, parts:[]};
+    const w4={}; L.forEach((l,i)=>{ if(i!==ai) w4[i]=['B1',T.B1]; });
+    s4.parts.push({id:'4a',t:'c',q:'a. Which tube holds the '+arene+'?',o:L.slice()}); key['4a']={t:'c',a:ai,w:w4};
+    part(s4,'4b','c','b. Styrene has a benzene ring, yet it decolourised the bromine water. Why?',chip(r,'Its C=C outside the ring adds Br₂',[['Its benzene ring adds Br₂','B2'],['Styrene is not an arene','B3']]));
+    part(s4,'4c','c','c. To put a Br on the benzene ring you need',chip(r,'Br₂ with an FeBr₃ catalyst',[['Bromine water, shaken in the cold','B4'],['Br₂ with concentrated H₂SO₄','B4']]));
+    part(s4,'4d','c','d. Benzene + Br₂ (FeBr₃) gives',chip(r,'bromobenzene + HBr',[['bromobenzene + H₂','B5'],['an addition product with two Br on the ring','B6']]));
+    aina.push('the '+arene+' tube is '+L[(ai+1)%3]);
+    st.push(s4);
+    /* station 5 */
+    const ek=pickR(r,S.eas), E=EAS[ek], others=EAS_ALL.filter(k=>k!==ek && EAS[k].E!==E.E);
+    const s5={n:5, eas:{id:ek, reag:E.reag, cat:E.cat, type:E.type}, parts:[]};
+    part(s5,'5a','c','a. The electrophile',chip(r,E.E,shuf(r,others).map(k=>EAS[k].E).filter((v,i,a)=>a.indexOf(v)===i).map(v=>[v,'R1'])));
+    part(s5,'5b','c','b. The organic product',chip(r,E.P,shuf(r,others).map(k=>EAS[k].P).filter((v,i,a)=>a.indexOf(v)===i).map(v=>[v,'R2'])));
+    part(s5,'5c','c','c. The by-product',chip(r,E.BP,shuf(r,['HBr','HCl','H2O','H2'].filter(x=>x!==E.BP)).map(v=>[v,'R3'])));
+    part(s5,'5d','c','d. In step 2, the carbocation intermediate',chip(r,'loses H⁺ from the carbon that gained the electrophile',[['adds a nucleophile, as an alkene would','R4'],['loses H⁺ from the next carbon along','R5']]));
+    aina.push('the electrophile is '+EAS[others[0]].E);
+    st.push(s5);
+    const pub={v:1, seed:seed, scen:scen, st:st};
+    if(S.aina) pub.aina=aina;
+    return {pub:pub, key:key};
+  }
+
+  /* the same checker the server runs, part by part */
+  function checkPart(k,a){
+    if(a==null || a==='') return null;
+    if(k.t==='c'){ a=+a; if(a===k.a) return {ok:true}; const w=k.w[a]||k.w[String(a)]; return {ok:false, code:w?w[0]:'D0', text:w?w[1]:T.D0}; }
+    const x=typeof a==='number'?a:parseFloat(String(a).replace(',','.').replace(/\s/g,''));
+    if(isNaN(x)) return {ok:false, code:'D0', text:'Type a number.'};
+    if(Math.abs(x-k.v)<=k.tol || (k.alt||[]).some(v=>Math.abs(x-v[0])<=v[1])) return {ok:true};
+    for(const w of k.w){ if(Math.abs(x-w[0])<=w[1]) return {ok:false, code:w[2], text:w[3]}; }
+    return {ok:false, code:k.d[0], text:k.d[1]};
+  }
+  return {makeRound:makeRound, checkPart:checkPart, iupac:iupac, wrongNames:wrongNames, validNames:validNames, G:G, MONO:MONO, MULTI:MULTI, RINGS:RINGS, HYD:HYD, EAS:EAS, T:T, rng:rng};
+}
+/*CORE-END*/
+  const CORE=RingCore();
+  function buildCharts(){}
+  const fm=s=>String(s).replace(/([A-Za-z\)])(\d+)/g,(m,a,d)=>a+d.replace(/\d/g,x=>'₀₁₂₃₄₅₆₇₈₉'[x])).replace(/\+$/,'⁺').replace(/^\+/,'⁺');
+  const INK='#1c2620', SUBC='#1f3a8a';
+  const vtx=(n,cx,cy,r,rot)=>{ const a=[]; for(let i=0;i<n;i++){ const t=(-90+(rot||0)+i*360/n)*Math.PI/180; a.push([cx+r*Math.cos(t),cy+r*Math.sin(t)]); } return a; };
+  const Ls=(p,q,w,col,extra)=>'<line x1="'+p[0].toFixed(1)+'" y1="'+p[1].toFixed(1)+'" x2="'+q[0].toFixed(1)+'" y2="'+q[1].toFixed(1)+'" stroke="'+(col||INK)+'" stroke-width="'+(w||2)+'" stroke-linecap="round"'+(extra||'')+'/>';
+  const Ts=(x,y,s,o)=>{ o=o||{}; return '<text x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" text-anchor="'+(o.a||'middle')+'" font-family="DM Sans,system-ui,sans-serif" font-size="'+(o.s||12)+'" font-weight="'+(o.w||700)+'" fill="'+(o.c||INK)+'">'+s+'</text>'; };
+  /* a ring drawn as a string of SVG: bonds, inner lines for double bonds, charges, CH2 labels, groups */
+  function ringS(o){
+    const n=o.n||6, cx=o.cx, cy=o.cy, r=o.r||28, db=o.db||(n===6&&!o.circle?[0,2,4]:[]), P=vtx(n,cx,cy,r,o.rot), col=o.col||INK; let s='';
+    if(o.hl) s+='<polygon points="'+P.map(p=>p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ')+'" fill="#dcefe4"/>';
+    for(let i=0;i<n;i++){ const p=P[i], q=P[(i+1)%n]; s+=Ls(p,q,o.w||2.2,col);
+      if(db.includes(i)){ const f=0.22,k=0.8, a=[p[0]+(cx-p[0])*f,p[1]+(cy-p[1])*f], b=[q[0]+(cx-q[0])*f,q[1]+(cy-q[1])*f], m=[(a[0]+b[0])/2,(a[1]+b[1])/2];
+        s+=Ls([m[0]+(a[0]-m[0])*k,m[1]+(a[1]-m[1])*k],[m[0]+(b[0]-m[0])*k,m[1]+(b[1]-m[1])*k],o.w||2.2,col); } }
+    if(o.circle) s+='<circle cx="'+cx+'" cy="'+cy+'" r="'+(r*0.58).toFixed(1)+'" fill="none" stroke="'+col+'" stroke-width="'+(o.w||2.2)+'"/>';
+    const out=(v,k)=>{ const p=P[v], d=Math.hypot(p[0]-cx,p[1]-cy); return [p[0]+(p[0]-cx)/d*k, p[1]+(p[1]-cy)/d*k]; };
+    (o.ch2||[]).forEach(v=>{ const q=out(v,13); s+=Ts(q[0],q[1]+4,'CH₂',{s:o.fs||10,c:'#5c665f'}); });
+    if(o.pos!=null){ const q=out(o.pos,12); s+='<circle cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="7" fill="#fff" stroke="#c0392b" stroke-width="1.5"/>'+Ts(q[0],q[1]+4.5,'+',{s:12,c:'#c0392b',w:800}); }
+    if(o.neg!=null){ const q=out(o.neg,12), p=P[o.neg]; s+='<circle cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="7" fill="#fff" stroke="#3a6bd1" stroke-width="1.5"/>'+Ts(q[0],q[1]+4.5,'−',{s:12,c:'#3a6bd1',w:800});
+      const t=[p[0]+(cx-p[0])*0.22,p[1]+(cy-p[1])*0.22]; s+='<circle cx="'+(t[0]-3).toFixed(1)+'" cy="'+t[1].toFixed(1)+'" r="1.7" fill="#3a6bd1"/><circle cx="'+(t[0]+3).toFixed(1)+'" cy="'+t[1].toFixed(1)+'" r="1.7" fill="#3a6bd1"/>'; }
+    Object.keys(o.g||{}).forEach(v=>{ const p=P[+v], d=Math.hypot(p[0]-cx,p[1]-cy), dx=(p[0]-cx)/d, dy=(p[1]-cy)/d, ln=o.gl||13, q=[p[0]+dx*ln,p[1]+dy*ln];
+      const a=dx>0.35?'start':(dx<-0.35?'end':'middle'); s+=Ls(p,q,2,col)+Ts(q[0]+(a==='start'?2:a==='end'?-2:0),q[1]+(dy>0.35?11:dy<-0.35?-3:4.5),fm(o.g[v]),{a:a,s:o.fs||11.5,c:o.gc||SUBC}); });
+    return {s:s,P:P};
+  }
+  document.querySelectorAll('.ringmol').forEach(g=>{ g.innerHTML=ringS(JSON.parse(g.dataset.ring)).s; });
+  document.querySelectorAll('svg.ringmini').forEach(svg=>{ const o=JSON.parse(svg.dataset.ring); o.cx=60; o.cy=o.g?42:35; o.r=o.g?20:24; o.fs=10; svg.innerHTML=ringS(o).s; });
+
+  /* p orbitals on the π cloud page */
+  (function(){ const g=document.getElementById('pcl-left'); if(!g) return; let s='<ellipse cx="105" cy="121" rx="62" ry="17" fill="none" stroke="#1c2620" stroke-width="2.2"/>';
+    for(let i=0;i<6;i++){ const a=i*Math.PI/3+Math.PI/6, x=105+62*Math.cos(a), y=121+17*Math.sin(a);
+      s+='<ellipse cx="'+x.toFixed(1)+'" cy="'+(y-17).toFixed(1)+'" rx="7" ry="15" fill="#dcefe4" stroke="#2d6a4f" stroke-width="1.3"/><ellipse cx="'+x.toFixed(1)+'" cy="'+(y+17).toFixed(1)+'" rx="7" ry="15" fill="#eef6f1" stroke="#2d6a4f" stroke-width="1.3"/><circle cx="'+x.toFixed(1)+'" cy="'+y.toFixed(1)+'" r="3.5" fill="#1c2620"/>'; }
+    g.innerHTML=s+'<text x="105" y="196" text-anchor="middle" font-family="DM Sans,system-ui,sans-serif" font-size="11" fill="#6f7771">one per sp² carbon</text>'; })();
+
+  /* ---------- hook poll (page 1): any answer is fine; it does not gate ---------- */
+  (function(){
+    const box=document.getElementById('poll-hook'); if(!box) return;
+    const out=document.getElementById('poll-out');
+    const say={b:'Surprisingly, no. The ring is unusually hard to break.',s:'Good instinct. The ring survives most reactions whole.',u:'Fair: you need to know what makes the ring special.'};
+    box.querySelectorAll('.chip2').forEach(b=>b.addEventListener('click',()=>{
+      box.querySelectorAll('.chip2').forEach(x=>x.classList.toggle('on',x===b));
+      out.hidden=false; out.innerHTML=say[b.dataset.v]+' You will see why on the page <b>Benzene is extra stable</b>, and why it reacts by swapping an H instead of breaking open (section 4).';
+      trk('hook-guess',{v:b.dataset.v}); fit(slides[current-1]);
+    }));
+  })();
+
+  /* ---------- ANIMATION: Kekulé structures and the real molecule ---------- */
+  ANIM.kekule=function(svg){
+    E('rect',{width:400,height:230,rx:12,fill:'#fbfcfb'},svg);
+    const gA=E('g',{},svg), gB=E('g',{},svg), gC=E('g',{},svg), lab=txt(svg,200,214,'',{'font-size':13,'font-weight':700,fill:COL.ink,'text-anchor':'middle'});
+    gA.innerHTML=ringS({cx:110,cy:105,r:52,db:[0,2,4],w:3}).s; gB.innerHTML=ringS({cx:290,cy:105,r:52,db:[1,3,5],w:3}).s;
+    gC.innerHTML=ringS({cx:200,cy:105,r:62,db:[],circle:true,w:3,col:'#2d6a4f'}).s;
+    const arr=E('text',{x:200,y:112,'text-anchor':'middle','font-size':26,'font-weight':800,fill:COL.o},svg,'↔');
+    return {dur:9, caps:[[0,'Kekulé drew benzene with three C=C double bonds…'],[2.2,'…but they could just as well sit in the other three places.'],[4.6,'Neither is real. The π electrons are spread evenly round the ring.'],[6.6,'So all six bonds are the same: 1.39 Å. We draw a circle, or either Kekulé form.']],
+      draw(t){
+        const a=t<4.4?1:Math.max(0,1-(t-4.4)/0.8), c=t<4.6?0:Math.min(1,(t-4.6)/0.9);
+        gA.setAttribute('opacity',(t<2.2?1:0.45+0.55*(t>=2.2&&t<4.4?Math.abs(Math.sin((t-2.2)*2.2)):1))*a);
+        gB.setAttribute('opacity',(t<2?0:Math.min(1,(t-2)/0.6))*a);
+        arr.setAttribute('opacity',(t<2?0:1)*a);
+        gC.setAttribute('opacity',c);
+        lab.textContent=t<2?'Kekulé structure':(t<4.6?'two Kekulé structures':'the real molecule: C₆H₆');
+      }};
+  };
+
+  /* ---------- ANIMATION: the two-step mechanism ---------- */
+  ANIM.eas=function(svg){
+    E('rect',{width:400,height:230,rx:12,fill:'#fbfcfb'},svg);
+    const cx=120, cy=134, r=46;
+    const ringA=E('g',{},svg), ringB=E('g',{},svg), ringC=E('g',{},svg);
+    ringA.innerHTML=ringS({cx:cx,cy:cy,r:r,db:[0,2,4],w:2.6}).s;
+    ringB.innerHTML=ringS({cx:cx,cy:cy,r:r,db:[2,4],w:2.6,pos:3}).s;
+    ringC.innerHTML=ringS({cx:cx,cy:cy,r:r,db:[1,3,5],w:2.6}).s;
+    const P=vtx(6,cx,cy,r);
+    const e=E('g',{},svg); const eC=E('circle',{r:15,fill:'#fff4e6',stroke:COL.o,'stroke-width':2},e); const eT=E('text',{'text-anchor':'middle','font-size':14,'font-weight':800,fill:COL.o},e,'E⁺');
+    const bondE=E('line',{stroke:COL.ink,'stroke-width':2.6,'stroke-linecap':'round'},svg);
+    const hG=E('g',{},svg); const hL=E('line',{stroke:COL.ink,'stroke-width':2,'stroke-linecap':'round'},hG); const hT=E('text',{'text-anchor':'middle','font-size':13,'font-weight':800,fill:COL.b},hG,'H');
+    const curly=E('path',{fill:'none',stroke:COL.r,'stroke-width':2.2,'marker-end':'url(#ar-r)'},svg);
+    const base=E('text',{x:330,y:60,'text-anchor':'middle','font-size':13,'font-weight':800,fill:COL.b},svg,'base');
+    const step=txt(svg,300,170,'',{'font-size':14,'font-weight':800,fill:COL.g,'text-anchor':'middle'});
+    const sub=txt(svg,300,190,'',{'font-size':11,'text-anchor':'middle'});
+    const top=P[0], dirU=[0,-1];
+    return {dur:13, caps:[[0,'Benzene meets an electrophile, E⁺, made by the catalyst.'],[2,'Step 1 (slow): two π electrons of the ring attack E⁺.'],[4.4,'A carbocation forms. The ring has lost its aromatic π cloud: this is the slow, uphill step.'],[7,'Step 2 (fast): a base takes H⁺ from the carbon that now carries E.'],[9.4,'The two electrons go back into the ring. It is aromatic again: substitution, not addition.']],
+      draw(t){
+        const s1=clamp((t-2)/2.2,0,1), s2=clamp((t-7)/2.2,0,1);
+        ringA.setAttribute('opacity',t<4.4?1:0); ringB.setAttribute('opacity',t>=4.4&&t<9.4?1:0); ringC.setAttribute('opacity',t>=9.4?1:0);
+        const ex=top[0]+70*(1-ease(s1))+(-14)*ease(s1), ey=top[1]-60+(32)*ease(s1);
+        e.setAttribute('transform','translate('+fx(ex)+' '+fx(ey)+')'); eT.setAttribute('y',5); eC.setAttribute('opacity',t<4.4?1:0); eT.textContent=t<4.4?'E⁺':'E';
+        if(t>=4.4){ bondE.setAttribute('opacity',1); bondE.setAttribute('x1',fx(top[0])); bondE.setAttribute('y1',fx(top[1])); bondE.setAttribute('x2',fx(top[0]-12)); bondE.setAttribute('y2',fx(top[1]-20)); } else bondE.setAttribute('opacity',0);
+        const hx=top[0]+12+60*ease(s2), hy=top[1]-20-14*ease(s2);
+        hL.setAttribute('x1',fx(top[0])); hL.setAttribute('y1',fx(top[1])); hL.setAttribute('x2',fx(top[0]+10)); hL.setAttribute('y2',fx(top[1]-18)); hL.setAttribute('opacity',t<7?1:0);
+        hT.setAttribute('x',fx(t<7?top[0]+16:hx+150*ease(s2)*0.9)); hT.setAttribute('y',fx(t<7?top[1]-22:hy-20*ease(s2))); hT.textContent=t<7?'H':'H⁺';
+        if(t>=2&&t<4.4){ curly.setAttribute('d','M'+fx(P[1][0]-10)+' '+fx(P[1][1]+4)+' Q'+fx(top[0]+40)+' '+fx(top[1]-40)+' '+fx(ex+12)+' '+fx(ey+8)); curly.setAttribute('opacity',1); }
+        else if(t>=7&&t<9.4){ curly.setAttribute('d','M'+fx(top[0]+5)+' '+fx(top[1]-8)+' Q'+fx(top[0]+16)+' '+fx(top[1]+20)+' '+fx(P[1][0]-12)+' '+fx(P[1][1]-2)); curly.setAttribute('opacity',1); }
+        else curly.setAttribute('opacity',0);
+        base.setAttribute('opacity',t>=6.6&&t<9.6?1:0);
+        step.textContent=t<2?'':(t<7?'Step 1 · slow':'Step 2 · fast');
+        sub.textContent=t<2?'':(t<7?'ring + E⁺ → carbocation':(t<9.4?'carbocation → H⁺ leaves':'product: C₆H₅E + H⁺'));
+      }};
+  };
+
+  /* ---------- ortho, meta, para: tap the ring ---------- */
+  (function(){
+    const svg=document.getElementById('omp-svg'), task=document.getElementById('omp-task'), out=document.getElementById('omp-out'); if(!svg) return;
+    const found=new Set(); let pick=null;
+    const NAMES={1:['ortho','1,2-dibromobenzene'],2:['meta','1,3-dibromobenzene'],3:['para','1,4-dibromobenzene'],4:['meta','1,3-dibromobenzene (counting the short way: 1,5 → 1,3)'],5:['ortho','1,2-dibromobenzene (counting the short way)']};
+    function draw(){
+      const o={cx:200,cy:112,r:58,db:[0,2,4],g:{0:'Br'},w:2.6,fs:14,gl:16}; if(pick!=null) o.g[pick]='Br';
+      const R=ringS(o); let s='<rect width="400" height="230" rx="12" fill="#f4f7f5"/>'+R.s;
+      R.P.forEach((p,i)=>{ const num=i+1; s+='<text x="'+(200+(p[0]-200)*0.72).toFixed(1)+'" y="'+(112+(p[1]-112)*0.72+4).toFixed(1)+'" text-anchor="middle" font-size="11" font-weight="700" fill="#6f7771">'+num+'</text>';
+        if(i>0) s+='<circle class="omp-hit" data-i="'+i+'" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="14" fill="'+(pick===i?'#dcefe4':'rgba(45,106,79,.08)')+'" stroke="#2d6a4f" stroke-width="1.2" stroke-dasharray="3 3" style="cursor:pointer"/>'; });
+      ['ortho','meta','para'].forEach((w,k)=>{ s+='<text x="'+(30)+'" y="'+(170+k*18)+'" font-size="12" font-weight="800" fill="'+(found.has(w)?'#2d6a4f':'#b9c2bc')+'">'+(found.has(w)?'✓ ':'○ ')+w+'</text>'; });
+      svg.innerHTML=s;
+      svg.querySelectorAll('.omp-hit').forEach(c=>c.addEventListener('click',()=>{ pick=+c.dataset.i; const nm=NAMES[pick]; found.add(nm[0]); out.hidden=false; out.innerHTML='Br on C1 and C'+(pick+1)+': <b>'+nm[0]+'</b>, '+nm[1]+'.';
+        trk('omp-tap',{pos:pick+1}); draw(); if(found.size===3 && !task.dataset.done){ task.dataset.done='1'; task.innerHTML='All three found. ortho 1,2 · meta 1,3 · para 1,4.'; task.classList.add('ok'); } fit(slides[current-1]); updateGate(false); }));
+    }
+    draw();
+  })();
+
+  /* ---------- name builder ---------- */
+  (function(){
+    const svg=document.getElementById('nb-svg'), box=document.getElementById('nb-groups'), out=document.getElementById('nb-out'), task=document.getElementById('nb-task'); if(!svg) return;
+    const GR=['Br','Cl','I','NO2','Et','CH3','OH','NH2','COOH','CHO'], LAB={Et:'CH2CH3'}, SPECIAL=['CH3','OH','NH2','COOH','CHO'];
+    let sel='Br'; const subs={};
+    GR.forEach(g=>{ const b=document.createElement('button'); b.type='button'; b.className='chip2'+(g===sel?' on':''); b.textContent=fm(LAB[g]||g); b.addEventListener('click',()=>{ sel=g; box.querySelectorAll('.chip2').forEach(x=>x.classList.toggle('on',x===b)); }); box.appendChild(b); });
+    function explain(){
+      const keys=Object.keys(subs), sp=keys.filter(k=>SPECIAL.includes(subs[k]));
+      if(!keys.length) return 'Place two or three groups.';
+      if(sp.length>1) return 'This builder takes only one of CH₃, OH, NH₂, COOH, CHO at a time. Remove one.';
+      if(keys.length>3) return 'Three groups at most here. Remove one.';
+      const name=CORE.iupac(subs);
+      let why='';
+      if(keys.length===1) why=sp.length?'A common-name group: the whole compound has that name.':'One group: name + benzene, no number.';
+      else { why=(sp.length?'<b>'+fm(LAB[subs[sp[0]]]||subs[sp[0]])+'</b> gives the parent name, so its carbon is C1. ':'No common-name group: try every start for the lowest numbers. ')+'Groups listed A to Z.';
+        if(keys.length===2){ const ks=keys.map(Number), d=Math.min((ks[0]-ks[1]+6)%6,(ks[1]-ks[0]+6)%6); why+=' The two groups are '+({1:'ortho (1,2)',2:'meta (1,3)',3:'para (1,4)'})[d]+'.'; } }
+      return '<b style="font-size:1.08em;color:#2d6a4f">'+name+'</b><br><span class="small">'+why+'</span>';
+    }
+    function draw(){
+      const g={}; Object.keys(subs).forEach(k=>{ g[k]=LAB[subs[k]]||subs[k]; });
+      const R=ringS({cx:200,cy:108,r:54,db:[0,2,4],g:g,w:2.6,fs:13.5,gl:15}); let s='<rect width="400" height="230" rx="12" fill="#f4f7f5"/>'+R.s;
+      R.P.forEach((p,i)=>{ s+='<circle class="nb-hit" data-i="'+i+'" cx="'+p[0].toFixed(1)+'" cy="'+p[1].toFixed(1)+'" r="13" fill="'+(subs[i]?'rgba(45,106,79,.18)':'rgba(45,106,79,.07)')+'" stroke="#2d6a4f" stroke-width="1.1" stroke-dasharray="3 3" style="cursor:pointer"/>'; });
+      svg.innerHTML=s; out.innerHTML=explain();
+      svg.querySelectorAll('.nb-hit').forEach(c=>c.addEventListener('click',()=>{ const i=+c.dataset.i; if(subs[i]) delete subs[i]; else subs[i]=sel; draw();
+        const keys=Object.keys(subs), sp=keys.filter(k=>SPECIAL.includes(subs[k]));
+        if(keys.length>=2 && keys.length<=3 && sp.length<=1){ trk('name-built',{name:CORE.iupac(subs)}); if(!task.dataset.done){ task.dataset.done='1'; task.classList.add('ok'); task.innerHTML='Built. Try more: move a group and watch the numbers change.'; } }
+        fit(slides[current-1]); updateGate(false); }));
+    }
+    draw();
+  })();
+
+  /* ---------- aromatic or not? ---------- */
+  (function(){
+    const svg=document.getElementById('ar-svg'), q=document.getElementById('ar-q'), out=document.getElementById('ar-out'), task=document.getElementById('ar-task'), btns=document.getElementById('ar-btns'); if(!svg) return;
+    const LIST=['benzene','chd','cpa','cbd','trop'], R=CORE.RINGS; let i=0; const right=new Set();
+    const WHY=k=>{ const g=R[k]; const parts=[g.pi+' π electrons'+(g.neg!=null?' (4 from C=C + 2 from the lone pair)':'')+(g.pos!=null?' (the + carbon adds 0)':''), g.p?'a p orbital on every ring atom':'an sp³ CH₂ breaks the cloud', g.h?g.pi+' is a 4n + 2 number':g.pi+' is not a 4n + 2 number']; return parts.join('; ')+'.'; };
+    function draw(){
+      const k=LIST[i], g=R[k];
+      svg.innerHTML='<rect width="400" height="230" rx="12" fill="#f4f7f5"/>'+ringS({cx:200,cy:104,r:g.n===4?44:52,n:g.n,db:g.db,ch2:g.ch2,pos:g.pos,neg:g.neg,w:2.6,fs:12}).s+
+        '<text x="200" y="210" text-anchor="middle" font-family="DM Sans,system-ui,sans-serif" font-size="14" font-weight="800" fill="#2d6a4f">'+g.name+'</text>'+
+        LIST.map((kk,j)=>'<circle cx="'+(20+j*16)+'" cy="20" r="5" fill="'+(right.has(kk)?'#2d6a4f':(j===i?'#d9821f':'#d5dad7'))+'"/>').join('');
+      q.innerHTML='Ring '+(i+1)+' of 5. Check the four tests, then decide.';
+      btns.querySelectorAll('.chip2').forEach(b=>{ b.classList.remove('on'); b.disabled=false; });
+    }
+    btns.querySelectorAll('.chip2').forEach(b=>b.addEventListener('click',()=>{
+      const k=LIST[i], g=R[k], ok=(b.dataset.v==='1')===g.ar; out.hidden=false;
+      if(ok){ right.add(k); out.innerHTML='<b>Right.</b> '+g.name.charAt(0).toUpperCase()+g.name.slice(1)+' is '+(g.ar?'aromatic':'not aromatic')+': '+WHY(k);
+        btns.querySelectorAll('.chip2').forEach(x=>x.disabled=true);
+        if(right.size===LIST.length){ if(!task.dataset.done){ task.dataset.done='1'; task.classList.add('ok'); task.innerHTML='All five judged. Well done.'; } draw(); btns.querySelectorAll('.chip2').forEach(x=>x.disabled=true); }
+        else setTimeout(()=>{ i=(i+1)%LIST.length; while(right.has(LIST[i])) i=(i+1)%LIST.length; draw(); fit(slides[current-1]); },1600);
+      } else { b.classList.add('on'); out.innerHTML='<b>Not quite.</b> Go through the tests again: count π electrons (C⁻ adds 2, C⁺ adds 0), look for an sp³ CH₂, then check 4n + 2.'; }
+      trk('arom-try',{ring:k,correct:ok}); fit(slides[current-1]); updateGate(false);
+    }));
+    draw();
+  })();
+
+  /* ---------- bromine water: add or substitute ---------- */
+  (function(){
+    const svg=document.getElementById('bw-svg'), out=document.getElementById('bw-out'), task=document.getElementById('bw-task'), btns=document.getElementById('bw-btns'); if(!svg) return;
+    let st=0;
+    function tube(x,label,top,bot,cap){ return '<rect x="'+(x-18)+'" y="30" width="36" height="128" rx="16" fill="#fff" stroke="#1c2620" stroke-width="2"/>'+
+      '<path d="M'+(x-16)+' 82 h32 v24 h-32 z" fill="'+top+'" style="transition:fill 1.2s"/><path d="M'+(x-16)+' 106 h32 v36 q0 14 -16 14 q-16 0 -16 -14 z" fill="'+bot+'" style="transition:fill 1.2s"/>'+
+      '<rect x="'+(x-18)+'" y="30" width="36" height="128" rx="16" fill="none" stroke="#1c2620" stroke-width="2"/>'+
+      '<text x="'+x+'" y="182" text-anchor="middle" font-family="DM Sans,system-ui,sans-serif" font-size="13" font-weight="800" fill="#1c2620">'+label+'</text>'+
+      '<text x="'+x+'" y="200" text-anchor="middle" font-family="DM Sans,system-ui,sans-serif" font-size="11" font-weight="700" fill="'+(cap[1]||'#6f7771')+'">'+cap[0]+'</text>'; }
+    function draw(){
+      let s='<rect width="400" height="230" rx="12" fill="#f4f7f5"/>';
+      if(st===0) s+=tube(120,'cyclohexene','#f4f8f6','#f08c2e',['+ bromine water'])+tube(280,'benzene','#f4f8f6','#f08c2e',['+ bromine water']);
+      if(st>=1) s+=tube(120,'cyclohexene','#f4f8f6','#eef4f1',['colourless: added Br₂','#2d6a4f'])+(st===1?tube(280,'benzene','#f3a24a','#f7ead2',['orange stays','#b25f0c']):tube(280,'benzene + FeBr₃','#f7ead2','#f7ead2',['substituted','#2d6a4f']));
+      if(st===2) s+='<g><text x="280" y="20" text-anchor="middle" font-family="DM Sans,system-ui,sans-serif" font-size="12" font-weight="800" fill="#6f7771">HBr fumes ↑</text></g>';
+      svg.innerHTML=s;
+    }
+    btns.querySelectorAll('.chip2').forEach(b=>b.addEventListener('click',()=>{
+      if(b.dataset.v==='shake' && st===0){ st=1; b.classList.add('on'); btns.querySelector('[data-v="fe"]').disabled=false; out.hidden=false;
+        out.innerHTML='Cyclohexene turns colourless at once: Br₂ <b>adds</b> across its C=C (1,2-dibromocyclohexane). Benzene does not react: the orange colour just moves into the benzene layer.'; }
+      else if(b.dataset.v==='fe' && st===1){ st=2; b.classList.add('on'); out.innerHTML='With the FeBr₃ catalyst, benzene reacts, but by <b>substitution</b>: C₆H₆ + Br₂ → C₆H₅Br (bromobenzene) + HBr. The ring stays aromatic.';
+        if(!task.dataset.done){ task.dataset.done='1'; task.classList.add('ok'); task.textContent='Both steps done.'; } }
+      draw(); trk('bw-step',{step:st}); fit(slides[current-1]); updateGate(false);
+    }));
+    draw();
+  })();
+
+  /* ---------- reaction builder ---------- */
+  (function(){
+    const svg=document.getElementById('rb-svg'), box=document.getElementById('rb-chips'), out=document.getElementById('rb-out'), task=document.getElementById('rb-task'); if(!svg) return;
+    const ORDER=['brom','chlor','nitr','sulf','acyl','alkE'], GP={brom:'Br',chlor:'Cl',nitr:'NO2',sulf:'SO3H',acyl:'COCH3',alkE:'CH2CH3'}; const tried=new Set();
+    function draw(k){
+      let s='<rect width="400" height="230" rx="12" fill="#f4f7f5"/>'+ringS({cx:56,cy:96,r:30,db:[0,2,4],w:2.4}).s;
+      if(!k){ s+=Ts(200,104,'choose a reagent',{s:14,c:'#6f7771'}); svg.innerHTML=s; return; }
+      const E=CORE.EAS[k];
+      s+=Ts(104,101,'+',{s:16})+Ts(140,101,fm(E.reag.replace(' (concentrated)','')),{s:13,w:800,c:SUBC})+
+        '<path d="M176 96 h56" stroke="#1c2620" stroke-width="2"/><path d="M228 91 l8 5 -8 5" fill="none" stroke="#1c2620" stroke-width="2"/>'+Ts(206,88,fm(E.cat),{s:11,c:'#b25f0c'})+
+        ringS({cx:282,cy:104,r:26,db:[0,2,4],w:2.4,g:{0:GP[k]},fs:12,gl:12}).s+Ts(330,108,'+',{s:16})+Ts(362,108,fm(E.BP),{s:14,w:800,c:SUBC})+
+        '<rect x="20" y="160" width="360" height="54" rx="10" fill="#fff4e6" stroke="#d9821f"/>'+Ts(200,182,'electrophile: '+fm(E.E),{s:14,w:800,c:'#b25f0c'})+Ts(200,202,E.type,{s:12,w:700,c:'#6f7771'});
+      svg.innerHTML=s;
+    }
+    ORDER.forEach(k=>{ const E=CORE.EAS[k], b=document.createElement('button'); b.type='button'; b.className='chip2'; b.textContent=fm(E.reag.replace(' (concentrated)',''))+' + '+fm(E.cat);
+      b.addEventListener('click',()=>{ box.querySelectorAll('.chip2').forEach(x=>x.classList.toggle('on',x===b)); draw(k); tried.add(k); out.hidden=false;
+        out.innerHTML='<b>'+E.type+'.</b> The catalyst makes '+fm(E.E)+', which replaces one H: <b>'+E.P+'</b> + '+fm(E.BP)+'.';
+        if(tried.size>=3 && !task.dataset.done){ task.dataset.done='1'; task.classList.add('ok'); task.textContent='Three reactions tried: same two steps, a different electrophile each time.'; }
+        trk('rx-build',{rx:k}); fit(slides[current-1]); updateGate(false); });
+      box.appendChild(b); });
+    draw(null);
+  })();
+
+  /* ---------- player ---------- */
+  const players=[];
+  document.querySelectorAll('.anim').forEach(host=>{
+    const svg=host.querySelector('.anim-svg'), cap=host.querySelector('.anim-cap'), bP=host.querySelector('.a-play'), bR=host.querySelector('.a-replay'), fill=host.querySelector('.a-fill');
+    let A=null, t=0, playing=false, last=0, raf=0, opts={};
+    host.querySelectorAll('.a-tab').forEach(tb=>{ if(tb.classList.contains('on')) Object.assign(opts,JSON.parse(tb.dataset.o)); });
+    if(host.dataset.o) Object.assign(opts,JSON.parse(host.dataset.o));
+    function build(){ while(svg.firstChild) svg.removeChild(svg.firstChild); A=ANIM[host.dataset.anim](svg,opts); t=0; draw(); }
+    function draw(){ A.draw(t); fill.style.width=(t/A.dur*100).toFixed(1)+'%'; if(cap){ let c=A.caps[0][1]; A.caps.forEach(x=>{ if(t>=x[0]) c=x[1]; }); if(cap.innerHTML!==c) cap.innerHTML=c; } }
+    function ui(){ bP.textContent=playing?'❚❚ Pause':(t>=A.dur?'▶ Play again':(t>0?'▶ Resume':'▶ Play')); bP.setAttribute('aria-pressed',playing?'true':'false'); }
+    function frame(now){ if(!playing) return; t=Math.min(A.dur,t+(now-last)/1000); last=now; draw();
+      if(t>=A.dur){ playing=false; ui(); if(window.umami) umami.track('anim-complete',{anim:host.dataset.anim}); return; } raf=requestAnimationFrame(frame); }
+    function play(){ if(!A) build(); if(t>=A.dur) t=0; playing=true; last=performance.now(); ui(); cancelAnimationFrame(raf); raf=requestAnimationFrame(frame); }
+    function pause(){ playing=false; cancelAnimationFrame(raf); if(A) ui(); }
+    bP.addEventListener('click',()=>{ if(playing) pause(); else { play(); if(window.umami) umami.track('anim-play',{anim:host.dataset.anim}); } });
+    bR.addEventListener('click',()=>{ pause(); t=0; play(); if(window.umami) umami.track('anim-replay',{anim:host.dataset.anim}); });
+    host.querySelectorAll('.a-tab').forEach(tb=>tb.addEventListener('click',()=>{
+      host.querySelectorAll('.a-tab').forEach(x=>{ x.classList.toggle('on',x===tb); x.setAttribute('aria-pressed',x===tb?'true':'false'); });
+      opts=Object.assign({},JSON.parse(tb.dataset.o)); pause(); build(); play(); if(window.umami) umami.track('anim-tab',{anim:host.dataset.anim, tab:tb.textContent});
+    }));
+    players.push({host:host,
+      enter(){ build(); if(RMO){ t=A.dur; draw(); ui(); } else play(); },
+      leave(){ pause(); }});
+  });
+  function animsFor(n){ const s=slides[n-1]; players.forEach(p=>{ if(s.contains(p.host)) p.enter(); else p.leave(); }); }
+
+  /* ---------- AUTO-FIT: shrink a page until it fits without scrolling ---------- */
+  const MIN_K = 0.8;   /* never shrink text below 80% of normal */
+  const stageEl = document.getElementById('stage');
+  function updateMore(){
+    const s = slides[current-1];
+    const more = s && s.classList.contains('scrolly') && (s.scrollTop + s.clientHeight < s.scrollHeight - 4);
+    stageEl.classList.toggle('more', !!more);
+  }
+  /* ---------- FLOW CHARTS: straight row if it fits, otherwise snake ---------- */
+  document.querySelectorAll('.flow').forEach(f=>{
+    f._items=[...f.children].filter(c=>!c.classList.contains('arr')).map(c=>c.outerHTML);
+    f._sig=''; f._nat=0;
+  });
+  function flowDelays(f){ [...f.children].forEach((e,i)=>e.style.setProperty('--d',(0.1+i*0.08).toFixed(2)+'s')); }
+  function renderRow(f){
+    f.classList.remove('snake'); f.classList.add('row'); f.style.gridTemplateColumns='';
+    f.innerHTML=f._items.join('<span class="arr" aria-hidden="true">→</span>'); flowDelays(f);
+  }
+  function renderSnake(f,cols){
+    const it=f._items, n=it.length; let h='';
+    f.classList.remove('row'); f.classList.add('snake');
+    f.style.gridTemplateColumns=Array(cols).fill('minmax(0,1fr)').join(' 1.5em ');
+    for(let i=0;i<n;i++){
+      const r=Math.floor(i/cols), p=i%cols, rev=r%2===1;
+      const c=rev?cols-1-p:p, gr=2*r+1, gc=2*c+1;
+      h+='<div class="cell" style="grid-row:'+gr+';grid-column:'+gc+'">'+it[i]+'</div>';
+      if(i<n-1){
+        if(p<cols-1) h+='<span class="arr" aria-hidden="true" style="grid-row:'+gr+';grid-column:'+(rev?gc-1:gc+1)+'">'+(rev?'←':'→')+'</span>';
+        else h+='<span class="arr down" aria-hidden="true" style="grid-row:'+(gr+1)+';grid-column:'+gc+'">↓</span>';
+      }
+    }
+    f.innerHTML=h; flowDelays(f);
+  }
+  function layoutFlow(f,k){
+    const w=f.clientWidth; if(!w) return;
+    if(!f._nat){ renderRow(f); f._sig='row'; f._nat=f.scrollWidth/k; }
+    const fs=parseFloat(getComputedStyle(f).fontSize)||16;
+    const fitsRow=f._nat*k<=w+1;
+    const cols=Math.min(f._items.length,Math.max(2,Math.min(3,Math.floor(w/(9*fs)))));
+    const sig=fitsRow?'row':'s'+cols;
+    if(sig===f._sig) return;      /* unchanged: don't rebuild (avoids replaying animations) */
+    f._sig=sig; fitsRow?renderRow(f):renderSnake(f,cols);
+  }
+
+  function fit(slide){
+    if(!slide) return;
+    const si=slide.querySelector('.si');
+    const flows=[...slide.querySelectorAll('.flow')];
+    slide.classList.remove('scrolly'); slide.scrollTop = 0;
+    let k=1; slide.style.setProperty('--k',k); flows.forEach(f=>layoutFlow(f,k));
+    let g=0;
+    const over = () => si.scrollHeight>slide.clientHeight+1 || si.scrollWidth>slide.clientWidth+1;
+    while(g++<16 && over() && k>MIN_K){
+      k=+(k-0.03).toFixed(2); slide.style.setProperty('--k',k); flows.forEach(f=>layoutFlow(f,k));
+    }
+    if (over()) slide.classList.add('scrolly');
+    updateMore();
+  }
+  slides.forEach(s=>s.addEventListener('scroll', updateMore, {passive:true}));
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>fit(slides[current-1]),120); });
+
+  /* ---------- GATING ---------- */
+  function pending(slide){
+    let n=0;
+    slide.querySelectorAll('.toggle-wrap:not(.opt)').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
+    slide.querySelectorAll('.rcard').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
+    slide.querySelectorAll('.choice-set').forEach(s=>{ if(!s.dataset.done) n++; });
+    slide.querySelectorAll('.task').forEach(t=>{ if(!t.dataset.done) n++; });
+    return n;
+  }
+  function updateGate(alert){
+    const s=slides[current-1], n=(isEducator||current<maxReached)?0:pending(s);
+    btnNext.classList.toggle('locked', n>0);
+    if(n===0){ hint.className=''; hint.textContent=isEducator?'Educator view: nothing is locked. To test the locks, use “View as student” in Kompas.':(previewOn?'Student preview: questions lock Next, and nothing is saved.':''); return; }
+    hint.className=alert?'alert':'';
+    const what=n===1?'1 item':n+' items';
+    hint.textContent=alert
+      ? 'Please finish the questions or open the sections on this page first ('+what+' left).'
+      : 'Finish '+what+' on this page to continue.';
+  }
+  function flagPending(slide){
+    [...slide.querySelectorAll('.toggle-wrap:not(.seen):not(.opt), .rcard:not(.seen), .choice-set:not([data-done]), .task:not([data-done])')]
+      .filter(e=>e.offsetParent!==null)
+      .forEach(e=>{ e.classList.remove('pulse'); void e.offsetWidth; e.classList.add('pulse'); });
+  }
+
+  function show(n){
+    slides.forEach((s,i)=>s.classList.toggle('active',i+1===n));
+    progFill.style.width=((n/TOTAL)*100)+'%';
+    progLbl.textContent=n+' / '+TOTAL;
+    btnBack.disabled=n===1;
+    btnNext.textContent=n===TOTAL?'Done':'Next →';
+    btnNext.setAttribute('data-umami-event',n===TOTAL?'carousel-selesai':'nav-next');
+    buildCharts(n);
+    fit(slides[n-1]);
+    requestAnimationFrame(()=>fit(slides[n-1]));
+    labFrame(slides[n-1]);
+    animsFor(n);
+    updateGate(false);
+    saveProgress();
+    if(window.umami) umami.track('slide-view',{slide:n});
+  }
+
+  /* NAV BUTTONS ONLY — no swipe, no keyboard */
+  btnNext.addEventListener('click',()=>{
+    const s=slides[current-1];
+    if(!isEducator && current>=maxReached && pending(s)>0){ updateGate(true); flagPending(s); if(window.umami) umami.track('gate-blocked',{slide:current}); return; }
+    if(current<TOTAL){ current++; reach(current); show(current); } else openOv('refs-overlay');
+  });
+  btnBack.addEventListener('click',()=>{ if(current>1){ current--; show(current); } });
+
+  document.querySelectorAll('.toggle-btn').forEach(b=>b.addEventListener('click',()=>{
+    const w=b.parentElement; w.classList.toggle('open'); w.classList.add('seen'); fit(slides[current-1]); updateGate(false);
+    if(window.umami) umami.track('toggle',{label:b.textContent.trim().slice(0,40)});
+  }));
+  document.querySelectorAll('.rcard').forEach(c=>c.addEventListener('click',()=>{ c.classList.add('seen'); fit(slides[current-1]); updateGate(false); }));
+
+  /* questions: a wrong choice is marked and explained; the student keeps going until right.
+     The right answer is never shown before it is chosen. First-try results feed the quiz score. */
+  document.querySelectorAll('.choice-set').forEach(set=>{
+    const ans=set.dataset.answer, fb=set.querySelector('.feedback');
+    const miss=document.createElement('div'); miss.className='feedback miss'; miss.setAttribute('aria-live','polite'); fb.parentNode.insertBefore(miss,fb);
+    set.querySelectorAll('.choice').forEach(c=>c.addEventListener('click',()=>{
+      if(set.dataset.done || c.classList.contains('wrong')) return;
+      const ok=c.dataset.v===ans;
+      if(set.dataset.first===undefined) set.dataset.first=ok?'1':'0';
+      if(ok){
+        set.dataset.done='1'; set.classList.add('done'); c.classList.add('right');
+        miss.classList.remove('show'); fb.classList.add('show');
+      } else {
+        c.classList.add('wrong'); c.setAttribute('aria-disabled','true');
+        miss.innerHTML='<b>Not quite.</b> '+(c.dataset.fb||'Think again, then choose another answer.'); miss.classList.add('show');
+      }
+      if(window.umami) umami.track('choice',{correct:ok, first:set.dataset.first==='1'});
+      updateScore(); fit(slides[current-1]); updateGate(false);
+    }));
+    const nx=set.querySelector('.next-q');
+    if(nx) nx.addEventListener('click',()=>{
+      const nxt=set.nextElementSibling;
+      if(nxt&&nxt.classList.contains('choice-set')){ set.classList.remove('cur'); nxt.classList.add('cur'); fit(slides[current-1]); }
+    });
+  });
+  function updateScore(){
+    const q=document.querySelectorAll('.quiz .choice-set'), done=[...q].filter(s=>s.dataset.done);
+    if(done.length<q.length) return;
+    document.getElementById('quiz-score').textContent='Right first time: '+done.filter(s=>s.dataset.first==='1').length+' / '+q.length;
+  }
+  function openOv(id){ if(id==='toc-overlay') buildToc(); document.getElementById(id).classList.add('open'); }
+  document.querySelectorAll('.overlay').forEach(o=>{
+    o.addEventListener('click',e=>{ if(e.target===o) o.classList.remove('open'); });
+    o.querySelector('.close-ov').addEventListener('click',()=>o.classList.remove('open'));
+  });
+  /* demonstration videos: load the player only when opened, unload on close so it stops */
+  const vOv=document.getElementById('video-overlay'), vFrame=document.getElementById('video-frame');
+  function closeVid(){ vOv.classList.remove('open'); vFrame.innerHTML=''; }
+  document.querySelectorAll('.vid-btn').forEach(b=>b.addEventListener('click',()=>{
+    const id=b.dataset.yt;
+    document.getElementById('video-title').textContent=b.dataset.ytitle;
+    document.getElementById('video-link').href='https://www.youtube.com/watch?v='+id;
+    vFrame.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+id+'?rel=0&autoplay=1" title="'+b.dataset.ytitle.replace(/"/g,'&quot;')+'" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>';
+    vOv.classList.add('open');
+  }));
+  vOv.addEventListener('click',e=>{ if(e.target===vOv) closeVid(); });
+  vOv.querySelector('.close-ov').addEventListener('click',closeVid);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && vOv.classList.contains('open')) closeVid(); });
+  document.getElementById('btn-toc').addEventListener('click',()=>openOv('toc-overlay'));
+  document.getElementById('btn-refs').addEventListener('click',()=>openOv('refs-overlay'));
+  document.getElementById('btn-pt').addEventListener('click',()=>{
+    document.getElementById('toc-overlay').classList.remove('open');
+    if(window.KompasPT) KompasPT.open();
+  });
+
+  /* contents: students can revisit any page they have already reached;
+     a signed-in Kompas educator can open every page */
+  const secNames={intro:'Introduction',meet:'1 · Meet benzene',name:'2 · Naming',arom:'3 · Aromaticity and stability',react:'4 · How benzene reacts',meds:'5 · Arenes in medicines',ringlab:'Lab · Ring Bench',end:'Wrap-up'};
+  function buildToc(){
+    const ul=document.getElementById('toc-list'); ul.innerHTML=''; let last='';
+    slides.forEach((s,i)=>{
+      if(s.dataset.sec!==last){ const h=document.createElement('li'); h.className='sec'; h.textContent=secNames[s.dataset.sec]; ul.appendChild(h); last=s.dataset.sec; }
+      const li=document.createElement('li'), b=document.createElement('button');
+      b.innerHTML='<span>'+(i+1)+'</span>'+s.dataset.title;
+      if(i+1===current) b.className='cur';
+      const open=isEducator || i+1<=maxReached;
+      if(!open){ b.classList.add('lockd'); b.disabled=true; b.setAttribute('aria-disabled','true'); }
+      b.addEventListener('click',()=>{ if(!(isEducator || i+1<=maxReached)) return; current=i+1; show(current); document.getElementById('toc-overlay').classList.remove('open'); if(window.umami) umami.track('toc-jump',{slide:current}); });
+      li.appendChild(b); ul.appendChild(li);
+    });
+  }
+
+  /* the labs need about 480 px of height to show each step without scrolling;
+     on shorter screens offer a full-screen link instead of a cramped frame */
+  function labFrame(slide){
+    const fr=slide && slide.querySelector('iframe[data-src]'); if(!fr) return;
+    const box=fr.parentElement, small=box.clientHeight<480;
+    box.classList.toggle('launch',small);
+    if(!small && !fr.src){ fr.src=fr.dataset.src; if(window.umami) umami.track('lab-embed-open',{lab:fr.dataset.src.split('.')[0]}); }
+  }
+  window.addEventListener('resize',()=>setTimeout(()=>labFrame(slides[current-1]),200));
+
+  /* the embedded labs report finished rounds */
+  window.addEventListener('message',e=>{
+    if(e.origin!==location.origin && location.origin!=='null') return;
+    const d=e.data||{};
+    if(d.type==='ring-lab' && window.umami) umami.track(d.type+'-'+d.event,{scenario:d.reaction||''});
+    if(d.type==='ring-lab' && d.event==='round-complete') markLab(d.type);
+  });
+  /* a lab page stays locked until that bench has one completed round. The bench also records
+     the round on this device, so a round finished full screen (another tab) unlocks it too. */
+  const LABKEY=l=>'kompas.arenes.'+l+'.done';
+  function markLab(l){
+    document.querySelectorAll('.lab-status[data-lab="'+l+'"]').forEach(t=>{ if(t.dataset.done) return; t.dataset.done='1'; t.classList.add('ok'); t.innerHTML='Lab round complete. Press Next to continue.'; });
+    updateGate(false);
+  }
+  ['ring-lab'].forEach(l=>{ try{ if(localStorage.getItem(LABKEY(l))) markLab(l); }catch(_){} });
+  window.addEventListener('storage',e=>{ const m=/^kompas\.arenes\.(ring-lab)\.done$/.exec(e.key||''); if(m && e.newValue) markLab(m[1]); });
+
+  /* Back to Kompas: return to the exact course view the student came from
+     (it always opens Kompas at the Interactive labs list). */
+  document.getElementById('btn-kompas').addEventListener('click',e=>{
+    try{
+      if (document.referrer && new URL(document.referrer).origin===location.origin && history.length>1){
+        e.preventDefault(); location.assign(e.currentTarget.href);
+      }
+    }catch(_){}
+  });
+
+  /* ---------- progress: furthest page reached, remembered on this device ---------- */
+  function reach(n){ if(n>maxReached){ maxReached=n; } }
+  function saveProgress(){ if(!saveOn) return; try{ localStorage.setItem(PKEY, JSON.stringify({max:maxReached, last:current})); }catch(_){} }
+  function loadProgress(){
+    maxReached=1; current=1;
+    try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null');
+      if(sv && sv.max>=1) maxReached=Math.min(sv.max, TOTAL);
+      if(sv && sv.last>=1 && sv.last<=maxReached) current=sv.last; }catch(_){}
+  }
+
+  /* ---------- Kompas sign-in: read the user's own role (RLS allows only their own row) ---------- */
+  window.addEventListener('DOMContentLoaded',async()=>{
+    try{
+      if(!window.supabase){ renderCertBox(); return; }
+      const sb=window.supabase.createClient('https://jtkskwopnprgmxlhppro.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0a3Nrd29wbnByZ214bGhwcHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDU0NDQsImV4cCI6MjEwMjUyMTQ0NH0.MVvaIH6fPhzC0aRk8XIZMU1OrAZYNbsT9V1diP8fuGw',{auth:{detectSessionInUrl:false}});
+      authSb=sb;
+      const {data:{session}}=await sb.auth.getSession(); if(!session){ renderCertBox(); return; }
+      const {data}=await sb.from('profiles').select('role, full_name').eq('id',session.user.id).single();
+      if(!data){ renderCertBox(); return; }
+      signedIn=true; profileName=(data.full_name||'').trim();
+      try{ previewOn=data.role==='educator' && !!sessionStorage.getItem('kompas.previewCourse'); }catch(_){ previewOn=false; }
+      isEducator=data.role==='educator' && !previewOn;
+      if(data.role==='educator'){ saveOn=false; if(previewOn){ maxReached=1; current=1; } }
+      else { PKEY='kompas.arenes.progress.u.'+session.user.id; loadProgress(); }
+      show(current); buildToc(); renderCertBox(); updateGate(false);
+    }catch(_){ renderCertBox(); }
+  });
+
+  /* ---------- certificate of completion ---------- */
+  const certBox=document.getElementById('cert-box'), certOut=document.getElementById('cert-out');
+  const esc=t=>String(t).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function renderCertBox(){
+    if(!certBox) return;
+    if(!signedIn){
+      certBox.innerHTML='<p style="margin:0 0 .4em">Sign in to <b>Kompas Semester</b> to get your certificate. It is issued in your registered name with a serial number.</p><a class="btn solid cert-dl" href="../../index.html" data-umami-event="certificate-signin">Open Kompas Semester</a><p class="small" style="margin:.4em 0 0">Then come back to this page.</p>';
+    } else if(!profileName){
+      certBox.innerHTML='<p style="margin:0">Your Kompas Semester profile has no name yet. Add it in your Kompas account, then come back.</p>';
+    } else {
+      certBox.innerHTML='<p style="margin:0 0 .4em">Name on your certificate: <b>'+esc(profileName)+'</b><br><span class="small">From your Kompas Semester account.</span></p><button class="btn solid" id="cert-make" type="button">Create certificate</button>';
+      document.getElementById('cert-make').addEventListener('click',makeCert);
+    }
+    document.getElementById('cert-check').hidden=!isEducator;
+    if(slides[current-1].contains(certBox)) fit(slides[current-1]);
+  }
+  async function makeCert(){
+    const btn=document.getElementById('cert-make'); btn.disabled=true; btn.textContent='Issuing…';
+    try{
+      const {data,error}=await authSb.rpc('issue_certificate',{p_explainer:'arenes'});
+      if(error||!data||!data.length) throw error||new Error('No certificate returned');
+      const c=data[0], cv=await drawCert(c.name_on_certificate, c.serial, c.issued_at);
+      /* Blob URL, not a data: URL — browsers block top-level navigation to data: URLs */
+      const blob=await new Promise((res,rej)=>cv.toBlob(b=>b?res(b):rej(new Error('PNG failed')),'image/png'));
+      if(window._certURL) URL.revokeObjectURL(window._certURL);
+      const url=window._certURL=URL.createObjectURL(blob), fname='arenes-certificate-'+c.serial+'.png';
+      certOut.innerHTML='<img class="cert-img" alt="Certificate of completion, serial '+esc(c.serial)+'" src="'+url+'"><p class="small" style="margin:.2em 0">Serial <b>'+esc(c.serial)+'</b></p><button class="btn solid" id="cert-dl" type="button">Download certificate (PNG)</button><p class="small" style="margin:.4em 0 0">On a phone, if nothing downloads, press and hold the certificate image and choose <b>Save image</b>.</p>';
+      /* plain button with no data-umami-event: Umami intercepts tagged links and ignores the download attribute */
+      document.getElementById('cert-dl').addEventListener('click',()=>{
+        const a=document.createElement('a'); a.href=url; a.download=fname; a.style.display='none';
+        document.body.appendChild(a); a.click(); a.remove();
+        if(window.umami) umami.track('certificate-download');
+      });
+      if(window.umami) umami.track('certificate-create');
+    }catch(err){
+      console.warn('Certificate not issued:', err);
+      certOut.innerHTML='<p class="calc-out fail">Could not issue your certificate. Check that you are signed in to Kompas Semester and online, then try again.</p>';
+    }
+    btn.disabled=false; btn.textContent='Create certificate'; fit(slides[current-1]);
+  }
+  const lookBtn=document.getElementById('cert-lookup');
+  if(lookBtn) lookBtn.addEventListener('click',async()=>{
+    const out=document.getElementById('cert-check-out'), sn=(document.getElementById('cert-serial').value||'').trim().toUpperCase();
+    if(!sn){ out.innerHTML='<p class="calc-out fail">Type a serial first.</p>'; fit(slides[current-1]); return; }
+    out.innerHTML='<p class="small">Checking…</p>';
+    try{
+      const {data,error}=await authSb.from('certificates').select('serial, explainer, name_on_certificate, issued_at').eq('serial',sn).maybeSingle();
+      if(error) throw error;
+      out.innerHTML=data
+        ? '<p class="calc-out"><b>Genuine.</b> '+esc(data.name_on_certificate)+' · '+esc(data.explainer)+' · issued '+new Date(data.issued_at).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Kuala_Lumpur'})+'</p>'
+        : '<p class="calc-out fail"><b>No certificate has this serial.</b> Treat the certificate as not genuine.</p>';
+      if(window.umami) umami.track('certificate-check');
+    }catch(_){ out.innerHTML='<p class="calc-out fail">Could not check right now. Try again.</p>'; }
+    fit(slides[current-1]);
+  });
+  function wrapLines(ctx,text,maxW){ const words=text.split(' '), lines=[]; let line=''; words.forEach(w=>{ const t=line?line+' '+w:w; if(ctx.measureText(t).width>maxW && line){ lines.push(line); line=w; } else line=t; }); if(line) lines.push(line); return lines; }
+  async function drawCert(name, serial, issuedAt){
+    try{ await Promise.all(['800 60px "DM Sans"','700 30px "DM Sans"','500 30px "DM Sans"'].map(f=>document.fonts.load(f))); }catch(_){}
+    const W=2000, H=1414, c=document.createElement('canvas'); c.width=W; c.height=H; const x=c.getContext('2d');
+    const F=(w,sz)=>w+' '+sz+'px "DM Sans", system-ui, sans-serif';
+    x.fillStyle='#ffffff'; x.fillRect(0,0,W,H);
+    x.strokeStyle='#2d6a4f'; x.lineWidth=14; x.strokeRect(50,50,W-100,H-100);
+    x.strokeStyle='#cfe6d9'; x.lineWidth=4; x.strokeRect(84,84,W-168,H-168);
+    /* motif */
+    x.strokeStyle='#cfe6d9'; x.lineWidth=6; x.beginPath();
+    for(let i=0;i<=400;i++){ const t=i/400, X=1280+t*600, y=1220-(220*Math.exp(-Math.pow((t-.3)/.035,2))+150*Math.exp(-Math.pow((t-.68)/.04,2))); i?x.lineTo(X,y):x.moveTo(X,y); } x.stroke();
+    x.textAlign='center'; x.fillStyle='#8a5d14'; x.font=F(700,30);
+    x.fillText('KOMPAS SEMESTER  ·  AUFTHORITY EDU',W/2,200);
+    x.fillStyle='#1c2620'; x.font=F(800,92); x.fillText('Certificate of Completion',W/2,320);
+    x.fillStyle='#3f4742'; x.font=F(500,38); x.fillText('This certifies that',W/2,430);
+    let sz=104; x.font=F(800,sz); while(x.measureText(name).width>1500 && sz>56){ sz-=4; x.font=F(800,sz); }
+    x.fillStyle='#2d6a4f'; x.fillText(name,W/2,560);
+    x.strokeStyle='#c9cec9'; x.lineWidth=3; x.beginPath(); x.moveTo(W/2-620,600); x.lineTo(W/2+620,600); x.stroke();
+    x.fillStyle='#3f4742'; x.font=F(500,38); x.fillText('has completed every page of the interactive explainer',W/2,680);
+    x.fillStyle='#1c2620'; x.font=F(800,60); x.fillText('Arenes, Explained',W/2,775);
+    x.fillStyle='#636b65'; x.font=F(500,32); x.fillText('Naming · Aromaticity · Stability · Reactions of benzene',W/2,835);
+    x.textAlign='left'; x.font=F(500,30); x.fillStyle='#3f4742';
+    const outcomes=['Apply nomenclature to benzene derivatives.','Analyse the aromaticity and stability of cyclic compounds.','Predict the products of the electrophilic substitution reactions of benzene.'];
+    let y=930; outcomes.forEach(o=>{ x.fillStyle='#2d6a4f'; x.beginPath(); x.arc(300,y-10,9,0,Math.PI*2); x.fill(); x.fillStyle='#3f4742'; wrapLines(x,o,1300).forEach(l=>{ x.fillText(l,330,y); y+=44; }); y+=6; });
+    const day=new Date(issuedAt).toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric',timeZone:'Asia/Kuala_Lumpur'});
+    x.font=F(700,32); x.fillStyle='#1c2620'; x.fillText('Issued: '+day,260,1180);
+    x.fillText('Serial: '+serial,260,1232);
+    x.font=F(500,24); x.fillStyle='#636b65'; x.textAlign='center';
+    x.fillText('Recorded by Kompas Semester; educators can check this serial. A record of completion, not an official KPJ Healthcare University award.',W/2,1316);
+    return c;
+  }
+
+
+  buildToc();
+  show(current);
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fit(slides[current-1]));
+})();
+</script>
+</body>
+</html>
