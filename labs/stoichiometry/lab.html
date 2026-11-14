@@ -4,13 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Reaction Bench — Aufthority</title>
-<meta name="description" content="Interactive stoichiometry lab: balance an equation, load the reactants, find the limiting reagent and theoretical yield, then calculate the percentage yield.">
+<meta name="description" content="Interactive lab: six hospital pharmacy stations. Electrolyte doses in mmol, reaction types in QC tests, balancing an antacid equation, checking a label claim, and the limiting reagent and percentage yield of an effervescent sachet.">
 <meta name="theme-color" content="#ffffff">
 <meta property="og:type"         content="website">
 <meta property="og:site_name"    content="Aufthority">
-<meta property="og:title"        content="Reaction Bench: a stoichiometry lab">
-<meta property="og:description"  content="Balance, load, react: find the limiting reagent and percentage yield.">
-<meta property="og:url"          content="https://kompassemester.aufthority.com/labs/stoichiometry/lab.html">
+<meta property="og:title"        content="Reaction Bench: stoichiometry in the hospital pharmacy">
+<meta property="og:description"  content="How many tablets? Will the sachet pass? Six stoichiometry stations for pharmacy students.">
 <meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
 <meta property="og:locale"       content="en_MY">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
@@ -27,24 +26,28 @@
 })();
 </script>
 <script src="../shared/periodic-table.js" defer></script>
+
 <style>
 :root{
-  --ink:#1c2620;--body:#3f4742;--muted:#6f7771;--accent:#2d6a4f;--accent-dark:#1f4d39;
-  --eyebrow:#9a6a1c;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
-  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --ink:#1c2620;--body:#3f4742;--muted:#636b65;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#8a5d14;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--arrow:#b25f0c;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
   --radius:10px;color-scheme:light;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html,body{background:#fff}
-body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%;font-size:16px}
+[hidden]{display:none!important}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.45;-webkit-text-size-adjust:100%;font-size:16px;overflow:hidden}
+@media (min-width:900px) and (min-height:700px){.scr{font-size:calc(var(--k,1)*18px)}}
 b,strong{color:var(--ink);font-weight:700}
 a{color:var(--accent)}
-.wrap{max-width:760px;margin:0 auto;padding:0 16px 28px}
-.embedded .wrap{padding:10px 12px 18px}
-.embedded body{font-size:15px}
 
-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 0 8px;border-bottom:1px solid var(--rule);margin-bottom:12px}
-.embedded nav,.embedded .page-head,.embedded .madeby{display:none}
+/* one screen, no page scroll: top bar, stage, footer */
+#app{height:100vh;height:var(--app-h,100dvh);max-width:1040px;margin:0 auto;padding:0 14px;display:flex;flex-direction:column}
+.embedded #app{padding:0 10px}
+
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0 6px;border-bottom:1px solid var(--rule)}
+.embedded nav{display:none}
 .logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
 .logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
 .nav-right{display:flex;gap:8px}
@@ -54,99 +57,189 @@ nav{display:flex;align-items:center;justify-content:space-between;gap:8px;paddin
 @media (max-width:340px){.logo{font-size:.92rem}.nav-right{gap:4px}.pillbtn{padding:4px 7px!important;font-size:.74rem}}
 @media (max-width:400px){.ptl{display:none}.pts{display:inline}.nav-right{gap:6px}.pillbtn{padding:5px 9px}}
 
-.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.3em}
-h1{color:var(--ink);font-weight:800;line-height:1.1;letter-spacing:-.025em;font-size:1.8em;margin-bottom:.3em}
+#bar{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:7px 0 5px}
+#bar-lbl{flex:1;min-width:0;font-size:.8rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar-lbl span{color:var(--eyebrow);letter-spacing:.06em;text-transform:uppercase;font-size:.9em;margin-right:.35em}
+#hints-btn{flex:0 0 auto}
+#track{flex:0 0 3px;background:var(--rule);border-radius:3px;margin-bottom:6px}
+#fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;gap:.35em;font-size:calc(var(--k,1)*16px);overflow:hidden;padding:2px 1px 4px}
+.scr.on{display:flex}
+.scr.scrolly{overflow-y:auto}
+.scr.half-l{right:calc(50% + 8px)}
+.scr.half-r{left:calc(50% + 8px)}
+/* wider screens: every pane is a card; two panes share the width equally, a single pane is one centred card */
+#stage.roomy .scr.on{border:1px solid var(--rule);border-radius:14px;padding:14px 18px;background:#fff}
+#stage.roomy .scr.single{left:max(0px,calc(50% - 340px));right:max(0px,calc(50% - 340px));top:50%;bottom:auto;transform:translateY(-50%);max-height:100%}
+#stage.roomy .scr.single .madeby{margin-top:.8em}
+@media (max-height:600px){#stage.roomy .scr.on{padding:8px 12px}}
+.grow{flex:1 1 auto;min-height:0}
+
+#foot{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 0 10px;border-top:1px solid var(--rule)}
+#gate{flex:1;text-align:center;font-size:.74rem;color:var(--muted);line-height:1.25}
+#foot .btn{min-width:6.2em}
+#next.ready{animation:nudge 1.6s ease-in-out 2}
+@keyframes nudge{0%,100%{transform:none}50%{transform:translateX(3px)}}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.15em}
+h1{color:var(--ink);font-weight:800;line-height:1.1;letter-spacing:-.025em;font-size:1.6em;margin-bottom:.2em}
 h1 .ac{color:var(--accent)}
-h2{color:var(--ink);font-weight:800;font-size:1.08em;letter-spacing:-.01em;margin-bottom:.35em;display:flex;align-items:center;gap:.5em}
-h2 .num{flex:0 0 1.6em;height:1.6em;border-radius:50%;background:var(--accent);color:#fff;display:inline-flex;align-items:center;justify-content:center;font-size:.8em}
-p{margin-bottom:.5em;font-size:.95em}
+p{margin-bottom:.4em;font-size:.95em}
 .small{font-size:.82em;color:var(--muted)}
-.page-head{margin-bottom:10px}
+.madeby{margin-top:auto;border-top:1px solid var(--rule);padding-top:.5em;font-size:.78em;color:var(--muted)}
 
-.card{border:1px solid var(--rule);border-radius:12px;padding:12px 14px;margin-bottom:10px;background:#fff}
-.card.locked{opacity:.45;pointer-events:none}
-.card.locked .lock-note{display:block}
-.lock-note{display:none;font-size:.8em;color:var(--muted);font-weight:600}
-.card.done{border-color:var(--g-line)}
-.card.done h2 .num{background:var(--accent-dark)}
-
-.chips{display:flex;flex-wrap:wrap;gap:.35em;margin:.2em 0 .5em}
-.chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .82em 'DM Sans',sans-serif;padding:.35em .8em;border-radius:100px;cursor:pointer}
+.chips{display:flex;flex-wrap:wrap;gap:.3em;margin:.15em 0 .35em}
+.chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .82em 'DM Sans',sans-serif;padding:.32em .75em;border-radius:100px;cursor:pointer;text-align:left;line-height:1.3}
 .chip:hover{border-color:var(--ink)}
 .chip.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
-.chip.right{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
-.chip.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red)}
 .chip .tick{margin-left:.3em;color:var(--accent)}
-.ctx{font-size:.88em;color:var(--body);margin:0}
+.chips.col{flex-direction:column;align-items:stretch}
+.chips.col .chip{border-radius:8px}
+.ctx{font-size:.9em;color:var(--body);margin:0}
 
+.msg{font-size:.84em;padding:.35em .65em;border-left:3px solid var(--rule);border-radius:0 8px 8px 0}
+.msg.good{border-color:var(--accent);background:var(--g-bg)}
+.msg.near{border-color:var(--orange);background:var(--o-bg)}
+.msg.bad{border-color:var(--red);background:var(--r-bg)}
+.msg p{margin:0;font-size:1em}.msg p+p{margin-top:.25em}
+.q{font-weight:700;color:var(--ink);font-size:.92em;margin:.3em 0 .2em}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .86em 'DM Sans',sans-serif;padding:.42em 1em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{border-color:var(--rule);color:var(--body);font-weight:600}
+.btn:disabled{opacity:.4;cursor:default}
+.btns{display:flex;flex-wrap:wrap;gap:.4em;margin-top:.2em}
+.work{display:none}
+.work.show{display:block}
+table.w{width:100%;border-collapse:collapse;font-size:.8em}
+table.w th,table.w td{border-bottom:1px solid var(--rule);padding:.25em .4em;text-align:left;vertical-align:top}
+table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+/* story */
+#story{display:flex;flex-direction:column;gap:.3em;min-height:0}
+.story-head{display:flex;align-items:center;justify-content:space-between}
+.dots{display:flex;gap:5px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--rule)}.dots i.on{background:var(--accent)}
+.scene{display:block;width:100%;border:0;padding:0;background:none;cursor:pointer;border-radius:10px}
+.scene svg{display:block;width:100%;height:auto;max-height:13em}
+.say{font-size:.9em;margin:0;background:var(--g-bg);border-radius:10px;padding:.5em .75em;color:var(--ink);line-height:1.4}
+.story-nav{display:flex;align-items:center;justify-content:space-between;gap:.5em}
+.bob{animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:none}50%{transform:translateY(-1.5px)}}
+.blink{animation:blink 4s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes blink{0%,92%,100%{transform:none}95%{transform:scaleY(.1)}}
+.pulse{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.spin{animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sorange{fill:#e2852b}.sorange-h{opacity:1}
+.sclear{fill:#eef3f4}.sclear-h{opacity:0}
+.sclear-anim{fill:#e2852b;animation:toclear 1s 1.6s forwards}.sclear-anim-h{animation:hatchoff 1s 1.6s forwards}
+@keyframes toclear{to{fill:#eef3f4}}@keyframes hatchoff{to{opacity:0}}
+.sdrop{opacity:0;animation:sdrop .7s ease-in .2s 2}
+@keyframes sdrop{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(34px)}}
+.slbl{opacity:0;animation:fadein .5s 2.7s forwards}
+@keyframes fadein{to{opacity:1}}
+.ondark path{stroke:#c9d1cb}
+.ondark .tl1,.ondark .tl2{fill:#f2f4f2}.onlight .tl1{fill:#1c2620}.onlight .tl2{fill:#8a4f0c}
+/* hints overlay */
+#hints,#brief,#stp{position:fixed;inset:0;background:rgba(28,38,32,.45);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
+#hints.open,#brief.open,#stp.open{display:flex}
+#hints .box,#brief .box,#stp .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:14px 16px;max-height:100%;overflow:auto}
+#hints .top,#brief .top,#stp .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5em}
+.ideas{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
+.idea{font-size:.86em;line-height:1.35;text-align:center}
+.idea svg{display:block;width:100%;height:46px;margin-bottom:.2em}
+.term{background:none;border:none;border-bottom:1.5px dotted var(--accent);color:inherit;font:inherit;padding:0;cursor:help}
+.def{display:block;margin:.2em 0 .3em;padding:.3em .6em;background:var(--g-bg);border-radius:6px;font-size:.92em;color:var(--accent-dark);font-weight:500}
+
+
+/* ---------- shared bench styles (from the TLC bench) ---------- */
+.calc-in{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .6em;margin:.1em 0}
+.num-in{font:600 1em 'DM Sans',sans-serif;width:6.5em;padding:.28em .5em;border:1.5px solid var(--rule);border-radius:8px;color:var(--ink);background:#fff}
+.num-in:focus{outline:none;border-color:var(--accent)}
+.num-in.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red)}
+.num-in.wrong + .unit::after{content:" ✕ check this";color:var(--red);font-weight:700}
+.unit{font-size:.84em;color:var(--muted)}
+.given{background:#f6f7f5;border-radius:8px;padding:.4em .65em;font-size:.86em;margin:.1em 0 .2em}
+.given b{white-space:nowrap}
+.plate-box{flex:1 1 auto;min-height:9em;background:#f4f5f2;border:1px solid var(--rule);border-radius:10px;padding:4px;display:flex;justify-content:center}
+.plate-box svg{height:100%;width:100%;max-width:300px;display:block}
+.runrow{display:flex;flex-wrap:wrap;gap:.3em;align-items:center}
+.runrow .btn{font-size:.78em;padding:.34em .75em}
+.runrow .btn.doneb{border-color:var(--g-line);color:var(--accent-dark);background:var(--g-bg)}
+.pstate{font-size:.8em;color:var(--muted);line-height:1.3}
+.words-box{display:none;font-size:.8em;background:#f6f7f5;border-radius:8px;padding:.35em .6em;color:var(--ink)}
+.words .words-box{display:block}
+.trainee{font-weight:700;color:var(--red)}
+.ptx{font:600 9.5px 'DM Sans',sans-serif;fill:#5c665f}
+.ptx.s{font-size:8.5px;font-weight:500}
+.pen{fill:none;stroke:#7b827d;stroke-width:1;stroke-dasharray:2.5 2}
+.lane-lbl{font:700 10px 'DM Sans',sans-serif;fill:var(--ink);text-anchor:middle}
+.spot-lt{font:700 10px 'DM Sans',sans-serif;fill:var(--accent-dark)}
+.wait-note{font-size:.84em;color:var(--muted);background:#f6f7f5;border-radius:8px;padding:.4em .65em}
+.stuck{font-size:.92em;color:var(--accent-dark)}
+@media (prefers-reduced-motion: reduce){ #plate *{transition:none!important} }
+/* step guide: the footer names the next move; the matching control glows */
+#gate.go{color:#a85f10;font-weight:700}
+.guide{box-shadow:0 0 0 3px rgba(217,130,31,.8);animation:guide 1.4s ease-in-out infinite}
+.chips.guide,.slrow.guide,.btns.guide{border-radius:10px}
+@keyframes guide{0%,100%{box-shadow:0 0 0 2px rgba(217,130,31,.25)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.9)}}
+.sop{padding-left:1.3em;font-size:.9em;margin:.3em 0 .6em}.sop li{margin-bottom:.3em}
+/* STP: the lab's controlled method document */
+#stp .box{max-width:720px;padding-top:0}
+#stp .top{position:sticky;top:0;background:#fff;padding:12px 0 8px;margin-bottom:.2em;z-index:1;border-bottom:1px solid var(--rule)}
+#stp-btn.sec{color:#a85f10;border-color:#efc58f;background:var(--o-bg)}
+.stp-doc{font-size:.86em;color:var(--body)}
+.stp-stamp{display:inline-block;border:2px solid var(--red);color:var(--red);font-weight:800;font-size:.72em;letter-spacing:.1em;text-transform:uppercase;padding:.15em .5em;border-radius:4px;transform:rotate(-2deg);margin:.5em 0}
+.stp-head{width:100%;border-collapse:collapse;margin-bottom:.6em}
+.stp-head th,.stp-head td{border:1px solid var(--ink);padding:.3em .5em;text-align:left;vertical-align:top}
+.stp-head th{background:var(--ink);color:#fff;letter-spacing:.04em}
+.stp-head td:first-child{width:36%;color:var(--muted);font-weight:600}
+.stp-sec{border-top:1px solid var(--rule);padding:.5em .35em .3em;scroll-margin-top:3.4em;border-radius:6px;transition:background .6s}
+.stp-sec.hit{background:var(--o-bg)}
+.stp-sec h3{font-size:1em;color:var(--ink);margin-bottom:.3em}
+.stp-sec p,.stp-sec li{font-size:1em;margin-bottom:.3em}
+.stp-sec ol,.stp-sec ul{padding-left:1.3em;margin-bottom:.3em}
+.stp-t{width:100%;border-collapse:collapse;margin:.2em 0 .4em}
+.stp-t th,.stp-t td{border:1px solid var(--rule);padding:.25em .45em;text-align:left;vertical-align:top}
+.stp-t th{background:#f6f7f5}
+.stp-f{background:#f6f7f5;border-radius:6px;padding:.4em .6em;font-weight:700;color:var(--ink);margin:.2em 0 .4em;overflow-x:auto}
+.tn{border-left:3px solid var(--accent);background:var(--g-bg);color:var(--accent-dark);border-radius:0 6px 6px 0;padding:.3em .6em;margin:.3em 0}
+.tn b{color:var(--accent-dark)}
+
+
+
+
+/* ---------- additions for Reaction Bench ---------- */
+.rig{display:block;width:100%;max-width:380px;height:auto;max-height:calc(var(--k,1)*8.2em);margin:.15em auto .2em}
+.eqn{font-weight:700;color:var(--ink);white-space:nowrap;overflow-x:auto;font-size:1.02em}
+.eqn .use{display:block;white-space:normal;font-weight:500;color:var(--body);font-size:.86em;margin-bottom:.1em}
+.rxq + .rxq{margin-top:.15em;border-top:1px solid var(--rule);padding-top:.3em}
+.rxq .chips{margin:.1em 0 0}
+.rxq .chip{font-size:.76em;padding:.28em .6em}
 /* balancer */
-.bal-eq{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:center;gap:.35em .45em;margin:.4em 0 .6em}
+.bal-eq{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:center;gap:.35em .45em;margin:.3em 0 .4em}
 .sp{display:flex;flex-direction:column;align-items:center;gap:.2em}
 .sp .f{font-weight:700;color:var(--ink);font-size:1.02em;white-space:nowrap}
 .sp .f .c{color:var(--accent);font-weight:800;margin-right:.06em}
 .sp .nm{font-size:.68em;color:var(--muted);text-align:center;max-width:7.5em;line-height:1.15}
-.stp{display:flex;align-items:center;border:1px solid var(--rule);border-radius:100px;overflow:hidden}
-.stp button{background:#fff;border:none;font:700 1em 'DM Sans',sans-serif;color:var(--ink);width:1.9em;height:1.8em;cursor:pointer}
-.stp button:hover{background:var(--g-bg)}
-.stp span{min-width:1.3em;text-align:center;font-weight:800;color:var(--accent)}
-.op{font-weight:800;color:var(--orange);margin-top:1.62em}
-.tally{display:flex;flex-wrap:wrap;gap:.35em;justify-content:center;margin-bottom:.4em}
-.at{border:1px solid var(--rule);border-radius:8px;padding:.2em .55em;font-size:.82em;text-align:center;min-width:4.4em}
+.cstep{display:flex;align-items:center;border:1px solid var(--rule);border-radius:100px;overflow:hidden;background:#fff}
+.cstep button{background:#fff;border:none;font:700 1em 'DM Sans',sans-serif;color:var(--ink);width:1.9em;height:1.8em;cursor:pointer}
+.cstep button:hover{background:var(--g-bg)}
+.cstep span{min-width:1.3em;text-align:center;font-weight:800;color:var(--accent)}
+.op{font-weight:800;color:var(--orange);margin-top:.15em}
+.tally{display:flex;flex-wrap:wrap;gap:.35em;justify-content:center;margin-bottom:.3em}
+.at{border:1px solid var(--rule);border-radius:8px;padding:.2em .55em;font-size:.8em;text-align:center;min-width:4.4em}
 .at b{display:block;font-size:1.05em}
 .at.ok{border-color:var(--accent);background:var(--g-bg)}
 .at.no{border-color:var(--red);background:var(--r-bg)}
-.msg{font-size:.86em;padding:.4em .7em;border-left:3px solid var(--rule);border-radius:0 8px 8px 0;margin-top:.4em}
-.msg.good{border-color:var(--accent);background:var(--g-bg)}
-.msg.near{border-color:var(--orange);background:var(--o-bg)}
-.msg.bad{border-color:var(--red);background:var(--r-bg)}
-
-/* load */
-.sl{margin:.35em 0 .6em}
-.sl-top{display:flex;justify-content:space-between;gap:.6em;font-size:.86em;align-items:baseline}
-.sl-top .v{font-weight:800;color:var(--accent);font-size:1.05em;white-space:nowrap}
-.range{width:100%;accent-color:var(--accent)}
-.fine{display:flex;gap:.3em;justify-content:flex-end}
-.fine button{background:#fff;border:1px solid var(--rule);border-radius:100px;font:600 .74em 'DM Sans',sans-serif;padding:.15em .55em;cursor:pointer;color:var(--body)}
-.q{font-weight:700;color:var(--ink);font-size:.92em;margin:.6em 0 .3em}
-.inrow{display:flex;gap:.5em;flex-wrap:wrap;align-items:center}
-.inrow input{font:600 1.02em 'DM Sans',sans-serif;padding:.35em .5em;border:1px solid var(--rule);border-radius:8px;width:8em;color:var(--ink)}
-.inrow .u{font-size:.9em;color:var(--muted)}
-.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .86em 'DM Sans',sans-serif;padding:.45em 1em;cursor:pointer}
-.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
-.btn.ghost{border-color:var(--rule);color:var(--body);font-weight:600}
-.btn:disabled{opacity:.4;cursor:default}
-.btns{display:flex;flex-wrap:wrap;gap:.45em;margin-top:.55em}
-.work{display:none;margin-top:.5em}
-.work.show{display:block}
-table.w{width:100%;border-collapse:collapse;font-size:.8em}
-table.w th,table.w td{border-bottom:1px solid var(--rule);padding:.32em .4em;text-align:left;vertical-align:top}
-table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
-table.w tr.hl td{background:var(--g-bg)}
-.scroll-x{overflow-x:auto}
-
-/* run */
-#bars{width:100%;height:auto;display:block;margin:.3em 0}
-.tx{font-family:'DM Sans',sans-serif;font-size:12px;fill:var(--body)}
-.tx.s{font-size:10.5px;fill:var(--muted)}
-.tx.b{font-weight:700;fill:var(--ink)}
-.tx.g{fill:var(--accent-dark);font-weight:700}
-.tx.end{text-anchor:end}
-.bb{fill:#e4e6e3}
-.ba{fill:var(--accent)}
-.ba.p{fill:var(--orange)}
-.grow-x{transform-box:fill-box;transform-origin:left center;animation:growx .9s cubic-bezier(.2,.7,.2,1) both;animation-delay:var(--d,.1s)}
-@keyframes growx{from{transform:scaleX(0)}to{transform:scaleX(1)}}
-.flask{display:flex;align-items:center;gap:.7em;margin:.3em 0}
-.flask svg{width:46px;height:52px;flex:0 0 auto}
-.result{font-size:.95em}
-.result .big{font-size:1.25em;font-weight:800;color:var(--accent)}
-.score{font-size:.82em;color:var(--muted);text-align:center;margin-top:4px}
-.madeby{border-top:1px solid var(--rule);padding-top:.6em;margin-top:.8em;font-size:.8em;color:var(--muted)}
-@media (prefers-reduced-motion: reduce){ .grow-x{animation:none} }
+.tally-cap{font-size:.76em;color:var(--muted);text-align:center;margin:0 0 .2em}
+.rx-mini{font-weight:700;color:var(--ink);background:#f6f7f5;border-radius:6px;padding:.15em .45em;white-space:nowrap}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div id="app">
   <nav>
     <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
     <div class="nav-right">
@@ -155,82 +248,160 @@ table.w tr.hl td{background:var(--g-bg)}
       <a class="pillbtn" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
     </div>
   </nav>
+  <div id="bar"><div id="bar-lbl"></div><button type="button" class="pillbtn" id="stp-btn" aria-haspopup="dialog" title="Bench card: the method for each station">Card</button><button type="button" class="pillbtn" id="hints-btn" aria-haspopup="dialog">Hints</button></div>
+  <div id="track"><div id="fill"></div></div>
 
-  <div class="page-head">
-    <div class="eyebrow">Interactive lab · Stoichiometry</div>
-    <h1>Reaction Bench: <span class="ac">balance, load, react.</span></h1>
-    <p class="small">Choose a reaction and work through the three steps. Masses are random each round, so you can practise as often as you like. Relative atomic masses: H 1, C 12, O 16, Na 23, S 32, Cl 35.5, Ca 40, Ba 137.</p>
+  <main id="stage">
+    <section class="scr" id="s0" data-step="0" data-title="Start">
+      <div class="eyebrow" style="margin:0">Choose a scenario <span class="small" style="text-transform:none;letter-spacing:0;font-weight:500">· rounds completed: <span id="rounds">0</span></span></div>
+      <div class="chips" id="scen-chips"></div>
+      <div id="story"></div>
+    </section>
+
+    <section class="scr" data-step="1" data-pane="a" data-title="The prescription"><div id="q1a"></div></section>
+    <section class="scr" data-step="1" data-pane="b" data-title="How many?">
+      <div id="q1b"></div>
+      <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button></div>
+      <div class="msg" id="m1">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="2" data-pane="a" data-title="Two QC reactions"><div id="q2a"></div></section>
+    <section class="scr" data-step="2" data-pane="b" data-title="Which is redox?">
+      <div id="q2b"></div>
+      <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button></div>
+      <div class="msg" id="m2">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="3" data-pane="a" data-title="Balance it"><div id="q3a"></div></section>
+    <section class="scr" data-step="3" data-pane="b" data-title="Read the equation">
+      <div id="q3b"></div>
+      <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button></div>
+      <div class="msg" id="m3">Balance the equation and answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="4" data-pane="a" data-title="One tablet"><div id="q4a"></div></section>
+    <section class="scr" data-step="4" data-pane="b" data-title="The label claim">
+      <div id="q4b"></div>
+      <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button></div>
+      <div class="msg" id="m4">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="5" data-pane="a" data-title="The recipe"><div id="q5a"></div></section>
+    <section class="scr" data-step="5" data-pane="b" data-title="Which runs out?">
+      <div id="q5b"></div>
+      <div class="btns"><button class="btn solid" id="chk5" type="button">Check</button></div>
+      <div class="msg" id="m5">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="6" data-pane="a" data-title="Test a sachet"><div id="q6a"></div></section>
+    <section class="scr" data-step="6" data-pane="b" data-title="Release or not?">
+      <div id="q6b"></div>
+      <div class="btns"><button class="btn solid" id="chk6" type="button">Check</button></div>
+      <div class="msg" id="m6">Answer every part, then check.</div>
+      <div class="btns" id="endrow" hidden><button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New values</button><button class="btn ghost" id="btn-next" type="button">Next scenario →</button></div>
+    </section>
+  </main>
+
+  <div id="foot">
+    <button class="btn" id="back" type="button">← Back</button>
+    <div id="gate" aria-live="polite"></div>
+    <button class="btn solid" id="next" type="button">Continue →</button>
   </div>
+</div>
 
-  <section class="card" id="c0">
-    <div class="eyebrow">Choose a reaction</div>
-    <div class="chips" id="rx-chips"></div>
-    <p class="ctx" id="rx-ctx"></p>
-  </section>
-
-  <section class="card" id="c1">
-    <h2><span class="num">1</span>Balance the equation</h2>
-    <div class="bal-eq" id="bal-eq"></div>
-    <div class="tally" id="tally"></div>
-    <div class="msg" id="bal-msg">Use − and + until every atom matches.</div>
-  </section>
-
-  <section class="card locked" id="c2">
-    <h2><span class="num">2</span>Load the flask and predict</h2>
-    <p class="lock-note">Balance the equation first.</p>
-    <div id="sliders"></div>
-    <div class="q">Which reactant is the limiting reagent?</div>
-    <div class="chips" id="lim-chips"></div>
-    <div class="q" id="ty-q">Theoretical yield of the product:</div>
-    <div class="inrow"><input id="ty" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 2.61"><span class="u">g</span></div>
-    <div class="btns">
-      <button class="btn solid" id="btn-check" type="button">Check my prediction</button>
-      <button class="btn ghost" id="btn-work" type="button">Show the working</button>
+<div id="stp" role="dialog" aria-modal="true" aria-labelledby="stp-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="stp-title">Bench card: the method</div><button type="button" class="btn ghost" id="stp-close">Close</button></div>
+    <div class="stp-doc">
+      <table class="stp-head">
+        <tr><th colspan="2">Reaction Bench · Hospital pharmacy</th></tr>
+        <tr><td>Units</td><td>mg ÷ (g/mol) = mmol · 1 mmol of HCl = 1 mEq</td></tr>
+        <tr><td>Relative atomic masses</td><td>H 1, C 12, N 14, O 16, Na 23, Mg 24, Al 27, S 32, Cl 35.5, K 39, Ca 40, Fe 56, Cu 64, Zn 65, Ag 108, Ba 137</td></tr>
+        <tr><td>Based on</td><td>Chang, <i>Chemistry</i> (10th ed.), Chapters 3 and 4</td></tr>
+      </table>
+      <section class="stp-sec" id="stp-1"><h3>1 · Dispensary: doses in mmol</h3>
+        <div class="stp-f">n (mmol) = mass (mg) ÷ M (g/mol)</div>
+        <ol><li>Work out M of the salt from the formula.</li>
+          <li>mmol in one tablet (or in 5 mL) = mg ÷ M. One KCl gives one K⁺; one NaHCO₃ gives one HCO₃⁻; one CaCO₃ gives one Ca²⁺.</li>
+          <li>Tablets a day = prescribed mmol a day ÷ mmol per tablet. Give whole tablets.</li>
+          <li>Liquid: mL a day = prescribed mmol ÷ mmol per mL.</li></ol></section>
+      <section class="stp-sec" id="stp-2"><h3>2 · QC lab: reaction types</h3>
+        <table class="stp-t"><tr><th>Type</th><th>Pattern</th></tr>
+          <tr><td>Combination</td><td>A + B → AB</td></tr><tr><td>Decomposition</td><td>AB → A + B</td></tr>
+          <tr><td>Single displacement</td><td>A + BC → AC + B</td></tr><tr><td>Double displacement</td><td>AB + CD → AD + CB</td></tr>
+          <tr><td>Neutralisation</td><td>acid + base → salt + water</td></tr><tr><td>Combustion</td><td>fuel + O₂ → CO₂ + H₂O</td></tr></table>
+        <p><b>Redox:</b> electrons move. Look for an element on either side, or O₂ reacting. Ions that only swap partners (double displacement, neutralisation) are not redox.</p></section>
+      <section class="stp-sec" id="stp-3"><h3>3 · Drug information: balance the equation</h3>
+        <ol><li>Correct formulas first. Never change a subscript.</li>
+          <li>Balance the metal, then Cl, then H, and O last.</li>
+          <li>Use the smallest whole numbers, then recount every atom.</li>
+          <li>The coefficients are <b>mole ratios</b>, not mass ratios.</li></ol></section>
+      <section class="stp-sec" id="stp-4"><h3>4 · Drug information: acid-neutralising capacity</h3>
+        <div class="stp-f">mmol HCl = mmol antacid × (HCl coefficient ÷ antacid coefficient)</div>
+        <ol><li>mmol antacid in one tablet = mg ÷ M.</li>
+          <li>Use the mole ratio from your balanced equation.</li>
+          <li>For HCl, 1 mmol = 1 mEq.</li>
+          <li>Theory is the <b>maximum</b>. A measured value can be lower, never higher.</li></ol></section>
+      <section class="stp-sec" id="stp-5"><h3>5 · Manufacturing unit: the limiting reagent</h3>
+        <div class="stp-f">3NaHCO₃ + C₆H₈O₇ → Na₃C₆H₅O₇ + 3H₂O + 3CO₂</div>
+        <table class="stp-t"><tr><th>Substance</th><th>M (g/mol)</th></tr><tr><td>Sodium bicarbonate, NaHCO₃</td><td>84</td></tr><tr><td>Citric acid (anhydrous), C₆H₈O₇</td><td>192</td></tr><tr><td>Carbon dioxide, CO₂</td><td>44</td></tr></table>
+        <ol><li>mmol of each reactant = mg ÷ M.</li>
+          <li>Divide each by its coefficient (3 and 1). The smaller result is the <b>limiting</b> reagent.</li>
+          <li>CO₂ (mmol) = 3 × that smaller result. Mass (g) = mmol × 44 ÷ 1000.</li>
+          <li>Excess left = mmol present − mmol used. Change to mg with × M.</li>
+          <li>The formula keeps citric acid in <b>slight excess</b>.</li></ol></section>
+      <section class="stp-sec" id="stp-6"><h3>6 · QC release: percentage yield</h3>
+        <div class="stp-f">% yield = actual ÷ theoretical × 100</div>
+        <ol><li>CO₂ released = balance reading before − reading after.</li>
+          <li>Theoretical CO₂ comes from station 5.</li>
+          <li>In-house limit (simulated for training): release only if CO₂ is <b>at least 90%</b> of theoretical.</li>
+          <li>Over 100% means a slip. Recheck the division.</li></ol></section>
+      <div class="stp-stamp">Training document</div>
     </div>
-    <div class="msg" id="pred-msg" hidden></div>
-    <div class="work scroll-x" id="work"></div>
-  </section>
-
-  <section class="card locked" id="c3">
-    <h2><span class="num">3</span>Run the reaction and weigh</h2>
-    <p class="lock-note">Check your prediction (or show the working) first.</p>
-    <div class="btns" style="margin-top:0"><button class="btn solid" id="btn-run" type="button">Run the reaction</button></div>
-    <div id="run-out" hidden>
-      <svg id="bars" viewBox="0 0 400 200" role="img" aria-label="Moles of each substance before and after the reaction"></svg>
-      <div class="flask">
-        <svg viewBox="0 0 46 52" aria-hidden="true"><path d="M17 3 H29 M19 3 V18 L5 46 Q4 49 8 49 H38 Q42 49 41 46 L27 18 V3" fill="none" stroke="#1c2620" stroke-width="2" stroke-linejoin="round"/><path d="M11 36 H35 L39 46 Q40 48 37 48 H9 Q6 48 7 46 Z" fill="#e9f4ee" stroke="#2d6a4f" stroke-width="1.2"/></svg>
-        <div class="result" id="actual"></div>
-      </div>
-      <div class="q">Percentage yield:</div>
-      <div class="inrow"><input id="py" type="number" inputmode="decimal" min="0" step="any" placeholder="e.g. 80.5"><span class="u">%</span><button class="btn solid" id="btn-py" type="button">Check</button></div>
-      <div class="msg" id="py-msg" hidden></div>
-      <div class="btns">
-        <button class="btn" id="btn-again" type="button">New masses</button>
-        <button class="btn ghost" id="btn-nextrx" type="button">Next reaction →</button>
-      </div>
+  </div>
+</div>
+<div id="brief" role="dialog" aria-modal="true" aria-labelledby="brief-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="brief-title">Before you start: today’s stations</div></div>
+    <div id="brief-body"></div>
+    <p class="small">The line at the bottom of the screen and the glowing box show your next move. <b>Card</b>, beside Hints, holds the method: it opens at the station you are on. <b>Hints</b> explains the ideas.</p>
+    <div class="btns"><button type="button" class="btn solid" id="brief-go">Start the lab</button><button type="button" class="btn ghost" id="brief-stp">Read the card</button></div>
+  </div>
+</div>
+<div id="hints" role="dialog" aria-modal="true" aria-labelledby="hints-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="hints-title">Hints: four ideas</div><button type="button" class="btn ghost" id="hints-close">Close</button></div>
+    <div class="ideas">
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="26" font-size="11" text-anchor="middle" fill="#1c2620" font-weight="800">mg ÷ M = mmol</text></svg>Every station passes through <b>moles</b>. Divide the mass by the molar mass first.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="18" font-size="10" text-anchor="middle" fill="#2d6a4f" font-weight="800">1 : 3 mol ✓</text><text x="60" y="36" font-size="10" text-anchor="middle" fill="#c0392b" font-weight="800">1 : 3 g ✕</text></svg>Coefficients are <b>mole ratios</b>, not gram ratios.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="18" font-size="9.5" text-anchor="middle" fill="#1c2620" font-weight="700">mol ÷ coefficient</text><text x="60" y="36" font-size="9.5" text-anchor="middle" fill="#2d6a4f" font-weight="800">smallest = limiting</text></svg>The smaller mass is <b>not</b> always limiting. Compare moles ÷ coefficient.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="26" font-size="10" text-anchor="middle" fill="#1c2620" font-weight="800">actual ÷ theory × 100</text></svg>Percentage yield is <b>actual ÷ theoretical</b>. Over 100% is a warning sign.</div>
     </div>
-  </section>
-
-  <div class="score" id="score">Rounds completed: 0</div>
-  <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Actual yields are simulated.</div>
+    <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Prescriptions, products, label claims, recipes, readings and limits are simulated for training. Always follow the product information and your hospital’s procedures.</div>
+  </div>
 </div>
 
 <script>
 (function(){
-  const A={H:1,C:12,N:14,O:16,Na:23,Mg:24,Al:27,S:32,Cl:35.5,K:39,Ca:40,Ba:137};
-  const NS='http://www.w3.org/2000/svg';
-  const track=(ev,data)=>{ if(window.umami) umami.track(ev,data); };
-  const tellParent=(event,extra)=>{
-    if(window.parent===window) return;
-    try{ window.parent.postMessage(Object.assign({type:'stoich-lab',event:event},extra||{}), location.origin==='null'?'*':location.origin); }catch(_){}
-  };
+  'use strict';
+  const $ = s=>document.querySelector(s);
+  const track=(e,d)=>{ try{ if(window.umami) umami.track(e,d); }catch(_){} };
+  const shuffle=a=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+  const pick=a=>a[Math.floor(Math.random()*a.length)];
+  const rd=(x,d)=>Math.round(x*Math.pow(10,d))/Math.pow(10,d);
+  const sig=(x,d)=>(+x.toPrecision(d||3)).toString();
+  const fmt=(x,d)=>(+x.toFixed(d==null?2:d)).toString();
+  const sub=f=>f.replace(/\d/g,d=>'₀₁₂₃₄₅₆₇₈₉'[d]);
 
+  /* one atomic-mass table, the same rounded values as the periodic table (Cl = 35.5) */
+  const A={H:1,C:12,N:14,O:16,Na:23,Mg:24,Al:27,S:32,Cl:35.5,K:39,Ca:40,Fe:56,Cu:64,Zn:65,Ag:108,Ba:137};
   function parseF(f){
     let i=0;
     function group(){
       const d={};
       while(i<f.length){
-        if(f[i]==='('){ i++; const sub=group(); const m=/^\d*/.exec(f.slice(i))[0]; i+=m.length; const k=+(m||1); for(const e in sub) d[e]=(d[e]||0)+sub[e]*k; }
+        if(f[i]==='('){ i++; const g=group(); const m=/^\d*/.exec(f.slice(i))[0]; i+=m.length; const k=+(m||1); for(const e in g) d[e]=(d[e]||0)+g[e]*k; }
         else if(f[i]===')'){ i++; return d; }
         else { const m=/^([A-Z][a-z]?)(\d*)/.exec(f.slice(i)); d[m[1]]=(d[m[1]]||0)+(+(m[2]||1)); i+=m[0].length; }
       }
@@ -239,240 +410,681 @@ table.w tr.hl td{background:var(--g-bg)}
     return group();
   }
   const Mr=f=>{ const p=parseF(f); let s=0; for(const e in p) s+=A[e]*p[e]; return Math.round(s*10)/10; };
-  const sub=f=>f.replace(/\d/g,d=>'₀₁₂₃₄₅₆₇₈₉'[d]);
   const gcd=(a,b)=>b?gcd(b,a%b):a;
 
-  const RX=[
-    {id:'aspirin', name:'Aspirin synthesis',
-     ctx:'Salicylic acid is acetylated with acetic anhydride to make aspirin, the classic first synthesis in pharmaceutical chemistry. Product of interest: <b>aspirin</b>.',
-     l:[{f:'C7H6O3',n:'salicylic acid',min:1,max:5},{f:'C4H6O3',n:'acetic anhydride',min:1,max:8}],
-     r:[{f:'C9H8O4',n:'aspirin'},{f:'C2H4O2',n:'acetic acid'}], prod:0, yr:[0.65,0.90],
-     why:'Some aspirin stays dissolved during recrystallisation, and some is lost on the filter paper.'},
-    {id:'antacid', name:'Antacid vs stomach acid',
-     ctx:'A calcium carbonate antacid neutralises hydrochloric acid and releases carbon dioxide. The CO₂ is measured from the mass the flask loses. Product of interest: <b>carbon dioxide</b>.',
-     l:[{f:'CaCO3',n:'calcium carbonate',min:0.2,max:2},{f:'HCl',n:'hydrogen chloride (in the acid)',min:0.1,max:1.5}],
-     r:[{f:'CaCl2',n:'calcium chloride'},{f:'H2O',n:'water'},{f:'CO2',n:'carbon dioxide'}], prod:2, yr:[0.85,0.98],
-     why:'Some CO₂ stays dissolved in the solution instead of escaping, so the mass loss reads a little low.'},
-    {id:'sulfate', name:'Sulfate precipitation',
-     ctx:'Barium chloride precipitates sulfate as insoluble barium sulfate, the chemistry behind the sulfate limit test. The solid is filtered, dried and weighed. Product of interest: <b>barium sulfate</b>.',
-     l:[{f:'BaCl2',n:'barium chloride',min:0.5,max:5},{f:'Na2SO4',n:'sodium sulfate',min:0.3,max:4}],
-     r:[{f:'BaSO4',n:'barium sulfate'},{f:'NaCl',n:'sodium chloride'}], prod:0, yr:[0.90,0.99],
-     why:'Very fine BaSO₄ particles can pass through the filter paper, and a little sticks to the glassware.'},
-    {id:'propane', name:'Burning propane',
-     ctx:'Propane, a bottled fuel, burns in oxygen. The carbon dioxide formed is absorbed and weighed. Product of interest: <b>carbon dioxide</b>.',
-     l:[{f:'C3H8',n:'propane',min:0.5,max:5},{f:'O2',n:'oxygen',min:1,max:20}],
-     r:[{f:'CO2',n:'carbon dioxide'},{f:'H2O',n:'water'}], prod:0, yr:[0.80,0.97],
-     why:'Some carbon ends up as carbon monoxide or soot instead of CO₂, especially if oxygen runs low.'}
+  /* ---------- tap-to-define terms ---------- */
+  const GLOSS={
+    mr:'Modified-release: the tablet lets the drug out slowly over several hours.',
+    meq:'Milliequivalent (mEq): the amount of acid a dose can neutralise. For hydrochloric acid, 1 mEq = 1 mmol.',
+    limit:'Limit test: a pharmacopoeial test that checks an impurity stays below a set level, often by comparing the cloudiness with a standard.',
+    redox:'Redox: a reaction in which electrons move from one substance to another. Oxidation and reduction happen together.',
+    eff:'Effervescent: fizzes in water. An acid and a carbonate react and give off carbon dioxide.',
+    inhouse:'In-house limit: a limit the hospital sets for its own product. The 90% used here is simulated for training.',
+    quar:'Quarantine: the batch is labelled, held apart and not used until QC decides what happens to it.',
+    anh:'Anhydrous: with no water of crystallisation. Anhydrous citric acid is C₆H₈O₇.'
+  };
+  document.addEventListener('click',e=>{
+    const t=e.target.closest('.term'); if(!t) return;
+    const nx=t.nextElementSibling; if(nx && nx.classList.contains('def')){ nx.remove(); fitPage(); return; }
+    const d=document.createElement('span'); d.className='def'; d.textContent=GLOSS[t.dataset.t]||''; t.after(d); track('lab-term',{t:t.dataset.t}); fitPage();
+  });
+  const term=(k,txt)=>'<button type="button" class="term" data-t="'+k+'">'+txt+'</button>';
+
+  /* ---------- misconceptions: every wrong answer names one ---------- */
+  const MIX={
+    D1:'mmol = mg ÷ M.', D2:'Doses a day = mmol a day ÷ mmol per dose.', D3:'Doses count ions, not grams.',
+    T1:'Count the reactants and products.', T2:'Acid + base → salt + water.', T3:'Redox: electrons move.',
+    B1:'Every atom must match.', B2:'Use the smallest whole numbers.', B3:'Never change a subscript.', B4:'Coefficients are mole ratios.',
+    S1:'mmol = mg ÷ M.', S2:'Use the mole ratio.', S3:'Theory is the maximum.', S4:'Not all of it reacts in time.',
+    L1:'mmol = mg ÷ M.', L2:'Compare mmol ÷ coefficient.', L3:'Work from the limiting reagent.', L4:'Excess = present − used.', L5:'The acid should be in slight excess.',
+    Y1:'CO₂ released = before − after.', Y2:'% yield = actual ÷ theoretical × 100.', Y3:'Compare with the 90% limit.', Y4:'Mass is conserved.', Y5:'Damp sachets react in storage.'
+  };
+  function mixLine(m,text,step){ track('lab-mix-'+m,{step:step, scenario:R.S.id}); return '<p><b>'+MIX[m]+'</b> '+text+'</p>'; }
+
+  /* ---------- scenarios ---------- */
+  const SCEN=[
+   {id:'routine', chip:'1 · Ward day'},
+   {id:'trainee', chip:'2 · Aina’s bench'},
+   {id:'monsoon', chip:'3 · Monsoon week'},
+   {id:'shortage', chip:'4 · Stock shortage'}
   ];
-  RX.forEach(rx=>{ rx.l.forEach(s=>s.M=Mr(s.f)); rx.r.forEach(s=>s.M=Mr(s.f)); });
+  const STEPS=6;
+  const STEP_NAMES=['Reaction Bench','Dispensary','QC lab','Balance','Label claim','Sachet recipe','Sachet release'];
+  /* where each station is taught in the explainer (for the Stuck? line) */
+  const EXP_PAGE=['','Pharmacy: mmol on the label','Six patterns','A method that always works','Worked example: an antacid','Finding the limiting reagent','Theoretical and actual yield'];
 
-  const $=id=>document.getElementById(id);
-  let ri=0, coef=[], masses=[], st={}, rounds=0;
-  const solved={};
+  /* ---------- data ---------- */
+  const PROD1={
+    kcl:{name:'Potassium chloride 600 mg', form:'modified-release tablets', f:'KCl', salt:'potassium chloride', mg:600, ion:'K⁺', ionName:'potassium', unit:'tablet', units:'tablets', per:8, mult:[2,3,4,6], who:'low potassium'},
+    bic:{name:'Sodium bicarbonate 500 mg', form:'capsules', f:'NaHCO3', salt:'sodium bicarbonate', mg:500, ion:'HCO₃⁻', ionName:'bicarbonate', unit:'capsule', units:'capsules', per:6, mult:[2,3,4,6], who:'acid build-up from kidney disease'},
+    ca:{name:'Calcium carbonate 1.25 g', form:'chewable tablets', f:'CaCO3', salt:'calcium carbonate', mg:1250, ion:'Ca²⁺', ionName:'calcium', unit:'tablet', units:'tablets', per:12.5, mult:[1,2,3], who:'low calcium'},
+    kliq:{name:'Potassium chloride oral solution 375 mg/5 mL', form:'', f:'KCl', salt:'potassium chloride', mg:375, vol:5, ion:'K⁺', ionName:'potassium', unit:'5 mL', units:'mL', per:5, liquid:true, doses:[15,20,25,30,40], who:'low potassium'}
+  };
+  const TYPES=['Combination','Decomposition','Single displacement','Double displacement','Neutralisation','Combustion'];
+  const RXP=[
+    {id:'cl',  s:'Chloride test',  use:'Chloride '+term('limit','limit test')+': a white cloudiness shows chloride.', eq:'AgNO₃ + NaCl → AgCl + NaNO₃', t:3, rx:false},
+    {id:'so4', s:'Sulfate test',   use:'Sulfate limit test: a white cloudiness shows sulfate.', eq:'BaCl₂ + Na₂SO₄ → BaSO₄ + 2NaCl', t:3, rx:false},
+    {id:'tit', s:'Acid assay',     use:'Assay of a hydrochloric acid solution by titration.', eq:'NaOH + HCl → NaCl + H₂O', t:4, rx:false},
+    {id:'anc', s:'Antacid test',   use:'Acid-neutralising test on an antacid.', eq:'Mg(OH)₂ + 2HCl → MgCl₂ + 2H₂O', t:4, rx:false},
+    {id:'bic', s:'Bicarbonate store', use:'Why sodium bicarbonate is stored away from heat.', eq:'2NaHCO₃ → Na₂CO₃ + H₂O + CO₂', t:1, rx:false},
+    {id:'h2o2',s:'Peroxide store', use:'Why hydrogen peroxide is stored cool and away from light.', eq:'2H₂O₂ → 2H₂O + O₂', t:1, rx:true},
+    {id:'fire',s:'Hand rub',       use:'Why alcohol hand rub is kept away from flames.', eq:'C₂H₅OH + 3O₂ → 2CO₂ + 3H₂O', t:5, rx:true},
+    {id:'cu',  s:'Spatula',        use:'A steel spatula left in copper sulfate solution turns pink-brown.', eq:'Fe + CuSO₄ → FeSO₄ + Cu', t:2, rx:true},
+    {id:'zn',  s:'Acid waste',     use:'A zinc pellet dropped into dilute hydrochloric acid gives off bubbles.', eq:'Zn + 2HCl → ZnCl₂ + H₂', t:2, rx:true},
+    {id:'rust',s:'Trolley',        use:'A steel trolley rusts in a damp store.', eq:'4Fe + 3O₂ → 2Fe₂O₃', t:0, rx:true}
+  ];
+  const ANT=[
+    {id:'al', f:'Al(OH)3', name:'aluminium hydroxide', l:['Al(OH)3','HCl'], r:['AlCl3','H2O'], nm:['aluminium hydroxide','hydrochloric acid','aluminium chloride','water'], c:[1,3,1,3], mg:[300,400,500,600], aina:'Al(OH)₃ + H₃Cl₃ → AlCl₃ + H₆O₃', bad:'H₃Cl₃'},
+    {id:'mg', f:'Mg(OH)2', name:'magnesium hydroxide', l:['Mg(OH)2','HCl'], r:['MgCl2','H2O'], nm:['magnesium hydroxide','hydrochloric acid','magnesium chloride','water'], c:[1,2,1,2], mg:[250,300,400,500], aina:'Mg(OH)₂ + H₂Cl₂ → MgCl₂ + H₄O₂', bad:'H₂Cl₂'},
+    {id:'ca', f:'CaCO3', name:'calcium carbonate', l:['CaCO3','HCl'], r:['CaCl2','H2O','CO2'], nm:['calcium carbonate','hydrochloric acid','calcium chloride','water','carbon dioxide'], c:[1,2,1,1,1], mg:[500,750,1000,1250], aina:'CaCO₃ + H₂Cl₂ → CaCl₂ + H₂O + CO₂', bad:'H₂Cl₂'}
+  ];
+  const MB=Mr('NaHCO3'), MA=Mr('C6H8O7'), MC=Mr('CO2');   /* 84, 192, 44 */
 
-  /* ---------- reaction picker ---------- */
-  RX.forEach((rx,i)=>{
-    const c=document.createElement('button'); c.type='button'; c.className='chip'; c.innerHTML=rx.name;
-    c.addEventListener('click',()=>pick(i));
-    $('rx-chips').appendChild(c);
-  });
-  function pick(i){
-    ri=i; const rx=RX[i];
-    [...$('rx-chips').children].forEach((c,k)=>{ c.classList.toggle('on',k===i); c.innerHTML=RX[k].name+(solved[RX[k].id]?'<span class="tick">✓</span>':''); });
-    $('rx-ctx').innerHTML=rx.ctx;
-    coef=rx.l.concat(rx.r).map(()=>1);
-    st={balanced:false};
-    $('c1').classList.remove('done');
-    renderBal();
-    track('lab-pick',{reaction:rx.id});
-  }
+  /* ---------- state ---------- */
+  let sc=0, R=null, solved=Array(STEPS).fill(false), rounds=0;
+  const done=new Set();
+  const DEFAULT={}; for(let n=1;n<=STEPS;n++) DEFAULT[n]=$('#m'+n).innerHTML;
 
-  /* ---------- step 1: balance ---------- */
-  function renderBal(){
-    const rx=RX[ri], sp=rx.l.concat(rx.r), box=$('bal-eq'); box.innerHTML='';
-    sp.forEach((s,j)=>{
-      if(j>0){ const o=document.createElement('span'); o.className='op'; o.textContent=j===rx.l.length?'→':'+'; box.appendChild(o); }
-      const d=document.createElement('div'); d.className='sp';
-      d.innerHTML='<div class="f"><span class="c">'+(coef[j]>1?coef[j]:'')+'</span>'+sub(s.f)+'</div><div class="stp"><button type="button" aria-label="decrease '+s.n+'">−</button><span>'+coef[j]+'</span><button type="button" aria-label="increase '+s.n+'">+</button></div><div class="nm">'+s.n+'</div>';
-      const [dn,up]=d.querySelectorAll('button');
-      dn.addEventListener('click',()=>{ if(coef[j]>1){ coef[j]--; onCoef(); } });
-      up.addEventListener('click',()=>{ if(coef[j]<12){ coef[j]++; onCoef(); } });
-      box.appendChild(d);
-    });
-    const els=[]; sp.forEach(s=>Object.keys(parseF(s.f)).forEach(e=>{ if(!els.includes(e)) els.push(e); }));
-    const cnt=(side,off)=>{ const t={}; side.forEach((s,j)=>{ const p=parseF(s.f); for(const e in p) t[e]=(t[e]||0)+p[e]*coef[off+j]; }); return t; };
-    const L=cnt(rx.l,0), R=cnt(rx.r,rx.l.length);
-    let ok=true; $('tally').innerHTML='';
-    els.forEach(e=>{ const g=L[e]===R[e]; if(!g) ok=false; const t=document.createElement('div'); t.className='at '+(g?'ok':'no'); t.innerHTML='<b>'+e+'</b>'+L[e]+' | '+R[e]; $('tally').appendChild(t); });
-    const g=coef.reduce(gcd), m=$('bal-msg');
-    const wasBalanced=st.balanced;
-    st.balanced=ok&&g===1;
-    if(st.balanced){ m.className='msg good'; m.innerHTML=coef.every(c=>c===1)?'<b>Already balanced as written.</b> Every coefficient is 1: check the atom counts to confirm, then move to step 2.':'<b>Balanced.</b> The coefficients are the mole ratios you will use in step 2.'; }
-    else if(ok){ m.className='msg near'; m.innerHTML='Balanced, but not in the <b>smallest whole numbers</b>. Divide every coefficient by '+g+'.'; }
-    else { m.className='msg'; m.textContent='Left | right atom counts are shown for each element. Fix the red ones.'; }
-    $('c1').classList.toggle('done',st.balanced);
-    if(st.balanced && !wasBalanced){ track('lab-balanced',{reaction:rx.id}); newRound(); }
-    if(!st.balanced){ lock(2); lock(3); }
-  }
-  function onCoef(){ renderBal(); }
-  function lock(n){ $('c'+n).classList.add('locked'); $('c'+n).classList.remove('done'); if(n===3){ $('run-out').hidden=true; } }
-  function unlock(n){ $('c'+n).classList.remove('locked'); }
-
-  /* ---------- step 2: load and predict ---------- */
-  const rnd=(a,b)=>Math.round((a+Math.random()*(b-a))*100)/100;
-  function analyse(){
-    const rx=RX[ri], nC=rx.l.length;
-    const rows=rx.l.map((s,j)=>{ const n=masses[j]/s.M; return {s:s,m:masses[j],n:n,per:n/coef[j]}; });
-    const minPer=Math.min(...rows.map(r=>r.per));
-    const tie=rows.filter(r=>Math.abs(r.per-minPer)/minPer<0.001).length>1;
-    const limIdx=rows.findIndex(r=>r.per===minPer);
-    const p=rx.r[rx.prod], pc=coef[nC+rx.prod];
-    const nP=minPer*pc, mP=nP*p.M;
-    return {rows,limIdx,tie,minPer,p,pc,nP,mP};
-  }
   function newRound(){
-    const rx=RX[ri];
-    let tries=0;
-    do{
-      masses=rx.l.map(s=>rnd(s.min,s.max));
-      const per=rx.l.map((s,j)=>masses[j]/s.M/coef[j]);
-      if(Math.abs(per[0]-per[1])/Math.min(per[0],per[1])>0.06) break;
-    } while(++tries<30);
-    renderSliders();
-    resetPrediction();
-    unlock(2); lock(3);
+    const S=SCEN[sc], r={S:S};
+    r.tr=S.id==='trainee'; r.wet=S.id==='monsoon'; r.sh=S.id==='shortage';
+    /* 1 · dispensary */
+    r.p1=r.sh?'kliq':pick(['kcl','bic','ca']);
+    { const P=PROD1[r.p1]; if(P.liquid) r.dose=pick(P.doses); else { r.nTab=pick(P.mult); r.dose=rd(r.nTab*P.per,1); } }
+    /* 2 · QC lab: one redox reaction and two that are not, all of different types */
+    { const red=RXP.filter(x=>x.rx), non=RXP.filter(x=>!x.rx);
+      const rr=(r.wet && Math.random()<.6)?RXP.find(x=>x.id==='rust'):pick(red);
+      const types=shuffle([...new Set(non.filter(x=>x.t!==rr.t).map(x=>x.t))]).slice(0,2);
+      r.rx2=shuffle([rr].concat(types.map(t=>pick(non.filter(x=>x.t===t))))); }
+    /* 3, 4 · antacid */
+    r.ant=pick(ANT); r.coef=r.ant.c.map(()=>1); r.mgT=pick(r.ant.mg);
+    r.imp=Math.random()<(r.sh?0.6:0.35);
+    { const th=r.mgT/Mr(r.ant.f)*r.ant.c[1]/r.ant.c[0]; r.claim=rd(th*(r.imp?rnd(1.15,1.35):rnd(0.82,0.94)),1); }
+    /* 5 · sachet recipe: acid in slight excess (as the formula says) or short (a weighing slip) */
+    r.ok5=Math.random()<0.65;
+    { let q, g=0; do{ r.m1=rd(rnd(1.60,2.40),2); r.m2=rd(r.m1/MB/3*MA*(r.ok5?rnd(1.07,1.17):rnd(0.83,0.93)),2); q=(r.m2/MA)/(r.m1/MB/3); }
+      while(g++<50 && (r.ok5?(q<1.06||q>1.18):(q<0.82||q>0.94))); }
+    /* 6 · release test on a sachet made to the formula (sodium bicarbonate limiting) */
+    r.fail6=r.wet?true:Math.random()<(r.tr?0.4:0.25);
+    r.T6=rd(r.m1*1000/MB*MC/1000,3);
+    { const f=r.fail6?rnd(0.72,0.86):rnd(0.91,0.98); r.B=rd(rnd(120,160)+r.m1+r.m2+1.2,3); r.Af=rd(r.B-r.T6*f,3); }
+    r.ans={}; for(let k=1;k<=STEPS;k++) r.ans[k]={};
+    R=r; solved=Array(STEPS).fill(false);
+    render();
   }
-  function renderSliders(){
-    const rx=RX[ri], box=$('sliders'); box.innerHTML='';
-    rx.l.forEach((s,j)=>{
-      const d=document.createElement('div'); d.className='sl';
-      d.innerHTML='<div class="sl-top"><span>'+s.n.charAt(0).toUpperCase()+s.n.slice(1)+', <b>'+sub(s.f)+'</b> (M = '+s.M+' g/mol)</span><span class="v">'+masses[j].toFixed(2)+' g</span></div>'+
-        '<input class="range" type="range" min="'+s.min+'" max="'+s.max+'" step="0.01" value="'+masses[j]+'" aria-label="mass of '+s.n+' in grams">'+
-        '<div class="fine"><button type="button">−0.01</button><button type="button">+0.01</button></div>';
-      const r=d.querySelector('input'), v=d.querySelector('.v'), [dn,up]=d.querySelectorAll('.fine button');
-      const set=x=>{ x=Math.max(s.min,Math.min(s.max,Math.round(x*100)/100)); masses[j]=x; r.value=x; v.textContent=x.toFixed(2)+' g'; resetPrediction(); };
-      r.addEventListener('input',()=>set(parseFloat(r.value)));
-      dn.addEventListener('click',()=>set(masses[j]-0.01));
-      up.addEventListener('click',()=>set(masses[j]+0.01));
+  /* expected answers, all derived from the data above */
+  const X={
+    M1:()=>Mr(PROD1[R.p1].f), n1:()=>PROD1[R.p1].mg/X.M1(),
+    u1:()=>{ const P=PROD1[R.p1]; return P.liquid? R.dose/(X.n1()/P.vol) : Math.round(R.dose/X.n1()); },
+    M3:()=>Mr(R.ant.f), ratio:()=>R.ant.c[1]/R.ant.c[0],
+    n4a:()=>R.mgT/X.M3(), n4b:()=>X.n4a()*X.ratio(),
+    nB:()=>R.m1*1000/MB, nA:()=>R.m2*1000/MA,
+    limB:()=>X.nB()/3<X.nA(), per:()=>Math.min(X.nB()/3,X.nA()),
+    co2:()=>3*X.per()*MC/1000,
+    exc:()=>X.limB()?(X.nA()-X.nB()/3)*MA:(X.nB()-3*X.nA())*MB,
+    a6:()=>rd(R.B-R.Af,3), p6:()=>X.a6()/R.T6*100
+  };
+  function chipGroup(opts,sel,cb,col){
+    const g=document.createElement('div'); g.className='chips'+(col?' col':''); g.setAttribute('role','group');
+    opts.forEach((o,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(sel===i?' on':''); b.innerHTML=o; b.setAttribute('aria-pressed',sel===i?'true':'false');
+      b.addEventListener('click',()=>{ g.querySelectorAll('.chip').forEach(c=>{ c.classList.remove('on'); c.setAttribute('aria-pressed','false'); }); b.classList.add('on'); b.setAttribute('aria-pressed','true'); cb(i); }); g.appendChild(b); });
+    return g;
+  }
+  /* feedback: at most two points, so a page never overflows. Students keep trying until the step is right. */
+  function msg(n,cls,html){
+    const m=$('#m'+n); m.className='msg '+cls;
+    const tmp=document.createElement('div'); tmp.innerHTML=html; const ps=tmp.querySelectorAll(':scope > p');
+    if(ps.length>2){ for(let i=2;i<ps.length;i++) ps[i].remove(); tmp.insertAdjacentHTML('beforeend','<p>…and '+(ps.length-2)+' more. Fix these first.</p>'); }
+    /* after 3 wrong tries on a step, point to the bench card and the explainer (never to the answer) */
+    if(cls==='bad'){ R.tries=R.tries||[]; R.tries[n]=(R.tries[n]||0)+1;
+      if(R.tries[n]>=3) tmp.insertAdjacentHTML('beforeend','<p class="stuck"><b>Stuck?</b> Tap <b>Card §'+n+'</b> (top right) for the equations of this station, and <b>Hints</b> for the ideas. The explainer page <b>'+EXP_PAGE[n]+'</b> works an example. Then fix one point at a time.</p>'); }
+    m.innerHTML=tmp.innerHTML;
+    track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); fitPage();
+  }
+  function clearMsg(n){ const m=$('#m'+n); m.className='msg'; m.innerHTML=DEFAULT[n]; }
+  function unsolveFrom(k){
+    let changed=false;
+    for(let j=k;j<=STEPS;j++){ if(solved[j-1]){ solved[j-1]=false; changed=true; } if(j>k) clearMsg(j); }
+    if(changed){ $('#endrow').hidden=true; updatePager(); }
+  }
+  const numIn=(id,val)=>'<input class="num-in" id="'+id+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':val)+'">';
+  const readNum=id=>{ const e=$('#'+id); if(!e) return null; const v=(e.value||'').replace(',','.').replace(/\s/g,'').trim(); return v===''?null:parseFloat(v); };
+  /* a wrong number box turns red when Check is pressed; editing it clears the mark */
+  const markNum=(id,bad)=>{ const e=$('#'+id); if(e) e.classList.toggle('wrong',!!bad); };
+  document.addEventListener('input',e=>{ const t=e.target; if(t && t.classList && t.classList.contains('num-in')) t.classList.remove('wrong'); });
+  const close=(a,b,rel,abs)=>a!=null && !isNaN(a) && Math.abs(a-b)<=Math.max(Math.abs(b)*rel, abs||0);
+  const numRow=(lbl,id,unit,k,first,go)=>'<div class="q"'+(first?' style="margin-top:0"':'')+'>'+lbl+'</div><div class="calc-in">'+numIn(id,R.ans[k][id]).replace('<input ','<input data-go="'+(go||lbl).replace(/<[^>]+>/g,'').replace(/"/g,'')+'" ')+'<span class="unit">'+unit+'</span></div>';
+  function wire(k,ids){ ids.forEach(id=>{ const i=$('#'+id); if(i) i.addEventListener('input',()=>{ i.classList.remove('wrong'); R.ans[k][id]=i.value; unsolveFrom(k); }); }); }
+
+  function render(){
+    const sc0=$('#scen-chips'); sc0.innerHTML='';
+    SCEN.forEach((s,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(i===sc?' on':''); b.innerHTML=s.chip+(done.has(s.id)?'<span class="tick">✓</span>':'');
+      b.addEventListener('click',()=>{ if(i===sc) return; sc=i; track('lab-pick',{scenario:s.id}); newRound(); }); sc0.appendChild(b); });
+    R.beat=0; R.storyDone=false; renderStory();
+    renderQ1(); renderQ2(); renderQ3(); renderQ4(); renderQ5(); renderQ6();
+    for(let n=1;n<=STEPS;n++) clearMsg(n); $('#endrow').hidden=true; updatePager();
+  }
+  /* a chip question built from [text, right?, feedback, misconception] options */
+  function ask(box,label,opts,key,store,step,first,row){
+    const d=document.createElement('div'); d.dataset.qk=step+'-'+key;
+    d.innerHTML='<div class="q"'+(first?' style="margin-top:0"':'')+'>'+label+'</div>';
+    d.appendChild(chipGroup(opts.map(o=>o[0]), store[key], i=>{ store[key]=i; unsolveFrom(step); }, !row)); box.appendChild(d);
+  }
+  function judgeChips(defs,store,step,lines){
+    let miss=0;
+    defs.forEach(q=>{ const a=store[q.k]; if(a==null){ miss++; return; } const o=q.o[a]; if(!o[1]) lines.push(mixLine(o[3],o[2],step)); });
+    return miss;
+  }
+  function chipDefs(k,make){ R.q=R.q||{}; if(!R.q[k]) R.q[k]=make(); return R.q[k]; }
+  const nearMsg=n=>msg(n,'near','Answer every part first (the first parts are on the '+(innerWidth>=900?'left':'previous screen')+').');
+
+  /* ---------- drawings ---------- */
+  function bottleSVG(){
+    const P=PROD1[R.p1], liq=!!P.liquid;
+    const pill=liq?'':'<g transform="translate(118 74)"><ellipse cx="0" cy="0" rx="13" ry="8" fill="#fff" stroke="#5c665f" stroke-width="1.4"/><line x1="-8" y1="0" x2="8" y2="0" stroke="#b9c2bc"/></g>';
+    return '<svg viewBox="0 0 260 120" class="rig" aria-hidden="true"><rect width="260" height="120" rx="10" fill="#f4f7f5"/>'+
+      (liq?'<path d="M30 34 h40 v-10 h-8 v-8 h-24 v8 h-8 z" fill="#fff" stroke="#5c665f" stroke-width="1.4"/><rect x="26" y="34" width="48" height="76" rx="8" fill="#e8effc" stroke="#5c665f" stroke-width="1.4"/><rect x="26" y="58" width="48" height="52" rx="4" fill="#cfdcf6"/>'
+          :'<rect x="34" y="14" width="32" height="12" rx="3" fill="#9aa39d"/><rect x="26" y="26" width="48" height="84" rx="8" fill="#fff" stroke="#5c665f" stroke-width="1.4"/>')+
+      '<rect x="30" y="54" width="40" height="30" rx="3" fill="#fff" stroke="#cfe6d9"/><text x="50" y="66" text-anchor="middle" font-size="8" font-weight="800" fill="#1c2620">'+sub(P.f)+'</text><text x="50" y="78" text-anchor="middle" font-size="7.5" fill="#636b65">'+(liq?'375 mg/5 mL':P.mg+' mg')+'</text>'+pill+
+      '<g transform="translate(150 18)"><rect width="96" height="84" rx="4" fill="#fffef8" stroke="#b9b29c"/><text x="10" y="18" font-size="10" font-weight="800" fill="#1f3a8a">Rx</text>'+
+      '<text x="10" y="40" font-size="8.5" fill="#1c2620" font-weight="700">'+P.ionName+'</text><text x="10" y="56" font-size="10" fill="#1c2620" font-weight="800">'+fmt(R.dose,1)+' mmol</text><text x="10" y="70" font-size="8.5" fill="#636b65">a day, divided</text></g></svg>';
+  }
+  function tabletSVG(){
+    return '<svg viewBox="0 0 260 110" class="rig" aria-hidden="true"><rect width="260" height="110" rx="10" fill="#f4f7f5"/>'+
+      '<g transform="translate(62 56)"><circle r="32" fill="#fff" stroke="#5c665f" stroke-width="1.6"/><circle r="25" fill="none" stroke="#e4e6e3"/><text y="-2" text-anchor="middle" font-size="10" font-weight="800" fill="#1c2620">'+sub(R.ant.f)+'</text><text y="12" text-anchor="middle" font-size="9" fill="#636b65">'+R.mgT+' mg</text></g>'+
+      '<g transform="translate(130 18)"><rect width="116" height="74" rx="4" fill="#fffef8" stroke="#b9b29c"/><text x="10" y="18" font-size="8.5" font-weight="800" fill="#1f3a8a">'+(R.sh?'Substitute: leaflet':'Leaflet')+'</text>'+
+      '<text x="10" y="38" font-size="8.5" fill="#1c2620">Each tablet neutralises</text><text x="10" y="56" font-size="12" font-weight="800" fill="#c0392b">'+fmt(R.claim,1)+' mEq</text><text x="10" y="68" font-size="7.5" fill="#636b65">of acid (claimed)</text></g></svg>';
+  }
+  function sachetSVG(){
+    const boat=(x,lbl,g,col)=>'<g transform="translate('+x+' 0)"><rect x="0" y="84" width="74" height="22" rx="5" fill="#e4e6e3" stroke="#9aa39d"/><rect x="10" y="90" width="54" height="11" rx="2" fill="#1c2620"/><text x="60" y="98.5" text-anchor="end" font-family="ui-monospace,monospace" font-size="8.5" font-weight="700" fill="#8fe3b0">'+g.toFixed(2)+' g</text><path d="M12 78 h50 l-6 6 h-38 z" fill="#fff" stroke="#5c665f"/><ellipse cx="37" cy="76" rx="18" ry="5" fill="'+col+'"/><text x="37" y="66" text-anchor="middle" font-size="8.5" font-weight="700" fill="#1c2620">'+lbl+'</text></g>';
+    return '<svg viewBox="0 0 260 112" class="rig" aria-hidden="true"><rect width="260" height="112" rx="10" fill="#f4f7f5"/>'+
+      '<g transform="translate(20 14)"><path d="M0 6 q0-6 6-6 h40 q6 0 6 6 v62 q0 6-6 6 h-40 q-6 0-6-6 z" fill="#fff" stroke="#5c665f" stroke-width="1.4"/><path d="M0 14 h52" stroke="#b9c2bc" stroke-dasharray="3 2"/><text x="26" y="40" text-anchor="middle" font-size="8" font-weight="800" fill="#2d6a4f">fizz</text><text x="26" y="52" text-anchor="middle" font-size="7.5" fill="#636b65">sachet</text></g>'+
+      boat(88,'NaHCO₃',R.m1,'#fff')+boat(172,'C₆H₈O₇',R.m2,'#fdf3e6')+'</svg>';
+  }
+  function balanceSVG(){
+    const bal=(x,lbl,g,fizz)=>'<g transform="translate('+x+' 0)"><rect x="0" y="86" width="104" height="22" rx="5" fill="#e4e6e3" stroke="#9aa39d"/><rect x="12" y="92" width="80" height="11" rx="2" fill="#1c2620"/><text x="88" y="100.5" text-anchor="end" font-family="ui-monospace,monospace" font-size="8.5" font-weight="700" fill="#8fe3b0">'+g.toFixed(3)+' g</text>'+
+      '<rect x="22" y="80" width="60" height="5" rx="2" fill="#b9c2bc"/><path d="M40 30 v14 l-14 30 q-2 5 4 5 h44 q6 0 4-5 l-14-30 v-14 z" fill="#eef5fb" stroke="#5c665f" stroke-width="1.4"/><path d="M31 62 h42 l6 13 q1 3-3 3 h-48 q-4 0-3-3 z" fill="#d9ecf7"/>'+
+      (fizz?'<g fill="#fff" stroke="#8fb3c9">'+[[44,66],[54,58],[60,70],[48,52]].map(p=>'<circle cx="'+p[0]+'" cy="'+p[1]+'" r="2.4"/>').join('')+'</g>':'')+
+      '<text x="52" y="22" text-anchor="middle" font-size="9" font-weight="800" fill="#1c2620">'+lbl+'</text></g>';
+    return '<svg viewBox="0 0 260 112" class="rig" aria-hidden="true"><rect width="260" height="112" rx="10" fill="'+(R.wet?'#eef3f7':'#f4f7f5')+'"/>'+bal(18,'before: sachet added',R.B,true)+bal(138,'after: fizzing stopped',R.Af,false)+'</svg>';
+  }
+
+  /* ---------- station 1 · dispensary (mg → mmol → dose) ---------- */
+  function renderQ1(){
+    const P=PROD1[R.p1], qa=$('#q1a'), qb=$('#q1b'), liq=!!P.liquid;
+    qa.innerHTML='<div class="eyebrow">Outpatient dispensary</div><div class="given">A prescription for a patient with '+P.who+': <b>'+P.ionName+' '+fmt(R.dose,1)+' mmol a day</b>, in divided doses. '+
+      (liq?'The potassium tablets are out of stock. You have <b>'+P.name+'</b>.':'You have <b>'+P.name+' '+(P.f==='KCl'?term('mr','modified-release')+' tablets':P.form)+'</b>.')+'</div>'+
+      bottleSVG()+numRow('a. mmol of '+P.ion+' in '+(liq?'5 mL':'one '+P.unit),'p1a','mmol',1,false,'a. Work out the mmol in '+(liq?'5 mL':'one '+P.unit));
+    qb.innerHTML=numRow('b. '+(liq?'Volume to give each day':'How many '+P.units+' a day?'),'p1b',liq?'mL a day':P.units+' a day',1,true,'b. Work out the daily amount');
+    q1Def().forEach(q=>ask(qb,q.p,q.o,q.k,R.ans[1],1,false,q.row));
+    wire(1,['p1a','p1b']);
+  }
+  function q1Def(){ return chipDefs(1,()=>{ const P=PROD1[R.p1]; return [
+    {k:'c', p:'c. Why is the dose written in mmol of '+P.ionName+', not in mg of '+P.salt+'?', o:shuffle([
+      ['The body responds to the number of '+P.ion+' ions, and salts differ in mass per mmol',1],
+      ['mmol is a smaller unit, so the dose is more precise',0,'mmol is not about size: it counts particles.','D3'],
+      ['Every '+P.ionName+' salt has the same mass per mmol',0,'Different salts have different molar masses, so the same mg gives a different amount of '+P.ion+'.','D3']])}
+  ]; }); }
+  $('#chk1').addEventListener('click',()=>{
+    const P=PROD1[R.p1], liq=!!P.liquid, M=X.M1(), lines=[]; let miss=0;
+    const a=readNum('p1a'), b=readNum('p1b'); const bad={p1a:false,p1b:false};
+    const ion=P.f==='KCl'?39:P.f==='NaHCO3'?61:40;
+    if(a==null) miss++; else if(!close(a,X.n1(),.01,.02)){ bad.p1a=true;
+      if(close(a,X.n1()/1000,.02)) lines.push(mixLine('D1','That is in mol. mg ÷ g/mol gives mmol directly.',1));
+      else if(close(a,M/P.mg,.02)) lines.push(mixLine('D1','Mass ÷ molar mass, not the other way round.',1));
+      else if(close(a,P.mg*M,.02)) lines.push(mixLine('D1','Divide by M, don’t multiply.',1));
+      else if(close(a,P.mg/ion,.02)) lines.push(mixLine('D1','Use M of the whole salt, '+sub(P.f)+', not the ion alone.',1));
+      else lines.push(mixLine('D1',P.mg+' mg ÷ M of '+sub(P.f)+'. Work out M from the formula.',1)); }
+    if(b==null) miss++; else { const n=(a!=null&&!bad.p1a)?a:X.n1();
+      if(liq){ const v=R.dose/(n/P.vol); if(!close(b,v,.02,.3)){ bad.p1b=true;
+        lines.push(close(b,R.dose/n,.02)?mixLine('D2','That is the number of 5 mL doses. Multiply by 5 mL.',1):close(b,R.dose*n,.02)?mixLine('D2','Divide the daily mmol by the mmol per mL.',1):mixLine('D2','mmol per mL = your part a ÷ 5. Then '+fmt(R.dose,1)+' ÷ that.',1)); } }
+      else { const want=Math.round(R.dose/n);
+        if(b!==want){ bad.p1b=true;
+          if(close(b,R.dose/n,.03)) lines.push(mixLine('D2','Give whole '+P.units+': round your answer.',1));
+          else if(close(b,R.dose*n,.02)) lines.push(mixLine('D2','Divide the daily mmol by the mmol in one '+P.unit+'.',1));
+          else if(close(b,R.dose/P.mg,.05)||close(b,P.mg/R.dose,.05)) lines.push(mixLine('D3','Work in mmol, not mg: '+fmt(R.dose,1)+' mmol ÷ your part a.',1));
+          else lines.push(mixLine('D2',fmt(R.dose,1)+' mmol ÷ mmol per '+P.unit+'.',1)); } } }
+    Object.keys(bad).forEach(id=>markNum(id,bad[id]));
+    miss+=judgeChips(q1Def(),R.ans[1],1,lines);
+    if(lines.length) return msg(1,'bad',lines.join(''));
+    if(miss) return nearMsg(1);
+    msg(1,'good','<b>Right.</b> '+P.mg+' ÷ '+M+' = '+fmt(X.n1(),2)+' mmol of '+P.ion+' per '+(liq?'5 mL':P.unit)+' (the label says '+P.per+'). '+fmt(R.dose,1)+' mmol a day = <b>'+(liq?fmt(X.u1(),1)+' mL':X.u1()+' '+P.units)+'</b> a day, split into doses.'); solve(1);
+  });
+
+  /* ---------- station 2 · QC lab (reaction types, redox) ---------- */
+  function typeFb(j,x){
+    if(j===3 && x.t===4) return 'The ions do swap, but acid + base → salt + water has a more precise name.';
+    return ['Combination makes one product. Count the products.','Decomposition starts from one reactant. Count the reactants.','Single displacement needs a lone element on the left, such as Fe or Zn.','Double displacement needs two compounds that swap partners.','Neutralisation needs an acid and a base, giving a salt and water.','Combustion is a fuel burning in O₂ to give CO₂ and H₂O.'][j];
+  }
+  function q2Def(){ return chipDefs(2,()=>{
+    const q=R.rx2.map((x,i)=>({k:'abc'[i], row:true, p:'abc'[i]+'. Type of reaction', o:TYPES.map((t,j)=>[t, j===x.t?1:0, typeFb(j,x), (j===4||x.t===4)?'T2':'T1'])}));
+    q.push({k:'d', row:true, p:'d. Which of the three is a '+term('redox','redox')+' reaction?', o:R.rx2.map(x=>[x.s, x.rx?1:0,
+      x.id==='bic'?'In the bicarbonate reaction every atom keeps its charge (Na +1, C +4, O −2). No electrons move.':'In the '+x.s.toLowerCase()+' reaction, ions only swap partners. No electrons move.','T3'])});
+    return q; }); }
+  function renderQ2(){
+    const qa=$('#q2a'), qb=$('#q2b'), D=q2Def();
+    qa.innerHTML='<div class="eyebrow">Hospital QC lab</div><p class="small" style="margin:0">Every QC test and storage rule rests on a reaction. Name each type.</p>'; qb.innerHTML='';
+    R.rx2.forEach((x,i)=>{ const box=i<2?qa:qb, d=document.createElement('div'); d.className='rxq'; d.innerHTML='<div class="eqn"><span class="use">'+x.use+'</span>'+x.eq+'</div>'; box.appendChild(d); const q=D[i]; ask(d,q.p,q.o,q.k,R.ans[2],2,false,true); });
+    const q=D[3]; ask(qb,q.p,q.o,q.k,R.ans[2],2,false,true);
+  }
+  $('#chk2').addEventListener('click',()=>{
+    const lines=[], miss=judgeChips(q2Def(),R.ans[2],2,lines);
+    if(lines.length) return msg(2,'bad',lines.join(''));
+    if(miss) return nearMsg(2);
+    const red=R.rx2.find(x=>x.rx);
+    msg(2,'good','<b>Right.</b> '+R.rx2.map(x=>x.s+': '+TYPES[x.t].toLowerCase()).join('; ')+'. Only the '+red.s.toLowerCase()+' reaction moves electrons, so it is the redox one.'); solve(2);
+  });
+
+  /* ---------- station 3 · drug information (balance the antacid equation) ---------- */
+  function counts(){
+    const a=R.ant, sp=a.l.concat(a.r), L={}, Rt={};
+    sp.forEach((f,j)=>{ const p=parseF(f), t=j<a.l.length?L:Rt; for(const e in p) t[e]=(t[e]||0)+p[e]*R.coef[j]; });
+    const els=[]; sp.forEach(f=>Object.keys(parseF(f)).forEach(e=>{ if(!els.includes(e)) els.push(e); }));
+    return {L:L,R:Rt,els:els};
+  }
+  const eqStr=c=>{ const a=R.ant; return a.l.map((f,j)=>(c[j]>1?c[j]:'')+sub(f)).join(' + ')+' → '+a.r.map((f,j)=>(c[a.l.length+j]>1?c[a.l.length+j]:'')+sub(f)).join(' + '); };
+  function renderBal(){
+    const a=R.ant, sp=a.l.concat(a.r), box=$('#bal-eq'); if(!box) return; box.innerHTML='';
+    sp.forEach((f,j)=>{
+      if(j>0){ const o=document.createElement('span'); o.className='op'; o.textContent=j===a.l.length?'→':'+'; box.appendChild(o); }
+      const d=document.createElement('div'); d.className='sp';
+      d.innerHTML='<div class="f"><span class="c">'+(R.coef[j]>1?R.coef[j]:'')+'</span>'+sub(f)+'</div><div class="cstep"><button type="button" aria-label="fewer '+a.nm[j]+'">−</button><span>'+R.coef[j]+'</span><button type="button" aria-label="more '+a.nm[j]+'">+</button></div><div class="nm">'+a.nm[j]+'</div>';
+      const [dn,up]=d.querySelectorAll('button');
+      dn.addEventListener('click',()=>{ if(R.coef[j]>1){ R.coef[j]--; onCoef(); } });
+      up.addEventListener('click',()=>{ if(R.coef[j]<9){ R.coef[j]++; onCoef(); } });
       box.appendChild(d);
     });
-    const lc=$('lim-chips'); lc.innerHTML='';
-    rx.l.forEach((s,j)=>{
-      const c=document.createElement('button'); c.type='button'; c.className='chip'; c.innerHTML=sub(s.f)+' · '+s.n.replace(/ \(.*\)/,'');
-      c.addEventListener('click',()=>{ st.lim=j; [...lc.children].forEach((x,k)=>{ x.classList.toggle('on',k===j); x.classList.remove('right','wrong'); }); });
-      lc.appendChild(c);
-    });
-    const p=rx.r[rx.prod];
-    $('ty-q').innerHTML='Theoretical yield of '+p.n+', <b>'+sub(p.f)+'</b> (M = '+p.M+' g/mol):';
+    const c=counts(), t=$('#tally'); t.innerHTML='';
+    c.els.forEach(e=>{ const g=c.L[e]===c.R[e], d=document.createElement('div'); d.className='at '+(g?'ok':'no'); d.innerHTML='<b>'+e+'</b>'+c.L[e]+' | '+c.R[e]; t.appendChild(d); });
   }
-  function resetPrediction(){
-    st.lim=undefined; st.predOk=false; st.revealed=false; st.ran=false;
-    [...$('lim-chips').children].forEach(x=>x.classList.remove('on','right','wrong'));
-    $('ty').value=''; $('pred-msg').hidden=true; $('work').classList.remove('show'); $('btn-work').textContent='Show the working';
-    $('c2').classList.remove('done'); lock(3);
+  function onCoef(){ R.ans[3].touched=true; unsolveFrom(3); renderBal(); fitPage(); guide(); }
+  function renderQ3(){
+    const a=R.ant, qa=$('#q3a'), qb=$('#q3b');
+    qa.innerHTML='<div class="eyebrow">Drug information</div><div class="given">A ward nurse asks how much stomach acid one <b>'+a.name+'</b> tablet can neutralise. First, balance the equation. Use − and +.</div>'+
+      '<div class="bal-eq" id="bal-eq"></div><p class="tally-cap">Atoms on the left | right</p><div class="tally" id="tally"></div>';
+    renderBal(); qb.innerHTML='';
+    q3Def().forEach((q,i)=>ask(qb,q.p,q.o,q.k,R.ans[3],3,i===0,q.row));
   }
-  const g3=x=>x>=10?x.toFixed(2):x>=1?x.toFixed(3):x.toFixed(3);
-  function workHTML(a){
-    const rx=RX[ri];
-    let h='<table class="w"><tr><th>Reactant</th><th>Mass</th><th>Moles = m ÷ M</th><th>÷ coefficient</th></tr>';
-    a.rows.forEach((r,j)=>{
-      const lim=a.tie||j===a.limIdx;
-      h+='<tr'+(lim?' class="hl"':'')+'><td><b>'+sub(r.s.f)+'</b></td><td>'+r.m.toFixed(2)+' g</td><td>'+r.m.toFixed(2)+' ÷ '+r.s.M+' = '+(r.n*1000).toFixed(2)+' mmol</td><td>÷ '+coef[j]+' = '+(r.per*1000).toFixed(2)+(lim?(a.tie?' (exact ratio)':' ← limiting'):'')+'</td></tr>';
-    });
-    h+='</table>';
-    h+='<p class="small" style="margin-top:.45em">Product: '+(a.minPer*1000).toFixed(2)+' mmol × '+a.pc+' = '+(a.nP*1000).toFixed(2)+' mmol '+sub(a.p.f)+' × '+a.p.M+' g/mol = <b>'+g3(a.mP)+' g</b> theoretical yield.</p>';
-    if(!a.tie){
-      const ex=a.rows.map((r,j)=>j).filter(j=>j!==a.limIdx).map(j=>{ const used=a.minPer*coef[j]; return sub(RX[ri].l[j].f)+' left over: '+((a.rows[j].n-used)*1000).toFixed(2)+' mmol'; }).join('; ');
-      h+='<p class="small">'+ex+'.</p>';
-    }
-    return h;
-  }
-  $('btn-check').addEventListener('click',()=>{
-    const a=analyse(), m=$('pred-msg'), ty=parseFloat($('ty').value);
-    m.hidden=false;
-    if(st.lim===undefined){ m.className='msg near'; m.textContent='Choose which reactant you think is limiting.'; return; }
-    if(!(ty>0)){ m.className='msg near'; m.textContent='Enter your theoretical yield in grams.'; return; }
-    const limOk=a.tie||st.lim===a.limIdx;
-    const tyOk=Math.abs(ty-a.mP)<=Math.max(0.01*a.mP,0.005);
-    [...$('lim-chips').children].forEach((x,k)=>{ x.classList.remove('right','wrong'); if(k===st.lim) x.classList.add(limOk?'right':'wrong'); });
-    let txt='';
-    txt+=limOk?'<b>Limiting reagent: correct.</b> ':'<b>Limiting reagent: not quite.</b> Compare moles ÷ coefficient, not masses. ';
-    txt+=tyOk?'<b>Theoretical yield: correct</b> ('+g3(a.mP)+' g).':(limOk?'<b>Theoretical yield: check your arithmetic.</b> Work from the limiting reagent and use the mole ratio.':'<b>Theoretical yield:</b> recalculate once you have the right limiting reagent.');
-    m.className='msg '+(limOk&&tyOk?'good':'bad'); m.innerHTML=txt;
-    track('lab-predict',{reaction:RX[ri].id,lim:limOk,ty:tyOk});
-    if(limOk&&tyOk){ st.predOk=true; $('c2').classList.add('done'); unlock(3); }
-    else if(!st.revealed){ m.innerHTML+=' Try again, or tap <b>Show the working</b>.'; }
-  });
-  $('btn-work').addEventListener('click',()=>{
-    const w=$('work');
-    if(w.classList.contains('show')){ w.classList.remove('show'); $('btn-work').textContent='Show the working'; return; }
-    w.innerHTML=workHTML(analyse()); w.classList.add('show'); $('btn-work').textContent='Hide the working';
-    st.revealed=true; unlock(3); track('lab-reveal',{reaction:RX[ri].id});
+  function q3Def(){ return chipDefs(3,()=>{ const a=R.ant; const q=[
+    {k:'b', p:'b. In your balanced equation, the number in front of HCl tells you:', o:shuffle([
+      ['How many mol of HCl react with each mol of '+a.name,1],
+      ['How many grams of HCl react with each gram of '+a.name,0,'Coefficients count particles, so they are mole ratios, not mass ratios.','B4'],
+      ['How many H atoms are in one HCl',0,'A coefficient multiplies the whole formula. HCl always has one H.','B4']])}];
+    if(R.tr) q.push({k:'c', p:'c. Aina wrote <span class="rx-mini">'+a.aina+'</span>. The atoms balance. What is wrong?', o:shuffle([
+      ['She changed a subscript: '+a.bad+' is not hydrochloric acid. Only coefficients may change',1],
+      ['Nothing: the atoms balance',0,'The atoms balance, but is '+a.bad+' a real substance?','B3'],
+      ['She should have used bigger numbers',0,'The size of the numbers is not the problem. Look at where she wrote them.','B3']])});
+    return q; }); }
+  $('#chk3').addEventListener('click',()=>{
+    const lines=[]; let miss=0; const c=counts();
+    const off=c.els.filter(e=>c.L[e]!==c.R[e]), g=R.coef.reduce(gcd);
+    if(!R.ans[3].touched) miss++;
+    else if(off.length) lines.push(mixLine('B1','These atoms do not match yet: <b>'+off.join(', ')+'</b>. Change the coefficients, not the formulas.',3));
+    else if(g>1) lines.push(mixLine('B2','Balanced, but divide every coefficient by '+g+'.',3));
+    miss+=judgeChips(q3Def(),R.ans[3],3,lines);
+    if(lines.length) return msg(3,'bad',lines.join(''));
+    if(miss) return msg(3,'near','Balance the equation and answer every part first.');
+    msg(3,'good','<b>Right.</b> '+eqStr(R.coef)+'. So 1 mol of '+sub(R.ant.f)+' reacts with <b>'+X.ratio()+' mol</b> of HCl.'); solve(3);
   });
 
-  /* ---------- step 3: run ---------- */
-  function el(tag,attrs,text){ const e=document.createElementNS(NS,tag); for(const k in attrs) e.setAttribute(k,attrs[k]); if(text!==undefined) e.textContent=text; return e; }
-  function drawBars(a){
-    const rx=RX[ri], nC=rx.l.length, sp=rx.l.concat(rx.r), svg=$('bars');
-    while(svg.firstChild) svg.removeChild(svg.firstChild);
-    const before=sp.map((s,j)=>j<nC?a.rows[j].n:0);
-    const after=sp.map((s,j)=>j<nC?a.rows[j].n-a.minPer*coef[j]:a.minPer*coef[j]);
-    const max=Math.max(...before,...after);
-    const L=96, W=230, rowH=34, top=26;
-    svg.setAttribute('viewBox','0 0 400 '+(top+sp.length*rowH+8));
-    svg.appendChild(el('text',{class:'tx s',x:L,y:12},'grey = before · colour = after (mmol)'));
-    sp.forEach((s,j)=>{
-      const y=top+j*rowH;
-      svg.appendChild(el('text',{class:'tx b end',x:L-8,y:y+12},sub(s.f)));
-      svg.appendChild(el('text',{class:'tx s end',x:L-8,y:y+25},j<nC?(j===a.limIdx&&!a.tie?'limiting':'reactant'):(j-nC===rx.prod?'product':'by-product')));
-      const wb=Math.max(before[j]>0?2:0,before[j]/max*W), wa=Math.max(after[j]>1e-9?2:0,after[j]/max*W);
-      svg.appendChild(el('rect',{class:'bb',x:L,y:y+1,width:wb,height:11,rx:3}));
-      const ra=el('rect',{class:'ba grow-x'+(j-nC===rx.prod?' p':''),x:L,y:y+14,width:wa,height:11,rx:3,style:'--d:'+(0.15+j*0.1)+'s'});
-      svg.appendChild(ra);
-      const lab=(before[j]>0?(before[j]*1000).toFixed(1)+' → ':'0 → ')+(Math.abs(after[j])<1e-9?'0':(after[j]*1000).toFixed(1));
-      svg.appendChild(el('text',{class:'tx '+(j-nC===rx.prod?'g':''),x:L+Math.max(wb,wa)+6,y:y+20},lab));
-    });
+  /* ---------- station 4 · drug information (theoretical acid-neutralising capacity vs label claim) ---------- */
+  function renderQ4(){
+    const a=R.ant, qa=$('#q4a'), qb=$('#q4b');
+    qa.innerHTML='<div class="eyebrow">Drug information</div><div class="given">'+(R.sh?'The usual antacid is out of stock. The substitute brand has ':'Each tablet has ')+'<b>'+R.mgT+' mg</b> of '+a.name+'. From station 3: <span class="rx-mini">'+eqStr(a.c)+'</span></div>'+
+      tabletSVG()+numRow('a. mmol of '+sub(a.f)+' in one tablet','p4a','mmol',4,false,'a. Work out the mmol of antacid')+
+      numRow('b. Acid one tablet can neutralise, in theory','p4b','mmol HCl = '+term('meq','mEq'),4,false,'b. Use the mole ratio');
+    qb.innerHTML='';
+    q4Def().forEach((q,i)=>ask(qb,q.p,q.o,q.k,R.ans[4],4,i===0,q.row));
+    wire(4,['p4a','p4b']);
   }
-  $('btn-run').addEventListener('click',()=>{
-    const a=analyse(), rx=RX[ri];
-    st.ran=true; st.theo=a.mP;
-    const f=rx.yr[0]+Math.random()*(rx.yr[1]-rx.yr[0]);
-    st.actual=Math.round(a.mP*f*1000)/1000;
-    drawBars(a);
-    $('actual').innerHTML='You collected <span class="big">'+st.actual.toFixed(3)+' g</span> of '+a.p.n+'.<br><span class="small">Theoretical yield: '+g3(a.mP)+' g</span>';
-    $('py').value=''; $('py-msg').hidden=true; $('run-out').hidden=false;
-    track('lab-run',{reaction:rx.id});
-    setTimeout(()=>$('run-out').scrollIntoView({behavior:'smooth',block:'nearest'}),60);
+  function q4Def(){ return chipDefs(4,()=>[
+    {k:'c', row:true, p:'c. The leaflet claims <b>'+fmt(R.claim,1)+' mEq</b> per tablet. This claim is:', o:[
+      ['Possible: below the theoretical maximum',R.imp?0:1,'Compare the claim with your part b. A measured value can be below theory, never above.','S3'],
+      ['Not possible: query the supplier',R.imp?1:0,'Compare the claim with your part b. A measured value can be below theory, never above.','S3']]},
+    {k:'d', p:'d. Why is a measured capacity usually lower than the theoretical value?', o:shuffle([
+      ['Some of the antacid does not react in the test time',1],
+      ['Some mass is lost when the acid reacts',0,'Mass is conserved. The question is how much of the antacid reacts.','Y4'],
+      ['The acid runs out first in the test',0,'The test uses acid in excess, so the antacid is limiting.','S4']])}
+  ]); }
+  $('#chk4').addEventListener('click',()=>{
+    const a=R.ant, M=X.M3(), r=X.ratio(), lines=[]; let miss=0;
+    const p=readNum('p4a'), q=readNum('p4b'); const bad={p4a:false,p4b:false};
+    if(p==null) miss++; else if(!close(p,X.n4a(),.01,.02)){ bad.p4a=true;
+      if(close(p,X.n4a()/1000,.02)) lines.push(mixLine('S1','That is in mol. mg ÷ g/mol gives mmol directly.',4));
+      else if(close(p,M/R.mgT,.02)) lines.push(mixLine('S1','Mass ÷ molar mass, not the other way round.',4));
+      else lines.push(mixLine('S1',R.mgT+' mg ÷ M of '+sub(a.f)+'. Work out M from the formula.',4)); }
+    if(q==null) miss++; else { const n=(p!=null&&!bad.p4a)?p:X.n4a(); if(!close(q,n*r,.01,.03)){ bad.p4b=true;
+      if(close(q,n,.01)) lines.push(mixLine('S2','Use the mole ratio: '+r+' mol of HCl for every 1 mol of '+sub(a.f)+'.',4));
+      else if(close(q,n/r,.01)) lines.push(mixLine('S2','Multiply by '+r+', don’t divide.',4));
+      else if(close(q,n*r*36.5,.02)) lines.push(mixLine('S2','That is mg of HCl. The box asks for mmol (mEq).',4));
+      else lines.push(mixLine('S2','mmol of HCl = your part a × '+r+'.',4)); } }
+    Object.keys(bad).forEach(id=>markNum(id,bad[id]));
+    miss+=judgeChips(q4Def(),R.ans[4],4,lines);
+    if(lines.length) return msg(4,'bad',lines.join(''));
+    if(miss) return nearMsg(4);
+    msg(4,'good','<b>Right.</b> '+R.mgT+' ÷ '+M+' = '+fmt(X.n4a(),2)+' mmol × '+r+' = <b>'+fmt(X.n4b(),1)+' mEq</b> at most. '+(R.imp?'The claimed '+fmt(R.claim,1)+' mEq is above this: <b>query the supplier</b> before it goes to the ward.':'The claimed '+fmt(R.claim,1)+' mEq is below this, so it is possible.')); solve(4);
   });
-  $('btn-py').addEventListener('click',()=>{
-    const v=parseFloat($('py').value), m=$('py-msg'), rx=RX[ri];
-    const ans=st.actual/st.theo*100;
-    m.hidden=false;
-    if(!(v>0)){ m.className='msg near'; m.textContent='Enter your percentage yield.'; return; }
-    if(Math.abs(v-ans)<=0.5){
-      m.className='msg good';
-      m.innerHTML='<b>Correct: '+ans.toFixed(1)+'%.</b> '+st.actual.toFixed(3)+' ÷ '+g3(st.theo)+' × 100. Why not 100%? '+rx.why;
-      if(!$('c3').classList.contains('done')){
-        $('c3').classList.add('done'); rounds++; $('score').textContent='Rounds completed: '+rounds;
-        solved[rx.id]=true;
-        [...$('rx-chips').children].forEach((c,k)=>{ c.innerHTML=RX[k].name+(solved[RX[k].id]?'<span class="tick">✓</span>':''); });
-        track('lab-round-complete',{reaction:rx.id}); tellParent('round-complete',{reaction:rx.id});
-      }
-    } else if(Math.abs(v-(st.theo/st.actual*100))<=0.5){
-      m.className='msg bad'; m.innerHTML='That is theoretical ÷ actual. Divide <b>actual</b> by <b>theoretical</b>, then multiply by 100.';
+
+  /* ---------- station 5 · manufacturing unit (limiting reagent, excess) ---------- */
+  function renderQ5(){
+    const qa=$('#q5a'), qb=$('#q5b');
+    qa.innerHTML='<div class="eyebrow">Manufacturing unit</div><div class="given">The unit makes '+term('eff','effervescent')+' sachets. The batch record, per sachet: <b>'+R.m1.toFixed(2)+' g sodium bicarbonate</b> and <b>'+R.m2.toFixed(2)+' g citric acid</b> ('+term('anh','anhydrous')+').<br><span class="rx-mini">3NaHCO₃ + C₆H₈O₇ → Na₃C₆H₅O₇ + 3H₂O + 3CO₂</span></div>'+
+      sachetSVG()+numRow('a. mmol of NaHCO₃','p5a','mmol',5,false,'a. Work out the mmol of NaHCO₃')+numRow('b. mmol of citric acid','p5b','mmol',5,false,'b. Work out the mmol of citric acid');
+    qb.innerHTML=''; const D=q5Def();
+    ask(qb,D[0].p,D[0].o,D[0].k,R.ans[5],5,true,true);
+    qb.insertAdjacentHTML('beforeend',numRow('d. CO₂ one sachet can give, in theory','p5d','g',5,false,'d. Work out the CO₂')+numRow('e. Excess reactant left over','p5e','mg',5,false,'e. Work out the excess left'));
+    D.slice(1).forEach(q=>ask(qb,q.p,q.o,q.k,R.ans[5],5,false,q.row));
+    wire(5,['p5a','p5b','p5d','p5e']);
+  }
+  function q5Def(){ return chipDefs(5,()=>{ const lb=X.limB(); const q=[
+    {k:'c', p:'c. Which reactant is limiting?', o:[['Sodium bicarbonate',lb?1:0,'Divide each by its coefficient (3 for NaHCO₃, 1 for citric acid), then compare.','L2'],['Citric acid',lb?0:1,'Divide each by its coefficient (3 for NaHCO₃, 1 for citric acid), then compare.','L2']]},
+    {k:'f', p:'f. The formula keeps citric acid in slight excess. This batch:', o:[['Follows the formula: fill the sachets',R.ok5?1:0,'Look at your limiting reagent in part c.','L5'],['Is short of acid: re-weigh before filling',R.ok5?0:1,'Look at your limiting reagent in part c.','L5']]}];
+    if(R.tr) q.push({k:'g', p:'g. Aina wrote: “Citric acid is limiting, because its mass is smaller.” What is wrong?', o:shuffle([
+      ['She compared masses. Compare mmol ÷ coefficient',1],
+      ['Nothing: the smaller mass is always limiting',0,'Equal masses are not equal amounts. Compare moles, scaled by the coefficients.','L2'],
+      ['She should compare the products',0,'The limiting reagent is found from the reactants.','L2']])});
+    return q; }); }
+  $('#chk5').addEventListener('click',()=>{
+    const lines=[]; let miss=0;
+    const a=readNum('p5a'), b=readNum('p5b'), d=readNum('p5d'), e=readNum('p5e'); const bad={p5a:false,p5b:false,p5d:false,p5e:false};
+    const nm=(v,want,M,g,id,lbl)=>{ if(v==null){ miss++; return; } if(close(v,want,.01,.05)) return; bad[id]=true;
+      if(close(v,want/1000,.02)) lines.push(mixLine('L1','That is in mol. g × 1000 ÷ M gives mmol (or use mg ÷ M).',5));
+      else if(close(v,M/g,.03)||close(v,M/(g*1000),.03)) lines.push(mixLine('L1','Mass ÷ molar mass, not the other way round.',5));
+      else lines.push(mixLine('L1',lbl+': '+g.toFixed(2)+' g = '+Math.round(g*1000)+' mg, ÷ M. Work out M from the formula.',5)); };
+    nm(a,X.nB(),MB,R.m1,'p5a','NaHCO₃'); nm(b,X.nA(),MA,R.m2,'p5b','Citric acid');
+    const nB=(a!=null&&!bad.p5a)?a:X.nB(), nA=(b!=null&&!bad.p5b)?b:X.nA(), per=Math.min(nB/3,nA), lb=nB/3<nA;
+    if(d==null) miss++; else { const w=3*per*MC/1000; if(!close(d,w,.01,.003)){ bad.p5d=true;
+      if(close(d,3*per,.02)) lines.push(mixLine('L3','That is mmol of CO₂. × 44 ÷ 1000 gives grams.',5));
+      else if(close(d,3*Math.max(nB/3,nA)*MC/1000,.02)) lines.push(mixLine('L3','You worked from the excess reactant. Use the limiting one.',5));
+      else if(close(d,per*MC/1000,.02)) lines.push(mixLine('L3','3 mol of CO₂ form per mol of citric acid (per 3 mol of NaHCO₃). Multiply by 3.',5));
+      else if(close(d,(lb?nB*3:nA)*MC/1000,.02)) lines.push(mixLine('L3','NaHCO₃ gives CO₂ 1 : 1 (3 : 3). Don’t multiply by 3 again.',5));
+      else lines.push(mixLine('L3','CO₂ (mmol) = 3 × the smaller of (NaHCO₃ ÷ 3) and (citric acid ÷ 1). Then × 44 ÷ 1000.',5)); } }
+    if(e==null) miss++; else { const w=lb?(nA-nB/3)*MA:(nB-3*nA)*MB, wx=X.exc(), tol=lb?0.07*MA:0.2*MB; /* a small difference of two larger numbers: allow for mmol rounded to 1 decimal place */
+      if(!close(e,w,.03,tol) && !close(e,wx,.03,tol)){ bad.p5e=true;
+      if(close(e,lb?nA-nB/3:nB-3*nA,.03)) lines.push(mixLine('L4','That is mmol. × M gives mg.',5));
+      else if(lb && close(e,(nA-nB)*MA,.03)) lines.push(mixLine('L4','Only 1 mol of citric acid is used for every 3 mol of NaHCO₃: used = NaHCO₃ ÷ 3.',5));
+      else if(!lb && close(e,(nB-nA)*MB,.03)) lines.push(mixLine('L4','3 mol of NaHCO₃ are used for every 1 mol of citric acid: used = 3 × citric acid.',5));
+      else lines.push(mixLine('L4','Excess left (mmol) = present − used, then × M for mg.',5)); } }
+    Object.keys(bad).forEach(id=>markNum(id,bad[id]));
+    miss+=judgeChips(q5Def(),R.ans[5],5,lines);
+    if(lines.length) return msg(5,'bad',lines.join(''));
+    if(miss) return nearMsg(5);
+    const lbT=X.limB();
+    msg(5,'good','<b>Right.</b> NaHCO₃ '+fmt(X.nB()/3,1)+' vs citric acid '+fmt(X.nA(),1)+' (mmol ÷ coefficient): <b>'+(lbT?'sodium bicarbonate':'citric acid')+'</b> is limiting. CO₂ '+fmt(X.co2(),3)+' g; '+Math.round(X.exc())+' mg of '+(lbT?'citric acid':'sodium bicarbonate')+' left. '+(R.ok5?'Acid in slight excess, as the formula intends.':'<b>Acid short:</b> some bicarbonate would not react. Re-weigh the citric acid.')); solve(5);
+  });
+
+  /* ---------- station 6 · QC release (CO₂ by mass loss, percentage yield, decision) ---------- */
+  function renderQ6(){
+    const qa=$('#q6a'), qb=$('#q6b');
+    qa.innerHTML='<div class="eyebrow">QC release</div><div class="given">'+(R.wet?'Monsoon week: the store’s humidity log read above 80% for three days, and some sachets feel lumpy. ':'')+
+      'QC empties one sachet '+(R.ok5?'from this batch':'from the re-weighed batch')+' into water on a balance and waits until the fizzing stops. Theoretical CO₂ per sachet: <b>'+R.T6.toFixed(3)+' g</b>'+(R.ok5?' (your station 5 answer)':' (now sodium bicarbonate is limiting)')+'.</div>'+
+      balanceSVG()+numRow('a. Mass of CO₂ released','p6a','g',6,false,'a. Work out the CO₂ released')+numRow('b. CO₂ released as a percentage of theoretical','p6b','%',6,false,'b. Work out the percentage yield');
+    qb.innerHTML='';
+    q6Def().forEach((q,i)=>ask(qb,q.p,q.o,q.k,R.ans[6],6,i===0,q.row));
+    wire(6,['p6a','p6b']);
+  }
+  function q6Def(){ return chipDefs(6,()=>{ const f=R.fail6; const q=[
+    {k:'c', row:true, p:'c. The '+term('inhouse','in-house limit')+' is at least 90% of theoretical. Decision:', o:[
+      ['Release the batch',f?0:1,'Compare your part b with 90%.','Y3'],
+      ['Quarantine and investigate',f?1:0,'Compare your part b with 90%.','Y3']]},
+    f?{k:'d', p:'d. What is the most likely cause?', o:shuffle([
+      ['Damp got in: the acid and bicarbonate reacted in storage, so that CO₂ was already lost',1],
+      ['There was too much water in the flask',0,'The amount of water does not change how much CO₂ the sachet can make.','Y5'],
+      ['The balance was not zeroed first',0,'You used the difference of two readings, so zeroing cancels out.','Y1']])}
+     :{k:'d', p:'d. Why is it below 100%?', o:shuffle([
+      ['Some CO₂ stays dissolved in the water',1],
+      ['Some mass was destroyed in the reaction',0,'Mass is conserved. The missing CO₂ has to be somewhere.','Y4'],
+      ['The balance was not zeroed first',0,'You used the difference of two readings, so zeroing cancels out.','Y1']])}];
+    if(R.tr) q.push({k:'e', p:'e. Aina reported <b>'+fmt(R.T6/X.a6()*100,1)+'%</b>. What went wrong?', o:shuffle([
+      ['She divided theoretical by actual',1],
+      ['Nothing: over 100% means a very good batch',0,'Real product cannot beat theory. Over 100% means a slip.','Y2'],
+      ['She used the wrong limiting reagent',0,'The theoretical CO₂ was given. Look at how she divided.','Y2']])});
+    return q; }); }
+  $('#chk6').addEventListener('click',()=>{
+    const lines=[]; let miss=0;
+    const a=readNum('p6a'), b=readNum('p6b'); const bad={p6a:false,p6b:false};
+    if(a==null) miss++; else if(!close(a,X.a6(),0,.0015)){ bad.p6a=true;
+      if(close(a,-X.a6(),0,.0015)) lines.push(mixLine('Y1','Before − after gives a positive mass.',6));
+      else if(close(a,R.B,0,.01)||close(a,R.Af,0,.01)) lines.push(mixLine('Y1','Use the difference of the two readings.',6));
+      else lines.push(mixLine('Y1',R.B.toFixed(3)+' − '+R.Af.toFixed(3)+'.',6)); }
+    if(b==null) miss++; else { const act=(a!=null&&!bad.p6a)?a:X.a6(), w=act/R.T6*100; if(!close(b,w,0,.5)){ bad.p6b=true;
+      if(close(b,R.T6/act*100,0,.6)) lines.push(mixLine('Y2','That is theoretical ÷ actual. Divide actual by theoretical.',6));
+      else if(close(b,w/100,0,.01)) lines.push(mixLine('Y2','Multiply by 100 for a percentage.',6));
+      else lines.push(mixLine('Y2','Your part a ÷ '+R.T6.toFixed(3)+' × 100.',6)); } }
+    Object.keys(bad).forEach(id=>markNum(id,bad[id]));
+    miss+=judgeChips(q6Def(),R.ans[6],6,lines);
+    if(lines.length) return msg(6,'bad',lines.join(''));
+    if(miss) return nearMsg(6);
+    msg(6,'good','<b>Round complete.</b> '+X.a6().toFixed(3)+' ÷ '+R.T6.toFixed(3)+' × 100 = <b>'+fmt(X.p6(),1)+'%</b>. '+(R.fail6?'Below 90%: <b>quarantine</b> the batch, check the store’s humidity and the sachet seals.':'At least 90%: <b>release</b> the batch.')); solve(6);
+  });
+
+  function solve(k){
+    solved[k-1]=true; track('lab-step'+k+'-solved',{scenario:R.S.id});
+    if(k===STEPS){ roundComplete(); $('#endrow').hidden=false; }
+    updatePager(); fitPage();
+  }
+  function roundComplete(){
+    rounds++; $('#rounds').textContent=rounds; done.add(R.S.id);
+    const c=$('#scen-chips').children[sc]; if(c && !c.querySelector('.tick')) c.insertAdjacentHTML('beforeend','<span class="tick">✓</span>');
+    track('lab-round-complete',{scenario:R.S.id});
+    try{ localStorage.setItem('kompas.stoichiometry.stoich-lab.done', String(Date.now())); }catch(_){}
+    try{ if(window.parent!==window){ const o=location.origin; window.parent.postMessage({type:'stoich-lab', event:'round-complete', reaction:R.S.id}, (o&&o!=='null')?o:'*'); } }catch(_){}
+  }
+  $('#btn-new').addEventListener('click',()=>{ newRound(); goPage(firstPageOfStep(1)); });
+  $('#btn-next').addEventListener('click',()=>{ sc=(sc+1)%SCEN.length; track('lab-pick',{scenario:SCEN[sc].id}); newRound(); goPage(0); });
+  $('#btn-pt').addEventListener('click',()=>{ if(window.KompasPT) KompasPT.open(); });
+  $('#btn-kompas').addEventListener('click',e=>{ if(history.length>1 && document.referrer && document.referrer.indexOf(location.host)>-1){ e.preventDefault(); location.assign(e.currentTarget.href); } });
+
+  function person(who,x,y,s,mirror){
+    const skin=who==='aina'?'#e3b48c':'#a9714b';
+    let g='<g class="who-'+who+'" transform="translate('+x+' '+y+') scale('+(mirror?-s:s)+' '+s+')"><g class="bob">';
+    g+='<path d="M-22 0 Q-23 -33 0 -35 Q23 -33 22 0 Z" fill="#fff" stroke="#b9c2bc" stroke-width="1.5"/>';
+    g+='<path d="M-8 -34 L0 -21 L8 -34" fill="none" stroke="#2d6a4f" stroke-width="2.4" stroke-linejoin="round"/>';
+    g+='<rect x="7" y="-25" width="8" height="5" rx="1" fill="#2d6a4f"/>';
+    if(who==='aina'){
+      g+='<path d="M-15 -47 Q-16 -68 0 -68 Q16 -68 15 -47 Q15 -33 0 -31 Q-15 -33 -15 -47 Z" fill="#3f7d63"/>';
+      g+='<ellipse cx="0" cy="-49" rx="10" ry="11.5" fill="'+skin+'"/>';
     } else {
-      m.className='msg bad'; m.innerHTML='Not quite. Percentage yield = actual yield ÷ theoretical yield × 100.';
+      g+='<rect x="-4" y="-40" width="8" height="6" fill="'+skin+'"/>';
+      g+='<circle cx="0" cy="-51" r="12.5" fill="'+skin+'"/>';
+      g+='<path d="M-12.5 -54 Q-12 -66 0 -66 Q12 -66 12.5 -54 Q8 -60 0 -60 Q-7 -60 -12.5 -54 Z" fill="#26201c"/>';
+      g+='<g fill="none" stroke="#26201c" stroke-width="1.3"><circle cx="-4.6" cy="-51" r="3.4"/><circle cx="4.6" cy="-51" r="3.4"/><path d="M-1.2 -51 H1.2"/></g>';
     }
-  });
-  $('btn-again').addEventListener('click',()=>{ $('c3').classList.remove('done'); newRound(); $('c2').scrollIntoView({behavior:'smooth',block:'start'}); });
-  $('btn-nextrx').addEventListener('click',()=>{ $('c3').classList.remove('done'); pick((ri+1)%RX.length); $('c0').scrollIntoView({behavior:'smooth',block:'start'}); });
+    g+='<g class="blink"><circle cx="-4.4" cy="-51" r="1.4" fill="#1c2620"/><circle cx="4.4" cy="-51" r="1.4" fill="#1c2620"/></g>';
+    g+='<path d="M-3.5 -45.5 Q0 -42.5 3.5 -45.5" fill="none" stroke="#1c2620" stroke-width="1.3" stroke-linecap="round"/>';
+    return g+'</g></g>';
+  }
+  const bottle=(x,y,l)=>'<g transform="translate('+x+' '+y+')"><rect x="-9" y="-58" width="18" height="8" rx="2" fill="#9aa39d"/><rect x="-14" y="-50" width="28" height="50" rx="6" fill="#fff" stroke="#5c665f" stroke-width="1.4"/><rect x="-11" y="-36" width="22" height="16" rx="2" fill="#e9f4ee"/><text x="0" y="-25" text-anchor="middle" font-size="7" font-weight="800" fill="#1c2620">'+l+'</text></g>';
+  const flask=(x,y)=>'<g transform="translate('+x+' '+y+')"><path d="M-6 -56 h12 M-4 -56 v18 l-14 30 q-2 8 6 8 h24 q8 0 6 -8 l-14 -30 v-18" fill="#eef5fb" stroke="#5c665f" stroke-width="1.4"/><path d="M-13 -16 h26 l4 9 q1 7-6 7 h-22 q-7 0-6-7 z" fill="#d9ecf7"/><g fill="#fff" stroke="#8fb3c9"><circle cx="-3" cy="-10" r="2"/><circle cx="4" cy="-14" r="1.8"/></g></g>';
+  const sachet=(x,y)=>'<g transform="translate('+x+' '+y+')"><rect x="-16" y="-44" width="32" height="44" rx="4" fill="#fff" stroke="#5c665f" stroke-width="1.4"/><path d="M-16 -38 h32" stroke="#b9c2bc" stroke-dasharray="3 2"/><text x="0" y="-18" text-anchor="middle" font-size="7" font-weight="800" fill="#2d6a4f">fizz</text></g>';
+  const cloud='<g transform="translate(250 34)"><ellipse cx="0" cy="0" rx="24" ry="12" fill="#c9d4dc"/><ellipse cx="-14" cy="4" rx="14" ry="9" fill="#c9d4dc"/><ellipse cx="14" cy="4" rx="14" ry="9" fill="#c9d4dc"/>'+[-14,-2,10].map((dx,i)=>'<line x1="'+dx+'" y1="16" x2="'+(dx-4)+'" y2="28" stroke="#3a6bd1" stroke-width="2" stroke-linecap="round" class="pulse" style="animation-delay:'+(i*.4)+'s"/>').join('')+'</g>';
+  const shelf='<g transform="translate(176 40)"><rect x="0" y="0" width="120" height="90" rx="4" fill="#fff" stroke="#b9c2bc"/><line x1="0" y1="45" x2="120" y2="45" stroke="#b9c2bc"/><text x="60" y="30" text-anchor="middle" font-size="9" font-weight="800" fill="#c0392b" class="pulse">OUT OF STOCK</text></g>'+bottle(204,128,'KCl')+bottle(240,128,'ALT');
+  const STORY={
+    routine:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'A full shift: the dispensary, the QC lab, drug information and the manufacturing unit. Six jobs today, and every one is stoichiometry.',
+      know:'every number is right, and every decision is safe for the patient.',
+      scene:()=>bottle(190,128,'KCl')+flask(234,128)+sachet(276,128)},
+    trainee:{who:'aina', name:'Aina', role:'trainee pharmacist',
+      problem:'I did today’s sums last night. Can you check them with me? I think I slipped on a formula, a limiting reagent and a yield.',
+      know:'you find Aina’s mistakes and explain how to fix them.',
+      scene:()=>'<g transform="translate(230 110)"><rect x="-44" y="-58" width="88" height="66" rx="5" fill="#fffef8" stroke="#b9b29c"/><path d="M-34 -42 h52 M-34 -30 h60 M-34 -18 h40" stroke="#1f3a8a" stroke-width="1.3"/><text x="30" y="-4" font-size="14" font-weight="800" fill="#c0392b" class="pulse">?</text></g>'},
+    monsoon:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'Monsoon week. The store has been damp for days. Watch anything that reacts with water, especially the effervescent sachets.',
+      know:'no damp-damaged stock reaches a patient.',
+      scene:()=>cloud+sachet(206,128)+sachet(246,128)},
+    shortage:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'Stock shortage. The potassium tablets are out, and the usual antacid has been swapped for another brand. Check every substitute before it goes out.',
+      know:'each substitute gives the right dose, and its label claim makes sense.',
+      scene:()=>shelf}
+  };
+  const SCENE_W=320, SCENE_H=150;
+  function sceneFor(beat){
+    const st=STORY[R.S.id], who=st.who;
+    let s='<svg viewBox="0 0 '+SCENE_W+' '+SCENE_H+'" role="img" aria-label="'+(['The problem','The method','Your goal'][beat])+'"><rect width="320" height="150" rx="10" fill="'+(R.wet?'#eef3f7':'#f4f7f5')+'"/>';
+    if(beat===0) s+=st.scene()+person(who,72,140,1.45);
+    if(beat===1){
+      s+='<g transform="translate(160 18)"><rect width="148" height="114" rx="8" fill="#fff" stroke="#cfe6d9" stroke-width="2"/>';
+      ['mass (mg)','÷ M → mmol','× mole ratio','mmol → × M','mass (mg)'].forEach((t,i)=>{ s+='<text x="74" y="'+(22+i*21)+'" text-anchor="middle" font-size="'+(i%4===0?10.5:9.5)+'" font-weight="'+(i%4===0?800:700)+'" fill="'+(i%4===0?'#2d6a4f':'#1c2620')+'">'+t+'</text>'; if(i<4) s+='<text x="74" y="'+(32+i*21)+'" text-anchor="middle" font-size="8" fill="#b25f0c">↓</text>'; });
+      s+='</g>'+person(who==='aina'?'ravi':'aina',70,140,1.45);
+    }
+    if(beat===2){
+      s+=person('aina',58,140,1.35)+person('ravi',118,140,1.35,true);
+      s+='<g transform="translate(166 6)"><rect width="148" height="138" rx="8" fill="#fff" stroke="#cfe6d9" stroke-width="2"/>';
+      STEP_NAMES.slice(1).forEach((t,i)=>{ s+='<circle cx="16" cy="'+(17+i*21.5)+'" r="8" fill="#2d6a4f"/><text x="16" y="'+(20.5+i*21.5)+'" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">'+(i+1)+'</text><text x="30" y="'+(20.5+i*21.5)+'" font-size="10" font-weight="700" fill="#1c2620">'+t+'</text>'; });
+      s+='</g>';
+    }
+    return s+'</svg>';
+  }
+  const BEAT_TITLE=['1 · The problem','2 · The method','3 · Your goal'];
+  function renderStory(){
+    const st=STORY[R.S.id], b=R.beat||0, box=$('#story');
+    let text='';
+    if(b===0) text='<p class="say"><b>'+st.name+'</b> <span class="small">('+st.role+')</span><br>'+st.problem+'</p>';
+    if(b===1) text='<p class="say">Six stations, one method: change every mass to <b>moles</b>, use the <b>balanced equation</b> for the ratio, then change back. Relative atomic masses are on the Card and in the periodic table.</p>';
+    if(b===2) text='<p class="say"><b>Objective:</b> a correct answer and a safe decision at every station.<br><b>You succeed when:</b> '+st.know+'</p>';
+    box.innerHTML='<div class="story-head"><span class="eyebrow" style="margin:0">'+BEAT_TITLE[b]+'</span><span class="dots">'+[0,1,2].map(i=>'<i class="'+(i<=b?'on':'')+'"></i>').join('')+'</span></div>'+
+      '<button type="button" class="scene" id="scene" aria-label="Next part of the story">'+sceneFor(b)+'</button>'+text+
+      '<div class="story-nav">'+(b>0?'<button type="button" class="btn ghost" id="story-back">‹ Back</button>':'<span></span>')+
+      (b<2?'<button type="button" class="btn solid" id="story-next">Tap to continue ›</button>':'<span class="small">Ready? Press <b>Continue</b> below.</span>')+'</div>';
+    const nx=$('#story-next'); if(nx) nx.addEventListener('click',storyNext);
+    $('#scene').addEventListener('click',storyNext);
+    const bk=$('#story-back'); if(bk) bk.addEventListener('click',()=>{ R.beat=Math.max(0,b-1); renderStory(); });
+    if(b===2 && !R.storyDone){ R.storyDone=true; track('lab-story-done',{scenario:R.S.id}); }
+    updatePager(); fitPage();
+  }
+  function storyNext(){ if((R.beat||0)<2){ R.beat=(R.beat||0)+1; track('lab-story-beat',{scenario:R.S.id, beat:R.beat}); renderStory(); } }
 
-  $('btn-pt').addEventListener('click',()=>{ if(window.KompasPT) KompasPT.open(); });
-  $('btn-kompas').addEventListener('click',e=>{
-    try{ if(document.referrer && new URL(document.referrer).origin===location.origin && history.length>1){ e.preventDefault(); location.assign(e.currentTarget.href); } }catch(_){}
-  });
+  /* ---------- hints ---------- */
+  const hints=$('#hints');
+  $('#hints-btn').addEventListener('click',()=>{ hints.classList.add('open'); $('#hints-close').focus(); track('lab-hints',{page:page}); });
+  $('#hints-close').addEventListener('click',()=>{ hints.classList.remove('open'); $('#hints-btn').focus(); });
+  hints.addEventListener('click',e=>{ if(e.target===hints) hints.classList.remove('open'); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') hints.classList.remove('open'); });
 
-  pick(0);
+  /* ---------- pager: one screen at a time ----------
+     Narrow screens show one pane per page; wide screens show both panes of a step side by side. */
+  const SCR=[...document.querySelectorAll('.scr')];
+  let pages=[], page=0, wide=null;
+  function isWide(){ return innerWidth>=900 && innerHeight>=560; }
+  function buildPages(){
+    const w=isWide(); if(w===wide && pages.length) return; wide=w;
+    const cur=pages.length?pages[page][0]:SCR[0];
+    pages=[];
+    SCR.forEach(s=>{ const last=pages[pages.length-1];
+      if(w && last && s.dataset.pane==='b' && last[0].dataset.step===s.dataset.step) last.push(s); else pages.push([s]); });
+    page=Math.max(0,pages.findIndex(p=>p.includes(cur)));
+  }
+  const stepOf=p=>+pages[p][0].dataset.step;
+  const firstPageOfStep=k=>pages.findIndex(p=>+p[0].dataset.step===k);
+  function lastPaneOfStep(p){ const k=stepOf(p); return p+1>=pages.length || stepOf(p+1)!==k; }
+  function canLeave(p){ const k=stepOf(p); if(k===0) return !!(R&&R.storyDone); if(!lastPaneOfStep(p)) return true; return solved[k-1]; }
+  function goPage(n){
+    page=Math.max(0,Math.min(pages.length-1,n));
+    SCR.forEach(s=>{ s.classList.remove('on','half-l','half-r','single','scrolly'); s.style.setProperty('--k',1); });
+    $('#stage').classList.toggle('roomy', innerWidth>=640);
+    const P=pages[page]; P.forEach((s,i)=>{ s.classList.add('on'); if(P.length===2) s.classList.add(i?'half-r':'half-l'); else s.classList.add('single'); });
+    updatePager(); fitPage();
+    if(stepOf(page)===1 && R && !briefed.has(R.S.id)) openBrief();
+    track('lab-page',{page:STEP_NAMES[stepOf(page)]+(P.length===1&&P[0].dataset.pane?' '+P[0].dataset.pane:'')});
+  }
+  function updatePager(){
+    if(!pages.length) return;
+    const k=stepOf(page), P=pages[page], same=pages.filter(p=>stepOf(pages.indexOf(p))===k);
+    const part=(P.length===1 && same.length>1)?' ('+(same.indexOf(P)+1)+'/'+same.length+')':'';
+    $('#bar-lbl').innerHTML=(k?'<span>Station '+k+' of '+STEPS+'</span>':'')+STEP_NAMES[k]+part;
+    $('#fill').style.width=(page/(pages.length-1)*100)+'%';
+    $('#back').disabled=page===0;
+    const last=page===pages.length-1, ok=canLeave(page), nx=$('#next');
+    nx.textContent=last?(solved[STEPS-1]?'New round ↺':'Continue →'):'Continue →';
+    nx.disabled=!ok || (last && !solved[STEPS-1]);
+    nx.classList.toggle('ready', ok && k>0 && lastPaneOfStep(page) && solved[k-1]);
+    guide();
+  }
+  $('#back').addEventListener('click',()=>goPage(page-1));
+  $('#next').addEventListener('click',()=>{ if(page===pages.length-1){ if(solved[STEPS-1]){ newRound(); goPage(firstPageOfStep(1)); } return; } if(canLeave(page)) goPage(page+1); });
+
+  /* fit: shrink the text slightly if a page is too tall; scroll only as a last resort (logged) */
+  function fitPage(){
+    if(!pages.length) return;
+    pages[page].forEach(s=>{
+      s.classList.remove('scrolly'); let k=1; s.style.setProperty('--k',k);
+      const over=()=>s.scrollHeight>s.clientHeight+1;
+      let g=0; while(over() && k>0.8 && g++<10){ k=+(k-0.04).toFixed(2); s.style.setProperty('--k',k); }
+      if(over()){ s.classList.add('scrolly'); track('lab-overflow',{page:s.dataset.title, w:innerWidth, h:innerHeight}); }
+      s.dataset.k=k;
+    });
+    guide();
+  }
+  function setAppH(){ document.documentElement.style.setProperty('--app-h', innerHeight+'px'); }
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ setAppH(); buildPages(); goPage(page); },120); });
+
+  /* ---------- step guide: the footer names the next move and the matching control glows ----------
+     It only ever points at the next empty input or button, never at the right answer. */
+  const briefed=new Set(); let glowEl=null;
+  const empty=id=>{ const e=$('#'+id); return !e || !e.value.trim(); };
+  const checkMove=n=>({t:$('#m'+n).classList.contains('bad')?'Fix what the feedback says, then press Check again':'Press Check', e:$('#chk'+n)});
+  const storyMove=()=>R.storyDone?{t:'Press Continue to start the lab',e:$('#next')}:{t:'Tap the picture to read the story',e:$('#story-next')};
+  const doneMove=k=>k<STEPS?{t:'Station done. Press Continue',e:$('#next')}:{t:'Round complete. Try new values or the next scenario',e:$('#endrow')};
+  function guide(){
+    if(!pages.length || !R) return;
+    const g=nextMove(); let t=g.t||'', e=g.e||null;
+    if(e){ const s=e.closest('.scr'); if(s && !pages[page].includes(s)){ const j=pages.findIndex(p=>p.includes(s));
+      if(j>page){ t='Next screen: '+t; e=$('#next'); } else { t='Back a screen: '+t; e=$('#back'); } } }
+    const gate=$('#gate'); gate.textContent=t; gate.classList.toggle('go',!!t);
+    if(glowEl!==e){ if(glowEl) glowEl.classList.remove('guide'); glowEl=e; if(e) e.classList.add('guide'); }
+    const sb=$('#stp-btn'), sl=g.s?'Card §'+g.s:'Card';
+    if(sb.textContent!==sl){ sb.textContent=sl; sb.classList.toggle('sec',!!g.s); sb.dataset.s=g.s||''; }
+  }
+  function openBrief(){ briefed.add(R.S.id); $('#brief-body').innerHTML=briefHTML(); $('#brief').classList.add('open'); $('#brief-go').focus(); }
+  function closeBrief(){ $('#brief').classList.remove('open'); guide(); }
+  $('#brief-go').addEventListener('click',closeBrief);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#brief').classList.contains('open')) closeBrief(); });
+  document.addEventListener('click',()=>setTimeout(guide,0));
+  document.addEventListener('input',()=>guide());
+
+
+  /* the next empty box or unanswered question, in screen order; never the answer */
+  const DEFS={1:q1Def,2:q2Def,3:q3Def,4:q4Def,5:q5Def,6:q6Def};
+  function nextMove(){
+    const k=stepOf(page);
+    if(k===0) return storyMove();
+    if(solved[k-1]) return doneMove(k);
+    if(k===3 && !R.ans[3].touched) return {t:'Balance the equation with − and +',e:$('#bal-eq'),s:3};
+    const els=[...document.querySelectorAll('#q'+k+'a .num-in, #q'+k+'a [data-qk], #q'+k+'b .num-in, #q'+k+'b [data-qk]')];
+    for(const el of els){
+      if(el.classList.contains('num-in')){ if(!el.value.trim()) return {t:el.dataset.go||'Fill in the box',e:el,s:k}; }
+      else { const key=el.dataset.qk.split('-')[1]; if(R.ans[k][key]==null) return {t:key+'. Choose an answer',e:el.querySelector('.chips'),s:k}; }
+    }
+    return Object.assign(checkMove(k),{s:k});
+  }
+  function briefHTML(){
+    return (R.tr?'<p class="small" style="margin:0">Aina is checking her working with you. Find her mistakes.</p>':R.wet?'<p class="small" style="margin:0">Monsoon week: the store is damp. Watch the sachets.</p>':R.sh?'<p class="small" style="margin:0">Stock shortage: check every substitute.</p>':'')+'<ol class="sop">'+
+      '<li><b>Dispensary.</b> mg → mmol: how much does the patient take?</li>'+
+      '<li><b>QC lab.</b> Name the reaction types. Which one is redox?</li>'+
+      '<li><b>Balance.</b> Balance the antacid equation.</li>'+
+      '<li><b>Label claim.</b> How much acid can one tablet neutralise? Is the claim possible?</li>'+
+      '<li><b>Sachet recipe.</b> Which reactant runs out? How much CO₂?</li>'+
+      '<li><b>Sachet release.</b> Percentage yield: release or quarantine?</li></ol>';
+  }
+  /* ---------- Bench card: opens at the section the current move needs ---------- */
+  function openSTP(s){
+    const d=$('#stp'); d.classList.add('open');
+    d.querySelectorAll('.stp-sec.hit').forEach(x=>x.classList.remove('hit'));
+    const sec=s?$('#stp-'+s):null;
+    if(sec){ sec.scrollIntoView({block:'start'}); sec.classList.add('hit'); } else d.querySelector('.box').scrollTop=0;
+    $('#stp-close').focus({preventScroll:true}); track('lab-card',{s:s||''});
+  }
+  function closeSTP(){ $('#stp').classList.remove('open'); $('#stp-btn').focus({preventScroll:true}); }
+  $('#stp-btn').addEventListener('click',()=>openSTP($('#stp-btn').dataset.s));
+  $('#stp-close').addEventListener('click',closeSTP);
+  $('#stp').addEventListener('click',e=>{ if(e.target.id==='stp') closeSTP(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#stp').classList.contains('open')) closeSTP(); });
+  $('#brief-stp').addEventListener('click',()=>{ closeBrief(); openSTP(''); });
+
+  /* test hook: lets the automated checks read the round (no effect for students) */
+  window.__lab={get R(){ return R; }, X:X, defs:DEFS};
+
+  setAppH(); buildPages(); newRound(); goPage(0);
 })();
 </script>
 </body>

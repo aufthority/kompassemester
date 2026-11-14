@@ -24,6 +24,7 @@
 <meta name="twitter:image"       content="https://www.aufthority.com/preview_v2.png">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
 <script src="../shared/periodic-table.js" defer></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
 <style>
 :root{
   --ink:#1c2620;--body:#3f4742;--muted:#6f7771;--accent:#2d6a4f;--accent-dark:#1f4d39;
@@ -328,6 +329,15 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 .lab-head p{margin-bottom:.2em}
 .lab-frame{flex:1 1 auto;min-height:300px;border:1px solid var(--rule);border-radius:12px;overflow:hidden;background:#fff}
 .lab-frame iframe{width:100%;height:100%;border:0;display:block}
+.lab-launch{display:none;height:100%;flex-direction:column;align-items:center;justify-content:center;gap:.6em;padding:1em;text-align:center;font-size:.92em}
+.lab-frame.launch iframe{display:none}
+.lab-frame.launch .lab-launch{display:flex}
+.lab-launch a{background:var(--accent);color:#fff;text-decoration:none;font-weight:700;padding:.6em 1.3em;border-radius:100px}
+.lab-status{font-size:.82em;font-weight:700;color:#a85f10;margin:.15em 0 0}
+.lab-status.ok{color:var(--accent-dark)}
+.feedback.miss{border-color:var(--orange);background:var(--o-bg)}
+.choice.wrong{cursor:default}
+.toc button.lockd{color:var(--muted);opacity:.45;cursor:default}
 /* ---------- video buttons + player ---------- */
 .vbtn{display:inline-flex;align-items:center;gap:.5em;background:var(--ink);color:#fff;border:none;font:600 .82em 'DM Sans',sans-serif;padding:.45em .95em .45em .7em;border-radius:100px;cursor:pointer;margin:.25em .35em .25em 0}
 .vbtn svg{width:1.1em;height:1.1em}
@@ -424,7 +434,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <h1>7.40 g went in. <span class="ac">2.10 g came out.</span></h1>
    <p>Meet <b>Luna</b>, a pharmacy trainee in her first week at a medicine factory. Her supervisor hands her the result of a small aspirin trial batch: 7.40 g of starting materials went into the flask, but only <b>2.10 g of aspirin</b> came out. "Find out where the other 5.30 g went," he says, "before we scale up."</p>
    <p>To solve it, Luna needs the tools in this explainer: the <b>mole</b>, <b>balanced equations</b>, the <b>limiting reagent</b> and <b>percentage yield</b>. Follow her case section by section; it is closed in Section 6.</p>
-   <p class="small">For Diploma in Pharmacy students. Use Next to move through the pages, or Contents to jump around. "Go deeper" sections are optional. A periodic table is in Contents. The Reaction Bench lab is near the end. Luna and her factory are fictional.</p>
+   <p class="small">For Diploma in Pharmacy students. Use Next to move through the pages. "Go deeper" sections are optional. A periodic table is in Contents. The Reaction Bench lab is just before the quiz. Luna and her factory are fictional.</p>
   </div>
  </div>
 </section>
@@ -597,6 +607,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
    <div class="story"><span class="story-tag">Luna's case · Day 1</span>Between tasks, Luna is asked to check a carton of potassium chloride tablets made at the factory. Is the second number on the label right?</div>
    <p>Potassium chloride tablets for low blood potassium are sold as <b>"600 mg (8 mmol)"</b>. The second number is the mole concept at work. <span class="cite">(<a href="https://mca.sps.nhs.uk/mca/potachlor-600mg-8mmol-modified-release-tablets-trion-pharma-ltd" target="_blank" rel="noopener">NHS dm+d</a>)</span></p>
    <div class="eqn">n(KCl) = 600 mg ÷ 74.5 g/mol = <span class="co">8.05 mmol</span><small>one K⁺ ion per KCl, so each tablet supplies about 8 mmol of potassium</small></div>
+   <p class="small">The oral solution works the same way: 375 mg in 5 mL ÷ 74.5 g/mol = 5.03 mmol, so it is labelled <b>5 mmol in 5 mL</b>. <span class="cite">(<a href="https://dmd-browser.nhsbsa.nhs.uk/vmp/view/1735" target="_blank" rel="noopener">NHS dm+d</a>)</span></p>
    <p>Doctors prescribe electrolytes by the amount of ion the patient needs, not by the mass of salt. Two salts of the same ion can have very different masses per mmol.</p>
    <div class="toggle-wrap">
      <button class="toggle-btn"><span>Why not just use milligrams?</span><span class="hint">Open</span></button>
@@ -615,21 +626,21 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="a">
       <div class="step-count">QUESTION 1 OF 3</div>
       <div class="choice-q">How many moles are in 9 g of water (M = 18 g/mol)?</div>
-      <div class="choices"><button class="choice" data-v="a">0.5 mol</button><button class="choice" data-v="b">2 mol</button><button class="choice" data-v="c">162 mol</button></div>
+      <div class="choices"><button class="choice" data-v="a">0.5 mol</button><button class="choice" data-v="b" data-fb="You divided the molar mass by the mass. Moles = mass ÷ molar mass.">2 mol</button><button class="choice" data-v="c" data-fb="You multiplied. Moles = mass ÷ molar mass.">162 mol</button></div>
       <div class="feedback">n = m ÷ M = 9 ÷ 18 = 0.5 mol. Multiplying (9 × 18) is the most common slip.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="c">
       <div class="step-count">QUESTION 2 OF 3</div>
       <div class="choice-q">Which contains more particles: 1 mol of NaCl or 1 mol of paracetamol?</div>
-      <div class="choices"><button class="choice" data-v="a">NaCl</button><button class="choice" data-v="b">Paracetamol</button><button class="choice" data-v="c">The same number</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="A mole is a count, like a dozen. Does the substance change the count?">NaCl</button><button class="choice" data-v="b" data-fb="Paracetamol molecules are heavier, but a mole is a count, not a mass.">Paracetamol</button><button class="choice" data-v="c">The same number</button></div>
       <div class="feedback">One mole of anything contains 6.022 × 10²³ particles. The masses differ (58.5 g vs 151 g); the counts do not.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="b">
       <div class="step-count">QUESTION 3 OF 3</div>
       <div class="choice-q">A dose of 250 mg of a drug with M = 250 g/mol is:</div>
-      <div class="choices"><button class="choice" data-v="a">1 mol</button><button class="choice" data-v="b">1 mmol</button><button class="choice" data-v="c">0.1 mmol</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="mg ÷ g/mol gives mmol, not mol.">1 mol</button><button class="choice" data-v="b">1 mmol</button><button class="choice" data-v="c" data-fb="Check the division: 250 ÷ 250.">0.1 mmol</button></div>
       <div class="feedback">mg ÷ g/mol gives mmol: 250 ÷ 250 = 1 mmol, which is 0.001 mol.</div>
     </div>
    </div>
@@ -719,28 +730,28 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="dec">
       <div class="step-count">QUESTION 1 OF 4</div>
       <div class="eqn">2H₂O₂ → 2H₂O + O₂</div>
-      <div class="choices"><button class="choice" data-v="com">Combination</button><button class="choice" data-v="dec">Decomposition</button><button class="choice" data-v="sd">Single displacement</button><button class="choice" data-v="dd">Double displacement</button><button class="choice" data-v="neu">Neutralisation</button></div>
+      <div class="choices"><button class="choice" data-v="com" data-fb="Combination makes one product from two or more reactants. Count the products.">Combination</button><button class="choice" data-v="dec">Decomposition</button><button class="choice" data-v="sd" data-fb="Single displacement needs a lone element on the left, such as Zn or Fe.">Single displacement</button><button class="choice" data-v="dd" data-fb="Double displacement needs two compounds that swap partners.">Double displacement</button><button class="choice" data-v="neu" data-fb="Neutralisation needs an acid and a base.">Neutralisation</button></div>
       <div class="feedback">One reactant breaks into two simpler products: decomposition.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="neu">
       <div class="step-count">QUESTION 2 OF 4</div>
       <div class="eqn">Mg(OH)₂ + 2HCl → MgCl₂ + 2H₂O</div>
-      <div class="choices"><button class="choice" data-v="com">Combination</button><button class="choice" data-v="dec">Decomposition</button><button class="choice" data-v="sd">Single displacement</button><button class="choice" data-v="dd">Double displacement</button><button class="choice" data-v="neu">Neutralisation</button></div>
+      <div class="choices"><button class="choice" data-v="com" data-fb="Combination makes one product from two or more reactants. Count the products.">Combination</button><button class="choice" data-v="dec" data-fb="Decomposition starts from one reactant. Count the reactants.">Decomposition</button><button class="choice" data-v="sd" data-fb="Single displacement needs a lone element on the left, such as Zn or Fe.">Single displacement</button><button class="choice" data-v="dd" data-fb="The ions do swap, but acid + base → salt + water has a more precise name.">Double displacement</button><button class="choice" data-v="neu">Neutralisation</button></div>
       <div class="feedback">A base plus an acid gives a salt and water: neutralisation. It is technically a double displacement too, but neutralisation is the more precise name.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="sd">
       <div class="step-count">QUESTION 3 OF 4</div>
       <div class="eqn">Zn + CuSO₄ → ZnSO₄ + Cu</div>
-      <div class="choices"><button class="choice" data-v="com">Combination</button><button class="choice" data-v="dec">Decomposition</button><button class="choice" data-v="sd">Single displacement</button><button class="choice" data-v="dd">Double displacement</button><button class="choice" data-v="neu">Neutralisation</button></div>
+      <div class="choices"><button class="choice" data-v="com" data-fb="Combination makes one product from two or more reactants. Count the products.">Combination</button><button class="choice" data-v="dec" data-fb="Decomposition starts from one reactant. Count the reactants.">Decomposition</button><button class="choice" data-v="sd">Single displacement</button><button class="choice" data-v="dd" data-fb="Double displacement needs two compounds that swap partners.">Double displacement</button><button class="choice" data-v="neu" data-fb="Neutralisation needs an acid and a base.">Neutralisation</button></div>
       <div class="feedback">An element (Zn) replaces another element (Cu) in a compound: single displacement. It is also a redox reaction.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="dd">
       <div class="step-count">QUESTION 4 OF 4</div>
       <div class="eqn">BaCl₂ + Na₂SO₄ → BaSO₄ + 2NaCl</div>
-      <div class="choices"><button class="choice" data-v="com">Combination</button><button class="choice" data-v="dec">Decomposition</button><button class="choice" data-v="sd">Single displacement</button><button class="choice" data-v="dd">Double displacement</button><button class="choice" data-v="neu">Neutralisation</button></div>
+      <div class="choices"><button class="choice" data-v="com" data-fb="Combination makes one product from two or more reactants. Count the products.">Combination</button><button class="choice" data-v="dec" data-fb="Decomposition starts from one reactant. Count the reactants.">Decomposition</button><button class="choice" data-v="sd" data-fb="Single displacement needs a lone element on the left, such as Zn or Fe.">Single displacement</button><button class="choice" data-v="dd">Double displacement</button><button class="choice" data-v="neu" data-fb="Neutralisation needs an acid and a base.">Neutralisation</button></div>
       <div class="feedback">The two compounds swap partners and insoluble BaSO₄ precipitates: double displacement. No acid or base, so not neutralisation. This reaction is the basis of the limit test for sulfate.</div>
     </div>
    </div>
@@ -880,21 +891,21 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="a">
       <div class="step-count">QUESTION 1 OF 3</div>
       <div class="choice-q">Which coefficients balance __Al + __O₂ → __Al₂O₃ ?</div>
-      <div class="choices"><button class="choice" data-v="a">4, 3, 2</button><button class="choice" data-v="b">2, 3, 1</button><button class="choice" data-v="c">2, 1, 1</button></div>
+      <div class="choices"><button class="choice" data-v="a">4, 3, 2</button><button class="choice" data-v="b" data-fb="Count the O atoms on each side.">2, 3, 1</button><button class="choice" data-v="c" data-fb="Count the O atoms on each side.">2, 1, 1</button></div>
       <div class="feedback">4Al + 3O₂ → 2Al₂O₃: 4 Al and 6 O on each side. "2, 3, 1" gives 6 O on the left but only 3 on the right.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="b">
       <div class="step-count">QUESTION 2 OF 3</div>
       <div class="choice-q">Why must you not balance H₂ + O₂ → H₂O by writing H₂O₂?</div>
-      <div class="choices"><button class="choice" data-v="a">The atoms would not balance</button><button class="choice" data-v="b">It changes the product into a different substance</button><button class="choice" data-v="c">Subscripts must be even</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="With H₂O₂ the atoms do balance. So what is the problem?">The atoms would not balance</button><button class="choice" data-v="b">It changes the product into a different substance</button><button class="choice" data-v="c" data-fb="There is no such rule. Think about what a subscript tells you.">Subscripts must be even</button></div>
       <div class="feedback">H₂O₂ is hydrogen peroxide. Subscripts define the substance; only coefficients may change.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="c">
       <div class="step-count">QUESTION 3 OF 3</div>
       <div class="choice-q">Mg(OH)₂ + 2HCl → MgCl₂ + 2H₂O. How many moles of HCl react with 0.10 mol of Mg(OH)₂?</div>
-      <div class="choices"><button class="choice" data-v="a">0.05 mol</button><button class="choice" data-v="b">0.10 mol</button><button class="choice" data-v="c">0.20 mol</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="You divided. More HCl reacts than Mg(OH)₂, so multiply.">0.05 mol</button><button class="choice" data-v="b" data-fb="Use the mole ratio from the coefficients: 1 : 2.">0.10 mol</button><button class="choice" data-v="c">0.20 mol</button></div>
       <div class="feedback">The ratio is 1 : 2, so 0.10 × 2 = 0.20 mol of HCl.</div>
     </div>
    </div>
@@ -934,9 +945,10 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
      <li><span class="n">2</span><div>Mole ratio HCl : Mg(OH)₂ = 2 : 1, so HCl = 2 × 8.62 = <b>17.2 mmol</b></div></li>
      <li><span class="n">3</span><div>Mass of HCl = 17.2 mmol × 36.5 g/mol = <b>629 mg</b></div></li>
    </ul>
+   <p class="small">Aluminium hydroxide works the same way, with a 1 : 3 ratio: Al(OH)₃ + <b>3</b>HCl → AlCl₃ + <b>3</b>H₂O.</p>
    <div class="toggle-wrap opt">
      <button class="toggle-btn"><span><span class="tag">Go deeper</span>Milliequivalents and antacid strength</span><span class="hint">Open</span></button>
-     <div class="toggle-body"><p>Antacid strength is reported as <b>acid-neutralising capacity</b> in milliequivalents (mEq). For HCl, 1 mEq is 1 mmol, so this tablet could in theory neutralise 17.2 mEq. US rules require an antacid product to provide at least <b>5 mEq</b>, measured by the USP test method. <span class="cite">(<a href="https://www.law.cornell.edu/cfr/text/21/331.10" target="_blank" rel="noopener">21 CFR 331.10</a>)</span></p></div>
+     <div class="toggle-body"><p>Antacid strength is reported as <b>acid-neutralising capacity</b> in milliequivalents (mEq). For HCl, 1 mEq is 1 mmol, so this tablet could in theory neutralise 17.2 mEq. US rules require an antacid product to provide at least <b>5 mEq</b>, measured by the USP test method. <span class="cite">(<a href="https://www.law.cornell.edu/cfr/text/21/331.10" target="_blank" rel="noopener">21 CFR 331.10</a>)</span></p><p>The calculation gives the <b>maximum</b>. A measured capacity can be lower, because not all of the antacid reacts in the test time, but never higher. A label claim above the theoretical value is an error to query.</p></div>
    </div>
   </div>
  </div>
@@ -953,14 +965,14 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="b">
       <div class="step-count">QUESTION 1 OF 2</div>
       <div class="choice-q">How many millimoles of HCl does it neutralise?</div>
-      <div class="choices"><button class="choice" data-v="a">10 mmol</button><button class="choice" data-v="b">20 mmol</button><button class="choice" data-v="c">40 mmol</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="That is the mmol of CaCO₃. Now use the mole ratio.">10 mmol</button><button class="choice" data-v="b">20 mmol</button><button class="choice" data-v="c" data-fb="Check the ratio: 2 HCl for each CaCO₃.">40 mmol</button></div>
       <div class="feedback">1.00 g ÷ 100 g/mol = 10 mmol CaCO₃. The ratio is 1 : 2, so 20 mmol HCl.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 2 OF 2</div>
       <div class="choice-q">What mass of carbon dioxide (M = 44 g/mol) forms? This gas is why calcium carbonate can cause burping.</div>
-      <div class="choices"><button class="choice" data-v="a">0.44 g</button><button class="choice" data-v="b">0.88 g</button><button class="choice" data-v="c">1.00 g</button></div>
+      <div class="choices"><button class="choice" data-v="a">0.44 g</button><button class="choice" data-v="b" data-fb="Look at the coefficient of CO₂. Is the ratio CO₂ : CaCO₃ 1 : 1 or 2 : 1?">0.88 g</button><button class="choice" data-v="c" data-fb="The tablet’s mass is not the mass of one product. Go through moles.">1.00 g</button></div>
       <div class="feedback">The ratio CO₂ : CaCO₃ is 1 : 1, so 10 mmol CO₂ × 44 g/mol = 440 mg = 0.44 g.</div>
     </div>
    </div>
@@ -1053,13 +1065,15 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
   <div class="txt">
    <div class="eyebrow">Formulator's thinking</div>
    <h2>The excess <span class="ac">is chosen on purpose.</span></h2>
-   <p>In a real synthesis, chemists decide which reactant will be limiting. Tap each reason.</p>
+   <p>In a real synthesis or formulation, the team decides which reactant will be limiting. Tap each reason.</p>
    <div class="rgrid">
      <button class="rcard"><span class="rt">Protect the valuable one</span><span class="rb">Make the expensive or hard-to-make starting material limiting, so as much of it as possible becomes product. Here, salicylic acid.</span></button>
      <button class="rcard"><span class="rt">Push it to completion</span><span class="rb">Extra of the cheap reagent helps the reaction use up the limiting one more fully.</span></button>
      <button class="rcard"><span class="rt">Easy to remove</span><span class="rb">Leftover acetic anhydride reacts with water to form acetic acid, which washes away from the solid aspirin.</span></button>
      <button class="rcard"><span class="rt">Too much costs too</span><span class="rb">A huge excess wastes material and adds purification and disposal work, so the excess is kept modest.</span></button>
+     <button class="rcard"><span class="rt">Effervescent sachets</span><span class="rb">Citric acid is kept in slight excess, so all the sodium bicarbonate reacts quickly and the slightly acidic drink tastes fresh.</span></button>
    </div>
+   <p class="small">Effervescent formulas: <span class="cite">(<a href="https://www.jungbunzlauer.com/wp-content/uploads/2025/04/Functional-acids-with-added-value-in-effervescent-systems.pdf" target="_blank" rel="noopener">Jungbunzlauer, 2025</a>)</span></p>
   </div>
  </div>
 </section>
@@ -1074,21 +1088,21 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="a">
       <div class="step-count">QUESTION 1 OF 3</div>
       <div class="choice-q">You mix 4 mol of H₂ with 3 mol of O₂. Which is limiting?</div>
-      <div class="choices"><button class="choice" data-v="a">H₂</button><button class="choice" data-v="b">O₂</button><button class="choice" data-v="c">Neither</button></div>
+      <div class="choices"><button class="choice" data-v="a">H₂</button><button class="choice" data-v="b" data-fb="Divide each by its coefficient before comparing.">O₂</button><button class="choice" data-v="c" data-fb="Divide each by its coefficient. Are the results equal?">Neither</button></div>
       <div class="feedback">H₂: 4 ÷ 2 = 2. O₂: 3 ÷ 1 = 3. H₂ gives the smaller number, so it runs out first; 1 mol of O₂ is left.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="b">
       <div class="step-count">QUESTION 2 OF 3</div>
       <div class="choice-q">How many moles of water form from that mixture?</div>
-      <div class="choices"><button class="choice" data-v="a">3 mol</button><button class="choice" data-v="b">4 mol</button><button class="choice" data-v="c">6 mol</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="Work from the limiting reagent, H₂, and the H₂O : H₂ ratio.">3 mol</button><button class="choice" data-v="b">4 mol</button><button class="choice" data-v="c" data-fb="You worked from O₂, which is in excess. Use the limiting reagent.">6 mol</button></div>
       <div class="feedback">Work from the limiting reagent: H₂O : H₂ is 2 : 2, so 4 mol H₂ gives 4 mol H₂O. Using O₂ (6 mol) would overestimate.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 3 OF 3</div>
       <div class="choice-q">Why did Luna's factory make salicylic acid the limiting reagent?</div>
-      <div class="choices"><button class="choice" data-v="a">It is the more valuable starting material</button><button class="choice" data-v="b">It has the smaller mass</button><button class="choice" data-v="c">It is a gas</button></div>
+      <div class="choices"><button class="choice" data-v="a">It is the more valuable starting material</button><button class="choice" data-v="b" data-fb="Mass alone never decides which is limiting. Why would a factory choose?">It has the smaller mass</button><button class="choice" data-v="c" data-fb="Salicylic acid is a solid. Think about cost.">It is a gas</button></div>
       <div class="feedback">The more valuable material is made limiting so that as much of it as possible ends up as product. Mass alone never decides it.</div>
     </div>
    </div>
@@ -1136,6 +1150,10 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
      <button class="rcard"><span class="rt">Purification losses</span><span class="rb">Recrystallisation removes impurities but some product stays dissolved in the solvent.</span></button>
    </div>
    <div class="callout warn"><b>Over 100%?</b> That is a warning sign, not a success. The product is probably still wet or contains impurities. Dry it to constant mass and check purity.</div>
+   <div class="toggle-wrap opt">
+     <button class="toggle-btn"><span><span class="tag">Go deeper</span>Damp effervescent sachets</span><span class="hint">Open</span></button>
+     <div class="toggle-body"><p>Effervescent powders take up moisture. A little water lets the acid and the bicarbonate react inside the pack, and that CO₂ escapes before the patient opens it. In one supplier’s test, a plain citric acid and bicarbonate mix gave about 47% less CO₂ after 88 days of open storage at 30 °C and 60% relative humidity. In a humid climate, effervescents need dry storage and sealed packs. <span class="cite">(<a href="https://www.jungbunzlauer.com/wp-content/uploads/2025/04/Functional-acids-with-added-value-in-effervescent-systems.pdf" target="_blank" rel="noopener">Jungbunzlauer, 2025</a>)</span></p></div>
+   </div>
   </div>
  </div>
 </section>
@@ -1201,14 +1219,14 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="a">
       <div class="step-count">QUESTION 1 OF 2</div>
       <div class="choice-q">The theoretical yield is 5.0 g and you collect 4.2 g. What is the percentage yield?</div>
-      <div class="choices"><button class="choice" data-v="a">84%</button><button class="choice" data-v="b">119%</button><button class="choice" data-v="c">4.2%</button></div>
+      <div class="choices"><button class="choice" data-v="a">84%</button><button class="choice" data-v="b" data-fb="That is theoretical ÷ actual. Divide actual by theoretical.">119%</button><button class="choice" data-v="c" data-fb="Divide first, then multiply by 100.">4.2%</button></div>
       <div class="feedback">4.2 ÷ 5.0 × 100 = 84%. Dividing the wrong way round gives 119%.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="b">
       <div class="step-count">QUESTION 2 OF 2</div>
       <div class="choice-q">A student reports a 108% yield. What is the most likely explanation?</div>
-      <div class="choices"><button class="choice" data-v="a">An excellent technique</button><button class="choice" data-v="b">The product is still wet or impure</button><button class="choice" data-v="c">The limiting reagent was in excess</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="No technique can make mass from nothing. What else could add mass?">An excellent technique</button><button class="choice" data-v="b">The product is still wet or impure</button><button class="choice" data-v="c" data-fb="The theoretical yield already uses the limiting reagent. What else adds mass?">The limiting reagent was in excess</button></div>
       <div class="feedback">Mass cannot appear from nowhere. Extra mass usually means solvent or impurities are still in the product.</div>
     </div>
    </div>
@@ -1217,6 +1235,18 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 </section>
 
 <!-- ================= WRAP-UP ================= -->
+
+<section class="slide" data-sec="lab" data-title="Reaction Bench (lab)">
+ <div class="si lab-si">
+  <div class="lab-head">
+   <div class="eyebrow">Interactive lab · all topics</div>
+   <h2>Reaction Bench: <span class="ac">six stations, one pharmacy.</span></h2>
+   <p class="small">Dose a prescription, name QC reactions, check an antacid, then make and release an effervescent sachet. Four scenarios. <a href="lab.html" target="_blank" rel="noopener" data-umami-event="lab-open-full">Open full screen ↗</a></p>
+   <p class="lab-status task" data-lab="stoich-lab" aria-live="polite">Finish one full round (all 6 stations) to unlock Next.</p>
+  </div>
+  <div class="lab-frame"><iframe data-src="lab.html?embed=1" title="Reaction Bench interactive lab" loading="lazy"></iframe><div class="lab-launch"><span>Your screen is too short to use the lab here.</span><a href="lab.html" target="_blank" rel="noopener" data-umami-event="lab-launch-small">Open the lab ↗</a></div></div>
+ </div>
+</section>
 
 <section class="slide" data-sec="end" data-title="Quick quiz">
  <div class="si">
@@ -1227,51 +1257,40 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
     <div class="choice-set cur" data-answer="b">
       <div class="step-count">QUESTION 1 OF 5</div>
       <div class="choice-q">What is the molar mass of CO₂ (C = 12, O = 16)?</div>
-      <div class="choices"><button class="choice" data-v="a">28 g/mol</button><button class="choice" data-v="b">44 g/mol</button><button class="choice" data-v="c">60 g/mol</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="CO₂ has two O atoms.">28 g/mol</button><button class="choice" data-v="b">44 g/mol</button><button class="choice" data-v="c" data-fb="Count the atoms: one C and two O.">60 g/mol</button></div>
       <div class="feedback">12 + (2 × 16) = 44 g/mol.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 2 OF 5</div>
       <div class="choice-q">2Mg + O₂ → 2MgO is an example of:</div>
-      <div class="choices"><button class="choice" data-v="a">Combination</button><button class="choice" data-v="b">Decomposition</button><button class="choice" data-v="c">Double displacement</button></div>
+      <div class="choices"><button class="choice" data-v="a">Combination</button><button class="choice" data-v="b" data-fb="Decomposition starts from one reactant. Count the reactants.">Decomposition</button><button class="choice" data-v="c" data-fb="Double displacement needs two compounds. Mg and O₂ are elements.">Double displacement</button></div>
       <div class="feedback">Two reactants join to make one product: combination. It is also a redox reaction.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 3 OF 5</div>
       <div class="choice-q">Which coefficients balance __C₃H₈ + __O₂ → __CO₂ + __H₂O ?</div>
-      <div class="choices"><button class="choice" data-v="a">1, 5, 3, 4</button><button class="choice" data-v="b">1, 4, 3, 4</button><button class="choice" data-v="c">1, 3, 3, 4</button></div>
+      <div class="choices"><button class="choice" data-v="a">1, 5, 3, 4</button><button class="choice" data-v="b" data-fb="Count the O atoms on the right: 3 × 2 + 4.">1, 4, 3, 4</button><button class="choice" data-v="c" data-fb="Count the O atoms on the right: 3 × 2 + 4.">1, 3, 3, 4</button></div>
       <div class="feedback">3 C, 8 H, and 10 O on each side: 1, 5, 3, 4.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="a">
       <div class="step-count">QUESTION 4 OF 5</div>
       <div class="choice-q">BaCl₂ + Na₂SO₄ → BaSO₄ + 2NaCl. You mix 0.50 mol BaCl₂ with 0.30 mol Na₂SO₄. How many moles of BaSO₄ can form?</div>
-      <div class="choices"><button class="choice" data-v="a">0.30 mol</button><button class="choice" data-v="b">0.50 mol</button><button class="choice" data-v="c">0.80 mol</button></div>
+      <div class="choices"><button class="choice" data-v="a">0.30 mol</button><button class="choice" data-v="b" data-fb="You worked from BaCl₂. Which reactant runs out first?">0.50 mol</button><button class="choice" data-v="c" data-fb="Product comes from the limiting reagent only, not from both added together.">0.80 mol</button></div>
       <div class="feedback">The ratio is 1 : 1, so Na₂SO₄ (0.30 mol) is limiting and 0.30 mol BaSO₄ forms; 0.20 mol BaCl₂ is left over.</div>
       <button class="next-q">Next question →</button>
     </div>
     <div class="choice-set" data-answer="b">
       <div class="step-count">QUESTION 5 OF 5</div>
       <div class="choice-q">The theoretical yield of aspirin is 2.61 g and you collect 2.35 g. The percentage yield is:</div>
-      <div class="choices"><button class="choice" data-v="a">111%</button><button class="choice" data-v="b">90.0%</button><button class="choice" data-v="c">26.1%</button></div>
+      <div class="choices"><button class="choice" data-v="a" data-fb="That is theoretical ÷ actual. Divide actual by theoretical.">111%</button><button class="choice" data-v="b">90.0%</button><button class="choice" data-v="c" data-fb="Check what you divided: actual ÷ theoretical, then × 100.">26.1%</button></div>
       <div class="feedback">2.35 ÷ 2.61 × 100 = 90.0%.</div>
     </div>
     <div class="score" id="quiz-score"></div>
    </div>
   </div>
- </div>
-</section>
-
-<section class="slide" data-sec="lab" data-title="Reaction Bench (lab)">
- <div class="si lab-si">
-  <div class="lab-head">
-   <div class="eyebrow">Interactive lab</div>
-   <h2>Reaction Bench: <span class="ac">balance, load, react.</span></h2>
-   <p class="small">Pick a reaction, balance it, set the reactant masses, predict the limiting reagent and theoretical yield, then run it and work out the percentage yield. <a href="lab.html" target="_blank" rel="noopener" data-umami-event="lab-open-full">Open full screen ↗</a></p>
-  </div>
-  <div class="lab-frame"><iframe id="lab-iframe" data-src="lab.html?embed=1" title="Reaction Bench interactive lab" loading="lazy"></iframe></div>
  </div>
 </section>
 
@@ -1304,7 +1323,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
      <div class="card"><div class="cn">3</div><div>Balance with coefficients, never subscripts. The coefficients are mole ratios.</div></div>
      <div class="card"><div class="cn">4</div><div>The limiting reagent has the smallest moles ÷ coefficient and sets the theoretical yield. Percentage yield = actual ÷ theoretical × 100%.</div></div>
    </div>
-   <div style="margin:.6em 0"><button class="btn solid" id="btn-refs" data-umami-event="open-sources">Sources and further reading (7) →</button></div>
+   <div style="margin:.6em 0"><button class="btn solid" id="btn-refs" data-umami-event="open-sources">Sources and further reading (9) →</button></div>
    <div class="madeby">
      <p><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener" data-umami-event="link-website">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Relative atomic masses are rounded for teaching. Luna, her factory and the trial batch are fictional.</p>
      <div class="socials">
@@ -1336,7 +1355,7 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
 <div class="overlay" id="toc-overlay" role="dialog" aria-modal="true">
   <div class="panel">
     <div class="panel-head"><h3>Contents</h3><button class="icon-btn close-ov">Close</button></div>
-    <p class="toc-note">You can jump to any page from here, even if a page's questions are not finished.</p>
+    <p class="toc-note">You can go back to any page you have reached. Finish a page's questions to move past it.</p>
     <button type="button" class="pt-open" id="btn-pt" data-umami-event="open-periodic-table"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3h4v4H2zM14 3h4v4h-4zM2 8h4v4H2zM7 8h3v4H7zM11 8h3v4h-3zM14 8h4v4h-4zM2 13h4v4H2zM7 13h3v4H7zM11 13h3v4h-3zM14 13h4v4h-4z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>Periodic table</button>
     <ul class="toc" id="toc-list"></ul>
   </div>
@@ -1357,6 +1376,8 @@ footer{text-align:center;font-size:.7rem;color:var(--muted);padding-top:4px}
       <li>Bureau International des Poids et Mesures. (2019). <i>The International System of Units (SI)</i> (9th ed.). <a href="https://www.bipm.org/en/publications/si-brochure" target="_blank" rel="noopener">bipm.org</a></li>
       <li>Code of Federal Regulations. 21 CFR § 331.10, Antacid active ingredients. <a href="https://www.law.cornell.edu/cfr/text/21/331.10" target="_blank" rel="noopener">law.cornell.edu</a></li>
       <li>European Pharmacopoeia. 2.4.4 Chlorides; 2.4.13 Sulfates (limit tests). European Directorate for the Quality of Medicines.</li>
+      <li>Jungbunzlauer. (2025). <i>Functional acids with added value in effervescent systems</i> [Technical paper]. <a href="https://www.jungbunzlauer.com/wp-content/uploads/2025/04/Functional-acids-with-added-value-in-effervescent-systems.pdf" target="_blank" rel="noopener">jungbunzlauer.com</a></li>
+      <li>NHS Business Services Authority. (n.d.). <i>Potassium chloride 375mg/5ml (potassium 5mmol/5ml) oral solution sugar free</i>. Dictionary of medicines and devices (dm+d). <a href="https://dmd-browser.nhsbsa.nhs.uk/vmp/view/1735" target="_blank" rel="noopener">dmd-browser.nhsbsa.nhs.uk</a></li>
       <li>NHS Business Services Authority. (n.d.). <i>PotaChlor 600mg (8mmol) modified-release tablets</i>. Dictionary of medicines and devices (dm+d). <a href="https://mca.sps.nhs.uk/mca/potachlor-600mg-8mmol-modified-release-tablets-trion-pharma-ltd" target="_blank" rel="noopener">mca.sps.nhs.uk</a></li>
       <li>OpenStax. (2019). Formula mass and the mole concept. In <i>Chemistry 2e</i> (Section 3.1). <a href="https://openstax.org/books/chemistry-2e/pages/3-1-formula-mass-and-the-mole-concept" target="_blank" rel="noopener">openstax.org</a></li>
       <li>OpenStax. (2019). Stoichiometry of chemical reactions. In <i>Chemistry 2e</i> (Chapter 4). <a href="https://openstax.org/books/chemistry-2e/pages/4-introduction" target="_blank" rel="noopener">openstax.org</a></li>
@@ -1567,7 +1588,13 @@ const RX_DATA=[
 (function(){
   const slides   = document.querySelectorAll('.slide');
   const TOTAL    = slides.length;
+  /* progress is kept per person: signed-in students under their own id, visitors under a device key.
+     Educators: nothing saved. In Kompas student preview the gates are on and nothing is saved. */
+  let PKEY='kompas.stoichiometry.progress.v2', saveOn=true, previewOn=false;
+  let maxReached=1, isEducator=false, signedIn=false;
+  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.max>=1) maxReached=Math.min(sv.max, document.querySelectorAll('.slide').length); }catch(_){}
   let current = 1;
+  try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null'); if(sv && sv.last>=1 && sv.last<=maxReached) current=sv.last; }catch(_){}
   const btnBack  = document.getElementById('btn-back');
   const btnNext  = document.getElementById('btn-next');
   const progFill = document.getElementById('progress-fill');
@@ -1775,7 +1802,7 @@ const RX_DATA=[
   slides.forEach(s=>s.addEventListener('scroll', updateMore, {passive:true}));
   let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>fit(slides[current-1]),120); });
 
-  /* ---------- GATING ("Go deeper" toggles are optional) ---------- */
+  /* ---------- GATING ("Go deeper" toggles are optional; pages already reached stay open) ---------- */
   function pending(slide){
     let n=0;
     slide.querySelectorAll('.toggle-wrap:not(.opt)').forEach(t=>{ if(!t.classList.contains('seen')) n++; });
@@ -1785,15 +1812,14 @@ const RX_DATA=[
     return n;
   }
   function updateGate(alert){
-    const s=slides[current-1], n=pending(s);
+    const s=slides[current-1], n=(isEducator||current<maxReached)?0:pending(s);
     btnNext.classList.toggle('locked', n>0);
-    if(n===0){ hint.className=''; hint.textContent=''; return; }
+    if(n===0){ hint.className=''; hint.textContent=isEducator?'Educator view: nothing is locked. To test the locks, use “View as student” in Kompas.':(previewOn?'Student preview: questions lock Next, and nothing is saved.':''); return; }
     hint.className=alert?'alert':'';
     const what=n===1?'1 item':n+' items';
-    hint.innerHTML=alert
-      ? 'Please finish the questions or open the sections on this page first ('+what+' left). Or skip ahead using <button type="button" id="hint-toc">Contents</button>.'
-      : 'Finish '+what+' on this page to continue, or use <button type="button" id="hint-toc">Contents</button>';
-    document.getElementById('hint-toc').addEventListener('click',()=>openOv('toc-overlay'));
+    hint.textContent=alert
+      ? 'Please finish the questions or open the sections on this page first ('+what+' left).'
+      : 'Finish '+what+' on this page to continue.';
   }
   function flagPending(slide){
     [...slide.querySelectorAll('.toggle-wrap:not(.seen):not(.opt), .rcard:not(.seen), .choice-set:not([data-done]), .task:not([data-done])')]
@@ -1809,19 +1835,19 @@ const RX_DATA=[
     btnNext.textContent=n===TOTAL?'Done':'Next →';
     btnNext.setAttribute('data-umami-event',n===TOTAL?'carousel-selesai':'nav-next');
     rxv.stop();
-    const fr=slides[n-1].querySelector('iframe[data-src]');
-    if(fr && !fr.src){ fr.src=fr.dataset.src; if(window.umami) umami.track('lab-embed-open'); }
     fit(slides[n-1]);
     requestAnimationFrame(()=>fit(slides[n-1]));
+    labFrame(slides[n-1]);
     updateGate(false);
+    saveProgress();
     if(window.umami) umami.track('slide-view',{slide:n});
   }
 
   /* NAV BUTTONS ONLY — no swipe, no keyboard */
   btnNext.addEventListener('click',()=>{
     const s=slides[current-1];
-    if(pending(s)>0){ updateGate(true); flagPending(s); if(window.umami) umami.track('gate-blocked',{slide:current}); return; }
-    if(current<TOTAL){ current++; show(current); } else openOv('refs-overlay');
+    if(!isEducator && current>=maxReached && pending(s)>0){ updateGate(true); flagPending(s); if(window.umami) umami.track('gate-blocked',{slide:current}); return; }
+    if(current<TOTAL){ current++; reach(current); show(current); } else openOv('refs-overlay');
   });
   btnBack.addEventListener('click',()=>{ if(current>1){ current--; show(current); } });
 
@@ -1832,15 +1858,20 @@ const RX_DATA=[
   document.querySelectorAll('.rcard').forEach(c=>c.addEventListener('click',()=>{ c.classList.add('seen'); fit(slides[current-1]); updateGate(false); }));
 
   document.querySelectorAll('.choice-set').forEach(set=>{
-    const ans=set.dataset.answer;
+    const ans=set.dataset.answer, fb=set.querySelector('.feedback');
+    const miss=document.createElement('div'); miss.className='feedback miss'; miss.setAttribute('aria-live','polite'); fb.parentNode.insertBefore(miss,fb);
     set.querySelectorAll('.choice').forEach(c=>c.addEventListener('click',()=>{
-      if(set.dataset.done) return;
-      set.dataset.done='1'; set.classList.add('done');
-      const ok=c.dataset.v===ans; set.dataset.correct=ok?'1':'0';
-      set.querySelectorAll('.choice').forEach(x=>{ if(x.dataset.v===ans) x.classList.add('right'); });
-      if(!ok) c.classList.add('wrong');
-      set.querySelector('.feedback').classList.add('show');
-      if(window.umami) umami.track('choice',{correct:ok});
+      if(set.dataset.done || c.classList.contains('wrong')) return;
+      const ok=c.dataset.v===ans;
+      if(set.dataset.first===undefined) set.dataset.first=ok?'1':'0';
+      if(ok){
+        set.dataset.done='1'; set.classList.add('done'); c.classList.add('right');
+        miss.classList.remove('show'); fb.classList.add('show');
+      } else {
+        c.classList.add('wrong'); c.setAttribute('aria-disabled','true');
+        miss.innerHTML='<b>Not quite.</b> '+(c.dataset.fb||'Think again, then choose another answer.'); miss.classList.add('show');
+      }
+      if(window.umami) umami.track('choice',{correct:ok, first:set.dataset.first==='1'});
       updateScore(); fit(slides[current-1]); updateGate(false);
     }));
     const nx=set.querySelector('.next-q');
@@ -1852,15 +1883,35 @@ const RX_DATA=[
   function updateScore(){
     const q=document.querySelectorAll('.quiz .choice-set'), done=[...q].filter(s=>s.dataset.done);
     if(done.length<q.length) return;
-    document.getElementById('quiz-score').textContent='Your score: '+done.filter(s=>s.dataset.correct==='1').length+' / '+q.length;
+    document.getElementById('quiz-score').textContent='Right first time: '+done.filter(s=>s.dataset.first==='1').length+' / '+q.length;
   }
+
+  /* the lab needs about 480 px of height to show each step without scrolling;
+     on shorter screens offer a full-screen link instead of a cramped frame */
+  function labFrame(slide){
+    const fr=slide && slide.querySelector('iframe[data-src]'); if(!fr) return;
+    const box=fr.parentElement, small=box.clientHeight<480;
+    box.classList.toggle('launch',small);
+    if(!small && !fr.src){ fr.src=fr.dataset.src; if(window.umami) umami.track('lab-embed-open',{lab:'stoich-lab'}); }
+  }
+  window.addEventListener('resize',()=>setTimeout(()=>labFrame(slides[current-1]),200));
 
   /* the embedded lab reports finished rounds */
   window.addEventListener('message',e=>{
     if(e.origin!==location.origin && location.origin!=='null') return;
     const d=e.data||{};
-    if(d.type==='stoich-lab' && window.umami) umami.track('lab-'+d.event,{reaction:d.reaction||''});
+    if(d.type==='stoich-lab' && window.umami) umami.track('lab-'+d.event,{scenario:d.reaction||''});
+    if(d.type==='stoich-lab' && d.event==='round-complete') markLab(d.type);
   });
+  /* the lab page stays locked until the bench has one completed round. The bench also records
+     the round on this device, so a round finished full screen (another tab) unlocks it too. */
+  const LABKEY=l=>'kompas.stoichiometry.'+l+'.done';
+  function markLab(l){
+    document.querySelectorAll('.lab-status[data-lab="'+l+'"]').forEach(t=>{ if(t.dataset.done) return; t.dataset.done='1'; t.classList.add('ok'); t.innerHTML='Lab round complete. Press Next to continue.'; });
+    updateGate(false);
+  }
+  ['stoich-lab'].forEach(l=>{ try{ if(localStorage.getItem(LABKEY(l))) markLab(l); }catch(_){} });
+  window.addEventListener('storage',e=>{ const m=/^kompas\.stoichiometry\.(stoich-lab)\.done$/.exec(e.key||''); if(m && e.newValue) markLab(m[1]); });
 
   /* ---------- VIDEOS: original creators' YouTube embeds ----------
      Paste a YouTube video ID into "id" to switch a button on. Empty id = button hidden. */
@@ -1894,8 +1945,9 @@ const RX_DATA=[
     if(window.KompasPT) KompasPT.open();
   });
 
-  /* contents — bypasses gating */
-  const secNames={intro:'Start here',mole:'1 · The mole',types:'2 · Types of reaction',balance:'3 · Writing and balancing equations',stoich:'4 · Reaction stoichiometry',limit:'5 · Limiting reagent',yield:'6 · Percentage yield',lab:'Interactive lab',end:'Wrap-up'};
+  /* contents: students can revisit any page they have already reached;
+     a signed-in Kompas educator can open every page */
+  const secNames={intro:'Start here',mole:'1 · The mole',types:'2 · Types of reaction',balance:'3 · Writing and balancing equations',stoich:'4 · Reaction stoichiometry',limit:'5 · Limiting reagent',yield:'6 · Percentage yield',lab:'Lab · Reaction Bench',end:'Wrap-up'};
   function buildToc(){
     const ul=document.getElementById('toc-list'); ul.innerHTML=''; let last='';
     slides.forEach((s,i)=>{
@@ -1903,7 +1955,9 @@ const RX_DATA=[
       const li=document.createElement('li'), b=document.createElement('button');
       b.innerHTML='<span>'+(i+1)+'</span>'+s.dataset.title;
       if(i+1===current) b.className='cur';
-      b.addEventListener('click',()=>{ current=i+1; show(current); document.getElementById('toc-overlay').classList.remove('open'); if(window.umami) umami.track('toc-jump',{slide:current}); });
+      const open=isEducator || i+1<=maxReached;
+      if(!open){ b.classList.add('lockd'); b.disabled=true; b.setAttribute('aria-disabled','true'); }
+      b.addEventListener('click',()=>{ if(!(isEducator || i+1<=maxReached)) return; current=i+1; show(current); document.getElementById('toc-overlay').classList.remove('open'); if(window.umami) umami.track('toc-jump',{slide:current}); });
       li.appendChild(b); ul.appendChild(li);
     });
   }
@@ -1925,9 +1979,36 @@ const RX_DATA=[
     play:id=>{ if(window.umami) umami.track('rxv-play',{type:id}); }
   });
 
+  /* ---------- progress: furthest page reached ---------- */
+  function reach(n){ if(n>maxReached){ maxReached=n; } }
+  function saveProgress(){ if(!saveOn) return; try{ localStorage.setItem(PKEY, JSON.stringify({max:maxReached, last:current})); }catch(_){} }
+  function loadProgress(){
+    maxReached=1; current=1;
+    try{ const sv=JSON.parse(localStorage.getItem(PKEY)||'null');
+      if(sv && sv.max>=1) maxReached=Math.min(sv.max, TOTAL);
+      if(sv && sv.last>=1 && sv.last<=maxReached) current=sv.last; }catch(_){}
+  }
+
+  /* ---------- Kompas sign-in: read the user's own role (RLS allows only their own row) ---------- */
+  window.addEventListener('DOMContentLoaded',async()=>{
+    try{
+      if(!window.supabase) return;
+      const sb=window.supabase.createClient('https://jtkskwopnprgmxlhppro.supabase.co','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0a3Nrd29wbnByZ214bGhwcHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDU0NDQsImV4cCI6MjEwMjUyMTQ0NH0.MVvaIH6fPhzC0aRk8XIZMU1OrAZYNbsT9V1diP8fuGw',{auth:{detectSessionInUrl:false}});
+      const {data:{session}}=await sb.auth.getSession(); if(!session) return;
+      const {data}=await sb.from('profiles').select('role').eq('id',session.user.id).single();
+      if(!data) return;
+      signedIn=true;
+      try{ previewOn=data.role==='educator' && !!sessionStorage.getItem('kompas.previewCourse'); }catch(_){ previewOn=false; }
+      isEducator=data.role==='educator' && !previewOn;
+      if(data.role==='educator'){ saveOn=false; if(previewOn){ maxReached=1; current=1; } }
+      else { PKEY='kompas.stoichiometry.progress.u.'+session.user.id; loadProgress(); }
+      show(current); buildToc(); updateGate(false);
+    }catch(_){}
+  });
+
   renderBal();
   buildToc();
-  show(1);
+  show(current);
   if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>fit(slides[current-1]));
 })();
 </script>
