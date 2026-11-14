@@ -1,0 +1,1332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Ring Bench — Aufthority</title>
+<meta name="description" content="Interactive lab: name benzene compounds, test rings for aromaticity, measure benzene’s extra stability, and predict its reactions.">
+<meta name="theme-color" content="#ffffff">
+<meta property="og:type"         content="website">
+<meta property="og:site_name"    content="Aufthority">
+<meta property="og:title"        content="Ring Bench: naming, aromaticity and the reactions of benzene">
+<meta property="og:description"  content="Name it, test it, and predict how benzene reacts.">
+<meta property="og:image"        content="https://www.aufthority.com/preview_v2.png">
+<meta property="og:locale"       content="en_MY">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js" defer></script>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700;9..40,800&display=swap" rel="stylesheet">
+<script>
+/* Embedded inside the explainer? Then hide the page chrome and skip analytics
+   (the explainer already tracks the visit). */
+(function(){
+  var emb = /[?&]embed=1/.test(location.search) || window.self !== window.top;
+  document.documentElement.classList.toggle('embedded', emb);
+  if(!emb){
+    var s=document.createElement('script'); s.defer=true; s.src='https://cloud.umami.is/script.js';
+    s.setAttribute('data-website-id','f79c60f1-f9e7-4170-a979-f357ba756a18'); document.head.appendChild(s);
+  }
+})();
+</script>
+
+<style>
+:root{
+  --ink:#1c2620;--body:#3f4742;--muted:#636b65;--accent:#2d6a4f;--accent-dark:#1f4d39;
+  --eyebrow:#8a5d14;--g-bg:#e9f4ee;--g-line:#cfe6d9;--rule:#e4e6e3;
+  --red:#c0392b;--r-bg:#fbecea;--orange:#d9821f;--arrow:#b25f0c;--o-bg:#fdf3e6;--blue:#3a6bd1;--b-bg:#e8effc;
+  --radius:10px;color-scheme:light;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+[hidden]{display:none!important}
+html,body{height:100%;background:#fff}
+body{color:var(--body);font-family:'DM Sans',system-ui,sans-serif;line-height:1.45;-webkit-text-size-adjust:100%;font-size:16px;overflow:hidden}
+@media (min-width:900px) and (min-height:700px){.scr{font-size:calc(var(--k,1)*18px)}}
+b,strong{color:var(--ink);font-weight:700}
+a{color:var(--accent)}
+
+/* one screen, no page scroll: top bar, stage, footer */
+#app{height:100vh;height:var(--app-h,100dvh);max-width:1040px;margin:0 auto;padding:0 14px;display:flex;flex-direction:column}
+.embedded #app{padding:0 10px}
+
+nav{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:8px 0 6px;border-bottom:1px solid var(--rule)}
+.embedded nav{display:none}
+.logo{font-weight:800;font-size:1.05rem;color:var(--ink);text-decoration:none;letter-spacing:-.01em}
+.logo span{color:var(--muted);font-weight:500;font-size:.8rem;margin-left:4px}
+.nav-right{display:flex;gap:8px}
+.pillbtn{cursor:pointer;text-decoration:none;color:var(--accent-dark);border:1px solid var(--g-line);background:var(--g-bg);font:600 .78rem 'DM Sans',sans-serif;padding:5px 10px;border-radius:100px;white-space:nowrap}
+@media (max-width:420px){.bk-long{display:none}.logo span{display:none}}
+.pts{display:none}
+@media (max-width:340px){.logo{font-size:.92rem}.nav-right{gap:4px}.pillbtn{padding:4px 7px!important;font-size:.74rem}}
+@media (max-width:400px){.ptl{display:none}.pts{display:inline}.nav-right{gap:6px}.pillbtn{padding:5px 9px}}
+
+#bar{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:7px 0 5px}
+#bar-lbl{flex:1;min-width:0;font-size:.8rem;font-weight:700;color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar-lbl span{color:var(--eyebrow);letter-spacing:.06em;text-transform:uppercase;font-size:.9em;margin-right:.35em}
+#hints-btn{flex:0 0 auto}
+#track{flex:0 0 3px;background:var(--rule);border-radius:3px;margin-bottom:6px}
+#fill{height:100%;width:0;background:var(--accent);border-radius:3px;transition:width .3s}
+
+#stage{flex:1 1 auto;min-height:0;position:relative}
+.scr{position:absolute;inset:0;display:none;flex-direction:column;gap:.35em;font-size:calc(var(--k,1)*16px);overflow:hidden;padding:2px 1px 4px}
+.scr.on{display:flex}
+.scr.scrolly{overflow-y:auto}
+.scr.half-l{right:calc(50% + 8px)}
+.scr.half-r{left:calc(50% + 8px)}
+/* wider screens: every pane is a card; two panes share the width equally, a single pane is one centred card */
+#stage.roomy .scr.on{border:1px solid var(--rule);border-radius:14px;padding:14px 18px;background:#fff}
+#stage.roomy .scr.single{left:max(0px,calc(50% - 340px));right:max(0px,calc(50% - 340px));top:50%;bottom:auto;transform:translateY(-50%);max-height:100%}
+#stage.roomy .scr.single .madeby{margin-top:.8em}
+@media (max-height:600px){#stage.roomy .scr.on{padding:8px 12px}}
+.grow{flex:1 1 auto;min-height:0}
+
+#foot{flex:0 0 auto;display:flex;align-items:center;gap:8px;padding:8px 0 10px;border-top:1px solid var(--rule)}
+#gate{flex:1;text-align:center;font-size:.74rem;color:var(--muted);line-height:1.25}
+#foot .btn{min-width:6.2em}
+#next.ready{animation:nudge 1.6s ease-in-out 2}
+@keyframes nudge{0%,100%{transform:none}50%{transform:translateX(3px)}}
+
+.eyebrow{font-size:.72em;letter-spacing:.12em;text-transform:uppercase;color:var(--eyebrow);font-weight:700;margin-bottom:.15em}
+h1{color:var(--ink);font-weight:800;line-height:1.1;letter-spacing:-.025em;font-size:1.6em;margin-bottom:.2em}
+h1 .ac{color:var(--accent)}
+p{margin-bottom:.4em;font-size:.95em}
+.small{font-size:.82em;color:var(--muted)}
+.madeby{margin-top:auto;border-top:1px solid var(--rule);padding-top:.5em;font-size:.78em;color:var(--muted)}
+
+.chips{display:flex;flex-wrap:wrap;gap:.3em;margin:.15em 0 .35em}
+.chip{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .82em 'DM Sans',sans-serif;padding:.32em .75em;border-radius:100px;cursor:pointer;text-align:left;line-height:1.3}
+.chip:hover{border-color:var(--ink)}
+.chip.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.chip .tick{margin-left:.3em;color:var(--accent)}
+.chips.col{flex-direction:column;align-items:stretch}
+.chips.col .chip{border-radius:8px}
+.ctx{font-size:.9em;color:var(--body);margin:0}
+
+.msg{font-size:.84em;padding:.35em .65em;border-left:3px solid var(--rule);border-radius:0 8px 8px 0}
+.msg.good{border-color:var(--accent);background:var(--g-bg)}
+.msg.near{border-color:var(--orange);background:var(--o-bg)}
+.msg.bad{border-color:var(--red);background:var(--r-bg)}
+.msg p{margin:0;font-size:1em}.msg p+p{margin-top:.25em}
+.q{font-weight:700;color:var(--ink);font-size:.92em;margin:.3em 0 .2em}
+.btn{background:#fff;border:1.5px solid var(--ink);border-radius:100px;color:var(--ink);font:700 .86em 'DM Sans',sans-serif;padding:.42em 1em;cursor:pointer}
+.btn.solid{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{border-color:var(--rule);color:var(--body);font-weight:600}
+.btn:disabled{opacity:.4;cursor:default}
+.btns{display:flex;flex-wrap:wrap;gap:.4em;margin-top:.2em}
+.work{display:none}
+.work.show{display:block}
+table.w{width:100%;border-collapse:collapse;font-size:.8em}
+table.w th,table.w td{border-bottom:1px solid var(--rule);padding:.25em .4em;text-align:left;vertical-align:top}
+table.w th{font-size:.82em;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+
+/* story */
+#story{display:flex;flex-direction:column;gap:.3em;min-height:0}
+.story-head{display:flex;align-items:center;justify-content:space-between}
+.dots{display:flex;gap:5px}.dots i{width:8px;height:8px;border-radius:50%;background:var(--rule)}.dots i.on{background:var(--accent)}
+.scene{display:block;width:100%;border:0;padding:0;background:none;cursor:pointer;border-radius:10px}
+.scene svg{display:block;width:100%;height:auto;max-height:13em}
+.say{font-size:.9em;margin:0;background:var(--g-bg);border-radius:10px;padding:.5em .75em;color:var(--ink);line-height:1.4}
+.story-nav{display:flex;align-items:center;justify-content:space-between;gap:.5em}
+.bob{animation:bob 3s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:none}50%{transform:translateY(-1.5px)}}
+.blink{animation:blink 4s infinite;transform-box:fill-box;transform-origin:center}
+@keyframes blink{0%,92%,100%{transform:none}95%{transform:scaleY(.1)}}
+.pulse{animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.55}}
+.spin{animation:spin 12s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.sorange{fill:#e2852b}.sorange-h{opacity:1}
+.sclear{fill:#eef3f4}.sclear-h{opacity:0}
+.sclear-anim{fill:#e2852b;animation:toclear 1s 1.6s forwards}.sclear-anim-h{animation:hatchoff 1s 1.6s forwards}
+@keyframes toclear{to{fill:#eef3f4}}@keyframes hatchoff{to{opacity:0}}
+.sdrop{opacity:0;animation:sdrop .7s ease-in .2s 2}
+@keyframes sdrop{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(34px)}}
+.slbl{opacity:0;animation:fadein .5s 2.7s forwards}
+@keyframes fadein{to{opacity:1}}
+.ondark path{stroke:#c9d1cb}
+.ondark .tl1,.ondark .tl2{fill:#f2f4f2}.onlight .tl1{fill:#1c2620}.onlight .tl2{fill:#8a4f0c}
+/* hints overlay */
+#hints,#brief,#stp{position:fixed;inset:0;background:rgba(28,38,32,.45);display:none;align-items:center;justify-content:center;padding:14px;z-index:20}
+#hints.open,#brief.open,#stp.open{display:flex}
+#hints .box,#brief .box,#stp .box{background:#fff;border-radius:14px;max-width:560px;width:100%;padding:14px 16px;max-height:100%;overflow:auto}
+#hints .top,#brief .top,#stp .top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5em}
+.ideas{display:grid;grid-template-columns:1fr 1fr;gap:.7em}
+.idea{font-size:.86em;line-height:1.35;text-align:center}
+.idea svg{display:block;width:100%;height:46px;margin-bottom:.2em}
+.term{background:none;border:none;border-bottom:1.5px dotted var(--accent);color:inherit;font:inherit;padding:0;cursor:help}
+.def{display:block;margin:.2em 0 .3em;padding:.3em .6em;background:var(--g-bg);border-radius:6px;font-size:.92em;color:var(--accent-dark);font-weight:500}
+
+
+/* ---------- shared bench styles (from the TLC bench) ---------- */
+.calc-in{display:flex;flex-wrap:wrap;align-items:center;gap:.3em .6em;margin:.1em 0}
+.num-in{font:600 1em 'DM Sans',sans-serif;width:6.5em;padding:.28em .5em;border:1.5px solid var(--rule);border-radius:8px;color:var(--ink);background:#fff}
+.num-in:focus{outline:none;border-color:var(--accent)}
+.num-in.wrong{border-color:var(--red);background:var(--r-bg);color:var(--red)}
+.num-in.wrong + .unit::after{content:" ✕ check this";color:var(--red);font-weight:700}
+.unit{font-size:.84em;color:var(--muted)}
+.given{background:#f6f7f5;border-radius:8px;padding:.4em .65em;font-size:.86em;margin:.1em 0 .2em}
+.given b{white-space:nowrap}
+.plate-box{flex:1 1 auto;min-height:9em;background:#f4f5f2;border:1px solid var(--rule);border-radius:10px;padding:4px;display:flex;justify-content:center}
+.plate-box svg{height:100%;width:100%;max-width:300px;display:block}
+.runrow{display:flex;flex-wrap:wrap;gap:.3em;align-items:center}
+.runrow .btn{font-size:.78em;padding:.34em .75em}
+.runrow .btn.doneb{border-color:var(--g-line);color:var(--accent-dark);background:var(--g-bg)}
+.pstate{font-size:.8em;color:var(--muted);line-height:1.3}
+.words-box{display:none;font-size:.8em;background:#f6f7f5;border-radius:8px;padding:.35em .6em;color:var(--ink)}
+.words .words-box{display:block}
+.trainee{font-weight:700;color:var(--red)}
+.ptx{font:600 9.5px 'DM Sans',sans-serif;fill:#5c665f}
+.ptx.s{font-size:8.5px;font-weight:500}
+.pen{fill:none;stroke:#7b827d;stroke-width:1;stroke-dasharray:2.5 2}
+.lane-lbl{font:700 10px 'DM Sans',sans-serif;fill:var(--ink);text-anchor:middle}
+.spot-lt{font:700 10px 'DM Sans',sans-serif;fill:var(--accent-dark)}
+.wait-note{font-size:.84em;color:var(--muted);background:#f6f7f5;border-radius:8px;padding:.4em .65em}
+.stuck{font-size:.92em;color:var(--accent-dark)}
+@media (prefers-reduced-motion: reduce){ #plate *{transition:none!important} }
+/* step guide: the footer names the next move; the matching control glows */
+#gate.go{color:#a85f10;font-weight:700}
+.guide{box-shadow:0 0 0 3px rgba(217,130,31,.8);animation:guide 1.4s ease-in-out infinite}
+.chips.guide,.slrow.guide,.btns.guide{border-radius:10px}
+@keyframes guide{0%,100%{box-shadow:0 0 0 2px rgba(217,130,31,.25)}50%{box-shadow:0 0 0 4px rgba(217,130,31,.9)}}
+.sop{padding-left:1.3em;font-size:.9em;margin:.3em 0 .6em}.sop li{margin-bottom:.3em}
+/* STP: the lab's controlled method document */
+#stp .box{max-width:720px;padding-top:0}
+#stp .top{position:sticky;top:0;background:#fff;padding:12px 0 8px;margin-bottom:.2em;z-index:1;border-bottom:1px solid var(--rule)}
+#stp-btn.sec{color:#a85f10;border-color:#efc58f;background:var(--o-bg)}
+.stp-doc{font-size:.86em;color:var(--body)}
+.stp-stamp{display:inline-block;border:2px solid var(--red);color:var(--red);font-weight:800;font-size:.72em;letter-spacing:.1em;text-transform:uppercase;padding:.15em .5em;border-radius:4px;transform:rotate(-2deg);margin:.5em 0}
+.stp-head{width:100%;border-collapse:collapse;margin-bottom:.6em}
+.stp-head th,.stp-head td{border:1px solid var(--ink);padding:.3em .5em;text-align:left;vertical-align:top}
+.stp-head th{background:var(--ink);color:#fff;letter-spacing:.04em}
+.stp-head td:first-child{width:36%;color:var(--muted);font-weight:600}
+.stp-sec{border-top:1px solid var(--rule);padding:.5em .35em .3em;scroll-margin-top:3.4em;border-radius:6px;transition:background .6s}
+.stp-sec.hit{background:var(--o-bg)}
+.stp-sec h3{font-size:1em;color:var(--ink);margin-bottom:.3em}
+.stp-sec p,.stp-sec li{font-size:1em;margin-bottom:.3em}
+.stp-sec ol,.stp-sec ul{padding-left:1.3em;margin-bottom:.3em}
+.stp-t{width:100%;border-collapse:collapse;margin:.2em 0 .4em}
+.stp-t th,.stp-t td{border:1px solid var(--rule);padding:.25em .45em;text-align:left;vertical-align:top}
+.stp-t th{background:#f6f7f5}
+.stp-f{background:#f6f7f5;border-radius:6px;padding:.4em .6em;font-weight:700;color:var(--ink);margin:.2em 0 .4em;overflow-x:auto}
+.tn{border-left:3px solid var(--accent);background:var(--g-bg);color:var(--accent-dark);border-radius:0 6px 6px 0;padding:.3em .6em;margin:.3em 0}
+.tn b{color:var(--accent-dark)}
+
+
+
+
+/* ---------- additions for Molecule Bench ---------- */
+.stage-wrap{position:relative;width:100%;max-width:520px;margin:.15em auto .1em;flex:0 1 auto}
+canvas.stage{display:block;width:100%;aspect-ratio:400/250;height:auto;max-height:calc(var(--k,1)*21em);touch-action:none;cursor:grab;border-radius:10px;border:1px solid var(--rule)}
+canvas.stage:active{cursor:grabbing}
+.drag-hint{position:absolute;left:8px;top:6px;font:600 .66em 'DM Sans',sans-serif;color:#fff;background:rgba(31,36,34,.55);padding:.12em .5em;border-radius:100px;pointer-events:none}
+.calc-in .num-in{width:5.2em}
+.chips .chip{font-size:.8em}
+@media (max-width:420px){.chips .chip{font-size:.76em;padding:.28em .6em}}
+@media (max-width:640px){canvas.stage{aspect-ratio:400/330}}
+
+/* periodic table (always in the bar, so it works inside the explainer too) */
+#ptov{position:fixed;inset:0;background:rgba(28,38,32,.45);display:none;align-items:flex-start;justify-content:center;padding:10px;z-index:30;overflow-y:auto}
+#ptov.open{display:flex}
+#ptov .box{background:#fff;border-radius:14px;max-width:1020px;width:100%;padding:0 14px 12px;font-size:16px}
+#ptov .top{position:sticky;top:0;background:#fff;z-index:3;display:flex;align-items:center;justify-content:space-between;padding:12px 0 6px}
+#pt-btn{display:inline-flex;align-items:center;gap:.35em}
+#pt-btn svg{width:1.05em;height:1.05em}
+.ptl2{display:inline}.pts2{display:none}
+@media (max-width:440px){.ptl2{display:none}.pts2{display:inline}#bar{gap:6px}#bar .pillbtn{padding:5px 8px}}
+.pt-top{display:flex;align-items:center;gap:.7em;margin-bottom:.2em}
+.nuc{position:relative;display:inline-block;padding-left:1.5em;font-weight:800;color:var(--ink);line-height:1}
+.nuc span{font-size:1.9rem;letter-spacing:-.02em}
+.nuc sup,.nuc sub{position:absolute;left:0;font-size:.72rem;font-weight:800;width:1.35em;text-align:right;color:var(--accent-dark)}
+.nuc sup{top:-.1em}.nuc sub{bottom:-.15em}
+.pt-detail .small{font-size:.86em;color:var(--muted)}
+.pt-detail{position:sticky;top:-2px;z-index:2;background:#fff;border:1px solid var(--g-line);border-radius:10px;padding:.55em .8em;font-size:.86rem;min-height:3.3em;margin-bottom:.5em}
+.pt-detail .big{font-size:1.5rem;font-weight:800;color:var(--ink);margin-right:.35em;letter-spacing:-.02em}
+.pt-detail .nm{font-weight:700;color:var(--ink)}
+.pt-tools{display:flex;align-items:center;gap:.4em;flex-wrap:wrap;margin-bottom:.45em;font-size:.78rem;color:var(--muted);font-weight:600}
+.pt-tools button{background:#fff;border:1.5px solid var(--rule);color:var(--ink);font:600 .78rem 'DM Sans',sans-serif;padding:.28em .75em;border-radius:100px;cursor:pointer}
+.pt-tools button.on{border-color:var(--accent);background:var(--g-bg);color:var(--accent-dark)}
+.pt-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:4px}
+.ptg{display:grid;grid-template-columns:repeat(18,minmax(2.55rem,1fr));gap:3px;min-width:47rem}
+.ptc{border:1px solid rgba(0,0,0,.08);border-radius:5px;padding:.14rem .1rem .12rem;text-align:center;cursor:pointer;font:inherit;line-height:1.05;color:var(--ink);min-width:0;background:#fff}
+.ptc i{display:block;font-style:normal;font-size:.56rem;color:var(--muted);text-align:left;padding-left:.12rem}
+.ptc b{display:block;font-size:.92rem;font-weight:800}
+.ptc s{display:block;text-decoration:none;font-size:.5rem;color:var(--muted);white-space:nowrap;overflow:hidden}
+.ptc.sel{outline:2.5px solid var(--ink);outline-offset:1px}
+.ptc.ph{background:repeating-linear-gradient(45deg,#fff 0 3px,#f1f2f0 3px 6px);cursor:default;font-size:.55rem;color:var(--muted);display:flex;align-items:center;justify-content:center}
+.ptc.dim{opacity:.32}
+.ptc.dark,.ptc.dark i,.ptc.dark s,.ptc.dark b{color:#fff}
+.pt-gh{font-size:.58rem;color:var(--muted);text-align:center;font-weight:700;align-self:end}
+.pt-legend{display:flex;flex-wrap:wrap;gap:.3em .8em;font-size:.72rem;color:var(--muted);margin:.5em 0}
+.pt-legend span{display:inline-flex;align-items:center;gap:.3em}
+.pt-legend span::before{content:"";width:.8em;height:.8em;border-radius:3px;background:var(--sw);border:1px solid rgba(0,0,0,.08)}
+.pt-scrollhint{display:none;font-size:.72rem;color:var(--muted);margin-bottom:.3em}
+@media (max-width:820px){.pt-scrollhint{display:block}}
+
+/* ---------- additions for Ring Bench ---------- */
+.calc-in .num-in{width:5.2em}
+.chips .chip{font-size:.8em}
+.chips.col .chip{text-align:left}
+@media (max-width:420px){.chips .chip{font-size:.76em;padding:.28em .6em}}
+.draw{display:block;width:100%;max-width:440px;height:auto;max-height:calc(var(--k,1)*14em);margin:.2em auto .1em}
+.draw.two{max-width:520px}
+.part.okd .chips .chip{pointer-events:none}
+.part.okd .chips .chip:not(.on){opacity:.35}
+.part .q .okm{color:var(--accent-dark);font-weight:800;margin-left:.3em}
+.part .q .bdm{color:#c0392b;font-weight:800;margin-left:.3em}
+.chip.wrongpick{border-color:#c0392b !important;background:#fdecea !important;color:#8e2a1f !important}
+.num-in.okd{border-color:var(--accent);background:var(--g-bg)}
+.aina{border-left:3px solid #b25f0c;background:#fff7ee;padding:.35em .6em;border-radius:6px;font-size:.86em;margin:.35em 0}
+.assess{border:1.5px solid var(--accent);border-radius:12px;padding:.6em .8em;background:var(--g-bg);margin-top:.5em}
+.assess h3{margin:0 0 .25em;font-size:1em}
+.assess ul{margin:.2em 0 .4em 1.1em;padding:0;font-size:.88em}
+.assess .att{font-size:.9em;margin:.3em 0}
+.chip.star{border-color:var(--accent);font-weight:700}
+.chip.lockd{opacity:.5}
+.mark{font-weight:800;color:var(--accent-dark)}
+.tube-btn{display:block;margin:.3em auto}
+@media (prefers-reduced-motion: no-preference){
+  .tb-liq{transition:fill 1.4s ease}
+  .shk{animation:shk .18s 6 alternate ease-in-out;transform-box:fill-box;transform-origin:50% 100%}
+  @keyframes shk{from{transform:rotate(-7deg)}to{transform:rotate(7deg)}}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <nav>
+    <a class="logo" href="https://www.aufthority.com">Aufthority<span>· Edu</span></a>
+    <div class="nav-right">
+      <a class="pillbtn" href="index.html" data-umami-event="lab-to-explainer">Explainer</a>
+      <a class="pillbtn" id="btn-kompas" href="../../index.html#labs" data-umami-event="back-to-kompas">← <span class="bk-long">Back to </span>Kompas</a>
+    </div>
+  </nav>
+  <div id="bar"><div id="bar-lbl"></div><button type="button" class="pillbtn" id="pt-btn" aria-haspopup="dialog" title="Periodic table: proton number, mass number, electron configuration and electronegativity"><svg viewBox="0 0 20 20" aria-hidden="true"><rect x="2" y="3" width="4" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="3" width="4" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2" y="9" width="16" height="4" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="5" y="15" width="12" height="3" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/></svg><span class="ptl2">Periodic table</span><span class="pts2">Table</span></button><button type="button" class="pillbtn" id="stp-btn" aria-haspopup="dialog" title="Bench card: the method for each station">Card</button><button type="button" class="pillbtn" id="hints-btn" aria-haspopup="dialog">Hints</button></div>
+  <div id="track"><div id="fill"></div></div>
+
+  <main id="stage">
+    <section class="scr" id="s0" data-step="0" data-title="Start">
+      <div class="eyebrow" style="margin:0">Choose a round <span class="small" style="text-transform:none;letter-spacing:0;font-weight:500">· practice rounds completed: <span id="rounds">0</span></span></div>
+      <div class="chips" id="scen-chips"></div>
+      <div id="story"></div>
+    </section>
+
+    <section class="scr" data-step="1" data-pane="a" data-title="Name it"><div id="q1a"></div></section>
+    <section class="scr" data-step="1" data-pane="b" data-title="Names">
+      <div id="q1b"></div>
+      <div class="btns"><button class="btn solid" id="chk1" type="button">Check</button></div>
+      <div class="msg" id="m1">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="2" data-pane="a" data-title="Aromatic?"><div id="q2a"></div></section>
+    <section class="scr" data-step="2" data-pane="b" data-title="The tests">
+      <div id="q2b"></div>
+      <div class="btns"><button class="btn solid" id="chk2" type="button">Check</button></div>
+      <div class="msg" id="m2">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="3" data-pane="a" data-title="Stability"><div id="q3a"></div></section>
+    <section class="scr" data-step="3" data-pane="b" data-title="Extra stability">
+      <div id="q3b"></div>
+      <div class="btns"><button class="btn solid" id="chk3" type="button">Check</button></div>
+      <div class="msg" id="m3">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="4" data-pane="a" data-title="Bromine water"><div id="q4a"></div></section>
+    <section class="scr" data-step="4" data-pane="b" data-title="Add or substitute">
+      <div id="q4b"></div>
+      <div class="btns"><button class="btn solid" id="chk4" type="button">Check</button></div>
+      <div class="msg" id="m4">Answer every part, then check.</div>
+    </section>
+
+    <section class="scr" data-step="5" data-pane="a" data-title="Predict"><div id="q5a"></div></section>
+    <section class="scr" data-step="5" data-pane="b" data-title="The products">
+      <div id="q5b"></div>
+      <div class="btns"><button class="btn solid" id="chk5" type="button">Check</button></div>
+      <div class="msg" id="m5">Answer every part, then check.</div>
+      <div class="btns" id="endrow" hidden><button class="btn" id="btn-new" type="button" data-umami-event="lab-new-values">New round</button><button class="btn ghost" id="btn-next" type="button">Next scenario →</button></div>
+    </section>
+
+  </main>
+
+  <div id="foot">
+    <button class="btn" id="back" type="button">← Back</button>
+    <div id="gate" aria-live="polite"></div>
+    <button class="btn solid" id="next" type="button">Continue →</button>
+  </div>
+</div>
+
+<div id="stp" role="dialog" aria-modal="true" aria-labelledby="stp-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="stp-title">Bench card: the method</div><button type="button" class="btn ghost" id="stp-close">Close</button></div>
+    <div class="stp-doc">
+      <table class="stp-head">
+        <tr><th colspan="2">Ring Bench · Pharmacy</th></tr>
+        <tr><td>Heat of hydrogenation</td><td>cyclohexene: 120 kJ/mol (28.6 kcal/mol) for one C=C</td></tr>
+        <tr><td>Based on</td><td>Bruice, <i>Organic Chemistry</i> (4th ed.), Chapters 7, 15 and 16; PHCH 4123 Unit 5 notes</td></tr>
+      </table>
+      <section class="stp-sec" id="stp-1"><h3>1 · Name it</h3>
+        <ol><li>Special parent names: CH₃ toluene, OH phenol, NH₂ aniline, COOH benzoic acid, CHO benzaldehyde, CH=CH₂ styrene.</li>
+          <li>Other single groups: group name + “benzene” (bromobenzene, nitrobenzene). One group needs no number.</li>
+          <li>Alkyl chain: 6 carbons or fewer, benzene is the parent (ethylbenzene). 7 or more, the chain is the parent and the ring is <b>phenyl</b> (2-phenylheptane).</li>
+          <li>Two or more groups: the parent group’s carbon is C1. Number round the ring for the <b>lowest set of numbers</b>. List groups A to Z; on a tie, the first in the alphabet gets the lower number.</li>
+          <li>ortho (o) = 1,2 · meta (m) = 1,3 · para (p) = 1,4.</li></ol></section>
+      <section class="stp-sec" id="stp-2"><h3>2 · Aromatic?</h3>
+        <ol><li>Count π electrons in the ring: 2 for each C=C. A negative ring carbon adds 2 (a lone pair in a p orbital); a positive one adds 0 (an empty p orbital).</li>
+          <li>Every ring atom needs a p orbital. An sp³ CH₂ in the ring breaks the π cloud.</li>
+          <li>Hückel’s rule: 4n + 2 π electrons, that is 2, 6, 10 …</li>
+          <li>Aromatic only if both 2 and 3 are true (and the ring is flat).</li></ol></section>
+      <section class="stp-sec" id="stp-3"><h3>3 · Stability</h3>
+        <div class="stp-f">expected heat = (number of C=C) × 120 kJ/mol</div>
+        <div class="stp-f">extra stability = expected − measured</div>
+        <p>A large extra stability (benzene: about 152 kJ/mol, 36 kcal/mol) means aromatic. A few kJ/mol comes from conjugation only.</p></section>
+      <section class="stp-sec" id="stp-4"><h3>4 · Bromine water</h3>
+        <ol><li>Alkenes (and any C=C outside a ring) add Br₂: the orange colour disappears.</li>
+          <li>Benzene does not react: the orange colour stays (it moves into the benzene layer).</li>
+          <li>To brominate the ring: Br₂ with an FeBr₃ catalyst. This is <b>substitution</b>: one H is swapped for Br, and HBr forms.</li></ol></section>
+      <section class="stp-sec" id="stp-5"><h3>5 · Predict the reaction</h3>
+        <table class="stp-t"><tr><th>Reaction</th><th>Reagent + catalyst</th><th>Electrophile</th><th>By-product</th></tr>
+          <tr><td>Halogenation</td><td>Br₂ + FeBr₃ (or Cl₂ + FeCl₃)</td><td>Br⁺ (Cl⁺)</td><td>HBr (HCl)</td></tr>
+          <tr><td>Nitration</td><td>HNO₃ + H₂SO₄</td><td>NO₂⁺</td><td>H₂O</td></tr>
+          <tr><td>Sulfonation</td><td>concentrated H₂SO₄, heat</td><td>⁺SO₃H</td><td>H₂O</td></tr>
+          <tr><td>Friedel–Crafts acylation</td><td>RCOCl + AlCl₃</td><td>RCO⁺ (acylium ion)</td><td>HCl</td></tr>
+          <tr><td>Friedel–Crafts alkylation</td><td>RCl + AlCl₃</td><td>R⁺</td><td>HCl</td></tr></table>
+        <p>Step 1 (slow): the ring’s π electrons attack the electrophile and a carbocation forms. Step 2 (fast): that same carbon loses H⁺ and the ring is aromatic again.</p></section>
+      <div class="stp-stamp">Training document</div>
+    </div>
+  </div>
+</div>
+<div id="brief" role="dialog" aria-modal="true" aria-labelledby="brief-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="brief-title">Before you start: today’s stations</div></div>
+    <div id="brief-body"></div>
+    <p class="small">The line at the bottom of the screen and the glowing box show your next move. <b>Card</b>, beside Hints, holds the method: it opens at the station you are on. <b>Hints</b> explains the ideas.</p>
+    <div class="btns"><button type="button" class="btn solid" id="brief-go">Start the lab</button><button type="button" class="btn ghost" id="brief-stp">Read the card</button></div>
+  </div>
+</div>
+<div id="ptov" role="dialog" aria-modal="true" aria-labelledby="pt-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="pt-title">Periodic table</div><button type="button" class="btn ghost" id="pt-close">Close</button></div>
+    <div class="pt-detail" id="pt-detail">Tap an element to see its proton number, mass number, electron configuration, valence electrons and electronegativity.</div>
+    <div class="pt-tools">Colour by <button type="button" class="on" data-mode="cat">Element type</button><button type="button" data-mode="en">Electronegativity</button></div>
+    <div class="pt-scrollhint">Scroll sideways to see the whole table.</div>
+    <div class="pt-scroll"><div class="ptg" id="pt-grid"></div></div>
+    <div class="pt-legend" id="pt-legend"></div>
+    <p class="small">Each box: proton number (top), symbol, relative atomic mass (bottom; or electronegativity when coloured by it). Masses: standard atomic weights to 2 decimal places; a value in brackets is the mass number of the longest-lived isotope. Mass number: the most common natural isotope. Electron configurations are written in filling order; the full form is shown up to krypton. Electronegativity: Chang's one-decimal values, for the main-group elements in this course.</p>
+  </div>
+</div>
+<div id="hints" role="dialog" aria-modal="true" aria-labelledby="hints-title">
+  <div class="box">
+    <div class="top"><div class="eyebrow" id="hints-title">Hints: four ideas</div><button type="button" class="btn ghost" id="hints-close">Close</button></div>
+    <div class="ideas">
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="18" font-size="10" text-anchor="middle" fill="#c0392b" font-weight="800">1,5- ✕</text><text x="60" y="36" font-size="10" text-anchor="middle" fill="#2d6a4f" font-weight="800">1,3- ✓</text></svg>Number round the ring for the <b>lowest</b> numbers; list groups <b>A to Z</b>.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="18" font-size="10" text-anchor="middle" fill="#1c2620" font-weight="800">C=C → 2 π e⁻</text><text x="60" y="36" font-size="10" text-anchor="middle" fill="#3a6bd1" font-weight="800">C⁻ → 2 · C⁺ → 0</text></svg>Count <b>π electrons</b> in the ring only.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="26" font-size="11" text-anchor="middle" fill="#2d6a4f" font-weight="800">2, 6, 10 …</text></svg><b>4n + 2</b> π electrons, and a p orbital on <b>every</b> ring atom.</div>
+      <div class="idea"><svg viewBox="0 0 120 44" aria-hidden="true"><text x="60" y="18" font-size="9.5" text-anchor="middle" fill="#c0392b" font-weight="700">add ✕</text><text x="60" y="36" font-size="9.5" text-anchor="middle" fill="#2d6a4f" font-weight="800">swap H for E ✓</text></svg>Benzene <b>substitutes</b>: it keeps its aromatic ring.</div>
+    </div>
+    <div class="madeby"><b>Made by <a href="https://www.aufthority.com/" target="_blank" rel="noopener">Aufthority</a>.</b> Learning material for Diploma in Pharmacy students. Scenarios are simulated for training. Heats of hydrogenation are from Bruice, <i>Organic Chemistry</i> (4th ed.).</div>
+  </div>
+</div>
+<script>
+(function(){
+  'use strict';
+  const $ = s=>document.querySelector(s);
+  const track=(e,d)=>{ try{ if(window.umami) umami.track(e,d); }catch(_){} };
+  const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'})[c]);
+  /* chemical formulas: digits after a letter become subscripts, a trailing or leading + becomes ⁺ */
+  const fm=s=>String(s).replace(/([A-Za-z\)])(\d+)/g,(m,a,d)=>a+d.replace(/\d/g,x=>'₀₁₂₃₄₅₆₇₈₉'[x])).replace(/\+$/,'⁺').replace(/^\+/,'⁺');
+/*CORE-START*/
+/* Ring Bench core: builds a round and checks answers. The same code runs in the
+   browser (practice rounds) and in the ring-bench edge function (assessed rounds,
+   whose answers never leave the server). Pure functions, no DOM. */
+function RingCore(){
+  'use strict';
+  /* seeded random numbers (mulberry32), so a round can be rebuilt from its seed */
+  function rng(seed){ let a=seed>>>0; return function(){ a|=0; a=a+0x6D2B79F5|0; let t=Math.imul(a^a>>>15,1|a); t=t+Math.imul(t^t>>>7,61|t)^t; return ((t^t>>>14)>>>0)/4294967296; }; }
+  const pickR=(r,a)=>a[Math.floor(r()*a.length)];
+  const shuf=(r,a)=>{ a=a.slice(); for(let i=a.length-1;i>0;i--){ const j=Math.floor(r()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; };
+
+  /* ---------- naming ---------- */
+  const G={
+    Br:{pre:'bromo',lab:'Br'}, Cl:{pre:'chloro',lab:'Cl'}, I:{pre:'iodo',lab:'I'}, NO2:{pre:'nitro',lab:'NO2'}, Et:{pre:'ethyl',lab:'CH2CH3'},
+    CH3:{par:'toluene',pre:'methyl',lab:'CH3'}, OH:{par:'phenol',pre:'hydroxy',lab:'OH'}, NH2:{par:'aniline',pre:'amino',lab:'NH2'},
+    COOH:{par:'benzoic acid',pre:'carboxy',lab:'COOH'}, CHO:{par:'benzaldehyde',pre:'formyl',lab:'CHO'}
+  };
+  const PAR_ORDER=['COOH','CHO','OH','NH2','CH3'];
+  const MULT=['','','di','tri','tetra'];
+  function locsFor(subs,s,dir){ const o={}; Object.keys(subs).forEach(p=>{ o[p]=(((+p-s)*dir)%6+6)%6+1; }); return o; }
+  /* build a name string from a numbering. useParent=false names a parent group as a prefix (a deliberate mistake) */
+  function nameFrom(subs,loc,parPos,order){
+    const items=[]; Object.keys(subs).forEach(p=>{ if(parPos!=null && +p===parPos) return; items.push({pre:G[subs[p]].pre, l:loc[p]}); });
+    const by={}; items.forEach(it=>{ (by[it.pre]=by[it.pre]||[]).push(it.l); });
+    let keys=Object.keys(by).sort(); if(order==='rev') keys=keys.reverse();
+    const parent=parPos!=null?G[subs[parPos]].par:'benzene';
+    if(!items.length) return parent;
+    const single=parPos==null && items.length===1;
+    const segs=keys.map(k=>{ const ls=by[k].sort((a,b)=>a-b); return (single?'':ls.join(',')+'-')+MULT[ls.length]+k; });
+    return segs.join('-')+parent;
+  }
+  const cmpArr=(a,b)=>{ for(let i=0;i<Math.max(a.length,b.length);i++){ if(a[i]!==b[i]) return (a[i]||0)-(b[i]||0); } return 0; };
+  function numberings(subs,parPos){
+    const occ=Object.keys(subs).map(Number), out=[];
+    (parPos!=null?[parPos]:occ).forEach(s=>[1,-1].forEach(d=>{ const loc=locsFor(subs,s,d);
+      const rest=Object.keys(subs).filter(p=>parPos==null || +p!==parPos);
+      const set=rest.map(p=>loc[p]).sort((a,b)=>a-b);
+      const alpha=rest.map(p=>({pre:G[subs[p]].pre,l:loc[p]})).sort((a,b)=>a.pre<b.pre?-1:a.pre>b.pre?1:a.l-b.l).map(x=>x.l);
+      out.push({s:s,d:d,loc:loc,set:set,alpha:alpha}); }));
+    out.sort((a,b)=>cmpArr(a.set,b.set)||cmpArr(a.alpha,b.alpha));
+    return out;
+  }
+  function parentPos(subs){ for(const g of PAR_ORDER){ const p=Object.keys(subs).find(k=>subs[k]===g); if(p!=null) return +p; } return null; }
+  function iupac(subs){ const pp=parentPos(subs), n=numberings(subs,pp); return nameFrom(subs,n[0].loc,pp); }
+  /* names that are also correct and so must never appear as a wrong option */
+  function validNames(subs){
+    const v=new Set([iupac(subs)]), pp=parentPos(subs);
+    if(pp!=null && subs[pp]==='CH3'){ const n=numberings(subs,null); v.add(nameFrom(subs,n[0].loc,null)); }
+    return v;
+  }
+  const OMP={2:'ortho',3:'meta',4:'para'};
+  /* wrong names for a two- or three-group ring, each tagged with the mistake it shows */
+  function wrongNames(subs,r){
+    const pp=parentPos(subs), valid=validNames(subs), right=iupac(subs), out=[], seen=new Set([...valid]);
+    const add=(name,code)=>{ if(!seen.has(name)){ seen.add(name); out.push([name,code]); } };
+    const ns=numberings(subs,pp), best=ns[0];
+    ns.slice(1).forEach(n=>{ const nm=nameFrom(subs,n.loc,pp); add(nm, cmpArr(n.set,best.set)?'N1':'N2'); });
+    if(Object.keys(by(subs,pp)).length>1) add(nameFrom(subs,best.loc,pp,'rev'),'N2');
+    if(pp!=null && subs[pp]!=='CH3'){ const n2=numberings(subs,null); add(nameFrom(subs,n2[0].loc,null),'N3'); }
+    const keys=Object.keys(subs);
+    if(keys.length===2){
+      const other=keys.find(p=>pp==null || +p!==pp), l=best.loc[other]+(pp!=null?0:0);
+      const rel=pp!=null?best.loc[other]:best.set[1];
+      const wrongW=Object.keys(OMP).map(Number).filter(x=>x!==rel);
+      wrongW.forEach(w=>{ const word=OMP[w];
+        if(pp!=null) add(word+'-'+G[subs[other]].pre+G[subs[pp]].par,'N4');
+        else { const pres=keys.map(p=>G[subs[p]].pre).sort(); add(word+'-'+(pres[0]===pres[1]?'di'+pres[0]:pres[0]+pres[1])+'benzene','N4'); } });
+    }
+    /* a different compound: one group moved one place round the ring */
+    keys.forEach(p=>{ if(pp!=null && +p===pp) return; [1,5].forEach(dp=>{ const q=(+p+dp)%6; if(subs[q]!=null) return; const s2={}; keys.forEach(k=>{ s2[+k===+p?q:k]=subs[k]; }); add(iupac(s2),'N8'); }); });
+    return out;
+  }
+  function by(subs,pp){ const o={}; Object.keys(subs).forEach(p=>{ if(pp!=null && +p===pp) return; o[G[subs[p]].pre]=1; }); return o; }
+
+  /* one group on the ring, or a chain: names to memorise and the phenyl rule */
+  const MONO=[
+    {g:'Br', name:'bromobenzene', w:[['1-bromobenzene','N6'],['chlorobenzene','G1'],['bromotoluene','G1']]},
+    {g:'Cl', name:'chlorobenzene', w:[['1-chlorobenzene','N6'],['bromobenzene','G1'],['chlorophenol','G1']]},
+    {g:'NO2', name:'nitrobenzene', w:[['1-nitrobenzene','N6'],['aniline','G1'],['phenol','G1']]},
+    {g:'Et', name:'ethylbenzene', w:[['toluene','G1'],['1-ethylbenzene','N6'],['phenylethane','N5']]},
+    {g:'Pr', name:'propylbenzene', lab:'CH2CH2CH3', w:[['1-phenylpropane','N5'],['1-propylbenzene','N6'],['ethylbenzene','G1']]},
+    {g:'OH', name:'phenol', w:[['hydroxybenzene','N7'],['benzoic acid','G1'],['aniline','G1']]},
+    {g:'NH2', name:'aniline', w:[['aminobenzene','N7'],['nitrobenzene','G1'],['phenol','G1']]},
+    {g:'COOH', name:'benzoic acid', w:[['benzaldehyde','G1'],['phenol','G1'],['carboxybenzene','N7']]},
+    {g:'CHO', name:'benzaldehyde', w:[['benzoic acid','G1'],['formylbenzene','N7'],['phenol','G1']]},
+    {g:'Vi', name:'styrene', lab:'CH=CH2', w:[['ethylbenzene','G1'],['toluene','G1'],['phenol','G1']]},
+    {g:'C7', name:'2-phenylheptane', chain:{n:7,at:2}, w:[['6-phenylheptane','N1'],['2-heptylbenzene','N5'],['heptylbenzene','N5']]},
+    {g:'C8', name:'3-phenyloctane', chain:{n:8,at:3}, w:[['6-phenyloctane','N1'],['3-octylbenzene','N5'],['octylbenzene','N5']]},
+    {g:'C7b', name:'3-phenylheptane', chain:{n:7,at:3}, w:[['5-phenylheptane','N1'],['3-heptylbenzene','N5'],['heptylbenzene','N5']]}
+  ];
+  /* two or three groups: positions 0 to 5 round the ring */
+  const MULTI=[
+    {0:'Br',1:'Br'},{0:'Cl',2:'Cl'},{0:'NO2',3:'NO2'},{0:'Br',2:'Cl'},{0:'Cl',2:'I'},{0:'Br',2:'NO2'},{0:'Cl',3:'Et'},{0:'Br',1:'Et'},{0:'Cl',1:'NO2'},{0:'I',3:'NO2'},
+    {0:'CH3',1:'Cl'},{0:'CH3',3:'NO2'},{0:'CH3',2:'Br'},{0:'OH',3:'NO2'},{0:'OH',1:'Cl'},{0:'OH',1:'Et'},{0:'NH2',3:'NO2'},{0:'NH2',2:'Br'},
+    {0:'COOH',3:'Cl'},{0:'COOH',2:'NO2'},{0:'CHO',2:'NO2'},{0:'CHO',3:'Br'},
+    {0:'OH',1:'Br',3:'Br',5:'Br'},{0:'NO2',1:'Br',3:'Cl'},{0:'Cl',3:'Br',1:'NO2'},{0:'Br',3:'Cl',1:'NO2'},
+    {0:'OH',2:'Br',3:'Cl'},{0:'NH2',1:'Et',3:'I'},{0:'CH3',2:'Br',5:'NO2'},{0:'Cl',1:'Cl',3:'NO2'}
+  ];
+  const MULTI_EASY=MULTI.filter(s=>Object.keys(s).length===2);
+
+  /* ---------- rings for the aromaticity test ----------
+     n atoms; db: double bonds as edges i→i+1; ch2: sp3 carbons; pos/neg: charged carbon; sub: a group outside the ring */
+  const RINGS={
+    benzene:{name:'benzene', n:6, db:[0,2,4]},
+    toluene:{name:'toluene', n:6, db:[0,2,4], sub:'CH3'},
+    chex:{name:'cyclohexene', n:6, db:[0], ch2:[2,3,4,5]},
+    chd:{name:'cyclohexa-1,3-diene', n:6, db:[0,2], ch2:[4,5]},
+    cpd:{name:'cyclopentadiene', n:5, db:[0,2], ch2:[4]},
+    cpa:{name:'cyclopentadienyl anion', n:5, db:[0,2], neg:4},
+    cpc:{name:'cyclopentadienyl cation', n:5, db:[0,2], pos:4},
+    cht:{name:'cycloheptatriene', n:7, db:[0,2,4], ch2:[6]},
+    trop:{name:'cycloheptatrienyl cation', n:7, db:[0,2,4], pos:6},
+    cbd:{name:'cyclobutadiene', n:4, db:[0,2]},
+    cot:{name:'cyclooctatetraene', n:8, db:[0,2,4,6]},
+    cpr:{name:'cyclopropenyl cation', n:3, db:[0], pos:2},
+    cpe:{name:'cyclopropene', n:3, db:[0], ch2:[2]}
+  };
+  Object.keys(RINGS).forEach(k=>{ const R=RINGS[k]; R.id=k; R.ch2=R.ch2||[]; R.pi=2*R.db.length+(R.neg!=null?2:0); R.p=R.ch2.length===0; R.h=(R.pi-2)%4===0; R.ar=R.p&&R.h; });
+  const RING_EASY=['benzene','toluene','chex','chd','cpd','cbd','cot','cht'];
+  const RING_ALL=Object.keys(RINGS);
+
+  /* ---------- heats of hydrogenation (Bruice): cyclohexene 120 kJ/mol ---------- */
+  const HYD={
+    benzene:{name:'benzene', nC:3, meas:208, kc:49.8},
+    chd:{name:'cyclohexa-1,3-diene', nC:2, meas:232, kc:55.4}
+  };
+
+  /* ---------- the five reactions ---------- */
+  const EAS={
+    brom:{reag:'Br2', cat:'FeBr3', E:'Br+', P:'bromobenzene', BP:'HBr', type:'Halogenation'},
+    chlor:{reag:'Cl2', cat:'FeCl3', E:'Cl+', P:'chlorobenzene', BP:'HCl', type:'Halogenation'},
+    nitr:{reag:'HNO3', cat:'H2SO4', E:'NO2+', P:'nitrobenzene', BP:'H2O', type:'Nitration'},
+    sulf:{reag:'H2SO4 (concentrated)', cat:'heat', E:'+SO3H', P:'benzenesulfonic acid', BP:'H2O', type:'Sulfonation'},
+    acyl:{reag:'CH3COCl', cat:'AlCl3', E:'CH3CO+', P:'acetophenone', BP:'HCl', type:'Friedel–Crafts acylation'},
+    alkE:{reag:'CH3CH2Cl', cat:'AlCl3', E:'CH3CH2+', P:'ethylbenzene', BP:'HCl', type:'Friedel–Crafts alkylation'},
+    alkM:{reag:'CH3Cl', cat:'AlCl3', E:'CH3+', P:'toluene', BP:'HCl', type:'Friedel–Crafts alkylation'}
+  };
+  const EAS_EASY=['brom','chlor','nitr'];
+  const EAS_ALL=Object.keys(EAS);
+
+  /* ---------- hint text for each mistake ---------- */
+  const T={
+    N1:'Number the ring the other way: the set of numbers must be as low as possible.',
+    N2:'When the numbers tie, the group that comes first in the alphabet gets the lower number, and groups are listed A to Z.',
+    N3:'This group gives the ring a special parent name. Its carbon is C1 and the name ends with that parent.',
+    N4:'ortho = 1,2 (next door), meta = 1,3 (one carbon between), para = 1,4 (opposite).',
+    N5:'Compare the chain with the ring: 6 carbons or fewer, benzene is the parent; 7 or more, the chain is the parent and the ring is “phenyl”.',
+    N6:'With only one group on the ring, no number is needed.',
+    N7:'This group has a common name that you must use for the whole compound.',
+    N8:'Count round the ring carefully: each number is one carbon further on.',
+    G1:'Look at the group again: it decides the name.',
+    A1:'Each C=C double bond holds 2 π electrons.',
+    A2:'A negative ring carbon has a lone pair in a p orbital: add 2 π electrons.',
+    A3:'A positive ring carbon has an empty p orbital: it adds no electrons.',
+    A4:'Count only the π electrons in the ring. Groups outside the ring do not count.',
+    A5:'An sp³ CH₂ in the ring has no p orbital, so the π cloud is broken.',
+    A6:'Charged ring carbons are sp²: each has a p orbital (empty for +, holding a pair for −).',
+    A7:'Hückel numbers are 2, 6, 10 (4n + 2). 4 and 8 are not.',
+    A8:'Aromatic needs both: a p orbital on every ring atom and 4n + 2 π electrons.',
+    S1:'Expected heat = (number of C=C) × 120 kJ/mol.',
+    S2:'Extra stability = expected heat − measured heat.',
+    S3:'Give the size of the difference as a positive number.',
+    S4:'Small extra stability comes from conjugation; a large one (over 100 kJ/mol) means aromatic.',
+    B1:'Alkenes add bromine at once and remove the orange colour. Benzene does not react with bromine water.',
+    B2:'The ring stays aromatic. Something else in styrene reacts with bromine water.',
+    B3:'Styrene has a benzene ring, so it is an arene.',
+    B4:'Benzene needs a stronger electrophile than bromine water gives. A Lewis-acid catalyst makes one.',
+    B5:'Substitution swaps an H for Br, so one product is H plus Br.',
+    B6:'Addition would destroy the aromatic ring, so benzene substitutes instead.',
+    R1:'The catalyst turns the reagent into the electrophile. Match the electrophile to this reagent.',
+    R2:'The electrophile replaces one H on the ring. Name the ring with that group.',
+    R3:'The H⁺ lost from the ring joins the leftover piece of the reagent.',
+    R4:'Adding a nucleophile would leave a non-aromatic ring. Benzene keeps its ring aromatic.',
+    R5:'The H⁺ leaves from the same carbon that gained the electrophile.',
+    D0:'Check your working against the method on the Card.'
+  };
+  const chip=(r,right,wrongs)=>{ /* wrongs: [[text,code],...] */
+    const all=shuf(r,[[right,null]].concat(wrongs.slice(0,3)));
+    const a=all.findIndex(x=>x[1]===null), w={};
+    all.forEach((x,i)=>{ if(x[1]) w[i]=[x[1],T[x[1]]]; });
+    return {pub:all.map(x=>x[0]), key:{t:'c', a:a, w:w}};
+  };
+  const num=(v,tol,wr,extra)=>({t:'n', v:v, tol:tol, alt:(extra||[]), w:wr.map(x=>[x[0],x[1],x[2],T[x[2]]]), d:['D0',T.D0]});
+
+  /* ---------- scenarios ---------- */
+  const SCEN={
+    store:{mono:true, multi:MULTI_EASY, rings:RING_EASY, eas:EAS_EASY},
+    ward:{multi:MULTI, rings:RING_EASY.concat(['cpa','trop']), eas:EAS_ALL},
+    aina:{multi:MULTI_EASY, rings:RING_EASY, eas:EAS_ALL, aina:true},
+    lab:{multi:MULTI, rings:RING_ALL, eas:EAS_ALL},
+    assess:{multi:MULTI, rings:RING_ALL, eas:EAS_ALL}
+  };
+
+  function makeRound(seed,scen){
+    const r=rng(seed), S=SCEN[scen]||SCEN.assess, st=[], key={};
+    const part=(st0,id,type,q,body,unit)=>{ const p={id:id,t:type,q:q}; if(type==='c') p.o=body.pub; else p.u=unit; st0.parts.push(p); key[id]=type==='c'?body.key:body; };
+    const aina=[]; /* Aina's wrong answers (one per station), shown in her scenario */
+    /* station 1 */
+    const m=pickR(r,MONO); let subs; let tries=0;
+    do{ subs=pickR(r,S.multi); tries++; }while(wrongNames(subs,r).length<3 && tries<50);
+    const rot=Math.floor(r()*6), flip=r()<0.5?1:-1;
+    const s1={n:1, mono:{g:m.g, lab:m.lab||null, chain:m.chain||null}, multi:{subs:subs, rot:rot, flip:flip}, parts:[]};
+    const wn=shuf(r,wrongNames(subs,r));
+    /* prefer different kinds of mistake */
+    const pickW=[]; const codes=new Set(); wn.forEach(x=>{ if(pickW.length<3 && !codes.has(x[1])){ pickW.push(x); codes.add(x[1]); } }); wn.forEach(x=>{ if(pickW.length<3 && !pickW.includes(x)) pickW.push(x); });
+    const cA=chip(r,m.name,shuf(r,m.w)), cB=chip(r,iupac(subs),pickW);
+    part(s1,'1a','c','a. Name compound A',cA); part(s1,'1b','c','b. Name compound B',cB);
+    aina.push('B is '+cB.pub[+Object.keys(cB.key.w)[0]]);
+    st.push(s1);
+    /* station 2 */
+    const R0=RINGS[pickR(r,S.rings)];
+    const s2={n:2, ring:{id:R0.id, name:R0.name, n:R0.n, db:R0.db, ch2:R0.ch2, pos:R0.pos, neg:R0.neg, sub:R0.sub||null}, parts:[]};
+    const piW=[[R0.db.length,0.01,'A1'],[R0.n,0.01,'A1']];
+    if(R0.neg!=null) piW.unshift([R0.pi-2,0.01,'A2']);
+    if(R0.pos!=null){ piW.unshift([R0.pi+2,0.01,'A3']); piW.unshift([R0.pi+1,0.01,'A3']); }
+    if(R0.sub) piW.unshift([R0.pi+2,0.01,'A4'],[R0.pi+1,0.01,'A4']);
+    const piW2=piW.filter(x=>x[0]!==R0.pi);
+    part(s2,'2a','n','a. π electrons in the ring',num(R0.pi,0.01,piW2),'electrons');
+    const pYes='Yes: every ring atom has a p orbital', pNo='No: at least one ring carbon is sp³ (no p orbital)';
+    part(s2,'2b','c','b. Does every ring atom have a p orbital?',chip(r,R0.p?pYes:pNo,[[R0.p?pNo:pYes,R0.p?'A6':'A5']]));
+    const hYes='Yes: it is a 4n + 2 number (2, 6, 10 …)', hNo='No: it is not a 4n + 2 number';
+    part(s2,'2c','c','c. Is the π count a Hückel number?',chip(r,R0.h?hYes:hNo,[[R0.h?hNo:hYes,'A7']]));
+    part(s2,'2d','c','d. So the ring is',chip(r,R0.ar?'Aromatic':'Not aromatic',[[R0.ar?'Not aromatic':'Aromatic','A8']]));
+    aina.push('this ring has '+(R0.neg!=null?R0.pi-2:R0.pos!=null?R0.pi+1:R0.db.length)+' π electrons');
+    st.push(s2);
+    /* station 3 */
+    const hk=pickR(r,Object.keys(HYD)), H=HYD[hk], exp=H.nC*120, ex=exp-H.meas;
+    const s3={n:3, hyd:{id:hk, name:H.name, nC:H.nC, meas:H.meas, kc:H.kc}, parts:[]};
+    const eW=[[120,0.5,'S1'],[H.nC===3?240:360,0.5,'S1'],[-exp,0.5,'S3']];
+    part(s3,'3a','n','a. Expected heat released if its C=C bonds acted alone',num(exp,0.5,eW),'kJ/mol');
+    const xW=[[H.meas,0.5,'S2'],[exp+H.meas,0.5,'S2'],[-ex,1,'S3'],[120-H.meas,0.5,'S1']];
+    part(s3,'3b','n','b. Extra stability (expected − measured)',num(ex,0.5,xW,hk==='benzene'?[[151,0.5]]:[]),'kJ/mol');
+    const why= hk==='benzene'
+      ? chip(r,'Its 6 π electrons are delocalised round the ring: it is aromatic',[['Its C=C bonds are only conjugated, a small effect','S4'],['It has no real extra stability','S4']])
+      : chip(r,'Its two C=C bonds are conjugated: a small extra stability, not aromatic',[['Its π electrons go right round the ring: it is aromatic','S4'],['It is as stable as benzene','S4']]);
+    part(s3,'3c','c','c. What does the extra stability tell you?',why);
+    aina.push('the extra stability is '+H.meas+' kJ/mol');
+    st.push(s3);
+    /* station 4 */
+    const arene=pickR(r,['benzene','toluene']), alk=pickR(r,['cyclohexene','hex-1-ene']);
+    const tubes=shuf(r,[{c:arene,keep:true},{c:alk,keep:false},{c:'styrene',keep:false}]);
+    const L=['Tube A','Tube B','Tube C'], ai=tubes.findIndex(t=>t.keep);
+    const s4={n:4, br:{arene:arene, list:[arene,alk,'styrene'], tubes:tubes.map(t=>t.keep)}, parts:[]};
+    const w4={}; L.forEach((l,i)=>{ if(i!==ai) w4[i]=['B1',T.B1]; });
+    s4.parts.push({id:'4a',t:'c',q:'a. Which tube holds the '+arene+'?',o:L.slice()}); key['4a']={t:'c',a:ai,w:w4};
+    part(s4,'4b','c','b. Styrene has a benzene ring, yet it decolourised the bromine water. Why?',chip(r,'Its C=C outside the ring adds Br₂',[['Its benzene ring adds Br₂','B2'],['Styrene is not an arene','B3']]));
+    part(s4,'4c','c','c. To put a Br on the benzene ring you need',chip(r,'Br₂ with an FeBr₃ catalyst',[['Bromine water, shaken in the cold','B4'],['Br₂ with concentrated H₂SO₄','B4']]));
+    part(s4,'4d','c','d. Benzene + Br₂ (FeBr₃) gives',chip(r,'bromobenzene + HBr',[['bromobenzene + H₂','B5'],['an addition product with two Br on the ring','B6']]));
+    aina.push('the '+arene+' tube is '+L[(ai+1)%3]);
+    st.push(s4);
+    /* station 5 */
+    const ek=pickR(r,S.eas), E=EAS[ek], others=EAS_ALL.filter(k=>k!==ek && EAS[k].E!==E.E);
+    const s5={n:5, eas:{id:ek, reag:E.reag, cat:E.cat, type:E.type}, parts:[]};
+    part(s5,'5a','c','a. The electrophile',chip(r,E.E,shuf(r,others).map(k=>EAS[k].E).filter((v,i,a)=>a.indexOf(v)===i).map(v=>[v,'R1'])));
+    part(s5,'5b','c','b. The organic product',chip(r,E.P,shuf(r,others).map(k=>EAS[k].P).filter((v,i,a)=>a.indexOf(v)===i).map(v=>[v,'R2'])));
+    part(s5,'5c','c','c. The by-product',chip(r,E.BP,shuf(r,['HBr','HCl','H2O','H2'].filter(x=>x!==E.BP)).map(v=>[v,'R3'])));
+    part(s5,'5d','c','d. In step 2, the carbocation intermediate',chip(r,'loses H⁺ from the carbon that gained the electrophile',[['adds a nucleophile, as an alkene would','R4'],['loses H⁺ from the next carbon along','R5']]));
+    aina.push('the electrophile is '+EAS[others[0]].E);
+    st.push(s5);
+    const pub={v:1, seed:seed, scen:scen, st:st};
+    if(S.aina) pub.aina=aina;
+    return {pub:pub, key:key};
+  }
+
+  /* the same checker the server runs, part by part */
+  function checkPart(k,a){
+    if(a==null || a==='') return null;
+    if(k.t==='c'){ a=+a; if(a===k.a) return {ok:true}; const w=k.w[a]||k.w[String(a)]; return {ok:false, code:w?w[0]:'D0', text:w?w[1]:T.D0}; }
+    const x=typeof a==='number'?a:parseFloat(String(a).replace(',','.').replace(/\s/g,''));
+    if(isNaN(x)) return {ok:false, code:'D0', text:'Type a number.'};
+    if(Math.abs(x-k.v)<=k.tol || (k.alt||[]).some(v=>Math.abs(x-v[0])<=v[1])) return {ok:true};
+    for(const w of k.w){ if(Math.abs(x-w[0])<=w[1]) return {ok:false, code:w[2], text:w[3]}; }
+    return {ok:false, code:k.d[0], text:k.d[1]};
+  }
+  return {makeRound:makeRound, checkPart:checkPart, iupac:iupac, wrongNames:wrongNames, validNames:validNames, G:G, MONO:MONO, MULTI:MULTI, RINGS:RINGS, HYD:HYD, EAS:EAS, T:T, rng:rng};
+}
+/*CORE-END*/
+  const CORE=RingCore();
+  const SUPA_URL='https://jtkskwopnprgmxlhppro.supabase.co', SUPA_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp0a3Nrd29wbnByZ214bGhwcHJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5NDU0NDQsImV4cCI6MjEwMjUyMTQ0NH0.MVvaIH6fPhzC0aRk8XIZMU1OrAZYNbsT9V1diP8fuGw';
+  const DONE_KEY='kompas.arenes.ring-lab.done';
+
+  /* ---------- rounds ---------- */
+  const SCEN=[
+   {id:'store', chip:'1 · Raw materials store'},
+   {id:'ward', chip:'2 · Medicines bench'},
+   {id:'aina', chip:'3 · Aina’s bench'},
+   {id:'lab', chip:'4 · Synthesis lab'},
+   {id:'assess', chip:'Assessed round · PHCH 4123', assess:true}
+  ];
+  const STEPS=5;
+  const STEP_NAMES=['Ring Bench','Name it','Aromatic?','Stability','Bromine water','Predict'];
+  /* where each station is taught in the explainer (for the Stuck? line) */
+  const EXP_PAGE=['','Two or more groups on the ring','Four tests for aromatic','Benzene is extra stable','Bromine water: add or substitute?','The five reactions'];
+  /* which parts sit on the first screen of each station (the rest go with the Check button) */
+  const PANE_A={1:[],2:['2a'],3:[],4:['4a'],5:['5a','5b']};
+  const LETTER=id=>id.slice(1);
+
+  /* ---------- state ----------
+     R.pub: what the student sees. R.key: answers (practice rounds only; assessed answers stay on the server).
+     R.st[id] = {t: tries, ok, a: last answer checked, p: points (practice only)} */
+  let sc=0, R=null, solved=Array(STEPS).fill(false), rounds=0;
+  const done=new Set();
+  const DEFAULT={}; for(let n=1;n<=STEPS;n++) DEFAULT[n]=$('#m'+n).innerHTML;
+  const AUTH={sb:null, session:null, status:null, loading:false, error:''};
+  let practised=false; try{ practised=!!localStorage.getItem(DONE_KEY); }catch(_){}
+
+  function freshR(S){ return {S:S, ans:{}, st:{}, beat:0, storyDone:false, shaken:false, tries:[]}; }
+  function newRound(){
+    const S=SCEN[sc];
+    if(S.assess){ R=freshR(S); R.pub=null; solved=Array(STEPS).fill(false); render(); refreshStatus(); return; }
+    const seed=Math.floor(Math.random()*2e9)+1, r=CORE.makeRound(seed,S.id);
+    R=freshR(S); R.pub=r.pub; R.key=r.key;
+    solved=Array(STEPS).fill(false);
+    render();
+  }
+  const partsOf=n=>R.pub?R.pub.st[n-1].parts:[];
+  const allParts=()=>R.pub?R.pub.st.flatMap(s=>s.parts):[];
+  const stationOk=n=>partsOf(n).length>0 && partsOf(n).every(p=>R.st[p.id] && R.st[p.id].ok);
+
+  /* ---------- sign-in, for the assessed round ---------- */
+  async function authInit(){
+    if(AUTH.sb || !window.supabase) return !!AUTH.sb;
+    AUTH.sb=window.supabase.createClient(SUPA_URL,SUPA_ANON,{auth:{detectSessionInUrl:false}});
+    return true;
+  }
+  async function callBench(body){
+    if(!(await authInit())) throw new Error('Could not load the sign-in service. Check your connection.');
+    const {data:{session}}=await AUTH.sb.auth.getSession(); AUTH.session=session;
+    if(!session) { const e=new Error('signin'); e.signin=true; throw e; }
+    const res=await fetch(SUPA_URL+'/functions/v1/ring-bench',{method:'POST',headers:{'Content-Type':'application/json',apikey:SUPA_ANON,Authorization:'Bearer '+session.access_token},body:JSON.stringify(body)});
+    let j={}; try{ j=await res.json(); }catch(_){}
+    if(!res.ok){ const e=new Error(j.error||('Server error '+res.status)); e.data=j; e.status=res.status; throw e; }
+    return j;
+  }
+  async function refreshStatus(){
+    if(AUTH.loading) return; AUTH.loading=true; AUTH.error='';
+    try{ AUTH.status=await callBench({action:'status'}); }
+    catch(e){ AUTH.status=null; AUTH.error=e.signin?'signin':e.message; }
+    AUTH.loading=false; if(R && R.S.assess && !R.pub) renderStory();
+  }
+
+  /* ---------- drawings (SVG, skeletal formulas) ---------- */
+  const INK='#1f2422', SUBC='#1f3a8a';
+  const vtx=(n,cx,cy,r,rot)=>{ const a=[]; for(let i=0;i<n;i++){ const t=(-90+(rot||0)+i*360/n)*Math.PI/180; a.push([cx+r*Math.cos(t),cy+r*Math.sin(t)]); } return a; };
+  const L=(p,q,w,col)=>'<line x1="'+p[0].toFixed(1)+'" y1="'+p[1].toFixed(1)+'" x2="'+q[0].toFixed(1)+'" y2="'+q[1].toFixed(1)+'" stroke="'+(col||INK)+'" stroke-width="'+(w||2)+'" stroke-linecap="round"/>';
+  const TX=(x,y,s,o)=>{ o=o||{}; return '<text x="'+x.toFixed(1)+'" y="'+y.toFixed(1)+'" text-anchor="'+(o.a||'middle')+'" font-size="'+(o.s||12)+'" font-weight="'+(o.w||700)+'" fill="'+(o.c||INK)+'"'+(o.cls?' class="'+o.cls+'"':'')+'>'+s+'</text>'; };
+  /* a ring: bonds, inner lines for double bonds, and optional decorations */
+  function ringSVG(n,cx,cy,r,db,o){
+    o=o||{}; const P=vtx(n,cx,cy,r,o.rot); let s='';
+    for(let i=0;i<n;i++){ const p=P[i], q=P[(i+1)%n]; s+=L(p,q,2.2);
+      if(db.includes(i)){ const f=0.22, k=0.8; const a=[p[0]+(cx-p[0])*f, p[1]+(cy-p[1])*f], b=[q[0]+(cx-q[0])*f, q[1]+(cy-q[1])*f];
+        const m=[(a[0]+b[0])/2,(a[1]+b[1])/2]; s+=L([m[0]+(a[0]-m[0])*k,m[1]+(a[1]-m[1])*k],[m[0]+(b[0]-m[0])*k,m[1]+(b[1]-m[1])*k],2.2); } }
+    return {s:s,P:P};
+  }
+  /* a group on a ring vertex: a short bond outwards, then its label */
+  function groupAt(P,v,cx,cy,label,len){
+    const p=P[v], ux=(p[0]-cx), uy=(p[1]-cy), d=Math.hypot(ux,uy), dx=ux/d, dy=uy/d, ln=len||15;
+    const q=[p[0]+dx*ln, p[1]+dy*ln];
+    const a=dx>0.35?'start':(dx<-0.35?'end':'middle');
+    const tx=q[0]+(a==='start'?2:a==='end'?-2:0), ty=q[1]+(dy>0.35?11:dy<-0.35?-3:4.5);
+    return L(p,q,2)+TX(tx,ty,fm(label),{a:a,s:12.5,c:SUBC});
+  }
+  /* compound A: one group, or a ring on a chain (drawn as a zigzag) */
+  function monoSVG(mono,cx,cy,r){
+    const g=CORE.G[mono.g], R0=ringSVG(6,cx,cy,r,[0,2,4]); let s=R0.s;
+    if(mono.chain){
+      const top=R0.P[0], ai=mono.chain.at-1, pts=[];
+      for(let i=0;i<mono.chain.n;i++){ const k=i-ai; pts.push([top[0]+k*12.5, top[1]-15-(k%2!==0?7.5:0)]); }
+      s+=L(top,pts[ai],2); for(let i=0;i<pts.length-1;i++) s+=L(pts[i],pts[i+1],2);
+    } else s+=groupAt(R0.P,0,cx,cy,mono.lab||(g?g.lab:mono.g));
+    return s;
+  }
+  function multiSVG(m,cx,cy,r){
+    const R0=ringSVG(6,cx,cy,r,[0,2,4]); let s=R0.s;
+    Object.keys(m.subs).forEach(p=>{ const v=((m.rot+m.flip*(+p))%6+6)%6; s+=groupAt(R0.P,v,cx,cy,CORE.G[m.subs[p]].lab); });
+    return s;
+  }
+  function s1SVG(st){
+    const chain=!!st.mono.chain;
+    return '<svg class="draw two" viewBox="0 0 360 180" role="img" aria-label="Compound A and compound B"><rect width="360" height="180" rx="10" fill="#f6f2e6"/>'+
+      monoSVG(st.mono,90,chain?112:100,30)+multiSVG(st.multi,268,92,30)+
+      TX(90,172,'A',{s:13,w:800,c:'#2d6a4f'})+TX(268,172,'B',{s:13,w:800,c:'#2d6a4f'})+'</svg>';
+  }
+  function s2SVG(rg){
+    const n=rg.n, r=n<=4?34:n>=8?46:40, cx=180, cy=rg.sub?100:90, R0=ringSVG(n,cx,cy,r,rg.db); let s=R0.s;
+    const out=(v,k)=>{ const p=R0.P[v], d=Math.hypot(p[0]-cx,p[1]-cy); return [p[0]+(p[0]-cx)/d*k, p[1]+(p[1]-cy)/d*k]; };
+    (rg.ch2||[]).forEach(v=>{ const q=out(v,15); s+=TX(q[0],q[1]+4,'CH₂',{s:10.5,c:'#5c665f',w:700}); });
+    if(rg.pos!=null){ const q=out(rg.pos,13); s+='<circle cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="7.5" fill="#fff" stroke="#c0392b" stroke-width="1.6"/>'+TX(q[0],q[1]+4.5,'+',{s:13,c:'#c0392b',w:800}); }
+    if(rg.neg!=null){ const q=out(rg.neg,13), p=R0.P[rg.neg]; s+='<circle cx="'+q[0].toFixed(1)+'" cy="'+q[1].toFixed(1)+'" r="7.5" fill="#fff" stroke="#3a6bd1" stroke-width="1.6"/>'+TX(q[0],q[1]+4.5,'−',{s:13,c:'#3a6bd1',w:800});
+      const t=[p[0]+(cx-p[0])*0.2,p[1]+(cy-p[1])*0.2]; s+='<circle cx="'+(t[0]-3).toFixed(1)+'" cy="'+t[1].toFixed(1)+'" r="1.8" fill="#3a6bd1"/><circle cx="'+(t[0]+3).toFixed(1)+'" cy="'+t[1].toFixed(1)+'" r="1.8" fill="#3a6bd1"/>'; }
+    if(rg.sub) s+=groupAt(R0.P,0,cx,cy,rg.sub);
+    return '<svg class="draw" viewBox="0 0 360 180" role="img" aria-label="'+esc(rg.name)+'"><rect width="360" height="180" rx="10" fill="#f6f2e6"/>'+s+TX(180,172,esc(rg.name),{s:12,w:700,c:'#2d6a4f'})+'</svg>';
+  }
+  function s3SVG(h){
+    const row=(y,db,lbl,nH,val,meas)=>{ const a=ringSVG(6,58,y,17,db), b=ringSVG(6,180,y,17,[]);
+      return a.s+TX(58,y+33,lbl,{s:9.5,w:600})+TX(106,y+4,'+ '+nH+' H₂',{s:12})+'<path d="M126 '+y+' h26" stroke="'+INK+'" stroke-width="1.8"/><path d="M150 '+(y-4)+' l6 4 -6 4" fill="none" stroke="'+INK+'" stroke-width="1.8"/>'+b.s+TX(180,y+33,'cyclohexane',{s:9.5,w:600})+
+        '<rect x="216" y="'+(y-18)+'" width="136" height="36" rx="8" fill="#fff" stroke="'+(meas?'#2d6a4f':'#b9c2bc')+'"/>'+TX(284,y-3,val,{s:12,w:800,c:meas?'#2d6a4f':INK})+TX(284,y+12,meas?'heat released (measured)':'heat released, per C=C',{s:9,w:600,c:'#5c665f'}); };
+    const db=h.nC===3?[0,2,4]:[0,2];
+    return '<svg class="draw" viewBox="0 0 360 170" role="img" aria-label="Heats of hydrogenation"><rect width="360" height="170" rx="10" fill="#f6f2e6"/>'+
+      row(40,[0],'cyclohexene',1,'120 kJ/mol (28.6 kcal)',false)+row(118,db,h.name,h.nC,h.meas+' kJ/mol ('+h.kc+' kcal)',true)+'</svg>';
+  }
+  function s4SVG(b,shaken){
+    let s=''; ['A','B','C'].forEach((l,i)=>{ const x=70+i*110, keep=b.tubes[i];
+      const top=shaken?(keep?'#f3a24a':'#f4f8f6'):'#f4f8f6', bot=shaken?(keep?'#f7ead2':'#eef4f1'):'#f08c2e';
+      s+='<g class="'+(shaken?'':'')+'"><rect x="'+(x-15)+'" y="22" width="30" height="104" rx="13" fill="#fff" stroke="'+INK+'" stroke-width="1.8"/>'+
+        '<path class="tb-liq" d="M'+(x-13)+' 62 h26 v20 h-26 z" fill="'+top+'"/>'+
+        '<path class="tb-liq" d="M'+(x-13)+' 82 h26 v30 q0 12 -13 12 q-13 0 -13 -12 z" fill="'+bot+'"/>'+
+        '<rect x="'+(x-15)+'" y="22" width="30" height="104" rx="13" fill="none" stroke="'+INK+'" stroke-width="1.8"/>'+
+        '<rect x="'+(x-18)+'" y="14" width="36" height="10" rx="3" fill="#9aa39d" stroke="'+INK+'" stroke-width="1.2"/></g>'+
+        TX(x,146,'Tube '+l,{s:12,w:800})+TX(x,162,shaken?(keep?'orange stays':'goes colourless'):'?',{s:10,w:700,c:shaken?(keep?'#b25f0c':'#2d6a4f'):'#5c665f'}); });
+    return '<svg class="draw" viewBox="0 0 360 172" role="img" aria-label="Three test tubes with bromine water"><rect width="360" height="172" rx="10" fill="#f6f2e6"/>'+s+'</svg>';
+  }
+  function s5SVG(e){
+    const R0=ringSVG(6,46,58,24,[0,2,4]);
+    return '<svg class="draw" viewBox="0 0 360 116" role="img" aria-label="Reaction"><rect width="360" height="116" rx="10" fill="#f6f2e6"/>'+R0.s+
+      TX(84,63,'+',{s:15})+TX(136,63,fm(e.reag.replace(' (concentrated)','')),{s:13,w:800,c:SUBC})+(e.reag.indexOf('concentrated')>-1?TX(136,78,'(concentrated)',{s:9,w:600,c:'#5c665f'}):'')+
+      '<path d="M182 58 h70" stroke="'+INK+'" stroke-width="2"/><path d="M248 53 l8 5 -8 5" fill="none" stroke="'+INK+'" stroke-width="2"/>'+TX(217,50,fm(e.cat),{s:11,w:700,c:'#b25f0c'})+
+      TX(286,64,'?',{s:20,w:800,c:'#2d6a4f'})+TX(306,63,'+',{s:15})+TX(328,64,'?',{s:20,w:800,c:'#2d6a4f'})+TX(180,104,e.type,{s:11,w:700,c:'#2d6a4f'})+'</svg>';
+  }
+
+  /* ---------- controls ---------- */
+  function chipGroup(opts,sel,cb,col){
+    const g=document.createElement('div'); g.className='chips'+(col?' col':''); g.setAttribute('role','group');
+    opts.forEach((o,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(sel===i?' on':''); b.innerHTML=o; b.setAttribute('aria-pressed',sel===i?'true':'false');
+      b.addEventListener('click',()=>{ g.querySelectorAll('.chip').forEach(c=>{ c.classList.remove('on','wrongpick'); c.setAttribute('aria-pressed','false'); }); b.classList.add('on'); b.setAttribute('aria-pressed','true'); cb(i); }); g.appendChild(b); });
+    return g;
+  }
+  function msg(n,cls,html){
+    const m=$('#m'+n); m.className='msg '+cls;
+    const tmp=document.createElement('div'); tmp.innerHTML=html; const ps=tmp.querySelectorAll(':scope > p');
+    if(ps.length>2){ for(let i=2;i<ps.length;i++) ps[i].remove(); tmp.insertAdjacentHTML('beforeend','<p>…and '+(ps.length-2)+' more. Fix these first.</p>'); }
+    if(cls==='bad'){ R.tries[n]=(R.tries[n]||0)+1;
+      if(R.tries[n]>=3) tmp.insertAdjacentHTML('beforeend','<p class="stuck"><b>Stuck?</b> Tap <b>Card §'+n+'</b> (top right) for the method of this station, and <b>Hints</b> for the ideas. The explainer page <b>'+EXP_PAGE[n]+'</b> works an example.</p>'); }
+    m.innerHTML=tmp.innerHTML;
+    track('lab-step'+n+'-'+({good:'right',near:'incomplete',bad:'wrong'})[cls],{scenario:R.S.id}); fitPage();
+  }
+  function clearMsg(n){ const m=$('#m'+n); m.className='msg'; m.innerHTML=DEFAULT[n]; }
+  const numIn=(id,val,okd)=>'<input class="num-in'+(okd?' okd':'')+'" id="in-'+id+'" type="text" inputmode="decimal" autocomplete="off" value="'+(val==null?'':esc(val))+'"'+(okd?' disabled':'')+'>';
+  const readNum=id=>{ const e=$('#in-'+id); if(!e) return null; const v=(e.value||'').replace(',','.').replace(/\s/g,'').trim(); return v===''?null:v; };
+  document.addEventListener('input',e=>{ const t=e.target; if(t && t.classList && t.classList.contains('num-in')){ t.classList.remove('wrong'); const id=t.id.slice(3); R.ans[id]=t.value; } });
+
+  const FORMULA_PARTS=['5a','5c'];
+  /* one part: a question with chips, or a number box */
+  function partHTML(box,p,first){
+    const s=R.st[p.id]||{}, d=document.createElement('div'); d.className='part'+(s.ok?' okd':''); d.dataset.qk=p.id;
+    const mark=s.ok?'<span class="okm">✓</span>':(s.t?'<span class="bdm">✗</span>':'');
+    d.innerHTML='<div class="q"'+(first?' style="margin-top:0"':'')+'>'+p.q+mark+'</div>';
+    if(p.t==='c'){
+      const opts=p.o.map(o=>FORMULA_PARTS.includes(p.id)?fm(o):esc(o));
+      const sel=R.ans[p.id]!=null?R.ans[p.id]:(s.ok?+s.a:null);
+      const g=chipGroup(opts,sel,i=>{ R.ans[p.id]=i; },true);
+      if(!s.ok && s.t && R.ans[p.id]!=null && String(R.ans[p.id])===String(s.a)) g.children[R.ans[p.id]].classList.add('wrongpick');
+      d.appendChild(g);
+    } else {
+      const val=R.ans[p.id]!=null?R.ans[p.id]:(s.ok?s.a:'');
+      d.insertAdjacentHTML('beforeend','<div class="calc-in">'+numIn(p.id,val,s.ok)+'<span class="unit">'+p.u+'</span></div>');
+      const inp=d.querySelector('input'); inp.dataset.go=p.q.replace(/^(\w)\. /,'$1. Type ');
+      if(!s.ok && s.t && String(val)===String(s.a)) inp.classList.add('wrong');
+    }
+    box.appendChild(d);
+  }
+  const given=(where,html)=>'<div class="eyebrow">'+where+'</div><div class="given">'+html+'</div>';
+  const ainaLine=n=>(R.pub && R.pub.aina)?'<div class="aina"><b>Aina wrote:</b> '+esc(R.pub.aina[n-1])+'. Is she right?</div>':'';
+  function ctxLine(n){
+    const id=R.S.id, st=R.pub.st[n-1];
+    if(n===1) return ({store:'Two drums arrived with their labels torn. Ravi drew the structures. Name each one for the new labels.',
+      ward:'These rings are pieces of medicines and their starting materials. Name each one.',
+      aina:'Aina named two compounds for the stock list. Name them yourself and check her work.',
+      lab:'The synthesis lab needs these two starting materials. Name each one correctly for the order form.',
+      assess:'Name compound A and compound B.'})[id];
+    if(n===2) return 'Is <b>'+esc(st.ring.name)+'</b> aromatic? Work through the tests one at a time.';
+    if(n===3) return 'Adding H₂ to a C=C releases heat. Compare what <b>'+esc(st.hyd.name)+'</b> should release if its C=C bonds acted alone with what it really releases.';
+    if(n===4) return 'Three tubes hold '+st.br.list.join(', ')+', but the labels are lost. Add bromine water to each and shake.';
+    if(n===5) return 'Benzene is treated with '+fm(st.eas.reag)+' and '+fm(st.eas.cat)+'. Predict what happens.';
+  }
+  function renderStation(n){
+    const qa=$('#q'+n+'a'), qb=$('#q'+n+'b'); qa.innerHTML=''; qb.innerHTML='';
+    if(!R.pub){ qa.innerHTML=given('Station '+n+' · '+STEP_NAMES[n],'Start the round first.'); return; }
+    const st=R.pub.st[n-1];
+    let pic='';
+    if(n===1) pic=s1SVG(st); if(n===2) pic=s2SVG(st.ring); if(n===3) pic=s3SVG(st.hyd); if(n===4) pic=s4SVG(st.br,R.shaken); if(n===5) pic=s5SVG(st.eas);
+    qa.innerHTML=given('Station '+n+' · '+STEP_NAMES[n],ctxLine(n))+ainaLine(n)+pic;
+    if(n===4 && !R.shaken){ qa.insertAdjacentHTML('beforeend','<button type="button" class="btn solid tube-btn" id="shake">Add bromine water and shake</button>');
+      $('#shake').addEventListener('click',()=>{ R.shaken=true; track('lab-shake'); const svg=qa.querySelector('svg.draw'); renderStation(4); const s2=qa.querySelector('svg.draw'); if(s2) s2.querySelectorAll('g').forEach(g=>g.classList.add('shk')); updatePager(); }); }
+    const A=PANE_A[n]; let fa=true, fb=true;
+    st.parts.forEach(p=>{ if(A.includes(p.id)){ if(n===4 && !R.shaken) return; partHTML(qa,p,false); fa=false; } else { partHTML(qb,p,fb); fb=false; } });
+    fitPage();
+  }
+  function render(){
+    const sc0=$('#scen-chips'); sc0.innerHTML='';
+    SCEN.forEach((s,i)=>{ const b=document.createElement('button'); b.type='button'; b.className='chip'+(i===sc?' on':'')+(s.assess?' star':''); b.innerHTML=s.chip+(done.has(s.id)?'<span class="tick">✓</span>':'');
+      b.addEventListener('click',()=>{ if(i===sc) return; sc=i; track('lab-pick',{scenario:s.id}); newRound(); }); sc0.appendChild(b); });
+    if(!R.S.assess){ R.beat=0; R.storyDone=false; }
+    renderStory();
+    for(let n=1;n<=STEPS;n++){ renderStation(n); clearMsg(n); solved[n-1]=stationOk(n); }
+    $('#endrow').hidden=!solved[STEPS-1]; updatePager();
+  }
+
+  /* ---------- checking ---------- */
+  let busy=false;
+  async function check(n){
+    if(busy || !R.pub) return;
+    const ps=partsOf(n), ans={};
+    ps.forEach(p=>{ if(R.st[p.id] && R.st[p.id].ok) return; ans[p.id]=p.t==='c'?R.ans[p.id]:readNum(p.id); });
+    const ids=Object.keys(ans);
+    if(ids.some(id=>ans[id]==null)) return msg(n,'near','Answer every part first'+(PANE_A[n].length?' (the first parts are on the '+(innerWidth>=900?'left':'previous screen')+')':'')+'.');
+    const same=ids.filter(id=>R.st[id] && R.st[id].t && String(R.st[id].a)===String(ans[id]));
+    if(same.length) return msg(n,'near','Change the answer'+(same.length>1?'s':'')+' marked ✗ ('+same.map(LETTER).join(', ')+') before checking again.');
+    let res;
+    if(R.S.assess){
+      busy=true; const b=$('#chk'+n); b.disabled=true; b.textContent='Checking…';
+      try{ res=await callBench({action:'check', attempt_id:R.attempt, station:n, answers:ans}); }
+      catch(e){ busy=false; b.disabled=false; b.textContent='Check'; return msg(n,'bad','<p>'+esc(e.signin?'Your sign-in has ended. Sign in to Kompas Semester again, then reopen the lab.':e.message)+'</p>'); }
+      busy=false; b.disabled=false; b.textContent='Check';
+      if(!res.complete) return msg(n,'near','Answer every part first.');
+      res=res; ids.forEach(id=>{ const r=res.results[id]; const t=(R.st[id]?R.st[id].t:0)+1; R.st[id]={t:t, ok:!!r.ok, a:ans[id], code:r.code, text:r.text}; });
+      if(res.finished){ R.final=res; }
+    } else {
+      ids.forEach(id=>{ const r=CORE.checkPart(R.key[id],ans[id]); const t=(R.st[id]?R.st[id].t:0)+1; R.st[id]={t:t, ok:r.ok, a:ans[id], p:r.ok?(t===1?1:t===2?0.5:0):0, code:r.code, text:r.text}; });
+    }
+    const wrong=ids.filter(id=>!R.st[id].ok);
+    renderStation(n);
+    if(wrong.length){ return msg(n,'bad',wrong.map(id=>'<p><b>Part '+LETTER(id)+'.</b> '+esc(R.st[id].text||'')+'</p>').join('')); }
+    solve(n);
+  }
+  for(let n=1;n<=STEPS;n++) $('#chk'+n).addEventListener('click',()=>check(n));
+  const firstTry=()=>allParts().filter(p=>R.st[p.id] && R.st[p.id].ok && R.st[p.id].t===1).length;
+  function practiceMark(){ const ps=allParts(); const pts=ps.reduce((s,p)=>s+((R.st[p.id]&&R.st[p.id].p)||0),0); return {pts:pts, max:ps.length}; }
+  const SUMMARY={
+    1:()=>'Both names are right.',
+    2:()=>{ const g=R.pub.st[1].ring, k=CORE.RINGS[g.id]; const nm=esc(g.name); return nm.charAt(0).toUpperCase()+nm.slice(1)+(k&&k.ar?' is aromatic: a p orbital on every ring atom and a 4n + 2 count.':' is not aromatic.'); },
+    3:()=>R.pub.st[2].hyd.nC===3?'Benzene is about 152 kJ/mol (36 kcal/mol) more stable than three separate C=C bonds would be.':'Conjugation gives cyclohexa-1,3-diene only a small extra stability: it is not aromatic.',
+    4:()=>'Alkenes add bromine; benzene needs FeBr₃ and substitutes instead.'
+  };
+  function solve(k){
+    solved[k-1]=true; track('lab-step'+k+'-solved',{scenario:R.S.id});
+    if(k<STEPS) msg(k,'good','<b>Station done.</b> '+SUMMARY[k]()+' Press <b>Continue</b>.');
+    else {
+      let t='<b>Round complete.</b> ';
+      if(R.S.assess){ const f=R.final||{}; const sm=f.summary||{};
+        t+=(f.finished?'Attempt '+R.attemptNo+': <span class="mark">'+f.score+' / '+f.max+'</span>, that is <span class="mark">'+(Math.round(f.score/f.max*100)/10)+' / 10</span>. ':'')+(sm.best10!=null?'Your best: <b>'+sm.best10+' / 10</b>. ':'')+
+          ((sm.attempts||[]).length<(sm.max_attempts||2)?'You may take one more attempt; the better mark counts.':'Both attempts are used.');
+        AUTH.status=sm.attempts?Object.assign({},AUTH.status||{},sm):AUTH.status;
+      } else { const pm=practiceMark(); t+='Practice mark: <span class="mark">'+pm.pts+' / '+pm.max+'</span> ('+(Math.round(pm.pts/pm.max*100)/10)+' / 10). Right first time: '+firstTry()+' of '+pm.max+'. Try a new round, or the next scenario.'; roundComplete(); }
+      msg(k,'good',t); $('#endrow').hidden=false;
+    }
+    updatePager(); fitPage();
+  }
+  function roundComplete(){
+    rounds++; $('#rounds').textContent=rounds; done.add(R.S.id); practised=true;
+    const c=$('#scen-chips').children[sc]; if(c && !c.querySelector('.tick')) c.insertAdjacentHTML('beforeend','<span class="tick">✓</span>');
+    track('lab-round-complete',{scenario:R.S.id});
+    try{ localStorage.setItem(DONE_KEY, String(Date.now())); }catch(_){}
+    try{ if(window.parent!==window){ const o=location.origin; window.parent.postMessage({type:'ring-lab', event:'round-complete', reaction:R.S.id}, (o&&o!=='null')?o:'*'); } }catch(_){}
+  }
+  $('#btn-new').addEventListener('click',()=>{ if(R.S.assess){ newRound(); goPage(0); return; } newRound(); goPage(firstPageOfStep(1)); });
+  $('#btn-next').addEventListener('click',()=>{ sc=(sc+1)%SCEN.length; if(SCEN[sc].assess) sc=0; track('lab-pick',{scenario:SCEN[sc].id}); newRound(); goPage(0); });
+  $('#btn-kompas').addEventListener('click',e=>{ if(history.length>1 && document.referrer && document.referrer.indexOf(location.host)>-1){ e.preventDefault(); location.assign(e.currentTarget.href); } });
+
+  /* ---------- the assessed round ---------- */
+  async function startAssessed(){
+    const b=$('#as-go'); if(b){ b.disabled=true; b.textContent='Starting…'; }
+    try{
+      const j=await callBench({action:'start'});
+      R.pub=j.pub; R.attempt=j.attempt_id; R.attemptNo=j.attempt_no; R.st={}; R.ans={};
+      Object.keys(j.state||{}).forEach(id=>{ const s=j.state[id]; R.st[id]={t:s.t, ok:s.ok, a:s.a}; if(!s.ok) R.ans[id]=s.a; });
+      if(R.st['4a'] && R.st['4a'].t) R.shaken=true;
+      AUTH.status=Object.assign({},AUTH.status||{},{attempts:j.attempts,best10:j.best10,max_attempts:j.max_attempts});
+      R.storyDone=true; R.tries=[]; track('lab-assessed-start',{attempt:j.attempt_no});
+      for(let n=1;n<=STEPS;n++){ renderStation(n); clearMsg(n); solved[n-1]=stationOk(n); }
+      renderStory(); updatePager();
+      const first=solved.findIndex(x=>!x); goPage(firstPageOfStep(first<0?1:first+1));
+    }catch(e){ AUTH.error=e.signin?'signin':e.message; renderStory(); }
+  }
+  async function downloadCSV(){
+    const b=$('#as-csv'); b.disabled=true; b.textContent='Preparing…';
+    try{
+      const j=await callBench({action:'scores'});
+      const head=['Matric number','Name','Email','Attempt 1 (/10)','Attempt 2 (/10)','Best (/10)','Test account'];
+      const q=v=>'"'+String(v==null?'':v).replace(/"/g,'""')+'"';
+      const lines=[head.map(q).join(',')].concat(j.rows.map(r=>[r.matric,r.name,r.email,r.attempt1,r.attempt2,r.best10,r.test_account?'yes':''].map(q).join(',')));
+      const blob=new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='PHCH4123_Arenes_Ring_Bench_marks.csv'; document.body.appendChild(a); a.click(); setTimeout(()=>{ URL.revokeObjectURL(a.href); a.remove(); },500);
+      track('lab-csv');
+    }catch(e){ alertBox(e.message); }
+    b.disabled=false; b.textContent='Download marks (CSV)';
+  }
+  function alertBox(t){ const el=$('#as-err'); if(el){ el.textContent=t; el.hidden=false; } }
+  function assessHTML(){
+    const S=AUTH.status, err=AUTH.error;
+    let h='<div class="assess"><h3>Assessed round · Arenes Ring Bench (10% of PHCH 4123 continuous assessment)</h3><ul>'+
+      '<li>One round, five stations, 17 parts. Each part: <b>1 mark</b> if right at the first try, <b>½</b> at the second, 0 after that. You still finish every station.</li>'+
+      '<li>You have <b>2 attempts</b>; the better one counts. You may use the Card, Hints and the periodic table.</li>'+
+      '<li>Your answers are marked on the Kompas server. You can leave and come back: the attempt waits for you.</li></ul>';
+    if(AUTH.loading) return h+'<p class="small">Checking your sign-in…</p></div>';
+    if(err==='signin') return h+'<p class="small"><b>Sign in to Kompas Semester first</b>, in this browser, then reopen this lab.</p><div class="btns"><a class="btn solid" href="../../index.html" target="_top">Open Kompas to sign in</a></div></div>';
+    if(err) return h+'<p class="small" style="color:#8e2a1f">'+esc(err)+'</p><div class="btns"><button type="button" class="btn" id="as-retry">Try again</button></div></div>';
+    if(!S) return h+'<p class="small">Loading…</p></div>';
+    const used=(S.attempts||[]), open=used.find(a=>!a.finished), left=(S.max_attempts||2)-used.length;
+    h+='<p class="att">'+(used.length?used.map(a=>'Attempt '+a.no+': '+(a.finished?'<b>'+a.mark10+' / 10</b>':'in progress')).join(' · '):'No attempts yet.')+(S.best10!=null?' · Best: <b>'+S.best10+' / 10</b>':'')+'</p>';
+    if(!S.enrolled && !S.educator) return h+'<p class="small">This round is for students enrolled in PHCH 4123. Practise with the other scenarios.</p></div>';
+    if(!practised && !S.educator && !used.length) return h+'<p class="small">Finish <b>one practice round</b> first (any scenario above). Then the assessed round opens.</p></div>';
+    if(open) h+='<div class="btns"><button type="button" class="btn solid" id="as-go">Continue attempt '+open.no+'</button></div>';
+    else if(left>0) h+='<div class="btns"><button type="button" class="btn solid" id="as-go">Start attempt '+(used.length+1)+' of '+(S.max_attempts||2)+'</button></div>';
+    else h+='<p class="small">Both attempts are used. Your best mark goes to your lecturer.</p>';
+    if(S.educator) h+='<p class="small">Educator view: your own attempts are not recorded as marks.</p><div class="btns"><button type="button" class="btn" id="as-csv">Download marks (CSV)</button></div>';
+    return h+'<p class="small" id="as-err" hidden style="color:#8e2a1f"></p></div>';
+  }
+  function person(who,x,y,s,mirror){
+    const skin=who==='aina'?'#e3b48c':'#a9714b';
+    let g='<g class="who-'+who+'" transform="translate('+x+' '+y+') scale('+(mirror?-s:s)+' '+s+')"><g class="bob">';
+    g+='<path d="M-22 0 Q-23 -33 0 -35 Q23 -33 22 0 Z" fill="#fff" stroke="#b9c2bc" stroke-width="1.5"/>';
+    g+='<path d="M-8 -34 L0 -21 L8 -34" fill="none" stroke="#2d6a4f" stroke-width="2.4" stroke-linejoin="round"/>';
+    g+='<rect x="7" y="-25" width="8" height="5" rx="1" fill="#2d6a4f"/>';
+    if(who==='aina'){
+      g+='<path d="M-15 -47 Q-16 -68 0 -68 Q16 -68 15 -47 Q15 -33 0 -31 Q-15 -33 -15 -47 Z" fill="#3f7d63"/>';
+      g+='<ellipse cx="0" cy="-49" rx="10" ry="11.5" fill="'+skin+'"/>';
+    } else {
+      g+='<rect x="-4" y="-40" width="8" height="6" fill="'+skin+'"/>';
+      g+='<circle cx="0" cy="-51" r="12.5" fill="'+skin+'"/>';
+      g+='<path d="M-12.5 -54 Q-12 -66 0 -66 Q12 -66 12.5 -54 Q8 -60 0 -60 Q-7 -60 -12.5 -54 Z" fill="#26201c"/>';
+      g+='<g fill="none" stroke="#26201c" stroke-width="1.3"><circle cx="-4.6" cy="-51" r="3.4"/><circle cx="4.6" cy="-51" r="3.4"/><path d="M-1.2 -51 H1.2"/></g>';
+    }
+    g+='<g class="blink"><circle cx="-4.4" cy="-51" r="1.4" fill="#1c2620"/><circle cx="4.4" cy="-51" r="1.4" fill="#1c2620"/></g>';
+    g+='<path d="M-3.5 -45.5 Q0 -42.5 3.5 -45.5" fill="none" stroke="#1c2620" stroke-width="1.3" stroke-linecap="round"/>';
+    return g+'</g></g>';
+  }
+  const bottle=(x,y,l)=>'<g transform="translate('+x+' '+y+')"><rect x="-9" y="-58" width="18" height="8" rx="2" fill="#9aa39d"/><rect x="-14" y="-50" width="28" height="50" rx="6" fill="#fff" stroke="#5c665f" stroke-width="1.4"/><rect x="-11" y="-36" width="22" height="16" rx="2" fill="#e9f4ee"/><text x="0" y="-25" text-anchor="middle" font-size="7" font-weight="800" fill="#1c2620">'+l+'</text></g>';
+  const flask=(x,y)=>'<g transform="translate('+x+' '+y+')"><path d="M-6 -56 h12 M-4 -56 v18 l-14 30 q-2 8 6 8 h24 q8 0 6 -8 l-14 -30 v-18" fill="#eef5fb" stroke="#5c665f" stroke-width="1.4"/><path d="M-13 -16 h26 l4 9 q1 7-6 7 h-22 q-7 0-6-7 z" fill="#d9ecf7"/><g fill="#fff" stroke="#8fb3c9"><circle cx="-3" cy="-10" r="2"/><circle cx="4" cy="-14" r="1.8"/></g></g>';
+  const sachet=(x,y)=>'<g transform="translate('+x+' '+y+')"><rect x="-16" y="-44" width="32" height="44" rx="4" fill="#fff" stroke="#5c665f" stroke-width="1.4"/><path d="M-16 -38 h32" stroke="#b9c2bc" stroke-dasharray="3 2"/><text x="0" y="-18" text-anchor="middle" font-size="7" font-weight="800" fill="#2d6a4f">fizz</text></g>';
+  const cloud='<g transform="translate(250 34)"><ellipse cx="0" cy="0" rx="24" ry="12" fill="#c9d4dc"/><ellipse cx="-14" cy="4" rx="14" ry="9" fill="#c9d4dc"/><ellipse cx="14" cy="4" rx="14" ry="9" fill="#c9d4dc"/>'+[-14,-2,10].map((dx,i)=>'<line x1="'+dx+'" y1="16" x2="'+(dx-4)+'" y2="28" stroke="#3a6bd1" stroke-width="2" stroke-linecap="round" class="pulse" style="animation-delay:'+(i*.4)+'s"/>').join('')+'</g>';
+  const shelf='<g transform="translate(176 40)"><rect x="0" y="0" width="120" height="90" rx="4" fill="#fff" stroke="#b9c2bc"/><line x1="0" y1="45" x2="120" y2="45" stroke="#b9c2bc"/><text x="60" y="30" text-anchor="middle" font-size="9" font-weight="800" fill="#c0392b" class="pulse">OUT OF STOCK</text></g>'+bottle(204,128,'KCl')+bottle(240,128,'ALT');
+  const vial=(x,y,cap)=>'<g transform="translate('+x+' '+y+')"><rect x="-8" y="-40" width="16" height="40" rx="3" fill="#eaf4f3" stroke="#1f2422" stroke-width="1.4"/><rect x="-9" y="-48" width="18" height="9" rx="2" fill="'+(cap||'#9aa39d')+'" stroke="#1f2422" stroke-width="1.2"/></g>';
+  const drum=(x,y,l)=>'<g transform="translate('+x+' '+y+')"><rect x="-18" y="-56" width="36" height="56" rx="5" fill="#4f7f9c" stroke="#1f2422" stroke-width="1.6"/><path d="M-18 -40 h36 M-18 -16 h36" stroke="#1f2422" stroke-width="1.2"/><rect x="-12" y="-34" width="24" height="13" rx="2" fill="#fffef8" stroke="#b9b29c"/><text x="0" y="-24.5" text-anchor="middle" font-size="7.5" font-weight="800" fill="#c0392b">'+l+'</text></g>';
+  const box=(x,y,l,c)=>'<g transform="translate('+x+' '+y+')"><rect x="-17" y="-30" width="34" height="30" rx="3" fill="#fff" stroke="#1f2422" stroke-width="1.4"/><rect x="-17" y="-30" width="34" height="8" fill="'+c+'"/><text x="0" y="-9" text-anchor="middle" font-size="6.8" font-weight="800" fill="#1c2620">'+l+'</text></g>';
+  const STORY={
+    store:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'Two drums of aromatic starting materials came in with torn labels. Before they go on the shelf, name them, and check how this family of compounds behaves.',
+      know:'you can name each compound and explain how benzene rings react.',
+      scene:()=>drum(206,132,'??')+drum(254,132,'??')},
+    ward:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'Aspirin, paracetamol and ibuprofen all carry a benzene ring. Today we study the chemistry those medicines are built on.',
+      know:'you can explain why the ring is so stable and how it reacts.',
+      scene:()=>box(200,132,'ASPIRIN','#2d6a4f')+box(240,132,'IBUPROFEN','#b25f0c')+box(280,132,'PCM','#3a6bd1')},
+    aina:{who:'aina', name:'Aina', role:'trainee pharmacist',
+      problem:'I worked through the arenes stations last night. Can you check them with me? At each station I wrote one answer I am not sure about.',
+      know:'you find Aina’s mistakes and explain how to fix them.',
+      scene:()=>'<g transform="translate(230 110)"><rect x="-44" y="-58" width="88" height="66" rx="5" fill="#fffef8" stroke="#b9b29c"/><path d="M-34 -42 h52 M-34 -30 h60 M-34 -18 h40" stroke="#1f3a8a" stroke-width="1.3"/><text x="30" y="-4" font-size="14" font-weight="800" fill="#c0392b" class="pulse">?</text></g>'},
+    lab:{who:'ravi', name:'Ravi', role:'senior pharmacist',
+      problem:'The synthesis lab is making a starting material for a medicine. Before anything goes in the flask, predict each step: names, ring stability and the reaction.',
+      know:'you can predict the product of each reaction and say why the ring survives.',
+      scene:()=>'<g transform="translate(236 132)"><path d="M-6 -70 h12 M-4 -70 v22 a26 26 0 1 0 8 0 v-22" fill="#eaf4f3" stroke="#1f2422" stroke-width="1.6"/><path d="M-22 -22 a22 16 0 0 0 44 0 z" fill="#f3d27a"/></g>'},
+    assess:{who:'ravi', name:'Ravi', role:'senior pharmacist', problem:'', know:'', scene:()=>''}
+  };
+  const SCENE_W=320, SCENE_H=150;
+  function sceneFor(beat){
+    const st=STORY[R.S.id], who=st.who;
+    let s='<svg viewBox="0 0 '+SCENE_W+' '+SCENE_H+'" role="img" aria-label="'+(['The problem','The method','Your goal'][beat])+'"><rect width="320" height="150" rx="10" fill="#f4f7f5"/>';
+    if(beat===0) s+=st.scene()+person(who,72,140,1.45);
+    if(beat===1){
+      s+='<g transform="translate(160 18)"><rect width="148" height="114" rx="8" fill="#fff" stroke="#cfe6d9" stroke-width="2"/>';
+      ['name: the ring','aromatic: 4n + 2','stability: heat','bromine water','predict: product'].forEach((t,i)=>{ s+='<text x="74" y="'+(22+i*21)+'" text-anchor="middle" font-size="9.5" font-weight="'+(i===4?800:700)+'" fill="'+(i===4?'#2d6a4f':'#1c2620')+'">'+t+'</text>'; if(i<4) s+='<text x="74" y="'+(32+i*21)+'" text-anchor="middle" font-size="8" fill="#b25f0c">↓</text>'; });
+      s+='</g>'+person(who==='aina'?'ravi':'aina',70,140,1.45);
+    }
+    if(beat===2){
+      s+=person('aina',58,140,1.35)+person('ravi',118,140,1.35,true);
+      s+='<g transform="translate(166 6)"><rect width="148" height="138" rx="8" fill="#fff" stroke="#cfe6d9" stroke-width="2"/>';
+      STEP_NAMES.slice(1).forEach((t,i)=>{ s+='<circle cx="16" cy="'+(17+i*21.5)+'" r="8" fill="#2d6a4f"/><text x="16" y="'+(20.5+i*21.5)+'" text-anchor="middle" font-size="9" font-weight="800" fill="#fff">'+(i+1)+'</text><text x="30" y="'+(20.5+i*21.5)+'" font-size="10" font-weight="700" fill="#1c2620">'+t+'</text>'; });
+      s+='</g>';
+    }
+    return s+'</svg>';
+  }
+  const BEAT_TITLE=['1 · The problem','2 · The method','3 · Your goal'];
+  function renderStory(){
+    const box=$('#story');
+    if(R.S.assess){
+      if(R.pub){ box.innerHTML='<div class="assess"><h3>Attempt '+R.attemptNo+' in progress</h3><p class="small" style="margin:.2em 0">Press <b>Continue</b> to go to your next station. Each part: 1 mark at the first try, ½ at the second.</p></div>'; }
+      else { box.innerHTML=assessHTML();
+        const g=$('#as-go'); if(g) g.addEventListener('click',startAssessed);
+        const c=$('#as-csv'); if(c) c.addEventListener('click',downloadCSV);
+        const rt=$('#as-retry'); if(rt) rt.addEventListener('click',refreshStatus); }
+      updatePager(); fitPage(); return;
+    }
+    const st=STORY[R.S.id], b=R.beat||0;
+    let text='';
+    if(b===0) text='<p class="say"><b>'+st.name+'</b> <span class="small">('+st.role+')</span><br>'+st.problem+'</p>';
+    if(b===1) text='<p class="say">One round, five stations: <b>name</b> two compounds, test a ring for <b>aromaticity</b>, measure benzene’s <b>extra stability</b>, run the <b>bromine water</b> test, and <b>predict</b> a reaction. Each part is marked: 1 at the first try, ½ at the second.</p>';
+    if(b===2) text='<p class="say"><b>Objective:</b> a correct answer at every station.<br><b>You succeed when:</b> '+st.know+'</p>';
+    box.innerHTML='<div class="story-head"><span class="eyebrow" style="margin:0">'+BEAT_TITLE[b]+'</span><span class="dots">'+[0,1,2].map(i=>'<i class="'+(i<=b?'on':'')+'"></i>').join('')+'</span></div>'+
+      '<button type="button" class="scene" id="scene" aria-label="Next part of the story">'+sceneFor(b)+'</button>'+text+
+      '<div class="story-nav">'+(b>0?'<button type="button" class="btn ghost" id="story-back">‹ Back</button>':'<span></span>')+
+      (b<2?'<button type="button" class="btn solid" id="story-next">Tap to continue ›</button>':'<span class="small">Ready? Press <b>Continue</b> below.</span>')+'</div>';
+    const nx=$('#story-next'); if(nx) nx.addEventListener('click',storyNext);
+    $('#scene').addEventListener('click',storyNext);
+    const bk=$('#story-back'); if(bk) bk.addEventListener('click',()=>{ R.beat=Math.max(0,b-1); renderStory(); });
+    if(b===2 && !R.storyDone){ R.storyDone=true; track('lab-story-done',{scenario:R.S.id}); }
+    updatePager(); fitPage();
+  }
+  function storyNext(){ if((R.beat||0)<2){ R.beat=(R.beat||0)+1; track('lab-story-beat',{scenario:R.S.id, beat:R.beat}); renderStory(); } }
+  /* ---------- hints ---------- */
+  const hints=$('#hints');
+  $('#hints-btn').addEventListener('click',()=>{ hints.classList.add('open'); $('#hints-close').focus(); track('lab-hints',{page:page}); });
+  $('#hints-close').addEventListener('click',()=>{ hints.classList.remove('open'); $('#hints-btn').focus(); });
+  hints.addEventListener('click',e=>{ if(e.target===hints) hints.classList.remove('open'); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') hints.classList.remove('open'); });
+
+  /* ---------- pager: one screen at a time ----------
+     Narrow screens show one pane per page; wide screens show both panes of a step side by side. */
+  const SCR=[...document.querySelectorAll('.scr')];
+  let pages=[], page=0, wide=null;
+  function isWide(){ return innerWidth>=900 && innerHeight>=560; }
+  function buildPages(){
+    const w=isWide(); if(w===wide && pages.length) return; wide=w;
+    const cur=pages.length?pages[page][0]:SCR[0];
+    pages=[];
+    SCR.forEach(s=>{ const last=pages[pages.length-1];
+      if(w && last && s.dataset.pane==='b' && last[0].dataset.step===s.dataset.step) last.push(s); else pages.push([s]); });
+    page=Math.max(0,pages.findIndex(p=>p.includes(cur)));
+  }
+  const stepOf=p=>+pages[p][0].dataset.step;
+  const firstPageOfStep=k=>pages.findIndex(p=>+p[0].dataset.step===k);
+  function lastPaneOfStep(p){ const k=stepOf(p); return p+1>=pages.length || stepOf(p+1)!==k; }
+  function canLeave(p){ const k=stepOf(p); if(k===0) return !!(R&&R.storyDone); if(!lastPaneOfStep(p)) return true; return solved[k-1]; }
+  function goPage(n){
+    page=Math.max(0,Math.min(pages.length-1,n));
+    SCR.forEach(s=>{ s.classList.remove('on','half-l','half-r','single','scrolly'); s.style.setProperty('--k',1); });
+    $('#stage').classList.toggle('roomy', innerWidth>=640);
+    const P=pages[page]; P.forEach((s,i)=>{ s.classList.add('on'); if(P.length===2) s.classList.add(i?'half-r':'half-l'); else s.classList.add('single'); });
+    updatePager(); fitPage();
+    if(stepOf(page)===1 && R && !briefed.has(R.S.id)) openBrief();
+    track('lab-page',{page:STEP_NAMES[stepOf(page)]+(P.length===1&&P[0].dataset.pane?' '+P[0].dataset.pane:'')});
+  }
+  function updatePager(){
+    if(!pages.length) return;
+    const k=stepOf(page), P=pages[page], same=pages.filter(p=>stepOf(pages.indexOf(p))===k);
+    const part=(P.length===1 && same.length>1)?' ('+(same.indexOf(P)+1)+'/'+same.length+')':'';
+    $('#bar-lbl').innerHTML=(k?'<span>Station '+k+' of '+STEPS+'</span>':'')+STEP_NAMES[k]+part;
+    $('#fill').style.width=(page/(pages.length-1)*100)+'%';
+    $('#back').disabled=page===0;
+    const last=page===pages.length-1, ok=canLeave(page), nx=$('#next');
+    nx.textContent=last?(solved[STEPS-1]?'New round ↺':'Continue →'):'Continue →';
+    nx.disabled=!ok || (last && !solved[STEPS-1]);
+    nx.classList.toggle('ready', ok && k>0 && lastPaneOfStep(page) && solved[k-1]);
+    guide();
+  }
+  $('#back').addEventListener('click',()=>goPage(page-1));
+  $('#next').addEventListener('click',()=>{ if(page===pages.length-1){ if(solved[STEPS-1]){ newRound(); goPage(firstPageOfStep(1)); } return; } if(canLeave(page)) goPage(page+1); });
+
+  /* fit: shrink the text slightly if a page is too tall; scroll only as a last resort (logged) */
+  function fitPage(){
+    if(!pages.length) return;
+    pages[page].forEach(s=>{
+      s.classList.remove('scrolly'); let k=1; s.style.setProperty('--k',k);
+      const over=()=>s.scrollHeight>s.clientHeight+1;
+      let g=0; while(over() && k>0.8 && g++<10){ k=+(k-0.04).toFixed(2); s.style.setProperty('--k',k); }
+      if(over()){ s.classList.add('scrolly'); track('lab-overflow',{page:s.dataset.title, w:innerWidth, h:innerHeight}); }
+      s.dataset.k=k;
+    });
+    guide();
+  }
+  function setAppH(){ document.documentElement.style.setProperty('--app-h', innerHeight+'px'); }
+  let rT; window.addEventListener('resize',()=>{ clearTimeout(rT); rT=setTimeout(()=>{ setAppH(); buildPages(); goPage(page); },120); });
+
+  /* ---------- step guide: the footer names the next move and the matching control glows ----------
+     It only ever points at the next empty input or button, never at the right answer. */
+  const briefed=new Set(); let glowEl=null;
+  const empty=id=>{ const e=$('#'+id); return !e || !e.value.trim(); };
+  const checkMove=n=>({t:$('#m'+n).classList.contains('bad')?'Fix what the feedback says, then press Check again':'Press Check', e:$('#chk'+n)});
+  const storyMove=()=>R.storyDone?{t:'Press Continue to start the lab',e:$('#next')}:{t:'Tap the picture to read the story',e:$('#story-next')};
+  const doneMove=k=>k<STEPS?{t:'Station done. Press Continue',e:$('#next')}:{t:'Round complete. Try new values or the next scenario',e:$('#endrow')};
+  function guide(){
+    if(!pages.length || !R) return;
+    const g=nextMove(); let t=g.t||'', e=g.e||null;
+    if(e){ const s=e.closest('.scr'); if(s && !pages[page].includes(s)){ const j=pages.findIndex(p=>p.includes(s));
+      if(j>page){ t='Next screen: '+t; e=$('#next'); } else { t='Back a screen: '+t; e=$('#back'); } } }
+    const gate=$('#gate'); gate.textContent=t; gate.classList.toggle('go',!!t);
+    if(glowEl!==e){ if(glowEl) glowEl.classList.remove('guide'); glowEl=e; if(e) e.classList.add('guide'); }
+    const sb=$('#stp-btn'), sl=g.s?'Card §'+g.s:'Card';
+    if(sb.textContent!==sl){ sb.textContent=sl; sb.classList.toggle('sec',!!g.s); sb.dataset.s=g.s||''; }
+  }
+  function openBrief(){ briefed.add(R.S.id); $('#brief-body').innerHTML=briefHTML(); $('#brief').classList.add('open'); $('#brief-go').focus(); }
+  function closeBrief(){ $('#brief').classList.remove('open'); guide(); }
+  $('#brief-go').addEventListener('click',closeBrief);
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#brief').classList.contains('open')) closeBrief(); });
+  document.addEventListener('click',()=>setTimeout(guide,0));
+  document.addEventListener('input',()=>guide());
+
+
+
+  /* the next empty box or unanswered question, in screen order; never the answer */
+  function nextMove(){
+    const k=stepOf(page);
+    if(k===0){
+      if(R.S.assess){ const g=$('#as-go'); return R.pub?{t:'Press Continue to go on',e:$('#next')}:(g?{t:'Press the green button to start',e:g}:{t:'',e:null}); }
+      return storyMove();
+    }
+    if(solved[k-1]) return doneMove(k);
+    if(k===4 && !R.shaken) return {t:'Add bromine water to the tubes',e:$('#shake'),s:4};
+    const els=[...document.querySelectorAll('#q'+k+'a .part, #q'+k+'b .part')];
+    for(const el of els){
+      const id=el.dataset.qk; if(R.st[id] && R.st[id].ok) continue;
+      const inp=el.querySelector('.num-in');
+      if(inp){ if(!inp.value.trim()) return {t:inp.dataset.go||'Fill in the box',e:inp,s:k}; }
+      else if(R.ans[id]==null) return {t:LETTER(id)+'. Choose an answer',e:el.querySelector('.chips'),s:k};
+    }
+    return Object.assign(checkMove(k),{s:k});
+  }
+  function briefHTML(){
+    return '<p class="small" style="margin:0">'+(R.S.assess?'Assessed attempt '+R.attemptNo+'. Each part: 1 mark at the first try, ½ at the second, 0 after.':(R.S.id==='aina'?'Aina has written one answer at each station. Check it.':'A practice round: you get a practice mark at the end.'))+'</p><ol class="sop">'+
+      '<li><b>Name it.</b> One simple compound, one with two or three groups.</li>'+
+      '<li><b>Aromatic?</b> π electrons, p orbitals, 4n + 2.</li>'+
+      '<li><b>Stability.</b> Expected and measured heats of hydrogenation.</li>'+
+      '<li><b>Bromine water.</b> Which tube holds the arene, and why.</li>'+
+      '<li><b>Predict.</b> Electrophile, product and by-product.</li></ol>';
+  }
+  /* ---------- Bench card: opens at the section the current move needs ---------- */
+  function openSTP(s){
+    const d=$('#stp'); d.classList.add('open');
+    d.querySelectorAll('.stp-sec.hit').forEach(x=>x.classList.remove('hit'));
+    const sec=s?$('#stp-'+s):null;
+    if(sec){ sec.scrollIntoView({block:'start'}); sec.classList.add('hit'); } else d.querySelector('.box').scrollTop=0;
+    $('#stp-close').focus({preventScroll:true}); track('lab-card',{s:s||''});
+  }
+  function closeSTP(){ $('#stp').classList.remove('open'); $('#stp-btn').focus({preventScroll:true}); }
+  $('#stp-btn').addEventListener('click',()=>openSTP($('#stp-btn').dataset.s));
+  $('#stp-close').addEventListener('click',closeSTP);
+  $('#stp').addEventListener('click',e=>{ if(e.target.id==='stp') closeSTP(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && $('#stp').classList.contains('open')) closeSTP(); });
+  $('#brief-stp').addEventListener('click',()=>{ closeBrief(); openSTP(''); });
+
+
+  /* ---------- PERIODIC TABLE: the Chemical Bonding explainer's table, with Chang's electronegativities ----------
+     [Z, symbol, name, relative atomic mass, group (0 = f block), period, type, Chang EN or null] */
+  const PT=[[1,"H","Hydrogen","1.008",1,1,"nm",2.1],[2,"He","Helium","4.00",18,1,"nob",null],[3,"Li","Lithium","6.94",1,2,"alk",1.0],[4,"Be","Beryllium","9.01",2,2,"ae",1.5],[5,"B","Boron","10.81",13,2,"mtd",2.0],[6,"C","Carbon","12.01",14,2,"nm",2.5],[7,"N","Nitrogen","14.01",15,2,"nm",3.0],[8,"O","Oxygen","16.00",16,2,"nm",3.5],[9,"F","Fluorine","19.00",17,2,"hal",4.0],[10,"Ne","Neon","20.18",18,2,"nob",null],[11,"Na","Sodium","22.99",1,3,"alk",0.9],[12,"Mg","Magnesium","24.31",2,3,"ae",1.2],[13,"Al","Aluminium","26.98",13,3,"post",1.5],[14,"Si","Silicon","28.09",14,3,"mtd",1.8],[15,"P","Phosphorus","30.97",15,3,"nm",2.1],[16,"S","Sulfur","32.06",16,3,"nm",2.5],[17,"Cl","Chlorine","35.45",17,3,"hal",3.0],[18,"Ar","Argon","39.95",18,3,"nob",null],[19,"K","Potassium","39.10",1,4,"alk",0.8],[20,"Ca","Calcium","40.08",2,4,"ae",1.0],[21,"Sc","Scandium","44.96",3,4,"tm",null],[22,"Ti","Titanium","47.87",4,4,"tm",null],[23,"V","Vanadium","50.94",5,4,"tm",null],[24,"Cr","Chromium","52.00",6,4,"tm",null],[25,"Mn","Manganese","54.94",7,4,"tm",null],[26,"Fe","Iron","55.85",8,4,"tm",null],[27,"Co","Cobalt","58.93",9,4,"tm",null],[28,"Ni","Nickel","58.69",10,4,"tm",null],[29,"Cu","Copper","63.55",11,4,"tm",null],[30,"Zn","Zinc","65.38",12,4,"tm",null],[31,"Ga","Gallium","69.72",13,4,"post",1.6],[32,"Ge","Germanium","72.63",14,4,"mtd",1.8],[33,"As","Arsenic","74.92",15,4,"mtd",2.0],[34,"Se","Selenium","78.97",16,4,"nm",2.4],[35,"Br","Bromine","79.90",17,4,"hal",2.8],[36,"Kr","Krypton","83.80",18,4,"nob",null],[37,"Rb","Rubidium","85.47",1,5,"alk",0.8],[38,"Sr","Strontium","87.62",2,5,"ae",1.0],[39,"Y","Yttrium","88.91",3,5,"tm",null],[40,"Zr","Zirconium","91.22",4,5,"tm",null],[41,"Nb","Niobium","92.91",5,5,"tm",null],[42,"Mo","Molybdenum","95.95",6,5,"tm",null],[43,"Tc","Technetium","(98)",7,5,"tm",null],[44,"Ru","Ruthenium","101.07",8,5,"tm",null],[45,"Rh","Rhodium","102.91",9,5,"tm",null],[46,"Pd","Palladium","106.42",10,5,"tm",null],[47,"Ag","Silver","107.87",11,5,"tm",null],[48,"Cd","Cadmium","112.41",12,5,"tm",null],[49,"In","Indium","114.82",13,5,"post",1.7],[50,"Sn","Tin","118.71",14,5,"post",1.8],[51,"Sb","Antimony","121.76",15,5,"mtd",1.9],[52,"Te","Tellurium","127.60",16,5,"mtd",2.1],[53,"I","Iodine","126.90",17,5,"hal",2.5],[54,"Xe","Xenon","131.29",18,5,"nob",null],[55,"Cs","Caesium","132.91",1,6,"alk",0.7],[56,"Ba","Barium","137.33",2,6,"ae",0.9],[57,"La","Lanthanum","138.91",0,6,"lan",null],[58,"Ce","Cerium","140.12",0,6,"lan",null],[59,"Pr","Praseodymium","140.91",0,6,"lan",null],[60,"Nd","Neodymium","144.24",0,6,"lan",null],[61,"Pm","Promethium","(145)",0,6,"lan",null],[62,"Sm","Samarium","150.36",0,6,"lan",null],[63,"Eu","Europium","151.96",0,6,"lan",null],[64,"Gd","Gadolinium","157.25",0,6,"lan",null],[65,"Tb","Terbium","158.93",0,6,"lan",null],[66,"Dy","Dysprosium","162.50",0,6,"lan",null],[67,"Ho","Holmium","164.93",0,6,"lan",null],[68,"Er","Erbium","167.26",0,6,"lan",null],[69,"Tm","Thulium","168.93",0,6,"lan",null],[70,"Yb","Ytterbium","173.05",0,6,"lan",null],[71,"Lu","Lutetium","174.97",0,6,"lan",null],[72,"Hf","Hafnium","178.49",4,6,"tm",null],[73,"Ta","Tantalum","180.95",5,6,"tm",null],[74,"W","Tungsten","183.84",6,6,"tm",null],[75,"Re","Rhenium","186.21",7,6,"tm",null],[76,"Os","Osmium","190.23",8,6,"tm",null],[77,"Ir","Iridium","192.22",9,6,"tm",null],[78,"Pt","Platinum","195.08",10,6,"tm",null],[79,"Au","Gold","196.97",11,6,"tm",null],[80,"Hg","Mercury","200.59",12,6,"tm",null],[81,"Tl","Thallium","204.38",13,6,"post",1.8],[82,"Pb","Lead","207.20",14,6,"post",1.9],[83,"Bi","Bismuth","208.98",15,6,"post",1.9],[84,"Po","Polonium","(209)",16,6,"post",null],[85,"At","Astatine","(210)",17,6,"hal",null],[86,"Rn","Radon","(222)",18,6,"nob",null],[87,"Fr","Francium","(223)",1,7,"alk",null],[88,"Ra","Radium","(226)",2,7,"ae",null],[89,"Ac","Actinium","(227)",0,7,"act",null],[90,"Th","Thorium","232.04",0,7,"act",null],[91,"Pa","Protactinium","231.04",0,7,"act",null],[92,"U","Uranium","238.03",0,7,"act",null],[93,"Np","Neptunium","(237)",0,7,"act",null],[94,"Pu","Plutonium","(244)",0,7,"act",null],[95,"Am","Americium","(243)",0,7,"act",null],[96,"Cm","Curium","(247)",0,7,"act",null],[97,"Bk","Berkelium","(247)",0,7,"act",null],[98,"Cf","Californium","(251)",0,7,"act",null],[99,"Es","Einsteinium","(252)",0,7,"act",null],[100,"Fm","Fermium","(257)",0,7,"act",null],[101,"Md","Mendelevium","(258)",0,7,"act",null],[102,"No","Nobelium","(259)",0,7,"act",null],[103,"Lr","Lawrencium","(262)",0,7,"act",null],[104,"Rf","Rutherfordium","(261)",4,7,"tm",null],[105,"Db","Dubnium","(262)",5,7,"tm",null],[106,"Sg","Seaborgium","(266)",6,7,"tm",null],[107,"Bh","Bohrium","(264)",7,7,"tm",null],[108,"Hs","Hassium","(277)",8,7,"tm",null],[109,"Mt","Meitnerium","(268)",9,7,"tm",null],[110,"Ds","Darmstadtium","(281)",10,7,"tm",null],[111,"Rg","Roentgenium","(272)",11,7,"tm",null],[112,"Cn","Copernicium","(285)",12,7,"tm",null],[113,"Nh","Nihonium","(286)",13,7,"post",null],[114,"Fl","Flerovium","(289)",14,7,"post",null],[115,"Mc","Moscovium","(289)",15,7,"post",null],[116,"Lv","Livermorium","(293)",16,7,"post",null],[117,"Ts","Tennessine","(294)",17,7,"hal",null],[118,"Og","Oganesson","(294)",18,7,"nob",null]];
+  /* [Z, mass number, 1 if longest-lived isotope (no stable isotope), full configuration (Z ≤ 36), noble-gas shorthand]
+     Mass number: the most abundant natural isotope. Configurations in filling order (Aufbau), with the known exceptions (Cr, Cu …). */
+  const PTX=[[1,1,0,"1s¹","1s¹"],[2,4,0,"1s²","1s²"],[3,7,0,"1s² 2s¹","[He] 2s¹"],[4,9,0,"1s² 2s²","[He] 2s²"],[5,11,0,"1s² 2s² 2p¹","[He] 2s² 2p¹"],[6,12,0,"1s² 2s² 2p²","[He] 2s² 2p²"],[7,14,0,"1s² 2s² 2p³","[He] 2s² 2p³"],[8,16,0,"1s² 2s² 2p⁴","[He] 2s² 2p⁴"],[9,19,0,"1s² 2s² 2p⁵","[He] 2s² 2p⁵"],[10,20,0,"1s² 2s² 2p⁶","[He] 2s² 2p⁶"],[11,23,0,"1s² 2s² 2p⁶ 3s¹","[Ne] 3s¹"],[12,24,0,"1s² 2s² 2p⁶ 3s²","[Ne] 3s²"],[13,27,0,"1s² 2s² 2p⁶ 3s² 3p¹","[Ne] 3s² 3p¹"],[14,28,0,"1s² 2s² 2p⁶ 3s² 3p²","[Ne] 3s² 3p²"],[15,31,0,"1s² 2s² 2p⁶ 3s² 3p³","[Ne] 3s² 3p³"],[16,32,0,"1s² 2s² 2p⁶ 3s² 3p⁴","[Ne] 3s² 3p⁴"],[17,35,0,"1s² 2s² 2p⁶ 3s² 3p⁵","[Ne] 3s² 3p⁵"],[18,40,0,"1s² 2s² 2p⁶ 3s² 3p⁶","[Ne] 3s² 3p⁶"],[19,39,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s¹","[Ar] 4s¹"],[20,40,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s²","[Ar] 4s²"],[21,45,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d¹","[Ar] 4s² 3d¹"],[22,48,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d²","[Ar] 4s² 3d²"],[23,51,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d³","[Ar] 4s² 3d³"],[24,52,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s¹ 3d⁵","[Ar] 4s¹ 3d⁵"],[25,55,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d⁵","[Ar] 4s² 3d⁵"],[26,56,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d⁶","[Ar] 4s² 3d⁶"],[27,59,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d⁷","[Ar] 4s² 3d⁷"],[28,58,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d⁸","[Ar] 4s² 3d⁸"],[29,63,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s¹ 3d¹⁰","[Ar] 4s¹ 3d¹⁰"],[30,64,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d¹⁰","[Ar] 4s² 3d¹⁰"],[31,69,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d¹⁰ 4p¹","[Ar] 4s² 3d¹⁰ 4p¹"],[32,74,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d¹⁰ 4p²","[Ar] 4s² 3d¹⁰ 4p²"],[33,75,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d¹⁰ 4p³","[Ar] 4s² 3d¹⁰ 4p³"],[34,80,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d¹⁰ 4p⁴","[Ar] 4s² 3d¹⁰ 4p⁴"],[35,79,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d¹⁰ 4p⁵","[Ar] 4s² 3d¹⁰ 4p⁵"],[36,84,0,"1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d¹⁰ 4p⁶","[Ar] 4s² 3d¹⁰ 4p⁶"],[37,85,0,"","[Kr] 5s¹"],[38,88,0,"","[Kr] 5s²"],[39,89,0,"","[Kr] 5s² 4d¹"],[40,90,0,"","[Kr] 5s² 4d²"],[41,93,0,"","[Kr] 5s¹ 4d⁴"],[42,98,0,"","[Kr] 5s¹ 4d⁵"],[43,98,1,"","[Kr] 5s² 4d⁵"],[44,102,0,"","[Kr] 5s¹ 4d⁷"],[45,103,0,"","[Kr] 5s¹ 4d⁸"],[46,106,0,"","[Kr] 4d¹⁰"],[47,107,0,"","[Kr] 5s¹ 4d¹⁰"],[48,114,0,"","[Kr] 5s² 4d¹⁰"],[49,115,0,"","[Kr] 5s² 4d¹⁰ 5p¹"],[50,120,0,"","[Kr] 5s² 4d¹⁰ 5p²"],[51,121,0,"","[Kr] 5s² 4d¹⁰ 5p³"],[52,130,0,"","[Kr] 5s² 4d¹⁰ 5p⁴"],[53,127,0,"","[Kr] 5s² 4d¹⁰ 5p⁵"],[54,132,0,"","[Kr] 5s² 4d¹⁰ 5p⁶"],[55,133,0,"","[Xe] 6s¹"],[56,138,0,"","[Xe] 6s²"],[57,139,0,"","[Xe] 6s² 5d¹"],[58,140,0,"","[Xe] 6s² 4f¹ 5d¹"],[59,141,0,"","[Xe] 6s² 4f³"],[60,142,0,"","[Xe] 6s² 4f⁴"],[61,145,1,"","[Xe] 6s² 4f⁵"],[62,152,0,"","[Xe] 6s² 4f⁶"],[63,153,0,"","[Xe] 6s² 4f⁷"],[64,158,0,"","[Xe] 6s² 4f⁷ 5d¹"],[65,159,0,"","[Xe] 6s² 4f⁹"],[66,164,0,"","[Xe] 6s² 4f¹⁰"],[67,165,0,"","[Xe] 6s² 4f¹¹"],[68,166,0,"","[Xe] 6s² 4f¹²"],[69,169,0,"","[Xe] 6s² 4f¹³"],[70,174,0,"","[Xe] 6s² 4f¹⁴"],[71,175,0,"","[Xe] 6s² 4f¹⁴ 5d¹"],[72,180,0,"","[Xe] 6s² 4f¹⁴ 5d²"],[73,181,0,"","[Xe] 6s² 4f¹⁴ 5d³"],[74,184,0,"","[Xe] 6s² 4f¹⁴ 5d⁴"],[75,187,0,"","[Xe] 6s² 4f¹⁴ 5d⁵"],[76,192,0,"","[Xe] 6s² 4f¹⁴ 5d⁶"],[77,193,0,"","[Xe] 6s² 4f¹⁴ 5d⁷"],[78,195,0,"","[Xe] 6s¹ 4f¹⁴ 5d⁹"],[79,197,0,"","[Xe] 6s¹ 4f¹⁴ 5d¹⁰"],[80,202,0,"","[Xe] 6s² 4f¹⁴ 5d¹⁰"],[81,205,0,"","[Xe] 6s² 4f¹⁴ 5d¹⁰ 6p¹"],[82,208,0,"","[Xe] 6s² 4f¹⁴ 5d¹⁰ 6p²"],[83,209,0,"","[Xe] 6s² 4f¹⁴ 5d¹⁰ 6p³"],[84,209,1,"","[Xe] 6s² 4f¹⁴ 5d¹⁰ 6p⁴"],[85,210,1,"","[Xe] 6s² 4f¹⁴ 5d¹⁰ 6p⁵"],[86,222,1,"","[Xe] 6s² 4f¹⁴ 5d¹⁰ 6p⁶"],[87,223,1,"","[Rn] 7s¹"],[88,226,1,"","[Rn] 7s²"],[89,227,1,"","[Rn] 7s² 6d¹"],[90,232,0,"","[Rn] 7s² 6d²"],[91,231,0,"","[Rn] 7s² 5f² 6d¹"],[92,238,0,"","[Rn] 7s² 5f³ 6d¹"],[93,237,1,"","[Rn] 7s² 5f⁴ 6d¹"],[94,244,1,"","[Rn] 7s² 5f⁶"],[95,243,1,"","[Rn] 7s² 5f⁷"],[96,247,1,"","[Rn] 7s² 5f⁷ 6d¹"],[97,247,1,"","[Rn] 7s² 5f⁹"],[98,251,1,"","[Rn] 7s² 5f¹⁰"],[99,252,1,"","[Rn] 7s² 5f¹¹"],[100,257,1,"","[Rn] 7s² 5f¹²"],[101,258,1,"","[Rn] 7s² 5f¹³"],[102,259,1,"","[Rn] 7s² 5f¹⁴"],[103,262,1,"","[Rn] 7s² 5f¹⁴ 7p¹"],[104,261,1,"","[Rn] 7s² 5f¹⁴ 6d²"],[105,262,1,"","[Rn] 7s² 5f¹⁴ 6d³"],[106,266,1,"","[Rn] 7s² 5f¹⁴ 6d⁴"],[107,264,1,"","[Rn] 7s² 5f¹⁴ 6d⁵"],[108,277,1,"","[Rn] 7s² 5f¹⁴ 6d⁶"],[109,268,1,"","[Rn] 7s² 5f¹⁴ 6d⁷"],[110,281,1,"","[Rn] 7s¹ 5f¹⁴ 6d⁹"],[111,272,1,"","[Rn] 7s¹ 5f¹⁴ 6d¹⁰"],[112,285,1,"","[Rn] 7s² 5f¹⁴ 6d¹⁰"],[113,286,1,"","[Rn] 7s² 5f¹⁴ 6d¹⁰ 7p¹"],[114,289,1,"","[Rn] 7s² 5f¹⁴ 6d¹⁰ 7p²"],[115,289,1,"","[Rn] 7s² 5f¹⁴ 6d¹⁰ 7p³"],[116,293,1,"","[Rn] 7s² 5f¹⁴ 6d¹⁰ 7p⁴"],[117,294,1,"","[Rn] 7s² 5f¹⁴ 6d¹⁰ 7p⁵"],[118,294,1,"","[Rn] 7s² 5f¹⁴ 6d¹⁰ 7p⁶"]];
+  const PT_CAT={alk:['Alkali metal','#f6d7c3'],ae:['Alkaline earth metal','#fbe8c8'],tm:['Transition metal','#e3e8f3'],post:['Post-transition metal','#dfe7e1'],mtd:['Metalloid','#e6e1f0'],nm:['Non-metal','#cfe6d9'],hal:['Halogen','#bfe0e2'],nob:['Noble gas','#f0dbe6'],lan:['Lanthanide','#efe9d4'],act:['Actinide','#ebe1d8']};
+  let ptMode='cat', ptBuilt=false;
+  const ptOv=$('#ptov'), ptGrid=$('#pt-grid'), ptDet=$('#pt-detail'), ptLeg=$('#pt-legend');
+  function enColour(v){ const t=Math.max(0,Math.min(1,(v-0.7)/3.3)); const a=[238,245,241], b=[31,77,57]; return 'rgb('+a.map((x,i)=>Math.round(x+(b[i]-x)*t)).join(',')+')'; }
+  function ptPaint(){
+    ptGrid.querySelectorAll('.ptc[data-z]').forEach(c=>{
+      const e=PT[+c.dataset.z-1];
+      c.classList.remove('dim','dark');
+      if(ptMode==='cat'){ c.style.background=PT_CAT[e[6]][1]; }
+      else if(e[7]!=null){ c.style.background=enColour(e[7]); if(e[7]>=2.2) c.classList.add('dark'); }
+      else { c.style.background='#fff'; c.classList.add('dim'); }
+      c.querySelector('s').textContent=ptMode==='en'?(e[7]!=null?'EN '+e[7].toFixed(1):''):e[3];
+    });
+    ptLeg.innerHTML=ptMode==='cat'
+      ? Object.keys(PT_CAT).map(k=>'<span style="--sw:'+PT_CAT[k][1]+'">'+PT_CAT[k][0]+'</span>').join('')
+      : '<span style="--sw:'+enColour(0.8)+'">low EN</span><span style="--sw:'+enColour(2.5)+'">medium</span><span style="--sw:'+enColour(4.0)+'">high EN (F 4.0)</span><span style="--sw:#fff">not needed here</span>';
+  }
+  function ptBuild(){
+    if(ptBuilt) return; ptBuilt=true;
+    const add=(node,r,c)=>{ node.style.gridRow=r; node.style.gridColumn=c; ptGrid.appendChild(node); };
+    for(let g=1;g<=18;g++){ const h=document.createElement('div'); h.className='pt-gh'; h.textContent=g; add(h,1,g); }
+    const fi={6:0,7:0};
+    PT.forEach(e=>{
+      const b=document.createElement('button'); b.type='button'; b.className='ptc'; b.dataset.z=e[0];
+      b.innerHTML='<i>'+e[0]+'</i><b>'+e[1]+'</b><s></s>'; b.setAttribute('aria-label',e[2]+', proton number '+e[0]);
+      if(e[4]===0){ add(b, e[5]===6?10:11, 3+fi[e[5]]); fi[e[5]]++; }
+      else add(b, e[5]+1, e[4]);
+      b.addEventListener('click',()=>ptSelect(e,b));
+    });
+    [['57–71',7],['89–103',8]].forEach(x=>{ const ph=document.createElement('div'); ph.className='ptc ph'; ph.textContent=x[0]; add(ph,x[1],3); });
+    const gap=document.createElement('div'); gap.style.height='.45rem'; add(gap,9,1);
+    ptPaint();
+  }
+  function ptSelect(e,btn){
+    ptGrid.querySelectorAll('.ptc.sel').forEach(c=>c.classList.remove('sel')); btn.classList.add('sel');
+    const x=PTX[e[0]-1], g=e[4], block=g===0?'f':(g<=2||e[0]===2?'s':(g>=13?'p':'d'));
+    const val=block==='s'?(e[0]===2?2:g):(block==='p'?g-10:null);
+    const grp=g===0?(e[6]==='lan'?'lanthanide':'actinide')+' series':'group '+g;
+    ptDet.innerHTML='<div class="pt-top"><span class="nuc" aria-hidden="true"><sup>'+x[1]+'</sup><sub>'+e[0]+'</sub><span>'+e[1]+'</span></span>'+
+      '<span><span class="nm">'+e[2]+'</span><br>proton number <b>'+e[0]+'</b> · mass number <b>'+x[1]+'</b> <span class="small">('+(x[2]?'longest-lived isotope':'most common isotope')+')</span> · relative atomic mass <b>'+e[3]+'</b></span></div>'+
+      '<div>Electron configuration: <b>'+(x[3]||x[4])+'</b>'+(x[3]&&x[4]!==x[3]?' <span class="small">or '+x[4]+'</span>':'')+'</div>'+
+      '<div class="small">'+grp.charAt(0).toUpperCase()+grp.slice(1)+', period '+e[5]+' · '+block+' block · '+PT_CAT[e[6]][0].toLowerCase()+
+      (val!=null?' · valence electrons <b>'+val+'</b>':'')+(e[7]!=null?' · electronegativity (Chang) <b>'+e[7].toFixed(1)+'</b>':'')+'</div>';
+    track('periodic-element',{symbol:e[1]});
+  }
+  document.querySelectorAll('#ptov .pt-tools button').forEach(b=>b.addEventListener('click',()=>{
+    ptMode=b.dataset.mode; document.querySelectorAll('#ptov .pt-tools button').forEach(x=>x.classList.toggle('on',x===b)); ptPaint(); track('periodic-mode',{mode:ptMode});
+  }));
+  function ptOpen(){ ptBuild(); ptOv.classList.add('open'); $('#pt-close').focus({preventScroll:true}); track('open-periodic-table'); }
+  function ptClose(){ ptOv.classList.remove('open'); $('#pt-btn').focus({preventScroll:true}); }
+  $('#pt-btn').addEventListener('click',ptOpen);
+  $('#pt-close').addEventListener('click',ptClose);
+  ptOv.addEventListener('click',e=>{ if(e.target===ptOv) ptClose(); });
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape' && ptOv.classList.contains('open')) ptClose(); });
+  /* test hook: lets the automated checks read the round (no effect for students) */
+  window.__lab={get R(){ return R; }, CORE:CORE, get solved(){ return solved; }};
+
+  setAppH(); buildPages(); newRound(); goPage(0);
+})();
+</script>
+</body>
+</html>

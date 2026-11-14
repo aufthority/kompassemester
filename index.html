@@ -747,6 +747,10 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
           <div><h3>Hydrocarbons Lab</h3><div class="meta">Name and draw alkanes and alkenes; see combustion and cracking.</div></div>
           <span class="lab-card-go">Open</span>
         </a>
+        <a class="card glass lab-card" href="labs/arenes/index.html" data-tour="arenes">
+          <div><h3>Arenes Explainer</h3><div class="meta">Name benzene compounds, test aromaticity and predict benzene’s reactions, with the Ring Bench lab.</div></div>
+          <span class="lab-card-go">Open</span>
+        </a>
         <a class="card glass lab-card" href="labs/chromatography/index.html" data-tour="chromatography">
           <div><h3>Chromatography Explainer</h3><div class="meta">Extraction, TLC, HPLC and GC, with animations of why compounds separate.</div></div>
           <span class="lab-card-go">Open</span>
@@ -981,6 +985,13 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
           <div>
             <h3>Hydrocarbons Lab</h3>
             <div class="meta">Alkanes, cycloalkanes, alkenes and cycloalkenes: name and draw structures by the IUPAC rules, follow combustion and free-radical halogenation, and see fractional distillation and cracking at work, with the Bromine Water Bench lab.</div>
+          </div>
+          <span class="lab-card-go">Open</span>
+        </a>
+        <a class="card glass fade-up lab-card" id="lab-arenes-link" href="labs/arenes/index.html">
+          <div>
+            <h3>Arenes Explainer</h3>
+            <div class="meta">Benzene and its compounds: naming, aromaticity and stability, and the five substitution reactions of benzene, with the Ring Bench lab (includes the PHCH 4123 assessed round).</div>
           </div>
           <span class="lab-card-go">Open</span>
         </a>
@@ -2162,7 +2173,7 @@ async function logEngagementEvent(eventType, { topicId = null, metadata = {} } =
 /* Interactive labs: log the open, then go. Waits at most 700 ms for the
    insert so leaving the page doesn't cancel it; a slow or failed log never
    blocks the student. */
-['orbitals', 'atomic-structure', 'trends', 'periodic-trends', 'acidbase', 'titration', 'osd', 'hydrocarbons', 'chemical-bonding', 'stoichiometry', 'gases', 'chromatography', 'spectroscopy', 'qc-practice'].forEach(lab => {
+['orbitals', 'atomic-structure', 'trends', 'periodic-trends', 'acidbase', 'titration', 'osd', 'hydrocarbons', 'arenes', 'chemical-bonding', 'stoichiometry', 'gases', 'chromatography', 'spectroscopy', 'qc-practice'].forEach(lab => {
   document.getElementById('lab-' + lab + '-link').addEventListener('click', async e => {
     e.preventDefault();
     const href = e.currentTarget.getAttribute('href');
