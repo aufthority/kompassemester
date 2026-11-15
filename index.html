@@ -528,6 +528,24 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
 .grp-topic-input{width:100%;min-width:170px;padding:7px 10px;border:1px solid rgba(27,67,50,0.16);border-radius:var(--radius-sm);font-size:12.5px;font-family:var(--font-body);background:#fff;color:var(--ink);}
 .grp-remove-btn{font-size:11px;font-weight:600;color:#a9491f;background:rgba(169,73,31,0.08);border:1px solid rgba(169,73,31,0.25);border-radius:var(--radius-sm);padding:6px 10px;white-space:nowrap;}
 .grp-remove-btn:hover{background:rgba(169,73,31,0.15);}
+/* Video topics (one 2-minute video per student) */
+.vt-card{padding:18px 20px;margin-bottom:16px;}
+.vt-label{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gold-600);margin-bottom:4px;}
+.vt-title{font-family:var(--font-display);font-size:17px;font-weight:600;color:var(--forest-900);margin-bottom:2px;}
+.vt-meta{font-size:11.5px;color:var(--ink-soft);margin-bottom:12px;}
+.vt-box{background:rgba(45,106,79,0.07);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px;}
+.vt-box-label{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--forest-700);margin-bottom:3px;}
+.vt-box-text{font-size:13px;color:var(--ink);line-height:1.45;}
+.vt-links{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.vt-link{display:inline-flex;align-items:center;font-size:12px;font-weight:600;color:#fff;background:var(--forest-700);border-radius:99px;padding:7px 14px;text-decoration:none;}
+.vt-link.alt{background:rgba(27,67,50,0.06);color:var(--forest-700);border:1px solid rgba(27,67,50,0.18);}
+.vt-note{font-size:12px;color:var(--ink-soft);font-style:italic;margin-bottom:12px;}
+.vt-steps{margin:0 0 0 18px;padding:0;font-size:12.5px;color:var(--ink);line-height:1.6;}
+.vt-actions{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:14px;padding-top:14px;border-top:1px solid rgba(27,67,50,0.08);}
+.vt-btn{padding:8px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;font-family:var(--font-body);border:1px solid rgba(27,67,50,0.18);background:#fff;color:var(--forest-700);cursor:pointer;}
+.vt-btn.primary{background:var(--forest-700);border-color:var(--forest-700);color:#fff;}
+.vt-btn.quiet{border:none;background:none;color:var(--ink-soft);text-decoration:underline;padding:8px 4px;}
+.vt-slice{font-size:9.5px;font-weight:700;color:var(--forest-700);background:rgba(45,106,79,0.14);border-radius:4px;padding:1px 4px;}
 .grp-stray-pill{display:inline-flex;align-items:center;font-size:12px;font-weight:500;background:rgba(201,162,39,0.10);border:1px solid rgba(201,162,39,0.28);border-radius:99px;padding:4px 11px;margin:3px 4px 3px 0;color:var(--ink);}
 .bank-q{padding:12px 4px;border-bottom:1px solid rgba(27,67,50,0.08);}
 .bank-q:last-child{border-bottom:none;}
@@ -1179,6 +1197,7 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
 
         <!-- STUDENT PANEL -->
         <div id="groups-student">
+          <div id="vt-student-card"></div>
           <div class="grp-grid" id="grp-student-grid"></div>
         </div>
 
@@ -1201,6 +1220,12 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
               </label>
             </div>
             <button class="btn-primary" id="grp-add-group-btn" type="button" style="margin-top:14px">+ Add empty group</button>
+            <div class="vt-actions">
+              <button class="vt-btn primary" id="vt-assign-btn" type="button">Assign video topics</button>
+              <button class="vt-btn" id="vt-export-btn" type="button">Export video topics (CSV)</button>
+              <button class="vt-btn quiet" id="vt-reset-btn" type="button">Start over</button>
+              <span class="meta" id="vt-summary-text"></span>
+            </div>
           </div>
 
           <div class="glass" style="padding:0;margin-bottom:16px;overflow:hidden">
@@ -3767,6 +3792,7 @@ function escapeHtml(s) {
 /* ---------- PROJECT GROUPS (student + educator, shared view) ---------- */
 let groupsList = [];
 let courseRoster = []; // [{id, full_name}] — everyone enrolled in the current course
+let videoAssignments = []; // educator view: [{student_id, group_id, topic_id, slice}] for the current course
 
 async function loadGroupsView() {
   if (!currentCourse || !myProfile) return;
@@ -3793,11 +3819,14 @@ async function loadGroupsView() {
     document.getElementById('groups-educator').style.display = '';
     const { data: enrollments } = await sb.from('enrollments').select('profiles(id, full_name)').eq('course_id', currentCourse.id);
     courseRoster = (enrollments || []).map(e => e.profiles).filter(Boolean);
+    const { data: va } = await sb.from('video_assignments').select('student_id, group_id, topic_id, slice').eq('course_id', currentCourse.id);
+    videoAssignments = va || [];
     renderEducatorGroups();
   } else {
     document.getElementById('groups-student').style.display = '';
     document.getElementById('groups-educator').style.display = 'none';
     renderStudentGroups();
+    await renderVideoTopicCard();
   }
 }
 
@@ -3904,6 +3933,9 @@ function renderEducatorGroups() {
   const placedCount = groupsList.reduce((sum, g) => sum + (g.project_group_members || []).length, 0);
   document.getElementById('grp-summary-text').textContent =
     `${groupsList.length} group${groupsList.length === 1 ? '' : 's'} · ${placedCount} of ${courseRoster.length} students placed`;
+  const sliceOf = new Map(videoAssignments.map(a => [a.student_id, a.slice]));
+  document.getElementById('vt-summary-text').textContent =
+    `${videoAssignments.length} of ${courseRoster.length} students have a video topic`;
 
   const tbody = document.getElementById('grp-educator-tbody');
   if (!groupsList.length) {
@@ -3917,7 +3949,7 @@ function renderEducatorGroups() {
       else if (count <= 1) badgeClass = 'warn';
       const membersHTML = members.length
         ? `<div class="grp-members-inline">${members.map(m =>
-            `<span class="grp-m">${escapeHtml(m.profiles && m.profiles.full_name ? m.profiles.full_name : 'Student')}<button class="grp-m-remove" type="button" data-remove-member="${g.id}|${m.student_id}" title="Remove from group">×</button></span>`
+            `<span class="grp-m">${escapeHtml(m.profiles && m.profiles.full_name ? m.profiles.full_name : 'Student')}${sliceOf.has(m.student_id) ? `<span class="vt-slice" title="Video slice">S${sliceOf.get(m.student_id)}</span>` : ''}<button class="grp-m-remove" type="button" data-remove-member="${g.id}|${m.student_id}" title="Remove from group">×</button></span>`
           ).join('')}</div>`
         : `<span class="meta">No members</span>`;
       return `<tr>
@@ -3992,6 +4024,87 @@ document.getElementById('grp-add-group-btn').addEventListener('click', async () 
   const { error } = await sb.rpc('create_project_group', { p_course_id: currentCourse.id, p_group_name: null });
   if (error) { alert(error.message); return; }
   await loadGroupsView();
+});
+
+/* ---- VIDEO TOPICS: each group gets a topic, each member their own part (slice) ----
+   Catalogue: video_topic_slices. Assignments: video_assignments, handed out by the
+   assign_video_topics RPC (educator only). Students see only their own row (RLS). */
+async function renderVideoTopicCard() {
+  const box = document.getElementById('vt-student-card');
+  box.innerHTML = '';
+  const { data: mine } = await sb.from('video_assignments')
+    .select('topic_id, slice').eq('course_id', currentCourse.id).eq('student_id', myProfile.id).maybeSingle();
+  if (!mine) return;
+  const { data: s } = await sb.from('video_topic_slices')
+    .select('*').eq('topic_id', mine.topic_id).eq('slice', mine.slice).maybeSingle();
+  if (!s) return;
+  const links = [
+    s.explainer_url ? `<a class="vt-link" href="${escapeHtml(s.explainer_url)}">Open ${escapeHtml(s.explainer)}</a>` : '',
+    s.lab_url ? `<a class="vt-link alt" href="${escapeHtml(s.lab_url)}">Open ${escapeHtml(s.lab)}</a>` : '',
+    currentCourse.inova_url ? `<a class="vt-link alt" href="${escapeHtml(currentCourse.inova_url)}" target="_blank" rel="noopener">Submit in INOVA</a>` : ''
+  ].join('');
+  box.innerHTML = `<div class="card glass fade-up vt-card">
+    <div class="vt-label">Your video topic</div>
+    <div class="vt-title">${escapeHtml(s.video_topic)}</div>
+    <div class="vt-meta">Group topic: ${escapeHtml(s.group_topic)}${s.unit ? ' (' + escapeHtml(s.unit) + ')' : ''} · Your part: ${s.slice}. Each member of your group has a different part.</div>
+    <div class="vt-box"><div class="vt-box-label">Problem to solve in your video</div><div class="vt-box-text">${escapeHtml(s.problem)}</div></div>
+    ${s.explainer_url ? '' : '<div class="vt-note">There is no Kompas explainer for this topic yet. Use your lecture notes and textbook.</div>'}
+    ${links ? `<div class="vt-links">${links}</div>` : ''}
+    <div class="vt-box-label">How to make your video</div>
+    <ol class="vt-steps">
+      <li>Keep it to 2 minutes or less. Show your face on camera the whole time. Speak in English.</li>
+      <li>Start with a pharmacy question your topic answers (about 15 seconds).</li>
+      <li>Explain the idea in your own words (about 35 seconds). Do not read from the screen.</li>
+      <li>Solve your problem step by step on screen (about 50 seconds).${s.lab_url ? ' Use the values from your own lab round.' : ''}</li>
+      <li>End with one common mistake and how to avoid it (about 20 seconds).</li>
+      <li>Submit your video in INOVA.</li>
+    </ol>
+    <div class="vt-meta" style="margin:10px 0 0">You can discuss your topic with your group, but make your own video.</div>
+  </div>`;
+}
+
+async function runAssignVideoTopics(reset) {
+  const msg = reset
+    ? `Start over for ${currentCourse.code}? Every student's video topic and part will be removed and handed out again from scratch. Students may get a different topic.`
+    : `Assign video topics for ${currentCourse.code}? Each group with members gets a topic, and each member gets their own part. Students who already have a part keep it. Each group's Topic box will be filled in for you.`;
+  if (!confirm(msg)) return;
+  const { data, error } = await sb.rpc('assign_video_topics', { p_course_id: currentCourse.id, p_reset: !!reset });
+  if (error) { alert('Could not assign video topics: ' + error.message); return; }
+  let note = `${data.assigned} student${data.assigned === 1 ? '' : 's'} got a new video part across ${data.groups} group${data.groups === 1 ? '' : 's'}.`;
+  if (data.skipped) note += `\n${data.skipped} student${data.skipped === 1 ? ' was' : 's were'} skipped: their group has more members than its topic has parts.`;
+  alert(note);
+  await loadGroupsView();
+}
+document.getElementById('vt-assign-btn').addEventListener('click', () => runAssignVideoTopics(false));
+document.getElementById('vt-reset-btn').addEventListener('click', () => runAssignVideoTopics(true));
+
+document.getElementById('vt-export-btn').addEventListener('click', async () => {
+  const [{ data: va, error: e1 }, { data: sl, error: e2 }, { data: en, error: e3 }] = await Promise.all([
+    sb.from('video_assignments').select('student_id, topic_id, slice').eq('course_id', currentCourse.id),
+    sb.from('video_topic_slices').select('topic_id, slice, unit, group_topic, video_topic, problem').eq('course_code', currentCourse.code),
+    sb.from('enrollments').select('profiles(id, full_name, matric_number, role)').eq('course_id', currentCourse.id)
+  ]);
+  const err = e1 || e2 || e3;
+  if (err) { alert('Could not export: ' + err.message); return; }
+  const sliceBy = new Map((sl || []).map(s => [s.topic_id + '|' + s.slice, s]));
+  const asgBy = new Map((va || []).map(a => [a.student_id, a]));
+  const groupBy = new Map();
+  groupsList.forEach(g => (g.project_group_members || []).forEach(m => groupBy.set(m.student_id, g.group_number)));
+  const rows = (en || []).map(e => e.profiles).filter(p => p && p.role !== 'educator').map(p => {
+    const a = asgBy.get(p.id), s = a ? sliceBy.get(a.topic_id + '|' + a.slice) : null;
+    return [groupBy.get(p.id) || '', p.full_name || '', p.matric_number || '',
+      a ? a.topic_id : '', s ? s.group_topic : '', s ? s.unit : '', a ? a.slice : '',
+      s ? s.video_topic : 'No video topic yet', s ? s.problem : '', '', ''];
+  }).sort((x, y) => (x[0] === '' ? 1e9 : x[0]) - (y[0] === '' ? 1e9 : y[0]) || (x[6] || 99) - (y[6] || 99));
+  const head = ['Group', 'Name', 'Matric number', 'Topic ID', 'Group topic', 'Unit', 'Part', 'Video topic', 'Problem to solve', 'Mark', 'Comments'];
+  const cell = v => { const t = String(v); return /[",\n]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
+  const csv = '﻿' + [head, ...rows].map(r => r.map(cell).join(',')).join('\r\n');
+  const url = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `video-topics-${currentCourse.code.replace(/\s+/g, '')}${currentCourse.cohort ? '-' + currentCourse.cohort.replace(/\s+/g, '') : ''}.csv`;
+  document.body.appendChild(link); link.click(); link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
 });
 
 async function loadStudyNoteEditor(topicId) {
