@@ -3825,6 +3825,12 @@ async function loadGroupsView() {
   } else {
     document.getElementById('groups-student').style.display = '';
     document.getElementById('groups-educator').style.display = 'none';
+    // Students can't read classmates' profiles (RLS); this RPC returns just their names.
+    const { data: names } = await sb.rpc('course_group_member_names', { p_course_id: currentCourse.id });
+    const nameOf = new Map((names || []).map(n => [n.student_id, n.full_name]));
+    groupsList.forEach(g => (g.project_group_members || []).forEach(m => {
+      if (nameOf.has(m.student_id)) m.profiles = { id: m.student_id, full_name: nameOf.get(m.student_id) };
+    }));
     renderStudentGroups();
     await renderVideoTopicCard();
   }
@@ -3845,6 +3851,13 @@ function renderGroupsStatusBanner() {
 }
 
 /* ---- STUDENT ---- */
+// "NUR ALIEYA BATRISYIA BINTI ABDULLAH" -> "NUR ALIEYA BATRISYIA". The first word alone
+// ("NUR", "MUHAMMAD") is shared by too many students to tell classmates apart.
+function givenName(full) {
+  const given = String(full).trim().split(/\s+(?:binti|bin|bt\.?|bte\.?|b\.|a\/l|a\/p|anak)\s+/i)[0];
+  return given.split(/\s+/).slice(0, 3).join(' ');
+}
+
 function renderStudentGroups() {
   const grid = document.getElementById('grp-student-grid');
   const locked = currentCourse.group_formation_locked;
@@ -3861,7 +3874,7 @@ function renderStudentGroups() {
     const isMine = members.some(m => m.student_id === myProfile.id);
     const isFull = members.length >= maxSize;
     const memberHTML = members.map(m =>
-      `<span class="grp-member-pill">${escapeHtml(m.student_id === myProfile.id ? 'You' : (m.profiles && m.profiles.full_name ? m.profiles.full_name.split(' ')[0] : 'Student'))}</span>`
+      `<span class="grp-member-pill">${escapeHtml(m.student_id === myProfile.id ? 'You' : (m.profiles && m.profiles.full_name ? givenName(m.profiles.full_name) : 'Student'))}</span>`
     ).join('');
     const openSlots = Math.max(0, maxSize - members.length);
     const slotsHTML = (!locked && openSlots > 0) ? Array(openSlots).fill('<span class="grp-slot-empty">open slot</span>').join('') : '';
