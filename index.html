@@ -545,6 +545,7 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
 .vt-btn{padding:8px 14px;border-radius:var(--radius-sm);font-size:12px;font-weight:600;font-family:var(--font-body);border:1px solid rgba(27,67,50,0.18);background:#fff;color:var(--forest-700);cursor:pointer;}
 .vt-btn.primary{background:var(--forest-700);border-color:var(--forest-700);color:#fff;}
 .vt-btn.quiet{border:none;background:none;color:var(--ink-soft);text-decoration:underline;padding:8px 4px;}
+.vt-filename{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;word-break:break-word;}
 .vt-slice{font-size:9.5px;font-weight:700;color:var(--forest-700);background:rgba(45,106,79,0.14);border-radius:4px;padding:1px 4px;}
 .grp-stray-pill{display:inline-flex;align-items:center;font-size:12px;font-weight:500;background:rgba(201,162,39,0.10);border:1px solid rgba(201,162,39,0.28);border-radius:99px;padding:4px 11px;margin:3px 4px 3px 0;color:var(--ink);}
 .bank-q{padding:12px 4px;border-bottom:1px solid rgba(27,67,50,0.08);}
@@ -4054,13 +4055,18 @@ async function renderVideoTopicCard() {
   const links = [
     s.explainer_url ? `<a class="vt-link" href="${escapeHtml(s.explainer_url)}">Open ${escapeHtml(s.explainer)}</a>` : '',
     s.lab_url ? `<a class="vt-link alt" href="${escapeHtml(s.lab_url)}">Open ${escapeHtml(s.lab)}</a>` : '',
-    currentCourse.inova_url ? `<a class="vt-link alt" href="${escapeHtml(currentCourse.inova_url)}" target="_blank" rel="noopener">Submit in INOVA</a>` : ''
+    currentCourse.inova_url ? `<a class="vt-link alt" href="${escapeHtml(currentCourse.inova_url)}" target="_blank" rel="noopener">Open INOVA</a>` : ''
   ].join('');
+  // File name the student must use: course code_full name_user ID_topic title
+  const fileSafe = t => String(t).replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim();
+  const fileName = [currentCourse.code, myProfile.full_name, myProfile.matric_number || 'YOUR USER ID', s.video_topic].map(fileSafe).join('_');
   box.innerHTML = `<div class="card glass fade-up vt-card">
     <div class="vt-label">Your video topic</div>
     <div class="vt-title">${escapeHtml(s.video_topic)}</div>
     <div class="vt-meta">Group topic: ${escapeHtml(s.group_topic)}${s.unit ? ' (' + escapeHtml(s.unit) + ')' : ''} · Your part: ${s.slice}. Each member of your group has a different part.</div>
     <div class="vt-box"><div class="vt-box-label">Problem to solve in your video</div><div class="vt-box-text">${escapeHtml(s.problem)}</div></div>
+    <div class="vt-box"><div class="vt-box-label">Name your video file exactly like this</div><div class="vt-box-text vt-filename" id="vt-filename">${escapeHtml(fileName)}</div>
+      <div class="vt-meta" style="margin:6px 0 0">${myProfile.matric_number ? '' : 'Replace YOUR USER ID with your full user ID. '}Keep the file type your phone gives (.mp4 or .mov). <button class="vt-btn quiet" type="button" id="vt-copy-name" style="padding:0">Copy name</button></div></div>
     ${s.explainer_url ? '' : '<div class="vt-note">There is no Kompas explainer for this topic yet. Use your lecture notes and textbook.</div>'}
     ${links ? `<div class="vt-links">${links}</div>` : ''}
     <div class="vt-box-label">How to make your video</div>
@@ -4070,10 +4076,14 @@ async function renderVideoTopicCard() {
       <li>Explain the idea in your own words (about 35 seconds). Do not read from the screen.</li>
       <li>Solve your problem step by step on screen (about 50 seconds).${s.lab_url ? ' Use the values from your own lab round.' : ''}</li>
       <li>End with one common mistake and how to avoid it (about 20 seconds).</li>
-      <li>Submit your video in INOVA.</li>
+      <li>Name your file as shown above, then upload it in the Google Form. The form link is in INOVA. Submit your own video.</li>
     </ol>
     <div class="vt-meta" style="margin:10px 0 0">You can discuss your topic with your group, but make your own video.</div>
   </div>`;
+  document.getElementById('vt-copy-name').addEventListener('click', async (e) => {
+    try { await navigator.clipboard.writeText(fileName); e.target.textContent = 'Copied'; }
+    catch { e.target.textContent = 'Select the name and copy it'; }
+  });
 }
 
 async function runAssignVideoTopics(reset) {
