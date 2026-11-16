@@ -930,6 +930,8 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
         <div id="learning-detail"></div>
 
         <div class="section-label" style="margin-top:22px" id="interactive-labs">Interactive labs</div>
+        <!-- One list, shared with the educator Labs view: showView() moves it there and back. -->
+        <div id="labs-list">
         <a class="card glass fade-up lab-card" id="lab-orbitals-link" href="labs/orbitals.html">
           <div>
             <h3>Atomic Orbital Lab</h3>
@@ -1035,6 +1037,7 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
           </div>
           <span class="lab-card-go">Open</span>
         </a>
+        </div>
 
         <div class="section-label" style="margin-top:22px">Your notes</div>
         <div class="glass" id="notes-history" style="margin-bottom:16px"></div>
@@ -1142,6 +1145,7 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
         <div class="content-tabs">
           <button class="content-tab active" id="content-tab-bank" type="button" data-panel="bank">Question bank</button>
           <button class="content-tab" id="content-tab-notes" type="button" data-panel="notes">Study note</button>
+          <button class="content-tab" id="content-tab-labs" type="button" data-panel="labs">Labs</button>
         </div>
 
         <!-- QUESTION BANK PANEL -->
@@ -1169,6 +1173,12 @@ button.stat-card:hover{border-color:rgba(45,106,79,0.35);}
             <button class="btn-import" id="copy-preview-btn" type="button">Preview matches</button>
             <div class="content-save-result" id="copy-result"></div>
           </div>
+        </div>
+
+        <!-- LABS PANEL (the Learning view's lab list is moved in here) -->
+        <div class="content-panel" id="content-panel-labs">
+          <div style="font-size:12.5px;color:var(--ink-soft);line-height:1.5;margin-bottom:12px">Interactive labs for all courses. They open in educator view: nothing is locked, and you can check certificate serials. To test the locks, use “View as student”.</div>
+          <div id="labs-home"></div>
         </div>
 
         <!-- STUDY NOTE PANEL -->
@@ -1692,7 +1702,9 @@ async function boot(opts = {}) {
     document.getElementById('educator-bottomnav').style.display = '';
     document.getElementById('add-course-row').style.display = '';
     await loadEducatorCourses();
-    if (!(location.hash === '#labs' && await previewAtLabs())) showView('courses');
+    // Back from a lab: to student preview if the lab was opened from it, else Content › Labs.
+    if (location.hash === '#labs') { if (!(await previewAtLabs())) { showView('content'); document.getElementById('content-tab-labs').click(); } }
+    else showView('courses');
     setupUploads();
   } else {
     document.getElementById('enroll-more-row').style.display = '';
@@ -1711,6 +1723,9 @@ function showLabs() {
 }
 function showView(view) {
   if (view !== 'learning' && location.hash === '#labs') history.replaceState(null, '', location.pathname + location.search);
+  // One lab list for both views; moving the node keeps its click handlers.
+  if (view === 'content') document.getElementById('labs-home').appendChild(document.getElementById('labs-list'));
+  else if (view === 'learning') document.getElementById('interactive-labs').after(document.getElementById('labs-list'));
   document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
   document.getElementById('view-' + view).classList.add('active');
   document.querySelectorAll('.sidenav button, .bottomnav button').forEach(b => b.classList.toggle('active', b.dataset.view === view));
@@ -1900,11 +1915,12 @@ async function openPreviewCourse(courseId) {
   showView('home');
 }
 
-/* Back from a lab as an educator: return to student preview (the course last
-   previewed in this tab, otherwise the first course) at the Interactive labs list. */
+/* Back from a lab opened in student preview: return to that preview (the course
+   last previewed in this tab) at the Interactive labs list. False when the lab
+   was opened from the educator Labs tab. */
 async function previewAtLabs() {
   let id = null; try { id = sessionStorage.getItem('kompas.previewCourse'); } catch (_) {}
-  const c = myCourses.find(x => String(x.id) === id) || myCourses[0];
+  const c = id && myCourses.find(x => String(x.id) === id);
   if (!c) return false;
   currentCourse = c;
   await enterPreview();
@@ -2182,7 +2198,7 @@ function renderQuizHistory() {
 // Voyager scoring engine. Never blocks the UI action it's attached to — a
 // failed insert (e.g. offline) should not stop a copy or a notebook open.
 async function logEngagementEvent(eventType, { topicId = null, metadata = {} } = {}) {
-  if (!myProfile || !currentCourse || previewMode) return;
+  if (!myProfile || !currentCourse || previewMode || myProfile.role === 'educator') return;
   try {
     await sb.from('engagement_events').insert({
       student_id: myProfile.id,
@@ -4184,6 +4200,8 @@ function bindContentEditorOnce() {
       document.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
       tab.classList.add('active');
       document.getElementById('content-panel-' + tab.dataset.panel).classList.add('active');
+      // Labs are for all courses: the course and topic pickers don't apply.
+      ['content-course-select', 'content-topic-select'].forEach(id => document.getElementById(id).style.display = tab.dataset.panel === 'labs' ? 'none' : '');
     });
   });
 
