@@ -4071,7 +4071,7 @@ async function renderVideoTopicCard() {
   const links = [
     s.explainer_url ? `<a class="vt-link" href="${escapeHtml(s.explainer_url)}">Open ${escapeHtml(s.explainer)}</a>` : '',
     s.lab_url ? `<a class="vt-link alt" href="${escapeHtml(s.lab_url)}">Open ${escapeHtml(s.lab)}</a>` : '',
-    currentCourse.inova_url ? `<a class="vt-link alt" href="${escapeHtml(currentCourse.inova_url)}" target="_blank" rel="noopener">Open INOVA</a>` : ''
+    currentCourse.video_submit_url ? `<a class="vt-link alt" href="${escapeHtml(currentCourse.video_submit_url)}" target="_blank" rel="noopener">Submit in INOVA</a>` : ''
   ].join('');
   // File name the student must use: course code_full name_user ID_topic title
   const fileSafe = t => String(t).replace(/[\\/:*?"<>|]+/g, ' ').replace(/\s+/g, ' ').trim();
@@ -4092,7 +4092,7 @@ async function renderVideoTopicCard() {
       <li>Explain the idea in your own words (about 35 seconds). Do not read from the screen.</li>
       <li>Solve your problem step by step on screen (about 50 seconds).${s.lab_url ? ' Use the values from your own lab round.' : ''}</li>
       <li>End with one common mistake and how to avoid it (about 20 seconds).</li>
-      <li>Name your file as shown above, then upload it in the Google Form. The form link is in INOVA. Submit your own video.</li>
+      <li>Name your file as shown above and upload it to your own Google Drive. Share it as "Anyone with the link", then submit the link using the form on the INOVA page${currentCourse.video_submit_url ? ' (Submit in INOVA button above)' : ''}. Submit your own video.</li>
     </ol>
     <div class="vt-meta" style="margin:10px 0 0">You can discuss your topic with your group, but make your own video.</div>
   </div>`;
